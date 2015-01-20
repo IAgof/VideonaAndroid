@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="transparent">#7F000000</color>
+
+    <color name="videona_blue">#0091ea</color>
+
+    <color name="videona_seekbar_blue_light">#85ffff</color>
+
+    <color name="videona_seekbar_blue">#26c5ff</color>
+
+    <color name="grey">#d9d9d9</color>
+
+</resources>
