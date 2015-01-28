@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -45,7 +44,7 @@ public class RecordActivity extends Activity{
     private boolean isRecording = false;
     private ImageButton captureButton;
 
-    private ImageButton btnTestColorEffect;
+    private ImageButton btnColorEffect;
     private static Boolean isColorEffect;
 
     // Activity request codes
@@ -189,14 +188,13 @@ public class RecordActivity extends Activity{
 
 
         appPrefs.setColorEffect(false);
-        btnTestColorEffect = (ImageButton) findViewById(R.id.btnTestColorEffect);
-        btnTestColorEffect.setOnClickListener(new OnClickListener() {
+        btnColorEffect = (ImageButton) findViewById(R.id.btnTestColorEffect);
+        btnColorEffect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-
-                if(appPrefs.getColorEffect()) {
+                if (appPrefs.getColorEffect()) {
                     appPrefs.setColorEffect(false);
                 } else {
                     appPrefs.setColorEffect(true);
