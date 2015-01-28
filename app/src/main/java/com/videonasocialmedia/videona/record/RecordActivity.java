@@ -201,13 +201,10 @@ public class RecordActivity extends Activity{
                 } else {
                     appPrefs.setColorEffect(true);
                 }
-           //   onCreate(null);
+
                 mCamera.stopPreview();
                 mCamera.release();
                 mCamera = null;
-          //      mPreview = null;
-
-             //  openCamera();
 
                 onCreate(null);
 
