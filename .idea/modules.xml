@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Videona.iml" filepath="$PROJECT_DIR$/Videona.iml" />
       <module fileurl="file://$PROJECT_DIR$/Videona app.iml" filepath="$PROJECT_DIR$/Videona app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
