@@ -156,7 +156,7 @@ public class RecordActivity extends Activity{
 
                         } else {
 
-                         //   mPreview.getHolder().setFixedSize(720, 1280);
+                         //    mPreview.getHolder().setFixedSize(720, 1280);
 
                             // initialize video camera
                             if (prepareVideoRecorder()) {
