@@ -20,7 +20,7 @@ public class Config {
 
     final public static int maxDurationVideo = 60;
 
-    final public static int widthDisplay = 1080;
+    //final public static int widthDisplay = 1080;
     
 
     
