@@ -48,6 +48,8 @@ public class VideonaMainActivity extends Activity {
 
         appPrefs.setCameraId(0);
 
+        appPrefs.setColorEffect(false);
+
         try {
             checkPath();
         } catch (IOException e) {

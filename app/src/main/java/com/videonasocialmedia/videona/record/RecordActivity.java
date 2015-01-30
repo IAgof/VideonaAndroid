@@ -187,8 +187,7 @@ public class RecordActivity extends Activity{
        );
 
 
-        appPrefs.setColorEffect(false);
-        btnColorEffect = (ImageButton) findViewById(R.id.btnTestColorEffect);
+        btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
         btnColorEffect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

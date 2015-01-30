@@ -20,38 +20,60 @@
             android:layout_weight="1"
             android:layout_centerInParent="true">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/btnColorEffect"
-                android:layout_gravity="left|top"
-                android:src="@drawable/ic_action_next_grey" />
         </FrameLayout>
 
         <ImageButton
-            android:id="@+id/button_capture"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="right|center_vertical"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_action_rec"
-            android:layout_alignParentRight="true" />
-
-        <Chronometer
-            android:id="@+id/chronometerVideo"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/button_capture"
-            android:layout_marginRight="38dp"
-            android:layout_marginTop="34dp"
-            android:paddingLeft="10dp"
-            android:textSize="18dp" />
+            android:text="New Button"
+            android:id="@+id/btnColorEffect"
+            android:layout_gravity="left|top"
+            android:src="@drawable/ic_color_effect"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:background="@null" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|right"
+            android:layout_marginRight="5dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:baselineAligned="false"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true">
+
+                <ImageButton
+                    android:id="@+id/button_capture"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_horizontal|right"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_action_rec"
+                    android:layout_alignParentRight="true" />
+
+                <Chronometer
+                    android:id="@+id/chronometerVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18dp"
+                    android:layout_alignWithParentIfMissing="false"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center" />
+            </LinearLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
 
