@@ -16,8 +16,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.Config;
@@ -26,9 +30,12 @@ import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.edit.EditVideoActivity;
 import com.videonasocialmedia.videona.share.ShareVideoActivity;
 
+import org.lucasr.twowayview.TwoWayView;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class RecordActivity extends Activity{
@@ -77,6 +84,11 @@ public class RecordActivity extends Activity{
 
     private static UserPreferences appPrefs;
 
+    private ListAdapter adapter;
+    private ImageColorEffectAdadpter imageColorEffectAdadpter;
+    private ListView listViewColorEffect;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +128,10 @@ public class RecordActivity extends Activity{
             share.setClass(RecordActivity.this, ShareVideoActivity.class);
             startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
         }
+
+
+
+      //  listViewColorEffect = (ListView) findViewById(R.id.listViewColorEffect);
 
 
         chronometer = (Chronometer) findViewById(R.id.chronometerVideo);
@@ -188,10 +204,38 @@ public class RecordActivity extends Activity{
 
 
         btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
+        btnColorEffect.setVisibility(View.VISIBLE);
+        final TwoWayView lvTest = (TwoWayView) findViewById(R.id.lvItems);
+
         btnColorEffect.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Log.d(LOG_TAG, " entro en btnColorEffect");
+
+                ArrayList<String> colorEffects = new ArrayList<String>();
+
+                colorEffects.add("aqua");
+                colorEffects.add("emboss");
+                colorEffects.add("posterize");
+
+                imageColorEffectAdadpter = new ImageColorEffectAdadpter(RecordActivity.this, getApplicationContext(), colorEffects );
+
+
+
+                lvTest.setAdapter(imageColorEffectAdadpter)  ;
+
+
+                btnColorEffect.setVisibility(View.INVISIBLE);
+
+            }
+        });
+
+
+        lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                Log.d(LOG_TAG, " entro en twoWay");
 
                 if (appPrefs.getColorEffect()) {
                     appPrefs.setColorEffect(false);
@@ -205,9 +249,16 @@ public class RecordActivity extends Activity{
 
                 onCreate(null);
 
+                Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
+
+                //    lvTest.setVisibility(View.INVISIBLE);
 
             }
+
         });
+
+
+
 
 
     }
