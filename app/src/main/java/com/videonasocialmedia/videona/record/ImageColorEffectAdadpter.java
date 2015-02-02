@@ -2,6 +2,8 @@ package com.videonasocialmedia.videona.record;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +12,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.UserPreferences;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by root on 30/01/15.
@@ -28,12 +33,25 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
         private ArrayList<String> colorEffectItems;
 
-        public ImageColorEffectAdadpter(Activity activity, Context c, ArrayList<String> colorEffectItems) {
+        private UserPreferences appPrefs;
+
+        private ViewClickListener mViewClickListener;
+
+        public interface ViewClickListener {
+            void onImageClicked(int position);
+        }
+
+        public void setViewClickListener (RecordActivity viewClickListener) {
+            mViewClickListener = viewClickListener;
+        }
+
+
+    public ImageColorEffectAdadpter(Activity activity, Context c, ArrayList<String> colorEffectItems) {
             super(activity, R.layout.item_color_effect, colorEffectItems);
             this.activity = activity;
             mContext = c;
             this.colorEffectItems = colorEffectItems;
-        }
+    }
 
         public int getCount() {
            // return mThumbIdsImage.length;
@@ -49,10 +67,10 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
         }
 
 
-        // create a new ImageView for each item referenced by the Adapter
-        public View getView(int position, View convertView, ViewGroup parent) {
+        // create a new ImageView and TextView for each item referenced by the Adapter
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ImageView imageView;
-            TextView textView;
+            final TextView textView;
 
             if (inflater == null)
                 //inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,29 +81,27 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
                 imageView = (ImageView)convertView.findViewById(R.id.imageColorEffect);
                 textView = (TextView) convertView.findViewById(R.id.textColorEffect);
 
-         /*   if (convertView == null) {  // if it's not recycled, initialize some attributes
-                imageView = new ImageView(mContext);
-                // imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                imageView.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(3, 3, 3, 3);
-            } else {
-                imageView = (ImageView) convertView;
-            }
-        */
 
+          //  imageView.setImageResource(mThumbIdsImage[position]);
+            String colorEffectName = CameraPreview.colorEffects.get(position);
+            String colorEffectDrawableName = "tucan_" + colorEffectName;
 
-            LayoutInflater inflater = activity.getLayoutInflater();
-         //   View rowView= inflater.inflate(R.layout.item_color_effect, null, true);
+            int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
+            imageView.setImageResource(resourceId);
 
-            imageView.setImageResource(mThumbIdsImage[position]);
-            textView.setText(mThumbIdsText[position]);
+            textView.setText(colorEffectName);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mViewClickListener.onImageClicked(position);
+
+                }
+            });
 
             return convertView;
         }
-
-
-
 
         // references to our images
         private Integer[] mThumbIdsImage = {
@@ -93,18 +109,12 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
                 R.drawable.tucan_mono, R.drawable.tucan_negative,
                 R.drawable.tucan_neon, R.drawable.tucan_posterize,
                 R.drawable.tucan_sepia, R.drawable.tucan_sketch,
-                R.drawable.tucan_solarize
+                R.drawable.tucan_solarize, R.drawable.tucan_blackboard,
+                R.drawable.tucan_whiteboard, R.drawable.tucan_none
         };
 
 
-        // references to our images
-        private String [] mThumbIdsText = {
-            "aqua", "emboss",
-            "mono", "negative",
-            "neon", "posterize",
-            "sepia", "sketch",
-            "solarize"
-        };
+
 
 
 

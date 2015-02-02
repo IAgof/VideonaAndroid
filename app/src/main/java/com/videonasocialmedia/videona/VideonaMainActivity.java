@@ -46,9 +46,9 @@ public class VideonaMainActivity extends Activity {
 
         Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
 
-        appPrefs.setCameraId(0);
+     //   appPrefs.setCameraId(0);
 
-        appPrefs.setColorEffect(false);
+        appPrefs.setIsColorEffect(false);
 
         try {
             checkPath();

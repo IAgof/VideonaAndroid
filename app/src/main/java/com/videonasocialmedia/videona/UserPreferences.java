@@ -31,6 +31,7 @@ public class UserPreferences {
 
 
     private String colorEffect = "colorEffect";
+    private String isColorEffect = "isColorEffect";
     private String cameraId = "back_camera";
 	 
 	public UserPreferences(Context context){
@@ -146,12 +147,20 @@ public class UserPreferences {
     }
 
 
-    public boolean getColorEffect() {
-        return appUserPreferences.getBoolean(colorEffect, true);
+    public String getColorEffect() {
+        return appUserPreferences.getString(colorEffect, "unkown");
     }
 
-    public void setColorEffect( Boolean isColorEffect) {
-        prefsEditor.putBoolean(colorEffect, isColorEffect).commit();
+    public void setColorEffect( String colorEffectSelected) {
+        prefsEditor.putString(colorEffect, colorEffectSelected).commit();
+    }
+
+    public boolean getIsColorEffect() {
+        return appUserPreferences.getBoolean(isColorEffect, false);
+    }
+
+    public void setIsColorEffect( Boolean isColorEffectSelected) {
+        prefsEditor.putBoolean(isColorEffect, isColorEffectSelected).commit();
     }
 
 }

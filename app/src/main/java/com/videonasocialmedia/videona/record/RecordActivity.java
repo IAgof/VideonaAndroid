@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class RecordActivity extends Activity{
+public class RecordActivity extends Activity implements ImageColorEffectAdadpter.ViewClickListener {
 
     private static final String LOG_TAG = "RecordActivity";
 
@@ -85,9 +85,10 @@ public class RecordActivity extends Activity{
     private static UserPreferences appPrefs;
 
     private ListAdapter adapter;
-    private ImageColorEffectAdadpter imageColorEffectAdadpter;
-    private ListView listViewColorEffect;
 
+    private ImageColorEffectAdadpter imageColorEffectAdadpter;
+
+    private TwoWayView lvTest;
 
 
     @Override
@@ -129,9 +130,6 @@ public class RecordActivity extends Activity{
             startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
         }
 
-
-
-      //  listViewColorEffect = (ListView) findViewById(R.id.listViewColorEffect);
 
 
         chronometer = (Chronometer) findViewById(R.id.chronometerVideo);
@@ -205,7 +203,23 @@ public class RecordActivity extends Activity{
 
         btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
         btnColorEffect.setVisibility(View.VISIBLE);
-        final TwoWayView lvTest = (TwoWayView) findViewById(R.id.lvItems);
+
+        lvTest = (TwoWayView) findViewById(R.id.lvItems);
+        lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.d(LOG_TAG, " entro en lvTest setOnClickListener");
+
+                mCamera.stopPreview();
+                mCamera.release();
+                mCamera = null;
+
+                onCreate(null);
+
+            }
+        });
+
 
         btnColorEffect.setOnClickListener(new OnClickListener() {
             @Override
@@ -215,51 +229,19 @@ public class RecordActivity extends Activity{
 
                 ArrayList<String> colorEffects = new ArrayList<String>();
 
-                colorEffects.add("aqua");
-                colorEffects.add("emboss");
-                colorEffects.add("posterize");
+                for(int i = 0; i< CameraPreview.colorEffects.size(); i++){
+                    colorEffects.add(CameraPreview.colorEffects.get(i));
+                }
 
                 imageColorEffectAdadpter = new ImageColorEffectAdadpter(RecordActivity.this, getApplicationContext(), colorEffects );
-
-
+                imageColorEffectAdadpter.setViewClickListener(RecordActivity.this);
 
                 lvTest.setAdapter(imageColorEffectAdadpter)  ;
-
 
                 btnColorEffect.setVisibility(View.INVISIBLE);
 
             }
         });
-
-
-        lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                Log.d(LOG_TAG, " entro en twoWay");
-
-                if (appPrefs.getColorEffect()) {
-                    appPrefs.setColorEffect(false);
-                } else {
-                    appPrefs.setColorEffect(true);
-                }
-
-                mCamera.stopPreview();
-                mCamera.release();
-                mCamera = null;
-
-                onCreate(null);
-
-                Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
-
-                //    lvTest.setVisibility(View.INVISIBLE);
-
-            }
-
-        });
-
-
-
-
 
     }
 
@@ -370,11 +352,6 @@ public class RecordActivity extends Activity{
     }
 
     private boolean prepareVideoRecorder(){
-
-
-
-
-     //   mCamera = getCameraInstance();
 
 
         mMediaRecorder = new MediaRecorder();
@@ -512,28 +489,6 @@ public class RecordActivity extends Activity{
             Log.d(LOG_TAG, "onResume height " + mCamera.getParameters().getPictureSize().height + " width " + mCamera.getParameters().getPictureSize().width);
         }
 
-
-    /*
-        amm: Show welcome hide
-
-       if(!showWelcomeToday) {
-        	
-
-            if (!showWelcome) {
-
-                // Do nothing
-
-            } else {
-
-            //    Intent welcome = new Intent(getApplicationContext(), WelcomeActivity.class);
-                Intent welcome = new Intent(getApplicationContext(), ScreenSlidePagerActivity.class);
-                startActivityForResult(welcome, WELCOME_REQUEST_CODE);
-
-            }
-
-        } */
-
-
     }
 
     @Override
@@ -576,20 +531,6 @@ public class RecordActivity extends Activity{
 
         }
 
-   /*
-     amm: Show welcome hide
-
-      if(requestCode==WELCOME_REQUEST_CODE){
-
-            // ¿Thanks for your support?
-
-            showWelcomeToday = true;
-
-            onCreate(null);
-
-        }
-     */
-
     }
     
     @Override
@@ -609,11 +550,7 @@ public class RecordActivity extends Activity{
         // do something on back.
      	 btnBackPressed = false;
     	  Log.d(LOG_TAG,"onKeyDown" );
-    	 //	finish();
-    	 
-        // Kill process. Exit app
-	     //   int pid = android.os.Process.myPid();  
-		 //   android.os.Process.killProcess(pid);
+
     	 
     	  Intent intent = new Intent(Intent.ACTION_MAIN);
           intent.addCategory(Intent.CATEGORY_HOME);
@@ -627,5 +564,28 @@ public class RecordActivity extends Activity{
         btnBackPressed = false;
         return super.onKeyDown(keyCode, event);
       
-    }  
+    }
+
+    @Override
+    public void onImageClicked(int position) {
+
+        Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
+
+        // Color effects
+        Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect());
+
+
+        appPrefs.setColorEffect(CameraPreview.colorEffects.get(position));
+        appPrefs.setIsColorEffect(true);
+
+
+
+        mCamera.stopPreview();
+        mCamera.release();
+        mCamera = null;
+
+        onCreate(null);
+
+    }
+
 }

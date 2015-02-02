@@ -15,6 +15,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 
     private static final String TAG = "CameraPreview";
+    public static List<String> colorEffects;
 
     private Context mContext;
     private SurfaceHolder mHolder;
@@ -42,6 +43,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder.addCallback(this);
         // deprecated setting, but required on Android versions prior to 3.0
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        // get available color effects
+        colorEffects = mCamera.getParameters().getSupportedColorEffects();
 
         appPrefs = new UserPreferences(context);
 
@@ -134,11 +138,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 
             // Color effects
-            Log.d(TAG, "getColorEffect " + appPrefs.getColorEffect());
-            if(appPrefs.getColorEffect()){
-                parameters.setColorEffect(Camera.Parameters.EFFECT_SEPIA);
+            Log.d(TAG, "getIsColorEffect " + appPrefs.getIsColorEffect());
+            if(appPrefs.getIsColorEffect()){
+                parameters.setColorEffect(appPrefs.getColorEffect());
+                appPrefs.setIsColorEffect(false);
             }
-           // parameters.setColorEffect(Camera.Parameters.EFFECT_AQUA);
+
 
             mCamera.setParameters(parameters);
             mCamera.startPreview();
