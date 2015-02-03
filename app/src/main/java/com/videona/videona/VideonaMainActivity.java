@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class VideonaMainActivity extends Activity {
-	
-	static {
+
+    static {
 
         System.loadLibrary("ffmpeg");
         System.loadLibrary("videona-editor");
@@ -27,20 +27,20 @@ public class VideonaMainActivity extends Activity {
 
     public static native int cut(String inputFile, String outputFile, int startTime, int length);
 
-    private final String LOG_TAG= this.getClass().getSimpleName();
+    private final String LOG_TAG = this.getClass().getSimpleName();
 
     public static Typeface tf;
-    
+
     private static final int CAMERA_RECORD_VIDEO_REQUEST_CODE = 100;
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
-    
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
-		 tf = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Medium.ttf");
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 
         UserPreferences appPrefs = new UserPreferences(getApplicationContext());
 
@@ -56,82 +56,78 @@ public class VideonaMainActivity extends Activity {
 
     }
 
-    private void launchCameraActivity(){
+    private void launchCameraActivity() {
 
         Intent i = new Intent(getApplicationContext(), RecordActivity.class);
         startActivity(i);
 
     }
-	
+
     @Override
     protected void onStart() {
-        super.onStart();        
-        
+        super.onStart();
+
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
 
 
     }
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
-	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     private void checkPath() throws IOException {
 
-        File f=new File(Config.pathApp);
-        if(!f.exists())
-        {
+        File f = new File(Config.pathApp);
+        if (!f.exists()) {
             f.mkdir();
 
-            Log.d(LOG_TAG,"Path Videona created");
+            Log.d(LOG_TAG, "Path Videona created");
         }
 
         File fTrim = new File(Config.pathVideoTrim);
-        if(!fTrim.exists())
-        {
+        if (!fTrim.exists()) {
             fTrim.mkdir();
 
-            Log.d(LOG_TAG,"Path " + Config.pathVideoTrim + " created");
+            Log.d(LOG_TAG, "Path " + Config.pathVideoTrim + " created");
         }
 
         File fMusic = new File(Config.pathVideoMusic);
-        if(!fMusic.exists())
-        {
+        if (!fMusic.exists()) {
             fMusic.mkdir();
 
-            Log.d(LOG_TAG,"Path " + Config.pathVideoMusic + " created");
+            Log.d(LOG_TAG, "Path " + Config.pathVideoMusic + " created");
         }
 
         File fTemp = new File(Config.pathVideoTemp);
-        if(!fTemp.exists())
-        {
+        if (!fTemp.exists()) {
             fTemp.mkdir();
 
-            Log.d(LOG_TAG,"Path " + Config.pathVideoTemp + " created");
+            Log.d(LOG_TAG, "Path " + Config.pathVideoTemp + " created");
         }
 
 
         File fTempAV = new File(Config.videoMusicTempFile);
 
-        if(fTempAV.exists()) {
+        if (fTempAV.exists()) {
             fTempAV.delete();
         }
 
@@ -148,7 +144,7 @@ public class VideonaMainActivity extends Activity {
 
         File fAudioTest = new File(Config.pathApp + "/audio_aac.aac");
 
-        if(!fAudioTest.exists()) {
+        if (!fAudioTest.exists()) {
 
             InputStream in = getResources().openRawResource(R.raw.audio_aac);
             FileOutputStream out = new FileOutputStream(Config.pathApp + "/audio_aac.aac");
@@ -167,11 +163,11 @@ public class VideonaMainActivity extends Activity {
 
     }
 
-    
 
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String LOG_TAG= this.getClass().getSimpleName();
+        private final String LOG_TAG = this.getClass().getSimpleName();
+
         @Override
         protected Boolean doInBackground(Void... voids) {
             //TODO actually check if the user is logged in
@@ -192,7 +188,8 @@ public class VideonaMainActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean loggedIn) {
 
-            launchCameraActivity();
+            //launchCameraActivity();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
 
         }
     }

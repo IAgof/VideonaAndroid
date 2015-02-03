@@ -1,39 +1,120 @@
 package com.videona.videona;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Base64;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.videona.videona.api.ApiClient;
+import com.videona.videona.api.CustomCookieManager;
+
+import java.io.UnsupportedEncodingException;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.OkClient;
+import retrofit.client.Response;
 
 
 public class LoginActivity extends Activity {
+
+    @InjectView(R.id.login_text_field)
+    TextView userTextField;
+    @InjectView(R.id.login_password_field)
+    TextView passwordTextField;
+
+    private ApiClient apiClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        ButterKnife.inject(this);
+
+        //TODO hacer cookies persistentes
+        OkHttpClient client = new OkHttpClient();
+        CustomCookieManager manager = new CustomCookieManager();
+        client.setCookieHandler(manager);
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setClient(new OkClient(client))
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setEndpoint("http://192.168.0.22/Videona/web/app_dev.php/api")
+                .build();
+        apiClient = restAdapter.create(ApiClient.class);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
+    /**
+     * Start the activity to create a new user when the new_user_button is clicked
+     */
+    @OnClick(R.id.new_user_button)
+    public void goToCreateUserAct() {
+        startActivity(new Intent(getApplicationContext(), UserSignUpActivity.class));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    /**
+     * Try to login the user using the credentials provided by userTextField and passwordTextField
+     */
+    @OnClick(R.id.send_login_button)
+    public void login() {
+        String source = userTextField.getText().toString() + ":"
+                + passwordTextField.getText().toString();
+        try {
+            String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"), Base64.DEFAULT);
+            apiClient.login(auth, new BasicLoginCallback());
+        } catch (UnsupportedEncodingException e) {
+            Toast.makeText(getApplicationContext(), "Error durante login", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    /**
+     * Sub-class implementing the callback of the login api call
+     */
+    class BasicLoginCallback implements Callback<Response> {
+        /**
+         * Star
+         *
+         * @param o
+         * @param response successful response message from the server
+         */
+        @Override
+        public void success(Response o, Response response) {
+            //TODO store session
+            Toast.makeText(getApplicationContext(), "Logeado correctamente", Toast.LENGTH_LONG).show();
+            response.getHeaders();
+            apiClient.getUserProfile(9, new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                }
+            });
+            //startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+
+
         }
 
-        return super.onOptionsItemSelected(item);
+        /**
+         * Show a message to the user let him know it was not possible to login
+         *
+         * @param error error captured by retrofit
+         */
+        @Override
+        public void failure(RetrofitError error) {
+            Toast.makeText(getApplicationContext(), "Error durante login", Toast.LENGTH_SHORT).show();
+        }
     }
 }
