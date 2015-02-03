@@ -335,8 +335,8 @@
                 android:cropToPadding="false"
                 android:scaleType="fitCenter"
                 android:layout_marginStart="51dp"
-                android:layout_alignBottom="@+id/imageButtonPlay"
-                android:layout_alignStart="@+id/seekBarPoint" />
+                android:layout_alignStart="@+id/seekBarPoint"
+                android:layout_alignBottom="@+id/imageButtonPlay" />
 
             <ImageButton
                 android:layout_width="wrap_content"

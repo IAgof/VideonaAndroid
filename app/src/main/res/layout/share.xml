@@ -16,64 +16,17 @@
         android:layout_centerInParent="true"
         android:visibility="visible" />
 
-    <LinearLayout
-        android:id="@+id/LinearLayoutShareInfoVideo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:visibility="invisible">
-
-        <TextView
-            android:id="@+id/textViewVideoName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text_video_name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewVideoDuration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text_video_duration"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textViewVideoDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text_video_description"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/imageBackRec"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="50dp"
-            android:background="@null"
-            android:src="@drawable/ic_action_rec_back"
-            android:layout_alignBottom="@+id/imageButtonPlayShare"
-            android:layout_alignStart="@+id/imageButtonShare"
-            android:visibility="invisible" />
-
-        <ImageButton
+    <ImageButton
             android:id="@+id/imageButtonShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/LinearLayoutShareInfoVideo"
-            android:layout_marginRight="53dp"
+        android:layout_marginRight="53dp"
             android:background="@null"
-            android:src="@drawable/ic_action_share" />
+            android:src="@drawable/ic_action_share"
+        android:layout_above="@+id/imageButtonPlayShare"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="34dp" />
 
     <ImageButton
         android:layout_width="wrap_content"

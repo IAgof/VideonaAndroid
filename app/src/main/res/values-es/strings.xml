@@ -11,7 +11,7 @@
     <string name="ok">Ok</string>
     <string name="indiegogo">Indiegogo</string>
     <string name="welcome">"Esta es la versión beta de la nueva Plataforma Social de Vídeo, puedes ayudarnos a desarrollarla dándonos tu opinión sobre ella, o puedes acceder a nuestra campaña de crowdfunding en Indiegogo para obtener alguna mejora en la app. También te estaremos muy agradecidos si difundes la campaña en tus redes sociales."</string>
-    <string name="videon_web">http://www.videona.es</string>
+    <string name="videona_web">http://www.videona.es</string>
     <string name="text_video_name">"Video name: "</string>
     <string name="text_video_duration">"Duration: "</string>
     <string name="text_video_description">"Description: "</string>
@@ -20,7 +20,6 @@
     <string name="dialog_processing">"Trimming video "</string>
     <string name="dialog_processing_audio">"Adding audio "</string>
     <string name="getit">"Entendido"</string>
-    <string name="videona_web">http://www.videona.es</string>
     <string name="action_finish">"Finish"</string>
     <string name="action_next">"Next"</string>
 
@@ -34,5 +33,6 @@
     <string name="music_genre_electronic">"Electronic"</string>
     <string name="music_genre_classic">"Classic"</string>
     <string name="music_genre_caribbean">"Caribbean"</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>
