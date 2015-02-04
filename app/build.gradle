@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.videona.videona"
+        applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 21
         versionCode 1
@@ -14,10 +14,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -34,6 +35,7 @@ dependencies {
     compile 'com.felipecsl.asymmetricgridview:library:1.1.0'
 
     compile 'com.jakewharton:butterknife:6.0.0'
+    compile 'org.lucasr.twowayview:twowayview:0.1.4'
 
 }
 
