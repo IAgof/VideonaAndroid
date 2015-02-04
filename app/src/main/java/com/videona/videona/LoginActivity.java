@@ -7,9 +7,7 @@ import android.util.Base64;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.OkHttpClient;
 import com.videona.videona.api.ApiClient;
-import com.videona.videona.api.CustomCookieManager;
 
 import java.io.UnsupportedEncodingException;
 
@@ -17,9 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.OkClient;
 import retrofit.client.Response;
 
 
@@ -42,15 +38,8 @@ public class LoginActivity extends Activity {
         ButterKnife.inject(this);
 
         //TODO hacer cookies persistentes
-        OkHttpClient client = new OkHttpClient();
-        CustomCookieManager manager = new CustomCookieManager();
-        client.setCookieHandler(manager);
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setClient(new OkClient(client))
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint("http://192.168.0.22/Videona/web/app_dev.php/api")
-                .build();
-        apiClient = restAdapter.create(ApiClient.class);
+        VideonaApplication app = (VideonaApplication) getApplication();
+        apiClient = app.getApiClient();
     }
 
     /**

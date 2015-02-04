@@ -42,5 +42,6 @@ We will be very grateful if you spread the news in your social networks."</strin
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
     <string name="please_sign_up">Create a new account</string>
+    <string name="new_user_btn_content_descp">New user</string>
 
 </resources>

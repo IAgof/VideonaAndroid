@@ -9,11 +9,10 @@
     tools:context="com.videona.videona.LoginActivity">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/please_login"
-        android:textSize="@dimen/text_big" />
+        android:textSize="@dimen/text_big"/>
 
     <GridLayout
         android:layout_width="wrap_content"
@@ -47,7 +46,8 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_twitter"
                 android:background="@android:color/transparent"
-                android:layout_marginStart="10dp" />
+                android:layout_marginStart="10dp"
+                />
 
             <ImageButton
                 android:id="@+id/login_g_plus_button"
@@ -65,7 +65,8 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_new_user"
                 android:background="@android:color/transparent"
-                android:layout_marginStart="10dp" />
+                android:layout_marginStart="10dp"
+                android:contentDescription="@string/new_user_btn_content_descp"/>
         </LinearLayout>
 
         <ImageView
@@ -111,6 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="80dp"
+        android:padding="@dimen/button_margin"
         android:text="@string/login"
         android:layout_marginTop="30dp"
         android:background="@android:color/white"

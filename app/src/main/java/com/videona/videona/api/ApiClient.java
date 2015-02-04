@@ -16,7 +16,7 @@ public interface ApiClient {
     @POST("/users/signup")
     void register(@Body RegisterRequestBody requestBody, Callback<Response> callback);
 
-    @GET("/users/login")
+    @GET("/login")
     void login(@Header("Authorization") String authorization, Callback<Response> callback);
 
     @POST("/users/logout")

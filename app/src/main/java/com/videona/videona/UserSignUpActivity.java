@@ -7,9 +7,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.OkHttpClient;
 import com.videona.videona.api.ApiClient;
-import com.videona.videona.api.CustomCookieManager;
 import com.videona.videona.api.RegisterRequestBody;
 import com.videona.videona.api.Validator;
 import com.videona.videona.record.RecordActivity;
@@ -18,9 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.OkClient;
 import retrofit.client.Response;
 
 /**
@@ -44,15 +40,8 @@ public class UserSignUpActivity extends Activity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.inject(this);
         //TODO Hacer singleton el cliente api?
-        OkHttpClient client = new OkHttpClient();
-        CustomCookieManager manager = new CustomCookieManager();
-        client.setCookieHandler(manager);
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setClient(new OkClient(client))
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setEndpoint("http://192.168.0.22/Videona/web/app_dev.php/api")
-                .build();
-        apiClient = restAdapter.create(ApiClient.class);
+        VideonaApplication app = (VideonaApplication) getApplication();
+        apiClient = app.getApiClient();
     }
 
     @OnClick(R.id.register_button)
@@ -84,7 +73,7 @@ public class UserSignUpActivity extends Activity {
                 @Override
                 public void success(Response response, Response response2) {
                     //TODO modificar textos
-                    Toast.makeText(getApplicationContext(), "Registrado correctamente",
+                    Toast.makeText(getApplicationContext(), "Registrado correctamente: status "+response.getStatus() ,
                             Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), RecordActivity.class));
                 }
@@ -92,7 +81,7 @@ public class UserSignUpActivity extends Activity {
                 @Override
                 public void failure(RetrofitError error) {
                     //TODO modificar textos
-                    Toast.makeText(getApplicationContext(), "Imposible registrar",
+                    Toast.makeText(getApplicationContext(), "Imposible registrar: "+error.getKind().name(),
                             Toast.LENGTH_SHORT).show();
                 }
             });
