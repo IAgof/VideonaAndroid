@@ -10,8 +10,8 @@
         android:layout_height="wrap_content">
 
         <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="78dp"
+            android:layout_height="50dp"
             android:text="Color Effect"
             android:id="@+id/imageColorEffect"
             android:src="@drawable/ic_action_share"

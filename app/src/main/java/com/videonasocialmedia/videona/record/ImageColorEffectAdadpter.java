@@ -2,23 +2,17 @@ package com.videonasocialmedia.videona.record;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by root on 30/01/15.
@@ -84,7 +78,7 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
           //  imageView.setImageResource(mThumbIdsImage[position]);
             String colorEffectName = CameraPreview.colorEffects.get(position);
-            String colorEffectDrawableName = "tucan_" + colorEffectName;
+            String colorEffectDrawableName = "effect_" + colorEffectName;
 
             int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
             imageView.setImageResource(resourceId);
@@ -105,12 +99,12 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
         // references to our images
         private Integer[] mThumbIdsImage = {
-                R.drawable.tucan_aqua, R.drawable.tucan_emboss,
-                R.drawable.tucan_mono, R.drawable.tucan_negative,
-                R.drawable.tucan_neon, R.drawable.tucan_posterize,
-                R.drawable.tucan_sepia, R.drawable.tucan_sketch,
-                R.drawable.tucan_solarize, R.drawable.tucan_blackboard,
-                R.drawable.tucan_whiteboard, R.drawable.tucan_none
+                R.drawable.effect_aqua, R.drawable.effect_emboss,
+                R.drawable.effect_mono, R.drawable.effect_negative,
+                R.drawable.effect_neon, R.drawable.effect_posterize,
+                R.drawable.effect_sepia, R.drawable.effect_sketch,
+                R.drawable.effect_solarize, R.drawable.effect_blackboard,
+                R.drawable.effect_whiteboard, R.drawable.effect_none
         };
 
 

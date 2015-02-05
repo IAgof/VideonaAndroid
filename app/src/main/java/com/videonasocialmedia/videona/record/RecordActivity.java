@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.Config;
@@ -89,6 +91,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     private ImageColorEffectAdadpter imageColorEffectAdadpter;
 
     private TwoWayView lvTest;
+    private RelativeLayout relativeLayoutColorEffects;
 
 
     @Override
@@ -180,6 +183,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                                 // inform the user that recording has started
                                 captureButton.setImageResource(R.drawable.ic_action_stop);  //setText("Stop");
+                                captureButton.setAlpha(125);
                                 isRecording = true;
 
 
@@ -204,6 +208,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
         btnColorEffect.setVisibility(View.VISIBLE);
 
+        relativeLayoutColorEffects = (RelativeLayout) findViewById(R.id.relativeLayoutColorEffects);
         lvTest = (TwoWayView) findViewById(R.id.lvItems);
         lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -226,6 +231,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
             public void onClick(View v) {
 
                 Log.d(LOG_TAG, " entro en btnColorEffect");
+
+                relativeLayoutColorEffects.setVisibility(View.VISIBLE);
 
                 ArrayList<String> colorEffects = new ArrayList<String>();
 
@@ -569,7 +576,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     public void onImageClicked(int position) {
 
-        Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
 
         // Color effects
         Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect());
@@ -579,13 +586,33 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         appPrefs.setIsColorEffect(true);
 
 
+        Camera.Parameters parameters = mCamera.getParameters();
+        // Color effects
+        Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect());
+        if(appPrefs.getIsColorEffect()){
+            parameters.setColorEffect(appPrefs.getColorEffect());
+            appPrefs.setIsColorEffect(false);
+        }
 
-        mCamera.stopPreview();
-        mCamera.release();
-        mCamera = null;
+        mCamera.setParameters(parameters);
 
-        onCreate(null);
 
+    }
+
+
+    /**  Use screen touches to toggle the video between playing and paused. */
+    @Override
+    public boolean onTouchEvent (MotionEvent ev){
+        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+
+            if( relativeLayoutColorEffects.isShown()){
+                relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
+                btnColorEffect.setVisibility(View.VISIBLE);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
