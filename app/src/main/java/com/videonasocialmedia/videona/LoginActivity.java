@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.api.ApiClient;
+import com.videonasocialmedia.videona.record.RecordActivity;
 
 import java.io.UnsupportedEncodingException;
 
@@ -55,6 +56,8 @@ public class LoginActivity extends Activity {
      */
     @OnClick(R.id.send_login_button)
     public void login() {
+
+        /*
         String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();
         try {
@@ -63,6 +66,13 @@ public class LoginActivity extends Activity {
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(getApplicationContext(), "Error durante login", Toast.LENGTH_SHORT).show();
         }
+        */
+
+        // Salto a pantalla Rec para pruebas
+
+        Intent i = new Intent(getApplicationContext(), RecordActivity.class);
+        startActivity(i);
+
     }
 
     /**

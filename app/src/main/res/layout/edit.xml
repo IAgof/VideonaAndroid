@@ -2,22 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true">
 
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true" />
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="200dp">
+
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:orientation="horizontal"
@@ -278,7 +283,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="1dp"
-                        android:textColor="@color/videona_blue"
+                        android:textColor="@color/videona_blue_1"
                         android:textSize="16dp"
                         android:layout_gravity="center"
                         android:gravity="center_horizontal"
@@ -305,7 +310,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarPoint"
                 android:thumb="@drawable/point"
-                android:progressDrawable="@color/grey"
+                android:progressDrawable="@color/pastel_palette_grey"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:maxHeight="4dp"
@@ -314,29 +319,30 @@
                 android:progress="1" />
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/imageButtonCut"
-                android:src="@drawable/ic_action_next"
+                android:src="@drawable/ic_validation"
                 android:background="@null"
-                android:layout_marginRight="50dp"
-                android:layout_marginEnd="45dp"
-                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:scaleType="fitCenter"
+                android:layout_marginEnd="22dp"
+                android:layout_alignTop="@+id/imageButtonMusic"
                 android:layout_alignEnd="@+id/seekBarPoint" />
 
             <ImageButton
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/imageButtonMusic"
                 android:background="@null"
-                android:src="@drawable/ic_action_music"
-                android:layout_marginLeft="50dp"
+                android:src="@drawable/ic_addmusic_buttom"
+                android:layout_marginLeft="16dp"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
                 android:scaleType="fitCenter"
-                android:layout_marginStart="51dp"
-                android:layout_alignStart="@+id/seekBarPoint"
-                android:layout_alignBottom="@+id/imageButtonPlay" />
+                android:layout_marginStart="21dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
 
             <ImageButton
                 android:layout_width="wrap_content"

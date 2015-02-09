@@ -40,9 +40,10 @@ We will be very grateful if you spread the news in your social networks."</strin
     <string name="music_genre_caribbean">"Caribbean"</string>
     <string name="music_genre_folk">"Folk"</string>
 
-    <!-- Activity Login -->
+    <!-- niiiiii -->
 
     <string name="title_activity_login">LoginActivity</string>
+    <string name="please_login">Please login in your account</string>
     <string name="login_hint">ohvideo@videona.es</string>
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
@@ -50,7 +51,5 @@ We will be very grateful if you spread the news in your social networks."</strin
     <string name="new_user_btn_content_descp">New user</string>
     <string name="accesibility_login_with_facebook">login with facebook</string>
     <string name="checkBox_remember_me">Remember Me</string>
-    <string name="please_login">Please login in your account</string>
-
 
 </resources>
