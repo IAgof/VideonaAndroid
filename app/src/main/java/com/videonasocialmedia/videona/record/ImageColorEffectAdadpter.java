@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
  */
 public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
+    private String LOG_TAG = this.getClass().getSimpleName();
+
     private Context mContext;
 
     private Activity activity;
@@ -34,7 +37,7 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
     private ViewClickListener mViewClickListener;
 
-    private Boolean isPressed = false;
+    private Boolean isPressed = true;
     private  int lastPositionPressed = 0;
 
     public interface ViewClickListener {
@@ -73,16 +76,13 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
     @SuppressLint("ResourceAsColor")
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        final ImageView imageView;
-        final TextView textView;
-
         // Check if an existing view is being reused, otherwise inflate the view
-        ViewHolder viewHolder; // view lookup cache stored in tag
+        final ViewHolder viewHolder; // view lookup cache stored in tag
 
         if (convertView == null) {
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_color_effect, null, true);
+            convertView = inflater.inflate(R.layout.item_color_effect, null, false);
 
             viewHolder = new ViewHolder();
 
@@ -106,10 +106,15 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
         viewHolder.imageView.setImageResource(resourceId);
         viewHolder.textView.setText(getColorEffectName(colorEffectName));
 
-        if(RecordActivity.colorEffectLastPosition == position) {
+
+        if(RecordActivity.colorEffectLastPosition == position && isPressed) {
+
+            Log.d(LOG_TAG, " setBackground in position " + position );
 
             viewHolder.imageView.setBackgroundColor(R.color.videona_blue_5);
             viewHolder.textView.setTypeface(null, Typeface.BOLD);
+
+            isPressed = false;
 
         }
 
@@ -118,6 +123,8 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
             public void onClick(View v) {
 
                 mViewClickListener.onImageClicked(position);
+
+               // isPressed = true;
 
             }
         });
