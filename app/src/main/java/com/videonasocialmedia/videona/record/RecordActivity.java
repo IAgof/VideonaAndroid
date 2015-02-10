@@ -22,6 +22,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.Config;
@@ -89,6 +90,11 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     private ImageColorEffectAdadpter imageColorEffectAdadpter;
 
     private TwoWayView lvTest;
+
+    private RelativeLayout relativeLayoutColorEffects;
+
+    public static int colorEffectLastPosition = 0;
+
 
 
     @Override
@@ -180,6 +186,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                                 // inform the user that recording has started
                                 captureButton.setImageResource(R.drawable.ic_action_stop);  //setText("Stop");
+                                captureButton.setAlpha(125);
                                 isRecording = true;
 
 
@@ -203,44 +210,65 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
 
+        relativeLayoutColorEffects = (RelativeLayout) findViewById(R.id.relativeLayoutColorEffects);
+        relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
+
+
         lvTest = (TwoWayView) findViewById(R.id.lvItems);
-        lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Log.d(LOG_TAG, " entro en lvTest setOnClickListener");
-
-                mCamera.stopPreview();
-                mCamera.release();
-                mCamera = null;
-
-                onCreate(null);
-
-            }
-        });
-
 
         btnColorEffect.setOnClickListener(new OnClickListener() {
+
             @Override
+
             public void onClick(View v) {
+
 
                 Log.d(LOG_TAG, " entro en btnColorEffect");
 
-                ArrayList<String> colorEffects = new ArrayList<String>();
 
-                for(int i = 0; i< CameraPreview.colorEffects.size(); i++){
-                    colorEffects.add(CameraPreview.colorEffects.get(i));
+                if(relativeLayoutColorEffects.isShown()) {
+
+
+                    relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
+
+
+                    btnColorEffect.setImageResource(R.drawable.ic_filters);
+
+
+                    return;
+
+
                 }
 
+
+                relativeLayoutColorEffects.setVisibility(View.VISIBLE);
+
+
+                ArrayList<String> colorEffects = new ArrayList<String>();
+
+
+                for(int i = 0; i< CameraPreview.colorEffects.size(); i++){
+
+                    colorEffects.add(CameraPreview.colorEffects.get(i));
+
+                }
+
+
                 imageColorEffectAdadpter = new ImageColorEffectAdadpter(RecordActivity.this, getApplicationContext(), colorEffects );
+
                 imageColorEffectAdadpter.setViewClickListener(RecordActivity.this);
+
 
                 lvTest.setAdapter(imageColorEffectAdadpter)  ;
 
+
                 btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
 
+
             }
+
         });
+
 
     }
 
@@ -304,14 +332,14 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
 
                 long time = SystemClock.elapsedRealtime() - chronometer.getBase();
-                int h   = (int)(time /3600000);
-                int m = (int)(time - h*3600000)/60000;
-                int s= (int)(time - h*3600000- m*60000)/1000 ;
-               // String hh = h < 10 ? "0"+h: h+"";
-                String mm = m < 10 ? "0"+m: m+"";
-                String ss = s < 10 ? "0"+s: s+"";
-               // chronometer.setText(hh+":"+mm+":"+ss);
-                RecordActivity.this.chronometer.setText(mm+":"+ss);
+                int h = (int) (time / 3600000);
+                int m = (int) (time - h * 3600000) / 60000;
+                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+                // String hh = h < 10 ? "0"+h: h+"";
+                String mm = m < 10 ? "0" + m : m + "";
+                String ss = s < 10 ? "0" + s : s + "";
+                // chronometer.setText(hh+":"+mm+":"+ss);
+                RecordActivity.this.chronometer.setText(mm + ":" + ss);
 
             }
         });
@@ -385,9 +413,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         }
         */
 
-        mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
+    //    mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
 
-    /*    mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
@@ -400,9 +428,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         mMediaRecorder.setVideoFrameRate(30);
         mMediaRecorder.setVideoSize(1280, 720);
-        mMediaRecorder.setVideoEncodingBitRate(5000000);
+        mMediaRecorder.setVideoEncodingBitRate(4000000);
 
-    */
+
 
         // Step 4: Set output file
         videoRecord = getOutputMediaFile(MEDIA_TYPE_VIDEO).toString();
@@ -568,22 +596,22 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     public void onImageClicked(int position) {
 
-        Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
 
-        // Color effects
-        Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect());
 
+        colorEffectLastPosition = position;
 
         appPrefs.setColorEffect(CameraPreview.colorEffects.get(position));
-        appPrefs.setIsColorEffect(true);
 
+        Camera.Parameters parameters = mCamera.getParameters();
+        parameters.setColorEffect(appPrefs.getColorEffect());
 
+        mCamera.setParameters(parameters);
+        // Color effects
 
-        mCamera.stopPreview();
-        mCamera.release();
-        mCamera = null;
+        Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect() + " filter " + appPrefs.getColorEffect());
 
-        onCreate(null);
+        lvTest.setAdapter(imageColorEffectAdadpter)  ;
 
     }
 
