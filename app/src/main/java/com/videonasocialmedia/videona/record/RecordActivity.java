@@ -202,7 +202,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
 
         btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
-        btnColorEffect.setVisibility(View.VISIBLE);
 
         lvTest = (TwoWayView) findViewById(R.id.lvItems);
         lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -238,7 +237,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                 lvTest.setAdapter(imageColorEffectAdadpter)  ;
 
-                btnColorEffect.setVisibility(View.INVISIBLE);
+                btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
 
             }
         });
