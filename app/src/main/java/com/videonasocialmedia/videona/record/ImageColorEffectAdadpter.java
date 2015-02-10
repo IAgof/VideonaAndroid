@@ -99,7 +99,7 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
         String colorEffectName = CameraPreview.colorEffects.get(position);
 
-        String colorEffectDrawableName = "filter_" + colorEffectName;
+        String colorEffectDrawableName = "effect_" + colorEffectName;
 
         int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
 
@@ -108,7 +108,7 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
         if(RecordActivity.colorEffectLastPosition == position) {
 
-            viewHolder.imageView.setBackgroundColor(R.color.videona_seekbar_blue_light);
+            viewHolder.imageView.setBackgroundColor(R.color.videona_blue_5);
             viewHolder.textView.setTypeface(null, Typeface.BOLD);
 
         }
