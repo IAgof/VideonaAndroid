@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/linearLayoutColorEffect">
@@ -10,14 +10,13 @@
         android:layout_height="wrap_content">
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="78dp"
+            android:layout_height="50dp"
             android:text="Color Effect"
             android:id="@+id/imageColorEffect"
-            android:src="@drawable/none_filter"
+            android:src="@drawable/ic_action_share"
             android:background="@null"
-            android:padding="5dp"
-            android:scaleType="fitCenter" />
+            android:padding="5dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,9 +24,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/textColorEffect"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal" />
+            android:gravity="center" />
     </LinearLayout>
 
 
-</RelativeLayout>
+</TableLayout>
