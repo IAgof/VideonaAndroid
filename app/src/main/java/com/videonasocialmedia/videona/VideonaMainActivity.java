@@ -170,10 +170,12 @@ public class VideonaMainActivity extends Activity {
         SharedPreferences config = getApplicationContext()
                 .getSharedPreferences("USER_INFO", MODE_PRIVATE);
         boolean remembered = config.getBoolean("rememberUser", false);
-        String cookieValue = config.getString("cookie", null);
-        if (remembered && cookieValue != null) {
+        String sessionCookie = config.getString("sessionCookie", null);
+        String rememberMeCookie = config.getString("rememberMeCookie", null);
+        if (remembered && sessionCookie != null && rememberMeCookie != null) {
             VideonaApplication app = (VideonaApplication) getApplication();
-            app.getApiHeaders().setSessionCookieValue(cookieValue);
+            app.getApiHeaders().setSessionCookieValue(sessionCookie);
+            app.getApiHeaders().setRememberMeCookieValue(rememberMeCookie);
             ApiClient apiClient = app.getApiClient();
             //apiClient.getUserName();
             //TODO Check session against server

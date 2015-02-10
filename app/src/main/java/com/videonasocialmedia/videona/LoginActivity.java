@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +30,13 @@ public class LoginActivity extends Activity {
     TextView userTextField;
     @InjectView(R.id.login_password_field)
     TextView passwordTextField;
+    @InjectView(R.id.checkBox_remember_me)
+    CheckBox rememberMe;
+
 
     private ApiClient apiClient;
     private VideonaApplication app;
     private SharedPreferences config;
-
-    private boolean rememberUser;
 
 
     @Override
@@ -48,7 +50,6 @@ public class LoginActivity extends Activity {
         apiClient = app.getApiClient();
         config = getApplicationContext()
                 .getSharedPreferences("USER_INFO", MODE_PRIVATE);
-        rememberUser = config.getBoolean("rememberUser", false);
     }
 
     /**
@@ -69,15 +70,24 @@ public class LoginActivity extends Activity {
         try {
             String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"),
                     Base64.DEFAULT);
-            int remember = 0;
-            if (rememberUser) remember = 1;
-            apiClient.login(auth, remember, new BasicLoginCallback());
+
+            int rememberQueryParam = 0;
+            boolean rememberMeChecked = rememberMe.isChecked();
+            if (rememberMeChecked) {
+                rememberQueryParam = 1;
+            }
+
+            apiClient.login(auth, rememberQueryParam, new BasicLoginCallback());
+
+            //Store remember user config
+            config.edit().putBoolean("rememberUser", rememberMeChecked);
 
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(getApplicationContext(), "Error durante login",
                     Toast.LENGTH_SHORT).show();
         }
     }
+
 
     /**
      * Sub-class implementing the callback of the login api call
@@ -86,7 +96,7 @@ public class LoginActivity extends Activity {
         /**
          * Receive the successful response from the server and stores the cookie with the session
          * data in VideonaApplication.apiHeaders and, if rememberUser is true, the cookie is also
-         * stored in sharedPreferences with the key cookie
+         * stored in sharedPreferences
          *
          * @param o
          * @param response successful response message from the server
@@ -97,17 +107,27 @@ public class LoginActivity extends Activity {
                     Toast.LENGTH_LONG).show();
 
             String cookie = "";
+            String sessionIdCookie = "";
+            String rememberMeCookie = "";
             List<Header> h = response.getHeaders();
             for (Header header : h) {
-                if (header.getName().equalsIgnoreCase("set-cookie"))
+                if (header.getName().equalsIgnoreCase("set-cookie")) {
                     cookie = header.getValue();
+                    if (cookie.contains("PHPSESSSID")) {
+                        sessionIdCookie = cookie;
+                    } else if (cookie.contains("REMEMBERME")) {
+                        rememberMeCookie = cookie;
+                    }
+                }
             }
 
-            app.getApiHeaders().setSessionCookieValue(cookie);
+            app.getApiHeaders().setSessionCookieValue(sessionIdCookie);
 
 
-            if (rememberUser) {
-                config.edit().putString("cookie", cookie).apply();
+            if (rememberMe.isChecked()) {
+                app.getApiHeaders().setRememberMeCookieValue(rememberMeCookie);
+                config.edit().putString("sessionCookie", sessionIdCookie).apply();
+                config.edit().putString("rememberMeCookie", rememberMeCookie).apply();
             }
 
             startActivity(new Intent(getApplicationContext(), RecordActivity.class));
