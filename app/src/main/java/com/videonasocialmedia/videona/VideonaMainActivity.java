@@ -2,6 +2,7 @@ package com.videonasocialmedia.videona;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,9 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.record.RecordActivity;
-
-import com.videonasocialmedia.videona.R;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,11 +50,6 @@ public class VideonaMainActivity extends Activity {
 
         appPrefs.setIsColorEffect(false);
 
-        try {
-            checkPath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -167,6 +162,26 @@ public class VideonaMainActivity extends Activity {
 
     }
 
+    /*+++++++++*/
+    /* SESSION */
+    /*+++++++++*/
+
+    private boolean isSessionActive() {
+        SharedPreferences config = getApplicationContext()
+                .getSharedPreferences("USER_INFO", MODE_PRIVATE);
+        boolean remembered = config.getBoolean("rememberUser", false);
+        String cookieValue = config.getString("cookie", null);
+        if (remembered && cookieValue != null) {
+            VideonaApplication app = (VideonaApplication) getApplication();
+            app.getApiHeaders().setSessionCookieValue(cookieValue);
+            ApiClient apiClient = app.getApiClient();
+            //apiClient.getUserName();
+            //TODO Check session against server
+            return true;
+        }
+        return false;
+    }
+
 
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -174,10 +189,20 @@ public class VideonaMainActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            //TODO actually check if the user is logged in
+
 
             // Waiting time to show splash screen
             // Dummy screen
+
+            boolean loggedIn = isSessionActive();
+
+            try {
+                checkPath();
+            } catch (IOException e) {
+                Log.e("CHECK_PATH", "Error checking path", e);
+            }
+
+
             try {
                 // 3 seconds, time in milliseconds
                 Thread.sleep(3000);
@@ -185,7 +210,8 @@ public class VideonaMainActivity extends Activity {
                 e.printStackTrace();
             }
 
-            return false;
+            return loggedIn;
+
 
         }
 
@@ -193,8 +219,11 @@ public class VideonaMainActivity extends Activity {
         protected void onPostExecute(Boolean loggedIn) {
 
             //launchCameraActivity();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
+            if (loggedIn) {
+                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+            } else {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
         }
     }
 

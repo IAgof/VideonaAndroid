@@ -2,20 +2,24 @@ package com.videonasocialmedia.videona;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.api.ApiClient;
+import com.videonasocialmedia.videona.record.RecordActivity;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Header;
 import retrofit.client.Response;
 
 
@@ -27,6 +31,10 @@ public class LoginActivity extends Activity {
     TextView passwordTextField;
 
     private ApiClient apiClient;
+    private VideonaApplication app;
+    private SharedPreferences config;
+
+    private boolean rememberUser;
 
 
     @Override
@@ -34,19 +42,20 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         ButterKnife.inject(this);
 
-        //TODO hacer cookies persistentes
-        VideonaApplication app = (VideonaApplication) getApplication();
+        app = (VideonaApplication) getApplication();
         apiClient = app.getApiClient();
+        config = getApplicationContext()
+                .getSharedPreferences("USER_INFO", MODE_PRIVATE);
+        rememberUser = config.getBoolean("rememberUser", false);
     }
 
     /**
      * Start the activity to create a new user when the new_user_button is clicked
      */
     @OnClick(R.id.new_user_button)
-    public void goToCreateUserAct() {
+    public void goToUserSignUpActivity() {
         startActivity(new Intent(getApplicationContext(), UserSignUpActivity.class));
     }
 
@@ -58,10 +67,13 @@ public class LoginActivity extends Activity {
         String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();
         try {
-            String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"), Base64.DEFAULT);
+            String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"),
+                    Base64.DEFAULT);
             apiClient.login(auth, new BasicLoginCallback());
+
         } catch (UnsupportedEncodingException e) {
-            Toast.makeText(getApplicationContext(), "Error durante login", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Error durante login",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -70,29 +82,33 @@ public class LoginActivity extends Activity {
      */
     class BasicLoginCallback implements Callback<Response> {
         /**
-         * Star
+         * Receive the successful response from the server and stores the cookie with the session
+         * data in VideonaApplication.apiHeaders and, if rememberUser is true, the cookie is also
+         * stored in sharedPreferences with the key cookie
          *
          * @param o
          * @param response successful response message from the server
          */
         @Override
         public void success(Response o, Response response) {
-            //TODO store session
-            Toast.makeText(getApplicationContext(), "Logeado correctamente", Toast.LENGTH_LONG).show();
-            response.getHeaders();
-            apiClient.getUserProfile(9, new Callback<Response>() {
-                @Override
-                public void success(Response response, Response response2) {
-                    Toast.makeText(getApplicationContext(), "Ok", Toast.LENGTH_LONG).show();
-                }
+            Toast.makeText(getApplicationContext(), "Logeado correctamente",
+                    Toast.LENGTH_LONG).show();
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-                }
-            });
-            //startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+            String cookie = "";
+            List<Header> h = response.getHeaders();
+            for (Header header : h) {
+                if (header.getName().equalsIgnoreCase("set-cookie"))
+                    cookie = header.getValue();
+            }
 
+            app.getApiHeaders().setSessionCookieValue(cookie);
+
+
+            if (rememberUser) {
+                config.edit().putString("cookie", cookie).apply();
+            }
+
+            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
 
         }
 
@@ -103,7 +119,8 @@ public class LoginActivity extends Activity {
          */
         @Override
         public void failure(RetrofitError error) {
-            Toast.makeText(getApplicationContext(), "Error durante login", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Error durante login",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

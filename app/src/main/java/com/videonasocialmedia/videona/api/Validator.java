@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
  */
 public class Validator {
 
-    private static Pattern userNamePattern = Pattern.compile("^[áéíóúÁÉÍÓÚüÜñÑA-Za-z0-9_-]{4,15}$");
+    private static Pattern userNamePattern = Pattern.compile("^[áéíóúÁÉÍÓÚüÜñÑA-Za-z0-9_]{4,15}$");
 
     //TODO establecer tamaño pass
-    private static Pattern passwordPattern = Pattern.compile("((?=.*[a-z])(?=.*d)(?=.*[@#$%])(?=.*[A-Z]).{8,16})");
+    private static Pattern passwordPattern = Pattern.compile("((?=.*[a-z])(?=.*d)(?=.*[@#$%&,!?¿.])(?=.*[A-Z]).{8,16})");
 
 
     public static boolean validateUserName(String username) {
