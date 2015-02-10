@@ -133,11 +133,11 @@ public class ShareVideoActivity  extends Activity {
 
             progressDialog.findViewById(
                     Resources.getSystem().getIdentifier("topPanel", "id",
-                            "android")).setBackgroundColor(R.color.videona_blue);
+                            "android")).setBackgroundColor(R.color.videona_blue_1);
             progressDialog.findViewById(
                     Resources.getSystem().getIdentifier("customPanel", "id",
                             "android"))
-                    .setBackgroundColor(R.color.videona_blue);
+                    .setBackgroundColor(R.color.videona_blue_1);
 
 
             performOnBackgroundThread(r);
