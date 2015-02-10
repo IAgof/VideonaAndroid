@@ -69,7 +69,9 @@ public class LoginActivity extends Activity {
         try {
             String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"),
                     Base64.DEFAULT);
-            apiClient.login(auth, new BasicLoginCallback());
+            int remember = 0;
+            if (rememberUser) remember = 1;
+            apiClient.login(auth, remember, new BasicLoginCallback());
 
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(getApplicationContext(), "Error durante login",
