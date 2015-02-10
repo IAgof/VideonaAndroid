@@ -14,6 +14,8 @@
 to develop it just giving feedback or you can go to our crowdfunding
 campaign on Idiegogo site and support us and get some upgrades on the app.
 We will be very grateful if you spread the news in your social networks."</string>
+
+
     <string name="videona_web">http://www.videona.es</string>
     <string name="text_video_name">"Video name: "</string>
     <string name="text_video_duration">"Duration: "</string>
@@ -36,12 +38,37 @@ We will be very grateful if you spread the news in your social networks."</strin
     <string name="music_genre_electronic">"Electronic"</string>
     <string name="music_genre_classic">"Classic"</string>
     <string name="music_genre_caribbean">"Caribbean"</string>
+    <string name="music_genre_folk">"Folk"</string>
+
+    <!-- Activity Login -->
+
     <string name="title_activity_login">LoginActivity</string>
-    <string name="please_login">Please login in your account</string>
     <string name="login_hint">ohvideo@videona.es</string>
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
     <string name="please_sign_up">Create a new account</string>
     <string name="new_user_btn_content_descp">New user</string>
+    <string name="accesibility_login_with_facebook">login with facebook</string>
+    <string name="checkBox_remember_me">Remember Me</string>
+    <string name="please_login">Please login in your account</string>
+
+    <!-- Activity Record -->
+
+        <!-- Filters_Effects -->
+            <string name="filter_effect_sepia">"sepia"</string>
+            <string name="filter_effect_aqua">"aqua"</string>
+            <string name="filter_effect_emboss">"emboss"</string>
+            <string name="filter_effect_mono">"mono"</string>
+            <string name="filter_effect_negative">"negative"</string>
+            <string name="filter_effect_neon">"neon"</string>
+            <string name="filter_effect_none">"none"</string>
+            <string name="filter_effect_posterice">"posterice"</string>
+            <string name="filter_effect_sketch">"sketch"</string>
+            <string name="filter_effect_solarice">"solarice"</string>
+            <string name="filter_effect_whiteboard">"whiteboard"</string>
+            <string name="filter_effect_blackboard">"blackboard"</string>
+
+
+
 
 </resources>

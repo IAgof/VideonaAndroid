@@ -456,7 +456,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
                 final RectF rect = new RectF(0, 0 , getWidth()-padding, getHeight());
 
-                paint.setColor(R.color.grey);
+                paint.setColor(R.color.pastel_palette_grey);
                 paint.setAlpha(160);
                 paint.setAntiAlias(true);
 
@@ -484,7 +484,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 rect.right = getWidth()-padding;
 
 
-                paint.setColor(R.color.grey);
+                paint.setColor(R.color.pastel_palette_grey);
                 paint.setAlpha(160);
                 //paint.setColor(Color.WHITE);
                 canvas.drawRect(rect, paint);

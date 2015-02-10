@@ -394,11 +394,11 @@ public class MusicActivity extends Activity {
 
     // references to our orginial images and text music order
     private Integer[] mThumbMusicImage = {
-            R.drawable.imagemusicrock, R.drawable.imagemusicreggae,
-            R.drawable.imagemusichiphop, R.drawable.imagemusicjazz,
-            R.drawable.imagemusicpop, R.drawable.imagemusiccountry,
-            R.drawable.imagemusicelectronic, R.drawable.imagemusicclassic,
-            R.drawable.imagemusiccaribbean
+            R.drawable.ic_rock, R.drawable.ic_reggae,
+            R.drawable.ic_hip_hop, R.drawable.ic_jazz,
+            R.drawable.ic_pop, R.drawable.ic_country,
+            R.drawable.ic_electronic, R.drawable.ic_classic,
+            R.drawable.ic_folk
     };
 
     private Integer[] mThumbMusicText = {
@@ -406,7 +406,7 @@ public class MusicActivity extends Activity {
             R.string.music_genre_hihhop, R.string.music_genre_jazz,
             R.string.music_genre_pop, R.string.music_genre_country,
             R.string.music_genre_electronic, R.string.music_genre_classic,
-            R.string.music_genre_caribbean
+            R.string.music_genre_folk
     };
 
     private Integer[] mThumbMusicAudio = {

@@ -22,22 +22,25 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Creo que esta no hace falta. He hecho una asimetrica con el gridview de android
+
+
+
     compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.android.support:support-v13:21.0.0'
-
+    compile 'com.android.support:support-v13:21.0.3'
     compile 'com.googlecode.mp4parser:isoparser:1.0.4.2'
-
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
-
-    //Creo que esta no hace falta. He hecho una asimetrica con el gridview de android
     compile 'com.felipecsl.asymmetricgridview:library:1.1.0'
-
     compile 'com.jakewharton:butterknife:6.0.0'
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
+    compile 'com.android.support:support-v4:21.0.3'
+
 
 }
+
 
 
 
