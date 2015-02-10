@@ -272,7 +272,7 @@ public class EditVideoActivity extends Activity {
 
                 if(isMusicON) {
 
-                    btnMusic.setImageDrawable(getDrawable(R.drawable.ic_action_music));
+                    btnMusic.setImageDrawable(getDrawable(R.drawable.ic_addmusic_buttom));
 
                     isMusicON = false;
 
@@ -498,11 +498,11 @@ public class EditVideoActivity extends Activity {
 
    			progressDialog.findViewById(
                     Resources.getSystem().getIdentifier("topPanel", "id",
-                            "android")).setBackgroundColor(R.color.videona_blue);
+                            "android")).setBackgroundColor(R.color.videona_blue_1);
    			progressDialog.findViewById(
                     Resources.getSystem().getIdentifier("customPanel", "id",
                             "android"))
-   					.setBackgroundColor(R.color.videona_blue); 
+   					.setBackgroundColor(R.color.videona_blue_1);
           
    			
                 performOnBackgroundThread(r);

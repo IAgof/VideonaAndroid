@@ -3,12 +3,37 @@
 
     <color name="transparent">#7F000000</color>
 
-    <color name="videona_blue">#0091ea</color>
 
-    <color name="videona_seekbar_blue_light">#85ffff</color>
+    <color name="videona_blue_1">#0091ea</color>
 
-    <color name="videona_seekbar_blue">#26c5ff</color>
+    <color name="videona_blue_2">#00b8f3</color>
 
-    <color name="grey">#d9d9d9</color>
+    <color name="videona_blue_3">#00cff7</color>
+
+    <color name="videona_blue_4">#00e7fb</color>
+
+    <color name="videona_blue_5">#00e7fb</color>
+
+
+    <color name="pastel_palette_brown">#c4bdab</color>
+
+    <color name="pastel_palette_blue">#a1c1e0</color>
+
+    <color name="pastel_palette_orange">#e6b285</color>
+
+    <color name="pastel_palette_pink">#ebcec5</color>
+
+    <color name="pastel_palette_red">#dd8977</color>
+
+    <color name="pastel_palette_green">#d3d899</color>
+
+    <color name="pastel_palette_purple">#ae9eab</color>
+
+    <color name="pastel_palette_pink_2">#e0a1a9</color>
+
+    <color name="pastel_palette_grey">#8e97a3</color>
+
+    <color name="pastel_palette_yellow">#eace83</color>
+
 
 </resources>
