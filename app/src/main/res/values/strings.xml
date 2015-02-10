@@ -19,7 +19,7 @@ We will be very grateful if you spread the news in your social networks."</strin
     <string name="text_video_duration">"Duration: "</string>
     <string name="text_video_description">"Description: "</string>
     <string name="share_using">"Share video using "</string>
-    <string name="please_wait">"Please wait ... "</string>
+    <string name="please_wait">"Please wait &#8230; "</string>
     <string name="dialog_processing">"Trimming video "</string>
     <string name="dialog_processing_audio">"Adding audio "</string>
     <string name="getit">"Get it"</string>
@@ -37,6 +37,12 @@ We will be very grateful if you spread the news in your social networks."</strin
     <string name="music_genre_classic">"Classic"</string>
     <string name="music_genre_caribbean">"Caribbean"</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="please_login">Please login in your account</string>
+    <string name="login_hint">ohvideo@videona.es</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="please_sign_up">Create a new account</string>
+    <string name="new_user_btn_content_descp">New user</string>
 
     <!-- Filters_Effects -->
     <string name="filter_effect_sepia">"sepia"</string>
