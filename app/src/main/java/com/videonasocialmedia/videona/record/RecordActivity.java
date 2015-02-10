@@ -93,6 +93,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     private TwoWayView lvTest;
     private RelativeLayout relativeLayoutColorEffects;
 
+    public static int colorEffectLastPosition = 0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -206,9 +208,10 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
 
         btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
-        btnColorEffect.setVisibility(View.VISIBLE);
 
         relativeLayoutColorEffects = (RelativeLayout) findViewById(R.id.relativeLayoutColorEffects);
+        relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
+
         lvTest = (TwoWayView) findViewById(R.id.lvItems);
         lvTest.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -232,6 +235,16 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                 Log.d(LOG_TAG, " entro en btnColorEffect");
 
+                if(relativeLayoutColorEffects.isShown()) {
+
+                    relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
+
+                    btnColorEffect.setImageResource(R.drawable.ic_color_effect);
+
+                    return;
+
+                }
+
                 relativeLayoutColorEffects.setVisibility(View.VISIBLE);
 
                 ArrayList<String> colorEffects = new ArrayList<String>();
@@ -245,7 +258,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                 lvTest.setAdapter(imageColorEffectAdadpter)  ;
 
-                btnColorEffect.setVisibility(View.INVISIBLE);
+                btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
 
             }
         });
@@ -393,9 +406,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         }
         */
 
-        mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
+      //  mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P));
 
-    /*    mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
@@ -408,9 +421,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         mMediaRecorder.setVideoFrameRate(30);
         mMediaRecorder.setVideoSize(1280, 720);
-        mMediaRecorder.setVideoEncodingBitRate(5000000);
+        mMediaRecorder.setVideoEncodingBitRate(4000000);
 
-    */
+
 
         // Step 4: Set output file
         videoRecord = getOutputMediaFile(MEDIA_TYPE_VIDEO).toString();
@@ -578,6 +591,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
       //  Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
 
+        colorEffectLastPosition = position;
+
         // Color effects
         Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect());
 
@@ -596,6 +611,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         mCamera.setParameters(parameters);
 
+        lvTest.setAdapter(imageColorEffectAdadpter);
+
 
     }
 
@@ -604,12 +621,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     public boolean onTouchEvent (MotionEvent ev){
         if(ev.getAction() == MotionEvent.ACTION_DOWN){
-
-            if( relativeLayoutColorEffects.isShown()){
-                relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
-                btnColorEffect.setVisibility(View.VISIBLE);
-            }
-            return true;
+           return true;
         } else {
             return false;
         }
