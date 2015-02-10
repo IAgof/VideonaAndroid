@@ -4,29 +4,29 @@ package com.videonasocialmedia.videona.api;
  * Created by jca on 8/1/15.
  */
 public class RegisterRequestBody {
-/*
-    {
-        user_name: "foo",
-            email: "foo@bar.com",
-            pass: "asdjw0213"
-    }
-*/
-    String user_name;
+    /*
+        {
+            username: "foo",
+                email: "foo@bar.com",
+                pass: "asdjw0213"
+        }
+    */
+    String username;
     String email;
     String password;
 
-    public RegisterRequestBody(String user_name, String email, String password) {
-        this.user_name = user_name;
+    public RegisterRequestBody(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

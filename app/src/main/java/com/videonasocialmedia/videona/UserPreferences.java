@@ -39,6 +39,7 @@ public class UserPreferences {
 	 this.prefsEditor = appUserPreferences.edit();
 	}
 
+
     /*
 	public String getUserId() {
 	 return appUserPreferences.getString(userId, "");

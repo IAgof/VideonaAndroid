@@ -33,6 +33,18 @@
     <string name="music_genre_electronic">"Electronic"</string>
     <string name="music_genre_classic">"Classic"</string>
     <string name="music_genre_caribbean">"Caribbean"</string>
+    <string name="music_genre_folk">"Folk"</string>
+
+    <!-- Activity Login -->
+
     <string name="title_activity_login">LoginActivity</string>
+    <string name="login_hint">ohvideo@videona.es</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="please_sign_up">Create a new account</string>
+    <string name="new_user_btn_content_descp">New user</string>
+    <string name="accesibility_login_with_facebook">login with facebook</string>
+    <string name="checkBox_remember_me">Remember Me</string>
+    <string name="please_login">Please login in your account</string>
 
 </resources>
