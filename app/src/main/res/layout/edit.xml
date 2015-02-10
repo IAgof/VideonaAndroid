@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/transparent">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -10,18 +11,16 @@
         android:layout_centerInParent="true">
 
         <RelativeLayout
-            android:layout_width="300dp"
-            android:layout_height="200dp">
+            android:layout_width="420dp"
+            android:layout_height="236dp"
+            android:layout_alignParentStart="false"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="16dp">
 
             <VideoView
                 android:id="@+id/videoView"
-                android:layout_width="300dp"
-                android:layout_height="200dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -33,9 +32,6 @@
             android:layout_centerVertical="true"
             android:gravity="center|top"
             android:id="@+id/relativeLayoutPreviewVideo"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="false"
             android:layout_marginBottom="10dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
@@ -77,7 +73,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/imageViewFrame1"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                             />
                     </RelativeLayout>
 
                     <!-- Image 2  -->
@@ -310,7 +307,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/seekBarPoint"
                 android:thumb="@drawable/point"
-                android:progressDrawable="@color/pastel_palette_grey"
+                android:progressDrawable="@color/pastel_palette_blue"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:maxHeight="4dp"
@@ -319,34 +316,33 @@
                 android:progress="1" />
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:id="@+id/imageButtonCut"
                 android:src="@drawable/ic_validation"
                 android:background="@null"
-                android:layout_marginRight="16dp"
                 android:scaleType="fitCenter"
-                android:layout_marginEnd="22dp"
-                android:layout_alignTop="@+id/imageButtonMusic"
-                android:layout_alignEnd="@+id/seekBarPoint" />
+                android:layout_alignBottom="@+id/imageButtonPlay"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="16dp" />
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:id="@+id/imageButtonMusic"
                 android:background="@null"
                 android:src="@drawable/ic_addmusic_buttom"
-                android:layout_marginLeft="16dp"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
                 android:scaleType="fitCenter"
-                android:layout_marginStart="21dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignBottom="@+id/imageButtonPlay"
+                android:layout_alignParentStart="true"
+                android:layout_margin="16dp" />
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:scaleType="fitCenter"
+                android:layout_height="50dp"
                 android:id="@+id/imageButtonPlay"
                 android:background="@null"
                 android:src="@drawable/ic_action_play"

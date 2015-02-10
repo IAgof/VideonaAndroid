@@ -17,8 +17,8 @@
 
             <ImageButton
                 android:id="@+id/imageBtnOkMusic"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="true"
