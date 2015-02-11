@@ -41,7 +41,7 @@ import java.util.Date;
 
 public class RecordActivity extends Activity implements ImageColorEffectAdadpter.ViewClickListener {
 
-    private static final String LOG_TAG = "RecordActivity";
+    private static String LOG_TAG = "RecordActivity";
 
     //private final String LOG_TAT = this.getClass().getSimpleName();
 
@@ -253,6 +253,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                 }
 
+                appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
+
 
                 imageColorEffectAdadpter = new ImageColorEffectAdadpter(RecordActivity.this, getApplicationContext(), colorEffects );
 
@@ -263,6 +265,10 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
 
                 btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
+
+                // save last color effect position selected to paint at position - 1
+                lvTest.setSelection(colorEffectLastPosition - 1);
+
 
 
             }
@@ -598,7 +604,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         //  Toast.makeText(RecordActivity.this, "You Clicked at " + position, Toast.LENGTH_SHORT).show();
 
-
         colorEffectLastPosition = position;
 
         appPrefs.setColorEffect(CameraPreview.colorEffects.get(position));
@@ -611,7 +616,28 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect() + " filter " + appPrefs.getColorEffect());
 
+
+        ArrayList<String> colorEffects = new ArrayList<String>();
+
+
+        for(int i = 0; i< CameraPreview.colorEffects.size(); i++){
+
+            colorEffects.add(CameraPreview.colorEffects.get(i));
+
+        }
+
+        appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
+
+        imageColorEffectAdadpter = null;
+
+        imageColorEffectAdadpter = new ImageColorEffectAdadpter(RecordActivity.this, getApplicationContext(), colorEffects );
+
+        imageColorEffectAdadpter.setViewClickListener(RecordActivity.this);
+
+
         lvTest.setAdapter(imageColorEffectAdadpter)  ;
+
+        lvTest.setSelection(colorEffectLastPosition - 1);
 
     }
 
