@@ -50,8 +50,8 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/login_butons_lined"
         android:layout_below="@+id/login_butons_lined"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:adjustViewBounds="false"
         android:baselineAlignBottom="false"
@@ -85,8 +85,6 @@
             android:id="@+id/login_facebook_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:layout_margin="8dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/accesibility_login_with_facebook"
@@ -94,7 +92,6 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:longClickable="false"
-            android:nestedScrollingEnabled="false"
             android:scaleType="fitXY"
             android:src="@drawable/ic_facebook" />
 
@@ -102,9 +99,7 @@
             android:id="@+id/login_g_plus_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_margin="8dp"
-            android:layout_toEndOf="@+id/new_user_button"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_google_plus" />
 
@@ -112,9 +107,7 @@
             android:id="@+id/login_twitter_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_margin="8dp"
-            android:layout_toEndOf="@+id/login_facebook_button"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_twitter" />
 
@@ -122,9 +115,7 @@
             android:id="@+id/new_user_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_margin="8dp"
-            android:layout_toEndOf="@+id/login_twitter_button"
             android:background="@android:color/transparent"
             android:contentDescription="@string/new_user_btn_content_descp"
             android:src="@drawable/ic_new_user" />

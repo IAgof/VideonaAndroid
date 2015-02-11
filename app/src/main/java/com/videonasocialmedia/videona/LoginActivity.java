@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Base64;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.record.RecordActivity;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -65,7 +63,11 @@ public class LoginActivity extends Activity {
      */
     @OnClick(R.id.send_login_button)
     public void login() {
-        String source = userTextField.getText().toString() + ":"
+
+        //TODO remove next line when remember-me is working and uncomment the rest of the method
+        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+
+       /* String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();
         try {
             String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"),
@@ -85,7 +87,7 @@ public class LoginActivity extends Activity {
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(getApplicationContext(), "Error durante login",
                     Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
 
@@ -143,8 +145,6 @@ public class LoginActivity extends Activity {
         public void failure(RetrofitError error) {
             Toast.makeText(getApplicationContext(), "Error durante login",
                     Toast.LENGTH_SHORT).show();
-            //TODO remove next line when remember-me is working
-            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
         }
     }
 }

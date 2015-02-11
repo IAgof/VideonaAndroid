@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    android:orientation="horizontal"
-
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
+
+    android:orientation="horizontal"
 
     >
 
@@ -18,11 +18,9 @@
 
         android:layout_height="fill_parent"
 
-        android:layout_weight="1"
+        android:layout_alignParentStart="true"
 
-        android:layout_centerInParent="true"
-
-        android:layout_alignParentStart="true">
+        android:layout_centerInParent="true">
 
 
     </FrameLayout>
@@ -30,15 +28,15 @@
 
     <RelativeLayout
 
+        android:id="@+id/rec_1"
+
         android:layout_width="120dp"
 
         android:layout_height="450dp"
 
-        android:layout_alignParentStart="false"
-
         android:layout_alignParentEnd="true"
 
-        android:id="@+id/rec_1">
+        android:layout_alignParentStart="false">
 
 
         <ImageButton
@@ -53,17 +51,15 @@
 
             android:layout_centerVertical="true"
 
-            android:layout_gravity="center_horizontal|right"
+            android:layout_gravity="center_horizontal|end"
 
             android:background="@null"
 
+            android:paddingEnd="16dp"
+
             android:scaleType="fitCenter"
 
-            android:src="@drawable/ic_rec_buttom"
-
-            android:layout_alignParentRight="true"
-
-            android:paddingRight="16dp" />
+            android:src="@drawable/ic_rec_buttom" />
 
 
         <Chronometer
@@ -74,34 +70,36 @@
 
             android:layout_height="wrap_content"
 
-            android:textSize="18sp"
-
             android:layout_alignWithParentIfMissing="false"
+
+            android:layout_below="@+id/button_capture"
+
+            android:layout_centerHorizontal="true"
 
             android:layout_gravity="center_vertical"
 
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
 
             android:paddingLeft="16dp"
 
             android:paddingRight="16dp"
 
-            android:layout_below="@+id/button_capture"
-
-            android:layout_centerHorizontal="true" />
+            android:textSize="18sp" />
 
 
         <ImageButton
+
+            android:id="@+id/btnColorEffect"
 
             android:layout_width="25dp"
 
             android:layout_height="25dp"
 
-            android:text="New Button"
+            android:layout_above="@+id/button_capture"
 
-            android:id="@+id/btnColorEffect"
+            android:layout_centerHorizontal="true"
 
-            android:src="@drawable/ic_filters"
+            android:layout_margin="16dp"
 
             android:background="@null"
 
@@ -109,46 +107,40 @@
 
             android:scaleType="fitCenter"
 
-            android:nestedScrollingEnabled="true"
-
-            android:layout_above="@+id/button_capture"
-
-            android:layout_centerHorizontal="true"
-
-            android:layout_margin="16dp" />
+            android:src="@drawable/ic_filters" />
 
 
         <ImageButton
+
+            android:id="@+id/imageButton5"
 
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
 
-            android:id="@+id/imageButton5"
-
-            android:background="@null"
-
-            android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
-
             android:layout_alignParentTop="true"
 
             android:layout_alignStart="@+id/btnColorEffect"
 
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+
+            android:background="@null"
+
+            android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha" />
 
     </RelativeLayout>
 
 
     <RelativeLayout
 
+        android:id="@+id/relativeLayoutColorEffects"
+
         android:layout_width="400dp"
 
         android:layout_height="100dp"
 
         android:layout_alignParentBottom="true"
-
-        android:layout_centerInParent="true"
-        android:id="@+id/relativeLayoutColorEffects">
+        android:layout_centerInParent="true">
 
 
         <org.lucasr.twowayview.TwoWayView
@@ -156,8 +148,6 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
 
             xmlns:tools="http://schemas.android.com/tools"
-
-            xmlns:app="http://schemas.android.com/apk/res-auto"
 
             android:id="@+id/lvItems"
 
@@ -167,13 +157,13 @@
 
             android:layout_height="wrap_content"
 
-            android:drawSelectorOnTop="false"
-
-            tools:context=".RecordActivity"
-
             android:layout_alignParentBottom="true"
 
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+
+            android:drawSelectorOnTop="false"
+
+            tools:context=".RecordActivity" />
 
     </RelativeLayout>
 

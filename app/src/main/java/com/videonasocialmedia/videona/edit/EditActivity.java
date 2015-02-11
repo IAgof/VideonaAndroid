@@ -38,7 +38,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.VideonaMainActivity;
 import com.videonasocialmedia.videona.music.MusicActivity;
-import com.videonasocialmedia.videona.share.ShareVideoActivity;
+import com.videonasocialmedia.videona.share.ShareActivity;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.VideoUtils;
 
@@ -49,13 +49,13 @@ import java.io.IOException;
  * Created by amm on 5/09/14.
  */
 
-public class EditVideoActivity extends Activity {
+public class EditActivity extends Activity {
 
 
     private Uri fileUri; // file url to store image/video
 
-    private final String LOG_TAG= this.getClass().getSimpleName();
-    
+    private final String LOG_TAG = this.getClass().getSimpleName();
+
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
     private static final int ADD_MUSIC_REQUEST_CODE = 600;
 
@@ -90,14 +90,14 @@ public class EditVideoActivity extends Activity {
     public static int durationVideoRecorded;
 
     private static String musicSelected;
-    
+
     private ProgressDialog progressDialog;
 
     // Buttons
     private ImageButton btnTrim;
     private ImageButton btnMusic;
     private ImageButton btnPlay;
-    
+
     private Typeface tf;
 
     private SeekBar seekBar;
@@ -150,12 +150,12 @@ public class EditVideoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit);
+        setContentView(R.layout.activity_edit);
 
         // Keep screen ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        tf = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Medium.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 
 
         image1 = (ImageView) findViewById(R.id.imageViewFrame1);
@@ -193,16 +193,16 @@ public class EditVideoActivity extends Activity {
         // getting intent data
         Intent in = getIntent();
 
-       // Test pruebas 2 min
-      //  videoRecorded = Environment.getExternalStorageDirectory() + File.separator + "amm/dosminutos.mp4";
-      //  videoRecorded = Environment.getExternalStorageDirectory() + File.separator + "Videona/vlc-player.mp4";
+        // Test pruebas 2 min
+        //  videoRecorded = Environment.getExternalStorageDirectory() + File.separator + "amm/dosminutos.mp4";
+        //  videoRecorded = Environment.getExternalStorageDirectory() + File.separator + "Videona/vlc-player.mp4";
 
         Log.d(LOG_TAG, " videoRecorded " + videoRecorded + " vs " + in.getStringExtra("MEDIA_OUTPUT"));
         videoRecorded = in.getStringExtra("MEDIA_OUTPUT");
 
         videoTrim = "V_TRIM_" + new File(videoRecorded).getName().substring(4);
 
-        detailVideoCut=(TextView)findViewById(R.id.DetailsVideoCut);
+        detailVideoCut = (TextView) findViewById(R.id.DetailsVideoCut);
         detailVideoCut.setBackgroundColor(Color.TRANSPARENT);
         detailVideoCut.setTypeface(tf);
 
@@ -212,14 +212,13 @@ public class EditVideoActivity extends Activity {
         linearLayoutFrames = (LinearLayout) findViewById(R.id.linearLayoutFrames);
 
 
-
         seekBar = (SeekBar) findViewById(R.id.seekBarPoint);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-                if(mediaPlayer.isPlaying()) {
+                if (mediaPlayer.isPlaying()) {
                     if (mediaPlayerMusic != null) {
                         if (mediaPlayerMusic.isPlaying()) {
                             mediaPlayerMusic.pause();
@@ -263,14 +262,14 @@ public class EditVideoActivity extends Activity {
                 mediaPlayer.pause();
                 videoProgress = mediaPlayer.getCurrentPosition();
 
-                if(mediaPlayerMusic  != null){
+                if (mediaPlayerMusic != null) {
                     // mediaPlayerMusic.stop();
                     mediaPlayerMusic.release();
                     mediaPlayerMusic = null;
                 }
 
 
-                if(isMusicON) {
+                if (isMusicON) {
 
                     btnMusic.setImageDrawable(getDrawable(R.drawable.ic_addmusic_buttom));
 
@@ -288,11 +287,10 @@ public class EditVideoActivity extends Activity {
                 } else {
 
                     Intent music = new Intent();
-                    music.setClass(EditVideoActivity.this, MusicActivity.class);
+                    music.setClass(EditActivity.this, MusicActivity.class);
                     startActivityForResult(music, ADD_MUSIC_REQUEST_CODE);
 
                 }
-
 
 
             }
@@ -307,7 +305,7 @@ public class EditVideoActivity extends Activity {
 
                 mediaPlayer.start();
 
-                if(mediaPlayerMusic != null) {
+                if (mediaPlayerMusic != null) {
                     mediaPlayerMusic.start();
                 }
 
@@ -317,55 +315,54 @@ public class EditVideoActivity extends Activity {
         });
 
 
-
     }  // onCreate
 
     private void updateSeekProgress() {
 
-      if (mediaPlayer !=null && mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 
-          seekBar.setProgress(mediaPlayer.getCurrentPosition());
+            seekBar.setProgress(mediaPlayer.getCurrentPosition());
             handler.postDelayed(r, 50);
 
-          if(isMusicON) {
+            if (isMusicON) {
 
-            if((int) (mediaPlayer.getCurrentPosition()/1000) == seekBarEnd) {
+                if ((int) (mediaPlayer.getCurrentPosition() / 1000) == seekBarEnd) {
 
-                Log.d(LOG_TAG, "EditVideoActivity seekBarEnd Mute OFF" );
+                    Log.d(LOG_TAG, "EditVideoActivity seekBarEnd Mute OFF");
 
-                if(isVideoMute) {
+                    if (isVideoMute) {
 
-                    mediaPlayerMusic.stop();
-                    mediaPlayerMusic.release();
-                    mediaPlayerMusic = null;
+                        mediaPlayerMusic.stop();
+                        mediaPlayerMusic.release();
+                        mediaPlayerMusic = null;
 
-                    mediaPlayer.setVolume(0.5f, 0.5f);
+                        mediaPlayer.setVolume(0.5f, 0.5f);
 
-                    isVideoMute = false;
+                        isVideoMute = false;
 
-                }
-
-            }
-
-            if((int) (mediaPlayer.getCurrentPosition()/1000) == seekBarStart) {
-
-                Log.d(LOG_TAG, "EditVideoActivity seekBarStart Mute ON" );
-
-               if(!isVideoMute) {
-
-                   mediaPlayerMusic = MediaPlayer.create(getBaseContext(), musicRawSelected);
-                   mediaPlayerMusic.start();
-                   mediaPlayerMusic.setVolume(5.0f, 5.0f);
-
-                   mediaPlayer.setVolume(0f, 0f);
-
-                   isVideoMute = true;
+                    }
 
                 }
 
+                if ((int) (mediaPlayer.getCurrentPosition() / 1000) == seekBarStart) {
+
+                    Log.d(LOG_TAG, "EditVideoActivity seekBarStart Mute ON");
+
+                    if (!isVideoMute) {
+
+                        mediaPlayerMusic = MediaPlayer.create(getBaseContext(), musicRawSelected);
+                        mediaPlayerMusic.start();
+                        mediaPlayerMusic.setVolume(5.0f, 5.0f);
+
+                        mediaPlayer.setVolume(0f, 0f);
+
+                        isVideoMute = true;
+
+                    }
+
+                }
             }
-          }
-      }
+        }
     }
 
     private void setEditVideoProgress(int videoProgress, int seekBarStart, int seekBarEnd) {
@@ -374,7 +371,7 @@ public class EditVideoActivity extends Activity {
 
         Log.d(LOG_TAG, "setEditVideoProgress " + "videoProgress " + videoProgress + " seekBarStart " + seekBarStart + " seekBarEnd " + seekBarEnd);
 
-        if(isMusicON) {
+        if (isMusicON) {
 
             if (videoProgress >= seekBarStart * 1000 && videoProgress <= seekBarEnd * 1000) {
 
@@ -422,18 +419,18 @@ public class EditVideoActivity extends Activity {
 
     private void setVideoInfo() {
 
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(videoRecorded);
-            String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-            long timeInmillisec = Long.parseLong( time );
-            long duration = timeInmillisec / 1000;
-            long hours = duration / 3600;
-            long minutes = (duration - hours * 3600) / 60;
-            long seconds = duration - (hours * 3600 + minutes * 60);
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(videoRecorded);
+        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        long timeInmillisec = Long.parseLong(time);
+        long duration = timeInmillisec / 1000;
+        long hours = duration / 3600;
+        long minutes = (duration - hours * 3600) / 60;
+        long seconds = duration - (hours * 3600 + minutes * 60);
 
-            durationVideoRecorded = (int) duration;
+        durationVideoRecorded = (int) duration;
 
-            appPrefs.setVideoDuration(durationVideoRecorded);
+        appPrefs.setVideoDuration(durationVideoRecorded);
 
 
     }
@@ -450,82 +447,82 @@ public class EditVideoActivity extends Activity {
 
                 videoView.stopPlayback();
 
-                if(mediaPlayer != null) {
-                   // mediaPlayer.stop();
+                if (mediaPlayer != null) {
+                    // mediaPlayer.stop();
 
                     mediaPlayer.release();
                     mediaPlayer = null;
                 }
 
-                if(mediaPlayerMusic  != null){
-                   // mediaPlayerMusic.stop();
+                if (mediaPlayerMusic != null) {
+                    // mediaPlayerMusic.stop();
                     mediaPlayerMusic.release();
                     mediaPlayerMusic = null;
                 }
-                             	
+
                 final Runnable r = new Runnable() {
-                        public void run() {
-                        	
-                            doTrimVideo();
+                    public void run() {
 
-                            
-                            Intent share = new Intent();
-                            share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
-                            share.setClass(EditVideoActivity.this, ShareVideoActivity.class);
-                            startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
+                        doTrimVideo();
 
-                        }
-                 };
 
-               progressDialog = ProgressDialog.show(EditVideoActivity.this, getString(R.string.dialog_processing), getString(R.string.please_wait), true);
-               
-               // Custom progress dialog
-               progressDialog.setIcon(R.drawable.ic_action_cut);
-               
+                        Intent share = new Intent();
+                        share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
+                        share.setClass(EditActivity.this, ShareActivity.class);
+                        startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
 
-   			((TextView) progressDialog.findViewById(Resources.getSystem()
-   					.getIdentifier("message", "id", "android")))
-   					.setTypeface(tf);
-   			((TextView) progressDialog.findViewById(Resources.getSystem()
-   					.getIdentifier("message", "id", "android")))
-   					.setTextColor(Color.WHITE);
-   			((TextView) progressDialog.findViewById(Resources.getSystem()
-   					.getIdentifier("alertTitle", "id", "android")))
-   					.setTypeface(tf);
-   			((TextView) progressDialog.findViewById(Resources.getSystem()
-   					.getIdentifier("alertTitle", "id", "android")))
-   					.setTextColor(Color.WHITE);
+                    }
+                };
 
-   			progressDialog.findViewById(
-                    Resources.getSystem().getIdentifier("topPanel", "id",
-                            "android")).setBackgroundColor(R.color.videona_blue_1);
-   			progressDialog.findViewById(
-                    Resources.getSystem().getIdentifier("customPanel", "id",
-                            "android"))
-   					.setBackgroundColor(R.color.videona_blue_1);
-          
-   			
+                progressDialog = ProgressDialog.show(EditActivity.this, getString(R.string.dialog_processing), getString(R.string.please_wait), true);
+
+                // Custom progress dialog
+                progressDialog.setIcon(R.drawable.ic_action_cut);
+
+
+                ((TextView) progressDialog.findViewById(Resources.getSystem()
+                        .getIdentifier("message", "id", "android")))
+                        .setTypeface(tf);
+                ((TextView) progressDialog.findViewById(Resources.getSystem()
+                        .getIdentifier("message", "id", "android")))
+                        .setTextColor(Color.WHITE);
+                ((TextView) progressDialog.findViewById(Resources.getSystem()
+                        .getIdentifier("alertTitle", "id", "android")))
+                        .setTypeface(tf);
+                ((TextView) progressDialog.findViewById(Resources.getSystem()
+                        .getIdentifier("alertTitle", "id", "android")))
+                        .setTextColor(Color.WHITE);
+
+                progressDialog.findViewById(
+                        Resources.getSystem().getIdentifier("topPanel", "id",
+                                "android")).setBackgroundColor(R.color.videona_blue_1);
+                progressDialog.findViewById(
+                        Resources.getSystem().getIdentifier("customPanel", "id",
+                                "android"))
+                        .setBackgroundColor(R.color.videona_blue_1);
+
+
                 performOnBackgroundThread(r);
 
-                }
+            }
 
         };
     }
 
     //stop playback when out of thumb bounds
-        protected Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                if (mediaPlayer.isPlaying() && isRunning) {
-                    // stop playback and set playback position on the end of trim
-                    // border
-                    mediaPlayer.pause();
+    protected Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (mediaPlayer.isPlaying() && isRunning) {
+                // stop playback and set playback position on the end of trim
+                // border
+                mediaPlayer.pause();
 
-                    mediaPlayer.seekTo(seekBarEnd * 1000);
-                }
+                mediaPlayer.seekTo(seekBarEnd * 1000);
             }
+        }
 
-        };
+    };
 
 
     private void doTrimVideo() {
@@ -534,18 +531,18 @@ public class EditVideoActivity extends Activity {
 
         // renameTrimVideo, to overwrite videoRecorded file. Future use.
         // renameTrimVideo(videoRecorded);
-        
+
         // Return value to 0, needed if you trim two o more videos 
         seekBarStart = 0;
 
         appPrefs = new UserPreferences(getApplicationContext());
 
-        if(appPrefs.getIsMusicON()) {
+        if (appPrefs.getIsMusicON()) {
 
             try {
 
-              //  String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
-              //  VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
+                //  String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
+                //  VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
 
                 VideoUtils.switchAudio(pathvideoTrim, musicSelected, Config.videoMusicTempFile);
 
@@ -565,9 +562,9 @@ public class EditVideoActivity extends Activity {
 
         this.runOnUiThread(new Runnable() {
             public void run() {
-            	
-            	progressDialog.dismiss();
-            	
+
+                progressDialog.dismiss();
+
                 Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
 
             }
@@ -590,7 +587,7 @@ public class EditVideoActivity extends Activity {
         return t;
     }
 
-    private void killProcess(){
+    private void killProcess() {
         System.gc();
         int pid = android.os.Process.myPid();
 
@@ -599,7 +596,7 @@ public class EditVideoActivity extends Activity {
     }
 
 
-    private void trimVideo(){
+    private void trimVideo() {
 
 
         int start = appPrefs.getSeekBarStart();
@@ -608,7 +605,7 @@ public class EditVideoActivity extends Activity {
 
         String inputFileName = videoRecorded;
 
-        pathvideoTrim = Config.pathVideoTrim + File.separator + videoTrim ;
+        pathvideoTrim = Config.pathVideoTrim + File.separator + videoTrim;
 
         Log.d(LOG_TAG, "VideonaMainActivity input " + inputFileName + " output " + pathvideoTrim + " start " + start + " length " + length);
 
@@ -616,20 +613,20 @@ public class EditVideoActivity extends Activity {
 
 
     }
-    
-    private void renameTrimVideo(String videoTrim){
-    	
-    	String newVideoTrim = videoTrim;
-    	String videoTrimAux =  Config.pathApp + Config.videoCutAuxName;
-    	
-    	File originalVideo = new File(videoTrim);
-    	if(originalVideo.exists()){
-    		originalVideo.delete();
-    	}
-    	
-    	File newTrimVideo = new File(videoTrimAux);
-    	newTrimVideo.renameTo(originalVideo);
-    	
+
+    private void renameTrimVideo(String videoTrim) {
+
+        String newVideoTrim = videoTrim;
+        String videoTrimAux = Config.pathApp + Config.videoCutAuxName;
+
+        File originalVideo = new File(videoTrim);
+        if (originalVideo.exists()) {
+            originalVideo.delete();
+        }
+
+        File newTrimVideo = new File(videoTrimAux);
+        newTrimVideo.renameTo(originalVideo);
+
     }
 
     /**
@@ -653,9 +650,9 @@ public class EditVideoActivity extends Activity {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
 
-                    Log.d(LOG_TAG, "EditVideoActivity setOnPreparedListener onPrepared" );
+                    Log.d(LOG_TAG, "EditVideoActivity setOnPreparedListener onPrepared");
 
-                    if(!isMusicON) {
+                    if (!isMusicON) {
 
                         paintSeekBar();
 
@@ -688,13 +685,13 @@ public class EditVideoActivity extends Activity {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
 
-                    Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener" );
+                    Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
 
                     btnPlay.setVisibility(View.VISIBLE);
 
                     videoProgress = 0;
 
-                    if(mediaPlayerMusic != null) {
+                    if (mediaPlayerMusic != null) {
                         mediaPlayerMusic.release();
                         mediaPlayerMusic = null;
                     }
@@ -710,12 +707,14 @@ public class EditVideoActivity extends Activity {
         }
     }
 
-    /**  Use screen touches to toggle the video between playing and paused. */
+    /**
+     * Use screen touches to toggle the video between playing and paused.
+     */
     @Override
-    public boolean onTouchEvent (MotionEvent ev){
-        if(ev.getAction() == MotionEvent.ACTION_DOWN){
-            if(mediaPlayer.isPlaying()){
-                if(mediaPlayerMusic != null) {
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mediaPlayer.isPlaying()) {
+                if (mediaPlayerMusic != null) {
                     if (mediaPlayerMusic.isPlaying()) {
                         mediaPlayerMusic.pause();
                     }
@@ -752,7 +751,7 @@ public class EditVideoActivity extends Activity {
 
         Log.d(LOG_TAG, " onResume isMusicON " + isMusicON);
 
-        if(isMusicON) {
+        if (isMusicON) {
 
             mediaPlayer = new MediaPlayer();
 
@@ -761,7 +760,7 @@ public class EditVideoActivity extends Activity {
 
             seekBarStart = appPrefs.getSeekBarStart();
 
-            seekBarEnd = Math.min (appPrefs.getSeekBarEnd(), seekBarStart + Config.maxDurationVideo);
+            seekBarEnd = Math.min(appPrefs.getSeekBarEnd(), seekBarStart + Config.maxDurationVideo);
 
             videoView.seekTo(appPrefs.getVideoProgress());
 
@@ -800,7 +799,7 @@ public class EditVideoActivity extends Activity {
 
         Log.d(LOG_TAG, "onStart");
 
-        seekBarEnd =  durationVideoRecorded;
+        seekBarEnd = durationVideoRecorded;
 
         isRunning = true;
 
@@ -810,27 +809,27 @@ public class EditVideoActivity extends Activity {
 
     }
 
-    private void paintFramesVideo(String pathVideoName){
+    private void paintFramesVideo(String pathVideoName) {
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        int width =  metrics.widthPixels - 100;
+        int width = metrics.widthPixels - 100;
         int height = metrics.heightPixels;
 
         Log.d("MainActivity", "screen size width: " + width + " " + "heigh " + height);
 
         int width_opt = (int) width / 9;
-        int height_opt = (int) ((width_opt * 9) /16); // 16:9
+        int height_opt = (int) ((width_opt * 9) / 16); // 16:9
         //int height_opt = (int) ((width_opt * 3) /4); // 4:3
 
 
         Log.d("MainActivity", "screen size width_opt: " + width_opt + " " + "height_opt " + height_opt);
 
-        File videoFile=new File(pathVideoName);
+        File videoFile = new File(pathVideoName);
 
 
-        Uri videoFileUri=Uri.parse(videoFile.toString());
+        Uri videoFileUri = Uri.parse(videoFile.toString());
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(videoFile.getAbsolutePath());
@@ -847,12 +846,12 @@ public class EditVideoActivity extends Activity {
                 height_opt));*/
 
         // Get 9 key frames from video in separate time
-        for(int j=1; j<10; j++) {
+        for (int j = 1; j < 10; j++) {
             int value = j;
             Bitmap bitmap = retriever.getFrameAtTime((int) (millis / 9) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
             Bitmap bmpScaledSize = Bitmap.createScaledBitmap(bitmap, width_opt, height_opt, false);
-            switch(value) {
-                case 1 :
+            switch (value) {
+                case 1:
 
                     progressBar1.setVisibility(View.INVISIBLE);
                     image1.setVisibility(View.VISIBLE);
@@ -860,7 +859,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 2 :
+                case 2:
 
                     progressBar2.setVisibility(View.INVISIBLE);
                     image2.setVisibility(View.VISIBLE);
@@ -868,7 +867,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 3 :
+                case 3:
 
                     progressBar3.setVisibility(View.INVISIBLE);
                     image3.setVisibility(View.VISIBLE);
@@ -876,7 +875,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 4 :
+                case 4:
 
                     progressBar4.setVisibility(View.INVISIBLE);
                     image4.setVisibility(View.VISIBLE);
@@ -884,7 +883,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 5 :
+                case 5:
 
                     progressBar5.setVisibility(View.INVISIBLE);
                     image5.setVisibility(View.VISIBLE);
@@ -892,7 +891,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 6 :
+                case 6:
 
                     progressBar6.setVisibility(View.INVISIBLE);
                     image6.setVisibility(View.VISIBLE);
@@ -900,7 +899,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 7 :
+                case 7:
 
                     progressBar7.setVisibility(View.INVISIBLE);
                     image7.setVisibility(View.VISIBLE);
@@ -908,7 +907,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 8 :
+                case 8:
 
                     progressBar8.setVisibility(View.INVISIBLE);
                     image8.setVisibility(View.VISIBLE);
@@ -916,7 +915,7 @@ public class EditVideoActivity extends Activity {
 
                     break;
 
-                case 9 :
+                case 9:
 
                     progressBar9.setVisibility(View.INVISIBLE);
                     image9.setVisibility(View.VISIBLE);
@@ -943,61 +942,60 @@ public class EditVideoActivity extends Activity {
         Log.d(LOG_TAG, "duracionvideo getDuration() " + durationVideoCut);
 
         seekBarStart = 0;
-        seekBarEnd = Math.min (durationVideoCut, seekBarStart + Config.maxDurationVideo);
+        seekBarEnd = Math.min(durationVideoCut, seekBarStart + Config.maxDurationVideo);
 
         seekBarRange = new RangeSeekBar<Double>(
-                (double) 0, (double) durationVideoCut,  getBaseContext()
+                (double) 0, (double) durationVideoCut, getBaseContext()
                 .getApplicationContext());
 
 
         seekBarRange.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Double>() {
 
-                    @Override
-                    public void onRangeSeekBarValuesChanged(
-                            RangeSeekBar<?> bar, Double minValue,
-                            Double maxValue) {
+            @Override
+            public void onRangeSeekBarValuesChanged(
+                    RangeSeekBar<?> bar, Double minValue,
+                    Double maxValue) {
 
 
-                        Log.d(LOG_TAG, " RangeSeekBar minValue " + minValue + " maxValue " + maxValue);
+                Log.d(LOG_TAG, " RangeSeekBar minValue " + minValue + " maxValue " + maxValue);
 
-                        isRunning = false; // set flag to prevent collision with
-                        // get playback position and trip borders
+                isRunning = false; // set flag to prevent collision with
+                // get playback position and trip borders
 
-                        seekBarStart = (int) Math.round(minValue);
+                seekBarStart = (int) Math.round(minValue);
 
-                        //seekBarEnd = (int) Math.round(maxValue);
-                        seekBarEnd = Math.min ((int) Math.round(maxValue), seekBarStart + Config.maxDurationVideo);
+                //seekBarEnd = (int) Math.round(maxValue);
+                seekBarEnd = Math.min((int) Math.round(maxValue), seekBarStart + Config.maxDurationVideo);
 
 
-                        if(mediaPlayer.isPlaying()) {
-                            if (mediaPlayerMusic != null) {
-                                if (mediaPlayerMusic.isPlaying()) {
-                                    mediaPlayerMusic.pause();
-                                }
-                            }
-
-                            mediaPlayer.pause();
-
-                            btnPlay.setVisibility(View.VISIBLE);
-
+                if (mediaPlayer.isPlaying()) {
+                    if (mediaPlayerMusic != null) {
+                        if (mediaPlayerMusic.isPlaying()) {
+                            mediaPlayerMusic.pause();
                         }
-
-
-                        appPrefs.setSeekBarStart(seekBarStart);
-                        appPrefs.setSeekBarEnd(seekBarEnd);
-
-
-                        refreshDetailView();
-
-
-                        isRunning = true; // free flag to prevent collision with
-                        // get playback position and trip borders
                     }
 
-                });
+                    mediaPlayer.pause();
+
+                    btnPlay.setVisibility(View.VISIBLE);
+
+                }
+
+
+                appPrefs.setSeekBarStart(seekBarStart);
+                appPrefs.setSeekBarEnd(seekBarEnd);
+
+
+                refreshDetailView();
+
+
+                isRunning = true; // free flag to prevent collision with
+                // get playback position and trip borders
+            }
+
+        });
 
         layoutSeekBar.addView(seekBarRange);
-
 
 
     }
@@ -1007,7 +1005,7 @@ public class EditVideoActivity extends Activity {
         Log.d(LOG_TAG, "refreshDetailView");
 
         int startSeekBar = seekBarStart;
-        int stopSeekBar = Math.min (seekBarEnd, seekBarStart + Config.maxDurationVideo);
+        int stopSeekBar = Math.min(seekBarEnd, seekBarStart + Config.maxDurationVideo);
         String start = TimeUtils.toFormattedTime(startSeekBar * 1000);
         String stop = TimeUtils.toFormattedTime(stopSeekBar * 1000);
 
@@ -1022,24 +1020,24 @@ public class EditVideoActivity extends Activity {
 
     }
 
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
 
         Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
-    	
-        if(requestCode==VIDEO_SHARE_REQUEST_CODE ) {
-        	
+
+        if (requestCode == VIDEO_SHARE_REQUEST_CODE) {
+
             setResult(Activity.RESULT_OK);
 
             finish();
 
         }
 
-        if(requestCode==ADD_MUSIC_REQUEST_CODE ) {
+        if (requestCode == ADD_MUSIC_REQUEST_CODE) {
 
-            if(resultCode == Activity.RESULT_CANCELED) {
+            if (resultCode == Activity.RESULT_CANCELED) {
 
                 onResume();
 
@@ -1054,7 +1052,7 @@ public class EditVideoActivity extends Activity {
 
             btnMusic.setImageDrawable(getResources().getDrawable(drawableImageMusic));
 
-            musicSelected =  Environment.getExternalStorageDirectory() + File.separator + "Videona/.temp/" + mThumbPathAudioSelected[music];
+            musicSelected = Environment.getExternalStorageDirectory() + File.separator + "Videona/.temp/" + mThumbPathAudioSelected[music];
 
             Log.d(LOG_TAG, "music selected position " + music + " music_audio " + musicRawSelected + " music_image " + drawableImageMusic);
 
@@ -1063,7 +1061,6 @@ public class EditVideoActivity extends Activity {
             appPrefs.setIsMusicON(true);
 
         }
-
 
 
     }
@@ -1097,11 +1094,9 @@ public class EditVideoActivity extends Activity {
         protected void onPostExecute(String result) {
 
 
-
         }
 
     }
-
 
 
 }

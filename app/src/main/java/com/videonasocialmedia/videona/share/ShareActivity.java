@@ -29,26 +29,25 @@ import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.VideonaMainActivity;
-import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.File;
 
 /**
  * Created by amm on 10/09/14.
  */
-public class ShareVideoActivity  extends Activity {
+public class ShareActivity extends Activity {
 
-    private final String LOG_TAG= this.getClass().getSimpleName();
-    
+    private final String LOG_TAG = this.getClass().getSimpleName();
+
     private static final int CHOOSE_SHARE_REQUEST_CODE = 600;
-    
+
     private static VideoView videoView;
     private static MediaPlayer mediaPlayer;
 
     private int durationVideoRecorded;
-    
+
     private String videoEdited;
-    
+
     // Buttons
     private ImageButton btnShare;
     private ImageButton btnPlay;
@@ -76,29 +75,29 @@ public class ShareVideoActivity  extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.share);
+        setContentView(R.layout.activity_share);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
-        
+
         videoView = (VideoView) findViewById(R.id.videoViewShare);
 
         mediaPlayer = new MediaPlayer();
-        
 
-     //   detailVideoDescription=(TextView)findViewById(R.id.textViewVideoDescription);        
-     //   detailVideoDescription.setTypeface(VideonaMainActivity.tf);
-        
+
+        //   detailVideoDescription=(TextView)findViewById(R.id.textViewVideoDescription);
+        //   detailVideoDescription.setTypeface(VideonaMainActivity.tf);
+
         btnShare = (ImageButton) findViewById(R.id.imageButtonShare);
         btnShare.setOnClickListener(shareClickListener());
-        
+
 
         appPrefs = new UserPreferences(getApplicationContext());
 
         Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
 
-        if(appPrefs.getIsMusicON()) {
+        if (appPrefs.getIsMusicON()) {
 
-            videoEdited = appPrefs.getVideoMusicAux() ;
+            videoEdited = appPrefs.getVideoMusicAux();
 
             setVideoInfo();
 
@@ -113,7 +112,7 @@ public class ShareVideoActivity  extends Activity {
                 }
             };
 
-            progressDialog = ProgressDialog.show(ShareVideoActivity.this, getString(R.string.dialog_processing_audio), getString(R.string.please_wait), true);
+            progressDialog = ProgressDialog.show(ShareActivity.this, getString(R.string.dialog_processing_audio), getString(R.string.please_wait), true);
 
             // Custom progress dialog
             progressDialog.setIcon(R.drawable.ic_action_cut);
@@ -143,24 +142,23 @@ public class ShareVideoActivity  extends Activity {
             performOnBackgroundThread(r);
 
 
-
         } else {
 
             // getting intent data
             Intent in = getIntent();
             videoEdited = in.getStringExtra("MEDIA_OUTPUT");
 
-            Log.d(LOG_TAG, "VideoEdited " + videoEdited );
+            Log.d(LOG_TAG, "VideoEdited " + videoEdited);
 
-            if(videoEdited == null) {
+            if (videoEdited == null) {
 
                 finish();
 
             } else {
 
-                 setVideoInfo();
+                setVideoInfo();
 
-                 previewVideo();
+                previewVideo();
 
             }
 
@@ -173,7 +171,7 @@ public class ShareVideoActivity  extends Activity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-                if(mediaPlayer.isPlaying()) {
+                if (mediaPlayer.isPlaying()) {
 
                     mediaPlayer.pause();
 
@@ -190,7 +188,7 @@ public class ShareVideoActivity  extends Activity {
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
 
-                if(fromUser) {
+                if (fromUser) {
 
                     mediaPlayer.seekTo(progress);
 
@@ -214,13 +212,11 @@ public class ShareVideoActivity  extends Activity {
         });
 
 
-
-
     }
 
     private void updateSeekProgress() {
 
-        if (mediaPlayer !=null && mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
             handler.postDelayed(r, 50);
@@ -243,8 +239,7 @@ public class ShareVideoActivity  extends Activity {
     };
 
 
-
-    private void doTrimAudio(){
+    private void doTrimAudio() {
 
         trimAudio();
 
@@ -264,9 +259,9 @@ public class ShareVideoActivity  extends Activity {
 
     }
 
-    private void trimAudio(){
+    private void trimAudio() {
 
-        videoEdited = appPrefs.getVideoMusicAux() ;
+        videoEdited = appPrefs.getVideoMusicAux();
 
         String videonaMusic = "V_MUSIC_" + new File(videoEdited).getName().substring(7);
 
@@ -274,7 +269,7 @@ public class ShareVideoActivity  extends Activity {
 
         int length = appPrefs.getVideoDurationTrim();
 
-        Log.d(LOG_TAG, "VideonaMainActivity cut " + Config.videoMusicTempFile + " .-.-.-. " +  pathVideonaFinal + " .-.-.-. " + length);
+        Log.d(LOG_TAG, "VideonaMainActivity cut " + Config.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
 
         VideonaMainActivity.cut(Config.videoMusicTempFile, pathVideonaFinal, 0, length);
 
@@ -305,11 +300,13 @@ public class ShareVideoActivity  extends Activity {
         return t;
     }
 
-    /**  Use screen touches to toggle the video between playing and paused. */
+    /**
+     * Use screen touches to toggle the video between playing and paused.
+     */
     @Override
-    public boolean onTouchEvent (MotionEvent ev){
-        if(ev.getAction() == MotionEvent.ACTION_DOWN){
-            if(mediaPlayer.isPlaying()){
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mediaPlayer.isPlaying()) {
 
                 mediaPlayer.pause();
                 btnPlay.setVisibility(View.VISIBLE);
@@ -325,70 +322,70 @@ public class ShareVideoActivity  extends Activity {
             return false;
         }
     }
-    
+
     private View.OnClickListener shareClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
 
                 Log.d(LOG_TAG, "shareClickListener");
-                
+
                 videoView.pause();
 
                 videoView.stopPlayback();
-                
+
                 videoView.suspend();
 
 
-    			ContentValues content = new ContentValues(4);
-    		    content.put(Video.VideoColumns.TITLE, videoEdited);
-    		    content.put(Video.VideoColumns.DATE_ADDED,
-    		    System.currentTimeMillis() / 1000);
-    		    content.put(Video.Media.MIME_TYPE, "video/mp4");
-    		    content.put(MediaStore.Video.Media.DATA, videoEdited);
-    		    ContentResolver resolver = getContentResolver();
-    		    Uri uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-    		    content);
+                ContentValues content = new ContentValues(4);
+                content.put(Video.VideoColumns.TITLE, videoEdited);
+                content.put(Video.VideoColumns.DATE_ADDED,
+                        System.currentTimeMillis() / 1000);
+                content.put(Video.Media.MIME_TYPE, "video/mp4");
+                content.put(MediaStore.Video.Media.DATA, videoEdited);
+                ContentResolver resolver = getContentResolver();
+                Uri uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        content);
 
-    		    Intent intent = new Intent(Intent.ACTION_SEND);
-    		    intent.setType("video/*");
-    		    intent.putExtra(Intent.EXTRA_STREAM, uri);
-    		    startActivityForResult(Intent.createChooser(intent, getString(R.string.share_using)), CHOOSE_SHARE_REQUEST_CODE);                
-             
-                }
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("video/*");
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivityForResult(Intent.createChooser(intent, getString(R.string.share_using)), CHOOSE_SHARE_REQUEST_CODE);
+
+            }
 
         };
     }
-    
+
     private View.OnClickListener recBackClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
 
                 Log.d(LOG_TAG, "recBackClickListener");
-                
+
                 videoView.pause();
 
                 videoView.stopPlayback();
-                
+
                 videoView.suspend();
 
 
                 // Kill process. Needed to load again ffmpeg libraries
-       	        int pid = android.os.Process.myPid();  
-       		    android.os.Process.killProcess(pid);   
-             
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
+
             }
 
         };
     }
-    
+
     private void setVideoInfo() {
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(videoEdited);
         String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        long timeInmillisec = Long.parseLong( time );
+        long timeInmillisec = Long.parseLong(time);
         long duration = timeInmillisec / 1000;
         long hours = duration / 3600;
         long minutes = (duration - hours * 3600) / 60;
@@ -397,10 +394,10 @@ public class ShareVideoActivity  extends Activity {
         durationVideoRecorded = (int) duration;
 
     }
-    
+
     public void previewVideo() {
-        
-    	try {
+
+        try {
 
             videoView.setVideoPath(videoEdited);
             videoView.setMediaController(null);
@@ -419,7 +416,7 @@ public class ShareVideoActivity  extends Activity {
                     seekBar.setMax(durationVideoRecorded * 1000);
 
                     // avoid first black screen
-                   // videoView.seekTo(500);
+                    // videoView.seekTo(500);
 
                     mediaPlayer.start();
 
@@ -434,7 +431,7 @@ public class ShareVideoActivity  extends Activity {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
 
-                    Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener" );
+                    Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
 
                     btnPlay.setVisibility(View.VISIBLE);
 
@@ -449,9 +446,9 @@ public class ShareVideoActivity  extends Activity {
 
     @Override
     public void onBackPressed() {
- 	   
 
-        if(music_selected) {
+
+        if (music_selected) {
 
             videoView.pause();
 
@@ -474,38 +471,37 @@ public class ShareVideoActivity  extends Activity {
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         isRunning = true;
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	//super.onActivityResult(requestCode, resultCode, data);
-   	 
-    	if(data == null) {
-    		
-    	} else {
-    		Log.d(LOG_TAG, "requestCode " + requestCode + "resultCode " + resultCode + "intent data " + data.getDataString());
-    	
-	    	
-	        if(requestCode==CHOOSE_SHARE_REQUEST_CODE ) {
-	        	
-	            //setResult(Activity.RESULT_OK);
-	            //finish();
-	            
-	            // Kill process. Needed to load again ffmpeg libraries
-	   	        int pid = android.os.Process.myPid();  
-	   		    android.os.Process.killProcess(pid);
-	
-	        }
-	        
-    	}
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        if (data == null) {
+
+        } else {
+            Log.d(LOG_TAG, "requestCode " + requestCode + "resultCode " + resultCode + "intent data " + data.getDataString());
+
+
+            if (requestCode == CHOOSE_SHARE_REQUEST_CODE) {
+
+                //setResult(Activity.RESULT_OK);
+                //finish();
+
+                // Kill process. Needed to load again ffmpeg libraries
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
+
+            }
+
+        }
 
 
     }
-    
 
-    
+
 }

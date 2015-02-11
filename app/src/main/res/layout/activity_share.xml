@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/videona_blue_1">
 
@@ -17,12 +18,12 @@
         android:visibility="visible" />
 
     <ImageButton
-            android:id="@+id/imageButtonShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:id="@+id/imageButtonShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginRight="53dp"
-            android:background="@null"
-            android:src="@drawable/ic_share_buttom"
+        android:background="@null"
+        android:src="@drawable/ic_share_buttom"
         android:layout_above="@+id/imageButtonPlayShare"
         android:layout_alignParentEnd="true"
         android:scaleType="fitCenter"

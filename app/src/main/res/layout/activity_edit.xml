@@ -73,8 +73,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/imageViewFrame1"
-                            android:visibility="gone"
-                             />
+                            android:visibility="gone" />
                     </RelativeLayout>
 
                     <!-- Image 2  -->
@@ -220,8 +219,7 @@
                         <ProgressBar
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
-                            android:id="@+id/progressBarImageFrame9"
-                             />
+                            android:id="@+id/progressBarImageFrame9" />
 
                         <ImageView
                             android:layout_width="wrap_content"

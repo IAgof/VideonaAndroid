@@ -28,7 +28,7 @@ import java.io.InputStream;
 public class MusicActivity extends Activity {
 
 
-    private final String LOG_TAG= this.getClass().getSimpleName();
+    private final String LOG_TAG = this.getClass().getSimpleName();
 
     private UserPreferences appPrefs;
     private Typeface tf;
@@ -58,7 +58,7 @@ public class MusicActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.music);
+        setContentView(R.layout.activity_music);
 
         // Keep screen ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -100,7 +100,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                if(mediaPlayerMusic != null) {
+                if (mediaPlayerMusic != null) {
                     mediaPlayerMusic.stop();
                     mediaPlayerMusic.release();
                     mediaPlayerMusic = null;
@@ -153,7 +153,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 1) {
+                if (position == 1) {
 
                 } else {
 
@@ -182,7 +182,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 2) {
+                if (position == 2) {
 
                 } else {
 
@@ -210,7 +210,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 3) {
+                if (position == 3) {
 
                 } else {
 
@@ -237,7 +237,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 4) {
+                if (position == 4) {
 
                 } else {
 
@@ -263,7 +263,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 5) {
+                if (position == 5) {
 
                 } else {
 
@@ -289,7 +289,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 6) {
+                if (position == 6) {
 
                 } else {
 
@@ -317,16 +317,16 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 7) {
+                if (position == 7) {
 
                 } else {
 
-                image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[7]));
-                image7.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[7]));
+                    image7.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
 
-                position = 7;
+                    position = 7;
 
-                updateDataMusic(position);
+                    updateDataMusic(position);
 
                 }
 
@@ -346,7 +346,7 @@ public class MusicActivity extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                if(position == 8) {
+                if (position == 8) {
 
                 } else {
 
@@ -371,7 +371,7 @@ public class MusicActivity extends Activity {
 
     private void startMusic() throws IOException {
 
-        if(mediaPlayerMusic != null) {
+        if (mediaPlayerMusic != null) {
 
             mediaPlayerMusic.stop();
             mediaPlayerMusic.release();
@@ -417,7 +417,7 @@ public class MusicActivity extends Activity {
             R.raw.audio_ocho
     };
 
-    private void updateDataMusic( int position) {
+    private void updateDataMusic(int position) {
 
         mThumbMusicImageAux = mThumbMusicImage[0];
         mThumbMusicImage[0] = mThumbMusicImage[position];
@@ -443,14 +443,13 @@ public class MusicActivity extends Activity {
         InputStream in = getResources().openRawResource(raw_resource);
 
         String nameFile = getResources().getResourceName(raw_resource);
-        nameFile = nameFile.substring(nameFile.lastIndexOf("/")+1);
+        nameFile = nameFile.substring(nameFile.lastIndexOf("/") + 1);
 
         Log.d(LOG_TAG, "downloadResource " + nameFile);
 
         File fSong = new File(Config.pathVideoTemp + File.separator + nameFile + Config.audioMusicExtension);
 
-        if(fSong.exists()) {
-
+        if (fSong.exists()) {
 
 
         } else {
@@ -485,7 +484,7 @@ public class MusicActivity extends Activity {
     public void onBackPressed() {
 
 
-        if(mediaPlayerMusic != null) {
+        if (mediaPlayerMusic != null) {
 
             mediaPlayerMusic.stop();
             mediaPlayerMusic.release();
