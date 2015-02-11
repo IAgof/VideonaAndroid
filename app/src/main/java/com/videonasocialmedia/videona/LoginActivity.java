@@ -143,6 +143,8 @@ public class LoginActivity extends Activity {
         public void failure(RetrofitError error) {
             Toast.makeText(getApplicationContext(), "Error durante login",
                     Toast.LENGTH_SHORT).show();
+            //TODO remove next line when remember-me is working
+            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
         }
     }
 }

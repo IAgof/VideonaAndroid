@@ -2,21 +2,14 @@ package com.videonasocialmedia.videona.record;
 
 
 import android.content.Context;
-
 import android.hardware.Camera;
-
 import android.util.Log;
-
 import android.view.SurfaceHolder;
-
 import android.view.SurfaceView;
-
 
 import com.videonasocialmedia.videona.UserPreferences;
 
-
 import java.io.IOException;
-
 import java.util.List;
 
 
@@ -167,10 +160,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.e(TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
 
 
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
 
-
-            parameters.setColorEffect(appPrefs.getColorEffect());
 
             mCamera.setParameters(parameters);
 
