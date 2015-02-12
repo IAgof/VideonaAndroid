@@ -256,6 +256,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                 imageColorEffectAdadpter.setViewClickListener(RecordActivity.this);
 
+         //       lvTest.set
 
                 lvTest.setAdapter(imageColorEffectAdadpter);
 
@@ -264,6 +265,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                 // save last color effect position selected to paint at position - 1
                 lvTest.setSelection(colorEffectLastPosition - 1);
+                //
+              //  lvTest .setScrollingCacheEnabled(false);
 
 
             }
