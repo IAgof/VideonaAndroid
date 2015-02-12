@@ -2,6 +2,9 @@ package com.videonasocialmedia.videona;
 
 import android.app.Application;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.okhttp.OkHttpClient;
 import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.api.ApiHeaders;
@@ -21,6 +24,7 @@ public class VideonaApplication extends Application {
     private OkHttpClient client;
     private ApiHeaders apiHeaders;
 
+    Tracker app_tracker;
 
     /**
      * Called when the application is starting, before any activity, service,
@@ -35,6 +39,7 @@ public class VideonaApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //rest client setup
         client = new OkHttpClient();
         manager = new CustomCookieManager();
         apiHeaders = new ApiHeaders();
@@ -46,6 +51,12 @@ public class VideonaApplication extends Application {
                 .setRequestInterceptor(apiHeaders)
                 .build();
         apiClient = restAdapter.create(ApiClient.class);
+
+        //Analytics setup
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+        app_tracker = analytics.newTracker(R.xml.app_tracker);
+        app_tracker.enableAdvertisingIdCollection(true);
     }
 
     /**
@@ -60,5 +71,13 @@ public class VideonaApplication extends Application {
      */
     public ApiHeaders getApiHeaders() {
         return apiHeaders;
+    }
+
+    /**
+     *
+     * @return google analytics tracker
+     */
+    synchronized Tracker getTracker() {
+        return app_tracker;
     }
 }

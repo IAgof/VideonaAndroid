@@ -8,6 +8,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.record.RecordActivity;
 
@@ -31,10 +34,15 @@ public class LoginActivity extends Activity {
     @InjectView(R.id.checkBox_remember_me)
     CheckBox rememberMe;
 
-
+    /*API*/
     private ApiClient apiClient;
     private VideonaApplication app;
+
+    /*CONFIG*/
     private SharedPreferences config;
+
+
+    Tracker t;
 
 
     @Override
@@ -48,7 +56,15 @@ public class LoginActivity extends Activity {
         apiClient = app.getApiClient();
         config = getApplicationContext()
                 .getSharedPreferences("USER_INFO", MODE_PRIVATE);
+
+
+        t =app.getTracker();
+
+        t.setScreenName("LoginActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
+
+
 
     /**
      * Start the activity to create a new user when the new_user_button is clicked
@@ -63,9 +79,16 @@ public class LoginActivity extends Activity {
      */
     @OnClick(R.id.send_login_button)
     public void login() {
+        t.send(new HitBuilders.EventBuilder()
+                .setCategory("Categoría")
+                .setAction("Acción")
+                .setLabel("Etiqueta")
+                .build());
+
+        GoogleAnalytics.getInstance(app.getBaseContext()).dispatchLocalHits();
 
         //TODO remove next line when remember-me is working and uncomment the rest of the method
-        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+        //startActivity(new Intent(getApplicationContext(), RecordActivity.class));
 
        /* String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();
