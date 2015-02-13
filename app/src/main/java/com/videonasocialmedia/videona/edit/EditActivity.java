@@ -838,6 +838,7 @@ public class EditActivity extends Activity {
         //Create a new Media Player
         MediaPlayer mp = MediaPlayer.create(getBaseContext(), videoFileUri);
 
+        // Fail when come back from music, nexus 4.
         int millis = mp.getDuration();
 
 
