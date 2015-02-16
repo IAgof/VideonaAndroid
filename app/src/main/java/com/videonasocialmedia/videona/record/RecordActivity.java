@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
@@ -61,8 +62,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     private static final int WELCOME_REQUEST_CODE = 400;
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
 
-
-    public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
     private Chronometer chronometer;
@@ -142,7 +141,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         //  showWelcome = appPrefs.getCheckIndiegogo();
 
         //  Log.d(LOG_TAG, "appPrefs welcome " + showWelcome);
-
         Log.d(LOG_TAG, "onCreate height " + mCamera.getParameters().getPictureSize().height + " width " + mCamera.getParameters().getPictureSize().width);
 
 
@@ -182,7 +180,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                                 // inform the user that recording has started
                                 captureButton.setImageResource(R.drawable.ic_action_stop);  //setText("Stop");
-                                captureButton.setAlpha(125);
+                                captureButton.setAlpha(125f);
                                 isRecording = true;
 
 
@@ -354,9 +352,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
             // int cameraId = appPrefs.getCameraId();
             //c = Camera.open(cameraId); // attempt to get a Camera instance
 
-            c = Camera.open(); // attempt to get a Camera instance
+            c = Camera.open(0); // attempt to get a Camera instance
 
-            if (c != null) {
+           // if (c != null) {
                 Camera.Parameters params = c.getParameters();
 
 
@@ -364,13 +362,14 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
                 c.setParameters(params);
 
                 Log.d(LOG_TAG, "getCameraInstance height " + c.getParameters().getPictureSize().height + " width " + c.getParameters().getPictureSize().width);
-            }
+          //  }
 
         } catch (Exception e) {
             Log.d("DEBUG", "Camera did not open");
             // Camera is not available (in use or does not exist)
         }
 
+        Log.d(LOG_TAG, " getCameraInstance camera " + c);
 
         return c; // returns null if camera is unavailable
     }
@@ -486,10 +485,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
+        if (type == MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "VID_" + timeStamp + ".mp4");
         } else {
@@ -502,6 +498,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     protected void onResume() {
         super.onResume();
+
+        Log.d(LOG_TAG, "onResume");
+
         // TODO Auto-generated method stub
         // deleting image from external storage
         // FileHandler.deleteFromExternalStorage();
@@ -512,6 +511,10 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
             mCamera = getCameraInstance();
 
             Log.d(LOG_TAG, "onResume height " + mCamera.getParameters().getPictureSize().height + " width " + mCamera.getParameters().getPictureSize().width);
+
+            // Create our Preview view and set it as the content of our activity.
+            mPreview = new CameraPreview(this, mCamera);
+
         }
 
     }
@@ -519,9 +522,18 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     protected void onPause() {
         super.onPause();
+
+        Log.d(LOG_TAG, "onPause");
+
         releaseMediaRecorder();       // if you are using MediaRecorder, release it first
         releaseCamera();              // release the camera immediately on pause event.
+
+        // Remove view. Prevent crash  Method called after release() in CameraPreview
+       // FrameLayout preview = (FrameLayout)findViewById(R.id.camera_preview);
+      //  preview.removeView(mPreview);
+
     }
+
 
     private void releaseMediaRecorder() {
         if (mMediaRecorder != null) {
@@ -540,6 +552,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
             mCamera.setPreviewCallback(null);
             mCamera.release();        // release the camera for other applications
             mCamera = null;
+
 
         }
     }

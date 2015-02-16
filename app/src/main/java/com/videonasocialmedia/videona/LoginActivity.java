@@ -3,12 +3,14 @@ package com.videonasocialmedia.videona;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.api.ApiClient;
+import com.videonasocialmedia.videona.record.CameraActivity;
 import com.videonasocialmedia.videona.record.RecordActivity;
 
 import java.util.List;
@@ -65,7 +67,12 @@ public class LoginActivity extends Activity {
     public void login() {
 
         //TODO remove next line when remember-me is working and uncomment the rest of the method
-        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+        } else {
+            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+        }
 
        /* String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();

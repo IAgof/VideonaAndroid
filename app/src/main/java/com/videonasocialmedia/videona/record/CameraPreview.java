@@ -208,6 +208,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         for (Camera.Size size : p.getSupportedPreviewSizes()) {
 
+            if ( size.height == 720 && size.width <= 1280) {
+
+                Log.d("CameraPreview", "getBestPreviewSize selection height " + size.height + " width " + size.width);
+
+                result = size;
+
+                return result;
+
+            }
+
             if (size.width<=width && size.height<=height) {
 
                 if (result==null) {
