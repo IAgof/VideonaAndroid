@@ -7,16 +7,22 @@
 
     <!-- The screen names that will appear in reports -->
     <screenName name="com.videonasocialmedia.videona.LoginActivity">
-        VideonaApplication LoginActivity
+        VideonaApplication-Android LoginActivity
     </screenName>
     <screenName name="com.videonasocialmedia.videona.UserSignUpActivity">
-        VideonaApplication LoginActivity
+        VideonaApplication-Android UserSignUpActivity
     </screenName>
     <screenName name="com.videonasocialmedia.videona.record.RecordActivity">
-        VideonaApplication recordActivity
+        VideonaApplication-Android recordActivity
     </screenName>
     <screenName name="com.videonasocialmedia.videona.edit.EditActivity">
-        VideonaApplication EditActivity
+        VideonaApplication-Android EditActivity
+    </screenName>
+    <screenName name="com.videonasocialmedia.videona.share.ShareActivity">
+        VideonaApplication-Android ShareActivity
+    </screenName>
+    <screenName name="com.videonasocialmedia.videona.music.MusicActivity">
+        VideonaApplication-Android MusicActivity
     </screenName>
     <!--  The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-59687187-1</string>

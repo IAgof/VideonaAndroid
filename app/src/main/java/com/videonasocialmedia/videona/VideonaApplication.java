@@ -77,7 +77,7 @@ public class VideonaApplication extends Application {
      *
      * @return google analytics tracker
      */
-    synchronized Tracker getTracker() {
+    public synchronized Tracker getTracker() {
         return app_tracker;
     }
 }

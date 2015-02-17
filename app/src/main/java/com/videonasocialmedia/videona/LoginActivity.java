@@ -28,6 +28,7 @@ import retrofit.client.Response;
 
 public class LoginActivity extends Activity {
 
+    /*VIEWS*/
     @InjectView(R.id.login_text_field)
     TextView userTextField;
     @InjectView(R.id.login_password_field)
@@ -42,7 +43,7 @@ public class LoginActivity extends Activity {
     /*CONFIG*/
     private SharedPreferences config;
 
-
+    /*ANALYTICS*/
     Tracker t;
 
 
@@ -57,12 +58,7 @@ public class LoginActivity extends Activity {
         apiClient = app.getApiClient();
         config = getApplicationContext()
                 .getSharedPreferences("USER_INFO", MODE_PRIVATE);
-
-
         t = app.getTracker();
-
-        //t.setScreenName("LoginActivity");
-        //t.send(new HitBuilders.AppViewBuilder().build());
     }
 
 
@@ -117,7 +113,7 @@ public class LoginActivity extends Activity {
 
 
         //TODO remove next line when remember-me is working and uncomment the rest of the method
-        //startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
 
        /* String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();
