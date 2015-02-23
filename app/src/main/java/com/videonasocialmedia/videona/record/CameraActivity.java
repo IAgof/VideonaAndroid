@@ -17,11 +17,26 @@
 package com.videonasocialmedia.videona.record;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 
+import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.UserPreferences;
+import com.videonasocialmedia.videona.share.ShareActivity;
+
+import java.io.File;
 
 public class CameraActivity extends Activity {
+
+    private static String LOG_TAG = "CameraActivity";
+
+    private static UserPreferences appPrefs;
+
+    private static final int VIDEO_SHARE_REQUEST_CODE = 500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +46,22 @@ public class CameraActivity extends Activity {
             getFragmentManager().beginTransaction()
                     .replace(R.id.container, Camera2VideoFragment.newInstance())
                     .commit();
+        }
+
+
+        Context context = getApplicationContext();
+        appPrefs = new UserPreferences(context);
+
+        Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
+
+        File fTempAV = new File(Config.videoMusicTempFile);
+
+        if (appPrefs.getIsMusicON() && fTempAV.exists()) {
+
+            Intent share = new Intent();
+            //  share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
+            share.setClass(CameraActivity.this, ShareActivity.class);
+            startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
         }
     }
 

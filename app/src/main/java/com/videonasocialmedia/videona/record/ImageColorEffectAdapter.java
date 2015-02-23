@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
 
@@ -21,11 +22,9 @@ import java.util.ArrayList;
 /**
  * Created by root on 30/01/15.
  */
-public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
+public class ImageColorEffectAdapter extends ArrayAdapter<String> {
 
     private String LOG_TAG = this.getClass().getSimpleName();
-
-    private Context mContext;
 
     private Activity activity;
 
@@ -47,15 +46,19 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
     }
 
     public void setViewClickListener (RecordActivity viewClickListener) {
-        mViewClickListener = viewClickListener;
+
+        mViewClickListener = (ViewClickListener) viewClickListener;
     }
 
+    public void setViewClickListenerLollipop (Camera2VideoFragment viewClickListener) {
 
-    public ImageColorEffectAdadpter(Activity activity, Context c, ArrayList<String> colorEffectItems) {
+        mViewClickListener = (ViewClickListener) viewClickListener;
+    }
+
+    public ImageColorEffectAdapter(Activity activity, ArrayList<String> colorEffectItems) {
             super(activity, R.layout.item_color_effect, colorEffectItems);
-            this.activity = activity;
-            mContext = c;
             this.colorEffectItems = colorEffectItems;
+            this.activity = activity;
     }
 
     public int getCount() {
@@ -97,17 +100,21 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
         }
 
 
-        String colorEffectName = CameraPreview.colorEffects.get(position);
+        String colorEffectName = colorEffectItems.get(position);
 
         String colorEffectDrawableName = "effect_" + colorEffectName;
 
+        // colorEffectName, key value to obtain drawable resources effect_ + colorEffectName
         int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
-
         viewHolder.imageView.setImageResource(resourceId);
+
         viewHolder.textView.setText(getColorEffectName(colorEffectName));
 
 
-        if(RecordActivity.colorEffectLastPosition == position && isPressed) {
+        //TODO  Save position color_effect, setBackground and bold text
+       /*
+
+       if(RecordActivity.colorEffectLastPosition == position && isPressed) {
 
             Log.d(LOG_TAG, " setBackground in position " + position );
 
@@ -117,6 +124,7 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
             isPressed = false;
 
         }
+        */
 
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +132,9 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
 
                 mViewClickListener.onImageClicked(position);
 
-               // isPressed = true;
+                viewHolder.imageView.setBackgroundColor(R.color.videona_blue_5);
+                viewHolder.textView.setTypeface(null, Typeface.BOLD);
+
 
             }
         });
@@ -140,58 +150,58 @@ public class ImageColorEffectAdadpter extends ArrayAdapter<String> {
         
     }
 
+    /**
+    * Return String name, different languages
+    *
+    */
+
     private String getColorEffectName(String colorEffectName) {
 
         String colorName = " ";
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_AQUA) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_AQUA) == 0) {
 
             return getContext().getString(R.string.filter_effect_aqua);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_BLACKBOARD) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_BLACKBOARD) == 0) {
 
             return getContext().getString(R.string.filter_effect_blackboard);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_MONO) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_MONO) == 0) {
 
             return getContext().getString(R.string.filter_effect_mono);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_NEGATIVE) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_NEGATIVE) == 0) {
 
             return getContext().getString(R.string.filter_effect_negative);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_NONE) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_NONE) == 0) {
 
             return getContext().getString(R.string.filter_effect_none);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_POSTERIZE) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_POSTERIZE) == 0) {
 
             return getContext().getString(R.string.filter_effect_posterice);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_SEPIA) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_SEPIA) == 0) {
 
             return getContext().getString(R.string.filter_effect_sepia);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_WHITEBOARD) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_WHITEBOARD) == 0) {
 
             return getContext().getString(R.string.filter_effect_whiteboard);
         }
 
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_SOLARIZE) == 0) {
+        if(colorEffectName.compareTo(Config.COLOR_EFFECT_SOLARIZE) == 0) {
 
             return getContext().getString(R.string.filter_effect_solarice);
-        }
-
-        if(colorEffectName.compareTo(Camera.Parameters.EFFECT_BLACKBOARD) == 0) {
-
-            return getContext().getString(R.string.filter_effect_blackboard);
         }
 
         if(colorEffectName.compareTo("emboss") == 0) {

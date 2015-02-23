@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -43,22 +44,27 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.edit.EditActivity;
+
+import org.lucasr.twowayview.TwoWayView;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +78,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class Camera2VideoFragment extends Fragment implements View.OnClickListener {
+public class Camera2VideoFragment extends Fragment implements ImageColorEffectAdapter.ViewClickListener, View.OnClickListener {
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -103,6 +109,26 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
      * Button to record video
      */
     private ImageButton mButtonVideo;
+
+    /**
+     * Button to apply color effects
+     */
+    private ImageButton btnColorEffect;
+
+    /**
+     *  ListView to use horizontal adapter
+     */
+    private TwoWayView lvTest;
+
+    /**
+     *  RelativeLayout to show and hide color effects
+     */
+    private RelativeLayout relativeLayoutColorEffects;
+
+    /**
+     *  Adapter to add images color effect
+     */
+    private ImageColorEffectAdapter imageColorEffectAdadpter;
 
     /**
      * A refernce to the opened {@link android.hardware.camera2.CameraDevice}.
@@ -237,14 +263,10 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
     private static Size chooseVideoSize(Size[] choices) {
         for (Size size : choices) {
 
-          //  Log.d("Camera2", "chooseVideSize choices " + size.getHeight() + " width " + size.getWidth());
-       // Example
-       //     if (size.getWidth() == size.getHeight() * 4 / 3 && size.getWidth() <= 1080) {
-       // Change to 16:9
-            //if (size.getWidth() == size.getWidth() * 16 / 9 && size.getHeight() <= 1080) {
+            Log.d("Camera2", "chooseVideSize choices " + size.getHeight() + " width " + size.getWidth());
             if (size.getWidth() == 1280 && size.getHeight() == 720) {
 
-                Log.d("Camera2", "chooseVideoSize selection height " + size.getHeight() + " width " + size.getWidth());
+                Log.d("Camera2", "chooseVideSize selection width " + size.getWidth() + " height " + size.getHeight());
                 return size;
             }
         }
@@ -268,18 +290,26 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         List<Size> bigEnough = new ArrayList<Size>();
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
+
+        Log.d("Camera2", "chooseOptimalSize bigEnough height " + h + " / " + height + " width " + w + " / " + width);
+
         for (Size option : choices) {
-         //   Log.d("Camera2", "chooseOptimalSize choices " + option.getHeight() + " width " + option.getWidth());
-         /*   if (option.getHeight() == option.getWidth() * h / w &&
+
+            Log.d("Camera2", "chooseOptimalSize choices " + option.getHeight() + " width " + option.getWidth());
+        //    if ( option.getHeight() >= height &&  option.getWidth() >= width) {
+            if (option.getHeight() == option.getWidth() * h / w &&
                     option.getWidth() >= width && option.getHeight() >= height) {
                 bigEnough.add(option);
+                Log.d("Camera2", "chooseOptimalSize choices add selection " + option.getHeight() + " width " + option.getWidth());
             }
-         */
-            if (option.getHeight() == 720 && option.getWidth() == 1280) {
+
+
+         /*   if (option.getHeight() <= Config.VIDEO_SIZE_HEIGHT && option.getWidth() <= Config.VIDEO_SIZE_WIDTH) {
                 Log.d("Camera2", "chooseOptimalSize selection height " + option.getHeight() + " width " + option.getWidth());
                 bigEnough.add(option);
 
             }
+          */
 
         }
 
@@ -292,6 +322,99 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    /// https://android.googlesource.com/platform/packages/apps/Camera2/+/36ebcb1/src/com/android/camera/util/CameraUtil.java
+
+    private static Point getDefaultDisplaySize(Activity activity, Point size) {
+        activity.getWindowManager().getDefaultDisplay().getSize(size);
+        return size;
+    }
+
+    public static Size getOptimalPreviewSize(Activity currentActivity,
+                                             List<Size> sizes, double targetRatio) {
+        Point[] points = new Point[sizes.size()];
+        int index = 0;
+        for (Size s : sizes) {
+            points[index++] = new Point(s.getWidth(), s.getHeight());
+        }
+        int optimalPickIndex = getOptimalPreviewSize(currentActivity, points, targetRatio);
+        return (optimalPickIndex == -1) ? null : sizes.get(optimalPickIndex);
+    }
+
+
+    public static int getOptimalPreviewSize(Activity currentActivity,
+                                            Point[] sizes, double targetRatio) {
+    // Use a very small tolerance because we want an exact match.
+        //final double ASPECT_TOLERANCE = 0.01;
+        final double ASPECT_TOLERANCE = 0.05;
+        if (sizes == null) return -1;
+        int optimalSizeIndex = -1;
+        double minDiff = Double.MAX_VALUE;
+    // Because of bugs of overlay and layout, we sometimes will try to
+    // layout the viewfinder in the portrait orientation and thus get the
+    // wrong size of preview surface. When we change the preview size, the
+    // new overlay will be created before the old one closed, which causes
+    // an exception. For now, just get the screen size.
+        Point point = getDefaultDisplaySize(currentActivity, new Point());
+        int targetHeight = Math.min(point.x, point.y);
+        // Try to find an size match aspect ratio and size
+        for (int i = 0; i < sizes.length; i++) {
+            Point size = sizes[i];
+            double ratio = (double) size.x / size.y;
+
+            Log.d("Camera2", " ratio getOptimalPreviewSize " + ratio);
+
+
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.y - targetHeight) < minDiff) {
+                optimalSizeIndex = i;
+                minDiff = Math.abs(size.y - targetHeight);
+            }
+        }
+    // Cannot find the one match the aspect ratio. This should not happen.
+    // Ignore the requirement.
+        if (optimalSizeIndex == -1) {
+            Log.w(TAG, "No preview size match the aspect ratio");
+            minDiff = Double.MAX_VALUE;
+            for (int i = 0; i < sizes.length; i++) {
+                Point size = sizes[i];
+                if (Math.abs(size.y - targetHeight) < minDiff) {
+                    optimalSizeIndex = i;
+                    minDiff = Math.abs(size.y - targetHeight);
+                }
+            }
+        }
+        return optimalSizeIndex;
+    }
+
+    // Returns the largest picture size which matches the given aspect ratio.
+    public static Size getOptimalVideoSnapshotPictureSize(
+            List<Size> sizes, double targetRatio) {
+        // Use a very small tolerance because we want an exact match.
+        final double ASPECT_TOLERANCE = 0.001;
+        if (sizes == null) return null;
+        Size optimalSize = null;
+        // Try to find a size matches aspect ratio and has the largest width
+        for (Size size : sizes) {
+            double ratio = (double) size.getWidth() / size.getHeight();
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (optimalSize == null || size.getWidth() > optimalSize.getWidth()) {
+                optimalSize = size;
+            }
+        }
+        // Cannot find one that matches the aspect ratio. This should not happen.
+        // Ignore the requirement.
+        if (optimalSize == null) {
+            Log.w(TAG, "No picture size match the aspect ratio");
+            for (Size size : sizes) {
+                if (optimalSize == null || size.getWidth() > optimalSize.getWidth()) {
+                    optimalSize = size;
+                }
+            }
+        }
+        return optimalSize;
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -300,9 +423,21 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (ImageButton) view.findViewById(R.id.button_capture);
         mButtonVideo.setOnClickListener(this);
+
+        chronometer = (Chronometer) view.findViewById(R.id.chronometerVideo);
+
+        btnColorEffect = (ImageButton) view.findViewById(R.id.btnColorEffect);
+        btnColorEffect.setOnClickListener(this);
+
+        relativeLayoutColorEffects = (RelativeLayout) view.findViewById(R.id.relativeLayoutColorEffects);
+        relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
+
+        lvTest = (TwoWayView) view.findViewById(R.id.lvItems);
+
 
     }
 
@@ -335,6 +470,41 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
                 }
                 break;
             }
+
+            case R.id.btnColorEffect: {
+
+                Log.d(TAG, "Camera2 btnColorEffect pressed");
+
+                if (relativeLayoutColorEffects.isShown()) {
+
+
+                    relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
+
+
+                    btnColorEffect.setImageResource(R.drawable.ic_filters);
+
+                    break;
+
+                }
+
+
+                relativeLayoutColorEffects.setVisibility(View.VISIBLE);
+
+
+                ArrayList<String> listItemColorEffects = getColorEffectList();
+
+                imageColorEffectAdadpter = new ImageColorEffectAdapter(getActivity(), listItemColorEffects);
+
+                imageColorEffectAdadpter.setViewClickListenerLollipop(this);
+
+                lvTest.setAdapter(imageColorEffectAdadpter);
+
+                btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
+
+                break;
+            }
+
+
         }
     }
 
@@ -381,25 +551,26 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
             StreamConfigurationMap map = characteristics
                     .get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
-            Log.d("Camera2" , " map " + map.getOutputFormats().toString());
 
             mVideoSize = chooseVideoSize(map.getOutputSizes(MediaRecorder.class));
             mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                     width, height, mVideoSize);
 
-            /*
+
             int orientation = getResources().getConfiguration().orientation;
+
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
             } else {
                 mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
             }
-            */
+
 
             // Landscape
             mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
 
             configureTransform(width, height);
+
             mMediaRecorder = new MediaRecorder();
             Log.d(TAG, " manager " + manager.getCameraIdList());
             manager.openCamera(cameraId, mStateCallback, null);
@@ -456,7 +627,7 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
 
             // Settings. CameraMetadata to set Color_Effects
             mPreviewBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
-            mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_AQUA);
+          //  mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_AQUA);
 
             Surface recorderSurface = mMediaRecorder.getSurface();
             surfaces.add(recorderSurface);
@@ -515,11 +686,17 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
      * @param viewHeight The height of `mTextureView`
      */
     private void configureTransform(int viewWidth, int viewHeight) {
+
+        Log.d("Camera2", "configureTransform width " + viewWidth + " heigth " + viewHeight);
+
         Activity activity = getActivity();
         if (null == mTextureView || null == mPreviewSize || null == activity) {
             return;
         }
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+
+        Log.d("Camera2", "rotation " + rotation);
+
         Matrix matrix = new Matrix();
         RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
         RectF bufferRect = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
@@ -534,6 +711,9 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
             matrix.postScale(scale, scale, centerX, centerY);
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
         }
+
+        //Log.d("Camera2", "matrix " + matrix.g);
+
         mTextureView.setTransform(matrix);
     }
 
@@ -549,16 +729,18 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
-        mMediaRecorder.setVideoEncodingBitRate(4000000);
-        mMediaRecorder.setVideoFrameRate(30);
-        //mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
-        mMediaRecorder.setVideoSize(1280, 720);
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        mMediaRecorder.setAudioSamplingRate(48000);
-        mMediaRecorder.setAudioChannels(2);
-        mMediaRecorder.setAudioEncodingBitRate(192000);
+
+        mMediaRecorder.setAudioSamplingRate(Config.AUDIO_SAMPLING_RATE);
+        mMediaRecorder.setAudioChannels(Config.AUDIO_CHANNELS);
+        mMediaRecorder.setAudioEncodingBitRate(Config.AUDIO_ENCODING_BIT_RATE);
+
+        mMediaRecorder.setVideoFrameRate(Config.VIDEO_FRAME_RATE);
+        mMediaRecorder.setVideoSize(Config.VIDEO_SIZE_WIDTH, Config.VIDEO_SIZE_HEIGHT);
+        mMediaRecorder.setVideoEncodingBitRate(Config.VIDEO_ENCODING_BIT_RATE);
+        //mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
+
 
         // Step 4: Set output file
         videoRecord = getOutputMediaFile(MEDIA_TYPE_VIDEO).toString();
@@ -600,7 +782,7 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d("RecordActivity", "failed to create directory");
+                Log.d("Camera2VideoFragment", "failed to create directory");
                 return null;
             }
         }
@@ -622,12 +804,19 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         try {
             // UI
            // mButtonVideo.setText(R.string.stop);
+
             mButtonVideo.setImageResource(R.drawable.ic_action_stop);
-            mButtonVideo.setAlpha(125f);
+            mButtonVideo.setImageAlpha(125);
+
+
             mIsRecordingVideo = true;
 
             // Start recording
             mMediaRecorder.start();
+
+            setChronometer();
+            chronometer.start();
+
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
@@ -640,6 +829,9 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         // Stop recording
         mMediaRecorder.stop();
         mMediaRecorder.reset();
+
+        chronometer.stop();
+
         Activity activity = getActivity();
         if (null != activity) {
             Toast.makeText(activity, "Video saved: " +videoRecord,
@@ -653,6 +845,33 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
         trim.putExtra("MEDIA_OUTPUT", videoRecord);
         trim.setClass(getActivity(), EditActivity.class);
         startActivityForResult(trim, CAMERA_TRIM_VIDEO_REQUEST_CODE);
+
+    }
+
+
+     private void setChronometer() {
+
+        chronometer.setBase(SystemClock.elapsedRealtime());
+
+        chronometer.setOnChronometerTickListener(new android.widget.Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(android.widget.Chronometer chronometer) {
+
+
+                Activity activity = getActivity();
+
+                long time = SystemClock.elapsedRealtime() - chronometer.getBase();
+                int h = (int) (time / 3600000);
+                int m = (int) (time - h * 3600000) / 60000;
+                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+                // String hh = h < 10 ? "0"+h: h+"";
+                String mm = m < 10 ? "0" + m : m + "";
+                String ss = s < 10 ? "0" + s : s + "";
+                // chronometer.setText(hh+":"+mm+":"+ss);
+                chronometer.setText(mm + ":" + ss);
+
+            }
+        });
 
     }
 
@@ -686,6 +905,74 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
                     .create();
         }
 
+    }
+
+
+    private static ArrayList<String> getColorEffectList() {
+
+        ArrayList<String> colorEffects = new ArrayList<String>();
+
+        colorEffects.add(Config.COLOR_EFFECT_NONE);
+        colorEffects.add(Config.COLOR_EFFECT_MONO);
+        colorEffects.add(Config.COLOR_EFFECT_NEGATIVE);
+        colorEffects.add(Config.COLOR_EFFECT_SOLARIZE);
+        colorEffects.add(Config.COLOR_EFFECT_SEPIA);
+        colorEffects.add(Config.COLOR_EFFECT_POSTERIZE);
+        colorEffects.add(Config.COLOR_EFFECT_WHITEBOARD);
+        colorEffects.add(Config.COLOR_EFFECT_BLACKBOARD);
+        colorEffects.add(Config.COLOR_EFFECT_AQUA);
+
+        return colorEffects;
+
+    }
+
+    @Override
+    public void onImageClicked(int position) {
+
+        Log.d("Camera2", "onImageClicked " + position);
+
+        mPreviewBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
+
+        switch (position) {
+            case 0:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_OFF);
+
+                break;
+            case 1:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_MONO);
+
+                break;
+            case 2:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_NEGATIVE);
+
+                break;
+            case 3:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_SOLARIZE);
+
+                break;
+            case 4:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_SEPIA);
+
+                break;
+            case 5:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_POSTERIZE);
+
+                break;
+            case 6:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_WHITEBOARD);
+
+                break;
+            case 7:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_BLACKBOARD);
+
+                break;
+            case 8:
+                mPreviewBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE, CameraMetadata.CONTROL_EFFECT_MODE_AQUA);
+
+                break;
+        }
+
+        updatePreview();
     }
 
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.UserPreferences;
 
 import java.io.IOException;
@@ -155,7 +156,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             // parameters.setPreviewSize(size.width, size.height);
 
-            parameters.setPreviewSize(1280, 720);
+            parameters.setPreviewSize(Config.VIDEO_SIZE_WIDTH, Config.VIDEO_SIZE_HEIGHT);
 
             Log.e(TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
 
@@ -208,7 +209,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         for (Camera.Size size : p.getSupportedPreviewSizes()) {
 
-            if ( size.height == 720 && size.width <= 1280) {
+
+            if ( size.height == Config.VIDEO_SIZE_HEIGHT && size.width <= Config.VIDEO_SIZE_WIDTH) {
 
                 Log.d("CameraPreview", "getBestPreviewSize selection height " + size.height + " width " + size.width);
 

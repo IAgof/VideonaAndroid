@@ -2,6 +2,7 @@ package com.videonasocialmedia.videona;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.api.RegisterRequestBody;
 import com.videonasocialmedia.videona.api.Validator;
+import com.videonasocialmedia.videona.record.CameraActivity;
 import com.videonasocialmedia.videona.record.RecordActivity;
 
 import butterknife.ButterKnife;
@@ -75,7 +77,15 @@ public class UserSignUpActivity extends Activity {
                     //TODO modificar textos
                     Toast.makeText(getApplicationContext(), "Registrado correctamente: status "+response.getStatus() ,
                             Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+
+                    //TODO remove next line when remember-me is working and uncomment the rest of the method
+
+                    if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                        startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+                    } else {
+                        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+                    }
+
                 }
 
                 @Override

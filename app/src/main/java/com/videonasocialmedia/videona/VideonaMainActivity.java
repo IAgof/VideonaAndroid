@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.videonasocialmedia.videona.api.ApiClient;
+import com.videonasocialmedia.videona.record.CameraActivity;
 import com.videonasocialmedia.videona.record.RecordActivity;
 
 import java.io.File;
@@ -55,8 +57,16 @@ public class VideonaMainActivity extends Activity {
 
     private void launchCameraActivity() {
 
-        Intent i = new Intent(getApplicationContext(), RecordActivity.class);
-        startActivity(i);
+        //Intent i = new Intent(getApplicationContext(), RecordActivity.class);
+       // startActivity(i);
+        //TODO remove next line when remember-me is working and uncomment the rest of the method
+
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+        } else {
+            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+        }
+
 
     }
 
@@ -222,7 +232,13 @@ public class VideonaMainActivity extends Activity {
 
             //launchCameraActivity();
             if (loggedIn) {
-                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+
+                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+                }
+
             } else {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }

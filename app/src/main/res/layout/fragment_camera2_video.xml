@@ -19,14 +19,9 @@
 
     <com.videonasocialmedia.videona.record.AutoFitTextureView
         android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
     <RelativeLayout
         android:layout_width="120dp"
@@ -117,6 +112,43 @@
             android:paddingRight="16dp"
 
             android:textSize="18sp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+
+        android:id="@+id/relativeLayoutColorEffects"
+
+        android:layout_width="400dp"
+
+        android:layout_height="100dp"
+
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true">
+
+
+        <org.lucasr.twowayview.TwoWayView
+
+            xmlns:android="http://schemas.android.com/apk/res/android"
+
+            xmlns:tools="http://schemas.android.com/tools"
+
+            android:id="@+id/lvItems"
+
+            style="@style/TwoWayView"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+
+            android:layout_centerInParent="true"
+
+            android:drawSelectorOnTop="false"
+
+            tools:context=".RecordActivity" />
 
     </RelativeLayout>
 
