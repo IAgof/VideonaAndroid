@@ -655,6 +655,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
             mCamera.setParameters(parameters);
 
+            Toast.makeText(getApplicationContext(), "Manual Focus", Toast.LENGTH_SHORT).show();
+
 
             return true;
         } else {
