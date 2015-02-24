@@ -233,11 +233,11 @@ public class VideonaMainActivity extends Activity {
             //launchCameraActivity();
             if (loggedIn) {
 
-                if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(new Intent(getApplicationContext(), CameraActivity.class));
-                } else {
+              //  if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+              //      startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+              //  } else {
                     startActivity(new Intent(getApplicationContext(), RecordActivity.class));
-                }
+              //  }
 
             } else {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));

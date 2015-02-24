@@ -3,6 +3,9 @@ package com.videonasocialmedia.videona.record;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
@@ -12,12 +15,12 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
@@ -28,6 +31,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.edit.EditActivity;
 import com.videonasocialmedia.videona.share.ShareActivity;
+import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -47,7 +51,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
      * Called when the activity is first created.
      */
     private Camera mCamera;
+
     private CameraPreview mPreview;
+
     private MediaRecorder mMediaRecorder;
     private boolean isRecording = false;
     private ImageButton captureButton;
@@ -118,6 +124,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
         ((ViewGroup) findViewById(R.id.camera_preview)).addView(mPreview);
 
+        ((ViewGroup) findViewById(R.id.camera_preview)).addView(new CustomFocusView(RecordActivity.this));
 
         Context context = getApplicationContext();
         appPrefs = new UserPreferences(context);
@@ -136,11 +143,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
 
         chronometer = (Chronometer) findViewById(R.id.chronometerVideo);
-      //  chronometer.setTypeface(tf);
-
-     //   chronometer = new ChronometerRecord(RecordActivity.this);
-
-
 
         chronometer.setText(String.format("%02d:%02d", 0, 0));
 
@@ -271,6 +273,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
             }
 
         });
+
+
+
 
 
     }
@@ -509,6 +514,10 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
             // Create our Preview view and set it as the content of our activity.
             mPreview = new CameraPreview(this, mCamera);
 
+            ((ViewGroup) findViewById(R.id.camera_preview)).addView(mPreview);
+
+            ((ViewGroup) findViewById(R.id.camera_preview)).addView(new CustomFocusView(RecordActivity.this));
+
         }
 
     }
@@ -544,6 +553,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
             isRecording = false;
             mCamera.stopPreview();
             mCamera.setPreviewCallback(null);
+            mPreview.getHolder().removeCallback(mPreview);
             mCamera.release();        // release the camera for other applications
             mCamera = null;
 
@@ -626,7 +636,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
         appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
 
-     /* imageColorEffectAdadpter = null;
+        imageColorEffectAdadpter = null;
 
         imageColorEffectAdadpter = new ImageColorEffectAdapter(RecordActivity.this, colorEffects);
 
@@ -635,33 +645,10 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
         lvTest.setAdapter(imageColorEffectAdadpter);
 
-        lvTest.setSelection(colorEffectLastPosition - 1);
-
-      */
-
-    }
+       // lvTest.setSelection(colorEffectLastPosition - 1);
 
 
-    /**
-     * Use screen touches to toggle the video between playing and paused.
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
 
-            Camera.Parameters parameters = mCamera.getParameters();
-
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-
-            mCamera.setParameters(parameters);
-
-            Toast.makeText(getApplicationContext(), "Manual Focus", Toast.LENGTH_SHORT).show();
-
-
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }
