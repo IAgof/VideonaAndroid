@@ -41,7 +41,7 @@
 
         <ImageButton
 
-            android:id="@+id/button_capture"
+            android:id="@+id/capture_button"
 
             android:layout_width="100dp"
 
@@ -64,7 +64,7 @@
 
         <Chronometer
 
-            android:id="@+id/chronometerVideo"
+            android:id="@+id/video_chronometer"
 
             android:layout_width="wrap_content"
 
@@ -72,7 +72,7 @@
 
             android:layout_alignWithParentIfMissing="false"
 
-            android:layout_below="@+id/button_capture"
+            android:layout_below="@+id/capture_button"
 
             android:layout_centerHorizontal="true"
 
@@ -89,13 +89,13 @@
 
         <ImageButton
 
-            android:id="@+id/btnColorEffect"
+            android:id="@+id/color_effect_button"
 
             android:layout_width="25dp"
 
             android:layout_height="25dp"
 
-            android:layout_above="@+id/button_capture"
+            android:layout_above="@+id/capture_button"
 
             android:layout_centerHorizontal="true"
 
@@ -120,7 +120,7 @@
 
             android:layout_alignParentTop="true"
 
-            android:layout_alignStart="@+id/btnColorEffect"
+            android:layout_alignStart="@+id/color_effect_button"
 
             android:layout_marginTop="16dp"
 

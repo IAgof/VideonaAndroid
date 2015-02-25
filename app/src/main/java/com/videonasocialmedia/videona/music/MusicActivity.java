@@ -12,9 +12,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
+import com.videonasocialmedia.videona.VideonaApplication;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +55,7 @@ public class MusicActivity extends Activity {
     private ImageButton btnMusicSelected;
 
     private TextView textMusicSelected;
+
 
     // Position image selected
     private int position = 0;
@@ -115,6 +119,8 @@ public class MusicActivity extends Activity {
 
                 setResult(Activity.RESULT_OK, select);
 
+                trackMusicUsed(getResources().getString(mThumbMusicText[0]));
+
                 finish();
             }
         });
@@ -128,6 +134,8 @@ public class MusicActivity extends Activity {
 
 
     }
+
+
 
     private View.OnClickListener image0Listener() {
         return new View.OnClickListener() {
@@ -483,7 +491,6 @@ public class MusicActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-
         if (mediaPlayerMusic != null) {
 
             mediaPlayerMusic.stop();
@@ -492,9 +499,23 @@ public class MusicActivity extends Activity {
         }
 
         setResult(Activity.RESULT_CANCELED);
+        trackMusicUsed("none");
 
         finish();
+    }
 
+    /**
+     * Sends to GA the music genre used in a video
+     *
+     * @param genre the music style applied
+     */
+    private void trackMusicUsed(String genre){
+        Tracker t= ((VideonaApplication)this.getApplication()).getTracker();
+        t.send(new HitBuilders.EventBuilder()
+                .setCategory("Edit")
+                .setAction("Music applied")
+                .setCategory(genre)
+                .build());
     }
 
 
