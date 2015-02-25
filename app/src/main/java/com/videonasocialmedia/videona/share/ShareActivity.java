@@ -29,6 +29,7 @@ import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.VideonaMainActivity;
+import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
 
@@ -204,7 +205,9 @@ public class ShareActivity extends Activity {
 
                 btnPlay.setVisibility(View.INVISIBLE);
 
-                mediaPlayer.start();
+                if(mediaPlayer!=null) {
+                    mediaPlayer.start();
+                }
 
                 updateSeekProgress();
 
@@ -252,6 +255,7 @@ public class ShareActivity extends Activity {
                 setVideoInfo();
 
                 previewVideo();
+
 
             }
         });
@@ -330,11 +334,19 @@ public class ShareActivity extends Activity {
 
                 Log.d(LOG_TAG, "shareClickListener");
 
-                videoView.pause();
+          /*      videoView.pause();
 
                 videoView.stopPlayback();
 
                 videoView.suspend();
+            */
+
+                if(mediaPlayer.isPlaying()){
+
+                    mediaPlayer.pause();
+                    btnPlay.setVisibility(View.VISIBLE);
+
+                }
 
 
                 ContentValues content = new ContentValues(4);
@@ -450,13 +462,19 @@ public class ShareActivity extends Activity {
 
         if (music_selected) {
 
-            videoView.pause();
+          /*  videoView.pause();
 
             videoView.stopPlayback();
 
             videoView.suspend();
 
-            // Kill process. Needed to load again ffmpeg libraries
+          */
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.pause();
+            }
+
+
+             // Kill process. Needed to load again ffmpeg libraries
             int pid = android.os.Process.myPid();
             android.os.Process.killProcess(pid);
 

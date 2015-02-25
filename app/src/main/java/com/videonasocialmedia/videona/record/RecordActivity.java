@@ -3,6 +3,9 @@ package com.videonasocialmedia.videona.record;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
@@ -11,6 +14,8 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -30,6 +35,7 @@ import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.edit.EditActivity;
 import com.videonasocialmedia.videona.share.ShareActivity;
+import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -39,28 +45,28 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class RecordActivity extends Activity implements ImageColorEffectAdadpter.ViewClickListener {
+public class RecordActivity extends Activity implements ImageColorEffectAdapter.ViewClickListener {
 
     private static String LOG_TAG = "RecordActivity";
 
     //private final String LOG_TAT = this.getClass().getSimpleName();
 
+    /**
+     * Called when the activity is first created.
+     */
     private Camera mCamera;
     private CameraPreview mPreview;
     private MediaRecorder mMediaRecorder;
     private boolean isRecording = false;
-    private int cameraId = 0;
-    private Uri fileUri; // file url to store image/video
-    private String videoRecord;
-
     private ImageButton captureButton;
-    private ImageButton colorEffectButton;
 
+    private ImageButton btnColorEffect;
     private static Boolean isColorEffect;
 
     /*ACTIVITY REQUEST CODES*/
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
+
     private static final int CAMERA_TRIM_VIDEO_REQUEST_CODE = 300;
     private static final int WELCOME_REQUEST_CODE = 400;
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
@@ -71,19 +77,30 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
     private Chronometer chronometer;
 
+    private Uri fileUri; // file url to store image/video
+
+    private String videoRecord;
+
     private boolean showWelcome;
     private boolean showWelcomeToday = false;
 
     private Typeface tf;
 
-    private boolean backButtonPressed = false;
+    private boolean btnBackPressed = false;
+
+
+    private int cameraId = 0;
 
     private static UserPreferences appPrefs;
 
     private ListAdapter adapter;
-    private ImageColorEffectAdadpter imageColorEffectAdadpter;
+
+    private ImageColorEffectAdapter imageColorEffectAdadpter;
+
     private TwoWayView lvTest;
+
     private RelativeLayout relativeLayoutColorEffects;
+
     public static int colorEffectLastPosition = 0;
 
     private Tracker t;
@@ -103,7 +120,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         if (mCamera == null)
             mCamera = getCameraInstance();
 
-        captureButton = (ImageButton) findViewById(R.id.capture_button);
+        captureButton = (ImageButton) findViewById(R.id.button_capture);
 
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
@@ -112,6 +129,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         //preview.addView(mPreview);
 
         ((ViewGroup) findViewById(R.id.camera_preview)).addView(mPreview);
+
+        ((ViewGroup) findViewById(R.id.camera_preview)).addView(new CustomFocusView(RecordActivity.this));
 
         Context context = getApplicationContext();
         appPrefs = new UserPreferences(context);
@@ -129,7 +148,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         }
 
 
-        chronometer = (Chronometer) findViewById(R.id.video_chronometer);
+        chronometer = (Chronometer) findViewById(R.id.chronometerVideo);
         chronometer.setTypeface(tf);
 
         chronometer.setText(String.format("%02d:%02d", 0, 0));
@@ -155,7 +174,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
                             //   captureButton.setImageResource(R.drawable.ic_btn_stop);  //setText("Capture");
                             isRecording = false;
 
-                            stopChronometer();
+                           // stop Chronometer ;
+                            chronometer.stop();
 
                             releaseCamera();
 
@@ -178,14 +198,13 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
                                 // inform the user that recording has started
                                 captureButton.setImageResource(R.drawable.ic_action_stop);  //setText("Stop");
-                                captureButton.setAlpha(125);
+                                captureButton.setImageAlpha(125);
                                 isRecording = true;
 
 
                                 //initialize chronometer
                                 setChronometer();
-
-                                startChronometer();
+                                chronometer.start();
 
 
                             } else {
@@ -200,7 +219,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         );
 
 
-        colorEffectButton = (ImageButton) findViewById(R.id.color_effect_button);
+        btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
 
         relativeLayoutColorEffects = (RelativeLayout) findViewById(R.id.relativeLayoutColorEffects);
         relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
@@ -208,18 +227,30 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         lvTest = (TwoWayView) findViewById(R.id.lvItems);
 
-        colorEffectButton.setOnClickListener(new OnClickListener() {
+        btnColorEffect.setOnClickListener(new OnClickListener() {
 
             @Override
+
             public void onClick(View v) {
 
-                Log.d(LOG_TAG, " entro en colorEffectButton");
+
+                Log.d(LOG_TAG, " entro en btnColorEffect");
+
 
                 if (relativeLayoutColorEffects.isShown()) {
+
+
                     relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
-                    colorEffectButton.setImageResource(R.drawable.ic_filters);
+
+
+                    btnColorEffect.setImageResource(R.drawable.ic_filters);
+
+
                     return;
+
+
                 }
+
 
                 relativeLayoutColorEffects.setVisibility(View.VISIBLE);
                 ArrayList<String> colorEffects = new ArrayList<String>();
@@ -231,18 +262,48 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
                 }
 
                 appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
-                imageColorEffectAdadpter = new ImageColorEffectAdadpter(RecordActivity.this, getApplicationContext(), colorEffects);
+
+
+                imageColorEffectAdadpter = new ImageColorEffectAdapter(RecordActivity.this, colorEffects);
+
                 imageColorEffectAdadpter.setViewClickListener(RecordActivity.this);
 
                 lvTest.setAdapter(imageColorEffectAdadpter);
 
-                colorEffectButton.setImageResource(R.drawable.ic_filters_blue_5_shining);
+                btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
 
                 // save last color effect position selected to paint at position - 1
-                lvTest.setSelection(colorEffectLastPosition - 1);
+               // lvTest.setSelection(colorEffectLastPosition - 1);
+
+
             }
+
         });
         t = ((VideonaApplication) this.getApplication()).getTracker();
+    }
+
+    private void setChronometer() {
+
+        chronometer.setBase(SystemClock.elapsedRealtime());
+
+        chronometer.setOnChronometerTickListener(new android.widget.Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(android.widget.Chronometer chronometer) {
+
+
+                long time = SystemClock.elapsedRealtime() - chronometer.getBase();
+                int h = (int) (time / 3600000);
+                int m = (int) (time - h * 3600000) / 60000;
+                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+                // String hh = h < 10 ? "0"+h: h+"";
+                String mm = m < 10 ? "0" + m : m + "";
+                String ss = s < 10 ? "0" + s : s + "";
+                // chronometer.setText(hh+":"+mm+":"+ss);
+                RecordActivity.this.chronometer.setText(mm + ":" + ss);
+
+            }
+        });
+
     }
 
     private void openCamera() {
@@ -278,44 +339,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         fileUri = savedInstanceState.getParcelable("file_uri");
     }
 
-
-    private void startChronometer() {
-
-        chronometer.start();
-
-    }
-
-    private void stopChronometer() {
-        chronometer.stop();
-
-    }
-
-    //initialize chronometer
-    private void setChronometer() {
-
-        chronometer.setBase(SystemClock.elapsedRealtime());
-
-        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-
-
-                long time = SystemClock.elapsedRealtime() - chronometer.getBase();
-                int h = (int) (time / 3600000);
-                int m = (int) (time - h * 3600000) / 60000;
-                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
-                // String hh = h < 10 ? "0"+h: h+"";
-                String mm = m < 10 ? "0" + m : m + "";
-                String ss = s < 10 ? "0" + s : s + "";
-                // chronometer.setText(hh+":"+mm+":"+ss);
-                RecordActivity.this.chronometer.setText(mm + ":" + ss);
-
-            }
-        });
-
-    }
-
-
     /**
      * A safe way to get an instance of the Camera object.
      */
@@ -327,23 +350,27 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
             // int cameraId = appPrefs.getCameraId();
             //c = Camera.open(cameraId); // attempt to get a Camera instance
 
-            c = Camera.open(); // attempt to get a Camera instance
+            c = Camera.open(0); // attempt to get a Camera instance
 
-            if (c != null) {
+           // if (c != null) {
                 Camera.Parameters params = c.getParameters();
 
 
-                params.setPictureSize(720, 1280);
+               // params.setPictureSize(720, 1280);
+
+                // Para Pablo
+                params.setPictureSize(Config.VIDEO_SIZE_HEIGHT, Config.VIDEO_SIZE_WIDTH);
                 c.setParameters(params);
 
                 Log.d(LOG_TAG, "getCameraInstance height " + c.getParameters().getPictureSize().height + " width " + c.getParameters().getPictureSize().width);
-            }
+          //  }
 
         } catch (Exception e) {
             Log.d("DEBUG", "Camera did not open");
             // Camera is not available (in use or does not exist)
         }
 
+        Log.d(LOG_TAG, " getCameraInstance camera " + c);
 
         return c; // returns null if camera is unavailable
     }
@@ -391,14 +418,14 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 
 
-        mMediaRecorder.setAudioSamplingRate(48000);
-        mMediaRecorder.setAudioChannels(2);
-        mMediaRecorder.setAudioEncodingBitRate(192000);
+        mMediaRecorder.setAudioSamplingRate(Config.AUDIO_SAMPLING_RATE);
+        mMediaRecorder.setAudioChannels(Config.AUDIO_CHANNELS);
+        mMediaRecorder.setAudioEncodingBitRate(Config.AUDIO_ENCODING_BIT_RATE);
 
 
-        mMediaRecorder.setVideoFrameRate(30);
-        mMediaRecorder.setVideoSize(1280, 720);
-        mMediaRecorder.setVideoEncodingBitRate(4000000);
+        mMediaRecorder.setVideoFrameRate(Config.VIDEO_FRAME_RATE);
+        mMediaRecorder.setVideoSize(Config.VIDEO_SIZE_WIDTH, Config.VIDEO_SIZE_HEIGHT);
+        mMediaRecorder.setVideoEncodingBitRate(Config.VIDEO_ENCODING_BIT_RATE);
 
 
         // Step 4: Set output file
@@ -459,10 +486,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
+        if (type == MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "VID_" + timeStamp + ".mp4");
         } else {
@@ -475,6 +499,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     protected void onResume() {
         super.onResume();
+
+        Log.d(LOG_TAG, "onResume");
+
         // TODO Auto-generated method stub
         // deleting image from external storage
         // FileHandler.deleteFromExternalStorage();
@@ -485,6 +512,14 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
             mCamera = getCameraInstance();
 
             Log.d(LOG_TAG, "onResume height " + mCamera.getParameters().getPictureSize().height + " width " + mCamera.getParameters().getPictureSize().width);
+
+            // Create our Preview view and set it as the content of our activity.
+            mPreview = new CameraPreview(this, mCamera);
+
+            ((ViewGroup) findViewById(R.id.camera_preview)).addView(mPreview);
+
+            ((ViewGroup) findViewById(R.id.camera_preview)).addView(new CustomFocusView(RecordActivity.this));
+
         }
 
     }
@@ -492,8 +527,16 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     protected void onPause() {
         super.onPause();
+
+        Log.d(LOG_TAG, "onPause");
+
         releaseMediaRecorder();       // if you are using MediaRecorder, release it first
         releaseCamera();              // release the camera immediately on pause event.
+
+        // Remove view. Prevent crash  Method called after release() in CameraPreview
+       // FrameLayout preview = (FrameLayout)findViewById(R.id.camera_preview);
+      //  preview.removeView(mPreview);
+
     }
 
     private void releaseMediaRecorder() {
@@ -511,6 +554,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
             isRecording = false;
             mCamera.stopPreview();
             mCamera.setPreviewCallback(null);
+            mPreview.getHolder().removeCallback(mPreview);
             mCamera.release();        // release the camera for other applications
             mCamera = null;
 
@@ -534,7 +578,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
     @Override
     public void onBackPressed() {
 
-        backButtonPressed = true;
+        btnBackPressed = true;
 
         Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
 
@@ -543,9 +587,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && backButtonPressed == true) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && btnBackPressed == true) {
             // do something on back.
-            backButtonPressed = false;
+            btnBackPressed = false;
             Log.d(LOG_TAG, "onKeyDown");
 
 
@@ -558,7 +602,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
             return true;
         }
-        backButtonPressed = false;
+        btnBackPressed = false;
         return super.onKeyDown(keyCode, event);
 
     }
@@ -581,6 +625,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
         Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect() + " filter " + appPrefs.getColorEffect());
         trackColorEffect(appPrefs.getColorEffect());
 
+
         ArrayList<String> colorEffects = new ArrayList<String>();
 
 
@@ -594,14 +639,16 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
 
         imageColorEffectAdadpter = null;
 
-        imageColorEffectAdadpter = new ImageColorEffectAdadpter(RecordActivity.this, getApplicationContext(), colorEffects);
+        imageColorEffectAdadpter = new ImageColorEffectAdapter(RecordActivity.this, colorEffects);
 
         imageColorEffectAdadpter.setViewClickListener(RecordActivity.this);
 
 
         lvTest.setAdapter(imageColorEffectAdadpter);
 
-        lvTest.setSelection(colorEffectLastPosition - 1);
+       // lvTest.setSelection(colorEffectLastPosition - 1);
+
+
 
     }
 
