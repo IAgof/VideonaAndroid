@@ -2,15 +2,23 @@ package com.videonasocialmedia.videona.record;
 
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.Camera;
+import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.UserPreferences;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,6 +44,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     private static UserPreferences appPrefs;
 
+    public Paint paint;
+    private boolean drawingViewSet = true;
+    private CameraPreview camPreview;
+
+    private Rect touchArea = null;
 
     public CameraPreview(Context context, Camera camera) {
 
@@ -43,6 +56,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         mCamera = camera;
 
+
+        paint = new Paint();
+        paint.setColor(Color.GREEN);
+        paint.setStrokeWidth(10);
+        paint.setStyle(Paint.Style.STROKE);
 
         // http://stackoverflow.com/questions/19577299/android-camera-preview-stretched
 
@@ -161,7 +179,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.e(TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
 
 
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+        // Focus_continuous doesn't work well on OnePlus One
+        // parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+
+        // AutoFocus onTouch ON
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 
 
             mCamera.setParameters(parameters);
@@ -309,5 +331,69 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
+
+    // Blog reference to Focus Area http://www.jayrambhia.com/blog/android-touchfocus/
+    // https://github.com/jayrambhia/Touch2Focus/tree/master/src/com/fenchtose/touch2focus
+
+    /**
+     * Called from PreviewSurfaceView to set touch focus.
+     *
+     * @param - Rect - new area for auto focus
+     */
+    public void doTouchFocus(final Rect tfocusRect) {
+        Log.i(TAG, "TouchFocus");
+        try {
+            final List<Camera.Area> focusList = new ArrayList<Camera.Area>();
+            Camera.Area focusArea = new Camera.Area(tfocusRect, 1000);
+            focusList.add(focusArea);
+            Camera.Parameters para = mCamera.getParameters();
+            para.setFocusAreas(focusList);
+            para.setMeteringAreas(focusList);
+            mCamera.setParameters(para);
+            mCamera.autoFocus(myAutoFocusCallback);
+
+            touchArea = tfocusRect;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.i(TAG, "Unable to autofocus");
+        }
+    }
+    /**
+     * AutoFocus callback
+     */
+    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback(){
+        @Override
+        public void onAutoFocus(boolean arg0, Camera arg1) {
+            if (arg0){
+                mCamera.cancelAutoFocus();
+            }
+        }
+    };
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            float x = event.getX();
+            float y = event.getY();
+            Rect touchRect = new Rect(
+                    (int)(x - 100),
+                    (int)(y - 100),
+                    (int)(x + 100),
+                    (int)(y + 100));
+            final Rect targetFocusRect = new Rect(
+                    touchRect.left * 2000/this.getWidth() - 1000,
+                    touchRect.top * 2000/this.getHeight() - 1000,
+                    touchRect.right * 2000/this.getWidth() - 1000,
+                    touchRect.bottom * 2000/this.getHeight() - 1000);
+
+            doTouchFocus(targetFocusRect);
+
+
+        }
+        return false;
+    }
 
 }

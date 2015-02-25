@@ -29,6 +29,7 @@ import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.VideonaMainActivity;
+import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
 
@@ -254,6 +255,7 @@ public class ShareActivity extends Activity {
                 setVideoInfo();
 
                 previewVideo();
+
 
             }
         });

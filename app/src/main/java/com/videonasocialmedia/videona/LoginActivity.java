@@ -68,11 +68,11 @@ public class LoginActivity extends Activity {
 
         //TODO remove next line when remember-me is working and uncomment the rest of the method
 
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-            startActivity(new Intent(getApplicationContext(), CameraActivity.class));
-        } else {
+//        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+//            startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+//        } else {
             startActivity(new Intent(getApplicationContext(), RecordActivity.class));
-        }
+//        }
 
        /* String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();
