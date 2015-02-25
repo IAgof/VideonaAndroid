@@ -102,7 +102,7 @@ public class ImageColorEffectAdapter extends ArrayAdapter<String> {
 
         String colorEffectName = colorEffectItems.get(position);
 
-        String colorEffectDrawableName = "effect_" + colorEffectName;
+        String colorEffectDrawableName = "common_filter_" + colorEffectName;
 
         // colorEffectName, key value to obtain drawable resources effect_ + colorEffectName
         int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());

@@ -26,7 +26,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_validation_grey" />
+                android:src="@drawable/common_icon_check_pressed" />
 
             <TextView
                 android:id="@+id/textViewMusicSelected"
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="@string/music_genre_rock"
+                android:text="@string/music_genre_folk"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/black" />
         </RelativeLayout>
@@ -63,7 +63,7 @@
                         android:background="@color/pastel_palette_red"
                         android:padding="25dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_rock" />
+                        android:src="@drawable/activity_music_icon_folk_normal" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -91,7 +91,7 @@
                                 android:background="@color/pastel_palette_brown"
                                 android:padding="16dp"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/ic_country" />
+                                android:src="@drawable/activity_music_icon_classic_normal" />
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -108,7 +108,7 @@
                                 android:background="@color/pastel_palette_yellow"
                                 android:padding="16dp"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/ic_electronic" />
+                                android:src="@drawable/activity_music_icon_violin_normal" />
                         </RelativeLayout>
                     </LinearLayout>
                 </RelativeLayout>
@@ -139,7 +139,7 @@
                         android:background="@color/pastel_palette_green"
                         android:padding="16dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_reggae" />
+                        android:src="@drawable/activity_music_icon_hip_hop_normal" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -156,7 +156,7 @@
                         android:background="@color/pastel_palette_orange"
                         android:padding="16dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_jazz" />
+                        android:src="@drawable/activity_music_icon_reggae_normal" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -173,7 +173,7 @@
                         android:background="@color/pastel_palette_blue"
                         android:padding="16dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_classic" />
+                        android:src="@drawable/activity_music_icon_clarinet_normal" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -202,7 +202,7 @@
                         android:background="@color/pastel_palette_purple"
                         android:padding="16dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_hip_hop" />
+                        android:src="@drawable/activity_music_icon_pop_normal" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -220,7 +220,7 @@
                         android:focusableInTouchMode="false"
                         android:padding="16dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_pop" />
+                        android:src="@drawable/activity_music_icon_rock_normal" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -237,7 +237,7 @@
                         android:background="@color/pastel_palette_grey"
                         android:padding="16dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_folk" />
+                        android:src="@drawable/activity_music_icon_ambiental_normal" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>

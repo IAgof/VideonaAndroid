@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="53dp"
         android:background="@null"
-        android:src="@drawable/ic_share_buttom"
+        android:src="@drawable/activity_share_icon_share_normal"
         android:layout_above="@+id/imageButtonPlayShare"
         android:layout_alignParentEnd="true"
         android:scaleType="fitCenter"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageButtonPlayShare"
         android:background="@null"
-        android:src="@drawable/ic_action_play"
+        android:src="@drawable/common_icon_play_on_normal"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

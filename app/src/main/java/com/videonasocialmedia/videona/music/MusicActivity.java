@@ -402,27 +402,27 @@ public class MusicActivity extends Activity {
 
     // references to our orginial images and text music order
     private Integer[] mThumbMusicImage = {
-            R.drawable.ic_rock, R.drawable.ic_reggae,
-            R.drawable.ic_hip_hop, R.drawable.ic_jazz,
-            R.drawable.ic_pop, R.drawable.ic_country,
-            R.drawable.ic_electronic, R.drawable.ic_classic,
-            R.drawable.ic_folk
+            R.drawable.activity_music_icon_folk_normal, R.drawable.activity_music_icon_hip_hop_normal,
+            R.drawable.activity_music_icon_pop_normal, R.drawable.activity_music_icon_reggae_normal,
+            R.drawable.activity_music_icon_rock_normal, R.drawable.activity_music_icon_classic_normal,
+            R.drawable.activity_music_icon_violin_normal, R.drawable.activity_music_icon_clarinet_normal,
+            R.drawable.activity_music_icon_ambiental_normal
     };
 
     private Integer[] mThumbMusicText = {
-            R.string.music_genre_rock, R.string.music_genre_reggae,
-            R.string.music_genre_hihhop, R.string.music_genre_jazz,
-            R.string.music_genre_pop, R.string.music_genre_country,
-            R.string.music_genre_electronic, R.string.music_genre_classic,
-            R.string.music_genre_folk
+            R.string.music_genre_folk, R.string.music_genre_hiphop,
+            R.string.music_genre_pop, R.string.music_genre_reggae,
+            R.string.music_genre_rock, R.string.music_genre_classic,
+            R.string.music_genre_classic_violin, R.string.music_genre_classic_clarinet,
+            R.string.music_genre_ambiental
     };
 
     private Integer[] mThumbMusicAudio = {
-            R.raw.audio_cero, R.raw.audio_uno,
-            R.raw.audio_dos, R.raw.audio_tres,
-            R.raw.audio_cuatro, R.raw.audio_cinco,
-            R.raw.audio_seis, R.raw.audio_siete,
-            R.raw.audio_ocho
+            R.raw.audio_folk, R.raw.audio_hiphop,
+            R.raw.audio_pop, R.raw.audio_reggae,
+            R.raw.audio_rock, R.raw.audio_clasica_piano,
+            R.raw.audio_clasica_violin, R.raw.audio_clasica_flauta,
+            R.raw.audio_ambiental
     };
 
     private void updateDataMusic(int position) {

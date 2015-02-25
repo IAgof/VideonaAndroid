@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -94,7 +95,7 @@ public class EditActivity extends Activity {
     private ProgressDialog progressDialog;
 
     // Buttons
-    private ImageButton btnTrim;
+    private Button btnTrim;
     private ImageButton btnMusic;
     private ImageButton btnPlay;
 
@@ -251,7 +252,7 @@ public class EditActivity extends Activity {
         });
 
 
-        btnTrim = (ImageButton) findViewById(R.id.imageButtonCut);
+        btnTrim = (Button) findViewById(R.id.imageButtonCut);
         btnTrim.setOnClickListener(trimClickListener());
 
         btnMusic = (ImageButton) findViewById(R.id.imageButtonMusic);
@@ -271,7 +272,7 @@ public class EditActivity extends Activity {
 
                 if (isMusicON) {
 
-                    btnMusic.setImageResource(R.drawable.ic_addmusic_buttom);
+                    btnMusic.setImageDrawable(getDrawable(R.drawable.activity_edit_icon_add_music_normal));
 
                     isMusicON = false;
 
@@ -477,7 +478,7 @@ public class EditActivity extends Activity {
                 progressDialog = ProgressDialog.show(EditActivity.this, getString(R.string.dialog_processing), getString(R.string.please_wait), true);
 
                 // Custom progress dialog
-                progressDialog.setIcon(R.drawable.ic_action_cut);
+                progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
 
 
                 ((TextView) progressDialog.findViewById(Resources.getSystem()
@@ -820,11 +821,13 @@ public class EditActivity extends Activity {
         Log.d("MainActivity", "screen size width: " + width + " " + "heigh " + height);
 
         int width_opt = (int) width / 9;
-        int height_opt = (int) ((width_opt * 9) / 16); // 16:9
+        //int height_opt = (int) ((width_opt * 9) / 16); // 16:9
         //int height_opt = (int) ((width_opt * 3) /4); // 4:3
 
+        //OJO Pablo esta jugando!!!//
+        int height_opt = width_opt;
 
-        Log.d("MainActivity", "screen size width_opt: " + width_opt + " " + "height_opt " + height_opt);
+                Log.d("MainActivity", "screen size width_opt: " + width_opt + " " + "height_opt " + height_opt);
 
         File videoFile = new File(pathVideoName);
 
@@ -1067,11 +1070,11 @@ public class EditActivity extends Activity {
     }
 
     private String[] mThumbPathAudioSelected = {
-            "audio_cero.m4a", "audio_uno.m4a",
-            "audio_dos.m4a", "audio_tres.m4a",
-            "audio_cuatro.m4a", "audio_cinco.m4a",
-            "audio_seis.m4a", "audio_siete.m4a",
-            "audio_ocho.m4a"
+            "audio_folk.m4a", "audio_hiphop.m4a",
+            "audio_pop.m4a", "audio_reggae.m4a",
+            "audio_rock.m4a", "audio_clasica_piano.m4a",
+            "audio_clasica_violin.m4a", "audio_clasica_flauta.m4a",
+            "audio_ambiental.m4a"
     };
 
     private class PaintFramesTask extends AsyncTask<String, Void, String> {

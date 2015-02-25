@@ -149,7 +149,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
 
         chronometer = (Chronometer) findViewById(R.id.chronometerVideo);
-
+        chronometer.setTypeface(tf);
         chronometer.setText(String.format("%02d:%02d", 0, 0));
 
 
@@ -174,8 +174,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
                             //   captureButton.setImageResource(R.drawable.ic_btn_stop);  //setText("Capture");
                             isRecording = false;
 
-                           // stop Chronometer ;
-                            chronometer.stop();
+                            stopChronometer();
 
                             releaseCamera();
 
@@ -197,14 +196,16 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
                                 mMediaRecorder.start();
 
                                 // inform the user that recording has started
-                                captureButton.setImageResource(R.drawable.ic_action_stop);  //setText("Stop");
-                                captureButton.setImageAlpha(125);
+                                captureButton.setImageResource(R.drawable.activity_record_icon_stop_normal);  //setText("Stop");
+                                captureButton.setAlpha(125);
                                 isRecording = true;
 
 
                                 //initialize chronometer
                                 setChronometer();
                                 chronometer.start();
+
+                                startChronometer();
 
 
                             } else {
@@ -243,7 +244,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
                     relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
 
 
-                    btnColorEffect.setImageResource(R.drawable.ic_filters);
+                    btnColorEffect.setImageResource(R.drawable.common_icon_filters_normal);
 
 
                     return;
@@ -254,6 +255,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
                 relativeLayoutColorEffects.setVisibility(View.VISIBLE);
                 ArrayList<String> colorEffects = new ArrayList<String>();
+
 
                 for (int i = 0; i < CameraPreview.colorEffects.size(); i++) {
 
@@ -268,9 +270,11 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
                 imageColorEffectAdadpter.setViewClickListener(RecordActivity.this);
 
+
                 lvTest.setAdapter(imageColorEffectAdadpter);
 
-                btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
+
+                btnColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
 
                 // save last color effect position selected to paint at position - 1
                // lvTest.setSelection(colorEffectLastPosition - 1);
