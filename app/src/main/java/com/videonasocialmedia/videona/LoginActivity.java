@@ -3,7 +3,6 @@ package com.videonasocialmedia.videona;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -14,7 +13,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.api.ApiClient;
-import com.videonasocialmedia.videona.record.CameraActivity;
 import com.videonasocialmedia.videona.record.RecordActivity;
 
 import java.util.List;

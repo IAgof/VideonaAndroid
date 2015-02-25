@@ -271,8 +271,7 @@ public class EditActivity extends Activity {
 
 
                 if (isMusicON) {
-
-                    btnMusic.setImageDrawable(getDrawable(R.drawable.activity_edit_icon_add_music_normal));
+                    btnMusic.setImageResource(R.drawable.activity_edit_icon_add_music_normal);
 
                     isMusicON = false;
 

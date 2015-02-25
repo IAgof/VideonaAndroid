@@ -3,9 +3,6 @@ package com.videonasocialmedia.videona.record;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
@@ -14,8 +11,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -35,7 +30,6 @@ import com.videonasocialmedia.videona.UserPreferences;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.edit.EditActivity;
 import com.videonasocialmedia.videona.share.ShareActivity;
-import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -174,8 +168,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
                             //   captureButton.setImageResource(R.drawable.ic_btn_stop);  //setText("Capture");
                             isRecording = false;
 
-                            stopChronometer();
-
                             releaseCamera();
 
                             Intent trim = new Intent();
@@ -204,9 +196,6 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
                                 //initialize chronometer
                                 setChronometer();
                                 chronometer.start();
-
-                                startChronometer();
-
 
                             } else {
                                 // prepare didn't work, release the camera
@@ -277,7 +266,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
                 btnColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
 
                 // save last color effect position selected to paint at position - 1
-               // lvTest.setSelection(colorEffectLastPosition - 1);
+                // lvTest.setSelection(colorEffectLastPosition - 1);
 
 
             }
@@ -356,18 +345,18 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
             c = Camera.open(0); // attempt to get a Camera instance
 
-           // if (c != null) {
-                Camera.Parameters params = c.getParameters();
+            // if (c != null) {
+            Camera.Parameters params = c.getParameters();
 
 
-               // params.setPictureSize(720, 1280);
+            // params.setPictureSize(720, 1280);
 
-                // Para Pablo
-                params.setPictureSize(Config.VIDEO_SIZE_HEIGHT, Config.VIDEO_SIZE_WIDTH);
-                c.setParameters(params);
+            // Para Pablo
+            params.setPictureSize(Config.VIDEO_SIZE_HEIGHT, Config.VIDEO_SIZE_WIDTH);
+            c.setParameters(params);
 
-                Log.d(LOG_TAG, "getCameraInstance height " + c.getParameters().getPictureSize().height + " width " + c.getParameters().getPictureSize().width);
-          //  }
+            Log.d(LOG_TAG, "getCameraInstance height " + c.getParameters().getPictureSize().height + " width " + c.getParameters().getPictureSize().width);
+            //  }
 
         } catch (Exception e) {
             Log.d("DEBUG", "Camera did not open");
@@ -538,8 +527,8 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
         releaseCamera();              // release the camera immediately on pause event.
 
         // Remove view. Prevent crash  Method called after release() in CameraPreview
-       // FrameLayout preview = (FrameLayout)findViewById(R.id.camera_preview);
-      //  preview.removeView(mPreview);
+        // FrameLayout preview = (FrameLayout)findViewById(R.id.camera_preview);
+        //  preview.removeView(mPreview);
 
     }
 
@@ -650,8 +639,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
         lvTest.setAdapter(imageColorEffectAdadpter);
 
-       // lvTest.setSelection(colorEffectLastPosition - 1);
-
+        // lvTest.setSelection(colorEffectLastPosition - 1);
 
 
     }
@@ -687,6 +675,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
     /**
      * tracks the effects applied by the user
+     *
      * @param effect
      */
     private void trackColorEffect(String effect) {

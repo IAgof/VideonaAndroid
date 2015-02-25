@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.api.RegisterRequestBody;
 import com.videonasocialmedia.videona.api.Validator;
-import com.videonasocialmedia.videona.record.CameraActivity;
+
 import com.videonasocialmedia.videona.record.RecordActivity;
 
 import butterknife.ButterKnife;
@@ -80,11 +80,11 @@ public class UserSignUpActivity extends Activity {
 
                     //TODO remove next line when remember-me is working and uncomment the rest of the method
 
-                    if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-                        startActivity(new Intent(getApplicationContext(), CameraActivity.class));
-                    } else {
+                   // if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                        //startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+                    //)} else {
                         startActivity(new Intent(getApplicationContext(), RecordActivity.class));
-                    }
+                   // }
 
                 }
 
