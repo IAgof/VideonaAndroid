@@ -206,7 +206,7 @@ public class VideonaMainActivity extends Activity {
             // Waiting time to show splash screen
             // Dummy screen
 
-            boolean loggedIn = isSessionActive();
+            //boolean loggedIn = isSessionActive();
 
             try {
                 checkPath();
@@ -222,8 +222,8 @@ public class VideonaMainActivity extends Activity {
                 e.printStackTrace();
             }
 
-            return loggedIn;
-
+            //return loggedIn;
+            return true;
 
         }
 
@@ -240,7 +240,8 @@ public class VideonaMainActivity extends Activity {
               //  }
 
             } else {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                //startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
             }
         }
     }
