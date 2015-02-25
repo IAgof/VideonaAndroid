@@ -59,11 +59,11 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     // Bitmap to paint RangeSeekBar
-    private final Bitmap thumbImageRight = BitmapFactory.decodeResource(getResources(), R.drawable.thumbleft);
+    private final Bitmap thumbImageRight = BitmapFactory.decodeResource(getResources(), R.drawable.activity_edit_icon_thumb_left_normal);
 
     //	private final Bitmap point = BitmapFactory.decodeResource(getResources(), R.drawable.point);        
-    private final Bitmap line = BitmapFactory.decodeResource(getResources(), R.drawable.thumbleft);
-    private final Bitmap lineright = BitmapFactory.decodeResource(getResources(), R.drawable.thumbright);
+    private final Bitmap line = BitmapFactory.decodeResource(getResources(), R.drawable.activity_edit_icon_thumb_left_normal);
+    private final Bitmap lineright = BitmapFactory.decodeResource(getResources(), R.drawable.activity_edit_icon_thumb_right_normal);
     private final float lineHeightHalf = 0.5f * line.getHeight();
     private final float lineWidthHalf = 0.5f * line.getWidth();
 
@@ -71,9 +71,11 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final float thumbWidth = thumbImageRight.getWidth();
     private final float thumbHalfWidth = 0.5f * thumbWidth;
     private final float thumbHalfHeight = 0.5f * thumbImageRight.getHeight();
+
     //  private final float lineHeight = 0.53f * thumbHalfHeight;
     private final float lineHeight = thumbHalfHeight;
-    private final float padding = thumbHalfWidth / 2;
+    //private final float padding = thumbHalfWidth / 2;
+    private final float padding = thumbHalfWidth;
     private final T absoluteMinValue, absoluteMaxValue;
     private final NumberType numberType;
     private final double absoluteMinValuePrim, absoluteMaxValuePrim;
@@ -441,8 +443,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         final RectF rect = new RectF(0, 0, getWidth() - padding, getHeight());
 
-        paint.setColor(R.color.pastel_palette_grey);
-        paint.setAlpha(160);
+       // paint.setColor(R.color.pastel_palette_grey);
+        paint.setColor(Color.WHITE);
+      //  paint.setAlpha(160);
         paint.setAntiAlias(true);
 
         //    canvas.drawRect(rect, paint);
@@ -468,9 +471,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         rect.right = getWidth() - padding;
 
 
-        paint.setColor(R.color.pastel_palette_grey);
-        paint.setAlpha(160);
-        //paint.setColor(Color.WHITE);
+      //  paint.setColor(R.color.pastel_palette_grey);
+       // paint.setAlpha(160);
+        paint.setColor(Color.WHITE);
         canvas.drawRect(rect, paint);
 
         canvas2 = canvas;

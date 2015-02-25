@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_play" />
+                android:src="@drawable/common_icon_play_on_normal" />
 
         </RelativeLayout>
 
@@ -112,7 +112,7 @@
                 android:layout_height="50dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_play" />
+                android:src="@drawable/common_icon_play_on_normal" />
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -141,7 +141,7 @@
                 android:layout_alignParentLeft="true"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_play" />
+                android:src="@drawable/common_icon_play_on_normal" />
 
             <RadioButton
                 android:id="@+id/radioButton"
@@ -172,7 +172,7 @@
                 android:layout_height="50dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_play"
+                android:src="@drawable/common_icon_play_on_normal"
                 android:layout_centerVertical="true" />
 
             <ImageButton
@@ -183,7 +183,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_validation"
+                android:src="@drawable/common_icon_check_normal"
                 android:background="@null"
                 android:adjustViewBounds="true"
                 android:layout_margin="2dp" />
@@ -206,7 +206,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_validation"
+                android:src="@drawable/common_icon_check_normal"
                 android:layout_centerInParent="true"
                 android:layout_alignParentTop="false" />
 
@@ -228,7 +228,7 @@
                 android:id="@+id/imageButton14"
                 android:layout_alignParentRight="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_validation"
+                android:src="@drawable/common_icon_check_normal"
                 android:background="@null"
                 android:adjustViewBounds="true"
                 android:layout_margin="2dp"
@@ -241,7 +241,7 @@
                 android:layout_height="50dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_play" />
+                android:src="@drawable/common_icon_play_on_normal" />
 
         </RelativeLayout>
 

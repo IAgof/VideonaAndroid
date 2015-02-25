@@ -27,7 +27,7 @@
 
             android:id="@+id/imageColorEffect"
 
-            android:src="@drawable/effect_none"
+            android:src="@drawable/common_filter_none"
 
             android:background="@null"
 

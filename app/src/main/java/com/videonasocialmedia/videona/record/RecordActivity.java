@@ -181,7 +181,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
                                 mMediaRecorder.start();
 
                                 // inform the user that recording has started
-                                captureButton.setImageResource(R.drawable.ic_action_stop);  //setText("Stop");
+                                captureButton.setImageResource(R.drawable.activity_record_icon_stop_normal);  //setText("Stop");
                                 captureButton.setAlpha(125);
                                 isRecording = true;
 
@@ -228,7 +228,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
                     relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
 
 
-                    btnColorEffect.setImageResource(R.drawable.ic_filters);
+                    btnColorEffect.setImageResource(R.drawable.common_icon_filters_normal);
 
 
                     return;
@@ -260,7 +260,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdadpter
                 lvTest.setAdapter(imageColorEffectAdadpter);
 
 
-                btnColorEffect.setImageResource(R.drawable.ic_filters_blue_5_shining);
+                btnColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
 
                 // save last color effect position selected to paint at position - 1
                 lvTest.setSelection(colorEffectLastPosition - 1);

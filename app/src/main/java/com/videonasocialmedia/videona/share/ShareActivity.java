@@ -115,7 +115,7 @@ public class ShareActivity extends Activity {
             progressDialog = ProgressDialog.show(ShareActivity.this, getString(R.string.dialog_processing_audio), getString(R.string.please_wait), true);
 
             // Custom progress dialog
-            progressDialog.setIcon(R.drawable.ic_action_cut);
+            progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
 
             ((TextView) progressDialog.findViewById(Resources.getSystem()
                     .getIdentifier("message", "id", "android")))
