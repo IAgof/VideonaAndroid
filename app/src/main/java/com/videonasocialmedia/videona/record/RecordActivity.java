@@ -120,7 +120,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
         if (mCamera == null)
             mCamera = getCameraInstance();
 
-        captureButton = (ImageButton) findViewById(R.id.button_capture);
+        captureButton = (ImageButton) findViewById(R.id.capture_button);
 
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
@@ -149,9 +149,9 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
 
         chronometer = (Chronometer) findViewById(R.id.chronometerVideo);
-        chronometer.setTypeface(tf);
 
         chronometer.setText(String.format("%02d:%02d", 0, 0));
+
 
         //  showWelcome = appPrefs.getCheckIndiegogo();
 
@@ -219,7 +219,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
         );
 
 
-        btnColorEffect = (ImageButton) findViewById(R.id.btnColorEffect);
+        btnColorEffect = (ImageButton) findViewById(R.id.color_effect_button);
 
         relativeLayoutColorEffects = (RelativeLayout) findViewById(R.id.relativeLayoutColorEffects);
         relativeLayoutColorEffects.setVisibility(View.INVISIBLE);

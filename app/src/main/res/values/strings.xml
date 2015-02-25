@@ -55,9 +55,9 @@ We will be very grateful if you spread the news in your social networks."</strin
 
 
     <!-- Filters_Effects -->
-    <string name="filter_effect_sepia">"sepia"</string>
-    <string name="filter_effect_aqua">"aqua"</string>
-    <string name="filter_effect_emboss">"emboss"</string>
+    <string name="filter_effect_sepia" translatable="false">"sepia"</string>
+    <string name="filter_effect_aqua">aqua</string>
+    <string name="filter_effect_emboss">emboss</string>
     <string name="filter_effect_mono">"mono"</string>
     <string name="filter_effect_negative">"negative"</string>
     <string name="filter_effect_neon">"neon"</string>
@@ -66,6 +66,6 @@ We will be very grateful if you spread the news in your social networks."</strin
     <string name="filter_effect_sketch">"sketch"</string>
     <string name="filter_effect_solarice">"solarice"</string>
     <string name="filter_effect_whiteboard">"whiteboard"</string>
-    <string name="filter_effect_blackboard">"blackboard"</string>
+    <string name="filter_effect_blackboard">blackboard</string>
 
 </resources>

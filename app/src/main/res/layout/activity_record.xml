@@ -59,7 +59,7 @@
 
         <Chronometer
 
-            android:id="@+id/video_chronometer"
+            android:id="@+id/chronometerVideo"
 
             android:layout_width="wrap_content"
 
