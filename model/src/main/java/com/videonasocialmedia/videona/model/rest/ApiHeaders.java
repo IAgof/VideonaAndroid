@@ -1,9 +1,15 @@
-package com.videonasocialmedia.videona.api;
+package com.videonasocialmedia.videona.model.rest;
 
 import retrofit.RequestInterceptor;
 
-/**
- * Created by jca on 9/2/15.
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
  */
 public class ApiHeaders implements RequestInterceptor {
     private String sessionCookieValue;

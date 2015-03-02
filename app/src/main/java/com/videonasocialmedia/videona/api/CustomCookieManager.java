@@ -8,8 +8,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by jca on 23/1/15.
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
  */
 public class CustomCookieManager extends CookieManager {
 

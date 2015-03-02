@@ -1,4 +1,6 @@
-package com.videonasocialmedia.videona.api;
+package com.videonasocialmedia.videona.model.rest;
+
+import com.videonasocialmedia.videona.model.rest.requests.RegisterRequestBody;
 
 import retrofit.Callback;
 import retrofit.client.Response;
@@ -10,10 +12,16 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by jca on 8/1/15.
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
  */
-public interface ApiClient {
+public interface VideonaApi {
 
     @POST("/signup")
     void register(@Body RegisterRequestBody requestBody, Callback<Response> callback);

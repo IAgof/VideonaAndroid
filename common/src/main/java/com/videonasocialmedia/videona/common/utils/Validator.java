@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.api;
+package com.videonasocialmedia.videona.common.utils;
 
 import android.text.TextUtils;
 
@@ -9,15 +9,14 @@ import java.util.regex.Pattern;
  */
 public class Validator {
 
-    private static Pattern userNamePattern = Pattern.compile("^[áéíóúÁÉÍÓÚüÜñÑA-Za-z0-9_]{4,15}$");
+    private static final Pattern USER_NAME_PATTERN = Pattern.compile("^[áéíóúÁÉÍÓÚüÜñÑA-Za-z0-9_]{4,15}$");
 
-    //TODO establecer tamaño pass
-    private static Pattern passwordPattern = Pattern.compile("((?=.*[a-z])(?=.*d)(?=.*[@#$%&,!?¿.])(?=.*[A-Z]).{8,16})");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("((?=.*[a-z])(?=.*d)(?=.*[@#$%&,!?¿.])(?=.*[A-Z]).{8,16})");
 
 
     public static boolean validateUserName(String username) {
         username = username.replaceAll("\\.", "");
-        return userNamePattern.matcher(username).matches();
+        return USER_NAME_PATTERN.matcher(username).matches();
     }
 
     public static boolean isUserNameAvailable(String username) {
@@ -26,8 +25,7 @@ public class Validator {
     }
 
     public static boolean validatePassword(String password) {
-        //TODO Verificar que Vero tiene la misma regex
-        return passwordPattern.matcher(password).matches();
+        return PASSWORD_PATTERN.matcher(password).matches();
     }
 
     public static boolean validateEmail(CharSequence email) {

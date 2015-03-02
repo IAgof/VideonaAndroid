@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.model.editor;
+package com.videonasocialmedia.videona.model.editor.media;
 
 /**
  * Created by jca on 27/2/15.

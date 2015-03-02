@@ -1,7 +1,17 @@
-package com.videonasocialmedia.videona.api;
+package com.videonasocialmedia.videona.model.rest.requests;
+
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ */
 
 /**
- * Created by jca on 8/1/15.
+ * Class that implements the body of the api request to register a new user
  */
 public class RegisterRequestBody {
     /*

@@ -1,5 +1,7 @@
 package com.videonasocialmedia.videona.api;
 
+import com.videonasocialmedia.videona.common.utils.Validator;
+
 import junit.framework.TestCase;
 
 /**

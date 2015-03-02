@@ -98,7 +98,9 @@
     <orderEntry type="library" exported="" name="twowayview-0.1.4" level="project" />
     <orderEntry type="library" exported="" name="butterknife-6.0.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.0.0" level="project" />
+    <orderEntry type="module" module-name="common" exported="" />
     <orderEntry type="module" module-name="domain" exported="" />
+    <orderEntry type="module" module-name="model" exported="" />
   </component>
 </module>
 

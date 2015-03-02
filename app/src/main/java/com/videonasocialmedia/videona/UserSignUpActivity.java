@@ -2,7 +2,6 @@ package com.videonasocialmedia.videona;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -10,7 +9,7 @@ import android.widget.Toast;
 
 import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.api.RegisterRequestBody;
-import com.videonasocialmedia.videona.api.Validator;
+import com.videonasocialmedia.videona.common.utils.Validator;
 
 import com.videonasocialmedia.videona.record.RecordActivity;
 
