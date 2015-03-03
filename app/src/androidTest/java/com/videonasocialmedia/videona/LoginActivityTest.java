@@ -2,7 +2,7 @@ package com.videonasocialmedia.videona;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.videonasocialmedia.videona.LoginActivity;
+import com.videonasocialmedia.videona.presentation.views.login.LoginActivity;
 
 /**
  * Created by jca on 20/1/15.
