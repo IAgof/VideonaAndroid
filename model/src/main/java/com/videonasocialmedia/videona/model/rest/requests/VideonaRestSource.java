@@ -6,6 +6,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.videonasocialmedia.videona.common.utils.Constants;
 import com.videonasocialmedia.videona.model.rest.ApiHeaders;
 import com.videonasocialmedia.videona.model.rest.VideonaApi;
+import com.videonasocialmedia.videona.model.social.User;
+import com.videonasocialmedia.videona.model.rest.callbacks.BasicLoginCallback;
 
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -60,5 +62,9 @@ public class VideonaRestSource {
         return INSTANCE;
     }
 
-    public g
+    //TODO rehacer casi completamente
+    public User getUser(BasicLoginCallback callback){
+        apiClient.login("",0,callback);
+        return new User();
+    }
 }

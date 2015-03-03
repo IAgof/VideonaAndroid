@@ -1,6 +1,6 @@
 package com.videonasocialmedia.videona.common.utils;
 
-import android.text.TextUtils;
+//import android.text.TextUtils;
 
 import java.util.regex.Pattern;
 
@@ -29,8 +29,9 @@ public class Validator {
     }
 
     public static boolean validateEmail(CharSequence email) {
-        return !TextUtils.isEmpty(email) &&
-                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        //return !TextUtils.isEmpty(email) &&
+        //        android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        return true;
     }
 
     public static boolean isEmailAvailable(String email) {

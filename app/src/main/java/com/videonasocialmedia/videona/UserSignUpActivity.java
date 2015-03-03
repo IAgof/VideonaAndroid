@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import com.videonasocialmedia.videona.api.ApiClient;
 import com.videonasocialmedia.videona.api.RegisterRequestBody;
-import com.videonasocialmedia.videona.common.utils.Validator;
 
+import com.videonasocialmedia.videona.common.utils.Validator;
 import com.videonasocialmedia.videona.record.RecordActivity;
 
 import butterknife.ButterKnife;
