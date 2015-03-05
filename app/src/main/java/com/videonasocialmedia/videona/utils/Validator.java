@@ -4,9 +4,19 @@ package com.videonasocialmedia.videona.utils;
 
 import java.util.regex.Pattern;
 
-/**
- * Created by jca on 23/1/15.
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ * Álvaro Martínez Marco
+ *
  */
+
+
 public class Validator {
 
     private static final Pattern USER_NAME_PATTERN = Pattern.compile("^[áéíóúÁÉÍÓÚüÜñÑA-Za-z0-9_]{4,15}$");

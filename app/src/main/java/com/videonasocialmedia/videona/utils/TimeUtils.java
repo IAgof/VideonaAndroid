@@ -1,21 +1,15 @@
 package com.videonasocialmedia.videona.utils;
 
-/************************************************************************
-*	Main/TimeUtils
-*
-*	2012 Álvaro Martínez Marco,	amm@gatv.ssr.upm.es
-*
-*	Descripción:
-*
-*	Convierte un valor en formato horas, minutos y segundos.
-*
-*	Comentarios: 
-*
-*	Para CutAudio y CutVideo y CutVideo_saveNewClip Activity.
-*
-*	En otras clases se calcula directamente, duplicando código.
-*
-* ***********************************************************************/
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Álvaro Martínez Marco
+ *
+ */
 
 public class TimeUtils {
      

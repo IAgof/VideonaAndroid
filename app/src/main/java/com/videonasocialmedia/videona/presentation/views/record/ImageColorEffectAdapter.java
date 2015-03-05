@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.util.ArrayList;
@@ -156,47 +155,47 @@ public class ImageColorEffectAdapter extends ArrayAdapter<String> {
 
         String colorName = " ";
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_AQUA) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_AQUA) == 0) {
 
             return getContext().getString(R.string.filter_effect_aqua);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_BLACKBOARD) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_BLACKBOARD) == 0) {
 
             return getContext().getString(R.string.filter_effect_blackboard);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_MONO) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_MONO) == 0) {
 
             return getContext().getString(R.string.filter_effect_mono);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_NEGATIVE) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_NEGATIVE) == 0) {
 
             return getContext().getString(R.string.filter_effect_negative);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_NONE) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_NONE) == 0) {
 
             return getContext().getString(R.string.filter_effect_none);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_POSTERIZE) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_POSTERIZE) == 0) {
 
             return getContext().getString(R.string.filter_effect_posterice);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_SEPIA) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_SEPIA) == 0) {
 
             return getContext().getString(R.string.filter_effect_sepia);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_WHITEBOARD) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_WHITEBOARD) == 0) {
 
             return getContext().getString(R.string.filter_effect_whiteboard);
         }
 
-        if(colorEffectName.compareTo(Config.COLOR_EFFECT_SOLARIZE) == 0) {
+        if(colorEffectName.compareTo(Constants.COLOR_EFFECT_SOLARIZE) == 0) {
 
             return getContext().getString(R.string.filter_effect_solarice);
         }

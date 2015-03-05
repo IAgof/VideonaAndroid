@@ -1,3 +1,4 @@
+/*
 package com.videonasocialmedia.videona.presentation.views.login;
 
 import android.app.Activity;
@@ -13,7 +14,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.api.ApiClient;
+import com.videonasocialmedia.videona.model.rest.ApiHeaders;
 import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
 
 import butterknife.ButterKnife;
@@ -27,7 +28,9 @@ import retrofit.client.Response;
 
 public class LoginActivity extends Activity {
 
-    /*VIEWS*/
+    */
+/*VIEWS*//*
+
     @InjectView(R.id.login_text_field)
     TextView userTextField;
     @InjectView(R.id.login_password_field)
@@ -35,14 +38,20 @@ public class LoginActivity extends Activity {
     @InjectView(R.id.checkBox_remember_me)
     CheckBox rememberMe;
 
-    /*API*/
+    */
+/*API*//*
+
     private ApiClient apiClient;
     private VideonaApplication app;
 
-    /*CONFIG*/
+    */
+/*CONFIG*//*
+
     private SharedPreferences config;
 
-    /*ANALYTICS*/
+    */
+/*ANALYTICS*//*
+
     Tracker t;
 
 
@@ -61,9 +70,11 @@ public class LoginActivity extends Activity {
     }
 
 
-    /**
+    */
+/**
      * Start the activity to create a new user when the new_user_button is clicked
-     */
+     *//*
+
     @OnClick(R.id.new_user_button)
     public void goToUserSignUpActivity() {
         startActivity(new Intent(getApplicationContext(), UserSignUpActivity.class));
@@ -98,9 +109,11 @@ public class LoginActivity extends Activity {
         GoogleAnalytics.getInstance(app.getBaseContext()).dispatchLocalHits();
     }
 
-    /**
+    */
+/**
      * Try to login the user using the credentials provided by userTextField and passwordTextField
-     */
+     *//*
+
     @OnClick(R.id.send_login_button)
     public void login(View v) {
         sendButtonTracked(v.getId());
@@ -119,7 +132,8 @@ public class LoginActivity extends Activity {
             startActivity(new Intent(getApplicationContext(), RecordActivity.class));
 //        }
 
-       /* String source = userTextField.getText().toString() + ":"
+       */
+/* String source = userTextField.getText().toString() + ":"
                 + passwordTextField.getText().toString();
         try {
             String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"),
@@ -139,8 +153,9 @@ public class LoginActivity extends Activity {
         } catch (UnsupportedEncodingException e) {
             Toast.makeText(getApplicationContext(), "Error durante login",
                     Toast.LENGTH_SHORT).show();
-        }*/
+        }*//*
+
     }
 
 
-}
+}*/

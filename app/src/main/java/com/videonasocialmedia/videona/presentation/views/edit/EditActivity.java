@@ -34,9 +34,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.SplashScreenActivity;
+import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
+import com.videonasocialmedia.videona.utils.Config;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.presentation.views.music.MusicActivity;
 import com.videonasocialmedia.videona.presentation.share.ShareActivity;
@@ -212,6 +213,7 @@ public class EditActivity extends Activity {
 
         linearLayoutFrames = (LinearLayout) findViewById(R.id.linearLayoutFrames);
 
+        progressDialog = new ProgressDialog(EditActivity.this);
 
         seekBar = (SeekBar) findViewById(R.id.seekBarPoint);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -460,21 +462,14 @@ public class EditActivity extends Activity {
                     mediaPlayerMusic = null;
                 }
 
-                final Runnable r = new Runnable() {
-                    public void run() {
 
-                        doTrimVideo();
+              //  progressDialog = ProgressDialog.show(getParent(), getString(R.string.dialog_processing), getString(R.string.please_wait), true);
 
+                progressDialog.setMessage(getString(R.string.dialog_processing));
+                progressDialog.setTitle(getString(R.string.please_wait));
+                progressDialog.setIndeterminate(true);
+                progressDialog.show();
 
-                        Intent share = new Intent();
-                        share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
-                        share.setClass(EditActivity.this, ShareActivity.class);
-                        startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-
-                    }
-                };
-
-                progressDialog = ProgressDialog.show(EditActivity.this, getString(R.string.dialog_processing), getString(R.string.please_wait), true);
 
                 // Custom progress dialog
                 progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
@@ -495,12 +490,27 @@ public class EditActivity extends Activity {
 
                 progressDialog.findViewById(
                         Resources.getSystem().getIdentifier("topPanel", "id",
-                                "android")).setBackgroundColor(R.color.videona_blue_1);
+                                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
                 progressDialog.findViewById(
                         Resources.getSystem().getIdentifier("customPanel", "id",
                                 "android"))
-                        .setBackgroundColor(R.color.videona_blue_1);
+                        .setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
 
+
+
+                final Runnable r = new Runnable() {
+                    public void run() {
+
+                        doTrimVideo();
+
+
+                        Intent share = new Intent();
+                        share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
+                        share.setClass(EditActivity.this, ShareActivity.class);
+                        startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
+
+                    }
+                };
 
                 performOnBackgroundThread(r);
 
@@ -544,7 +554,7 @@ public class EditActivity extends Activity {
                 //  String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
                 //  VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
 
-                VideoUtils.switchAudio(pathvideoTrim, musicSelected, Config.videoMusicTempFile);
+                VideoUtils.switchAudio(pathvideoTrim, musicSelected, Constants.videoMusicTempFile);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -605,11 +615,11 @@ public class EditActivity extends Activity {
 
         String inputFileName = videoRecorded;
 
-        pathvideoTrim = Config.pathVideoTrim + File.separator + videoTrim;
+        pathvideoTrim = Constants.pathVideoTrim + File.separator + videoTrim;
 
         Log.d(LOG_TAG, "VideonaMainActivity input " + inputFileName + " output " + pathvideoTrim + " start " + start + " length " + length);
 
-        SplashScreenActivity.cut(inputFileName, pathvideoTrim, start, length);
+        VideonaMainActivity.cut(inputFileName, pathvideoTrim, start, length);
 
 
     }
@@ -617,7 +627,7 @@ public class EditActivity extends Activity {
     private void renameTrimVideo(String videoTrim) {
 
         String newVideoTrim = videoTrim;
-        String videoTrimAux = Config.pathApp + Config.videoCutAuxName;
+        String videoTrimAux = Constants.pathApp + Constants.videoCutAuxName;
 
         File originalVideo = new File(videoTrim);
         if (originalVideo.exists()) {

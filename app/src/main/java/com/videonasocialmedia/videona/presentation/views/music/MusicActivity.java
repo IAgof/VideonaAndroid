@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.VideonaApplication;
 
@@ -455,7 +455,7 @@ public class MusicActivity extends Activity {
 
         Log.d(LOG_TAG, "downloadResource " + nameFile);
 
-        File fSong = new File(Config.pathVideoTemp + File.separator + nameFile + Config.audioMusicExtension);
+        File fSong = new File(Constants.pathVideoTemp + File.separator + nameFile + Constants.audioMusicExtension);
 
         if (fSong.exists()) {
 
@@ -464,7 +464,7 @@ public class MusicActivity extends Activity {
 
             FileOutputStream out = null;
             try {
-                out = new FileOutputStream(Config.pathVideoTemp + File.separator + nameFile + Config.audioMusicExtension);
+                out = new FileOutputStream(Constants.pathVideoTemp + File.separator + nameFile + Constants.audioMusicExtension);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
 

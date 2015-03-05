@@ -15,8 +15,8 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
-import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.utils.Config;
 
 import java.math.BigDecimal;
 

@@ -25,9 +25,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.SplashScreenActivity;
+import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
+import com.videonasocialmedia.videona.presentation.views.edit.EditActivity;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
@@ -90,6 +91,7 @@ public class ShareActivity extends Activity {
         btnShare = (ImageButton) findViewById(R.id.imageButtonShare);
         btnShare.setOnClickListener(shareClickListener());
 
+        progressDialog = new ProgressDialog(ShareActivity.this);
 
         appPrefs = new UserPreferences(getApplicationContext());
 
@@ -112,10 +114,17 @@ public class ShareActivity extends Activity {
                 }
             };
 
-            progressDialog = ProgressDialog.show(ShareActivity.this, getString(R.string.dialog_processing_audio), getString(R.string.please_wait), true);
+            /// TODO define strings progressDialog
+
+            progressDialog.setMessage("Adding audio");
+            progressDialog.setTitle(getString(R.string.please_wait));
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+
 
             // Custom progress dialog
             progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
+
 
             ((TextView) progressDialog.findViewById(Resources.getSystem()
                     .getIdentifier("message", "id", "android")))
@@ -132,11 +141,11 @@ public class ShareActivity extends Activity {
 
             progressDialog.findViewById(
                     Resources.getSystem().getIdentifier("topPanel", "id",
-                            "android")).setBackgroundColor(R.color.videona_blue_1);
+                            "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
             progressDialog.findViewById(
                     Resources.getSystem().getIdentifier("customPanel", "id",
                             "android"))
-                    .setBackgroundColor(R.color.videona_blue_1);
+                    .setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
 
 
             performOnBackgroundThread(r);
@@ -268,17 +277,17 @@ public class ShareActivity extends Activity {
 
         String videonaMusic = "V_MUSIC_" + new File(videoEdited).getName().substring(7);
 
-        String pathVideonaFinal = Config.pathVideoMusic + File.separator + videonaMusic;
+        String pathVideonaFinal = Constants.pathVideoMusic + File.separator + videonaMusic;
 
         int length = appPrefs.getVideoDurationTrim();
 
-        Log.d(LOG_TAG, "VideonaMainActivity cut " + Config.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
+        Log.d(LOG_TAG, "VideonaMainActivity cut " + Constants.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
 
-        SplashScreenActivity.cut(Config.videoMusicTempFile, pathVideonaFinal, 0, length);
+        VideonaMainActivity.cut(Constants.videoMusicTempFile, pathVideonaFinal, 0, length);
 
         videoEdited = pathVideonaFinal;
 
-        File temp = new File(Config.videoMusicTempFile);
+        File temp = new File(Constants.videoMusicTempFile);
         temp.deleteOnExit();
 
         appPrefs.setIsMusicON(false);

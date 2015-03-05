@@ -10,18 +10,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.api.ApiClient;
 
 import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
 import java.io.IOException;
 
-public class SplashScreenActivity extends Activity {
+public class VideonaMainActivity extends Activity {
 
     static {
 
@@ -106,36 +105,36 @@ public class SplashScreenActivity extends Activity {
 
     private void checkPath() throws IOException {
 
-        File f = new File(Config.pathApp);
+        File f = new File(Constants.pathApp);
         if (!f.exists()) {
             f.mkdir();
 
             Log.d(LOG_TAG, "Path Videona created");
         }
 
-        File fTrim = new File(Config.pathVideoTrim);
+        File fTrim = new File(Constants.pathVideoTrim);
         if (!fTrim.exists()) {
             fTrim.mkdir();
 
-            Log.d(LOG_TAG, "Path " + Config.pathVideoTrim + " created");
+            Log.d(LOG_TAG, "Path " + Constants.pathVideoTrim + " created");
         }
 
-        File fMusic = new File(Config.pathVideoMusic);
+        File fMusic = new File(Constants.pathVideoMusic);
         if (!fMusic.exists()) {
             fMusic.mkdir();
 
-            Log.d(LOG_TAG, "Path " + Config.pathVideoMusic + " created");
+            Log.d(LOG_TAG, "Path " + Constants.pathVideoMusic + " created");
         }
 
-        File fTemp = new File(Config.pathVideoTemp);
+        File fTemp = new File(Constants.pathVideoTemp);
         if (!fTemp.exists()) {
             fTemp.mkdir();
 
-            Log.d(LOG_TAG, "Path " + Config.pathVideoTemp + " created");
+            Log.d(LOG_TAG, "Path " + Constants.pathVideoTemp + " created");
         }
 
 
-        File fTempAV = new File(Config.videoMusicTempFile);
+        File fTempAV = new File(Constants.videoMusicTempFile);
 
         if (fTempAV.exists()) {
             fTempAV.delete();
@@ -186,10 +185,15 @@ public class SplashScreenActivity extends Activity {
         String sessionCookie = config.getString("sessionCookie", null);
         String rememberMeCookie = config.getString("rememberMeCookie", null);
         if (remembered && sessionCookie != null && rememberMeCookie != null) {
+           /*
+              Falla getApiHeaders()
+
             VideonaApplication app = (VideonaApplication) getApplication();
             app.getApiHeaders().setSessionCookieValue(sessionCookie);
             app.getApiHeaders().setRememberMeCookieValue(rememberMeCookie);
             ApiClient apiClient = app.getApiClient();
+          */
+
             //apiClient.getUserName();
             //TODO Check session against server
             return true;

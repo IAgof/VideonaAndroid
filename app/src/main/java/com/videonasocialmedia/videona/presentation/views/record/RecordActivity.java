@@ -24,8 +24,9 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.videonasocialmedia.videona.Config;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.utils.Config;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.views.edit.EditActivity;
@@ -131,7 +132,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
 
         Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
 
-        File fTempAV = new File(Config.videoMusicTempFile);
+        File fTempAV = new File(Constants.videoMusicTempFile);
 
         if (appPrefs.getIsMusicON() && fTempAV.exists()) {
 
@@ -159,7 +160,12 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
                     public void onClick(View v) {
                         trackButtonClick(v.getId());
                         if (isRecording) {
+
                             // stop recording and release camera
+
+                            // captureButton, prevent error touch twice stop button
+                            captureButton.setEnabled(false);
+
                             mMediaRecorder.stop();  // stop the recording
                             releaseMediaRecorder(); // release the MediaRecorder object
                             mCamera.lock();         // take camera access back from MediaRecorder
@@ -464,7 +470,7 @@ public class RecordActivity extends Activity implements ImageColorEffectAdapter.
         // File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
         //         Environment.DIRECTORY_MOVIES), "VideonaApp");
 
-        File mediaStorageDir = new File(Config.pathApp);
+        File mediaStorageDir = new File(Constants.pathApp);
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
