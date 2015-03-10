@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 
+import com.videonasocialmedia.videona.presentation.views.login.LoginActivity;
 import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
@@ -243,12 +244,13 @@ public class VideonaMainActivity extends Activity {
               //  if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
               //      startActivity(new Intent(getApplicationContext(), CameraActivity.class));
               //  } else {
-                    startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+//                    startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
               //  }
 
             } else {
-                //startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                //startActivity(new Intent(getApplicationContext(), RecordActivity.class));
             }
         }
     }

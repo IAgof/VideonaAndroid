@@ -16,9 +16,11 @@ import android.os.Environment;
 import java.io.File;
 
 public class Constants {
-
     //TODO cambiar el endpoint a la dirección de producción
     public static final String API_ENDPOINT="http://192.168.0.22/Videona/web/app_dev.php/api";
+    //OAuth
+    public static final String OAUTH_CLIENT_ID="4_6c1bbez44j0okk8sckcssk4wocsgks044wsw0sogkw4gwc8gg0";
+    public static final String OAUTH_CLIENT_SECRET="64a2br3oixwk0kkw4wwscoocssss0cwg0og8g0ssggcs80owww";
 
     // Color Effects
     final public static String COLOR_EFFECT_NONE = "none";
@@ -31,18 +33,15 @@ public class Constants {
     final public static String COLOR_EFFECT_BLACKBOARD = "blackboard";
     final public static String COLOR_EFFECT_AQUA = "aqua";
 
-
+    // Folders
     final public static String nameFolderVideos = "Videona";
     final public static String nameFolderVideosTrim = "VideonaTrim";
     final public static String nameFolderVideosMusic = "VideonaMusic";
     final public static String nameFolderTemp = ".temp";
-
     final public static String pathApp = Environment.getExternalStorageDirectory() + File.separator + nameFolderVideos;
-
     final public static String pathVideoTrim = pathApp + File.separator + nameFolderVideosTrim;
     final public static String pathVideoMusic = pathApp + File.separator + nameFolderVideosMusic;
     final public static String pathVideoTemp = pathApp + File.separator + nameFolderTemp;
-
     final public static String videoMusicTempFile = pathApp + File.separator + nameFolderTemp + File.separator + "tempAV.mp4";
     final public static String videoCutAuxName = "/videona_trim.mp4";
 

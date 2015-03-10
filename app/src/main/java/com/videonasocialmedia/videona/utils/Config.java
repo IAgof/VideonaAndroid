@@ -26,5 +26,4 @@ public class Config {
     final public static int VIDEO_ENCODING_BIT_RATE = 12000000;
 
     final public static int maxDurationVideo = 60;
-
 }

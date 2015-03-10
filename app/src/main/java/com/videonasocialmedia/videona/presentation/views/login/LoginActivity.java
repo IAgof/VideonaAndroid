@@ -1,4 +1,3 @@
-/*
 package com.videonasocialmedia.videona.presentation.views.login;
 
 import android.app.Activity;
@@ -8,29 +7,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.model.rest.ApiHeaders;
+import com.videonasocialmedia.videona.presentation.presenters.social.LoginPresenter;
 import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Header;
-import retrofit.client.Response;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements LoginView{
 
-    */
-/*VIEWS*//*
-
+    /*VIEWS*/
     @InjectView(R.id.login_text_field)
     TextView userTextField;
     @InjectView(R.id.login_password_field)
@@ -38,22 +32,14 @@ public class LoginActivity extends Activity {
     @InjectView(R.id.checkBox_remember_me)
     CheckBox rememberMe;
 
-    */
-/*API*//*
-
-    private ApiClient apiClient;
     private VideonaApplication app;
+    private LoginPresenter loginPresenter;
 
-    */
-/*CONFIG*//*
-
+    /*CONFIG*/
     private SharedPreferences config;
 
-    */
-/*ANALYTICS*//*
-
+    /*ANALYTICS*/
     Tracker t;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,22 +49,41 @@ public class LoginActivity extends Activity {
         ButterKnife.inject(this);
 
         app = (VideonaApplication) getApplication();
-        apiClient = app.getApiClient();
-        config = getApplicationContext()
-                .getSharedPreferences("USER_INFO", MODE_PRIVATE);
+        loginPresenter= new LoginPresenter(this);
         t = app.getTracker();
     }
 
-
-    */
-/**
+    /**
      * Start the activity to create a new user when the new_user_button is clicked
-     *//*
+     */
 
     @OnClick(R.id.new_user_button)
     public void goToUserSignUpActivity() {
-        startActivity(new Intent(getApplicationContext(), UserSignUpActivity.class));
+        navigate(UserSignUpActivity.class);
     }
+
+
+/**
+ * Try to login the user using the credentials provided by userTextField and passwordTextField
+ */
+    @OnClick(R.id.send_login_button)
+    public void login(View v) {
+        sendButtonTracked(v.getId());
+        loginPresenter.userPasswordLogin(userTextField.getText().toString(), passwordTextField.getText().toString());
+
+    }
+
+    @Override
+    public void showError(int errorMessageResource) {
+        Toast.makeText(this,errorMessageResource, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void navigate(Class<? extends Activity> activity) {
+        Intent i= new Intent(getApplicationContext(), activity);
+        startActivity(i);
+    }
+
 
     private void sendButtonTracked(int id) {
         String label;
@@ -109,53 +114,6 @@ public class LoginActivity extends Activity {
         GoogleAnalytics.getInstance(app.getBaseContext()).dispatchLocalHits();
     }
 
-    */
-/**
-     * Try to login the user using the credentials provided by userTextField and passwordTextField
-     *//*
-
-    @OnClick(R.id.send_login_button)
-    public void login(View v) {
-        sendButtonTracked(v.getId());
-        t.send(new HitBuilders.EventBuilder()
-                .setCategory("Categoría")
-                .setAction("Acción")
-                .setLabel("Etiqueta")
-                .build());
 
 
-        //TODO remove next line when remember-me is working and uncomment the rest of the method
-
-//        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-//            startActivity(new Intent(getApplicationContext(), CameraActivity.class));
-//        } else {
-            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
-//        }
-
-       */
-/* String source = userTextField.getText().toString() + ":"
-                + passwordTextField.getText().toString();
-        try {
-            String auth = "Basic " + Base64.encodeToString(source.getBytes("UTF-8"),
-                    Base64.DEFAULT);
-
-            int rememberQueryParam = 0;
-            boolean rememberMeChecked = rememberMe.isChecked();
-            if (rememberMeChecked) {
-                rememberQueryParam = 1;
-            }
-
-            apiClient.login(auth, rememberQueryParam, new BasicLoginCallback());
-
-            //Store remember user config
-            config.edit().putBoolean("rememberUser", rememberMeChecked);
-
-        } catch (UnsupportedEncodingException e) {
-            Toast.makeText(getApplicationContext(), "Error durante login",
-                    Toast.LENGTH_SHORT).show();
-        }*//*
-
-    }
-
-
-}*/
+}
