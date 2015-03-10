@@ -13,7 +13,7 @@
 //import com.videonasocialmedia.videona.api.RegisterRequestBody;
 //
 //import com.videonasocialmedia.videona.utils.Validator;
-//import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
+//import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 //
 //import butterknife.ButterKnife;
 //import butterknife.InjectView;

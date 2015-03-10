@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.model.editor.media;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -12,6 +10,7 @@ package com.videonasocialmedia.videona.model.editor.media;
  *
  */
 
+package com.videonasocialmedia.videona.model.editor.media;
 
 public class VideoItem implements MediaItem {
 

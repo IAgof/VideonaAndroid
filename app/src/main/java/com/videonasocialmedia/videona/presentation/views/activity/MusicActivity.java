@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.presentation.views.music;
+package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.VideonaApplication;
 
@@ -25,8 +25,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by root on 10/12/14.
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ * Álvaro Martínez Marco
+ *
  */
 public class MusicActivity extends Activity {
 
@@ -134,7 +142,6 @@ public class MusicActivity extends Activity {
 
 
     }
-
 
 
     private View.OnClickListener image0Listener() {
@@ -455,7 +462,7 @@ public class MusicActivity extends Activity {
 
         Log.d(LOG_TAG, "downloadResource " + nameFile);
 
-        File fSong = new File(Constants.pathVideoTemp + File.separator + nameFile + Constants.audioMusicExtension);
+        File fSong = new File(ConstantsUtils.pathVideoTemp + File.separator + nameFile + ConstantsUtils.audioMusicExtension);
 
         if (fSong.exists()) {
 
@@ -464,7 +471,7 @@ public class MusicActivity extends Activity {
 
             FileOutputStream out = null;
             try {
-                out = new FileOutputStream(Constants.pathVideoTemp + File.separator + nameFile + Constants.audioMusicExtension);
+                out = new FileOutputStream(ConstantsUtils.pathVideoTemp + File.separator + nameFile + ConstantsUtils.audioMusicExtension);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
 
@@ -509,8 +516,8 @@ public class MusicActivity extends Activity {
      *
      * @param genre the music style applied
      */
-    private void trackMusicUsed(String genre){
-        Tracker t= ((VideonaApplication)this.getApplication()).getTracker();
+    private void trackMusicUsed(String genre) {
+        Tracker t = ((VideonaApplication) this.getApplication()).getTracker();
         t.send(new HitBuilders.EventBuilder()
                 .setCategory("Edit")
                 .setAction("Music applied")

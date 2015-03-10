@@ -1,23 +1,16 @@
-package com.videonasocialmedia.videona.presentation.views.edit;
-
-/**
- * *********************************************************************
- * Video/CutVideoPlayerState
- * <p/>
- * 2012 Álvaro Martínez Marco,	amm@gatv.ssr.upm.es
- * <p/>
- * Descripción:
- * <p/>
- * Clase que devuelve datos sobre el vídeo seleccionado a cortar, nombre,
- * duración, currentTime, etc ...
- * <p/>
- * Comentarios:
- * <p/>
- * Se utiliza para la parte de sincronización, conociendo el estado del player,
- * pause, play, tiempo concreto, etc.
- * <p/>
- * **********************************************************************
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Álvaro Martínez Marco
  */
+
+package com.videonasocialmedia.videona.utils;
+
+import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 
 public class CutVideoPlayerState {
 
@@ -63,7 +56,7 @@ public class CutVideoPlayerState {
     }
 
     public int getDuration() {
-        // TODO Auto-generated method stub
+
         return stop - start;
     }
 

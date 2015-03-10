@@ -1,4 +1,15 @@
-package com.videonasocialmedia.videona.utils;
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Álvaro Martínez Marco
+ *
+ */
+
+package com.videonasocialmedia.videona.utils.utils;
 
 import android.util.Log;
 
@@ -22,16 +33,21 @@ import java.nio.channels.WritableByteChannel;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by root on 16/12/14.
- */
 
 public class VideoUtils {
 
 
     private static final String LOG_TAG = VideoUtils.class.getSimpleName();
 
-    //public <Track> void switchAudio(String pathVideoFile, String newPathAudioFile, String pathOutputFile) throws IOException {
+    /**
+     * Switch audio in video file for new audio file.
+     * Create new output file with VideoTrack from video file and AudioTrack from audio file.
+     *
+     * @param pathVideoFile
+     * @param newPathAudioFile
+     * @param pathOutputFile
+     * @throws IOException
+     */
     public static void switchAudio(String pathVideoFile, String newPathAudioFile, String pathOutputFile) throws IOException {
 
         Log.d(LOG_TAG, " mergeAudio " + pathVideoFile + " .-.-.- " + newPathAudioFile + " .-.-.- " + pathOutputFile );
@@ -92,6 +108,16 @@ public class VideoUtils {
 
     }
 
+    /**
+     * MergeFiles
+     * Merge video files saved in speratedDirPath
+     * Generate new file targetFileName
+     * Delete previews video files saved in speratedDirPath
+     *
+     * @param speratedDirPath
+     * @param targetFileName
+     * @return boolean
+     */
     public static boolean MergeFiles(String speratedDirPath,
                                      String targetFileName) {
 
@@ -191,6 +217,13 @@ public class VideoUtils {
 
         return true;
     }
+
+    /**
+     * Clear files from speratedDirPath
+     *
+     * @param speratedDirPath
+     * @return boolean
+     */
     public static boolean clearFiles(String speratedDirPath) {
         File videoSourceDirFile = new File(speratedDirPath);
         if (videoSourceDirFile != null

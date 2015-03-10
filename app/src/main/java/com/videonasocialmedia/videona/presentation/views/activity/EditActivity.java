@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.presentation.views.edit;
+package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -36,13 +36,13 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
-import com.videonasocialmedia.videona.utils.Config;
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.CutVideoPlayerState;
+import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.RangeSeekBar;
 import com.videonasocialmedia.videona.utils.UserPreferences;
-import com.videonasocialmedia.videona.presentation.views.music.MusicActivity;
-import com.videonasocialmedia.videona.presentation.share.ShareActivity;
-import com.videonasocialmedia.videona.utils.TimeUtils;
-import com.videonasocialmedia.videona.utils.VideoUtils;
+import com.videonasocialmedia.videona.utils.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.utils.VideoUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -463,7 +463,7 @@ public class EditActivity extends Activity {
                 }
 
 
-              //  progressDialog = ProgressDialog.show(getParent(), getString(R.string.dialog_processing), getString(R.string.please_wait), true);
+                //  progressDialog = ProgressDialog.show(getParent(), getString(R.string.dialog_processing), getString(R.string.please_wait), true);
 
                 progressDialog.setMessage(getString(R.string.dialog_processing));
                 progressDialog.setTitle(getString(R.string.please_wait));
@@ -495,7 +495,6 @@ public class EditActivity extends Activity {
                         Resources.getSystem().getIdentifier("customPanel", "id",
                                 "android"))
                         .setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
-
 
 
                 final Runnable r = new Runnable() {
@@ -554,7 +553,7 @@ public class EditActivity extends Activity {
                 //  String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
                 //  VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
 
-                VideoUtils.switchAudio(pathvideoTrim, musicSelected, Constants.videoMusicTempFile);
+                VideoUtils.switchAudio(pathvideoTrim, musicSelected, ConstantsUtils.videoMusicTempFile);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -615,7 +614,7 @@ public class EditActivity extends Activity {
 
         String inputFileName = videoRecorded;
 
-        pathvideoTrim = Constants.pathVideoTrim + File.separator + videoTrim;
+        pathvideoTrim = ConstantsUtils.pathVideoTrim + File.separator + videoTrim;
 
         Log.d(LOG_TAG, "VideonaMainActivity input " + inputFileName + " output " + pathvideoTrim + " start " + start + " length " + length);
 
@@ -627,7 +626,7 @@ public class EditActivity extends Activity {
     private void renameTrimVideo(String videoTrim) {
 
         String newVideoTrim = videoTrim;
-        String videoTrimAux = Constants.pathApp + Constants.videoCutAuxName;
+        String videoTrimAux = ConstantsUtils.pathApp + ConstantsUtils.videoCutAuxName;
 
         File originalVideo = new File(videoTrim);
         if (originalVideo.exists()) {
@@ -770,7 +769,7 @@ public class EditActivity extends Activity {
 
             seekBarStart = appPrefs.getSeekBarStart();
 
-            seekBarEnd = Math.min(appPrefs.getSeekBarEnd(), seekBarStart + Config.maxDurationVideo);
+            seekBarEnd = Math.min(appPrefs.getSeekBarEnd(), seekBarStart + ConfigUtils.maxDurationVideo);
 
             videoView.seekTo(appPrefs.getVideoProgress());
 
@@ -836,7 +835,7 @@ public class EditActivity extends Activity {
         //OJO Pablo esta jugando!!!//
         int height_opt = width_opt;
 
-                Log.d("MainActivity", "screen size width_opt: " + width_opt + " " + "height_opt " + height_opt);
+        Log.d("MainActivity", "screen size width_opt: " + width_opt + " " + "height_opt " + height_opt);
 
         File videoFile = new File(pathVideoName);
 
@@ -955,7 +954,7 @@ public class EditActivity extends Activity {
         Log.d(LOG_TAG, "duracionvideo getDuration() " + durationVideoCut);
 
         seekBarStart = 0;
-        seekBarEnd = Math.min(durationVideoCut, seekBarStart + Config.maxDurationVideo);
+        seekBarEnd = Math.min(durationVideoCut, seekBarStart + ConfigUtils.maxDurationVideo);
 
         seekBarRange = new RangeSeekBar<Double>(
                 (double) 0, (double) durationVideoCut, getBaseContext()
@@ -978,7 +977,7 @@ public class EditActivity extends Activity {
                 seekBarStart = (int) Math.round(minValue);
 
                 //seekBarEnd = (int) Math.round(maxValue);
-                seekBarEnd = Math.min((int) Math.round(maxValue), seekBarStart + Config.maxDurationVideo);
+                seekBarEnd = Math.min((int) Math.round(maxValue), seekBarStart + ConfigUtils.maxDurationVideo);
 
 
                 if (mediaPlayer.isPlaying()) {
@@ -1018,7 +1017,7 @@ public class EditActivity extends Activity {
         Log.d(LOG_TAG, "refreshDetailView");
 
         int startSeekBar = seekBarStart;
-        int stopSeekBar = Math.min(seekBarEnd, seekBarStart + Config.maxDurationVideo);
+        int stopSeekBar = Math.min(seekBarEnd, seekBarStart + ConfigUtils.maxDurationVideo);
         String start = TimeUtils.toFormattedTime(startSeekBar * 1000);
         String stop = TimeUtils.toFormattedTime(stopSeekBar * 1000);
 

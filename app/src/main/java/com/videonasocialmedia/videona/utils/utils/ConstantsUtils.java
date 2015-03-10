@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.utils;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -11,11 +9,13 @@ package com.videonasocialmedia.videona.utils;
  * Álvaro Martínez Marco
  */
 
+package com.videonasocialmedia.videona.utils.utils;
+
 import android.os.Environment;
 
 import java.io.File;
 
-public class Constants {
+public class ConstantsUtils {
 
     //TODO cambiar el endpoint a la dirección de producción
     public static final String API_ENDPOINT="http://192.168.0.22/Videona/web/app_dev.php/api";
@@ -30,6 +30,11 @@ public class Constants {
     final public static String COLOR_EFFECT_WHITEBOARD = "whiteboard";
     final public static String COLOR_EFFECT_BLACKBOARD = "blackboard";
     final public static String COLOR_EFFECT_AQUA = "aqua";
+    final public static String COLOR_EFFECT_EMBOSS = "emboss";
+    final public static String COLOR_EFFECT_SKETCH = "sketch";
+    final public static String COLOR_EFFECT_NEON = "neon";
+
+
 
 
     final public static String nameFolderVideos = "Videona";

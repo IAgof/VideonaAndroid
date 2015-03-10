@@ -15,7 +15,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.rest.ApiHeaders;
-import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -72,8 +72,8 @@ public class LoginActivity extends Activity {
 
     */
 /**
-     * Start the activity to create a new user when the new_user_button is clicked
-     *//*
+ * Start the activity to create a new user when the new_user_button is clicked
+ *//*
 
     @OnClick(R.id.new_user_button)
     public void goToUserSignUpActivity() {
@@ -111,8 +111,8 @@ public class LoginActivity extends Activity {
 
     */
 /**
-     * Try to login the user using the credentials provided by userTextField and passwordTextField
-     *//*
+ * Try to login the user using the credentials provided by userTextField and passwordTextField
+ *//*
 
     @OnClick(R.id.send_login_button)
     public void login(View v) {

@@ -3,7 +3,7 @@ package com.videonasocialmedia.videona.model.rest.requests;
 
 import com.squareup.okhttp.OkHttpClient;
 
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 import com.videonasocialmedia.videona.model.rest.ApiHeaders;
 import com.videonasocialmedia.videona.model.rest.VideonaApi;
 import com.videonasocialmedia.videona.model.social.User;
@@ -44,7 +44,7 @@ public class VideonaRestSource {
                 .setClient(new OkClient(okClient))
                 .setLogLevel(RestAdapter.LogLevel.FULL)
 
-                .setEndpoint(Constants.API_ENDPOINT)
+                .setEndpoint(ConstantsUtils.API_ENDPOINT)
                 .setRequestInterceptor(apiHeaders)
                 .build();
         apiClient = restAdapter.create(VideonaApi.class);

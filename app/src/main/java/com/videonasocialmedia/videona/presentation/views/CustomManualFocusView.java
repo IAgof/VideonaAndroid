@@ -1,4 +1,15 @@
-package com.videonasocialmedia.videona.presentation.views.record;
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Álvaro Martínez Marco
+ *
+ */
+
+package com.videonasocialmedia.videona.presentation.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,10 +18,7 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * Created by root on 23/02/15.
- */
-public class CustomFocusView extends View {
+public class CustomManualFocusView extends View {
 
     private Paint paint;
 
@@ -19,7 +27,7 @@ public class CustomFocusView extends View {
     float x = 0;
     float y = 0;
 
-    public CustomFocusView(Context context) {
+    public CustomManualFocusView(Context context) {
         super(context);
 
         setFocusable(true);
@@ -37,7 +45,7 @@ public class CustomFocusView extends View {
 
         super.onDraw(canvas);
 
-        if(showDraw) {
+        if (showDraw) {
             canvas.drawCircle(x, y, 50, paint);
         }
 

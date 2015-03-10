@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.model.editor.media.image;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -10,5 +8,8 @@ package com.videonasocialmedia.videona.model.editor.media.image;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.model.editor.media.image;
+
 public enum imageFilter {
 }

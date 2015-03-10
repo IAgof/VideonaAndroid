@@ -1,4 +1,25 @@
-package com.videonasocialmedia.videona.presentation.views.edit;
+/**
+ * Widget that lets users select a minimum and maximum value on a given numerical range. The range value types can be one of Long, Double, Integer, Float, Short, Byte or BigDecimal.<br />
+ * <br />
+ * Improved {@link android.view.MotionEvent} handling for smoother use, anti-aliased painting for improved aesthetics.
+ *
+ * @param <T> The Number type of the range values. One of Long, Double, Integer, Float, Short, Byte or BigDecimal.
+ * @author Stephan Tittel (stephan.tittel@kom.tu-darmstadt.de)
+ * @author Peter Sinnott (psinnott@gmail.com)
+ * @author Thomas Barrasso (tbarrasso@sevenplusandroid.org)
+ */
+
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Álvaro Martínez Marco
+ */
+
+package com.videonasocialmedia.videona.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,39 +37,10 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.utils.Config;
+import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
 
 import java.math.BigDecimal;
-
-/************************************************************************
- *	Main/RangeSeekBar2
- *
- *	2012 Álvaro Martínez Marco,	amm@gatv.ssr.upm.es
- *
- *	Descripción:
- *
- *	Muestra una barra de progreso táctil que permite de forma dinámica,
- *	seleccionar un rango de valores intermedio.
- *
- *	Comentarios:
- *
- *	Como RangeSeekBar pero para archivos que provienen de galería.
- *	Duplicando la clase, evitamos confusiones a la hora de parsear
- *	los tiempos que se quieren cortar los vídeos y si se quiere
- *	guardar el archivo como nuevo vídeo.
- *
- * ***********************************************************************/
-
-/**
- * Widget that lets users select a minimum and maximum value on a given numerical range. The range value types can be one of Long, Double, Integer, Float, Short, Byte or BigDecimal.<br />
- * <br />
- * Improved {@link android.view.MotionEvent} handling for smoother use, anti-aliased painting for improved aesthetics.
- *
- * @param <T> The Number type of the range values. One of Long, Double, Integer, Float, Short, Byte or BigDecimal.
- * @author Stephan Tittel (stephan.tittel@kom.tu-darmstadt.de)
- * @author Peter Sinnott (psinnott@gmail.com)
- * @author Thomas Barrasso (tbarrasso@sevenplusandroid.org)
- */
 
 @SuppressLint({"WrongCall", "DrawAllocation", "ViewConstructor"})
 public class RangeSeekBar<T extends Number> extends ImageView {
@@ -589,7 +581,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     public void setNormalizedMinValue(double value) {
         value = roundToClosest(value);//set value on the beginning of second in video
         // amm Nov'14 normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
-        normalizedMinValue = Math.max(normalizedMaxValue - (Config.maxDurationVideo * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
+        normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
         Log.d(LOG_TAG, "setNormalizedMinValue " + value + " normalizedMinValue " + normalizedMinValue);
         invalidate();
     }
@@ -603,7 +595,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         value = roundToClosest(value); //set value on the beginning of second in video
         // amm Nov'14 normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
-        normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (Config.maxDurationVideo * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
+        normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
         Log.d(LOG_TAG, "setNormalizedMaxValue " + value + " normalizedMaxValue " + normalizedMaxValue);
         invalidate();
     }

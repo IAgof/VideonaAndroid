@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.domain;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -10,6 +8,9 @@ package com.videonasocialmedia.videona.domain;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.domain;
+
 public class GetVideoSharedUseCaseController implements GetVideoSharedUseCase {
     @Override
     public void execute() {

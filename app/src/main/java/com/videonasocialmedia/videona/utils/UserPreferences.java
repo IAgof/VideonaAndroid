@@ -1,9 +1,3 @@
-package com.videonasocialmedia.videona.utils;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -14,6 +8,12 @@ import android.content.SharedPreferences;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.utils;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 public class UserPreferences {
 
@@ -38,8 +38,6 @@ public class UserPreferences {
     private String videoProgress = "videoProgress";
     private String videoDuration = "videoDuration";
     private String videoDurationTrim = "videoDurationTrim";
-
-
 
     private String colorEffect = "colorEffect";
     private String isColorEffect = "isColorEffect";
@@ -78,13 +76,6 @@ public class UserPreferences {
 
     */
 
-    public boolean getCheckIndiegogo() {
-        return appUserPreferences.getBoolean(checkIndiegogo, true);
-    }
-
-    public void setCheckIndiegogo( Boolean welcomeIndiegogo) {
-        prefsEditor.putBoolean(checkIndiegogo, welcomeIndiegogo).commit();
-    }
 
     public boolean getIsMusicON() {
         return appUserPreferences.getBoolean(isMusicON, false);

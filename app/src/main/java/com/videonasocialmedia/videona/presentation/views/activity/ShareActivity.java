@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.presentation.share;
+package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -27,14 +27,24 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
-import com.videonasocialmedia.videona.presentation.views.edit.EditActivity;
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
 
-/**
- * Created by amm on 10/09/14.
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ * Álvaro Martínez Marco
+ *
  */
 public class ShareActivity extends Activity {
 
@@ -50,8 +60,10 @@ public class ShareActivity extends Activity {
     private String videoEdited;
 
     // Buttons
-    private ImageButton btnShare;
-    private ImageButton btnPlay;
+    @InjectView(R.id.imageButtonShare)
+    ImageButton btnShare;
+    @InjectView(R.id.imageButtonPlayShare)
+    ImageButton btnPlay;
 
     private SeekBar seekBar;
 
@@ -78,17 +90,14 @@ public class ShareActivity extends Activity {
 
         setContentView(R.layout.activity_share);
 
+        ButterKnife.inject(this);
+
         tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 
         videoView = (VideoView) findViewById(R.id.videoViewShare);
 
         mediaPlayer = new MediaPlayer();
 
-
-        //   detailVideoDescription=(TextView)findViewById(R.id.textViewVideoDescription);
-        //   detailVideoDescription.setTypeface(VideonaMainActivity.tf);
-
-        btnShare = (ImageButton) findViewById(R.id.imageButtonShare);
         btnShare.setOnClickListener(shareClickListener());
 
         progressDialog = new ProgressDialog(ShareActivity.this);
@@ -113,40 +122,6 @@ public class ShareActivity extends Activity {
 
                 }
             };
-
-            /// TODO define strings progressDialog
-
-            progressDialog.setMessage("Adding audio");
-            progressDialog.setTitle(getString(R.string.please_wait));
-            progressDialog.setIndeterminate(true);
-            progressDialog.show();
-
-
-            // Custom progress dialog
-            progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
-
-
-            ((TextView) progressDialog.findViewById(Resources.getSystem()
-                    .getIdentifier("message", "id", "android")))
-                    .setTypeface(tf);
-            ((TextView) progressDialog.findViewById(Resources.getSystem()
-                    .getIdentifier("message", "id", "android")))
-                    .setTextColor(Color.WHITE);
-            ((TextView) progressDialog.findViewById(Resources.getSystem()
-                    .getIdentifier("alertTitle", "id", "android")))
-                    .setTypeface(tf);
-            ((TextView) progressDialog.findViewById(Resources.getSystem()
-                    .getIdentifier("alertTitle", "id", "android")))
-                    .setTextColor(Color.WHITE);
-
-            progressDialog.findViewById(
-                    Resources.getSystem().getIdentifier("topPanel", "id",
-                            "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
-            progressDialog.findViewById(
-                    Resources.getSystem().getIdentifier("customPanel", "id",
-                            "android"))
-                    .setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
-
 
             performOnBackgroundThread(r);
 
@@ -206,14 +181,13 @@ public class ShareActivity extends Activity {
             }
         });
 
-        btnPlay = (ImageButton) findViewById(R.id.imageButtonPlayShare);
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 btnPlay.setVisibility(View.INVISIBLE);
 
-                if(mediaPlayer!=null) {
+                if (mediaPlayer != null) {
                     mediaPlayer.start();
                 }
 
@@ -221,6 +195,44 @@ public class ShareActivity extends Activity {
 
             }
         });
+
+
+    }
+
+    private void setProgressDialog() {
+
+        /// TODO define strings progressDialog
+
+        progressDialog.setMessage("Adding audio");
+        progressDialog.setTitle(getString(R.string.please_wait));
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+
+
+        // Custom progress dialog
+        progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
+
+
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("message", "id", "android")))
+                .setTypeface(tf);
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("message", "id", "android")))
+                .setTextColor(Color.WHITE);
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("alertTitle", "id", "android")))
+                .setTypeface(tf);
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("alertTitle", "id", "android")))
+                .setTextColor(Color.WHITE);
+
+        progressDialog.findViewById(
+                Resources.getSystem().getIdentifier("topPanel", "id",
+                        "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
+        progressDialog.findViewById(
+                Resources.getSystem().getIdentifier("customPanel", "id",
+                        "android"))
+                .setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
 
 
     }
@@ -277,17 +289,17 @@ public class ShareActivity extends Activity {
 
         String videonaMusic = "V_MUSIC_" + new File(videoEdited).getName().substring(7);
 
-        String pathVideonaFinal = Constants.pathVideoMusic + File.separator + videonaMusic;
+        String pathVideonaFinal = ConstantsUtils.pathVideoMusic + File.separator + videonaMusic;
 
         int length = appPrefs.getVideoDurationTrim();
 
-        Log.d(LOG_TAG, "VideonaMainActivity cut " + Constants.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
+        Log.d(LOG_TAG, "VideonaMainActivity cut " + ConstantsUtils.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
 
-        VideonaMainActivity.cut(Constants.videoMusicTempFile, pathVideonaFinal, 0, length);
+        VideonaMainActivity.cut(ConstantsUtils.videoMusicTempFile, pathVideonaFinal, 0, length);
 
         videoEdited = pathVideonaFinal;
 
-        File temp = new File(Constants.videoMusicTempFile);
+        File temp = new File(ConstantsUtils.videoMusicTempFile);
         temp.deleteOnExit();
 
         appPrefs.setIsMusicON(false);
@@ -349,7 +361,7 @@ public class ShareActivity extends Activity {
                 videoView.suspend();
             */
 
-                if(mediaPlayer.isPlaying()){
+                if (mediaPlayer.isPlaying()) {
 
                     mediaPlayer.pause();
                     btnPlay.setVisibility(View.VISIBLE);
@@ -371,29 +383,6 @@ public class ShareActivity extends Activity {
                 intent.setType("video/*");
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 startActivityForResult(Intent.createChooser(intent, getString(R.string.share_using)), CHOOSE_SHARE_REQUEST_CODE);
-
-            }
-
-        };
-    }
-
-    private View.OnClickListener recBackClickListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-
-                Log.d(LOG_TAG, "recBackClickListener");
-
-                videoView.pause();
-
-                videoView.stopPlayback();
-
-                videoView.suspend();
-
-
-                // Kill process. Needed to load again ffmpeg libraries
-                int pid = android.os.Process.myPid();
-                android.os.Process.killProcess(pid);
 
             }
 
@@ -477,12 +466,12 @@ public class ShareActivity extends Activity {
             videoView.suspend();
 
           */
-            if(mediaPlayer.isPlaying()){
+            if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
             }
 
 
-             // Kill process. Needed to load again ffmpeg libraries
+            // Kill process. Needed to load again ffmpeg libraries
             int pid = android.os.Process.myPid();
             android.os.Process.killProcess(pid);
 

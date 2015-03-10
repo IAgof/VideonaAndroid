@@ -1,3 +1,5 @@
+package com.videonasocialmedia.videona.presentation.views.listener;
+
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -5,12 +7,12 @@
  * All rights reserved
  *
  * Authors:
- * Juan Javier Cabanas
  * Álvaro Martínez Marco
  *
  */
 
-package com.videonasocialmedia.videona.model.editor;
+public interface ColorEffectClickListener {
 
-public class Transition {
+    void onColorEffectClicked(int position);
+
 }

@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.domain;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -10,9 +8,142 @@ package com.videonasocialmedia.videona.domain;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.domain;
+
+import android.net.Uri;
+import android.util.Log;
+
+import com.videonasocialmedia.videona.model.record.RecordFile;
+import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCase {
+
+
+    public static final int MEDIA_TYPE_VIDEO = 2;
+    public static RecordFile recordFile;
+
+    String recordFilePathString;
+
+
+    public GetVideoRecordedUseCaseController(){
+
+        recordFile = new RecordFile();
+
+    }
+
     @Override
     public void execute() {
 
+
+        startRecordFile();
+
+    }
+
+    /**
+     * Start to record File
+     */
+    @Override
+    public void startRecordFile() {
+
+        recordFile.setIsRecordingFile(true);
+
+
+    }
+
+
+    /**
+     * Stop to record File
+     */
+    @Override
+    public void stopRecordFile() {
+
+        recordFile.setIsRecordingFile(false);
+
+        /// TODO setVideoDuration
+        //recordFile.setVideoDuration();
+
+    }
+
+    /**
+     * ColorEffects
+     */
+    @Override
+    public void colorEffect(String colorEffect) {
+
+        recordFile.setColorEffect(colorEffect);
+
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public String getRecordFileString() {
+
+
+        return getOutputRecordFile(MEDIA_TYPE_VIDEO).toString();
+    }
+
+
+    /**
+     * get Record File
+     *
+     * @return absolute path RecordFile
+     */
+    public static String getRecordFile(){
+
+        return recordFile.getRecordFilePathString();
+
+    }
+
+    /**
+     * set Record File Duration
+     *
+     * @param videoDuration
+     */
+    public static void setRecordFileDuration(long videoDuration){
+
+        recordFile.setVideoDuration(videoDuration);
+
+    }
+
+
+    /**
+     * Create a file Uri for saving video
+     */
+    private static Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputRecordFile(type));
+    }
+
+    private static File getOutputRecordFile(int type) {
+
+        File mediaStorageDir = new File(ConstantsUtils.pathApp);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+
+                Log.d("GetVideoRecordedUseCaseController", "failed to create directory");
+                return null;
+
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
     }
 }

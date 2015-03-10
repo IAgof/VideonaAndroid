@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.videonasocialmedia.videona.presentation.views.record;
+package com.videonasocialmedia.videona.presentation.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

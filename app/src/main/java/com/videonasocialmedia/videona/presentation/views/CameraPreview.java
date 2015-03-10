@@ -1,5 +1,16 @@
-package com.videonasocialmedia.videona.presentation.views.record;
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ * Álvaro Martínez Marco
+ *
+ */
 
+package com.videonasocialmedia.videona.presentation.views;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,8 +22,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.videonasocialmedia.videona.utils.Config;
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.IOException;
@@ -21,7 +31,6 @@ import java.util.List;
 
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
-
 
 
     private static final String TAG = "CameraPreview";
@@ -67,14 +76,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
 
-        for(Camera.Size str: mSupportedPreviewSizes)
+        for (Camera.Size str : mSupportedPreviewSizes)
 
             Log.e(TAG, " cameraPreview " + str.width + "/" + str.height);
 
 
-
         // Install a SurfaceHolder.Callback so we get notified when the
-
         // underlying surface is created and destroyed.
 
         mHolder = getHolder();
@@ -92,7 +99,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 
         appPrefs = new UserPreferences(context);
-
 
 
     }
@@ -115,7 +121,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
 
 
-
     }
 
 
@@ -127,7 +132,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
-
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 
         Log.e(TAG, "surfaceChanged => width=" + w + ", height=" + h);
@@ -136,7 +140,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         // Make sure to stop the preview before resizing or reformatting it.
 
-        if (mHolder.getSurface() == null){
+        if (mHolder.getSurface() == null) {
 
             // preview surface does not exist
 
@@ -151,7 +155,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             mCamera.stopPreview();
 
-        } catch (Exception e){
+        } catch (Exception e) {
 
             // ignore: tried to stop a non-existent preview
 
@@ -165,22 +169,21 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try {
 
 
-
             Camera.Parameters parameters = mCamera.getParameters();
 
             Camera.Size size = getBestPreviewSize(w, h);
 
             // parameters.setPreviewSize(size.width, size.height);
 
-            parameters.setPreviewSize(Config.VIDEO_SIZE_WIDTH, Config.VIDEO_SIZE_HEIGHT);
+            parameters.setPreviewSize(ConfigUtils.VIDEO_SIZE_WIDTH, ConfigUtils.VIDEO_SIZE_HEIGHT);
 
             Log.e(TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
 
 
-        // Focus_continuous doesn't work well on OnePlus One
-        // parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+            // Focus_continuous doesn't work well on OnePlus One
+            // parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
 
-        // AutoFocus onTouch ON
+            // AutoFocus onTouch ON
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 
 
@@ -189,8 +192,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.startPreview();
 
 
-
-        } catch (Exception e){
+        } catch (Exception e) {
 
             Log.d(TAG, "Error starting camera preview: " + e.getMessage());
 
@@ -223,14 +225,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     {
 
-        Camera.Size result=null;
+        Camera.Size result = null;
 
         Camera.Parameters p = mCamera.getParameters();
 
         for (Camera.Size size : p.getSupportedPreviewSizes()) {
 
 
-            if ( size.height == Config.VIDEO_SIZE_HEIGHT && size.width <= Config.VIDEO_SIZE_WIDTH) {
+            if (size.height == ConfigUtils.VIDEO_SIZE_HEIGHT && size.width <= ConfigUtils.VIDEO_SIZE_WIDTH) {
 
                 Log.d("CameraPreview", "getBestPreviewSize selection height " + size.height + " width " + size.width);
 
@@ -240,22 +242,22 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             }
 
-            if (size.width<=width && size.height<=height) {
+            if (size.width <= width && size.height <= height) {
 
-                if (result==null) {
+                if (result == null) {
 
-                    result=size;
+                    result = size;
 
                 } else {
 
-                    int resultArea=result.width*result.height;
+                    int resultArea = result.width * result.height;
 
-                    int newArea=size.width*size.height;
+                    int newArea = size.width * size.height;
 
 
-                    if (newArea>resultArea) {
+                    if (newArea > resultArea) {
 
-                        result=size;
+                        result = size;
 
                     }
 
@@ -275,7 +277,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         final double ASPECT_TOLERANCE = 0.1;
 
-        double targetRatio=(double)h / w;
+        double targetRatio = (double) h / w;
 
 
         if (sizes == null) return null;
@@ -329,7 +331,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
-
     // Blog reference to Focus Area http://www.jayrambhia.com/blog/android-touchfocus/
     // https://github.com/jayrambhia/Touch2Focus/tree/master/src/com/fenchtose/touch2focus
 
@@ -357,13 +358,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             Log.i(TAG, "Unable to autofocus");
         }
     }
+
     /**
      * AutoFocus callback
      */
-    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback(){
+    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback() {
         @Override
         public void onAutoFocus(boolean arg0, Camera arg1) {
-            if (arg0){
+            if (arg0) {
                 mCamera.cancelAutoFocus();
             }
         }
@@ -373,19 +375,19 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             float x = event.getX();
             float y = event.getY();
             Rect touchRect = new Rect(
-                    (int)(x - 100),
-                    (int)(y - 100),
-                    (int)(x + 100),
-                    (int)(y + 100));
+                    (int) (x - 100),
+                    (int) (y - 100),
+                    (int) (x + 100),
+                    (int) (y + 100));
             final Rect targetFocusRect = new Rect(
-                    touchRect.left * 2000/this.getWidth() - 1000,
-                    touchRect.top * 2000/this.getHeight() - 1000,
-                    touchRect.right * 2000/this.getWidth() - 1000,
-                    touchRect.bottom * 2000/this.getHeight() - 1000);
+                    touchRect.left * 2000 / this.getWidth() - 1000,
+                    touchRect.top * 2000 / this.getHeight() - 1000,
+                    touchRect.right * 2000 / this.getWidth() - 1000,
+                    touchRect.bottom * 2000 / this.getHeight() - 1000);
 
             doTouchFocus(targetFocusRect);
 

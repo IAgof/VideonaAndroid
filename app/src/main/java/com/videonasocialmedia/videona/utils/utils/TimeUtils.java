@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.utils;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -10,6 +8,8 @@ package com.videonasocialmedia.videona.utils;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.utils.utils;
 
 public class TimeUtils {
      
