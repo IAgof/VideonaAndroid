@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.domain.Editor;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -10,7 +8,13 @@ package com.videonasocialmedia.videona.domain.Editor;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.domain;
+
 public class GetVideoEditedUseCaseController implements GetVideoEditedUseCase {
+
+
+
     @Override
     public void execute() {
 

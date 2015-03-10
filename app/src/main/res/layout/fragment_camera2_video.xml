@@ -17,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.videonasocialmedia.videona.presentation.views.record.AutoFitTextureView
+    <com.videonasocialmedia.videona.presentation.views.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
 
         <Chronometer
 
-            android:id="@+id/chronometerVideo"
+            android:id="@+id/chronometer_record"
 
             android:layout_width="wrap_content"
 
@@ -118,7 +118,7 @@
 
     <RelativeLayout
 
-        android:id="@+id/relativeLayoutColorEffects"
+        android:id="@+id/relativelayout_color_effect"
 
         android:layout_width="400dp"
 
@@ -134,7 +134,7 @@
 
             xmlns:tools="http://schemas.android.com/tools"
 
-            android:id="@+id/lvItems"
+            android:id="@+id/listview_items_color_effect"
 
             style="@style/TwoWayView"
 

@@ -1,7 +1,3 @@
-package com.videonasocialmedia.videona.domain.share;
-
-import com.videonasocialmedia.videona.domain.UseCase;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -12,5 +8,8 @@ import com.videonasocialmedia.videona.domain.UseCase;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.domain;
+
 public interface GetVideoSharedUseCase extends UseCase {
 }

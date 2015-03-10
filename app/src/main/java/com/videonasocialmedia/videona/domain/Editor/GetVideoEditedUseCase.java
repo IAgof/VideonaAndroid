@@ -1,7 +1,3 @@
-package com.videonasocialmedia.videona.domain.Editor;
-
-import com.videonasocialmedia.videona.domain.UseCase;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -12,5 +8,9 @@ import com.videonasocialmedia.videona.domain.UseCase;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.domain;
+
 public interface GetVideoEditedUseCase extends UseCase {
+
 }

@@ -5,17 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
 
-import com.videonasocialmedia.videona.presentation.views.login.LoginActivity;
-import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
+import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
@@ -36,6 +36,7 @@ public class VideonaMainActivity extends Activity {
 
     public static Typeface tf;
 
+
     private static final int CAMERA_RECORD_VIDEO_REQUEST_CODE = 100;
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
 
@@ -51,7 +52,11 @@ public class VideonaMainActivity extends Activity {
 
         Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
 
-     // appPrefs.setCameraId(0);
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            ConfigUtils.isAndroidL = true;
+        }
+
 
         appPrefs.setIsColorEffect(false);
 
@@ -61,13 +66,13 @@ public class VideonaMainActivity extends Activity {
     private void launchCameraActivity() {
 
         //Intent i = new Intent(getApplicationContext(), RecordActivity.class);
-       // startActivity(i);
+        // startActivity(i);
         //TODO remove next line when remember-me is working and uncomment the rest of the method
 
         //if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
         //    startActivity(new Intent(getApplicationContext(), CameraActivity.class));
         //} else {
-            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
         //}
 
 
@@ -103,39 +108,42 @@ public class VideonaMainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * Check Videona app paths, pathApp, pathVideoTrim, pathVideoMusic, ...
+     * @throws IOException
+     */
     private void checkPath() throws IOException {
 
-        File f = new File(Constants.pathApp);
+        File f = new File(ConstantsUtils.pathApp);
         if (!f.exists()) {
             f.mkdir();
 
             Log.d(LOG_TAG, "Path Videona created");
         }
 
-        File fTrim = new File(Constants.pathVideoTrim);
+        File fTrim = new File(ConstantsUtils.pathVideoTrim);
         if (!fTrim.exists()) {
             fTrim.mkdir();
 
-            Log.d(LOG_TAG, "Path " + Constants.pathVideoTrim + " created");
+            Log.d(LOG_TAG, "Path " + ConstantsUtils.pathVideoTrim + " created");
         }
 
-        File fMusic = new File(Constants.pathVideoMusic);
+        File fMusic = new File(ConstantsUtils.pathVideoMusic);
         if (!fMusic.exists()) {
             fMusic.mkdir();
 
-            Log.d(LOG_TAG, "Path " + Constants.pathVideoMusic + " created");
+            Log.d(LOG_TAG, "Path " + ConstantsUtils.pathVideoMusic + " created");
         }
 
-        File fTemp = new File(Constants.pathVideoTemp);
+        File fTemp = new File(ConstantsUtils.pathVideoTemp);
         if (!fTemp.exists()) {
             fTemp.mkdir();
 
-            Log.d(LOG_TAG, "Path " + Constants.pathVideoTemp + " created");
+            Log.d(LOG_TAG, "Path " + ConstantsUtils.pathVideoTemp + " created");
         }
 
 
-        File fTempAV = new File(Constants.videoMusicTempFile);
+        File fTempAV = new File(ConstantsUtils.videoMusicTempFile);
 
         if (fTempAV.exists()) {
             fTempAV.delete();
@@ -241,16 +249,15 @@ public class VideonaMainActivity extends Activity {
             //launchCameraActivity();
             if (loggedIn) {
 
-              //  if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-              //      startActivity(new Intent(getApplicationContext(), CameraActivity.class));
-              //  } else {
-//                    startActivity(new Intent(getApplicationContext(), RecordActivity.class));
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-              //  }
+                //  if(Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                //      startActivity(new Intent(getApplicationContext(), CameraActivity.class));
+                //  } else {
+                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+                //  }
 
             } else {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                //startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+                //startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
             }
         }
     }

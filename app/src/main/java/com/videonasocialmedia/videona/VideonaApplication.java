@@ -1,11 +1,3 @@
-package com.videonasocialmedia.videona;
-
-import android.app.Application;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Logger;
-import com.google.android.gms.analytics.Tracker;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -15,6 +7,15 @@ import com.google.android.gms.analytics.Tracker;
  * Authors:
  * Juan Javier Cabanas
  */
+
+package com.videonasocialmedia.videona;
+
+import android.app.Application;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
+
 public class VideonaApplication extends Application {
 
 

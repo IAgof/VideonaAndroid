@@ -1,5 +1,3 @@
-package com.videonasocialmedia.videona.model.entities.editor.media;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -10,5 +8,8 @@ package com.videonasocialmedia.videona.model.entities.editor.media;
  * Álvaro Martínez Marco
  *
  */
+
+package com.videonasocialmedia.videona.model.editor.media;
+
 public class AddTextVideoItem extends VideoItem {
 }

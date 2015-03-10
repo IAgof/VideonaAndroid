@@ -1,9 +1,3 @@
-package com.videonasocialmedia.videona.utils;
-
-//import android.text.TextUtils;
-
-import java.util.regex.Pattern;
-
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com
@@ -16,6 +10,9 @@ import java.util.regex.Pattern;
  *
  */
 
+package com.videonasocialmedia.videona.utils;
+
+import java.util.regex.Pattern;
 
 public class StringUtils {
 
