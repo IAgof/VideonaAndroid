@@ -32,11 +32,11 @@ import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.utils.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import org.lucasr.twowayview.TwoWayView;
 

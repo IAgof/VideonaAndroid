@@ -37,12 +37,12 @@ import android.widget.VideoView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
 import com.videonasocialmedia.videona.utils.CutVideoPlayerState;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 import com.videonasocialmedia.videona.utils.RangeSeekBar;
 import com.videonasocialmedia.videona.utils.UserPreferences;
-import com.videonasocialmedia.videona.utils.utils.TimeUtils;
-import com.videonasocialmedia.videona.utils.utils.VideoUtils;
+import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
 import java.io.IOException;

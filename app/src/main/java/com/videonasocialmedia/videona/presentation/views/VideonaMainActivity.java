@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import com.videonasocialmedia.videona.R;
 
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 

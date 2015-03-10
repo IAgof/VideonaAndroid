@@ -9,7 +9,7 @@
  *
  */
 
-package com.videonasocialmedia.videona.utils.utils;
+package com.videonasocialmedia.videona.utils;
 
 public class TimeUtils {
      

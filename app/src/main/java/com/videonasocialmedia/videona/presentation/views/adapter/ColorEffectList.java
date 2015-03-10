@@ -12,7 +12,7 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
  */
 
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 
 import java.util.ArrayList;

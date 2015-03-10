@@ -64,7 +64,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.presentation.views.AutoFitTextureView;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
 
 import org.lucasr.twowayview.TwoWayView;

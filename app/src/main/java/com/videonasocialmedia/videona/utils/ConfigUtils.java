@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.utils.utils;
+package com.videonasocialmedia.videona.utils;
 
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
