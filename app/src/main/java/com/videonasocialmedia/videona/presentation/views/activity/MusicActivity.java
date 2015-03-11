@@ -60,6 +60,7 @@ public class MusicActivity extends Activity {
     private int mThumbMusicImageAux;
     private int mThumbMusicTextAux;
     private int mThumbMusicAudioAux;
+    private int mThumbMusicImageBackgroundAux;
 
     private ImageButton btnMusicSelected;
 
@@ -124,6 +125,7 @@ public class MusicActivity extends Activity {
                 select.putExtra("music_image", mThumbMusicImage[0]);
                 select.putExtra("music_text", mThumbMusicText[0]);
                 select.putExtra("music_audio", mThumbMusicAudio[0]);
+                select.putExtra("music_color", mThumbMusicImageBackground[0]);
 
 
                 setResult(Activity.RESULT_OK, select);
@@ -140,6 +142,7 @@ public class MusicActivity extends Activity {
         mThumbMusicImageAux = mThumbMusicImage[0];
         mThumbMusicTextAux = mThumbMusicText[0];
         mThumbMusicAudioAux = mThumbMusicAudio[0];
+        mThumbMusicImageBackgroundAux = mThumbMusicImageBackground[0];
 
 
     }
@@ -174,7 +177,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[1]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[1]));
+
                     image1.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image1.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 1;
 
@@ -203,7 +209,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[2]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[2]));
+
                     image2.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image2.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 2;
 
@@ -231,7 +240,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[3]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[3]));
+
                     image3.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image3.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 3;
 
@@ -258,7 +270,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[4]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[4]));
+
                     image4.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image4.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 4;
 
@@ -284,7 +299,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[5]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[5]));
+
                     image5.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image5.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 5;
                     updateDataMusic(position);
@@ -310,7 +328,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[6]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[6]));
+
                     image6.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image6.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 6;
 
@@ -338,7 +359,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[7]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[7]));
+
                     image7.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image7.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 7;
 
@@ -367,7 +391,10 @@ public class MusicActivity extends Activity {
                 } else {
 
                     image0.setImageDrawable(getResources().getDrawable(mThumbMusicImage[8]));
+                    image0.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[8]));
+
                     image8.setImageDrawable(getResources().getDrawable(mThumbMusicImage[position]));
+                    image8.setBackgroundColor(getResources().getColor(mThumbMusicImageBackground[position]));
 
                     position = 8;
 
@@ -417,6 +444,14 @@ public class MusicActivity extends Activity {
             R.drawable.activity_music_icon_ambiental_normal
     };
 
+    private Integer[] mThumbMusicImageBackground = {
+            R.color.pastel_palette_red, R.color.pastel_palette_green,
+            R.color.pastel_palette_purple, R.color.pastel_palette_orange,
+            R.color.pastel_palette_pink_2, R.color.pastel_palette_brown,
+            R.color.pastel_palette_yellow, R.color.pastel_palette_blue,
+            R.color.pastel_palette_grey
+    };
+
     private Integer[] mThumbMusicText = {
             R.string.music_genre_folk, R.string.music_genre_hiphop,
             R.string.music_genre_pop, R.string.music_genre_reggae,
@@ -446,6 +481,10 @@ public class MusicActivity extends Activity {
         mThumbMusicTextAux = mThumbMusicText[0];
         mThumbMusicText[0] = mThumbMusicText[position];
         mThumbMusicText[position] = mThumbMusicTextAux;
+
+        mThumbMusicImageBackgroundAux = mThumbMusicImageBackground[0];
+        mThumbMusicImageBackground[0] = mThumbMusicImageBackground[position];
+        mThumbMusicImageBackground[position] = mThumbMusicImageBackgroundAux;
 
         appPrefs.setPositionMusic(position);
 

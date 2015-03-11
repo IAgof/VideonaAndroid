@@ -1,21 +1,17 @@
 /*
- * Copyright (C) 2015 Videona Socialmedia SL
+ * Copyright (c) 2015. Videona Socialmedia SL
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
- *
- * Authors:
- * Álvaro Martínez Marco
- *
  */
 
-package com.videonasocialmedia.videona.domain;
+package com.videonasocialmedia.videona.domain.record;
 
 import android.net.Uri;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.model.record.RecordFile;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -136,7 +132,7 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
 
     private static File getOutputRecordFile(int type) {
 
-        File mediaStorageDir = new File(ConstantsUtils.pathApp);
+        File mediaStorageDir = new File(Constants.pathApp);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
