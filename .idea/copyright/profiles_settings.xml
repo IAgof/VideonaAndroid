@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="" />
+  <settings default="videona-privative">
+    <module2copyright>
+      <element module="All" copyright="videona-privative" />
+    </module2copyright>
+  </settings>
 </component>

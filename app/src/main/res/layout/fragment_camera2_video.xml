@@ -17,8 +17,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.videonasocialmedia.videona.record.AutoFitTextureView
-        android:id="@+id/texture"
+    <com.videonasocialmedia.videona.presentation.views.AutoFitTextureView
+        android:id="@+id/autofit_texture_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
@@ -47,7 +47,7 @@
 
         <ImageButton
 
-            android:id="@+id/button_capture"
+            android:id="@+id/button_record"
 
             android:layout_width="100dp"
 
@@ -69,13 +69,13 @@
 
         <ImageButton
 
-            android:id="@+id/btnColorEffect"
+            android:id="@+id/button_color_effect"
 
             android:layout_width="25dp"
 
             android:layout_height="25dp"
 
-            android:layout_above="@+id/button_capture"
+            android:layout_above="@+id/button_record"
 
             android:layout_centerHorizontal="true"
 
@@ -91,7 +91,7 @@
 
         <Chronometer
 
-            android:id="@+id/chronometerVideo"
+            android:id="@+id/chronometer_record"
 
             android:layout_width="wrap_content"
 
@@ -99,7 +99,7 @@
 
             android:layout_alignWithParentIfMissing="false"
 
-            android:layout_below="@+id/button_capture"
+            android:layout_below="@+id/button_record"
 
             android:layout_centerHorizontal="true"
 
@@ -118,7 +118,7 @@
 
     <RelativeLayout
 
-        android:id="@+id/relativeLayoutColorEffects"
+        android:id="@+id/relativelayout_color_effect"
 
         android:layout_width="400dp"
 
@@ -134,7 +134,7 @@
 
             xmlns:tools="http://schemas.android.com/tools"
 
-            android:id="@+id/lvItems"
+            android:id="@+id/listview_items_color_effect"
 
             style="@style/TwoWayView"
 
