@@ -11,8 +11,8 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.domain.editor.GetVideoRecordedUseCase;
-import com.videonasocialmedia.videona.domain.editor.GetVideoRecordedUseCaseController;
+
+import com.videonasocialmedia.videona.domain.record.GetVideoRecordedUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 
 public class RecordPresenter extends Presenter {
@@ -32,8 +32,7 @@ public class RecordPresenter extends Presenter {
     @Override
     public void start() {
 
-        useCase.startRecordFile();
-
+       useCase.startRecordFile();
     }
 
     /**

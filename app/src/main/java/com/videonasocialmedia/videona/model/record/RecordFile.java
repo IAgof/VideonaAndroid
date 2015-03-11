@@ -46,6 +46,15 @@ public class RecordFile {
         return colorEffect;
     }
 
+    public void setRecordFileDuration(long recordFileDuration){
+
+        this.recordFileDuration = recordFileDuration;
+    }
+
+    public long getRecordFileDuration(){
+        return recordFileDuration;
+    }
+
     public void setColorEffect(String colorEffect){
         this.colorEffect = colorEffect;
     }

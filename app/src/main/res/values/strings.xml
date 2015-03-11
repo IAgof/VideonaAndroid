@@ -57,7 +57,7 @@ We will be very grateful if you spread the news in your social networks.</string
 
 
     <!-- Filters_Effects -->
-    <string name="filter_effect_sepia" translatable="false">"sepia"</string>
+    <string name="filter_effect_sepia">"sepia"</string>
     <string name="filter_effect_aqua">aqua</string>
     <string name="filter_effect_emboss">emboss</string>
     <string name="filter_effect_mono">"mono"</string>
@@ -69,6 +69,8 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="filter_effect_solarice">"solarice"</string>
     <string name="filter_effect_whiteboard">"whiteboard"</string>
     <string name="filter_effect_blackboard">blackboard</string>
+
+
     <string name="loginError">Something was wrong. Try to login again</string>
     <string name="signUpError">Something bad happend. Try to register again</string>
 
