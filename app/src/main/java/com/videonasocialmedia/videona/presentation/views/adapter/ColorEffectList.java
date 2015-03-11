@@ -25,6 +25,8 @@ public class ColorEffectList {
 
         ArrayList<String> colorEffects = new ArrayList<String>();
 
+        /*
+
         // Color Effects constants in Android_L
         if (ConfigUtils.isAndroidL) {
 
@@ -46,6 +48,14 @@ public class ColorEffectList {
                 colorEffects.add(effect);
             }
 
+        }
+
+        */
+
+        // Color Effects in pre_Android_L depends on camera getSupportedColorEffects
+        for (String effect : CameraPreview.colorEffects) {
+
+            colorEffects.add(effect);
         }
 
         return colorEffects;

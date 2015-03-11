@@ -51,8 +51,6 @@
     <string name="accesibility_login_with_facebook">login with facebook</string>
     <string name="checkBox_remember_me">Remember Me</string>
     <string name="please_login">Please login in your account</string>
-    <string name="filter_effect_aqua">aqua</string>
-    <string name="filter_effect_blackboard">blackboard</string>
-    <string name="filter_effect_emboss">emboss</string>
+
 
 </resources>
