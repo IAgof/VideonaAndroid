@@ -11,9 +11,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.domain.GetVideoRecordedUseCase;
-import com.videonasocialmedia.videona.domain.GetVideoRecordedUseCaseController;
-import com.videonasocialmedia.videona.domain.UseCase;
+import com.videonasocialmedia.videona.domain.editor.GetVideoRecordedUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetVideoRecordedUseCaseController;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 
@@ -63,11 +61,11 @@ public class RecordPresenter extends Presenter {
     /**
      * Called when the user stop to record, save record file duration
      *
-     * @param recordFileDurationLong
+     * @param recordFileDuration
      */
-    public void setRecordFileDurationLong(long recordFileDurationLong){
+    public void setRecordFileDuration(long recordFileDuration){
 
-        useCase.setRecordFileDurationLong(recordFileDurationLong);
+        useCase.setRecordFileDuration(recordFileDuration);
     }
 
     /**

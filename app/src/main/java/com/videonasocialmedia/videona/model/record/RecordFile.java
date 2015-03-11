@@ -12,13 +12,7 @@
 package com.videonasocialmedia.videona.model.record;
 
 import android.net.Uri;
-import android.util.Log;
 
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class RecordFile {
 
@@ -28,7 +22,7 @@ public class RecordFile {
     // cameraId = 1 Front Camera
     int cameraId;
 
-    long recordFileDurationLong;
+    long recordFileDuration;
 
     Uri recordFileUri;
 

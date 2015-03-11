@@ -456,7 +456,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         long chronometer = SystemClock.elapsedRealtime() - chronometerRecord.getBase();
         //  GetVideoRecordedUseCaseController.setRecordFileDuration(chronometer);
 
-        mRecordPresenter.setRecordFileDurationLong(chronometer);
+        mRecordPresenter.setRecordFileDuration(chronometer);
 
         Log.d(LOG_TAG, " chronometerRecord " + chronometer);
         Log.d(LOG_TAG, " chronometerRecord TimeUtils " + TimeUtils.toFormattedTime((int) chronometer));
