@@ -11,6 +11,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import com.videonasocialmedia.videona.domain.GetVideoRecordedUseCase;
 import com.videonasocialmedia.videona.domain.GetVideoRecordedUseCaseController;
 import com.videonasocialmedia.videona.domain.UseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
@@ -19,6 +20,8 @@ public class RecordPresenter extends Presenter {
 
 
     private final RecordView mRecordView;
+
+    GetVideoRecordedUseCase useCase = new GetVideoRecordedUseCaseController();
 
     public RecordPresenter(RecordView mRecordView) {
 
@@ -31,8 +34,7 @@ public class RecordPresenter extends Presenter {
     @Override
     public void start() {
 
-        UseCase useCase = new GetVideoRecordedUseCaseController();
-        useCase.execute();
+        useCase.startRecordFile();
 
     }
 
@@ -43,5 +45,38 @@ public class RecordPresenter extends Presenter {
     @Override
     public void stop() {
 
+        useCase.stopRecordFile();
+
+    }
+
+    /**
+     * Called when the activity need a path to save record file data.
+     *
+     * @return String recordFile
+     */
+    public String getRecordFileString() {
+
+        return useCase.getRecordFileString();
+
+    }
+
+    /**
+     * Called when the user stop to record, save record file duration
+     *
+     * @param recordFileDurationLong
+     */
+    public void setRecordFileDurationLong(long recordFileDurationLong){
+
+        useCase.setRecordFileDurationLong(recordFileDurationLong);
+    }
+
+    /**
+     * Called when the user stop to record, save record file duration
+     *
+     * @param colorEffect
+     */
+    public void setColorEffect(String colorEffect){
+
+        useCase.setColorEffect(colorEffect);
     }
 }

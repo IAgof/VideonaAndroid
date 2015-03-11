@@ -1,3 +1,15 @@
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ * Álvaro Martínez Marco
+ *
+ */
+
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
@@ -25,19 +37,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/*
- * Copyright (C) 2015 Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- *
- * Authors:
- * Juan Javier Cabanas
- * Álvaro Martínez Marco
- *
- */
-public class MusicActivity extends Activity {
 
+public class MusicActivity extends Activity {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
 

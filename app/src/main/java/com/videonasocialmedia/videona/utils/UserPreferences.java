@@ -39,7 +39,7 @@ public class UserPreferences {
     private String videoDuration = "videoDuration";
     private String videoDurationTrim = "videoDurationTrim";
 
-    private String colorEffect = "colorEffect";
+    private String colorEffect = "setColorEffect";
     private String isColorEffect = "isColorEffect";
     private String cameraId = "back_camera";
 	 

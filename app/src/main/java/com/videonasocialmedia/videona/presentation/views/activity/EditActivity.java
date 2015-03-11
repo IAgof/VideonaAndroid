@@ -463,9 +463,9 @@ public class EditActivity extends Activity {
                 }
 
 
-                //  progressDialog = ProgressDialog.show(getParent(), getString(R.string.dialog_processing), getString(R.string.please_wait), true);
+                /// TODO Wait until define progressDialog Design
 
-                progressDialog.setMessage(getString(R.string.dialog_processing));
+          /*      progressDialog.setMessage(getString(R.string.dialog_processing));
                 progressDialog.setTitle(getString(R.string.please_wait));
                 progressDialog.setIndeterminate(true);
                 progressDialog.show();
@@ -495,6 +495,8 @@ public class EditActivity extends Activity {
                         Resources.getSystem().getIdentifier("customPanel", "id",
                                 "android"))
                         .setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
+
+            */
 
 
                 final Runnable r = new Runnable() {

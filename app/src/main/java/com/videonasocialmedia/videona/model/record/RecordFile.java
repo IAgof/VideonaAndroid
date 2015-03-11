@@ -12,13 +12,6 @@
 package com.videonasocialmedia.videona.model.record;
 
 import android.net.Uri;
-import android.util.Log;
-
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class RecordFile {
 
@@ -28,7 +21,7 @@ public class RecordFile {
     // cameraId = 1 Front Camera
     int cameraId;
 
-    long recordFileDuration;
+    long recordFileDurationLong;
 
     Uri recordFileUri;
 
@@ -56,12 +49,12 @@ public class RecordFile {
         this.colorEffect = colorEffect;
     }
 
-    public int getVideoDuration() {
-        return cameraId;
+    public long getRecordFileDurationLong() {
+        return recordFileDurationLong;
     }
 
-    public void setVideoDuration (long recordFileDuration) {
-        this.recordFileDuration = recordFileDuration;
+    public void setRecordFileDurationLong(long recordFileDuration) {
+        this.recordFileDurationLong = recordFileDuration;
     }
 
     public Uri getRecordFileUri(){

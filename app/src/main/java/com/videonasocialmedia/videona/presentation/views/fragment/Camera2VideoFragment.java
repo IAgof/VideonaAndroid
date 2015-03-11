@@ -59,6 +59,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
@@ -80,58 +81,88 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class Camera2VideoFragment extends Fragment implements ColorEffectClickListener, View.OnClickListener {
+public class Camera2VideoFragment extends Fragment implements RecordView, ColorEffectClickListener, View.OnClickListener {
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
+    /**
+     * String LOG_TAG
+     */
     private static final String TAG = "Camera2VideoFragment";
 
+    /**
+     * Int request code
+     */
     private static final int CAMERA_TRIM_VIDEO_REQUEST_CODE = 300;
+
+    /**
+     * Int media types
+     */
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    private Chronometer chronometer;
+    /**
+     * Chronometer, indicate time recording video
+     */
+    @InjectView(R.id.chronometer_record)
+    Chronometer chronometerRecord;
 
-    private Uri fileUri; // file url to store image/video
+    /**
+     * Uri, file url to store image/video
+     */
+    private Uri fileUri;
 
+    /**
+     * String path to video Recorded
+     */
     private String videoRecord;
 
     static {
+
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
+
     }
 
     /**
      * An {@link com.videonasocialmedia.videona.presentation.views.AutoFitTextureView} for camera preview.
      */
-    private AutoFitTextureView mTextureView;
+    @InjectView(R.id.autofit_texture_view)
+    AutoFitTextureView autoFitTextureView;
 
     /**
      * Button to record video
      */
-    private ImageButton mButtonVideo;
+    @InjectView(R.id.button_record)
+    ImageButton buttonRecord;
 
     /**
      * Button to apply color effects
      */
-    private ImageButton btnColorEffect;
+    @InjectView(R.id.button_color_effect)
+    ImageButton buttonColorEffect;
 
     /**
      * ListView to use horizontal adapter
      */
-    private TwoWayView lvTest;
+    @InjectView(R.id.listview_items_color_effect)
+    TwoWayView listViewItemsColorEffect;
 
     /**
      * RelativeLayout to show and hide color effects
      */
-    private RelativeLayout relativeLayoutColorEffects;
+    @InjectView(R.id.relativelayout_color_effect)
+    RelativeLayout relativeLayoutColorEffects;
 
     /**
      * Adapter to add images color effect
      */
-    private ColorEffectAdapter imageColorEffectAdadpter;
+    private ColorEffectAdapter colorEffectAdapter;
 
     /**
      * A refernce to the opened {@link android.hardware.camera2.CameraDevice}.
@@ -225,8 +256,8 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
             mCameraDevice = cameraDevice;
             startPreview();
             mCameraOpenCloseLock.release();
-            if (null != mTextureView) {
-                configureTransform(mTextureView.getWidth(), mTextureView.getHeight());
+            if (null != autoFitTextureView) {
+                configureTransform(autoFitTextureView.getWidth(), autoFitTextureView.getHeight());
             }
         }
 
@@ -430,19 +461,13 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
 
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-        mButtonVideo = (ImageButton) view.findViewById(R.id.button_capture);
-        mButtonVideo.setOnClickListener(this);
+        ButterKnife.inject(this, view);
 
-        chronometer = (Chronometer) view.findViewById(R.id.chronometer_record);
+        buttonRecord.setOnClickListener(this);
 
-        btnColorEffect = (ImageButton) view.findViewById(R.id.btnColorEffect);
-        btnColorEffect.setOnClickListener(this);
+        buttonColorEffect.setOnClickListener(this);
 
-        relativeLayoutColorEffects = (RelativeLayout) view.findViewById(R.id.relativelayout_color_effect);
         relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
-
-        lvTest = (TwoWayView) view.findViewById(R.id.listview_items_color_effect);
 
 
     }
@@ -451,10 +476,10 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
     public void onResume() {
         super.onResume();
         startBackgroundThread();
-        if (mTextureView.isAvailable()) {
-            openCamera(mTextureView.getWidth(), mTextureView.getHeight());
+        if (autoFitTextureView.isAvailable()) {
+            openCamera(autoFitTextureView.getWidth(), autoFitTextureView.getHeight());
         } else {
-            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+            autoFitTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
         }
     }
 
@@ -468,18 +493,18 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button_capture: {
+            case R.id.button_record: {
                 if (mIsRecordingVideo) {
-                    stopRecordingVideo();
+                    stopRecordVideo();
                 } else {
-                    startRecordingVideo();
+                    startRecordVideo();
                 }
                 break;
             }
 
-            case R.id.btnColorEffect: {
+            case R.id.button_color_effect: {
 
-                Log.d(TAG, "Camera2 btnColorEffect pressed");
+                Log.d(TAG, "Camera2 buttonColorEffect pressed");
 
                 if (relativeLayoutColorEffects.isShown()) {
 
@@ -487,7 +512,7 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
                     relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
 
 
-                    btnColorEffect.setImageResource(R.drawable.common_icon_filters_normal);
+                    buttonColorEffect.setImageResource(R.drawable.common_icon_filters_normal);
 
                     break;
 
@@ -496,13 +521,13 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
 
                 relativeLayoutColorEffects.setVisibility(View.VISIBLE);
 
-                imageColorEffectAdadpter = new ColorEffectAdapter(getActivity(), new ColorEffectList().getColorEffectList());
+                colorEffectAdapter = new ColorEffectAdapter(getActivity(), new ColorEffectList().getColorEffectList());
 
-                imageColorEffectAdadpter.setViewClickListenerLollipop(this);
+                colorEffectAdapter.setViewClickListenerLollipop(this);
 
-                lvTest.setAdapter(imageColorEffectAdadpter);
+                listViewItemsColorEffect.setAdapter(colorEffectAdapter);
 
-                btnColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
+                buttonColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
 
                 break;
             }
@@ -563,14 +588,14 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
             int orientation = getResources().getConfiguration().orientation;
 
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+                autoFitTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
             } else {
-                mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
+                autoFitTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
             }
 
 
             // Landscape
-            mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            autoFitTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
 
             configureTransform(width, height);
 
@@ -612,12 +637,12 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
      * Start the camera preview.
      */
     private void startPreview() {
-        if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
+        if (null == mCameraDevice || !autoFitTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
         try {
             setUpMediaRecorder();
-            SurfaceTexture texture = mTextureView.getSurfaceTexture();
+            SurfaceTexture texture = autoFitTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
             mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
@@ -681,19 +706,19 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
     }
 
     /**
-     * Configures the necessary {@link android.graphics.Matrix} transformation to `mTextureView`.
+     * Configures the necessary {@link android.graphics.Matrix} transformation to `autoFitTextureView`.
      * This method should not to be called until the camera preview size is determined in
-     * openCamera, or until the size of `mTextureView` is fixed.
+     * openCamera, or until the size of `autoFitTextureView` is fixed.
      *
-     * @param viewWidth  The width of `mTextureView`
-     * @param viewHeight The height of `mTextureView`
+     * @param viewWidth  The width of `autoFitTextureView`
+     * @param viewHeight The height of `autoFitTextureView`
      */
     private void configureTransform(int viewWidth, int viewHeight) {
 
         Log.d("Camera2", "configureTransform width " + viewWidth + " heigth " + viewHeight);
 
         Activity activity = getActivity();
-        if (null == mTextureView || null == mPreviewSize || null == activity) {
+        if (null == autoFitTextureView || null == mPreviewSize || null == activity) {
             return;
         }
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
@@ -717,7 +742,7 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
 
         //Log.d("Camera2", "matrix " + matrix.g);
 
-        mTextureView.setTransform(matrix);
+        autoFitTextureView.setTransform(matrix);
     }
 
     private void setUpMediaRecorder() throws IOException {
@@ -803,13 +828,51 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
         return mediaFile;
     }
 
-    private void startRecordingVideo() {
+
+    private void setChronometer() {
+
+        chronometerRecord.setBase(SystemClock.elapsedRealtime());
+
+        chronometerRecord.setOnChronometerTickListener(new android.widget.Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(android.widget.Chronometer chronometer) {
+
+
+                Activity activity = getActivity();
+
+                long time = SystemClock.elapsedRealtime() - chronometer.getBase();
+                int h = (int) (time / 3600000);
+                int m = (int) (time - h * 3600000) / 60000;
+                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
+                // String hh = h < 10 ? "0"+h: h+"";
+                String mm = m < 10 ? "0" + m : m + "";
+                String ss = s < 10 ? "0" + s : s + "";
+                // chronometerRecord.setText(hh+":"+mm+":"+ss);
+                chronometer.setText(mm + ":" + ss);
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onColorEffectClicked(int position) {
+
+        Log.d("Camera2", "onImageClicked " + position);
+
+        colorEffect(position);
+
+    }
+
+    @Override
+    public void startRecordVideo() {
+
         try {
             // UI
-            // mButtonVideo.setText(R.string.stop);
+            // buttonRecord.setText(R.string.stop);
 
-            mButtonVideo.setImageResource(R.drawable.activity_record_icon_stop_normal);
-            mButtonVideo.setImageAlpha(125);
+            buttonRecord.setImageResource(R.drawable.activity_record_icon_stop_normal);
+            buttonRecord.setImageAlpha(125);
 
 
             mIsRecordingVideo = true;
@@ -817,23 +880,26 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
             // Start recording
             mMediaRecorder.start();
 
-            setChronometer();
-            chronometer.start();
+            startChronometer();
+
 
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
+
     }
 
-    private void stopRecordingVideo() {
+    @Override
+    public void stopRecordVideo() {
+
         // UI
         mIsRecordingVideo = false;
-        // mButtonVideo.setText(R.string.record);
+        // buttonRecord.setText(R.string.record);
         // Stop recording
         mMediaRecorder.stop();
         mMediaRecorder.reset();
 
-        chronometer.stop();
+        stopChronometer();
 
         Activity activity = getActivity();
         if (null != activity) {
@@ -851,37 +917,22 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
 
     }
 
+    @Override
+    public void startChronometer() {
 
-    private void setChronometer() {
-
-        chronometer.setBase(SystemClock.elapsedRealtime());
-
-        chronometer.setOnChronometerTickListener(new android.widget.Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(android.widget.Chronometer chronometer) {
-
-
-                Activity activity = getActivity();
-
-                long time = SystemClock.elapsedRealtime() - chronometer.getBase();
-                int h = (int) (time / 3600000);
-                int m = (int) (time - h * 3600000) / 60000;
-                int s = (int) (time - h * 3600000 - m * 60000) / 1000;
-                // String hh = h < 10 ? "0"+h: h+"";
-                String mm = m < 10 ? "0" + m : m + "";
-                String ss = s < 10 ? "0" + s : s + "";
-                // chronometer.setText(hh+":"+mm+":"+ss);
-                chronometer.setText(mm + ":" + ss);
-
-            }
-        });
+        setChronometer();
+        chronometerRecord.start();
 
     }
 
     @Override
-    public void onColorEffectClicked(int position) {
+    public void stopChronometer() {
 
-        Log.d("Camera2", "onImageClicked " + position);
+        chronometerRecord.stop();
+    }
+
+    @Override
+    public void colorEffect(int position) {
 
         mPreviewBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
@@ -926,6 +977,11 @@ public class Camera2VideoFragment extends Fragment implements ColorEffectClickLi
 
         updatePreview();
 
+    }
+
+    @Override
+    public Context getContext() {
+        return null;
     }
 
     /**

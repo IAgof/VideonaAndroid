@@ -40,7 +40,7 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
     public void execute() {
 
 
-        startRecordFile();
+
 
     }
 
@@ -52,6 +52,7 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
 
         recordFile.setIsRecordingFile(true);
 
+        recordFile.setRecordFilePathString(getRecordFileString());
 
     }
 
@@ -64,16 +65,18 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
 
         recordFile.setIsRecordingFile(false);
 
-        /// TODO setVideoDuration
-        //recordFile.setVideoDuration();
+        /// TODO setRecordFileDurationLong
+        //recordFile.setRecordFileDurationLong();
 
     }
 
     /**
-     * ColorEffects
+     * Set color effect
+     *
+     * @param colorEffect
      */
     @Override
-    public void colorEffect(String colorEffect) {
+    public void setColorEffect(String colorEffect) {
 
         recordFile.setColorEffect(colorEffect);
 
@@ -89,6 +92,17 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
         return getOutputRecordFile(MEDIA_TYPE_VIDEO).toString();
     }
 
+    /**
+     * Set video duration
+     *
+     * @param recordFileDurationLong
+     */
+    @Override
+    public void setRecordFileDurationLong(long recordFileDurationLong) {
+
+        recordFile.setRecordFileDurationLong(recordFileDurationLong);
+
+    }
 
     /**
      * get Record File
@@ -108,7 +122,7 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
      */
     public static void setRecordFileDuration(long videoDuration){
 
-        recordFile.setVideoDuration(videoDuration);
+        recordFile.setRecordFileDurationLong(videoDuration);
 
     }
 

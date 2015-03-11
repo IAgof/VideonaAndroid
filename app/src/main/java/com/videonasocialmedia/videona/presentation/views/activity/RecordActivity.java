@@ -1,4 +1,14 @@
-
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ * Álvaro Martínez Marco
+ *
+ */
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
@@ -50,54 +60,130 @@ import butterknife.InjectView;
 
 public class RecordActivity extends Activity implements RecordView, ColorEffectClickListener {
 
+    /**
+     * LOG_TAG
+     */
     private final String LOG_TAG = getClass().getSimpleName();
 
+    /**
+     * Camera Android
+     */
     private Camera mCamera;
+
+    /**
+     * CameraPreview
+     */
     private CameraPreview mCameraPreview;
+
+    /**
+     * MediaRecorder
+     */
     private MediaRecorder mMediaRecorder;
+
+    /**
+     * Boolean, control is recording file
+     */
     private boolean isRecording = false;
 
+    /**
+     * Boolean is color effect selected
+     */
     private static Boolean isColorEffect;
 
-    /*ACTIVITY REQUEST CODES*/
+    /**
+     * Request code camera capture
+     */
     private static final int CAMERA_CAPTURE_VIDEO_REQUEST_CODE = 200;
+
+    /**
+     * Request code camera trim
+     */
     private static final int CAMERA_TRIM_VIDEO_REQUEST_CODE = 300;
+
+    /**
+     * Request code video share
+     */
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
 
-    private Uri fileUri; // file url to store image/video
+    /**
+     * Uri, file url to store image/video
+     */
+    private Uri fileUri;
 
+    /**
+     * String absolute path video record file
+     */
     private String videoRecordString;
 
+    /**
+     * Boolean, register button back pressed to exit from app
+     */
     private boolean buttonBackPressed = false;
 
+    /**
+     * Int cameraId. Future use to multicamera
+     */
     private int cameraId = 0;
 
+    /**
+     * Int media type video
+     */
     public static final int MEDIA_TYPE_VIDEO = 2;
 
+    /**
+     * User private preferences
+     */
     private static UserPreferences appPrefs;
 
+    /**
+     * Adapter to add images color effect
+     */
     private ColorEffectAdapter colorEffectAdapter;
 
+    /**
+     * Button to record video
+     */
     @InjectView(R.id.button_record)
     ImageButton buttonRecord;
 
+    /**
+     * Chronometer, indicate time recording video
+     */
     @InjectView(R.id.chronometer_record)
     Chronometer chronometerRecord;
 
+    /**
+     * Button to apply color effects
+     */
     @InjectView(R.id.button_color_effect)
     ImageButton buttonColorEffect;
 
+    /**
+     * ListView to use horizontal adapter
+     */
     @InjectView(R.id.listview_items_color_effect)
     TwoWayView listViewItemsColorEffect;
 
+    /**
+     * RelativeLayout to show and hide color effects
+     */
     @InjectView(R.id.relativelayout_color_effect)
     RelativeLayout relativeLayoutColorEffect;
 
+    /**
+     * FrameLayout to camera preview
+     */
     @InjectView(R.id.framelayout_camera_preview)
     ViewGroup frameLayoutCameraPreview;
 
+    /**
+     * Tracker google analytics
+     */
     private Tracker t;
 
+    /**
+     * RecordPresenter
+     */
     private RecordPresenter mRecordPresenter;
 
     @Override
@@ -275,13 +361,15 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         ///TODO Update view with color effect marked, background and text
 
-        // Restart colorEffect view.
-        colorEffectAdapter = null;
+        // Restart ColorEffect view.
+       /* colorEffectAdapter = null;
         colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, new ColorEffectList().getColorEffectList());
         colorEffectAdapter.setViewClickListener(RecordActivity.this);
 
 
         listViewItemsColorEffect.setAdapter(colorEffectAdapter);
+
+        */
 
 
     }
@@ -362,6 +450,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         long chronometer = SystemClock.elapsedRealtime() - chronometerRecord.getBase();
         //  GetVideoRecordedUseCaseController.setRecordFileDuration(chronometer);
 
+        mRecordPresenter.setRecordFileDurationLong(chronometer);
+
         Log.d(LOG_TAG, " chronometerRecord " + chronometer);
         Log.d(LOG_TAG, " chronometerRecord TimeUtils " + TimeUtils.toFormattedTime((int) chronometer));
 
@@ -382,6 +472,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect() + " filter " + appPrefs.getColorEffect());
         trackColorEffect(appPrefs.getColorEffect());
 
+        mRecordPresenter.setColorEffect(appPrefs.getColorEffect());
 
         // ¿?
         //appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
@@ -596,7 +687,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         mMediaRecorder.setVideoEncodingBitRate(ConfigUtils.VIDEO_ENCODING_BIT_RATE);
 
         // Set output file
-        videoRecordString = getOutputRecordFile(MEDIA_TYPE_VIDEO).toString();
+        videoRecordString = mRecordPresenter.getRecordFileString(); //getOutputRecordFile(MEDIA_TYPE_VIDEO).toString();
 
         // Check if videoRecordString exists
         File f = new File(videoRecordString);
