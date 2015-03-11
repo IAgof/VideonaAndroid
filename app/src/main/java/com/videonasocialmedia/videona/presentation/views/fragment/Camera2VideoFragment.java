@@ -65,8 +65,9 @@ import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.presentation.views.AutoFitTextureView;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
+import com.videonasocialmedia.videona.utils.Constants;
+
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -803,7 +804,7 @@ public class Camera2VideoFragment extends Fragment implements RecordView, ColorE
         // File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
         //       Environment.DIRECTORY_MOVIES), "VideonaApp");
 
-        File mediaStorageDir = new File(ConstantsUtils.pathApp);
+        File mediaStorageDir = new File(Constants.pathApp);
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 

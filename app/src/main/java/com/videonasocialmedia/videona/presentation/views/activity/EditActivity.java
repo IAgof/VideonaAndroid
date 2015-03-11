@@ -36,13 +36,13 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.CutVideoPlayerState;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.RangeSeekBar;
 import com.videonasocialmedia.videona.utils.UserPreferences;
-import com.videonasocialmedia.videona.utils.utils.TimeUtils;
-import com.videonasocialmedia.videona.utils.utils.VideoUtils;
+import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -555,7 +555,7 @@ public class EditActivity extends Activity {
                 //  String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
                 //  VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
 
-                VideoUtils.switchAudio(pathvideoTrim, musicSelected, ConstantsUtils.videoMusicTempFile);
+                VideoUtils.switchAudio(pathvideoTrim, musicSelected, Constants.videoMusicTempFile);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -616,7 +616,7 @@ public class EditActivity extends Activity {
 
         String inputFileName = videoRecorded;
 
-        pathvideoTrim = ConstantsUtils.pathVideoTrim + File.separator + videoTrim;
+        pathvideoTrim = Constants.pathVideoTrim + File.separator + videoTrim;
 
         Log.d(LOG_TAG, "VideonaMainActivity input " + inputFileName + " output " + pathvideoTrim + " start " + start + " length " + length);
 
@@ -628,7 +628,7 @@ public class EditActivity extends Activity {
     private void renameTrimVideo(String videoTrim) {
 
         String newVideoTrim = videoTrim;
-        String videoTrimAux = ConstantsUtils.pathApp + ConstantsUtils.videoCutAuxName;
+        String videoTrimAux = Constants.pathApp + Constants.videoCutAuxName;
 
         File originalVideo = new File(videoTrim);
         if (originalVideo.exists()) {

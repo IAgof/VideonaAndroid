@@ -14,14 +14,14 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import com.videonasocialmedia.videona.domain.GetVideoRecordedUseCase;
 import com.videonasocialmedia.videona.domain.GetVideoRecordedUseCaseController;
 import com.videonasocialmedia.videona.domain.UseCase;
+import com.videonasocialmedia.videona.domain.editor.GetVideoRecordedUseCaseController;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 
 public class RecordPresenter extends Presenter {
-
+    
+    GetVideoRecordedUseCase useCase = new GetVideoRecordedUseCaseController();
 
     private final RecordView mRecordView;
-
-    GetVideoRecordedUseCase useCase = new GetVideoRecordedUseCaseController();
 
     public RecordPresenter(RecordView mRecordView) {
 

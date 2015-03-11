@@ -38,7 +38,6 @@ import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
-import com.videonasocialmedia.videona.utils.utils.ConfigUtils;
 
 import java.math.BigDecimal;
 

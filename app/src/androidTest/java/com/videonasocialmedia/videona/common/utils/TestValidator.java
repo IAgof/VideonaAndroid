@@ -10,7 +10,7 @@ package com.videonasocialmedia.videona.common.utils;
  * Juan Javier Cabanas
  */
 
-import com.videonasocialmedia.videona.utils.Validator;
+import com.videonasocialmedia.videona.utils.StringUtils;
 
 import junit.framework.TestCase;
 
@@ -31,7 +31,7 @@ public class TestValidator extends TestCase {
         };
 
         for (int i = 0; i < inputs.length; i++) {
-            assertEquals(inputs[i] + ": " + expected[i], expected[i], Validator.validateUserName(inputs[i]));
+            assertEquals(inputs[i] + ": " + expected[i], expected[i], StringUtils.validateUserName(inputs[i]));
         }
     }
 
@@ -79,7 +79,7 @@ public class TestValidator extends TestCase {
         };
 
         for (int i = 0; i < inputs.length; i++) {
-            assertEquals(inputs[i] + ": " + expected[i], expected[i], Validator.validateEmail(inputs[i]));
+            assertEquals(inputs[i] + ": " + expected[i], expected[i], StringUtils.validateEmail(inputs[i]));
         }
     }
 
