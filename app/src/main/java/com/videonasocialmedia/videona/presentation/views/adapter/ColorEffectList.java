@@ -13,7 +13,8 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.Constants;
+
 
 import java.util.ArrayList;
 
@@ -27,15 +28,15 @@ public class ColorEffectList {
         // Color Effects constants in Android_L
         if (ConfigUtils.isAndroidL) {
 
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_NONE);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_MONO);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_NEGATIVE);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_SOLARIZE);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_SEPIA);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_POSTERIZE);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_WHITEBOARD);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_BLACKBOARD);
-            colorEffects.add(ConstantsUtils.COLOR_EFFECT_AQUA);
+            colorEffects.add(Constants.COLOR_EFFECT_NONE);
+            colorEffects.add(Constants.COLOR_EFFECT_MONO);
+            colorEffects.add(Constants.COLOR_EFFECT_NEGATIVE);
+            colorEffects.add(Constants.COLOR_EFFECT_SOLARIZE);
+            colorEffects.add(Constants.COLOR_EFFECT_SEPIA);
+            colorEffects.add(Constants.COLOR_EFFECT_POSTERIZE);
+            colorEffects.add(Constants.COLOR_EFFECT_WHITEBOARD);
+            colorEffects.add(Constants.COLOR_EFFECT_BLACKBOARD);
+            colorEffects.add(Constants.COLOR_EFFECT_AQUA);
 
         } else {
 

@@ -15,7 +15,7 @@ import com.videonasocialmedia.videona.R;
 
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
@@ -114,36 +114,36 @@ public class VideonaMainActivity extends Activity {
      */
     private void checkPath() throws IOException {
 
-        File f = new File(ConstantsUtils.pathApp);
+        File f = new File(Constants.pathApp);
         if (!f.exists()) {
             f.mkdir();
 
             Log.d(LOG_TAG, "Path Videona created");
         }
 
-        File fTrim = new File(ConstantsUtils.pathVideoTrim);
+        File fTrim = new File(Constants.pathVideoTrim);
         if (!fTrim.exists()) {
             fTrim.mkdir();
 
-            Log.d(LOG_TAG, "Path " + ConstantsUtils.pathVideoTrim + " created");
+            Log.d(LOG_TAG, "Path " + Constants.pathVideoTrim + " created");
         }
 
-        File fMusic = new File(ConstantsUtils.pathVideoMusic);
+        File fMusic = new File(Constants.pathVideoMusic);
         if (!fMusic.exists()) {
             fMusic.mkdir();
 
-            Log.d(LOG_TAG, "Path " + ConstantsUtils.pathVideoMusic + " created");
+            Log.d(LOG_TAG, "Path " + Constants.pathVideoMusic + " created");
         }
 
-        File fTemp = new File(ConstantsUtils.pathVideoTemp);
+        File fTemp = new File(Constants.pathVideoTemp);
         if (!fTemp.exists()) {
             fTemp.mkdir();
 
-            Log.d(LOG_TAG, "Path " + ConstantsUtils.pathVideoTemp + " created");
+            Log.d(LOG_TAG, "Path " + Constants.pathVideoTemp + " created");
         }
 
 
-        File fTempAV = new File(ConstantsUtils.videoMusicTempFile);
+        File fTempAV = new File(Constants.videoMusicTempFile);
 
         if (fTempAV.exists()) {
             fTempAV.delete();

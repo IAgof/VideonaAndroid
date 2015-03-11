@@ -1,16 +1,16 @@
-package com.videonasocialmedia.videona.presentation.presenters.social;
+package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.social.LoginUseCase;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.login.LoginView;
-import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
 
 /**
  * Created by jca on 9/3/15.
  */
-public class LoginPresenter implements OnLoginFinishedListener{
+public class LoginPresenter implements OnLoginFinishedListener {
 
     LoginUseCase loginUseCase;
     LoginView loginView;

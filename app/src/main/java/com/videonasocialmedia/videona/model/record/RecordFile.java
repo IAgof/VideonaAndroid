@@ -11,14 +11,8 @@
 
 package com.videonasocialmedia.videona.model.record;
 
+
 import android.net.Uri;
-import android.util.Log;
-
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class RecordFile {
 

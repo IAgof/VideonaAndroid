@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015. Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
+
 package com.videonasocialmedia.videona.model.sources.rest.callbacks;
 
 import retrofit.Callback;
@@ -5,7 +12,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 /**
- * Created by jca on 5/3/15.
+ * Class that implements callback for sign up api request
+ *
+ * @author Juan Javier Cabanas Abascal
  */
 public class SignUpCallback implements Callback<Response> {
     /**

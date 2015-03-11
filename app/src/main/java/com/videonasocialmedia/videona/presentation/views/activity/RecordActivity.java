@@ -33,7 +33,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectCli
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.utils.TimeUtils;
@@ -292,6 +292,11 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         return this;
     }
 
+
+    /**
+     * La funcionalidad no puede estar en la actividad
+     * Tiene que estar en el dominio
+     */
     @Override
     public void startRecordVideo() {
 
@@ -318,6 +323,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         }
 
     }
+
 
     @Override
     public void stopRecordVideo() {
@@ -461,7 +467,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
 
-        File fTempAV = new File(ConstantsUtils.videoMusicTempFile);
+        File fTempAV = new File(Constants.videoMusicTempFile);
 
         if (appPrefs.getIsMusicON() && fTempAV.exists()) {
 
@@ -633,7 +639,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     private static File getOutputRecordFile(int type) {
 
-        File mediaStorageDir = new File(ConstantsUtils.pathApp);
+        File mediaStorageDir = new File(Constants.pathApp);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {

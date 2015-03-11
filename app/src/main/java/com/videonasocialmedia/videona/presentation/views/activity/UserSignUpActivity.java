@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
 
-import com.videonasocialmedia.videona.presentation.presenters.social.SignUpPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.SignUpPresenter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

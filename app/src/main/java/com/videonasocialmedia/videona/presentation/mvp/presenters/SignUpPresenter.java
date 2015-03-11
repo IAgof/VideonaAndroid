@@ -1,11 +1,12 @@
-package com.videonasocialmedia.videona.presentation.presenters.social;
+package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.social.LoginUseCase;
 import com.videonasocialmedia.videona.domain.social.UserRegistrationUseCase;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.login.LoginActivity;
 import com.videonasocialmedia.videona.presentation.views.login.RegisterView;
-import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
+
 
 /**
  * Created by jca on 9/3/15.

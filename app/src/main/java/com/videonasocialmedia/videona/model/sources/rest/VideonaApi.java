@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2015. Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
+
 package com.videonasocialmedia.videona.model.sources.rest;
 
 import com.videonasocialmedia.videona.model.sources.rest.requests.RegisterRequestBody;
@@ -12,14 +19,9 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/*
- * Copyright (C) 2015 Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- *
- * Authors:
- * Juan Javier Cabanas
+/**
+ * Interface that defines the interactions with videona api
+ * @author Juan Javier Cabanas
  */
 public interface VideonaApi {
 

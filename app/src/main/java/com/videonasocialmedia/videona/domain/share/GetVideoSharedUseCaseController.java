@@ -9,7 +9,8 @@
  *
  */
 
-package com.videonasocialmedia.videona.domain;
+package com.videonasocialmedia.videona.domain.share;
+
 
 public class GetVideoSharedUseCaseController implements GetVideoSharedUseCase {
     @Override

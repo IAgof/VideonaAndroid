@@ -9,7 +9,9 @@
  *
  */
 
-package com.videonasocialmedia.videona.domain;
+package com.videonasocialmedia.videona.domain.share;
+
+import com.videonasocialmedia.videona.domain.UseCase;
 
 public interface GetVideoSharedUseCase extends UseCase {
 }

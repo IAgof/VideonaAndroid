@@ -27,7 +27,7 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
@@ -289,17 +289,17 @@ public class ShareActivity extends Activity {
 
         String videonaMusic = "V_MUSIC_" + new File(videoEdited).getName().substring(7);
 
-        String pathVideonaFinal = ConstantsUtils.pathVideoMusic + File.separator + videonaMusic;
+        String pathVideonaFinal = Constants.pathVideoMusic + File.separator + videonaMusic;
 
         int length = appPrefs.getVideoDurationTrim();
 
-        Log.d(LOG_TAG, "VideonaMainActivity cut " + ConstantsUtils.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
+        Log.d(LOG_TAG, "VideonaMainActivity cut " + Constants.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
 
-        VideonaMainActivity.cut(ConstantsUtils.videoMusicTempFile, pathVideonaFinal, 0, length);
+        VideonaMainActivity.cut(Constants.videoMusicTempFile, pathVideonaFinal, 0, length);
 
         videoEdited = pathVideonaFinal;
 
-        File temp = new File(ConstantsUtils.videoMusicTempFile);
+        File temp = new File(Constants.videoMusicTempFile);
         temp.deleteOnExit();
 
         appPrefs.setIsMusicON(false);

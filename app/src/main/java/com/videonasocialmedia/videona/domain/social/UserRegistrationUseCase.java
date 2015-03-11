@@ -1,7 +1,7 @@
 package com.videonasocialmedia.videona.domain.social;
 
 import com.videonasocialmedia.videona.model.sources.VideonaRestSource;
-import com.videonasocialmedia.videona.presentation.presenters.social.OnSignedUpListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSignedUpListener;
 
 
 import retrofit.RetrofitError;

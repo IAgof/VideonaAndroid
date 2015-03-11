@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.presentation.views.fragment.Camera2VideoFragment;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.util.ArrayList;
@@ -161,62 +161,62 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         String colorName = " ";
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_AQUA) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_AQUA) == 0) {
 
             return getContext().getString(R.string.filter_effect_aqua);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_BLACKBOARD) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_BLACKBOARD) == 0) {
 
             return getContext().getString(R.string.filter_effect_blackboard);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_MONO) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_MONO) == 0) {
 
             return getContext().getString(R.string.filter_effect_mono);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_NEGATIVE) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEGATIVE) == 0) {
 
             return getContext().getString(R.string.filter_effect_negative);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_NONE) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NONE) == 0) {
 
             return getContext().getString(R.string.filter_effect_none);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_POSTERIZE) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_POSTERIZE) == 0) {
 
             return getContext().getString(R.string.filter_effect_posterice);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_SEPIA) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SEPIA) == 0) {
 
             return getContext().getString(R.string.filter_effect_sepia);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_WHITEBOARD) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_WHITEBOARD) == 0) {
 
             return getContext().getString(R.string.filter_effect_whiteboard);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_SOLARIZE) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SOLARIZE) == 0) {
 
             return getContext().getString(R.string.filter_effect_solarice);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_EMBOSS) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_EMBOSS) == 0) {
 
             return getContext().getString(R.string.filter_effect_emboss);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_SKETCH) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SKETCH) == 0) {
 
             return getContext().getString(R.string.filter_effect_sketch);
         }
 
-        if (colorEffectName.compareTo(ConstantsUtils.COLOR_EFFECT_NEON) == 0) {
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEON) == 0) {
 
             return getContext().getString(R.string.filter_effect_neon);
         }

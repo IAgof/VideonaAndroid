@@ -11,8 +11,9 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.domain.GetVideoRecordedUseCaseController;
+
 import com.videonasocialmedia.videona.domain.UseCase;
+import com.videonasocialmedia.videona.domain.editor.GetVideoRecordedUseCaseController;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 
 public class RecordPresenter extends Presenter {

@@ -14,8 +14,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.presenters.social.LoginPresenter;
-import com.videonasocialmedia.videona.presentation.views.record.RecordActivity;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.LoginPresenter;
+
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -59,7 +59,7 @@ public class LoginActivity extends Activity implements LoginView{
 
     @OnClick(R.id.new_user_button)
     public void goToUserSignUpActivity() {
-        navigate(UserSignUpActivity.class);
+        navigate(com.videonasocialmedia.videona.presentation.views.login.UserSignUpActivity.class);
     }
 
 

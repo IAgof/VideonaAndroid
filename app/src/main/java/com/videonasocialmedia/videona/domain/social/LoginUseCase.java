@@ -6,7 +6,7 @@ import android.util.Log;
 import com.videonasocialmedia.videona.model.entities.social.Session;
 import com.videonasocialmedia.videona.model.entities.social.User;
 import com.videonasocialmedia.videona.model.sources.VideonaRestSource;
-import com.videonasocialmedia.videona.presentation.presenters.social.OnLoginFinishedListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnLoginFinishedListener;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import org.scribe.builder.ServiceBuilder;

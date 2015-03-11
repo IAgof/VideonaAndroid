@@ -25,7 +25,7 @@ import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.fragment.Camera2VideoFragment;
-import com.videonasocialmedia.videona.utils.utils.ConstantsUtils;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 
@@ -55,7 +55,7 @@ public class RecordAndroidLActivity extends Activity {
 
         Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
 
-        File fTempAV = new File(ConstantsUtils.videoMusicTempFile);
+        File fTempAV = new File(Constants.videoMusicTempFile);
 
         if (appPrefs.getIsMusicON() && fTempAV.exists()) {
 
