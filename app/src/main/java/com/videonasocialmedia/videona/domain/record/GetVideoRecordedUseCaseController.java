@@ -91,12 +91,12 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
     /**
      * Set video duration
      *
-     * @param recordFileDurationLong
+     * @param recordFileDuration
      */
     @Override
-    public void setRecordFileDurationLong(long recordFileDurationLong) {
+    public void setRecordFileDuration(long recordFileDuration) {
 
-        recordFile.setRecordFileDurationLong(recordFileDurationLong);
+        recordFile.setRecordFileDuration(recordFileDuration);
 
     }
 
@@ -108,17 +108,6 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
     public static String getRecordFile(){
 
         return recordFile.getRecordFilePathString();
-
-    }
-
-    /**
-     * set Record File Duration
-     *
-     * @param videoDuration
-     */
-    public static void setRecordFileDuration(long videoDuration){
-
-        recordFile.setRecordFileDurationLong(videoDuration);
 
     }
 

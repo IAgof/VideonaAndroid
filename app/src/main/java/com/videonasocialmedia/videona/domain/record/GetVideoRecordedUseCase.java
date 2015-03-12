@@ -40,7 +40,7 @@ public interface GetVideoRecordedUseCase extends UseCase {
     /**
      * Set video duration
      */
-    public void setRecordFileDurationLong(long recordFileDurationLong);
+    public void setRecordFileDuration(long recordFileDuration);
 
 
 }
