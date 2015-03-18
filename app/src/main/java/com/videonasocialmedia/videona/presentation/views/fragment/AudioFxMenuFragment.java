@@ -49,7 +49,7 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
     @OnClick(R.id.boton_audio_prueba)
     public void showLog() {
         Log.d("Fragment Audio", "He pulsado el primer botón");
-        imgButton.setImageResource(R.drawable.activity_edit_icon_transition_normal);
+        //imgButton.setImageResource(R.drawable.activity_edit_icon_transition_normal);
 
         //TODO poner el fragment de abajo
     }

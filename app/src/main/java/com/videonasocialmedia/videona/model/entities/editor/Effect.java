@@ -12,5 +12,19 @@
 
 package com.videonasocialmedia.videona.model.entities.editor;
 
-public interface Effect {
+import java.net.URI;
+
+public abstract class Effect {
+
+    protected URI iconUri;
+    protected String name;
+
+    public URI getIconUri() {
+        return iconUri;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

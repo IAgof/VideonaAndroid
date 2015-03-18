@@ -51,11 +51,6 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
     }
 
     @Override
-    public void showCatalog() {
-
-    }
-
-    @Override
     public void showLoading() {
 
     }

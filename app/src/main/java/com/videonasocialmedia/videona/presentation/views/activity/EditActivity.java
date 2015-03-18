@@ -38,7 +38,7 @@ public class EditActivity extends Activity implements EditorView {
     ImageButton lookFxButton;
     @InjectView(R.id.edit_button_scissor)
     ImageButton scissorButton;
-    @InjectView(R.id.edit_button_sound)
+    @InjectView(R.id.edit_button_audio)
     ImageButton audioFxButton;
 
     @InjectView(R.id.edit_preview_player)
@@ -73,7 +73,7 @@ public class EditActivity extends Activity implements EditorView {
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
     }
 
-    @OnClick(R.id.edit_button_sound)
+    @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
         if (audioFxButton == null)
             audioFxMenuFragment = new AudioFxMenuFragment();

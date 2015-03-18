@@ -17,8 +17,6 @@ public interface FxCatalogView{
 
     public void showCatalog(List<com.videonasocialmedia.videona.model.entities.editor.Effect> movieList);
 
-    void showCatalog();
-
     void showLoading ();
 
     void hideLoading ();
