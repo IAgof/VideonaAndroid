@@ -10,8 +10,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="45dp"
     android:background="#ffffff"
     android:orientation="vertical">
+
 
     <LinearLayout
         android:id="@+id/edit_left_panel"
@@ -24,25 +26,34 @@
             android:id="@+id/edit_button_scissor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/activity_edit_icon_fx_normal" />
+            android:background="@color/pastel_palette_orange"
+            android:padding="15dp"
+            android:src="@drawable/activity_edit_icon_cut_normal" />
 
         <ImageButton
             android:id="@+id/edit_button_fx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/pastel_palette_grey"
+            android:padding="15dp"
             android:src="@drawable/activity_edit_icon_fx_normal" />
+
+        <ImageButton
+            android:id="@+id/edit_button_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/pastel_palette_blue"
+            android:padding="15dp"
+            android:src="@drawable/activity_edit_icon_audio_normal" />
 
         <ImageButton
             android:id="@+id/edit_button_look"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/activity_edit_icon_fx_normal" />
-
-        <ImageButton
-            android:id="@+id/edit_button_sound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/activity_edit_icon_fx_normal" />
+            android:background="@color/pastel_palette_yellow"
+            android:padding="15dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/activity_edit_icon_look_normal" />
 
     </LinearLayout>
 
@@ -73,6 +84,54 @@
             android:id="@+id/edit_preview_player"
             android:layout_width="320dp"
             android:layout_height="180dp" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutRangeSeekBar"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentTop="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/pastel_palette_blue"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutRangeSeekBar"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <SeekBar
+            android:id="@+id/seekBarPoint"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:indeterminate="false"
+            android:longClickable="true"
+            android:maxHeight="2dp"
+            android:nestedScrollingEnabled="false"
+            android:progressDrawable="@color/pastel_palette_blue"
+            android:splitTrack="false"
+            android:thumbTint="@color/videona_blue_4" />
 
     </LinearLayout>
 

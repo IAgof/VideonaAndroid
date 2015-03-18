@@ -13,23 +13,34 @@
     android:orientation="vertical">
 
     <ImageButton
+        android:id="@+id/edit_fragment_sound_button_fx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pastel_palette_green"
+        android:padding="15dp"
+        android:src="@drawable/edit_fragment_sound_icon_fx_normal" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_sound_button_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pastel_palette_purple"
+        android:padding="15dp"
+        android:src="@drawable/edit_fragment_sound_icon_music_normal" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_sound_button_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/pastel_palette_pink_2"
+        android:padding="15dp"
+        android:src="@drawable/edit_fragment_sound_icon_audio_normal" />
+
+    <ImageButton
         android:id="@+id/boton_audio_prueba"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_sound_effects_normal" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_sound_effects_normal" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_sound_effects_normal" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_sound_effects_normal" />
+        android:background="@color/pastel_palette_red"
+        android:padding="15dp"
+        android:src="@drawable/activity_edit_icon_audio_normal" />
 </LinearLayout>

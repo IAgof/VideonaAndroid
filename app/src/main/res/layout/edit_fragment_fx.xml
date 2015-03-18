@@ -16,20 +16,28 @@
         android:id="@+id/boton_video_prueba"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_fx_normal" />
+        android:src="@drawable/activity_edit_icon_fx_normal"
+        android:background="@color/pastel_palette_orange"
+        android:padding="15dp"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_fx_normal" />
+        android:src="@drawable/activity_edit_icon_fx_normal"
+        android:background="@color/pastel_palette_orange"
+        android:padding="15dp"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_fx_normal" />
+        android:src="@drawable/activity_edit_icon_fx_normal"
+        android:background="@color/pastel_palette_orange"
+        android:padding="15dp"/>
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_fx_normal" />
+        android:src="@drawable/activity_edit_icon_fx_normal"
+        android:background="@color/pastel_palette_orange"
+        android:padding="15dp"/>
 </LinearLayout>

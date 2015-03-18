@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2015. Videona Socialmedia SL
   ~ http://www.videona.com
   ~ info@videona.com
@@ -7,31 +6,39 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <ImageButton
+        android:id="@+id/edit_fragment_scissors_button_razor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_cut_normal"
-        />
+        android:background="@color/pastel_palette_green"
+        android:padding="15dp"
+        android:src="@drawable/edit_fragment_scissors_icon_razor_normal" />
 
     <ImageButton
+        android:id="@+id/edit_fragment_scissors_button_crop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_cut_normal"
-        />
+        android:background="@color/pastel_palette_purple"
+        android:padding="15dp"
+        android:src="@drawable/edit_fragment_scissors_icon_crop_normal" />
 
     <ImageButton
+        android:id="@+id/edit_fragment_scissors_button_add_clip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_cut_normal"
-        />
+        android:background="@color/pastel_palette_pink_2"
+        android:padding="15dp"
+        android:src="@drawable/edit_fragment_scissors_icon_add_clip_normal" />
 
     <ImageButton
+        android:id="@+id/edit_fragment_scissors_button_duplicate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_cut_normal"
-        />
+        android:background="@color/pastel_palette_red"
+        android:padding="15dp"
+        android:src="@drawable/edit_fragment_scissors_icon_duplicate_normal" />
 </LinearLayout>
