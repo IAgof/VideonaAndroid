@@ -135,7 +135,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         absoluteMinValuePrim = absoluteMinValue.doubleValue();
         absoluteMaxValuePrim = absoluteMaxValue.doubleValue();
         numberType = NumberType.fromNumber(absoluteMinValue);
-        numIncrement = EditActivity.durationVideoRecorded;
+        //numIncrement = EditActivity.durationVideoRecorded;
         // make RangeSeekBar focusable. This solves focus handling issues in case EditText widgets are being used along with the RangeSeekBar within ScollViews.
         init();
         //onDraw(canvas2);

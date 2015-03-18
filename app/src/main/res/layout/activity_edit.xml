@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+~ Copyright (c) 2015. Videona Socialmedia SL
+~ http://www.videona.com
+~ info@videona.com
+~ All rights reserved
+-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,53 +24,57 @@
             android:id="@+id/edit_button_scissor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/activity_edit_icon_fx_normal"/>
+            android:src="@drawable/activity_edit_icon_fx_normal" />
 
         <ImageButton
             android:id="@+id/edit_button_fx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/activity_edit_icon_fx_normal"/>
+            android:src="@drawable/activity_edit_icon_fx_normal" />
 
         <ImageButton
             android:id="@+id/edit_button_look"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/activity_edit_icon_fx_normal"/>
+            android:src="@drawable/activity_edit_icon_fx_normal" />
 
         <ImageButton
             android:id="@+id/edit_button_sound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/activity_edit_icon_fx_normal"/>
+            android:src="@drawable/activity_edit_icon_fx_normal" />
 
     </LinearLayout>
 
-    <View
+    <FrameLayout
         android:id="@+id/edit_right_panel"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/edit_view_panel">
-        </View>
+        android:layout_alignParentRight="true">
 
-    <View
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/edit_bottom_panel"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_toEndOf="@+id/edit_view_panel">
-        </View>
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/edit_view_panel"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
         <VideoView
+            android:id="@+id/edit_preview_player"
             android:layout_width="320dp"
             android:layout_height="180dp" />
 
     </LinearLayout>
 
 </RelativeLayout>
+

@@ -10,7 +10,7 @@
  *
  */
 
-package com.videonasocialmedia.videona.model.editor;
+package com.videonasocialmedia.videona.model.entities.editor;
 
 public class Transition {
 }
