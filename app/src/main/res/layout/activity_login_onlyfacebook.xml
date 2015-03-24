@@ -1,0 +1,140 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/activity_login_background_skateboard"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.videonasocialmedia.videona.LoginActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/please_login"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_big"
+        android:layout_margin="25dp" />
+
+    <Button
+        android:id="@+id/send_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:minHeight="50dp"
+        android:minWidth="120dp"
+        android:textColor="@android:color/white"
+        android:padding="@dimen/button_margin"
+        android:text="@string/login"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_alignTop="@+id/checkBox_remember_me"
+        android:layout_alignParentEnd="true"
+        android:focusableInTouchMode="false" />
+
+    <CheckBox
+        android:id="@+id/checkBox_remember_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/checkBox_remember_me"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/login_email_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/login_butons_lined"
+        android:layout_below="@+id/login_butons_lined"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="false"
+        android:baselineAlignBottom="false"
+        android:clickable="false"
+        android:src="@drawable/activity_login_icon_email_normal" />
+
+    <EditText
+        android:id="@+id/login_text_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/login_password_field"
+        android:layout_alignTop="@+id/login_email_image"
+        android:ems="10"
+        android:hint="@string/login_hint"
+        android:maxEms="8"
+        android:minEms="10"
+        android:minHeight="28dp"
+        android:minWidth="218dp"
+        android:textColorHint="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/login_butons_lined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">>
+
+        <ImageButton
+            android:id="@+id/login_facebook_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/accesibility_login_with_facebook"
+            android:cropToPadding="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            android:scaleType="fitXY"
+            android:src="@drawable/activity_login_icon_facebook_normal" />
+
+        <ImageButton
+            android:id="@+id/login_g_plus_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/activity_login_icon_google_plus_normal" />
+
+        <ImageButton
+            android:id="@+id/login_twitter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/activity_login_icon_twitter_normal" />
+
+        <ImageButton
+            android:id="@+id/new_user_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/new_user_btn_content_descp"
+            android:src="@drawable/activity_login_icon_new_user_normal" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/login_password_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/login_email_image"
+        android:layout_toEndOf="@+id/login_email_image"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:maxEms="8"
+        android:minEms="10"
+        android:minHeight="28dp"
+        android:minWidth="218dp" />
+
+</RelativeLayout>
+
+
