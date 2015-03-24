@@ -3,6 +3,7 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
-import com.videonasocialmedia.videona.presentation.views.fragment.Camera2VideoFragment;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
+import com.videonasocialmedia.videona.presentation.views.fragment.Camera2VideoFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
@@ -43,8 +44,9 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
     private ColorEffectClickListener mColorEffectClickListener;
 
-    private Boolean isPressed = true;
-    private int lastPositionPressed = 0;
+    private String colorEffectName;
+    private Boolean isPressed = false;
+
 
 
     public void setViewClickListener(RecordActivity viewClickListener) {
@@ -81,6 +83,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
     @SuppressLint("ResourceAsColor")
     public View getView(final int position, View convertView, ViewGroup parent) {
 
+
         // Check if an existing view is being reused, otherwise inflate the view
         final ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -102,12 +105,23 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         }
 
 
-        String colorEffectName = colorEffectItems.get(position);
+        colorEffectName = colorEffectItems.get(position);
+
+        Log.d(LOG_TAG, "getView position " + position + " colorEffectName " + colorEffectName + " positionColorEffectPressed " + RecordActivity.positionColorEffectPressed);
 
         String colorEffectDrawableName = "common_filter_" + colorEffectName;
 
         // colorEffectName, key value to obtain drawable resources effect_ + colorEffectName
-        int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
+       // int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
+        int resourceId = 0;
+        if(RecordActivity.positionColorEffectPressed == position) {
+            isPressed = true;
+            resourceId = getResourceDrawableColorEffect(colorEffectName, isPressed);
+            isPressed = false;
+        } else {
+            resourceId = getResourceDrawableColorEffect(colorEffectName, isPressed);
+        }
+
         viewHolder.imageView.setImageResource(resourceId);
 
         viewHolder.textView.setText(getColorEffectName(colorEffectName));
@@ -135,7 +149,15 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
                 mColorEffectClickListener.onColorEffectClicked(position);
 
-                viewHolder.imageView.setBackgroundColor(R.color.videona_blue_5);
+                // Restart last position
+
+
+                isPressed = true;
+                colorEffectName = colorEffectItems.get(position);
+                int resourceIdPressed = getResourceDrawableColorEffect(colorEffectName, isPressed);
+                viewHolder.imageView.setImageResource(resourceIdPressed);
+                isPressed = false;
+                // viewHolder.imageView.setBackgroundColor(R.color.videona_blue_5);
                 viewHolder.textView.setTypeface(null, Typeface.BOLD);
 
 
@@ -152,6 +174,8 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         TextView textView;
 
     }
+
+
 
     /**
      * Return String name, different languages
@@ -222,6 +246,120 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         }
 
         return colorName;
+    }
+
+    public int getResourceDrawableColorEffect(String colorEffectName, boolean isPressed){
+
+        String colorName = " ";
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_AQUA) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_aqua_ad1_normal;
+            }else {
+                return R.drawable.common_filter_aqua_ad1_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_BLACKBOARD) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_blackboard_ad2_normal;
+            } else {
+                return R.drawable.common_filter_blackboard_ad2_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_MONO) == 0) {
+
+            if(!isPressed){
+                return R.drawable.common_filter_mono_ad4_normal;
+            } else {
+                return R.drawable.common_filter_mono_ad4_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEGATIVE) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_negative_ad5_normal;
+            } else {
+                return R.drawable.common_filter_negative_ad5_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NONE) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_none_ad0_normal;
+            } else {
+                return R.drawable.common_filter_none_ad0_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_POSTERIZE) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_posterize_ad7_normal;
+            } else {
+                return R.drawable.common_filter_posterize_ad7_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SEPIA) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_sepia_ad8_normal;
+            } else {
+                return R.drawable.common_filter_sepia_ad8_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_WHITEBOARD) == 0) {
+            if(!isPressed) {
+                return R.drawable.common_filter_whiteboard_ad11_normal;
+            } else {
+                return R.drawable.common_filter_whiteboard_ad11_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SOLARIZE) == 0) {
+
+            if(!isPressed){
+                return R.drawable.common_filter_solarize_ad10_normal;
+            } else {
+                return R.drawable.common_filter_solarize_ad10_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_EMBOSS) == 0) {
+
+            if(!isPressed){
+                return R.drawable.common_filter_emboss_ad3_normal;
+            } else {
+                return R.drawable.common_filter_emboss_ad3_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SKETCH) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_sketch_ad9_normal;
+            } else {
+                return R.drawable.common_filter_sketch_ad9_pressed;
+            }
+        }
+
+        if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEON) == 0) {
+
+            if(!isPressed) {
+                return R.drawable.common_filter_neon_ad6_normal;
+            } else {
+                return R.drawable.common_filter_neon_ad6_pressed;
+            }
+        }
+
+        return 0;
     }
 
 }

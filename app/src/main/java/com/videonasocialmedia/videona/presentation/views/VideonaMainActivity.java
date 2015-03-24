@@ -36,7 +36,6 @@ public class VideonaMainActivity extends Activity {
 
     public static Typeface tf;
 
-
     private static final int CAMERA_RECORD_VIDEO_REQUEST_CODE = 100;
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
 

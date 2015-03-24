@@ -35,24 +35,25 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.UserPreferences;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import org.lucasr.twowayview.TwoWayView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.ButterKnife;
@@ -185,6 +186,18 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      * RecordPresenter
      */
     private RecordPresenter mRecordPresenter;
+
+    /**
+     * Position color effect pressed
+     */
+    public static int positionColorEffectPressed = 0;
+
+    /**
+     *
+     *
+     */
+    public ArrayList<String> colorFilter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -358,18 +371,18 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         colorEffect(position);
 
+        positionColorEffectPressed = position;
 
         ///TODO Update view with color effect marked, background and text
 
         // Restart ColorEffect view.
-       /* colorEffectAdapter = null;
-        colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, new ColorEffectList().getColorEffectList());
-        colorEffectAdapter.setViewClickListener(RecordActivity.this);
+      //  colorEffectAdapter = null;
+      //  colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, new ColorEffectList().getColorEffectList());
+      //  colorEffectAdapter.setViewClickListener(RecordActivity.this);
 
+        //listViewItemsColorEffect.setAdapter(colorEffectAdapter);
 
-        listViewItemsColorEffect.setAdapter(colorEffectAdapter);
-
-        */
+        colorEffectAdapter.notifyDataSetChanged();
 
 
     }
@@ -467,7 +480,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     public void colorEffect(int position) {
 
 
-        appPrefs.setColorEffect(CameraPreview.colorEffects.get(position));
+       // appPrefs.setColorEffect(CameraPreview.colorEffects.get(position));
+        appPrefs.setColorEffect(colorFilter.get(position));
 
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setColorEffect(appPrefs.getColorEffect());
@@ -510,9 +524,19 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
                 relativeLayoutColorEffect.setVisibility(View.VISIBLE);
 
-                appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
+                //appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
 
-                colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, new ColorEffectList().getColorEffectList());
+
+                // Sort by num colorEffectList
+
+
+             //   colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, new ColorEffectList().getColorEffectList());
+
+                colorFilter = sortColorEffectList();
+
+                appPrefs.setColorEffect(colorFilter.get(0));
+
+                colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, colorFilter);
 
                 colorEffectAdapter.setViewClickListener(RecordActivity.this);
 
@@ -523,6 +547,115 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             }
 
         };
+    }
+
+
+    public static ArrayList<String> sortColorEffectList() {
+
+        ArrayList<String> colorEffectsSorted = new ArrayList<String>();
+
+        ArrayList<String> colorEffects = new ColorEffectList().getColorEffectList();
+
+
+       for(String effect: colorEffects) {
+
+           Log.d("RecordActivity", " colorEffects " + effect);
+
+           if (Constants.COLOR_EFFECT_NONE.compareTo(effect) == 0) {
+               colorEffectsSorted.add(Constants.COLOR_EFFECT_NONE);
+
+           }
+
+       }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_AQUA.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_AQUA);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_BLACKBOARD.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_BLACKBOARD);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_EMBOSS.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_EMBOSS);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+            if (Constants.COLOR_EFFECT_MONO.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_MONO);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_NEGATIVE.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_NEGATIVE);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+            if (Constants.COLOR_EFFECT_NEON.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_NEON);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_POSTERIZE.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_POSTERIZE);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_SEPIA.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_SEPIA);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_SKETCH.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_SKETCH);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_SOLARIZE.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_SOLARIZE);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_WHITEBOARD.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_WHITEBOARD);
+
+            }
+        }
+
+
+        return colorEffectsSorted;
     }
 
     /**
@@ -644,6 +777,25 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             c.setParameters(params);
 
             Log.d(LOG_TAG, "getCameraInstance height " + c.getParameters().getPictureSize().height + " width " + c.getParameters().getPictureSize().width);
+
+            // SetFrameRate
+            params.setPreviewFrameRate(30);
+            params.setPreviewFpsRange(30000, 30000);
+
+
+            // Log CameraParameters info
+            Log.d(LOG_TAG, " getParameters().getSupportedPreviewFrameRates() " );
+            for(int framerate: c.getParameters().getSupportedPreviewFrameRates()){
+                Log.d(LOG_TAG, " framerate: " + framerate);
+            }
+
+            Log.d(LOG_TAG, " getParameters(). getSupportedPreviewFpsRange ()() " );
+            for(int[] fpsrange: c.getParameters().getSupportedPreviewFpsRange()){
+                Log.d(LOG_TAG, " fpsrange: " + fpsrange[0] + " x " + fpsrange[1]);
+            }
+
+
+
             //  }
 
         } catch (Exception e) {
@@ -652,6 +804,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         }
 
         Log.d(LOG_TAG, " getCameraInstance camera " + c);
+
+
 
         return c; // returns null if camera is unavailable
     }
@@ -680,7 +834,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 
         mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+      //  mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
 
         // Audio
         mMediaRecorder.setAudioSamplingRate(ConfigUtils.AUDIO_SAMPLING_RATE);
@@ -688,8 +842,10 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         mMediaRecorder.setAudioEncodingBitRate(ConfigUtils.AUDIO_ENCODING_BIT_RATE);
 
         // Video
-        mMediaRecorder.setVideoFrameRate(ConfigUtils.VIDEO_FRAME_RATE);
+
         mMediaRecorder.setVideoSize(ConfigUtils.VIDEO_SIZE_WIDTH, ConfigUtils.VIDEO_SIZE_HEIGHT);
+        mMediaRecorder.setVideoFrameRate(ConfigUtils.VIDEO_FRAME_RATE);
+        mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mMediaRecorder.setVideoEncodingBitRate(ConfigUtils.VIDEO_ENCODING_BIT_RATE);
 
         // Set output file
