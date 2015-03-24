@@ -18,9 +18,11 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.FxCatalogFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,7 +32,7 @@ import butterknife.OnClick;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener {
 
     @InjectView(R.id.edit_button_fx)
     ImageButton videoFxButton;
@@ -49,6 +51,7 @@ public class EditActivity extends Activity implements EditorView {
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
     private LookFxMenuFragment lookFxMenuFragment;
+    private FxCatalogFragment fxCatalogFragment;
 
 
     @Override
@@ -132,5 +135,15 @@ public class EditActivity extends Activity implements EditorView {
     @Override
     public void navigate() {
 
+    }
+
+    @Override
+    public void onEffectMenuSelected() {
+        if (fxCatalogFragment== null){
+             fxCatalogFragment= new FxCatalogFragment();
+        } else {
+            //TODO cambiar la lista del fragment
+        }
+        switchFragment(fxCatalogFragment,R.id.edit_bottom_panel);
     }
 }

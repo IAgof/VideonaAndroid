@@ -17,9 +17,9 @@
 
     <LinearLayout
         android:id="@+id/edit_left_panel"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/edit_view_panel"
+        android:layout_alignParentLeft="true"
         android:orientation="vertical">
 
         <ImageButton
@@ -67,9 +67,16 @@
 
     <FrameLayout
         android:id="@+id/edit_bottom_panel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toEndOf="@+id/edit_view_panel">
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/edit_view_panel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/edit_left_panel"
+        android:layout_toStartOf="@id/edit_right_panel"
+        >
 
     </FrameLayout>
 
@@ -77,51 +84,30 @@
         android:id="@+id/edit_view_panel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
         <VideoView
             android:id="@+id/edit_preview_player"
             android:layout_width="320dp"
             android:layout_height="180dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutRangeSeekBar"
+        <LinearLayout
+            android:id="@+id/linearLayoutRangeSeekBar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:backgroundTint="@color/pastel_palette_blue"
-            android:focusableInTouchMode="true"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal" />
 
-            <LinearLayout
-                android:id="@+id/linearLayoutRangeSeekBar"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentEnd="false"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentTop="false"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center"
-                android:orientation="horizontal" />
-        </RelativeLayout>
 
         <SeekBar
             android:id="@+id/seekBarPoint"
             android:layout_width="340dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:focusable="false"
@@ -129,10 +115,8 @@
             android:indeterminate="false"
             android:longClickable="true"
             android:maxHeight="2dp"
-            android:nestedScrollingEnabled="false"
-            android:progressDrawable="@color/pastel_palette_blue"
-            android:splitTrack="false"
-            android:thumbTint="@color/videona_blue_4" />
+            android:progressDrawable="@color/pastel_palette_blue" />
+
 
     </LinearLayout>
 

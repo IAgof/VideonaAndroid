@@ -10,6 +10,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,9 @@ import android.view.ViewGroup;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Effect;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.fx.FxCatalogPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.FxCatalogView;
+import com.videonasocialmedia.videona.presentation.views.adapter.FxCatalogAdapter;
 
 import java.util.List;
 
@@ -30,13 +33,22 @@ import butterknife.InjectView;
  */
 public class FxCatalogFragment extends Fragment implements FxCatalogView{
 
+    FxCatalogAdapter adapter;
+    FxCatalogPresenter presenter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @InjectView(R.id.catalog_recycler) RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View v = inflater.inflate(R.layout.edit_fragment_catalog, container, false);
+        ButterKnife.inject(this, v);
+        presenter = new FxCatalogPresenter(this);
+
+        layoutManager= new GridLayoutManager(this.getActivity(), 4);
+        recyclerView.setLayoutManager(layoutManager);
+        return v;
     }
 
     @Override public void onDestroyView() {
@@ -44,10 +56,17 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
         ButterKnife.reset(this);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.start();
+    }
 
     @Override
-    public void showCatalog(List<Effect> movieList) {
-
+    public void showCatalog(List<Effect> fxList) {
+        adapter = new FxCatalogAdapter(fxList);
+        //TODO añadir esta clase como escuchadora para los eventos de la lista
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

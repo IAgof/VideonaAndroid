@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface FxCatalogView{
 
-    public void showCatalog(List<com.videonasocialmedia.videona.model.entities.editor.Effect> movieList);
+    public void showCatalog(List<com.videonasocialmedia.videona.model.entities.editor.Effect> fxList);
 
     void showLoading ();
 

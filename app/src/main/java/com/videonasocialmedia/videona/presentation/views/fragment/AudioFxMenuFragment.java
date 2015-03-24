@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.ImageButton;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.views.FxMenuView;
+import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 
 import java.util.List;
 
@@ -30,7 +32,21 @@ import butterknife.OnClick;
  */
 public class AudioFxMenuFragment extends Fragment implements FxMenuView {
 
+    private OnEffectMenuSelectedListener callback;
+
     @InjectView(R.id.boton_audio_prueba) ImageButton imgButton;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            callback = (OnEffectMenuSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -46,12 +62,15 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
         ButterKnife.reset(this);
     }
 
-    @OnClick(R.id.boton_audio_prueba)
+
     public void showLog() {
         Log.d("Fragment Audio", "He pulsado el primer botón");
         //imgButton.setImageResource(R.drawable.activity_edit_icon_transition_normal);
-
-        //TODO poner el fragment de abajo
+    }
+    @OnClick(R.id.boton_audio_prueba)
+    public void showCatalog(){
+        showLog();
+        callback.onEffectMenuSelected();
     }
 
     @Override

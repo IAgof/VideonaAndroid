@@ -42,6 +42,9 @@ public class FxCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
         super();
     }
 
+    public FxCatalogAdapter(List<Effect> effectList) {
+        this.effectList = effectList;
+    }
 
     @Override
     public FxItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -55,8 +58,9 @@ public class FxCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
     @Override
     public void onBindViewHolder(FxItemViewHolder holder, final int position) {
         Effect selectedEffect= effectList.get(position);
-        //TODO coger la url de la imagen del effecto y usar picasso para cachear
-        //holder.background.setImageResource(R.drawable.activity_edit_icon_add_clip_normal);
+        //TODO coger la url de la imagen del efecto y usar picasso para cachear
+        holder.background.setImageResource(R.drawable.edit_fragment_sound_icon_audio_normal);
+        holder.background.setBackgroundColor(R.color.pastel_palette_green);
     }
 
 
