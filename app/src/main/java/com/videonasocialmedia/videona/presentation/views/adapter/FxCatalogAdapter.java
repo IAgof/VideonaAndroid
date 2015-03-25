@@ -10,6 +10,7 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,12 +18,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.Effect;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnTouch;
 
 
 /**
@@ -32,41 +36,47 @@ public class FxCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
 
     private Context context;
 
-    private List<Effect> effectList;
+    private RecyclerClickListener recyclerClickListener;
 
-    public List<Effect> getEffectList() {
-        return effectList;
+    private List<EditorElement> elementList;
+
+    public List<EditorElement> getElementList() {
+        return elementList;
     }
 
-    public FxCatalogAdapter() {
-        super();
+    public FxCatalogAdapter(List<EditorElement> elementList) {
+        this.elementList = elementList;
     }
 
-    public FxCatalogAdapter(List<Effect> effectList) {
-        this.effectList = effectList;
+    public RecyclerClickListener getRecyclerClickListener() {
+        return recyclerClickListener;
+    }
+
+    public void setRecyclerClickListener(RecyclerClickListener recyclerClickListener) {
+        this.recyclerClickListener = recyclerClickListener;
     }
 
     @Override
     public FxItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context= parent.getContext();
+        context = parent.getContext();
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.edit_item_fx, parent, false);
-        return new FxItemViewHolder(view);
+        return new FxItemViewHolder(view, recyclerClickListener);
     }
 
 
     @Override
     public void onBindViewHolder(FxItemViewHolder holder, final int position) {
-        Effect selectedEffect= effectList.get(position);
+        EditorElement selectedElement = elementList.get(position);
         //TODO coger la url de la imagen del efecto y usar picasso para cachear
-        holder.background.setImageResource(R.drawable.edit_fragment_sound_icon_audio_normal);
-        holder.background.setBackgroundColor(R.color.pastel_palette_green);
+        holder.background.setImageResource(selectedElement.getIconResourceId());
+        //holder.background.setBackgroundColor(R.color.pastel_palette_green);
     }
 
 
     @Override
     public int getItemCount() {
-        return effectList.size();
+        return elementList.size();
     }
 
     public void appendEffects(List<Effect> effectList) {
@@ -80,12 +90,17 @@ public class FxCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
 
 class FxItemViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
 
+    private RecyclerClickListener onClickListener;
+
     @InjectView(R.id.edit_item_fx_background)
     ImageView background;
 
-    public FxItemViewHolder(View itemView) {
+    public FxItemViewHolder(View itemView, RecyclerClickListener onClickListener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        background.setDrawingCacheEnabled(true);
+        background.setOnTouchListener(this);
+        this.onClickListener = onClickListener;
     }
 
     /**
@@ -97,16 +112,18 @@ class FxItemViewHolder extends RecyclerView.ViewHolder implements View.OnTouchLi
      *              the event.
      * @return True if the listener has consumed the event, false otherwise.
      */
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return false;
+        Log.d("CATALOG ADAPTER", "tocado");
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            Log.d("CATALOG ADAPTER", "tocado");
+            onClickListener.onClick(getPosition());
 
-        //TODO implementar funcionalidad
+        }
 
-        //La actividad o el fragment deberían escuchar este evento para poder modificar el panel principal
+        return true;
     }
-
-
 }
 
 

@@ -8,6 +8,8 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
+import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ import java.util.List;
  */
 public interface FxCatalogView{
 
-    public void showCatalog(List<com.videonasocialmedia.videona.model.entities.editor.Effect> fxList);
+    public void showCatalog(List<EditorElement> elementList);
 
     void showLoading ();
 

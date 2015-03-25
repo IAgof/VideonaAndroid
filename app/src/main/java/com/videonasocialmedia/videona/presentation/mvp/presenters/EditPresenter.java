@@ -32,4 +32,7 @@ public class EditPresenter {
     }
 
 
+    public void start(){
+        //TODO load edition project
+    }
 }

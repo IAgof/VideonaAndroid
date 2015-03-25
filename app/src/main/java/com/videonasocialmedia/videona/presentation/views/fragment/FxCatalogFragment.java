@@ -18,10 +18,12 @@ import android.view.ViewGroup;
 
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.fx.FxCatalogPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.FxCatalogView;
 import com.videonasocialmedia.videona.presentation.views.adapter.FxCatalogAdapter;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
 
 import java.util.List;
 
@@ -63,8 +65,9 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
     }
 
     @Override
-    public void showCatalog(List<Effect> fxList) {
-        adapter = new FxCatalogAdapter(fxList);
+    public void showCatalog(List<EditorElement> elementList) {
+        adapter = new FxCatalogAdapter(elementList);
+        adapter.setRecyclerClickListener((RecyclerClickListener)getActivity());
         //TODO añadir esta clase como escuchadora para los eventos de la lista
         recyclerView.setAdapter(adapter);
     }
@@ -107,6 +110,10 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
     @Override
     public void appendFx(List<Effect> movieList) {
 
+    }
+
+    public List<EditorElement> getFxList(){
+        return adapter.getElementList();
     }
 
 

@@ -436,6 +436,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Intent trim = new Intent();
         trim.putExtra("MEDIA_OUTPUT", videoRecordString);
         trim.setClass(RecordActivity.this, EditActivity.class);
+        //TODO create a video item with the path and add it to the edition project (using presenters and use cases)
 
         startActivityForResult(trim, CAMERA_TRIM_VIDEO_REQUEST_CODE);
 

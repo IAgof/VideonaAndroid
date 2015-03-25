@@ -14,17 +14,7 @@ package com.videonasocialmedia.videona.model.entities.editor;
 
 import java.net.URI;
 
-public abstract class Effect {
+public abstract class Effect extends EditorElement{
 
-    protected URI iconUri;
-    protected String name;
-
-    public URI getIconUri() {
-        return iconUri;
-    }
-
-    public String getName() {
-        return name;
-    }
 
 }

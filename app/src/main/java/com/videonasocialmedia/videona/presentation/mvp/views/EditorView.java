@@ -18,4 +18,7 @@ public interface EditorView {
     //public void changeRightFragment(Class<?extends Fragment> fragmentClass);
     public void navigate();
 
+    public void initVideoPlayer(String videoPath);
+    public void initMusicPlayer(String musicPath);
+
 }

@@ -12,6 +12,8 @@
     <ImageView
         android:id="@+id/edit_item_fx_background"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@color/videona_blue_2"
+        android:layout_margin="3dp"/>
 
 </RelativeLayout>
