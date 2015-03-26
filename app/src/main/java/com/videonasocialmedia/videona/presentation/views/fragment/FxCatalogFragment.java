@@ -48,7 +48,7 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
         ButterKnife.inject(this, v);
         presenter = new FxCatalogPresenter(this);
 
-        layoutManager= new GridLayoutManager(this.getActivity(), 4);
+        layoutManager= new GridLayoutManager(this.getActivity(), 5);
         recyclerView.setLayoutManager(layoutManager);
         return v;
     }

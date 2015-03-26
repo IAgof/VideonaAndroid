@@ -73,9 +73,8 @@
         android:layout_marginLeft="10dp"
         android:layout_below="@+id/edit_view_panel"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/edit_left_panel"
-        android:layout_toStartOf="@id/edit_right_panel"
+        android:layout_toStartOf="@+id/edit_right_panel"
         >
 
     </FrameLayout>
