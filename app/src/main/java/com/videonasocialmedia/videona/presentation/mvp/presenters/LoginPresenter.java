@@ -5,7 +5,7 @@ import android.util.Log;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.social.LoginUseCase;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
-import com.videonasocialmedia.videona.presentation.views.login.LoginView;
+import com.videonasocialmedia.videona.presentation.mvp.views.LoginView;
 
 /**
  * Created by jca on 9/3/15.

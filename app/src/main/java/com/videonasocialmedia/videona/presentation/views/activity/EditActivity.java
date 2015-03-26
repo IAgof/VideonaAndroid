@@ -84,6 +84,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     //TODO de aquí en adelante hay que cambiarlo todo!!!!!
     int duration;
 
+    int seekBarStart = 0;
+    int seekBarEnd;
+
+    Music selectedMusic;
+
+    private boolean isVideoMute = false;
+    private boolean isMusicON = false;
+
     private Handler handler = new Handler();
 
     private Runnable updateTimeTask = new Runnable() {
@@ -101,44 +109,48 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             seekBar.setProgress(videoPlayer.getCurrentPosition());
             handler.postDelayed(updateTimeTask, 50);
 
-            /*if (isMusicON) {
+            if (isMusicON) {
 
-                if ((int) (mediaPlayer.getCurrentPosition() / 1000) == seekBarEnd) {
+                //Checks if the seek bar has reached de end of the trimmed segment
+                //If true stops music and restores original video audio
+                if ((int) (videoPlayer.getCurrentPosition()) == seekBarEnd) {
 
                     Log.d(LOG_TAG, "EditVideoActivity seekBarEnd Mute OFF");
 
                     if (isVideoMute) {
 
-                        mediaPlayerMusic.stop();
-                        mediaPlayerMusic.release();
-                        mediaPlayerMusic = null;
+                        musicPlayer.stop();
+                        musicPlayer.release();
+                        musicPlayer = null;
 
-                        mediaPlayer.setVolume(0.5f, 0.5f);
+                        videoPlayer.setVolume(0.5f, 0.5f);
 
                         isVideoMute = false;
 
                     }
 
                 }
-
-                if ((int) (mediaPlayer.getCurrentPosition() / 1000) == seekBarStart) {
+                //Checks if the seek bar has reached the start of the trimmed segment
+                //If true mutes the video audio and starts music player
+                if ((videoPlayer.getCurrentPosition()) == seekBarStart) {
 
                     Log.d(LOG_TAG, "EditVideoActivity seekBarStart Mute ON");
 
                     if (!isVideoMute) {
 
-                        mediaPlayerMusic = MediaPlayer.create(getBaseContext(), musicRawSelected);
-                        mediaPlayerMusic.start();
-                        mediaPlayerMusic.setVolume(5.0f, 5.0f);
+                        initMusicPlayer(selectedMusic);
+                        musicPlayer = MediaPlayer.create(getBaseContext(), selectedMusic.getMusicResourceId());
+                        musicPlayer.start();
+                        musicPlayer.setVolume(5.0f, 5.0f);
 
-                        mediaPlayer.setVolume(0f, 0f);
+                        musicPlayer.setVolume(0f, 0f);
 
                         isVideoMute = true;
 
                     }
 
                 }
-            }*/
+            }
         }
     }
 
@@ -170,7 +182,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 handler.removeCallbacks(updateTimeTask);
+
                 videoPlayer.seekTo(seekBar.getProgress());
+                if (isMusicON)
+                    musicPlayer.seekTo(seekBar.getProgress() + musicPlayer.getCurrentPosition() - seekBarStart);
                 updateSeekProgress();
             }
         });
@@ -212,10 +227,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
     @OnTouch(R.id.edit_preview_player)
-    public boolean pausePreview(MotionEvent event) {
+    public boolean onTouchPreview(MotionEvent event) {
         boolean result;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            playPreview();
+            playPausePreview();
             result = true;
         } else {
             result = false;
@@ -224,7 +239,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
     @OnClick(R.id.edit_button_play)
-    public void playPreview() {
+    public void playPausePreview() {
 
         if (videoPlayer.isPlaying()) {
             videoPlayer.pause();
@@ -358,19 +373,27 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
     }
 
+
     @Override
-    public void onClick(int position) {
-        List<EditorElement> musicList=fxCatalogFragment.getFxList();
-        Music selectedMusic= (Music)musicList.get(position);
-        Log.d(LOG_TAG, "adquirida la música");
+    public void initMusicPlayer(Music music) {
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer.release();
+            musicPlayer = null;
+        }
+        musicPlayer = MediaPlayer.create(getApplicationContext(), music.getMusicResourceId());
+        musicPlayer.setVolume(5.0f, 5.0f);
+        isMusicON = true;
     }
 
     @Override
-    public void initMusicPlayer(String musicPath) {
-        if (musicPlayer == null) {
-            Uri audioUri = Uri.parse(musicPath);
-            musicPlayer = MediaPlayer.create(getApplicationContext(), audioUri);
-            musicPlayer.setVolume(5.0f, 5.0f);
-        }
+    public void onClick(int position) {
+        List<EditorElement> musicList = fxCatalogFragment.getFxList();
+        selectedMusic = (Music) musicList.get(position);
+
+        Log.d(LOG_TAG, "adquirida la música");
+        initMusicPlayer(selectedMusic);
     }
+
+
 }

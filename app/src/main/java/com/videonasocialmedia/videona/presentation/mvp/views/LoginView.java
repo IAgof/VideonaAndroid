@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.presentation.views.login;
+package com.videonasocialmedia.videona.presentation.mvp.views;
 
 import android.app.Activity;
 

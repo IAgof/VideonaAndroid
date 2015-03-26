@@ -9,6 +9,8 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
 
 import android.app.Fragment;
 
+import com.videonasocialmedia.videona.model.entities.editor.media.audio.Music;
+
 /**
  * @author Juan Javier Cabanas Abascal
  */
@@ -19,6 +21,6 @@ public interface EditorView {
     public void navigate();
 
     public void initVideoPlayer(String videoPath);
-    public void initMusicPlayer(String musicPath);
+    public void initMusicPlayer(Music music);
 
 }

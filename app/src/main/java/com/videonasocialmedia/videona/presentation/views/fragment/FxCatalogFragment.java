@@ -68,7 +68,6 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
     public void showCatalog(List<EditorElement> elementList) {
         adapter = new FxCatalogAdapter(elementList);
         adapter.setRecyclerClickListener((RecyclerClickListener)getActivity());
-        //TODO añadir esta clase como escuchadora para los eventos de la lista
         recyclerView.setAdapter(adapter);
     }
 
