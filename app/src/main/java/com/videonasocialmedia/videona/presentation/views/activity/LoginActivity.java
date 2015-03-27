@@ -15,6 +15,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.LoginPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.LoginView;
 
 
 import butterknife.ButterKnife;
@@ -22,7 +23,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class LoginActivity extends Activity implements LoginView{
+public class LoginActivity extends Activity implements LoginView {
 
     /*VIEWS*/
     @InjectView(R.id.login_text_field)

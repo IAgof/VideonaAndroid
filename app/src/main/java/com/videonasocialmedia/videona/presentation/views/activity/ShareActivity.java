@@ -120,6 +120,8 @@ public class ShareActivity extends Activity {
 
                     doTrimAudio();
 
+                    appPrefs.setIsMusicON(false);
+
                 }
             };
 
@@ -266,6 +268,10 @@ public class ShareActivity extends Activity {
 
         trimAudio();
 
+        appPrefs.setIsMusicON(false);
+
+        File temp = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
+        temp.delete();
 
         this.runOnUiThread(new Runnable() {
             public void run() {
@@ -289,17 +295,17 @@ public class ShareActivity extends Activity {
 
         String videonaMusic = "V_MUSIC_" + new File(videoEdited).getName().substring(7);
 
-        String pathVideonaFinal = Constants.pathVideoMusic + File.separator + videonaMusic;
+        String pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
 
         int length = appPrefs.getVideoDurationTrim();
 
-        Log.d(LOG_TAG, "VideonaMainActivity cut " + Constants.videoMusicTempFile + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
+        Log.d(LOG_TAG, "VideonaMainActivity trimAudio cut " + Constants.VIDEO_MUSIC_TEMP_FILE + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
 
-        VideonaMainActivity.cut(Constants.videoMusicTempFile, pathVideonaFinal, 0, length);
+        VideonaMainActivity.cut(Constants.VIDEO_MUSIC_TEMP_FILE, pathVideonaFinal, 0, length);
 
         videoEdited = pathVideonaFinal;
 
-        File temp = new File(Constants.videoMusicTempFile);
+        File temp = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
         temp.deleteOnExit();
 
         appPrefs.setIsMusicON(false);

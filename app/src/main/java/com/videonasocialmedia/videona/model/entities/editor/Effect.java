@@ -10,7 +10,11 @@
  *
  */
 
-package com.videonasocialmedia.videona.model.editor;
+package com.videonasocialmedia.videona.model.entities.editor;
 
-public interface Effect {
+import java.net.URI;
+
+public abstract class Effect extends EditorElement{
+
+
 }

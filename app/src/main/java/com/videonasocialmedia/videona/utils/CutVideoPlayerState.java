@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 
 public class CutVideoPlayerState {
 
-    private String filename = EditActivity.videoRecorded;
+    //private String filename = EditActivity.videoRecorded;
     private int start = 0, stop = 0;
     private int currentTime = 0;
     private String messageText;
@@ -27,13 +27,13 @@ public class CutVideoPlayerState {
         this.messageText = messageText;
     }
 
-    public String getFilename() {
-        return filename;
-    }
+//    public String getFilename() {
+//        return filename;
+//    }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
+//    public void setFilename(String filename) {
+//        this.filename = filename;
+//    }
 
     public int getStart() {
         return start;

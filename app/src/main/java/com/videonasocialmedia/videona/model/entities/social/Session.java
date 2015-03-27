@@ -21,11 +21,6 @@ public class Session {
     private Token authToken;
 
     /**
-     * User password. Used to log in our services. MUST NOT be persisted
-     */
-    private String password; //TODO comprobar si es necesario tener la contraseña
-
-    /**
      * @hide
      */
     private Session(){user= new User("anonymous");}
@@ -51,13 +46,6 @@ public class Session {
 
     public boolean hasToken() {return authToken!=null;}
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public User getUser() {
         return user;
