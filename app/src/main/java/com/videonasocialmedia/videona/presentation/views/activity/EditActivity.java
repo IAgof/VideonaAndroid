@@ -120,8 +120,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                     if (isVideoMute) {
 
                         musicPlayer.stop();
-                        musicPlayer.release();
-                        musicPlayer = null;
+                        //musicPlayer.release();
+                        //musicPlayer = null;
 
                         videoPlayer.setVolume(0.5f, 0.5f);
 
@@ -386,13 +386,38 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         isMusicON = true;
     }
 
+
+    /**
+     * Needs to refactor
+     *
+     * @param position clicked on recycler
+     */
     @Override
     public void onClick(int position) {
-        List<EditorElement> musicList = fxCatalogFragment.getFxList();
-        selectedMusic = (Music) musicList.get(position);
 
-        Log.d(LOG_TAG, "adquirida la música");
-        initMusicPlayer(selectedMusic);
+        if (videoPlayer.isPlaying()) {
+            videoPlayer.pause();
+            if (musicPlayer != null) {
+                musicPlayer.pause();
+            }
+            playButton.setVisibility(View.VISIBLE);
+        }
+        List<EditorElement> musicList = fxCatalogFragment.getFxList();
+
+        if (position == (musicList.size()-1)) {
+            Log.d(LOG_TAG, "Detenida la música");
+            if(musicPlayer!=null){
+                musicPlayer.release();
+                musicPlayer=null;
+                isMusicON=false;
+            }
+
+        } else {
+
+            selectedMusic = (Music) musicList.get(position);
+            Log.d(LOG_TAG, "adquirida la música");
+            initMusicPlayer(selectedMusic);
+        }
     }
 
 

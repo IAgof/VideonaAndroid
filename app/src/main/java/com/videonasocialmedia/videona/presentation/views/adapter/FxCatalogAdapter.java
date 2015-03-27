@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.Effect;
+import com.videonasocialmedia.videona.model.entities.editor.media.audio.Music;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
 
 import java.util.List;
@@ -70,7 +71,8 @@ public class FxCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
         EditorElement selectedElement = elementList.get(position);
         //TODO coger la url de la imagen del efecto y usar picasso para cachear
         holder.background.setImageResource(selectedElement.getIconResourceId());
-        //holder.background.setBackgroundColor(R.color.pastel_palette_green);
+        //holder.background.setBackgroundColor(((Music)selectedElement).getColorResourceId());
+        holder.background.setBackgroundResource(((Music)selectedElement).getColorResourceId());
     }
 
 
@@ -98,7 +100,7 @@ class FxItemViewHolder extends RecyclerView.ViewHolder implements View.OnTouchLi
     public FxItemViewHolder(View itemView, RecyclerClickListener onClickListener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
-        background.setDrawingCacheEnabled(true);
+
         background.setOnTouchListener(this);
         this.onClickListener = onClickListener;
     }
@@ -115,9 +117,8 @@ class FxItemViewHolder extends RecyclerView.ViewHolder implements View.OnTouchLi
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d("CATALOG ADAPTER", "tocado");
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            Log.d("CATALOG ADAPTER", "tocado");
+
             onClickListener.onClick(getPosition());
 
         }

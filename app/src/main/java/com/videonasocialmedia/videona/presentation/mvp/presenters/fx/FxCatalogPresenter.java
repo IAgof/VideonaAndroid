@@ -34,15 +34,16 @@ public class FxCatalogPresenter {
         List<EditorElement> elementList = new ArrayList<>();
 
 
-        elementList.add(new Music(R.drawable.activity_music_icon_rock_normal, "Rock", R.raw.audio_rock));
-        elementList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "Ambient", R.raw.audio_ambiental));
-        elementList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "Flute", R.raw.audio_clasica_flauta));
-        elementList.add(new Music(R.drawable.activity_music_icon_classic_normal, "Classic", R.raw.audio_clasica_piano));
-        elementList.add(new Music(R.drawable.activity_music_icon_folk_normal, "Folk", R.raw.audio_folk));
-        elementList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "Hip-Hop", R.raw.audio_hiphop));
-        elementList.add(new Music(R.drawable.activity_music_icon_pop_normal, "Pop", R.raw.audio_pop));
-        elementList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "Reggae", R.raw.audio_reggae));
-        elementList.add(new Music(R.drawable.activity_music_icon_violin_normal, "Violin", R.raw.audio_clasica_violin));
+        elementList.add(new Music(R.drawable.activity_music_icon_rock_normal, "Rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
+        elementList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "Ambient", R.raw.audio_ambiental,R.color.pastel_palette_red));
+        elementList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "Flute", R.raw.audio_clasica_flauta,R.color.pastel_palette_blue));
+        elementList.add(new Music(R.drawable.activity_music_icon_classic_normal, "Classic", R.raw.audio_clasica_piano,R.color.pastel_palette_brown));
+        elementList.add(new Music(R.drawable.activity_music_icon_folk_normal, "Folk", R.raw.audio_folk,R.color.pastel_palette_red));
+        elementList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "Hip-Hop", R.raw.audio_hiphop,R.color.pastel_palette_green));
+        elementList.add(new Music(R.drawable.activity_music_icon_pop_normal, "Pop", R.raw.audio_pop,R.color.pastel_palette_purple));
+        elementList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "Reggae", R.raw.audio_reggae,R.color.pastel_palette_orange));
+        elementList.add(new Music(R.drawable.activity_music_icon_violin_normal, "Violin", R.raw.audio_clasica_violin,R.color.pastel_palette_yellow));
+        elementList.add(new Music(R.drawable.activity_music_icon_remove_normal,"Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
 
         OnFxListReceived(elementList);
     }
