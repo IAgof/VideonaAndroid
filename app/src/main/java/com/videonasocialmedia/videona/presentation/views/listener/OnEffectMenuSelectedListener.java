@@ -7,12 +7,12 @@
 
 package com.videonasocialmedia.videona.presentation.views.listener;
 
-import android.app.Fragment;
-
 /**
  * Created by jca on 23/3/15.
  */
 public interface OnEffectMenuSelectedListener {
 
     public void onEffectMenuSelected();
+
+    public void onEffectTrimMenuSelected();
 }

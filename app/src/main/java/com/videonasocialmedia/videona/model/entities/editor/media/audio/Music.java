@@ -17,10 +17,11 @@ public class Music extends EditorElement {
     //TODO en el futuro no será un recurso sino que se obtendrá
     private int musicResourceId;
     private int colorResourceId;
+    private String nameResourceId;
 
     public Music(int iconResourceId, String name, int musicResourceId, int colorResourceId) {
         this.iconResourceId = iconResourceId;
-        this.name = name;
+        this.nameResourceId = name;
         this.musicResourceId = musicResourceId;
         this.colorResourceId = colorResourceId;
     }
@@ -39,5 +40,13 @@ public class Music extends EditorElement {
 
     public void setColorResourceId(int colorResourceId) {
         this.colorResourceId = colorResourceId;
+    }
+
+    public void setNameResourceId(String name){
+        this.nameResourceId = name;
+    }
+
+    public String getNameResourceId(){
+        return nameResourceId;
     }
 }

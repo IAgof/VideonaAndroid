@@ -11,4 +11,12 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters.fx;
  * @author Juan Javier Cabanas Abascal
  */
 public class ScissorsFxPresenter {
+
+    private ScissorsFxPresenter scissorsFxView;
+
+    public ScissorsFxPresenter(ScissorsFxPresenter scissorsFxView) {
+        this.scissorsFxView = scissorsFxView;
+    }
+
+
 }

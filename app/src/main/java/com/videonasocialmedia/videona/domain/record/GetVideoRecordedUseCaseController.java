@@ -121,7 +121,7 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
 
     private static File getOutputRecordFile(int type) {
 
-        File mediaStorageDir = new File(Constants.pathApp);
+        File mediaStorageDir = new File(Constants.PATH_APP_MASTERS);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {

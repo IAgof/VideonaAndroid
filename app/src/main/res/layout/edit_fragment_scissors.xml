@@ -16,7 +16,9 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_green"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_scissors_icon_razor_normal" />
+        android:src="@drawable/edit_fragment_scissors_icon_razor_normal"
+        android:adjustViewBounds="false"
+        android:alpha="0.10" />
 
     <ImageButton
         android:id="@+id/edit_fragment_scissors_button_crop"
@@ -32,7 +34,8 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_pink_2"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_scissors_icon_add_clip_normal" />
+        android:src="@drawable/edit_fragment_scissors_icon_add_clip_normal"
+        android:alpha="0.10" />
 
     <ImageButton
         android:id="@+id/edit_fragment_scissors_button_duplicate"
@@ -40,5 +43,6 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_red"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_scissors_icon_duplicate_normal" />
+        android:src="@drawable/edit_fragment_scissors_icon_duplicate_normal"
+        android:alpha="0.10" />
 </LinearLayout>

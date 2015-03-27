@@ -502,7 +502,7 @@ public class MusicActivity extends Activity {
 
         Log.d(LOG_TAG, "downloadResource " + nameFile);
 
-        File fSong = new File(Constants.pathVideoTemp + File.separator + nameFile + Constants.audioMusicExtension);
+        File fSong = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
 
         if (fSong.exists()) {
 
@@ -511,7 +511,7 @@ public class MusicActivity extends Activity {
 
             FileOutputStream out = null;
             try {
-                out = new FileOutputStream(Constants.pathVideoTemp + File.separator + nameFile + Constants.audioMusicExtension);
+                out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
 

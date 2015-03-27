@@ -55,7 +55,7 @@ public class RecordAndroidLActivity extends Activity {
 
         Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
 
-        File fTempAV = new File(Constants.videoMusicTempFile);
+        File fTempAV = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
 
         if (appPrefs.getIsMusicON() && fTempAV.exists()) {
 

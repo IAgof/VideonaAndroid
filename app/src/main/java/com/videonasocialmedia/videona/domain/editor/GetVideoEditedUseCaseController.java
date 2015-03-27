@@ -9,7 +9,7 @@
  *
  */
 
-package com.videonasocialmedia.videona.domain;
+package com.videonasocialmedia.videona.domain.editor;
 
 public class GetVideoEditedUseCaseController implements GetVideoEditedUseCase {
 

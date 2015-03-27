@@ -35,25 +35,23 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.UserPreferences;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import org.lucasr.twowayview.TwoWayView;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -557,11 +555,15 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     private void checkIsMusicOn() {
 
-        Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
+        Log.d(LOG_TAG, "RecordActivity checkIsMusicOn getIsMusicON " + appPrefs.getIsMusicON());
 
-        File fTempAV = new File(Constants.videoMusicTempFile);
+        File fTempAV = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
 
         if (appPrefs.getIsMusicON() && fTempAV.exists()) {
+
+           // fTempAV.delete();
+
+           // appPrefs.setIsMusicON(false);
 
             Intent share = new Intent();
             //  share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
@@ -694,7 +696,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         mMediaRecorder.setVideoEncodingBitRate(ConfigUtils.VIDEO_ENCODING_BIT_RATE);
 
         // Set output file
-        videoRecordString = mRecordPresenter.getRecordFileString(); //getOutputRecordFile(MEDIA_TYPE_VIDEO).toString();
+        videoRecordString = mRecordPresenter.getRecordFileString();
 
         // Check if videoRecordString exists
         File f = new File(videoRecordString);
@@ -722,39 +724,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         return true;
     }
 
-    /**
-     *
-     * Create an output recordFile, media file name created with time stamps
-     *
-     * @param type
-     * @return File
-     */
-    private static File getOutputRecordFile(int type) {
-
-        File mediaStorageDir = new File(Constants.pathApp);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-
-                Log.d("GetVideoRecordedUseCaseController", "failed to create directory");
-                return null;
-
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }
 
     /**
      *  Release MediaRecorder

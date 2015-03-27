@@ -60,6 +60,12 @@ public class VideonaMainActivity extends Activity {
 
         appPrefs.setIsColorEffect(false);
 
+        try {
+            checkPathApp();
+        } catch (IOException e) {
+            Log.e("CHECK_PATH", "Error checking path", e);
+        }
+
 
     }
 
@@ -109,77 +115,45 @@ public class VideonaMainActivity extends Activity {
     }
 
     /**
-     * Check Videona app paths, pathApp, pathVideoTrim, pathVideoMusic, ...
+     * Check Videona app paths, PATH_APP, pathVideoTrim, pathVideoMusic, ...
      * @throws IOException
      */
-    private void checkPath() throws IOException {
+    private void checkPathApp() throws IOException {
 
-        File f = new File(Constants.pathApp);
-        if (!f.exists()) {
-            f.mkdir();
+        File fEdited = new File(Constants.PATH_APP);
+
+        if (!fEdited.exists()) {
+
+            fEdited.mkdir();
 
             Log.d(LOG_TAG, "Path Videona created");
+
+            File fTemp = new File(Constants.PATH_APP_TEMP);
+
+            if (!fTemp.exists()) {
+
+                fTemp.mkdir();
+
+                Log.d(LOG_TAG, "Path " + Constants.PATH_APP_TEMP + " created");
+            }
         }
 
-        File fTrim = new File(Constants.pathVideoTrim);
-        if (!fTrim.exists()) {
-            fTrim.mkdir();
+        File fMaster = new File(Constants.PATH_APP_MASTERS);
 
-            Log.d(LOG_TAG, "Path " + Constants.pathVideoTrim + " created");
-        }
+        if (!fMaster.exists()) {
 
-        File fMusic = new File(Constants.pathVideoMusic);
-        if (!fMusic.exists()) {
-            fMusic.mkdir();
+            fMaster.mkdir();
 
-            Log.d(LOG_TAG, "Path " + Constants.pathVideoMusic + " created");
-        }
-
-        File fTemp = new File(Constants.pathVideoTemp);
-        if (!fTemp.exists()) {
-            fTemp.mkdir();
-
-            Log.d(LOG_TAG, "Path " + Constants.pathVideoTemp + " created");
+            Log.d(LOG_TAG, "Path Videona Masters created");
         }
 
 
-        File fTempAV = new File(Constants.videoMusicTempFile);
+        File fTempAV = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
 
         if (fTempAV.exists()) {
             fTempAV.delete();
         }
 
-      /*  File f3=new File(pathtemporal);
-        if(!f3.exists())
-        {
-            f3.mkdir();
-            if(log) Log.d(TAG,"Path temp created");
-        }
-
-       */
-
-        // Copiamos recurso básico from raw to sdcard
-
-    /*    File fAudioTest = new File(Config.pathApp + "/audio_aac.aac");
-
-        if (!fAudioTest.exists()) {
-
-            InputStream in = getResources().openRawResource(R.raw.audio_aac);
-            FileOutputStream out = new FileOutputStream(Config.pathApp + "/audio_aac.aac");
-            byte[] buff = new byte[1024];
-            int read = 0;
-            try {
-                while ((read = in.read(buff)) > 0) {
-                    out.write(buff, 0, read);
-                }
-            } finally {
-                in.close();
-                out.flush();
-                out.close();
-            }
-        }
-
-      */
 
     }
 
@@ -223,13 +197,6 @@ public class VideonaMainActivity extends Activity {
             // Dummy screen
 
             //boolean loggedIn = isSessionActive();
-
-            try {
-                checkPath();
-            } catch (IOException e) {
-                Log.e("CHECK_PATH", "Error checking path", e);
-            }
-
 
             try {
                 // 3 seconds, time in milliseconds

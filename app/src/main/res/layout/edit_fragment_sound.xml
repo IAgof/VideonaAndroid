@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_green"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_sound_icon_fx_normal" />
+        android:src="@drawable/edit_fragment_sound_icon_fx_normal"
+        android:alpha="0.10" />
 
     <ImageButton
         android:id="@+id/edit_fragment_sound_button_music"
@@ -26,7 +27,8 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_purple"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_sound_icon_music_normal" />
+        android:src="@drawable/edit_fragment_sound_icon_music_normal"
+        android:alpha="0.10" />
 
     <ImageButton
         android:id="@+id/edit_fragment_sound_button_audio"
@@ -34,7 +36,8 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_pink_2"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_sound_icon_audio_normal" />
+        android:src="@drawable/edit_fragment_sound_icon_audio_normal"
+        android:alpha="0.10" />
 
     <ImageButton
         android:id="@+id/boton_audio_prueba"

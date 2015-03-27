@@ -804,7 +804,7 @@ public class Camera2VideoFragment extends Fragment implements RecordView, ColorE
         // File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
         //       Environment.DIRECTORY_MOVIES), "VideonaApp");
 
-        File mediaStorageDir = new File(Constants.pathApp);
+        File mediaStorageDir = new File(Constants.PATH_APP);
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 

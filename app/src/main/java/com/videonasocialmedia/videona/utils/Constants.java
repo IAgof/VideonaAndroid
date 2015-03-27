@@ -40,18 +40,20 @@ public class Constants {
 
 
     // Folders
-    final public static String nameFolderVideos = "Videona";
-    final public static String nameFolderVideosTrim = "VideonaTrim";
-    final public static String nameFolderVideosMusic = "VideonaMusic";
-    final public static String nameFolderTemp = ".temp";
-    final public static String pathApp = Environment.getExternalStorageDirectory() + File.separator + nameFolderVideos;
-    final public static String pathVideoTrim = pathApp + File.separator + nameFolderVideosTrim;
-    final public static String pathVideoMusic = pathApp + File.separator + nameFolderVideosMusic;
-    final public static String pathVideoTemp = pathApp + File.separator + nameFolderTemp;
-    final public static String videoMusicTempFile = pathApp + File.separator + nameFolderTemp + File.separator + "tempAV.mp4";
-    final public static String videoCutAuxName = "/videona_trim.mp4";
+    final public static String FOLDER_VIDEONA_MASTERS = "Videona_Masters";
+    final public static String FOLDER_VIDEONA_EDITED = "Videona";
 
-    final public static String audioMusicExtension = ".m4a";
+    final public static String FOLDER_VIDEONA_TEMP = ".temp";
+    final public static String PATH_APP = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA_EDITED;
+    final public static String PATH_APP_MASTERS = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA_MASTERS;
+
+    final public static String PATH_APP_TEMP = PATH_APP + File.separator + FOLDER_VIDEONA_TEMP;
+    final public static String VIDEO_MUSIC_TEMP_FILE = PATH_APP + File.separator + FOLDER_VIDEONA_TEMP + File.separator + "tempAV.mp4";
+    final public static String VIDEO_CUT_AUX_NAME = "/videona_trim.mp4";
+
+    final public static String AUDIO_MUSIC_FILE_EXTENSION = ".m4a";
 
 
 }
