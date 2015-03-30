@@ -35,25 +35,24 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.UserPreferences;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import org.lucasr.twowayview.TwoWayView;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -695,9 +694,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         if (appPrefs.getIsMusicON() && fTempAV.exists()) {
 
-           // fTempAV.delete();
-
-           // appPrefs.setIsMusicON(false);
 
             Intent share = new Intent();
             //  share.putExtra("MEDIA_OUTPUT", pathvideoTrim);

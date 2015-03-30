@@ -77,7 +77,7 @@ public class ShareActivity extends Activity {
 
     private boolean music_selected = false;
 
-    private final Runnable r = new Runnable() {
+    private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekProgress();
@@ -110,9 +110,9 @@ public class ShareActivity extends Activity {
 
             videoEdited = appPrefs.getVideoMusicAux();
 
-            setVideoInfo();
+          //  setVideoInfo();
 
-            previewVideo();
+          //  previewVideo();
 
 
             final Runnable r = new Runnable() {
@@ -244,7 +244,7 @@ public class ShareActivity extends Activity {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
-            handler.postDelayed(r, 50);
+            handler.postDelayed(updateTimeTask, 50);
 
         }
     }
@@ -268,10 +268,12 @@ public class ShareActivity extends Activity {
 
         trimAudio();
 
-        appPrefs.setIsMusicON(false);
-
         File temp = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
-        temp.delete();
+
+        if(temp.exists()){
+            temp.delete();
+        }
+
 
         this.runOnUiThread(new Runnable() {
             public void run() {
@@ -293,7 +295,7 @@ public class ShareActivity extends Activity {
 
         videoEdited = appPrefs.getVideoMusicAux();
 
-        String videonaMusic = "V_MUSIC_" + new File(videoEdited).getName().substring(7);
+        String videonaMusic = "V_EDIT_" + new File(videoEdited).getName().substring(7);
 
         String pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
 
@@ -304,11 +306,6 @@ public class ShareActivity extends Activity {
         VideonaMainActivity.cut(Constants.VIDEO_MUSIC_TEMP_FILE, pathVideonaFinal, 0, length);
 
         videoEdited = pathVideonaFinal;
-
-        File temp = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
-        temp.deleteOnExit();
-
-        appPrefs.setIsMusicON(false);
 
         music_selected = true;
 
