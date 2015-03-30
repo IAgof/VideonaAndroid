@@ -16,11 +16,19 @@ import java.net.URI;
  */
 public abstract class EditorElement {
 
-    protected int iconResourceId;
+    protected String iconPath;
     protected String name;
 
-    public int getIconResourceId() {
-        return iconResourceId;
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {

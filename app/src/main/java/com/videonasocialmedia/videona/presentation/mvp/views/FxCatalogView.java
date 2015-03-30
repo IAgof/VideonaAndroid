@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 
 import java.util.List;
 
@@ -33,5 +34,5 @@ public interface FxCatalogView{
 
     boolean isTheListEmpty ();
 
-    void appendFx (List<com.videonasocialmedia.videona.model.entities.editor.Effect> movieList);
+    void appendFx (List<Effect> movieList);
 }
