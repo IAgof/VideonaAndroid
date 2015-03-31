@@ -18,6 +18,8 @@ public class RecordFile {
 
     String colorEffect;
 
+    long colorEffectTime;
+
     // cameraId = 0 Back Camera
     // cameraId = 1 Front Camera
     int cameraId;
@@ -42,10 +44,6 @@ public class RecordFile {
         this.cameraId = cameraId;
     }
 
-    public String getColorEffect(){
-        return colorEffect;
-    }
-
     public void setRecordFileDuration(long recordFileDuration){
 
         this.recordFileDuration = recordFileDuration;
@@ -55,8 +53,13 @@ public class RecordFile {
         return recordFileDuration;
     }
 
-    public void setColorEffect(String colorEffect){
+    public void setColorEffect(String colorEffect, long colorEffectTime){
         this.colorEffect = colorEffect;
+        this.colorEffectTime = colorEffectTime;
+    }
+
+    public String getColorEffect(){
+        return colorEffect;
     }
 
     public int getVideoDuration() {

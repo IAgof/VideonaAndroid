@@ -28,7 +28,7 @@ public interface GetVideoRecordedUseCase extends UseCase {
     /**
      * ColorEffects
      */
-    public void setColorEffect(String colorEffect);
+    public void setColorEffect(String colorEffect, long time);
 
     /**
      * Get record file path

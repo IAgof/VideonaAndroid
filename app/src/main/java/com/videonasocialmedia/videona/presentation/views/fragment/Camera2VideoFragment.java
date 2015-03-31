@@ -30,6 +30,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
+import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -60,6 +61,7 @@ import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
@@ -255,7 +257,7 @@ public class Camera2VideoFragment extends Fragment implements RecordView, ColorE
             Log.d(TAG, "onOpened");
 
             mCameraDevice = cameraDevice;
-            startPreview();
+            startPreview(camera, cameraPreview);
             mCameraOpenCloseLock.release();
             if (null != autoFitTextureView) {
                 configureTransform(autoFitTextureView.getWidth(), autoFitTextureView.getHeight());
@@ -636,8 +638,10 @@ public class Camera2VideoFragment extends Fragment implements RecordView, ColorE
 
     /**
      * Start the camera preview.
+     * @param camera
+     * @param cameraPreview
      */
-    private void startPreview() {
+    private void startPreview(Camera camera, CameraPreview cameraPreview) {
         if (null == mCameraDevice || !autoFitTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
@@ -686,7 +690,7 @@ public class Camera2VideoFragment extends Fragment implements RecordView, ColorE
     }
 
     /**
-     * Update the camera preview. {@link #startPreview()} needs to be called in advance.
+     * Update the camera preview. {@link RecordView#startPreview(android.hardware.Camera, com.videonasocialmedia.videona.presentation.views.CameraPreview)} needs to be called in advance.
      */
     private void updatePreview() {
         if (null == mCameraDevice) {

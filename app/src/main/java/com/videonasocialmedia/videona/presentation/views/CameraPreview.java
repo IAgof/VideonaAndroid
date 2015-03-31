@@ -22,8 +22,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,16 +48,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     private Camera.Size mPreviewSize;
 
-
-    private static UserPreferences appPrefs;
-
     public Paint paint;
     private boolean drawingViewSet = true;
     private CameraPreview camPreview;
 
     private Rect touchArea = null;
 
-    public CameraPreview(Context context, Camera camera) {
+    public CameraPreview(RecordPresenter context, Camera camera) {
 
         super(context);
 
@@ -96,10 +93,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         // get available color effects
 
         colorEffects = mCamera.getParameters().getSupportedColorEffects();
-
-
-        appPrefs = new UserPreferences(context);
-
 
     }
 

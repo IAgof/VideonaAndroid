@@ -21,9 +21,11 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
 
 
     public static final int MEDIA_TYPE_VIDEO = 2;
+
     public static RecordFile recordFile;
 
     String recordFilePathString;
+
 
 
     public GetVideoRecordedUseCaseController(){
@@ -40,11 +42,13 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
 
     }
 
+
     /**
      * Start to record File
      */
     @Override
     public void startRecordFile() {
+
 
         recordFile.setIsRecordingFile(true);
 
@@ -72,9 +76,9 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
      * @param colorEffect
      */
     @Override
-    public void setColorEffect(String colorEffect) {
+    public void setColorEffect(String colorEffect, long time) {
 
-        recordFile.setColorEffect(colorEffect);
+        recordFile.setColorEffect(colorEffect, time);
 
     }
 
@@ -99,6 +103,12 @@ public class GetVideoRecordedUseCaseController implements GetVideoRecordedUseCas
         recordFile.setRecordFileDuration(recordFileDuration);
 
     }
+
+
+
+
+
+
 
     /**
      * get Record File

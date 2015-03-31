@@ -11,10 +11,10 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
  *
  */
 
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.Constants;
+import android.util.Log;
 
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -58,7 +58,125 @@ public class ColorEffectList {
             colorEffects.add(effect);
         }
 
-        return colorEffects;
+       // return colorEffects;
+        return sortColorEffectList();
+    }
+
+
+    /**
+     *  Sort Color Effect List
+     *
+     * List sort by filter number, AD0, AD5, ... Design
+     *
+     * @return ArrayList
+     */
+
+    private static ArrayList<String> sortColorEffectList() {
+
+        ArrayList<String> colorEffectsSorted = new ArrayList<String>();
+
+        ArrayList<String> colorEffects = getColorEffectList();
+
+
+        for(String effect: colorEffects) {
+
+            Log.d("RecordActivity", " colorEffects " + effect);
+
+            if (Constants.COLOR_EFFECT_NONE.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_NONE);
+
+            }
+
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_AQUA.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_AQUA);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_BLACKBOARD.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_BLACKBOARD);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_EMBOSS.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_EMBOSS);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+            if (Constants.COLOR_EFFECT_MONO.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_MONO);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_NEGATIVE.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_NEGATIVE);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+            if (Constants.COLOR_EFFECT_NEON.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_NEON);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_POSTERIZE.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_POSTERIZE);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_SEPIA.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_SEPIA);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_SKETCH.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_SKETCH);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_SOLARIZE.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_SOLARIZE);
+
+            }
+        }
+
+        for(String effect: colorEffects) {
+
+            if (Constants.COLOR_EFFECT_WHITEBOARD.compareTo(effect) == 0) {
+                colorEffectsSorted.add(Constants.COLOR_EFFECT_WHITEBOARD);
+
+            }
+        }
+
+
+        return colorEffectsSorted;
     }
 
 }

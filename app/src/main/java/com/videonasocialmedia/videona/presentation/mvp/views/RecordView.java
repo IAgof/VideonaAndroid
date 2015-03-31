@@ -12,16 +12,24 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
+import android.hardware.Camera;
+
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+
 public interface RecordView extends MVPView {
+
+    void startPreview(Camera camera, CameraPreview cameraPreview);
 
     void startRecordVideo();
 
     void stopRecordVideo();
 
+    void setChronometer();
+
     void startChronometer();
 
     void stopChronometer();
 
-    void colorEffect(int position);
+    void colorEffect(int position, Camera camera);
 
 }
