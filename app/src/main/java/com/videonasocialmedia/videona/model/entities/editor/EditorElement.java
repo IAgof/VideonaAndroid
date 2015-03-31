@@ -17,6 +17,7 @@ import java.net.URI;
 public abstract class EditorElement {
 
     protected String iconPath;
+    protected String selectedIconPath;
     protected String name;
 
     public String getIconPath() {
@@ -35,5 +36,11 @@ public abstract class EditorElement {
         return name;
     }
 
+    public String getSelectedIconPath() {
+        return selectedIconPath;
+    }
 
+    public void setSelectedIconPath(String selectedIconPath) {
+        this.selectedIconPath = selectedIconPath;
+    }
 }

@@ -23,7 +23,7 @@ public abstract class Effect extends EditorElement {
      */
     protected long duration;
     /**
-     * The moment the effect is applied
+     * The moment the effect is applied since start of the track
      */
     protected long startTime;
 

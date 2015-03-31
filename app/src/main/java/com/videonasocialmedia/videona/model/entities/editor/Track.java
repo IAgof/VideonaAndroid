@@ -20,12 +20,7 @@ import java.util.TreeMap;
 
 public abstract class Track {
 
-    /**
-     * A map representing the list of items and the time of start in the track.
-     * key: the item itself.
-     * value: the time of start in the track (in ms)
-     */
-    TreeMap<Long, Object> items;
+    ArrayList<Object> items;
 
     /**
      * A list of effects to be applied on the items of the track

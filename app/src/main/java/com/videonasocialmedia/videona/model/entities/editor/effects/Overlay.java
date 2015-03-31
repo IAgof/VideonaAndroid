@@ -14,14 +14,11 @@ import com.videonasocialmedia.videona.model.entities.editor.Size;
  */
 public class Overlay extends Effect {
 
-
-    String text;
     Size size;
     Coord coord;
 
-    public Overlay(long duration, long startTime, String text, Size size, Coord coord) {
+    public Overlay(long duration, long startTime, Size size, Coord coord) {
         super(duration, startTime);
-        this.text = text;
         this.size = size;
         this.coord = coord;
     }

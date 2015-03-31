@@ -11,51 +11,50 @@ import com.videonasocialmedia.videona.model.entities.editor.exceptions.NoMediaIn
 import com.videonasocialmedia.videona.model.entities.editor.media.Audio;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 /**
  * Created by jca on 30/3/15.
  */
 public class AudioTrack extends Track {
 
-    /**
-     * Overwritten attribute of the superclass forcing the key to be an Audio object
-     */
-    TreeMap<Long, Audio> items;
+    private TreeSet<Audio> items;
+    private long duration;
 
-    public TreeMap<Long, Audio> getItems() {
-        return items;
+
+    public AudioTrack() {
+        this.items = new TreeSet<>();
+        this.duration = 0;
     }
 
-    public void setItems(TreeMap<Long, Audio> items) {
-        this.items=items;
-    }
-
-    public void putItem(Audio audioItem, long t){
-        items.put(new Long(t), audioItem);
-    }
-
-    public void putAll(Map<Long, Audio> items){
-        items.putAll(items);
+    public AudioTrack(TreeSet<Audio> items) {
+        if (items.comparator() != null && (items.comparator()) instanceof AudioComparator) {
+            this.items = items;
+        } else {
+            this.items = new TreeSet<>(new AudioComparator());
+            this.items.addAll(items);
+        }
     }
 
     /**
      * Look for a Transition before a media Item
+     *
      * @param audioItem
      * @return returns the transitions if exists, null otherwise
      */
-    public Transition getTransitionBefore(Audio audioItem){
+    public Transition getTransitionBefore(Audio audioItem) {
         // TODO search the transition
         return null;
     }
+
     /**
      * Look for a Transition after a media Item
+     *
      * @param audioItem
      * @return returns the transitions if exists, null otherwise
      */
-    public Transition getTransitionAfter(Audio audioItem){
+    public Transition getTransitionAfter(Audio audioItem) {
         // TODO search the transition
         return null;
     }
@@ -63,13 +62,29 @@ public class AudioTrack extends Track {
     /**
      * add a transition object to the track
      * If one or the two of the media objects in the transition are not in the track an Exception is thrown
+     *
      * @param transition
      */
     public void addTransition(Transition transition) throws NoMediaInTrackException {
         //TODO check if the medias are in track and are consecutives
         this.transitions.add(transition);
     }
+}
 
+class AudioComparator implements Comparator<Audio> {
+    @Override
+    public int compare(Audio lhs, Audio rhs) {
+        int result = 0;
+        if (lhs.getStartTime() < rhs.getStartTime()) {
+            result = -1;
+        } else if (lhs.getStartTime() > rhs.getStartTime()) {
+            result = 1;
+        }
+        return result;
+    }
 
-
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
 }

@@ -9,10 +9,8 @@ package com.videonasocialmedia.videona.model.entities.editor;
 
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.NoMediaInTrackException;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 /**
  * Created by jca on 30/3/15.
@@ -20,26 +18,24 @@ import java.util.TreeMap;
 public class MediaTrack extends Track {
 
     /**
-     * Overwritten attribute of the superclass forcing the key to be a Media object
+     * Overwritten attribute of the superclass forcing it to be a Media objects list
      */
-    TreeMap<Long, Media> items;
-
+    private TreeSet<Media> items;
     private long duration;
 
-    public TreeMap<Long, Media> getItems() {
-        return items;
+
+    public MediaTrack() {
+        this.items = new TreeSet<>();
+        this.duration = 0;
     }
 
-    public void setItems(TreeMap<Long, Media> items) {
-        this.items = items;
-    }
-
-    public void putItem(Media mediaItem, long t) {
-        items.put(new Long(t), mediaItem);
-    }
-
-    public void putAll(Map<Long, Media> items) {
-        items.putAll(items);
+    public MediaTrack(TreeSet<Media> items) {
+        if (items.comparator()!=null&&(items.comparator()) instanceof MediaComparator){
+            this.items = items;
+        }else{
+            this.items=new TreeSet<>(new MediaComparator());
+            this.items.addAll(items);
+        }
     }
 
     /**
@@ -79,4 +75,22 @@ public class MediaTrack extends Track {
         return duration;
     }
 
+
+}
+class MediaComparator implements Comparator<Media>{
+    @Override
+    public int compare(Media lhs, Media rhs) {
+        int result=0;
+        if (lhs.getStartTime()<rhs.getStartTime()){
+            result=-1;
+        }else if (lhs.getStartTime()>rhs.getStartTime()){
+            result=1;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return false;
+    }
 }
