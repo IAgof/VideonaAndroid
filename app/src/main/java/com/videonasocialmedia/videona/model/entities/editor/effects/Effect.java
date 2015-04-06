@@ -14,14 +14,13 @@ package com.videonasocialmedia.videona.model.entities.editor.effects;
 
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 
-import java.net.URI;
-
 public abstract class Effect extends EditorElement {
 
     /**
      * Duration of the effect
      */
     protected long duration;
+
     /**
      * The moment the effect is applied
      */

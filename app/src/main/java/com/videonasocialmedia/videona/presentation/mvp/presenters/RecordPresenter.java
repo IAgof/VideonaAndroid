@@ -20,10 +20,12 @@ import com.videonasocialmedia.videona.domain.record.GetVideoRecordedUseCase;
 import com.videonasocialmedia.videona.domain.record.GetVideoRecordedUseCaseController;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class RecordPresenter extends Presenter {
 
@@ -35,6 +37,11 @@ public class RecordPresenter extends Presenter {
      * LOG_TAG
      */
     private final String LOG_TAG = getClass().getSimpleName();
+
+    /**
+     * ArrayList colorFilter
+     */
+    public static ArrayList<String> colorFilter;
 
     /**
      * MediaRecorder
@@ -81,11 +88,13 @@ public class RecordPresenter extends Presenter {
 
         camera = getCameraInstance();
 
-        cameraPreview = new CameraPreview(this, camera);
+        cameraPreview = new CameraPreview(recordView.getContext(), camera);
 
         recordView.startPreview(camera, cameraPreview);
 
         recordView.setChronometer();
+
+        colorFilter = ColorEffectList.getColorEffectList(camera);
 
        // recordUseCase.startRecordFile();
     }
@@ -106,7 +115,7 @@ public class RecordPresenter extends Presenter {
 
         camera = getCameraInstance();
 
-        recordView.startPreview(camera, cameraPreview);
+     //   recordView.startPreview(camera, cameraPreview);
 
     }
 

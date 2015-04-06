@@ -7,10 +7,6 @@
 
 package com.videonasocialmedia.videona.model.entities.editor;
 
-import android.net.Uri;
-
-import java.net.URI;
-
 /**
  * Created by jca on 25/3/15.
  */
@@ -18,6 +14,13 @@ public abstract class EditorElement {
 
     protected String iconPath;
     protected String name;
+
+    // amm
+    protected int iconResourceId;
+
+    public int getIconResourceId() {
+        return iconResourceId;
+    }
 
     public String getIconPath() {
         return iconPath;

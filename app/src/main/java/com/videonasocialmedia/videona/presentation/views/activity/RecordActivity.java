@@ -188,12 +188,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     public static int positionColorEffectPressed = 0;
 
-    /**
-     *
-     *
-     */
-    public ArrayList<String> colorFilter;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -233,6 +227,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         super.onStart();
 
         recordPresenter.start();
+
+
 
     }
 
@@ -329,7 +325,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public Context getContext() {
 
-        return this;
+       return this;
     }
 
     @Override
@@ -462,7 +458,11 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
       // Sort by num colorEffectList
 
-        colorFilter = ColorEffectList.getColorEffectList();
+        //colorFilter = ColorEffectList.getColorEffectList();
+        colorFilter = RecordPresenter.colorFilter;
+
+        // Sort List
+        colorFilter = ColorEffectList.sortColorEffectList(colorFilter);
 
         appPrefs.setColorEffect(colorFilter.get(0));
 

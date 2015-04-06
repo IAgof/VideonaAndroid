@@ -22,7 +22,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 
 import java.io.IOException;
@@ -36,9 +35,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private static final String TAG = "CameraPreview";
 
     public static List<String> colorEffects;
-
-
-    private Context mContext;
 
     private SurfaceHolder mHolder;
 
@@ -54,12 +50,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     private Rect touchArea = null;
 
-    public CameraPreview(RecordPresenter context, Camera camera) {
+    public CameraPreview(Context context, Camera camera) {
 
         super(context);
 
         mCamera = camera;
-
 
         paint = new Paint();
         paint.setColor(Color.GREEN);
@@ -67,7 +62,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         paint.setStyle(Paint.Style.STROKE);
 
         // http://stackoverflow.com/questions/19577299/android-camera-preview-stretched
-
 
         // supported preview sizes
 

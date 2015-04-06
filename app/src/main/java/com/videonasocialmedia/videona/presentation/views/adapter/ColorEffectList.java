@@ -11,9 +11,9 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
  *
  */
 
+import android.hardware.Camera;
 import android.util.Log;
 
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class ColorEffectList {
 
 
-    public static ArrayList<String> getColorEffectList() {
+    public static ArrayList<String> getColorEffectList(Camera camera) {
 
         ArrayList<String> colorEffects = new ArrayList<String>();
 
@@ -52,14 +52,16 @@ public class ColorEffectList {
 
         */
 
+
         // Color Effects in pre_Android_L depends on camera getSupportedColorEffects
-        for (String effect : CameraPreview.colorEffects) {
+       // for (String effect : CameraPreview.colorEffects) {
+        for(String effect: camera.getParameters().getSupportedColorEffects()) {
 
             colorEffects.add(effect);
         }
 
-       // return colorEffects;
-        return sortColorEffectList();
+        return colorEffects;
+       // return sortColorEffectList();
     }
 
 
@@ -71,11 +73,11 @@ public class ColorEffectList {
      * @return ArrayList
      */
 
-    private static ArrayList<String> sortColorEffectList() {
+    public static ArrayList<String> sortColorEffectList(ArrayList<String> colorEffects) {
 
         ArrayList<String> colorEffectsSorted = new ArrayList<String>();
 
-        ArrayList<String> colorEffects = getColorEffectList();
+     //   ArrayList<String> colorEffects = getColorEffectList();
 
 
         for(String effect: colorEffects) {

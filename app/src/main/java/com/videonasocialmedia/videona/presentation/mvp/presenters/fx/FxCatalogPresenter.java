@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters.fx;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
+import com.videonasocialmedia.videona.model.entities.editor.Music;
 import com.videonasocialmedia.videona.presentation.mvp.views.FxCatalogView;
 
 import java.util.ArrayList;
