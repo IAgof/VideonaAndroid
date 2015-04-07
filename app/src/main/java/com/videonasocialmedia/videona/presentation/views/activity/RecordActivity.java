@@ -16,7 +16,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -35,21 +34,19 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
-import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import org.lucasr.twowayview.TwoWayView;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -61,31 +58,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      * LOG_TAG
      */
     private final String LOG_TAG = getClass().getSimpleName();
-
-    /**
-     * Camera Android
-     */
-    private Camera camera;
-
-    /**
-     * CameraPreview
-     */
-    private CameraPreview cameraPreview;
-
-    /**
-     * MediaRecorder
-     */
-    private MediaRecorder mMediaRecorder;
-
-    /**
-     * Boolean, control is recording file
-     */
-    private boolean isRecording = false;
-
-    /**
-     * Boolean is color effect selected
-     */
-    private static Boolean isColorEffect;
 
     /**
      * Request code camera capture
@@ -103,29 +75,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
 
     /**
-     * Uri, file url to store image/video
-     */
-    private Uri fileUri;
-
-    /**
-     * String absolute path video record file
-     */
-    private String videoRecordString;
-
-    /**
      * Boolean, register button back pressed to exit from app
      */
     private boolean buttonBackPressed = false;
-
-    /**
-     * Int cameraId. Future use to multicamera
-     */
-    private int cameraId = 0;
-
-    /**
-     * Int media type video
-     */
-    public static final int MEDIA_TYPE_VIDEO = 2;
 
     /**
      * User private preferences
@@ -136,6 +88,11 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      * Adapter to add images color effect
      */
     private ColorEffectAdapter colorEffectAdapter;
+
+    /**
+     * Uri, file url to store image/video
+     */
+    private Uri fileUri;
 
     /**
      * Button to record video
@@ -183,11 +140,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     private RecordPresenter recordPresenter;
 
-    /**
-     * Position color effect pressed
-     */
-    public static int positionColorEffectPressed = 0;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -229,14 +181,11 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         recordPresenter.start();
 
 
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        Log.d(LOG_TAG, "onResume");
 
         recordPresenter.onResume();
 
@@ -277,6 +226,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
     }
 
+    /**
+     * Register back pressed to exit app
+     */
     @Override
     public void onBackPressed() {
 
@@ -310,14 +262,19 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
     }
 
+    /**
+     * User select effect
+     *
+     * @param adapter
+     * @param effect
+     */
     @Override
-    public void onColorEffectClicked(int position) {
+    public void onEffectClicked(ColorEffectAdapter adapter, Effect effect) {
 
-        colorEffect(position, camera);
 
-        positionColorEffectPressed = position;
+        adapter.notifyDataSetChanged();
 
-        colorEffectAdapter.notifyDataSetChanged();
+        recordPresenter.setEffect(effect);
 
 
     }
@@ -328,58 +285,57 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
        return this;
     }
 
+    /**
+     * Start preview
+     *
+     * @param camera
+     * @param cameraPreview
+     */
     @Override
     public void startPreview(Camera camera, CameraPreview cameraPreview){
-
 
             frameLayoutCameraPreview.addView(cameraPreview);
             frameLayoutCameraPreview.addView(new CustomManualFocusView(RecordActivity.this));
 
-
     }
 
+    /**
+     * Start recordVideo, show stop image
+     */
     @Override
     public void startRecordVideo() {
 
+        buttonRecord.setImageResource(R.drawable.activity_record_icon_stop_normal);
+        buttonRecord.setImageAlpha(125); // (50%)
     }
 
-
+    /**
+     * Stop recordVideo, show record image
+     */
     @Override
     public void stopRecordVideo() {
 
-        // stop recording and release camera
-
-        // buttonRecord, prevent error touch twice stop button
-        buttonRecord.setEnabled(false);
-
-
-        Intent trim = new Intent();
-        trim.putExtra("MEDIA_OUTPUT", videoRecordString);
-        trim.setClass(RecordActivity.this, EditActivity.class);
-        //TODO create a video item with the path and add it to the edition project (using presenters and use cases)
-
-        startActivityForResult(trim, CAMERA_EDIT_VIDEO_REQUEST_CODE);
+        buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
 
     }
 
+
+    /**
+     * Start chronometer
+     */
     @Override
     public void startChronometer() {
 
         chronometerRecord.start();
     }
 
+    /**
+     * Stop chronometer
+     */
     @Override
     public void stopChronometer() {
 
         chronometerRecord.stop();
-
-        long chronometer = SystemClock.elapsedRealtime() - chronometerRecord.getBase();
-        //  GetVideoRecordedUseCaseController.setRecordFileDuration(chronometer);
-
-        recordPresenter.setRecordFileDuration(chronometer);
-
-        Log.d(LOG_TAG, " chronometerRecord " + chronometer);
-        Log.d(LOG_TAG, " chronometerRecord TimeUtils " + TimeUtils.toFormattedTime((int) chronometer));
 
     }
 
@@ -412,37 +368,15 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
     }
 
-    @Override
-    public void colorEffect(int position, Camera camera) {
-
-
-       // appPrefs.setColorEffect(CameraPreview.colorEffects.get(position));
-        appPrefs.setColorEffect(colorFilter.get(position));
-
-        Camera.Parameters parameters = camera.getParameters();
-        parameters.setColorEffect(appPrefs.getColorEffect());
-
-        camera.setParameters(parameters);
-        // Color effects
-
-        Log.d(LOG_TAG, "getIsColorEffect " + appPrefs.getIsColorEffect() + " filter " + appPrefs.getColorEffect());
-        trackColorEffect(appPrefs.getColorEffect());
-
-        recordPresenter.setColorEffect(appPrefs.getColorEffect(), chronometerRecord.getBase());
-
-        // ¿?
-        //appPrefs.setColorEffect(CameraPreview.colorEffects.get(0));
-
-    }
-
-
     /**
-     * Color effect on click listener
+     * Show list of effects
+     *
+     * @param adapter
      */
-    @OnClick(R.id.button_color_effect)
-    public void colorEffectButtonListener() {
+    @Override
+    public void showEffects(ColorEffectAdapter adapter){
 
-        trackButtonClick(R.id.button_color_effect);
+        colorEffectAdapter = adapter;
 
         if (relativeLayoutColorEffect.isShown()) {
 
@@ -456,24 +390,38 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         relativeLayoutColorEffect.setVisibility(View.VISIBLE);
 
-      // Sort by num colorEffectList
-
-        //colorFilter = ColorEffectList.getColorEffectList();
-        colorFilter = RecordPresenter.colorFilter;
-
-        // Sort List
-        colorFilter = ColorEffectList.sortColorEffectList(colorFilter);
-
-        appPrefs.setColorEffect(colorFilter.get(0));
-
-        colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, colorFilter);
+        buttonColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
 
         colorEffectAdapter.setViewClickListener(RecordActivity.this);
 
         listViewItemsColorEffect.setAdapter(colorEffectAdapter);
 
-        buttonColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
 
+    }
+
+    /**
+     * Update view with effect selected
+     *
+     * @param effect
+     */
+    @Override
+    public void showEffectSelected(Effect effect){
+
+        /// TODO apply animation effect
+
+        colorEffectAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * Color effect on click listener
+     */
+    @OnClick(R.id.button_color_effect)
+    public void colorEffectButtonListener() {
+
+        trackButtonClick(R.id.button_color_effect);
+
+       recordPresenter.effectClickListener();
 
     }
 
@@ -488,11 +436,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     public void buttonRecordListener() {
 
 
-                trackButtonClick(R.id.button_record);
+        trackButtonClick(R.id.button_record);
 
-                recordPresenter.recordClickListener();
-
-
+        recordPresenter.recordClickListener();
 
     }
 
@@ -550,17 +496,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
-    /**
-     * Tracks the effects applied by the user
-     *
-     * @param effect
-     */
-    private void trackColorEffect(String effect) {
-        t.send(new HitBuilders.EventBuilder()
-                .setCategory("RecordActivity")
-                .setAction("Color effect applied")
-                .setCategory(effect)
-                .build());
-    }
+
 
 }

@@ -943,6 +943,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 // String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
 // VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
                 Log.d(LOG_TAG, "pathVideoTrim " + pathvideoTrim + "  " + " musicSelected " + musicSelected);
+
                 VideoUtils.switchAudio(pathvideoTrim, musicSelected, Constants.VIDEO_MUSIC_TEMP_FILE);
             } catch (IOException e) {
                 e.printStackTrace();

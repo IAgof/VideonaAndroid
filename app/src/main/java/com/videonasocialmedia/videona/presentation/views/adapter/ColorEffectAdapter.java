@@ -151,7 +151,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
 
-                mColorEffectClickListener.onColorEffectClicked(position);
+                mColorEffectClickListener.onEffectClicked(position);
 
                 // Restart last position
 

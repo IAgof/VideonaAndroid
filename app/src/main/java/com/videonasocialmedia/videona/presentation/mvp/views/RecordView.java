@@ -14,7 +14,9 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
 
 import android.hardware.Camera;
 
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 
 public interface RecordView extends MVPView {
 
@@ -30,6 +32,8 @@ public interface RecordView extends MVPView {
 
     void stopChronometer();
 
-    void colorEffect(int position, Camera camera);
+    void showEffects(ColorEffectAdapter adapter);
+
+    void showEffectSelected(Effect effect);
 
 }

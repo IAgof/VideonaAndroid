@@ -162,6 +162,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             // parameters.setPreviewSize(size.width, size.height);
 
+            ///TODO get VideoSize from model, Project Profile
             parameters.setPreviewSize(ConfigUtils.VIDEO_SIZE_WIDTH, ConfigUtils.VIDEO_SIZE_HEIGHT);
 
             Log.e(TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
