@@ -3,9 +3,14 @@
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas
+ * Álvaro Martínez Marco
+ * Danny R. Fonseca Arboleda
  */
 
-package com.videonasocialmedia.videona.model.entities.editor;
+package com.videonasocialmedia.videona.model.entities.editor.utils;
 
 /**
  * Created by jca on 30/3/15.
