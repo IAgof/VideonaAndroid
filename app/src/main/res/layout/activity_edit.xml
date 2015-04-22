@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+~ Copyright (c) 2015. Videona Socialmedia SL
+~ http://www.videona.com
+~ info@videona.com
+~ All rights reserved
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutTop"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">>
+                <Button
+                    android:id="@+id/buttonCancelEditActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:text="Cancel"
+                    android:textColor="@color/videona_blue_1"
+                    android:visibility="visible" />
+
+                <Button
+                        android:id="@+id/buttonOkEditActivity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@android:color/transparent"
+                        android:text="OK"
+                        android:textColor="@color/videona_blue_1" />
+
+                <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:password="false"
+                        android:text="Editor Room"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/videona_blue_1" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:id="@+id/edit_view_panel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical">
+
+                <RelativeLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center_horizontal">
+
+                    <VideoView
+                        android:id="@+id/edit_preview_player"
+                        android:layout_width="320dp"
+                        android:layout_height="180dp"
+                        android:layout_gravity="center_horizontal" />
+
+                    <ImageButton
+                        android:id="@+id/edit_button_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="@null"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/common_icon_play_on_normal" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="340dp"
+                    android:layout_height="80dp"
+                    android:id="@+id/relativeLayoutPreviewVideo"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp">
+
+                    <RelativeLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/relativeLayoutTrim"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center" >
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/linearLayoutFrames"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp" >
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame1"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame1" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame1"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame2"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame2" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame2"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame3"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame3" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame3"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame4"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame4" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame4"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame5"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame5" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame5"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame6"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame6" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame6"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame7"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame7" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame7"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame8"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame8" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame8"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:id="@+id/relativeLayoutImageFrame9"
+                                android:layout_weight="1"
+                                android:layout_gravity="top" >
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/progressBarImageFrame9" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/imageViewFrame9"
+                                    android:visibility="gone" />
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayoutRangeSeekBar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentBottom="false"
+                        android:layout_alignParentTop="false"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:backgroundTint="@color/pastel_palette_blue"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutRangeSeekBar"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_alignParentEnd="false"
+                            android:layout_alignParentStart="false"
+                            android:layout_alignParentTop="false"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center"
+                            android:orientation="horizontal" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <SeekBar
+                    android:id="@+id/edit_seek_bar"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="true"
+                    android:indeterminate="false"
+                    android:longClickable="true"
+                    android:maxHeight="2dp"
+                    android:progressDrawable="@color/pastel_palette_blue" />
+
+
+            </LinearLayout>
+
+
+
+            <FrameLayout
+                android:id="@+id/edit_bottom_panel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@+id/edit_view_panel"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/edit_left_panel"
+                android:layout_toStartOf="@+id/edit_right_panel"
+                >
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/edit_right_panel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true">
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/edit_left_panel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical"
+                android:layout_alignParentStart="false">
+
+                <ImageButton
+                    android:id="@+id/edit_button_scissor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pastel_palette_orange"
+                    android:padding="15dp"
+                    android:src="@drawable/activity_edit_icon_cut_normal" />
+
+                <ImageButton
+                    android:id="@+id/edit_button_fx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pastel_palette_grey"
+                    android:padding="15dp"
+                    android:src="@drawable/activity_edit_icon_fx_normal"
+                    android:alpha="0.05" />
+
+                <ImageButton
+                    android:id="@+id/edit_button_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pastel_palette_blue"
+                    android:padding="15dp"
+                    android:src="@drawable/activity_edit_icon_audio_normal" />
+
+                <ImageButton
+                    android:id="@+id/edit_button_look"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pastel_palette_yellow"
+                    android:padding="15dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/activity_edit_icon_look_normal"
+                    android:alpha="0.10" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
