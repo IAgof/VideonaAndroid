@@ -38,7 +38,7 @@ public class RecordFile {
         return cameraId;
     }
 
-    public void setCameraId( int camera) {
+    public void setCameraId( int cameraId) {
         this.cameraId = cameraId;
     }
 

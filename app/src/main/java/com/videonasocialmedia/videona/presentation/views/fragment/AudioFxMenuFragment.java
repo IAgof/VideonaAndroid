@@ -53,6 +53,9 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_fragment_sound, container, false);
         ButterKnife.inject(this, view);
+
+        callback.onEffectMenuSelected();
+
         return view;
     }
 
