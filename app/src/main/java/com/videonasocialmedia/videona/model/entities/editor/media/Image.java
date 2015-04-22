@@ -29,11 +29,14 @@ public class Image extends Media {
      */
     public Image(String title, String mediaPath, long mediaStartTime, MediaMetadata metadata,
                  long duration, ArrayList<User> authors, ArrayList<String> authorsNames,
-                 License license) {
-        super(title, mediaPath, mediaStartTime, metadata, duration, authors, authorsNames, license);
+                 License license, String iconPath, String selectedIconPath) {
+        super(title, mediaPath, mediaStartTime, metadata, duration, authors, authorsNames, license,
+                iconPath, selectedIconPath);
     }
     public Image(String title, String mediaPath, long mediaStartTime, MediaMetadata metadata,
-                 ArrayList<User> authors, ArrayList<String> authorsNames, License license) {
-        super(title, mediaPath, mediaStartTime, metadata, 3, authors, authorsNames, license);
+                 ArrayList<User> authors, ArrayList<String> authorsNames, License license,
+                 String iconPath, String selectedIconPath) {
+        super(title, mediaPath, mediaStartTime, metadata, 3, authors, authorsNames, license,
+                iconPath, selectedIconPath);
     }
 }

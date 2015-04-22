@@ -15,6 +15,7 @@ import android.media.MediaMetadata;
 
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
+
 import java.util.ArrayList;
 
 /**
@@ -25,12 +26,12 @@ import java.util.ArrayList;
 public class Audio extends Media {
 
     /**
-     *
      * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
      */
     protected Audio(String title, String mediaPath, long mediaStartTime, MediaMetadata metadata,
                     long duration, ArrayList<User> authors, ArrayList<String> authorsNames,
-                    License license) {
-        super(title, mediaPath, mediaStartTime, metadata, duration, authors, authorsNames, license);
+                    License license, String iconPath, String selectedIconPath) {
+        super(title, mediaPath, mediaStartTime, metadata, duration, authors, authorsNames,
+                license, iconPath, selectedIconPath);
     }
 }
