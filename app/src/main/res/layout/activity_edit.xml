@@ -375,7 +375,8 @@
                 android:id="@+id/edit_right_panel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true">
+                android:layout_alignParentRight="true"
+                android:visibility="gone">
 
             </FrameLayout>
 

@@ -194,6 +194,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     RangeSeekBar<Double> seekBarRange;
 
 
+    // Adapt navigation to beta April 22nd
+    boolean isButtonAudioPressed = false;
+
+
     //******************************************************************************
     //******************************************************************************
     // End of changes
@@ -345,9 +349,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         });
 
         //TODO mover a donde se deba
+        /// amm Start with ScissorFx
+        scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         audioFxMenuFragment = new AudioFxMenuFragment();
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
+        //ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
+        ft.add(R.id.edit_right_panel, scissorsFxMenuFragment).commit();
 
         this.initVideoPlayer(this.getIntent().getStringExtra("MEDIA_OUTPUT"));
 
@@ -508,16 +516,44 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
     @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
-        if (audioFxButton == null)
-            audioFxMenuFragment = new AudioFxMenuFragment();
-        this.switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
+     /*  if (audioFxButton == null) {
+           audioFxMenuFragment = new AudioFxMenuFragment();
+           switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
+       }
+    */
+        if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
+            relativeLayoutPreviewVideo.setVisibility(View.GONE);
+        };
+
+
+        if (fxCatalogFragment == null) {
+            fxCatalogFragment = new FxCatalogFragment();
+        }
+        this.switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
+
+        onEffectMenuSelected();
+
+
     }
 
     @OnClick(R.id.edit_button_scissor)
     public void showScissorsFxMenu() {
-        if (scissorsFxMenuFragment == null)
+
+        if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
-        this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+            onEffectTrimMenuSelected();
+        }
+
+      //  this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+
+        relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
+
+        if(edit_bottom_panel.getVisibility() == View.VISIBLE) {
+            edit_bottom_panel.setVisibility(View.INVISIBLE);
+        }
+
+
+
     }
 
     @OnClick(R.id.edit_button_look)
@@ -697,6 +733,13 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         }
 
         switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
+
+      /*  if(audioFxMenuFragment == null){
+            audioFxMenuFragment = new AudioFxMenuFragment();
+        }
+        switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
+        */
+
     }
 
     @Override

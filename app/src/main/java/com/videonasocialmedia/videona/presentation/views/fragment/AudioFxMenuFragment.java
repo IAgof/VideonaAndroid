@@ -54,8 +54,6 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
         View view = inflater.inflate(R.layout.edit_fragment_sound, container, false);
         ButterKnife.inject(this, view);
 
-        callback.onEffectMenuSelected();
-
         return view;
     }
 
@@ -73,7 +71,7 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
     @OnClick(R.id.boton_audio_prueba)
     public void showCatalog(){
         showLog();
-        callback.onEffectMenuSelected();
+       // callback.onEffectMenuSelected();
     }
 
     @Override
