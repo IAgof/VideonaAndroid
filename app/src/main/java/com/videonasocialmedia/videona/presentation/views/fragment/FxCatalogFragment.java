@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
-import com.videonasocialmedia.videona.model.entities.editor.Effect;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.fx.FxCatalogPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.FxCatalogView;
 import com.videonasocialmedia.videona.presentation.views.adapter.FxCatalogAdapter;

@@ -7,10 +7,6 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
-import android.app.Fragment;
-
-import com.videonasocialmedia.videona.model.entities.editor.media.audio.Music;
-
 /**
  * @author Juan Javier Cabanas Abascal
  */

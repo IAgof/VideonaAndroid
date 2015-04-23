@@ -10,7 +10,6 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,15 +18,13 @@ import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
-import com.videonasocialmedia.videona.model.entities.editor.Effect;
-import com.videonasocialmedia.videona.model.entities.editor.media.audio.Music;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnTouch;
 
 
 /**
