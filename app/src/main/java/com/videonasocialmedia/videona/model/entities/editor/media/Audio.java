@@ -16,6 +16,7 @@ import android.media.MediaMetadata;
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
+
 import java.util.ArrayList;
 
 /**

@@ -10,9 +10,7 @@
  * Danny R. Fonseca Arboleda
  */
 package com.videonasocialmedia.videona.model.entities.editor.media;
-
 import android.media.MediaMetadata;
-
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;

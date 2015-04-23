@@ -15,7 +15,9 @@ package com.videonasocialmedia.videona.model.entities.editor;
 /**
  * Defines any element that can be rendered on the editor.
  *
- * Created by jca on 25/3/15.
+ * @author Juan Javier Cabanas
+ * @author Álvaro Martínez Marco
+ * @author Danny R. Fonseca Arboleda
  */
 public abstract class EditorElement {
 
@@ -35,6 +37,7 @@ public abstract class EditorElement {
     protected String selectedIconPath;
 
     /**
+     * Constructor of minimum number of parameters.
      *
      * @param identifier - Unique identifier of element in the current project.
      * @param iconPath - Path to a resource that allows represent the element in the view.
@@ -46,7 +49,7 @@ public abstract class EditorElement {
     }
 
     /**
-     * Constructor of minimum number of parameters.
+     * Parametrized constructor. Use all attributes from EditorElement object.
      *
      * @param identifier - Unique identifier of element in the current project.
      * @param iconPath - path to a resource to allow represent the element in the view.
@@ -62,19 +65,16 @@ public abstract class EditorElement {
     public String getIconPath() {
         return iconPath;
     }
+
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
     }
+
     public String getSelectedIconPath() {
         return selectedIconPath;
     }
+
     public void setSelectedIconPath(String selectedIconPath) {
         this.selectedIconPath = selectedIconPath;
-    }
-    public String getIdentifier() {
-        return identifier;
-    }
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
     }
 }

@@ -21,8 +21,12 @@ import java.util.ArrayList;
 /**
  * Abstract representation of any media resource that can be used in the project.
  * TODO habrá que echar un vistazo a esto http://developer.android.com/reference/android/media/package-summary.html
- * Created by jca on 30/3/15.
+ *
+ * @author Juan Javier Cabanas
+ * @author Álvaro Martínez Marco
+ * @author Danny R. Fonseca Arboleda
  */
+
 public abstract class Media extends EditorElement {
 
     /**
