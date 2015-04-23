@@ -45,10 +45,15 @@ public class Profile {
     private  ProfileType profileType;
 
     /**
-     * Default constructor. It can be only a instance of profile.
+     * Constructor of minimum number of parameters. In this case coincides with parametrized
+     * constructor and therefore is the default constructor. It has all possible atributes for the
+     * profile object.
      *
-     * @param resolution - Maximum resolution allowed.
-     * @param maxDuration - Maximum video duration allowed.
+     * There can be only a single instance of a profile, and therefore this constructor can only be
+     * accessed through the factory.
+     *
+     * @param resolution - Maximum resolution allowed for the profile.
+     * @param maxDuration - Maximum video duration allowed for the profile.
      * @param type - Profile type.
      */
     private Profile(Size resolution, long maxDuration, ProfileType type) {
@@ -66,7 +71,6 @@ public class Profile {
     public static Profile getInstance(ProfileType profileType) {
         if (INSTANCE == null) {
             if (profileType == ProfileType.free) {
-                //instantiate the free profile
                 INSTANCE = new Profile(new Size(Size.Resolution.hd720), 1000, profileType);
             } else {
                 INSTANCE = new Profile(new Size(Size.Resolution.hd1080), -1, profileType);

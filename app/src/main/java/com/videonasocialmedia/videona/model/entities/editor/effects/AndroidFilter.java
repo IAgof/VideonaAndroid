@@ -11,6 +11,7 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.effects;
 
+import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
 
 /**
@@ -20,11 +21,13 @@ import com.videonasocialmedia.videona.model.entities.social.User;
  */
 public class AndroidFilter extends Filter {
 
-    public AndroidFilter(String filterType, int layer, long startTime, long duration, User author) {
-        super(filterType, layer, startTime, duration, author);
+    public AndroidFilter(String identifier, String iconPath, String type, long startTime,
+                         long duration, License license, User author) {
+        super(identifier, iconPath, type, startTime, duration, license, author);
     }
 
-    public AndroidFilter(String filterType, int layer, long startTime, long duration, String authorName) {
-        super(filterType, layer, startTime, duration, authorName);
+    public AndroidFilter(String iconPath, String selectedIconPath, String identifier, String type,
+                         long startTime, long duration, int layer, User author, License license) {
+        super(iconPath, selectedIconPath, identifier, type, startTime, duration, layer, author, license);
     }
 }

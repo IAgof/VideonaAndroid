@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.model.entities.editor.exceptions;
 
 /**
+ * Todo doc
  * Created by dfa on 13/4/15.
  */
 public class IllegalItemOnTrack extends Throwable {
@@ -15,6 +16,6 @@ public class IllegalItemOnTrack extends Throwable {
         super(s);
     }
     public IllegalItemOnTrack(){
-        super("");
+        super();
     }
 }

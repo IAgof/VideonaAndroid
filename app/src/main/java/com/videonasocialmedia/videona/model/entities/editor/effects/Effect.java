@@ -25,19 +25,19 @@ public abstract class Effect extends EditorElement {
 
 
     /**
-     * Effect type identifier.
+     * Effect type identifier. Uniquely identifies an opengl effect.
      */
     protected String type;
-
-    /**
-     * Duration of the effect.
-     */
-    protected long duration;
 
     /**
      * The moment the effect is applied since start of the track.
      */
     protected long startTime;
+
+    /**
+     * Duration of the effect.
+     */
+    protected long duration;
 
     /**
      * Positive integer that defines the layer in which it have to be applied. The lower the layer
@@ -63,46 +63,55 @@ public abstract class Effect extends EditorElement {
     protected License license;
 
     /**
-     * Constructor called when the effect owner is not a videona user.
+     * Constructor of minimum number of parameters. Default constructor.
      *
-     * @param effectType - Effect type identifier.
-     * @param layer - Layer identifier that keeps the order in which the effect has to be apply.
-     * @param startTime - Time in seconds within result track in which the effect should start to be
-     *                  apply.
-     * @param duration - Time during which the effect should be apply.
-     * @param authorName - Effects owner type. Used to keep a reference for effects created by users
-     *                   outside the videona platform.
+     * @param identifier - Unique identifier for the editor element for the current project.
+     * @param iconPath - Path to a resource that allows represent the element in the view.
+     * @param type - Opengl unique effect identifier.
+     * @param startTime - Track instant in milliseconds in which the effect has to be applied.
+     * @param duration - Duration of effect.
+     * @param license - Legal stuff.
+     * @param author - Author of the effect.
      */
-    protected Effect(String effectType, int layer, long startTime, long duration, String authorName) {
-        this.setType(effectType);
-        this.setDuration(duration);
-        this.setStartTime(startTime);
-        this.setLayer(layer);
-        this.setAuthorName(authorName);
-        this.setAuthor(null);
-        this.license = new License(License.CC40_NAME, License.CC40_TEXT);
+    protected Effect(String identifier, String iconPath, String type, long startTime, long duration,
+                     License license, User author) {
+        super(identifier, iconPath);
+        this.type = type;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.license = license;
+        this.author = author;
     }
 
     /**
-     * Default constructor. Called when the effect owner is a videona user.
+     * Parametrized constructor. It requires all possible attributes for an effect object.
      *
-     * @param effectType - Effect type identifier.
-     * @param layer - Layer identifier that keeps the order in which the effect has to be apply.
-     * @param startTime - Time in seconds within result track in which the effect should start to be
-     *                  apply.
-     * @param duration - Time during which the effect should be apply.
-     * @param author - Effects owner instance.
-     */
-    protected Effect(String effectType, int layer, long startTime, long duration, User author) {
-        this.setType(effectType);
-        this.setDuration(duration);
-        this.setStartTime(startTime);
-        this.setLayer(layer);
-        this.setAuthor(author);
-        this.setAuthorName(author.getName());
-        this.license = new License(License.CC40_NAME, License.CC40_TEXT);
-    }
+     * @param identifier - Unique identifier for the editor element for the current project.
+     * @param iconPath - Path to a resource that allows represent the element in the view.
+     * @param selectedIconPath - if not null used as icon when something interact with the element.
+     *                           If null it will be used the iconPath as default.
+     * @param type - Opengl unique effect identifier.
+     * @param startTime - Track instant in milliseconds in which the effect has to be applied.
+     * @param duration - Duration of effect.
+     * @param license - Legal stuff.
+     * @param author - Author of the effect.
 
+     * @param layer - Number of the layer in which the effect has to be applied. Layers define
+     *              which effects expose to further modifications by others. The lower the layer
+     *              number the soner will be applied in assembly time.
+     * @param license - Legal stuff.
+     * @param author - Author of the effect.
+     */
+    protected Effect(String iconPath, String selectedIconPath, String identifier, String type,
+                     long startTime, long duration, int layer, User author, License license) {
+        super(identifier, iconPath, selectedIconPath);
+        this.type = type;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.layer = layer;
+        this.author = author;
+        this.license = license;
+    }
 
     //applying methods
     /**
@@ -116,7 +125,6 @@ public abstract class Effect extends EditorElement {
     /**
      * This method is called in real time by the editor to show a preview of the current edition
      * track modified by the effect.
-     * TODO Aún no se ha pensado como se hará esto.
      */
     public abstract void preview();
 

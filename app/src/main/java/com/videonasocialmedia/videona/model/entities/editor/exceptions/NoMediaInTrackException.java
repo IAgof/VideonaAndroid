@@ -21,6 +21,6 @@ public class NoMediaInTrackException extends Exception {
         super(detailMessage);
     }
     public NoMediaInTrackException() {
-        super("");
+        super();
     }
 }

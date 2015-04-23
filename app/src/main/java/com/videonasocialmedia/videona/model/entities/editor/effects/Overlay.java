@@ -13,6 +13,7 @@ package com.videonasocialmedia.videona.model.entities.editor.effects;
 
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
+import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
 
 /**
@@ -34,29 +35,31 @@ public class Overlay extends Effect {
     protected Coordinates coords;
 
     /**
+     * Constructor of minimum number of parameters. Default constructor.
      *
-     * @param overlayType - Overlay unique identifier.
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Overlay(String overlayType, Coordinates coords, Size frameSize, int layer, long startTime,
-                   long duration, User author) {
-        super(overlayType, layer, startTime, duration, author);
-        this.frameSize = frameSize;
-        this.coords = coords;
+    public Overlay(String identifier, String iconPath, String type, long startTime, long duration,
+                   License license, User author) {
+        super(identifier, iconPath, type, startTime, duration, license, author);
+        this.frameSize = null; //TODO get default size by the phone.
+        this.coords = new Coordinates(0, 0); //null means 0, 0
     }
 
     /**
+     * Parametrized construct. Requires all possible attributes of an Overlay object.
      *
-     * @param overlayType - Overlay unique identifier.
+     * @param frameSize - Size in pixels of the overlay effect.
+     * @param coords - coordinates referred to the video image.
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Overlay(String overlayType, Coordinates coords, Size frameSize, int layer, long startTime,
-                   long duration, String authorName) {
-        super(overlayType, layer, startTime, duration, authorName);
+    public Overlay(String iconPath, String selectedIconPath, String identifier, String type,
+                   long startTime, long duration, int layer, User author, License license,
+                   Size frameSize, Coordinates coords) {
+        super(iconPath, selectedIconPath, identifier, type, startTime, duration, layer, author, license);
         this.frameSize = frameSize;
         this.coords = coords;
     }
-
 
     //apply methods
     /**

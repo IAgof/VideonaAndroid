@@ -53,32 +53,16 @@ public class License {
     public final static String CC40_NAME = "CC BY-NC-SA 4.0";
     public final static String CC40_TEXT = "Summary\n" +
             "Creative Commons Attribution-NoDeratives license in International version 4, that " +
-            "allows to do what they want except modifying.\n"+
-            "Attribution\n" +
-            "You must give credit to the original author of the work, including a URI or hyperlink " +
-            "to the work, this Public license and a copyright notice.\n" +
-            "\n" +
-            "Attribution information revoke\n" +
-            "\n" +
-            "Author can request to remove any attribution given information.\n" +
-            "\n" +
-            "Tivoization\n" +
-            "You may not apply legal terms or technological measures that legally restrict others " +
-            "from doing anything the license permits.\n" +
-            "\n" +
-            "Disclaimer of warranties\n" +
-            "Disclaimer of warranties is optional.\n" +
-            "\n" +
-            "If separately undertaken, shared material must retain a notice to Disclaimer of " +
-            "warranties.\n" +
-            "\n" +
-            "Otherwise, Disclaimer of warranties, is taken by default, providing the work as-is and" +
-            " as-available.\n" +
-            "\n" +
-            "Liable\n" +
-            "Liable follows the same rules as Disclaimer of warranties, providing, by default, " +
-            "protection from defamation for the creator.\n" +
-            "\n" +
-            "Revoke\n" +
-            "The licensor cannot revoke these freedoms as long as you follow the license terms.";
+            "allows to do what they want except modifying.\n Attribution\n You must give credit to " +
+            "the original author of the work, including a URI or hyperlink to the work, this Public" +
+            " license and a copyright notice.\n\nAttribution information revoke\n\nAuthor can " +
+            "request to remove any attribution given information.\n\nTivoization\nYou may not apply " +
+            "legal terms or technological measures that legally restrict others from doing anything " +
+            "the license permits.\n\nDisclaimer of warranties\nDisclaimer of warranties is optional." +
+            "\n\nIf separately undertaken, shared material must retain a notice to Disclaimer of " +
+            "warranties.\n\nOtherwise, Disclaimer of warranties, is taken by default, providing the " +
+            "work as-is and as-available.\n\nLiable\nLiable follows the same rules as Disclaimer of " +
+            "warranties, providing, by default, protection from defamation for the creator.\n\n" +
+            "Revoke\n The licensor cannot revoke these freedoms as long as you follow the license " +
+            "terms.";
 }

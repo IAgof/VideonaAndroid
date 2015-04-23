@@ -29,7 +29,10 @@ import java.util.LinkedList;
 public class AudioTrack extends Track {
 
     /**
-     * Default constructor. Used when a new project is launched.
+     * Constructor of minimum number of parameters. Default constructor. Used when a new project
+     * is launched.
+     *
+     * @see com.videonasocialmedia.videona.model.entities.editor.track.Track
      */
     public AudioTrack() {
         super();
@@ -40,7 +43,7 @@ public class AudioTrack extends Track {
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.track.Track
      */
-    public AudioTrack(LinkedList<Media> items, ArrayList<Effect> effects,
+    public AudioTrack(LinkedList<Media> items, HashMap<Integer, LinkedList<Effect>> effects,
                       HashMap<String, Transition> transitions) {
         super(items, effects, transitions);
         this.checkItems();

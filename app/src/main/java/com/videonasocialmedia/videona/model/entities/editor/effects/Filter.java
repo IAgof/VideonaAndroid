@@ -13,6 +13,7 @@
 package com.videonasocialmedia.videona.model.entities.editor.effects;
 
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
+import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
 
 /**
@@ -22,23 +23,20 @@ import com.videonasocialmedia.videona.model.entities.social.User;
 public class Filter extends Effect {
 
     /**
-     * Default constructor. Called when owner is a videona user.
-     *
-     * @param filterType - Unique filter identifier.
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Filter(String filterType, int layer, long startTime, long duration, User author) {
-        super(filterType, layer, startTime, duration, author);
+    public Filter(String identifier, String iconPath, String type, long startTime, long duration, License license, User author) {
+        super(identifier, iconPath, type, startTime, duration, license, author);
     }
 
     /**
-     * Constructor called when owner is not a videona user.
      *
-     * @param filterType - Unique filter identifier.
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Filter(String filterType, int layer, long startTime, long duration, String authorName) {
-        super(filterType, layer, startTime, duration, authorName);
+    public Filter(String iconPath, String selectedIconPath, String identifier, String type,
+                  long startTime, long duration, int layer, User author, License license) {
+        super(iconPath, selectedIconPath, identifier, type, startTime, duration, layer, author,
+                license);
     }
 
     //application methods
