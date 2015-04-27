@@ -101,12 +101,28 @@
                 </RelativeLayout>
 
 
+                <SeekBar
+                    android:id="@+id/edit_seek_bar"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="true"
+                    android:indeterminate="false"
+                    android:longClickable="true"
+                    android:maxHeight="2dp"
+                    android:progressDrawable="@color/pastel_palette_blue" />
+
                 <RelativeLayout
                     android:orientation="horizontal"
                     android:layout_width="340dp"
                     android:layout_height="80dp"
                     android:id="@+id/relativeLayoutPreviewVideo"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp">
 
@@ -336,22 +352,6 @@
 
                 </RelativeLayout>
 
-                <SeekBar
-                    android:id="@+id/edit_seek_bar"
-                    android:layout_width="340dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="true"
-                    android:indeterminate="false"
-                    android:longClickable="true"
-                    android:maxHeight="2dp"
-                    android:progressDrawable="@color/pastel_palette_blue" />
-
 
             </LinearLayout>
 
@@ -375,7 +375,8 @@
                 android:id="@+id/edit_right_panel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true">
+                android:layout_alignParentRight="true"
+                android:visibility="gone">
 
             </FrameLayout>
 
@@ -425,5 +426,16 @@
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageBetaLabel"
+        android:src="@drawable/beta_label"
+        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="Beta Label"
+        android:layout_alignParentLeft="false" />
 
 </RelativeLayout>

@@ -12,19 +12,51 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 
-import com.videonasocialmedia.videona.domain.record.GetVideoRecordedUseCase;
-import com.videonasocialmedia.videona.domain.record.GetVideoRecordedUseCaseController;
+import android.content.Intent;
+import android.hardware.Camera;
+import android.media.MediaRecorder;
+import android.util.Log;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.videonasocialmedia.videona.domain.record.RecordUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
+import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 
-public class RecordPresenter extends Presenter {
-    
-    GetVideoRecordedUseCase useCase = new GetVideoRecordedUseCaseController();
+import java.util.ArrayList;
 
-    private final RecordView mRecordView;
+public class RecordPresenter extends Presenter implements onRecordEventListener, onEffectListener, onPreviewListener {
 
-    public RecordPresenter(RecordView mRecordView) {
+    /**
+     * Record Use Case
+     */
+    RecordUseCase recordUseCase;
 
-        this.mRecordView = mRecordView;
+    /**
+     * Record View
+     */
+    private final RecordView recordView;
+
+    /**
+     * LOG_TAG
+     */
+    private final String LOG_TAG = getClass().getSimpleName();
+
+    /**
+     * Boolean, control is recording file
+     */
+    private boolean isRecording = false;
+
+
+    public RecordPresenter(RecordView recordView) {
+
+        this.recordView = recordView;
+
+        recordUseCase = new RecordUseCase(recordView.getContext());
+
     }
 
     /**
@@ -33,7 +65,8 @@ public class RecordPresenter extends Presenter {
     @Override
     public void start() {
 
-       useCase.startRecordFile();
+        recordUseCase.startPreview(this);
+
     }
 
     /**
@@ -43,38 +76,144 @@ public class RecordPresenter extends Presenter {
     @Override
     public void stop() {
 
-        useCase.stopRecordFile();
+        recordUseCase.stopRecord(this);
 
     }
 
     /**
-     * Called when the activity need a path to save record file data.
-     *
-     * @return String recordFile
+     * on Resume Presenter
      */
-    public String getRecordFileString() {
+    public void onResume(){
 
-        return useCase.getRecordFileString();
+        recordUseCase.onResume();
+    }
+
+    /**
+     * on Pause Presenter
+     */
+    public void onPause(){
+
+        recordUseCase.onPause();
+    }
+
+
+    /**
+     * Record Button pressed
+     */
+
+    public void recordClickListener() {
+
+        if (isRecording) {
+
+           recordUseCase.startRecord(this);
+
+        } else {
+
+            recordUseCase.stopRecord(this);
+
+        }
 
     }
 
     /**
-     * Called when the user stop to record, save record file duration
-     *
-     * @param recordFileDuration
+     * Effect Button pressed
      */
-    public void setRecordFileDuration(long recordFileDuration){
+    public void effectClickListener(){
 
-        useCase.setRecordFileDuration(recordFileDuration);
+        recordUseCase.getAvailableEffects(this);
     }
 
     /**
-     * Called when the user stop to record, save record file duration
+     *  Effect selected
      *
-     * @param colorEffect
+     * @param effect
      */
-    public void setColorEffect(String colorEffect){
+    public void setEffect(Effect effect){
 
-        useCase.setColorEffect(colorEffect);
+       // Check isEffectPressed, lastEffect, ... to add o remove effect
+
+           recordUseCase.addEffect(effect, this);
+
+           recordUseCase.removeEffect(effect, this);
+
     }
+
+    @Override
+    public void onEffectAdded(Effect effect, long time) {
+
+
+        trackColorEffect(effect);
+
+        recordView.showEffectSelected(effect);
+    }
+
+    @Override
+    public void onEffectRemoved(Effect effect, long time) {
+
+        recordView.showEffectSelected(effect);
+    }
+
+    @Override
+    public void onEffectListRetrieved(ArrayList<String> effects) {
+
+        ColorEffectAdapter colorEffectAdapter = new ColorEffectAdapter(RecordActivity.this, effects);
+
+        recordView.showEffects(colorEffectAdapter);
+    }
+
+
+    @Override
+    public void onRecordStarted() {
+
+        recordView.startRecordVideo();
+        //initialize chronometerRecord
+        recordView.startChronometer();
+
+        isRecording = true;
+
+    }
+
+    @Override
+    public void onRecordStopped() {
+
+        recordView.stopRecordVideo();
+        recordView.stopChronometer();
+
+        isRecording = false;
+
+        ///TODO onRecordStopped navigate to EditActivity
+
+     /*
+        Intent edit = new Intent();
+        edit.putExtra("MEDIA_OUTPUT", videoRecordString);
+        edit.setClass(RecordActivity.this, EditActivity.class);
+
+        startActivityForResult(edit, CAMERA_EDIT_VIDEO_REQUEST_CODE);
+
+     */
+
+    }
+
+    @Override
+    public void onPreviewStarted(Camera camera, CameraPreview cameraPreview){
+
+        recordView.startPreview(camera, cameraPreview);
+        recordView.setChronometer();
+
+    }
+
+
+    /**
+     * Tracks the effects applied by the user
+     *
+     * @param effect
+     */
+    private void trackColorEffect(Effect effect) {
+        t.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("Color effect applied")
+                .setCategory(effect.getName())
+                .build());
+    }
+
 }

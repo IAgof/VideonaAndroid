@@ -9,6 +9,7 @@
  * Álvaro Martínez Marco
  * Danny R. Fonseca Arboleda
  */
+
 package com.videonasocialmedia.videona.model.entities.editor.effects;
 
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;

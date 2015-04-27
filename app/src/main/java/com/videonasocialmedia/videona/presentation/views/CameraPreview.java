@@ -23,7 +23,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.videonasocialmedia.videona.utils.ConfigUtils;
-import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,9 +36,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public static List<String> colorEffects;
 
-
-    private Context mContext;
-
     private SurfaceHolder mHolder;
 
     private Camera mCamera;
@@ -47,9 +43,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private List<Camera.Size> mSupportedPreviewSizes;
 
     private Camera.Size mPreviewSize;
-
-
-    private static UserPreferences appPrefs;
 
     public Paint paint;
     private boolean drawingViewSet = true;
@@ -63,14 +56,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         mCamera = camera;
 
-
         paint = new Paint();
         paint.setColor(Color.GREEN);
         paint.setStrokeWidth(10);
         paint.setStyle(Paint.Style.STROKE);
 
         // http://stackoverflow.com/questions/19577299/android-camera-preview-stretched
-
 
         // supported preview sizes
 
@@ -96,10 +87,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         // get available color effects
 
         colorEffects = mCamera.getParameters().getSupportedColorEffects();
-
-
-        appPrefs = new UserPreferences(context);
-
 
     }
 
@@ -175,6 +162,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             // parameters.setPreviewSize(size.width, size.height);
 
+            ///TODO get VideoSize from model, Project Profile
             parameters.setPreviewSize(ConfigUtils.VIDEO_SIZE_WIDTH, ConfigUtils.VIDEO_SIZE_HEIGHT);
 
             Log.e(TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);

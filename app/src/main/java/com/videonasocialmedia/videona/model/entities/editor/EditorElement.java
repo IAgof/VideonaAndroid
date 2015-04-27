@@ -62,6 +62,13 @@ public abstract class EditorElement {
         this.identifier = identifier;
     }
 
+    // amm
+    protected int iconResourceId;
+
+    public int getIconResourceId() {
+        return iconResourceId;
+    }
+
     public String getIconPath() {
         return iconPath;
     }

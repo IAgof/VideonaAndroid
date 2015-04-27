@@ -4,7 +4,7 @@
     <string name="app_name">Videona</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="toast_trim">Video Recorded trimmed in /sdcard/Videona</string>
+    <string name="toast_trim">Video Recorded trimmed in /sdcard/Movies/Videona</string>
     <string name="toast_exit">Press back to exit</string>
     <string name="not_ask_again">Not ask again</string>
     <string name="not_thanks">Not thanks</string>
