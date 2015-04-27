@@ -52,6 +52,7 @@ public class ScissorsFxMenuFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.edit_fragment_scissors,container,false);
         ButterKnife.inject(this, view);
+
         return view;
     }
 

@@ -47,6 +47,9 @@ import com.videonasocialmedia.videona.utils.UserPreferences;
 import org.lucasr.twowayview.TwoWayView;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -455,9 +458,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         if (appPrefs.getIsMusicON() && fTempAV.exists()) {
 
-           // fTempAV.delete();
-
-           // appPrefs.setIsMusicON(false);
 
             Intent share = new Intent();
             //  share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
