@@ -14,8 +14,8 @@ package com.videonasocialmedia.videona.model.entities.editor.track;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
-import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
+import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +82,9 @@ public abstract class Track {
      *
      * @param position - index where the item has to be added.
      * @param itemToAdd - the Media item.
+
+     * @return
+     * @throws IllegalItemOnTrack
      */
     public boolean insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
 
@@ -143,6 +146,23 @@ public abstract class Track {
         }
     }
 
+    /**
+     *
+     * @param itemToAdd
+     * @return
+     * @throws IllegalItemOnTrack
+     */
+    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
+        //Check if possible
+        if(this.items == null){
+            //TODO ¿hemos perdido el track? ¿que hacemos? ¿lo recuperamos de la última versión buena? ¿petamos?
+            //por el momento evitamos un nullpointer.
+            this.setItems(new LinkedList<Media>());
+        }
+
+        return this.insertItemAt(this.items.size(), itemToAdd);
+    }
+
 
     /**
      * Delete Media item. Get his position and deletes from the list.
@@ -151,7 +171,7 @@ public abstract class Track {
      * @return TRUE if the list contained the specified element.
      */
     public Media deleteItem(Media itemToDelete) throws IllegalOrphanTransitionOnTrack,
-            NoSuchElementException, IndexOutOfBoundsException {
+            NoSuchElementException, IndexOutOfBoundsException, IllegalItemOnTrack {
         return this.deleteItemAt(items.indexOf(itemToDelete));
     }
 
@@ -161,7 +181,7 @@ public abstract class Track {
      * @param position
      */
     public Media deleteItemAt(int position) throws IllegalOrphanTransitionOnTrack,
-            NoSuchElementException {
+            NoSuchElementException, IllegalItemOnTrack {
 
         //Make it possible
         if(this.items == null){

@@ -13,12 +13,14 @@ package com.videonasocialmedia.videona.model.entities.editor.track;
 
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
+import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Audio;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 /**
  * A media track instance is a track that can contain video and image media items but no audio
@@ -69,13 +71,66 @@ public class MediaTrack extends Track {
      * @throws IllegalItemOnTrack - when trying to add a Audio item on
      */
     @Override
-    public void insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
+    public boolean insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
         if(itemToAdd instanceof Audio) {
             throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
         }
-        super.insertItemAt(position, itemToAdd);
+        return super.insertItemAt(position, itemToAdd);
     }
 
+    @Override
+    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
+        if(itemToAdd instanceof Audio) {
+            throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
+        }
+        return this.insertItem(itemToAdd);
+    }
+
+    /**
+     * Delete Media item. Get his position and deletes from the list.
+     *
+     * @param itemToDelete - Media item to be deleted.
+     * @return TRUE if the list contained the specified element.
+     */
+    @Override
+    public Media deleteItem(Media itemToDelete) throws IllegalOrphanTransitionOnTrack,
+            NoSuchElementException, IndexOutOfBoundsException, IllegalItemOnTrack {
+        return this.deleteItemAt(this.items.indexOf(itemToDelete));
+    }
+
+    /**
+     * Delete Media item on the given position.
+     *
+     * @param position
+     */
+    @Override
+    public Media deleteItemAt(int position) throws IllegalOrphanTransitionOnTrack,
+            NoSuchElementException, IllegalItemOnTrack {
+        if(this.items.get(position) instanceof Audio) {
+            throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
+        }
+        return super.deleteItemAt(position);
+    }
+
+    /**
+     * Moves Media item to the given position.
+     *
+     * @param newPosition - The new position in the track for the media item.
+     * @param itemToMove - The media item to ve moved.
+     */
+    @Override
+    public boolean moveItemTo(int newPosition, Media itemToMove) throws IllegalItemOnTrack,
+            IllegalOrphanTransitionOnTrack {
+        if(itemToMove instanceof Audio) {
+            throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
+        }
+        return super.moveItemTo(newPosition, itemToMove);
+    }
+
+    /**
+     *
+     * @param items
+     */
     @Override
     public void setItems(LinkedList<Media> items) {
         super.setItems(items);
