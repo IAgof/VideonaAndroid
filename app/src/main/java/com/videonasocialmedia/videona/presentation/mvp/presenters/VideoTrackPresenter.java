@@ -8,26 +8,40 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.domain.editor.AddVideoUseCase;
+import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoTrackView;
 
 import java.util.ArrayList;
 
 /**
- * Created by vlf on 27/04/2015.
+ * This class is used for adding new videos to the project.
+ *
+ * @author vlf
+ * @since 27/04/2015
  */
 public class VideoTrackPresenter implements OnMediaFinishedListener {
-    AddVideoUseCase addVideoUseCase;
+    AddVideoToProjectUseCase addVideoToProjectUseCase;
     VideoTrackView videoTrackView;
 
+    /**
+     * Constructor.
+     *
+     * @param videoTrackView the view of the track in the editor activity
+     */
     public VideoTrackPresenter(VideoTrackView videoTrackView) {
-        addVideoUseCase = new AddVideoUseCase();
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         this.videoTrackView = videoTrackView;
     }
 
-    public void loadSelectedVideos(ArrayList<String> videos) {
-        addVideoUseCase.loadSelectedMediaItems(videos, this);
+    /**
+     * This method is used to add new videos to the actual track which makes use of addVideosToProject
+     * method.
+     *
+     * @param videos the list of the paths of the new elements which user wants to add to the project
+     */
+    public void addVideosToProject(ArrayList<String> videos) {
+        addVideoToProjectUseCase.addMediaItemsToProject(videos, this);
     }
 
     @Override
