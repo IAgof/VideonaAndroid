@@ -25,17 +25,17 @@ public class Filter extends Effect {
     /**
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Filter(String identifier, String iconPath, String type, long startTime, long duration, License license, User author) {
-        super(identifier, iconPath, type, startTime, duration, license, author);
+    public Filter(String iconPath, String type, long startTime, long duration, License license, User author) {
+        super(iconPath, type, startTime, duration, license, author);
     }
 
     /**
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Filter(String iconPath, String selectedIconPath, String identifier, String type,
+    public Filter(String iconPath, String selectedIconPath, String type,
                   long startTime, long duration, int layer, User author, License license) {
-        super(iconPath, selectedIconPath, identifier, type, startTime, duration, layer, author,
+        super(iconPath, selectedIconPath, type, startTime, duration, layer, author,
                 license);
     }
 

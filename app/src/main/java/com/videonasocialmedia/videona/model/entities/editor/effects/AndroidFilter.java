@@ -21,13 +21,13 @@ import com.videonasocialmedia.videona.model.entities.social.User;
  */
 public class AndroidFilter extends Filter {
 
-    public AndroidFilter(String identifier, String iconPath, String type, long startTime,
+    public AndroidFilter(String iconPath, String type, long startTime,
                          long duration, License license, User author) {
-        super(identifier, iconPath, type, startTime, duration, license, author);
+        super(iconPath, type, startTime, duration, license, author);
     }
 
-    public AndroidFilter(String iconPath, String selectedIconPath, String identifier, String type,
+    public AndroidFilter(String iconPath, String selectedIconPath, String type,
                          long startTime, long duration, int layer, User author, License license) {
-        super(iconPath, selectedIconPath, identifier, type, startTime, duration, layer, author, license);
+        super(iconPath, selectedIconPath, type, startTime, duration, layer, author, license);
     }
 }

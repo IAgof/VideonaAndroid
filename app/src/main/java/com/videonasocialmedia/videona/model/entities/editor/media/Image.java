@@ -38,9 +38,9 @@ public class Image extends Media {
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
      */
-    public Image(String identifier, String iconPath, String mediaPath, ArrayList<User> authors,
+    public Image(String iconPath, String mediaPath, ArrayList<User> authors,
                  License license) {
-        super(identifier, iconPath, mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, authors, license);
+        super(iconPath, mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, authors, license);
     }
 
     /**
@@ -48,10 +48,10 @@ public class Image extends Media {
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
      */
-    public Image(String identifier, String iconPath, String selectedIconPath, String title, String
+    public Image(String iconPath, String selectedIconPath, String title, String
             mediaPath, long duration, Transition opening, Transition ending,
                  MediaMetadata metadata, ArrayList<User> authors, License license) {
-        super(identifier, iconPath, selectedIconPath, title, mediaPath, 0, duration,
+        super(iconPath, selectedIconPath, title, mediaPath, 0, duration,
                 opening, ending, metadata, authors, license);
     }
 

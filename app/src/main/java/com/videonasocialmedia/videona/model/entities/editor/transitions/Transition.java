@@ -68,24 +68,21 @@ public abstract class Transition extends EditorElement {
     /**
      * Constructor of minimum number of parameters. Default constructor.
      *
-     * @param identifier - Unique identifier of the media for the current project.
      * @param iconPath - Path to a resource that allows represent the media in the view.
      * @param type - Opengl unique identifier for transition.
      * @param afterMediaItem - Media item immediately preceding the transition. If null the
-     *                         transition must be the first item of the editor track, and therefore
-     *                         it must be added a void media (blackout 1 sec) during assembly
-     *                         proccess.
+     *                       transition must be the first item of the editor track, and therefore
+     *                       it must be added a void media (blackout 1 sec) during assembly proccess.
      * @param beforeMediaItem - Media item immediately following the transition. If null the
-     *                         transition must be the last item of the editor track, and therefore
-     *                         it must be added a void media (blackout 1 sec) during assembly
-     *                         proccess.
+     *                        transition must be the last item of the editor track, and therefore
+     *                        it must be added a void media (blackout 1 sec) during assembly proccess.
      * @param duration - transition elapsed time.
      * @param author - Transition owner's user reference.
      * @param license - Owner's choice licensing for the transition.
      */
-    public Transition(String identifier, String iconPath, String type, Media afterMediaItem,
-                         Media beforeMediaItem, long duration, User author, License license) {
-        super(identifier, iconPath);
+    public Transition(String iconPath, String type, Media afterMediaItem,
+                      Media beforeMediaItem, long duration, User author, License license) {
+        super(iconPath);
         this.type = type;
         this.afterMediaItem = afterMediaItem;
         this.beforeMediaItem = beforeMediaItem;
@@ -96,7 +93,6 @@ public abstract class Transition extends EditorElement {
 
     /**
      *
-     * @param identifier - Unique identifier of the media for the current project.
      * @param iconPath - Path to a resource that allows represent the media in the view.
      * @param selectedIconPath - if not null used as icon when something interact with the element.
      * @param type - Opengl unique identifier for transition.
@@ -112,10 +108,10 @@ public abstract class Transition extends EditorElement {
      * @param author - Transition owner's user reference.
      * @param license - Owner's choice licensing for the transition.
      */
-    public Transition(String identifier, String iconPath, String selectedIconPath, String type,
+    public Transition(String iconPath, String selectedIconPath, String type,
                          Media afterMediaItem, Media beforeMediaItem, long duration, User author,
                          License license) {
-        super(identifier, iconPath, selectedIconPath);
+        super(iconPath, selectedIconPath);
         this.type = type;
         this.afterMediaItem = afterMediaItem;
         this.beforeMediaItem = beforeMediaItem;

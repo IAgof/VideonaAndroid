@@ -39,9 +39,9 @@ public class Overlay extends Effect {
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Overlay(String identifier, String iconPath, String type, long startTime, long duration,
+    public Overlay(String iconPath, String type, long startTime, long duration,
                    License license, User author) {
-        super(identifier, iconPath, type, startTime, duration, license, author);
+        super(iconPath, type, startTime, duration, license, author);
         this.frameSize = null; //TODO get default size by the phone.
         this.coords = new Coordinates(0, 0); //null means 0, 0
     }
@@ -53,10 +53,10 @@ public class Overlay extends Effect {
      * @param coords - coordinates referred to the video image.
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
-    public Overlay(String iconPath, String selectedIconPath, String identifier, String type,
+    public Overlay(String iconPath, String selectedIconPath, String type,
                    long startTime, long duration, int layer, User author, License license,
                    Size frameSize, Coordinates coords) {
-        super(iconPath, selectedIconPath, identifier, type, startTime, duration, layer, author, license);
+        super(iconPath, selectedIconPath, type, startTime, duration, layer, author, license);
         this.frameSize = frameSize;
         this.coords = coords;
     }
