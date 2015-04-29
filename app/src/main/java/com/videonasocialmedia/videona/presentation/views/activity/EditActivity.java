@@ -531,8 +531,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         this.switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
 
         onEffectMenuSelected();
-
-
     }
 
     @OnClick(R.id.edit_button_scissor)
