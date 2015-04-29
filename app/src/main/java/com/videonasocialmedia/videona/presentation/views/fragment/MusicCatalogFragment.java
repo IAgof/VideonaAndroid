@@ -112,7 +112,7 @@ public class MusicCatalogFragment extends Fragment implements MusicCatalogView {
 
     }
 
-    public List<EditorElement> getFxList(){
+    public List<Music> getFxList(){
         return adapter.getElementList();
     }
 

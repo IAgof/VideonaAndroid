@@ -52,7 +52,7 @@ public class Image extends Media {
      * @param mediaPath
      */
     public Image(String mediaPath) {
-        super(null, mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, null, null);
+        super(null, null,mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, null, null);
         //check if the mediapath is an image.
 
         //get the iconpath

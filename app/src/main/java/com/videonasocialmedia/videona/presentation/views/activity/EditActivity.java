@@ -39,9 +39,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
-import com.videonasocialmedia.videona.model.entities.editor.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
@@ -105,7 +103,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
     private LookFxMenuFragment lookFxMenuFragment;
-    private MusicCatalogFragment fxCatalogFragment;
+    private MusicCatalogFragment musicCatalogFragment;
 
     /*mvp*/
     private EditPresenter editPresenter;
@@ -519,7 +517,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
     public void showAudioFxMenu() {
      /*  if (audioFxButton == null) {
            audioFxMenuFragment = new AudioFxMenuFragment();
-           switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
+           switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
        }
     */
         if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
@@ -527,10 +525,10 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         };
 
 
-        if (fxCatalogFragment == null) {
-            fxCatalogFragment = new FxCatalogFragment();
+        if (musicCatalogFragment == null) {
+            musicCatalogFragment = new MusicCatalogFragment();
         }
-        this.switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
+        this.switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
 
         onEffectMenuSelected();
 
@@ -727,13 +725,13 @@ Resources.getSystem().getIdentifier("customPanel", "id",
             relativeLayoutPreviewVideo.setVisibility(View.GONE);
         };
 
-        if (fxCatalogFragment == null) {
-            fxCatalogFragment = new FxCatalogFragment();
+        if (musicCatalogFragment == null) {
+            musicCatalogFragment = new MusicCatalogFragment();
         } else {
             //TODO cambiar la lista del fragment
         }
 
-        switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
+        switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
 
       /*  if(audioFxMenuFragment == null){
             audioFxMenuFragment = new AudioFxMenuFragment();
@@ -862,7 +860,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
             playButton.setVisibility(View.VISIBLE);
         }
 
-        List<EditorElement> musicList = fxCatalogFragment.getFxList();
+        List<Music> musicList = musicCatalogFragment.getFxList();
 
         if (position == (musicList.size()-1)) {
 
