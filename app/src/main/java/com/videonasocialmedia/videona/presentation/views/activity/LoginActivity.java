@@ -64,9 +64,9 @@ public class LoginActivity extends Activity implements LoginView {
     }
 
 
-/**
- * Try to login the user using the credentials provided by userTextField and passwordTextField
- */
+    /**
+     * Try to login the user using the credentials provided by userTextField and passwordTextField
+     */
     @OnClick(R.id.send_login_button)
     public void login(View v) {
         sendButtonTracked(v.getId());

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.videonasocialmedia.videona.R;
 
+import com.videonasocialmedia.videona.presentation.mvp.presenters.LoadingProjectPresenter;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -38,6 +39,8 @@ public class VideonaMainActivity extends Activity {
 
     private static final int CAMERA_RECORD_VIDEO_REQUEST_CODE = 100;
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
+
+    private LoadingProjectPresenter loadingProjectPresenter;
 
 
     @Override
@@ -65,6 +68,7 @@ public class VideonaMainActivity extends Activity {
             Log.e("CHECK_PATH", "Error checking path", e);
         }
 
+        loadingProjectPresenter = new LoadingProjectPresenter();
 
     }
 
@@ -198,6 +202,10 @@ public class VideonaMainActivity extends Activity {
             //boolean loggedIn = isSessionActive();
 
             try {
+
+                // Loading project use case
+                loadingProjectPresenter.startLoadingProject();
+
                 // 3 seconds, time in milliseconds
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

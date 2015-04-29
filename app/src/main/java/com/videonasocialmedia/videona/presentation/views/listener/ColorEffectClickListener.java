@@ -11,8 +11,10 @@ package com.videonasocialmedia.videona.presentation.views.listener;
  *
  */
 
+import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
+
 public interface ColorEffectClickListener {
 
-    void onColorEffectClicked(int position);
+    void onColorEffectClicked(ColorEffectAdapter adapter, String effectName, int position);
 
 }

@@ -41,6 +41,7 @@ import android.widget.VideoView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.model.entities.editor.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
@@ -527,7 +528,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
 
         if (fxCatalogFragment == null) {
-            fxCatalogFragment = new MusicCatalogFragment();
+            fxCatalogFragment = new FxCatalogFragment();
         }
         this.switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
 
@@ -727,7 +728,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         };
 
         if (fxCatalogFragment == null) {
-            fxCatalogFragment = new MusicCatalogFragment();
+            fxCatalogFragment = new FxCatalogFragment();
         } else {
             //TODO cambiar la lista del fragment
         }
@@ -1040,6 +1041,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 // String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
 // VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
                 Log.d(LOG_TAG, "pathVideoTrim " + pathvideoTrim + "  " + " musicSelected " + musicSelected);
+
                 VideoUtils.switchAudio(pathvideoTrim, musicSelected, Constants.VIDEO_MUSIC_TEMP_FILE);
 
                 // Delete TRIM temporal file

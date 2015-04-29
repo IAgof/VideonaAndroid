@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
-import com.videonasocialmedia.videona.presentation.views.fragment.Camera2VideoFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
@@ -54,10 +53,15 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         mColorEffectClickListener = (ColorEffectClickListener) viewClickListener;
     }
 
+    /*
+     Descomentar Camera2VideoFragment
+
     public void setViewClickListenerLollipop(Camera2VideoFragment viewClickListener) {
 
         mColorEffectClickListener = (ColorEffectClickListener) viewClickListener;
     }
+
+    */
 
     public ColorEffectAdapter(Activity activity, ArrayList<String> colorEffectItems) {
         super(activity, R.layout.item_color_effect, colorEffectItems);
@@ -114,6 +118,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         // colorEffectName, key value to obtain drawable resources effect_ + colorEffectName
        // int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
         int resourceId = 0;
+
         if(RecordActivity.positionColorEffectPressed == position) {
             isPressed = true;
             resourceId = getResourceDrawableColorEffect(colorEffectName, isPressed);
@@ -147,13 +152,15 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
 
-                mColorEffectClickListener.onColorEffectClicked(position);
 
                 // Restart last position
 
 
                 isPressed = true;
                 colorEffectName = colorEffectItems.get(position);
+
+                mColorEffectClickListener.onColorEffectClicked(new ColorEffectAdapter(activity,colorEffectItems), colorEffectName, position);
+
                 int resourceIdPressed = getResourceDrawableColorEffect(colorEffectName, isPressed);
                 viewHolder.imageView.setImageResource(resourceIdPressed);
                 isPressed = false;
