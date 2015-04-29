@@ -10,10 +10,19 @@
  * Danny R. Fonseca Arboleda
  */
 package com.videonasocialmedia.videona.model.entities.editor.media;
+
+import android.graphics.Bitmap;
 import android.media.MediaMetadata;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
+
+import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +31,8 @@ import java.util.ArrayList;
  * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
  */
 public class Video extends Media {
+
+    public static String VIDEO_PATH;
 
     /**
      * Constructor of minimum number of parameters. Default constructor.
@@ -45,4 +56,14 @@ public class Video extends Media {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, fileStartTime, duration,
                 opening, ending, metadata, authors, license);
     }
+
+    /**
+     * Constructor of minimum number of parameters. Default constructor.
+     * //TODO no pides nada vero.  xD
+     * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
+     */
+    public Video(String mediaPath, long fileStartTime) {
+        super(null, null, mediaPath, fileStartTime, 0, null, null);
+    }
+
 }

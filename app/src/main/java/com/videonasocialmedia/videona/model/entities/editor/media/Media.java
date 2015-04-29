@@ -12,10 +12,13 @@
 package com.videonasocialmedia.videona.model.entities.editor.media;
 
 import android.media.MediaMetadata;
+
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -38,6 +41,8 @@ public abstract class Media extends EditorElement {
      * The path of the media resource
      */
     protected String mediaPath;
+
+    protected File source;
 
     /**
      * The start time of the media resource within the file it represents.
@@ -94,6 +99,7 @@ public abstract class Media extends EditorElement {
                     long duration, ArrayList<User> authors, License license) {
         super(identifier, iconPath);
         this.mediaPath = mediaPath;
+        this.source = new File(this.mediaPath);
         this.fileStartTime = fileStartTime;
         this.duration = duration;
         this.authors = authors;
@@ -124,6 +130,7 @@ public abstract class Media extends EditorElement {
         super(identifier, iconPath, selectedIconPath);
         this.title = title;
         this.mediaPath = mediaPath;
+        this.source = new File(this.mediaPath);
         this.fileStartTime = fileStartTime;
         this.duration = duration;
         this.opening = opening;

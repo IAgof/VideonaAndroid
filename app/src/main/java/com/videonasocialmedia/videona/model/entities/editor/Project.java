@@ -11,9 +11,13 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor;
 
+import com.videonasocialmedia.videona.model.entities.editor.media.Audio;
+import com.videonasocialmedia.videona.model.entities.editor.media.Image;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.AudioTrack;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -47,11 +51,6 @@ public class Project {
      * project profile.
      */
     private ArrayList<AudioTrack> audioTracks;
-    /**
-     * Total duration of the video project.
-     * TODO dfa - aquí la duración la veo innecesaria. Si es por rpeguntar por la máxima se le pregunta al profile. Y la actual al track.
-     */
-    private long duration;
 
     /**
      * Project profile. Defines some limitations and characteristic of the project based on user
@@ -59,41 +58,46 @@ public class Project {
      */
     private Profile profile;
 
-    /**
-     * Parametrized constructor. It has all possible attributes for a Project object.
-     *
-     * @param title -  the title of the current project.
-     * @param projectPath - Project root location.
-     * @param mediaTrack - MediaTrack with all media elements used in the current project.
-     * @param audioTracks - A list of up to 3 audio tracks for the current project.
-     * @param duration - //TODO deprectaed, no tiene sentido usarlo aquí.
-     * @param profile - Project profile. Set the default limits by category Profile
-     *                //TODO si tenemos una fabrica mejor dejar un solo constructor y privado.
-     */
-    public Project(String title, String projectPath, MediaTrack mediaTrack,
-                   ArrayList<AudioTrack> audioTracks, long duration, Profile profile) {
-        this.title = title;
-        this.projectPath = projectPath;
-        this.mediaTrack = mediaTrack;
-        this.audioTracks = audioTracks;
-        this.duration = duration;
-        this.profile = profile;
-    }
+    public static String VIDEONA_PATH = "";
 
     /**
      * Constructor of minimum number of parameters. This is the Default constructor.
      *
      * @param title - Project and final video name.
-     * @param projectPath - Path to root folder for the current project.
+     * @param rootPath - Path to root folder for the current project.
      * @param profile - Define some characteristics and limitations of the current project.
      */
-    private Project(String title, String projectPath, Profile profile) {
+    private Project(String title, String rootPath, Profile profile) {
         this.title = title;
-        this.projectPath = projectPath;
+        this.projectPath = rootPath+"/projects/"+title; //todo probablemente necesitemos un slugify de ese title.
+        this.checkPathSetup(rootPath);
         this.mediaTrack = new MediaTrack();
         this.audioTracks = new ArrayList<AudioTrack>();
         this.profile = profile;
-        this.duration = mediaTrack.getDuration();
+    }
+
+    /**
+     *
+     * @param rootPath
+     */
+    private void checkPathSetup(String rootPath) {
+
+        Project.VIDEONA_PATH = rootPath;
+        File projectPath = new File(this.projectPath);
+        projectPath.mkdirs();
+
+        Audio.AUDIO_PATH = rootPath+"/audios";
+        File audioPath = new File(Audio.AUDIO_PATH+"/thumbs");
+        audioPath.mkdirs();
+
+        Image.IMAGE_PATH = rootPath+"/images";
+        File imagePath = new File(Image.IMAGE_PATH+"thumbs");
+        imagePath.mkdirs();
+
+        Video.VIDEO_PATH = rootPath+"/videos";
+        File videoPath = new File(Audio.AUDIO_PATH+"/thumbs");
+        videoPath.mkdirs();
+
     }
 
     /**
@@ -101,9 +105,9 @@ public class Project {
      *
      * @return - Singleton instance of the current project.
      */
-    public static Project getInstance(String title, String projectPath, Profile profile){
+    public static Project getInstance(String title, String rootPath, Profile profile){
         if (INSTANCE==null){
-            INSTANCE=new Project(title, projectPath, profile);
+            INSTANCE=new Project(title, rootPath, profile);
         }
         return INSTANCE;
     }

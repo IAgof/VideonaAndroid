@@ -14,8 +14,10 @@ package com.videonasocialmedia.videona.model.entities.editor.track;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
-import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
+import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -80,12 +82,16 @@ public abstract class Track {
      *
      * @param position - index where the item has to be added.
      * @param itemToAdd - the Media item.
+
+     * @return
+     * @throws IllegalItemOnTrack
      */
-    public void insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
+    public boolean insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
 
         //Check if possible
         if(this.items == null){
             //TODO ¿hemos perdido el track? ¿que hacemos? ¿lo recuperamos de la última versión buena? ¿petamos?
+            //por el momento evitamos un nullpointer.
             this.setItems(new LinkedList<Media>());
         }
 
@@ -97,10 +103,14 @@ public abstract class Track {
             position = trackSize;
         }
 
-        //empty effects and transitions, nothing to do except add the item.
         if((this.effects.isEmpty() && this.transitions.isEmpty()) || this.items.isEmpty()){
+            //If there are no items on the track it cannot contain effects or transitions
+            //if there is not effects and/or transitions then the item could be added without
+            //further calculations.
             this.items.add(position, itemToAdd);
+            return true;
         } else {
+            //if there is
 
             //Get adjacent items. Util for both checkings: transitions and effects.
             Media afterMedia;
@@ -120,49 +130,37 @@ public abstract class Track {
 
             if (afterMedia == beforeMedia) {
                 //is empty WTF!!!
+                return false;
             }
 
             /**
-             * TODO transitions no entra en el deadline del 7 de mayo.
-             * todo esto es de cara a mover bien las transiciones antes de insertar el item.
-             //Check transitions
-             Transition beforeTransition = null;
-             if(beforeMedia != null) beforeTransition = beforeMedia.getEnding();
-             Transition afterTransition = null;
-             if(afterMedia != null) afterTransition = afterMedia.getOpening();
-             //There could not separate two media items joined by a transition.
-             if(afterTransition == beforeTransition){
-             throw new IllegalItemOnTrack("Can not add an item between two items which " +
-             "share a transition. Transition must be disengaged before");
-             }
+             * TODO transitions no entra en el deadline del 7 de mayo. Pero abrá que hacerlo
              */
-
 
             //Adapt events to the new track configuration.
-            /**
-             * TODO la idea es conservar las posiciones relativas originales de start y finish time dentro
-             * de los items originales donde empezaba y/o terminaba el efecto.
-             */
-            long newItemTrackStartTime = getTrackStartTimeFor(afterMedia);
-            for(LinkedList<Effect> layer: this.effects.values()){
-                for(Effect e: layer){
-                    if(newItemTrackStartTime >= e.getStartTime()+e.getDuration()){
-                        //case insert item after the effect, we don't have to do anything
-                        continue;
-                    } else if(newItemTrackStartTime <= e.getStartTime()){
-                        //case insert item before the effect. Add newItemDuration to effectStartTime
-                        e.setStartTime(e.getStartTime()+itemToAdd.getDuration());
-                    } else {
-                        //case insert in the middle of an effect afected area. We extend the effect
-                        //to cover the new added item.
-                        e.setDuration(e.getDuration()+itemToAdd.getDuration());
-                    }
-                }
-            }
+            this.updateEffectsForAddItem(itemToAdd, this.getTrackStartTimeFor(afterMedia));
 
             //add the item.
             this.items.add(position, itemToAdd);
+            return true;
         }
+    }
+
+    /**
+     *
+     * @param itemToAdd
+     * @return
+     * @throws IllegalItemOnTrack
+     */
+    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
+        //Check if possible
+        if(this.items == null){
+            //TODO ¿hemos perdido el track? ¿que hacemos? ¿lo recuperamos de la última versión buena? ¿petamos?
+            //por el momento evitamos un nullpointer.
+            this.setItems(new LinkedList<Media>());
+        }
+
+        return this.insertItemAt(this.items.size(), itemToAdd);
     }
 
 
@@ -173,7 +171,7 @@ public abstract class Track {
      * @return TRUE if the list contained the specified element.
      */
     public Media deleteItem(Media itemToDelete) throws IllegalOrphanTransitionOnTrack,
-            NoSuchElementException, IndexOutOfBoundsException {
+            NoSuchElementException, IndexOutOfBoundsException, IllegalItemOnTrack {
         return this.deleteItemAt(items.indexOf(itemToDelete));
     }
 
@@ -183,25 +181,50 @@ public abstract class Track {
      * @param position
      */
     public Media deleteItemAt(int position) throws IllegalOrphanTransitionOnTrack,
-            NoSuchElementException {
+            NoSuchElementException, IllegalItemOnTrack {
 
         //Make it possible
         if(this.items == null){
-            //TODO no tiene sentido ¿tratar de recuperar el último track valido?
+            //TODO ¿hemos perdido el track? ¿que hacemos? ¿lo recuperamos de la última versión buena? ¿petamos?
+            //por el momento evitamos un nullpointer.
             this.setItems(new LinkedList<Media>());
             throw new NoSuchElementException();
         }
 
-        //check if fail
-        if((position < 0) || (position>=items.size()) ){
-            throw new IndexOutOfBoundsException();
+        if(this.items.isEmpty()){
+            //nothing to delete.
+            throw new NoSuchElementException();
         }
 
-                //Check transition is not violated.
+        //Check transition is not violated.
         if(this.items.get(position).hashTransitions()){
             throw new IllegalOrphanTransitionOnTrack("Media item to delete must be disengaged " +
                     "from transitions first");
         }
+
+        //Get adjacent items. Util for both checkings: transitions and effects.
+        Media afterMedia;
+        try {
+            afterMedia = items.get(position);
+        } catch (IndexOutOfBoundsException e) {
+            //adding to the end of the list
+            afterMedia = null;
+        }
+        Media beforeMedia;
+        try {
+            beforeMedia = items.get(position - 1);
+        } catch (IndexOutOfBoundsException e) {
+            //adding to beggining of the list.
+            beforeMedia = null;
+        }
+
+        if (afterMedia == beforeMedia) {
+            //is empty WTF!!!
+            return null;
+        }
+
+        //Check to update effects.
+        this.updateEffectsForDeleteItem(this.items.get(position));
 
         //try to delete element from list.
         return items.remove(position);
@@ -215,12 +238,48 @@ public abstract class Track {
      */
     public boolean moveItemTo(int newPosition, Media itemToMove) throws IllegalItemOnTrack,
             IllegalOrphanTransitionOnTrack {
-       return false;
+
+        //Make it possible
+        if(this.items == null){
+            //TODO ¿hemos perdido el track? ¿que hacemos? ¿lo recuperamos de la última versión buena? ¿petamos?
+            //por el momento evitamos un nullpointer.
+            this.setItems(new LinkedList<Media>());
+            throw new NoSuchElementException(); //nothing to move.
+        }
+
+        if(this.items.isEmpty()){
+            //Nothing to move.
+            throw new NoSuchElementException();
+        }
+
+        //Check transition is not violated.
+        if(itemToMove.hashTransitions()){
+            throw new IllegalOrphanTransitionOnTrack("Media item to move must be disengaged from " +
+                    "transitions first");
+        }
+
+
+
+        //check for effects
+
+        //apply update as is delete the item
+        ArrayList<Effect> removedEffects = this.updateEffectsForDeleteItem(itemToMove);
+
+        //delete the item.
+        this.items.remove(this.items.indexOf(itemToMove));
+
+        //insert the item again in his new position.
+        this.insertItemAt(newPosition, itemToMove);
+
+        //add the previously deleted effects.
+        //TODO cuando sepamos como se insertan los efectos y que esto no va a petar.
+
+       return true;
     }
 
 
     //Effects
-    //TODO disntinguir entre audioeffects y media effects.
+    //TODO disntinguir entre audioeffects y media effects. No entran en el 7 de mayo.
     public void insertEffect(Effect effect){
     }
     public void deleteEffect(){
@@ -231,7 +290,7 @@ public abstract class Track {
 
 
     //Transitions
-    //TODO distinguir entre audio transitions y media transitions.
+    //TODO distinguir entre audio transitions y media transitions. No entran en el 7 de mayo
     public void insertTransitionAfter() {
     }
     public void deleteTransition(){
@@ -259,6 +318,82 @@ public abstract class Track {
     }
     public void setTransitions(HashMap<String, Transition> transitions) {
         this.transitions = transitions;
+    }
+
+    //Local Utilities
+
+    /**
+     * Recalculate effects positions for the new track configuration after item has been removed.
+     *
+     * @param itemToAdd - Media Item to be added to the track, used to recalculated new effects
+     *                  startTime and durations.
+     */
+    private void updateEffectsForAddItem(Media itemToAdd, long newItemTrackStartTime) {
+        for(LinkedList<Effect> layer: this.effects.values()){
+            for(Effect e: layer){
+                if(newItemTrackStartTime >= e.getStartTime()+e.getDuration()){
+                    //case insert item after the effect, we don't have to do anything
+                    //continue;
+
+                } else if(newItemTrackStartTime <= e.getStartTime()){
+                    //case insert item before the effect. Add newItemDuration to effectStartTime
+                    e.setStartTime(e.getStartTime()+itemToAdd.getDuration());
+                } else {
+                    //case insert in the middle of an effect afected area. We extend the effect
+                    //to cover the new added item.
+                    e.setDuration(e.getDuration()+itemToAdd.getDuration());
+                }
+            }
+        }
+    }
+
+    /**
+     * Recalculate effects positions for the new track configuration after item has been removed.
+     *
+     * @param itemToDelete - Media item to be deleted. Used to recalculate startTimes an durations for
+     *                     effects in the new track configuration.
+     *
+     * @return An ArrayList<Effect> containing effects that has been removed from the track due to
+     * the action being performed. If action was a delteItem ignore this return, if action was a move
+     * item use this list to add the effects again in his new location after moving the item.
+     */
+    private ArrayList<Effect> updateEffectsForDeleteItem(Media itemToDelete) {
+        long itemStartTime = this.getTrackStartTimeFor(itemToDelete);
+        long itemEndTime = itemStartTime+itemToDelete.getDuration();
+        ArrayList<Effect> removedEffects = new ArrayList<Effect>();
+        for(LinkedList<Effect> layer: this.effects.values()){
+            for(Effect e: layer){
+                if(itemStartTime > e.getStartTime()+e.getDuration()){
+                    //case effect occurs before the item. Nothing to do.
+                    //continue;
+
+                } else if(itemEndTime < e.getStartTime()){
+                    //case effect occurs after the item. Deduct itemToDelete duration from effect startTime
+                    e.setStartTime(e.getStartTime()-itemToDelete.getDuration());
+
+                } else if(itemStartTime <= e.getStartTime() && itemEndTime >= e.getStartTime()+e.getDuration()){
+                    //case effect is contained in item. Delete effect.
+                    //remove the item and store in a temporal list used for the moveItem action.
+                    removedEffects.add(layer.remove(layer.indexOf(e)));
+                    //set startTime relative to media, in case of moveItem action. Used later to stablish the new effect startTime.
+                    e.setStartTime(e.getStartTime()-itemStartTime);
+
+                } else if(itemStartTime > e.getStartTime() && itemEndTime < e.getStartTime()+e.getDuration()){
+                    //case effect contains item. Set new effect duration deducting itemToDelete duration.
+                    e.setDuration(e.getDuration()-itemToDelete.getDuration());
+
+                } else if(itemStartTime <= e.getStartTime() && itemEndTime < e.getStartTime()+e.getDuration()){
+                    //case effect starts during itemToDelete => Effect new startTime = itemToDelete startTime
+                    e.setStartTime(itemStartTime);
+
+                } else if(itemStartTime > e.getStartTime() && itemEndTime >= e.getStartTime()+e.getDuration()){
+                    //case effect ends during itemToDelete => Trim effect duration to itemToDelete startTime
+                    e.setDuration(itemStartTime-e.getStartTime());
+
+                }
+            }
+        }
+        return removedEffects;
     }
 
     /**

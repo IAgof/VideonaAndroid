@@ -11,10 +11,14 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.media;
 
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadata;
+
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 public class Image extends Media {
 
     public static final long DEFAULT_IMAGE_DURATION = 3;
+    public static String IMAGE_PATH = "";
 
 
     /**
@@ -39,6 +44,22 @@ public class Image extends Media {
     public Image(String identifier, String iconPath, String mediaPath, ArrayList<User> authors,
                  License license) {
         super(identifier, iconPath, mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, authors, license);
+    }
+
+    /**
+     * Lazy constructor. Creating a image media item from the mediaPath only.
+     *
+     * @param mediaPath
+     */
+    public Image(String mediaPath) {
+        super(null, mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, null, null);
+        //check if the mediapath is an image.
+
+        //get the iconpath
+
+        //resolve lincese by default.
+        this.setLicense(new License(License.CC40_NAME, License.CC40_TEXT));
+
     }
 
     /**
@@ -60,5 +81,16 @@ public class Image extends Media {
     @Override
     public void setFileStartTime(long fileStartTime) {
         //
+    }
+
+    //utils
+    public static boolean isImage(File file) {
+        if (file == null || !file.exists()) {
+            return false;
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getPath(), options);
+        return options.outWidth != -1 && options.outHeight != -1;
     }
 }

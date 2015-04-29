@@ -75,15 +75,12 @@ public abstract class EditorElement {
     public String getIconPath() {
         return iconPath;
     }
-
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
     }
-
     public String getSelectedIconPath() {
         return selectedIconPath;
     }
-
     public void setSelectedIconPath(String selectedIconPath) {
         this.selectedIconPath = selectedIconPath;
     }
