@@ -87,16 +87,17 @@ public abstract class Media extends EditorElement {
     /**
      * Constructor of minimum number of parameters. Default constructor.
      *
+     * @param identifier - Unique identifier of the media for the current project.
      * @param iconPath - Path to a resource that allows represent the media in the view.
      * @param mediaPath - Path to the resource file that this media represents.
      * @param fileStartTime - Media item initial time in milliseconds within the file referenced
      * @param duration - Media item duration in milliseconds within the file referenced
-     * @param authors - List of authors of the media item.
      * @param license - Legal stuff.
+     * @param authors - List of authors of the media item.
      */
-    protected Media(String iconPath, String mediaPath, long fileStartTime,
+    protected Media(String identifier, String iconPath, String mediaPath, long fileStartTime,
                     long duration, ArrayList<User> authors, License license) {
-        super(iconPath);
+        super(identifier, iconPath);
         this.mediaPath = mediaPath;
         this.source = new File(this.mediaPath);
         this.fileStartTime = fileStartTime;
@@ -108,6 +109,7 @@ public abstract class Media extends EditorElement {
     /**
      * Parametrized constructor. It requires all possible attributes for an effect object.
      *
+     * @param identifier - Unique identifier of the media for the current project.
      * @param iconPath - Path to a resource that allows represent the media in the view.
      * @param selectedIconPath - if not null used as icon when something interact with the element.
      *                           If null it will be used the iconPath as default.
@@ -118,14 +120,14 @@ public abstract class Media extends EditorElement {
      * @param opening - reference to a transition after the media item in the track.
      * @param ending - reference to a transition before the media item in the track.
      * @param metadata - File metadata.
-     * @param authors - List of authors of the media item.
      * @param license - Legal stuff.
+     * @param authors - List of authors of the media item.
      */
-    protected Media(String iconPath, String selectedIconPath, String title,
+    protected Media(String identifier, String iconPath, String selectedIconPath, String title,
                     String mediaPath, long fileStartTime, long duration, Transition opening,
                     Transition ending, MediaMetadata metadata, ArrayList<User> authors,
                     License license) {
-        super(iconPath, selectedIconPath);
+        super(identifier, iconPath, selectedIconPath);
         this.title = title;
         this.mediaPath = mediaPath;
         this.source = new File(this.mediaPath);

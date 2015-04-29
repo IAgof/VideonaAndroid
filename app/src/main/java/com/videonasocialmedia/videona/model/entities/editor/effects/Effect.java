@@ -65,6 +65,7 @@ public abstract class Effect extends EditorElement {
     /**
      * Constructor of minimum number of parameters. Default constructor.
      *
+     * @param identifier - Unique identifier for the editor element for the current project.
      * @param iconPath - Path to a resource that allows represent the element in the view.
      * @param type - Opengl unique effect identifier.
      * @param startTime - Track instant in milliseconds in which the effect has to be applied.
@@ -72,9 +73,9 @@ public abstract class Effect extends EditorElement {
      * @param license - Legal stuff.
      * @param author - Author of the effect.
      */
-    protected Effect(String iconPath, String type, long startTime, long duration,
+    protected Effect(String identifier, String iconPath, String type, long startTime, long duration,
                      License license, User author) {
-        super(iconPath);
+        super(identifier, iconPath);
         this.type = type;
         this.startTime = startTime;
         this.duration = duration;
@@ -84,22 +85,26 @@ public abstract class Effect extends EditorElement {
 
     /**
      * Parametrized constructor. It requires all possible attributes for an effect object.
-     * 
+     *
+     * @param identifier - Unique identifier for the editor element for the current project.
      * @param iconPath - Path to a resource that allows represent the element in the view.
      * @param selectedIconPath - if not null used as icon when something interact with the element.
      *                           If null it will be used the iconPath as default.
      * @param type - Opengl unique effect identifier.
      * @param startTime - Track instant in milliseconds in which the effect has to be applied.
      * @param duration - Duration of effect.
-     * @param layer - Number of the layer in which the effect has to be applied. Layers define
-*              which effects expose to further modifications by others. The lower the layer
-*              number the soner will be applied in assembly time.
-     * @param author - Author of the effect.
      * @param license - Legal stuff.
+     * @param author - Author of the effect.
+
+     * @param layer - Number of the layer in which the effect has to be applied. Layers define
+     *              which effects expose to further modifications by others. The lower the layer
+     *              number the soner will be applied in assembly time.
+     * @param license - Legal stuff.
+     * @param author - Author of the effect.
      */
-    protected Effect(String iconPath, String selectedIconPath, String type,
+    protected Effect(String iconPath, String selectedIconPath, String identifier, String type,
                      long startTime, long duration, int layer, User author, License license) {
-        super(iconPath, selectedIconPath);
+        super(identifier, iconPath, selectedIconPath);
         this.type = type;
         this.startTime = startTime;
         this.duration = duration;
