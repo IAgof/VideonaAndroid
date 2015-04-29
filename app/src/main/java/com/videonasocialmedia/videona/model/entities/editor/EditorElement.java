@@ -64,4 +64,6 @@ public abstract class EditorElement {
     public void setSelectedIconPath(String selectedIconPath) {
         this.selectedIconPath = selectedIconPath;
     }
+
+
 }

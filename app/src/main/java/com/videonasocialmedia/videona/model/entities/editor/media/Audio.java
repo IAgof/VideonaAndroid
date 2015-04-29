@@ -26,6 +26,8 @@ import java.util.ArrayList;
  */
 public class Audio extends Media {
 
+    public static String AUDIO_PATH = "";
+
     /**
      * Constructor of minimum number of parameters. Default constructor.
      *

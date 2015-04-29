@@ -11,12 +11,18 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.media;
 
+import android.graphics.Bitmap;
 import android.media.MediaMetadata;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 
+import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +31,8 @@ import java.util.ArrayList;
  * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
  */
 public class Video extends Media {
+
+    public static String VIDEO_PATH;
 
     /**
      * Constructor of minimum number of parameters. Default constructor.
@@ -54,9 +62,32 @@ public class Video extends Media {
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
      */
-    public Video(String mediaPath, long fileStartTime) {
+    public Video(String mediaPath, long fileStartTime) throws IllegalArgumentException {
         super(null, mediaPath, fileStartTime, -1, null, null);
 
+        //check if is a valid video.
+        this.validateVideoFile(mediaPath);
+
+        //generate icons
+        Bitmap microBM = ThumbnailUtils.createVideoThumbnail(mediaPath, MediaStore.Video.Thumbnails.MICRO_KIND);
+        File iconMini = new File(Video.VIDEO_PATH+"/thumbs/"+this.source.getName()+"_96x96");
+        Bitmap miniBM = ThumbnailUtils.createVideoThumbnail(mediaPath, MediaStore.Video.Thumbnails.MINI_KIND);
+
+
+
+        //
+    }
+
+    private boolean validateVideoFile(String mediaPath) {
+        MediaMetadataRetriever mmdr = new MediaMetadataRetriever();
+        mmdr.setDataSource(mediaPath);
+        if(mmdr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_VIDEO) ==null){
+            mmdr.release();
+            throw new IllegalArgumentException("Path: "+mediaPath+" is not a valid video resource");
+            //return false;
+        }
+        mmdr.release();
+        return true;
     }
 
 }
