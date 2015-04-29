@@ -13,7 +13,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.model.entities.social.Session;
 import com.videonasocialmedia.videona.model.entities.social.User;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnMediaFinishedListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFinishedListener;
 
 import java.util.ArrayList;
 
@@ -38,7 +38,7 @@ public class AddVideoToProjectUseCase implements AddMediaToProjectUseCase {
     }
 
     @Override
-    public void addMediaItemsToProject(ArrayList<String> list, OnMediaFinishedListener listener) {
+    public void addMediaItemsToProject(ArrayList<String> list, OnAddMediaFinishedListener listener) {
         boolean correct = false;
 
         for (String path : list) {

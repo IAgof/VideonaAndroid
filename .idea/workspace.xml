@@ -41,31 +41,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8e38901f-0ea2-488a-9033-fef4064749e3" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\appcompat_v7_21_0_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\aspectjrt_1_8_2.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\butterknife_6_0_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\gson_2_3_1.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\hamcrest_core_1_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\isoparser_1_0_4_2.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\junit_4_12.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\mockable_android_21.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\mockito_core_1_9_5.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\objenesis_1_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\okhttp_2_0_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\okhttp_urlconnection_2_0_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\okio_1_0_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\play_services_6_5_87.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\recyclerview_v7_21_0_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\retrofit_1_9_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\scribe.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\support_annotations_21_0_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\support_v13_21_0_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\support_v4_21_0_3.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\.idea\libraries\twowayview_0_1_4.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/MediaTrack.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/MediaTrack.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/Track.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/Track.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddAudioToProjectUseCase.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnAddAudioFinishedListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnRemoveAudioFinishedListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/RemoveAudioFromProjectUseCase.java" />
+      <change type="MOVED" beforePath="C:\Users\Vero\AndroidStudioProjects\VideonaAndroid\app\src\main\java\com\videonasocialmedia\videona\presentation\mvp\presenters\OnMediaFinishedListener.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnAddMediaFinishedListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddMediaToProjectUseCase.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddMediaToProjectUseCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectUseCase.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectUseCase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/AudioTrack.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/AudioTrack.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/VideoTrackPresenter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/VideoTrackPresenter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Videona.iws" />
@@ -89,93 +73,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="EditorElement.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/EditorElement.java">
+      <file leaf-file-name="AddAudioToProjectUseCase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddAudioToProjectUseCase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="398" max-vertical-offset="1224">
-              <caret line="66" column="0" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
-              <folding>
-                <element signature="e#1926#1927#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EditorView.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/views/EditorView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
-              <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_edit.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_edit.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.4444447" vertical-offset="6582" max-vertical-offset="7582">
-              <caret line="399" column="32" selection-start-line="399" selection-start-column="32" selection-end-line="399" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_gallery.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_gallery.xml">
-          <provider editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4607">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-          <provider selected="true" editor-type-id="android-designer">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EditActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/views/activity/EditActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-20.071428" vertical-offset="6799" max-vertical-offset="22049">
-              <caret line="506" column="84" selection-start-line="506" selection-start-column="84" selection-end-line="506" selection-end-column="84" />
-              <folding>
-                <element signature="e#22903#22904#0" expanded="true" />
-                <element signature="e#22933#22934#0" expanded="true" />
-                <element signature="e#22981#22982#0" expanded="true" />
-                <element signature="e#23014#23015#0" expanded="true" />
-                <element signature="e#31437#33720#0" expanded="true" />
-                <element signature="e#33229#33649#0" expanded="true" />
-                <element signature="e#33630#33631#0" expanded="true" />
-                <element signature="e#33709#33710#0" expanded="true" />
-                <element signature="e#33806#34138#0" expanded="true" />
-                <element signature="e#34131#34132#0" expanded="true" />
-                <element signature="e#35387#35617#0" expanded="true" />
-                <element signature="e#35534#35564#0" expanded="true" />
-                <element signature="e#35606#35607#0" expanded="true" />
-                <element signature="e#35729#35925#0" expanded="true" />
-                <element signature="e#35914#35915#0" expanded="true" />
-                <element signature="e#37423#38148#0" expanded="true" />
-                <element signature="e#38133#38134#0" expanded="true" />
-                <element signature="e#38272#38769#0" expanded="true" />
-                <element signature="e#38754#38755#0" expanded="true" />
-                <element signature="e#38991#38992#0" expanded="true" />
-                <element signature="e#39033#39034#0" expanded="true" />
-                <element signature="e#43518#44886#0" expanded="true" />
-                <element signature="e#44875#44876#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AddVideoToProjectUseCase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectUseCase.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="226" max-vertical-offset="1309">
-              <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="1462">
+              <caret line="79" column="27" selection-start-line="79" selection-start-column="27" selection-end-line="79" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -183,22 +85,38 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
+      <file leaf-file-name="RemoveAudioFromProjectUseCase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/RemoveAudioFromProjectUseCase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.19070514" vertical-offset="0" max-vertical-offset="624">
-              <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1326">
+              <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <file leaf-file-name="OnRemoveAudioFinishedListener.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnRemoveAudioFinishedListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="833">
-              <caret line="28" column="60" selection-start-line="28" selection-start-column="60" selection-end-line="28" selection-end-column="60" />
-              <folding />
+            <state vertical-scroll-proportion="0.57211536" vertical-offset="0" max-vertical-offset="624">
+              <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OnAddAudioFinishedListener.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnAddAudioFinishedListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
+              <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="30" selection-end-column="79" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1492,13 +1410,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/MoveAudioUseCase.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/RemoveAudioUseCase.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/GetAvailableAudiosUseCase.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/GetAvailableAudiosUseCaseController.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/views/activity/LoginActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/social/LoginUseCase.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/LoginPresenter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnLoginFinishedListener.java" />
         <option value="$PROJECT_DIR$/VideonaAndroid.iml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/media/Media.java" />
@@ -1533,9 +1444,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectToProjectUseCasae.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectToProjectUseCase.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnMediaFinishedListener.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddMediaToProjectUseCase.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/VideoTrackPresenter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectUseCase.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/views/VideoTrackView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/Track.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/MediaTrack.java" />
@@ -1543,6 +1452,15 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/views/activity/RecordActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/views/EditorView.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/views/activity/EditActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/AudioTrack.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddAudioToProject.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectUseCase.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnAddMediaFinishedListener.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddMediaToProjectUseCase.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnAddAudioFinishedListener.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnRemoveAudioFinishedListener.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddAudioToProjectUseCase.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/RemoveAudioFromProjectUseCase.java" />
       </list>
     </option>
   </component>
@@ -2184,6 +2102,52 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="entities" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="media" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Videona" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VideonaAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="videona" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="domain" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -2754,7 +2718,11 @@
       <created>1430215812371</created>
       <updated>1430215812371</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Merged with the entities of the model">
+      <created>1430303024358</created>
+      <updated>1430303024358</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -2838,7 +2806,8 @@
     <MESSAGE value="Added constructor to EditorElement and calls from subclasses" />
     <MESSAGE value="Added the structure to add new videos to the actual project from the user's gallery" />
     <MESSAGE value="Added comments and refactoring names of some files and methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added comments and refactoring names of some files and methods" />
+    <MESSAGE value="Merged with the entities of the model" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merged with the entities of the model" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2854,128 +2823,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-21/android/test/ActivityInstrumentationTestCase2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3145">
-          <caret line="46" column="22" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/videonasocialmedia/videona/LoginActivityTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
-          <caret line="9" column="57" selection-start-line="9" selection-start-column="57" selection-end-line="9" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/androidTest/java/com/videonasocialmedia/videona/common/utils/TestValidator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.6" vertical-offset="82" max-vertical-offset="1598">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddMediaToProjectUseCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.28" vertical-offset="0" max-vertical-offset="493">
-          <caret line="26" column="38" selection-start-line="26" selection-start-column="16" selection-end-line="26" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/Project.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26110125" vertical-offset="1196" max-vertical-offset="1972">
-          <caret line="92" column="43" selection-start-line="92" selection-start-column="43" selection-end-line="92" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/Track.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.04" vertical-offset="6900" max-vertical-offset="7531">
-          <caret line="428" column="5" selection-start-line="428" selection-start-column="5" selection-end-line="428" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#16112#0" expanded="false" />
-            <element signature="imports" expanded="false" />
-            <element signature="e#10084#10085#0" expanded="false" />
-            <element signature="e#10112#10113#0" expanded="false" />
-            <element signature="e#10164#10165#0" expanded="false" />
-            <element signature="e#10198#10199#0" expanded="false" />
-            <element signature="e#10261#10262#0" expanded="false" />
-            <element signature="e#10291#10292#0" expanded="false" />
-            <element signature="e#10366#10367#0" expanded="false" />
-            <element signature="e#10404#10405#0" expanded="false" />
-            <element signature="e#10462#10463#0" expanded="false" />
-            <element signature="e#10496#10497#0" expanded="false" />
-            <element signature="e#12699#12707#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/MediaTrack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6105442" vertical-offset="1681" max-vertical-offset="2329">
-          <caret line="130" column="6" selection-start-line="130" selection-start-column="6" selection-end-line="130" selection-end-column="6" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1437#1438#0" expanded="false" />
-            <element signature="e#1460#1461#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnLoginFinishedListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14455782" vertical-offset="0" max-vertical-offset="588">
-          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/views/LoginView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20238096" vertical-offset="0" max-vertical-offset="588">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="10" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/LoginPresenter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.83843535" vertical-offset="102" max-vertical-offset="748">
-          <caret line="40" column="24" selection-start-line="40" selection-start-column="24" selection-end-line="40" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnMediaFinishedListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1734694" vertical-offset="0" max-vertical-offset="588">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/views/VideoTrackView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
-          <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/GetVideoEditedUseCase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
@@ -3239,14 +3086,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/AudioTrack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43333334" vertical-offset="577" max-vertical-offset="1207">
-          <caret line="69" column="16" selection-start-line="69" selection-start-column="16" selection-end-line="69" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/views/activity/RecordActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334" vertical-offset="2221" max-vertical-offset="15249">
@@ -3303,26 +3142,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/VideoTrackPresenter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7275641" vertical-offset="362" max-vertical-offset="986">
-          <caret line="53" column="58" selection-start-line="53" selection-start-column="58" selection-end-line="53" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectUseCase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="226" max-vertical-offset="1309">
-          <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/views/activity/EditActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-20.071428" vertical-offset="6799" max-vertical-offset="22049">
@@ -3360,6 +3179,142 @@
         <state vertical-scroll-proportion="0.19070514" vertical-offset="0" max-vertical-offset="624">
           <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnLoginFinishedListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
+          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/media/Audio.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2782324" vertical-offset="0" max-vertical-offset="611">
+          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/media/Video.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2451923" vertical-offset="0" max-vertical-offset="680">
+          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnAddMediaFinishedListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16346154" vertical-offset="0" max-vertical-offset="624">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/Project.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1275" max-vertical-offset="1972">
+          <caret line="77" column="36" selection-start-line="77" selection-start-column="36" selection-end-line="77" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/Track.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4603" max-vertical-offset="7038">
+          <caret line="303" column="16" selection-start-line="303" selection-start-column="16" selection-end-line="303" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddMediaToProjectUseCase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="493">
+          <caret line="18" column="3" selection-start-line="18" selection-start-column="3" selection-end-line="18" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddVideoToProjectUseCase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="646" max-vertical-offset="1309">
+          <caret line="65" column="23" selection-start-line="65" selection-start-column="23" selection-end-line="65" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnAddAudioFinishedListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
+          <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="30" selection-end-column="79" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/exceptions/IllegalOrphanTransitionOnTrack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21794872" vertical-offset="0" max-vertical-offset="624">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/VideoTrackPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31891027" vertical-offset="260" max-vertical-offset="986">
+          <caret line="32" column="19" selection-start-line="32" selection-start-column="19" selection-end-line="32" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/AddAudioToProjectUseCase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="770" max-vertical-offset="1462">
+          <caret line="79" column="27" selection-start-line="79" selection-start-column="27" selection-end-line="79" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/model/entities/editor/track/AudioTrack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.59134614" vertical-offset="1008" max-vertical-offset="2193">
+          <caret line="93" column="64" selection-start-line="93" selection-start-column="64" selection-end-line="93" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/domain/editor/RemoveAudioFromProjectUseCase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1326">
+          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/videonasocialmedia/videona/presentation/mvp/presenters/OnRemoveAudioFinishedListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.57211536" vertical-offset="0" max-vertical-offset="624">
+          <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

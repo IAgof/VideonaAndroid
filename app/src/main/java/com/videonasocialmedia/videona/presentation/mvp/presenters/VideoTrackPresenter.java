@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @author vlf
  * @since 27/04/2015
  */
-public class VideoTrackPresenter implements OnMediaFinishedListener {
+public class VideoTrackPresenter implements OnAddMediaFinishedListener {
     AddVideoToProjectUseCase addVideoToProjectUseCase;
     VideoTrackView videoTrackView;
 

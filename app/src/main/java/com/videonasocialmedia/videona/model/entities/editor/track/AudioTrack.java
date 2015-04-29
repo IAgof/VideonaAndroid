@@ -13,12 +13,14 @@ package com.videonasocialmedia.videona.model.entities.editor.track;
 
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
+import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Audio;
-import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
-import java.util.ArrayList;
+import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
+
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 /**
  * An audio track is a track that can only contain Audio media items. There could be many audio
@@ -53,8 +55,8 @@ public class AudioTrack extends Track {
      * Ensure there are only Audio items on items list.
      */
     private void checkItems() {
-        for(Object item : this.getItems()) {
-            if(!(item instanceof Audio)){
+        for (Object item : this.getItems()) {
+            if (!(item instanceof Audio)) {
                 this.items.removeFirstOccurrence(item);
             }
         }
@@ -63,15 +65,64 @@ public class AudioTrack extends Track {
     /**
      * Insert a new Audio item in the AudioTrack. Get sure it is an Audio media item.
      *
-     * @see com.videonasocialmedia.videona.model.entities.editor.track.Track
      * @throws IllegalItemOnTrack - when trying to add a Audio item on
+     * @see com.videonasocialmedia.videona.model.entities.editor.track.Track
      */
     @Override
-    public void insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
-        if(itemToAdd instanceof Audio) {
-            throw new IllegalItemOnTrack("Cannot add an audio media item to a media track.");
+    public boolean insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
+        if (!(itemToAdd instanceof Audio)) {
+            throw new IllegalItemOnTrack("Audio track can only have audio media items.");
         }
-        super.insertItemAt(position, itemToAdd);
+        return super.insertItemAt(position, itemToAdd);
+    }
+
+    @Override
+    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
+        if (!(itemToAdd instanceof Audio)) {
+            throw new IllegalItemOnTrack("Audio track can only have audio media items.");
+        }
+        return this.insertItem(itemToAdd);
+    }
+
+    /**
+     * Delete Media item. Get his position and deletes from the list.
+     *
+     * @param itemToDelete - Media item to be deleted.
+     * @return TRUE if the list contained the specified element.
+     */
+    @Override
+    public Media deleteItem(Media itemToDelete) throws IllegalOrphanTransitionOnTrack,
+            NoSuchElementException, IndexOutOfBoundsException, IllegalItemOnTrack {
+        return this.deleteItemAt(this.items.indexOf(itemToDelete));
+    }
+
+    /**
+     * Delete Media item on the given position.
+     *
+     * @param position
+     */
+    @Override
+    public Media deleteItemAt(int position) throws IllegalOrphanTransitionOnTrack,
+            NoSuchElementException, IllegalItemOnTrack {
+        if (!(this.items.get(position) instanceof Audio)) {
+            throw new IllegalItemOnTrack("Audio track can only have audio media items.");
+        }
+        return super.deleteItemAt(position);
+    }
+
+    /**
+     * Moves Media item to the given position.
+     *
+     * @param newPosition - The new position in the track for the media item.
+     * @param itemToMove  - The media item to ve moved.
+     */
+    @Override
+    public boolean moveItemTo(int newPosition, Media itemToMove) throws IllegalItemOnTrack,
+            IllegalOrphanTransitionOnTrack {
+        if (!(itemToMove instanceof Audio)) {
+            throw new IllegalItemOnTrack("Audio track can only have audio media items.");
+        }
+        return super.moveItemTo(newPosition, itemToMove);
     }
 
     @Override
@@ -79,6 +130,6 @@ public class AudioTrack extends Track {
         super.setItems(items);
         this.checkItems();
     }
-
-
 }
+
+
