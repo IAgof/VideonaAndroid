@@ -55,5 +55,9 @@ public class Constants {
 
     final public static String AUDIO_MUSIC_FILE_EXTENSION = ".m4a";
 
+    // Project
+    final public static String PROJECT_TITLE = "Project";
+    final public static String PATH_PROJECT = PATH_APP;
+
 
 }

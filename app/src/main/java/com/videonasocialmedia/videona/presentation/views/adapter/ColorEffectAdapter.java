@@ -118,6 +118,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         // colorEffectName, key value to obtain drawable resources effect_ + colorEffectName
        // int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
         int resourceId = 0;
+
         if(RecordActivity.positionColorEffectPressed == position) {
             isPressed = true;
             resourceId = getResourceDrawableColorEffect(colorEffectName, isPressed);
@@ -151,13 +152,15 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
             @Override
             public void onClick(View v) {
 
-                mColorEffectClickListener.onEffectClicked(position);
 
                 // Restart last position
 
 
                 isPressed = true;
                 colorEffectName = colorEffectItems.get(position);
+
+                mColorEffectClickListener.onColorEffectClicked(new ColorEffectAdapter(activity,colorEffectItems), colorEffectName, position);
+
                 int resourceIdPressed = getResourceDrawableColorEffect(colorEffectName, isPressed);
                 viewHolder.imageView.setImageResource(resourceIdPressed);
                 isPressed = false;

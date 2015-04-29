@@ -792,7 +792,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //    }
 //
 //    @Override
-//    public void onEffectClicked(int position) {
+//    public void onColorEffectClicked(int position) {
 //
 //        Log.d("Camera2", "onImageClicked " + position);
 //

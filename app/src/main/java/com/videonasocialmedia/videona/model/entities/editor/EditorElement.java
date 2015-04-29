@@ -65,6 +65,9 @@ public abstract class EditorElement {
     // amm
     protected int iconResourceId;
 
+    protected EditorElement() {
+    }
+
     public int getIconResourceId() {
         return iconResourceId;
     }

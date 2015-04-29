@@ -14,7 +14,9 @@ public class Music extends EditorElement {
     private int musicResourceId;
     private int colorResourceId;
     private String nameResourceId;
+
     public Music(int iconResourceId, String name, int musicResourceId, int colorResourceId) {
+
         this.iconResourceId = iconResourceId;
         this.nameResourceId = name;
         this.musicResourceId = musicResourceId;

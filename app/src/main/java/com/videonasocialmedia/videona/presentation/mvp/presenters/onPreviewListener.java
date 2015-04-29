@@ -7,11 +7,11 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import android.hardware.Camera;
-
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 
 public interface onPreviewListener {
 
-    public void onPreviewStarted(Camera camera, CameraPreview cameraPreview);
+    public void onPreviewStarted(CameraPreview cameraPreview);
+
+    public void onPreviewReStarted(CameraPreview cameraPreview);
 }

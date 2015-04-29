@@ -9,13 +9,15 @@ package com.videonasocialmedia.videona.domain.record;
 
 import android.widget.Chronometer;
 
-import com.videonasocialmedia.videona.model.entities.editor.Track;
+import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 
 public class GetAddEffectUseCase {
 
     private Chronometer chronometer;
 
-    private Track track;
+    private MediaTrack track;
 
 
+    public GetAddEffectUseCase() {
+    }
 }

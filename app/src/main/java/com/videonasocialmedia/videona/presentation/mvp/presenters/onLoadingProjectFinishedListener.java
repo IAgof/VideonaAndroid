@@ -7,12 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface onRecordEventListener {
+public interface onLoadingProjectFinishedListener {
 
-    public void onRecordStarted();
-
-    public void onRecordStopped();
-
-    public void onRecordRestarted();
-
+    public void onLoadingProjectSuccess();
 }
