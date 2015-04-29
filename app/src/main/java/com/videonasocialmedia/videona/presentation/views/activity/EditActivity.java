@@ -40,11 +40,12 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
-import com.videonasocialmedia.videona.presentation.views.fragment.FxCatalogFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.MusicCatalogFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
@@ -103,7 +104,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
     private LookFxMenuFragment lookFxMenuFragment;
-    private FxCatalogFragment fxCatalogFragment;
+    private MusicCatalogFragment fxCatalogFragment;
 
     /*mvp*/
     private EditPresenter editPresenter;
@@ -526,7 +527,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
 
         if (fxCatalogFragment == null) {
-            fxCatalogFragment = new FxCatalogFragment();
+            fxCatalogFragment = new MusicCatalogFragment();
         }
         this.switchFragment(fxCatalogFragment, R.id.edit_bottom_panel);
 
@@ -726,7 +727,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         };
 
         if (fxCatalogFragment == null) {
-            fxCatalogFragment = new FxCatalogFragment();
+            fxCatalogFragment = new MusicCatalogFragment();
         } else {
             //TODO cambiar la lista del fragment
         }

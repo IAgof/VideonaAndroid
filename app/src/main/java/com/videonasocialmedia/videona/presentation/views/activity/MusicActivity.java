@@ -38,6 +38,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * @deprecated
+ */
 public class MusicActivity extends Activity {
 
     private final String LOG_TAG = this.getClass().getSimpleName();

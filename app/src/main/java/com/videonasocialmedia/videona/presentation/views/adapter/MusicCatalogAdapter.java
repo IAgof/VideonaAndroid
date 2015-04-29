@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
 
 import java.util.List;
@@ -30,19 +31,19 @@ import butterknife.InjectView;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class FxCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
+public class MusicCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
 
     private Context context;
 
     private RecyclerClickListener recyclerClickListener;
 
-    private List<EditorElement> elementList;
+    private List<Music> elementList;
 
-    public List<EditorElement> getElementList() {
+    public List<Music> getElementList() {
         return elementList;
     }
 
-    public FxCatalogAdapter(List<EditorElement> elementList) {
+    public MusicCatalogAdapter(List<Music> elementList) {
         this.elementList = elementList;
     }
 
@@ -65,11 +66,11 @@ public class FxCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> {
 
     @Override
     public void onBindViewHolder(FxItemViewHolder holder, final int position) {
-        EditorElement selectedElement = elementList.get(position);
+        Music selectedElement = elementList.get(position);
         //TODO coger la url de la imagen del efecto y usar picasso para cachear
         holder.background.setImageResource(selectedElement.getIconResourceId());
         //holder.background.setBackgroundColor(((Music)selectedElement).getColorResourceId());
-        holder.background.setBackgroundResource(((Music)selectedElement).getColorResourceId());
+        holder.background.setBackgroundResource(selectedElement.getColorResourceId());
     }
 
 

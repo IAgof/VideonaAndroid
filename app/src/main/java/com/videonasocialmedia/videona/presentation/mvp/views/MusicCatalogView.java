@@ -8,17 +8,19 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
+
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 
 import java.util.List;
 
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public interface FxCatalogView{
+public interface MusicCatalogView {
 
-    public void showCatalog(List<EditorElement> elementList);
+    public void showCatalog(List<Music> elementList);
 
     void showLoading ();
 

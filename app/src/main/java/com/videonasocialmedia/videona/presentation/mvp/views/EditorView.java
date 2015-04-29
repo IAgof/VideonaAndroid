@@ -7,6 +7,8 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+
 /**
  * @author Juan Javier Cabanas Abascal
  */

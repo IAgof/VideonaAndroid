@@ -20,9 +20,10 @@ import android.view.ViewGroup;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.fx.FxCatalogPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.views.FxCatalogView;
-import com.videonasocialmedia.videona.presentation.views.adapter.FxCatalogAdapter;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.fx.MusicCatalogPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.MusicCatalogView;
+import com.videonasocialmedia.videona.presentation.views.adapter.MusicCatalogAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
 
 import java.util.List;
@@ -33,10 +34,10 @@ import butterknife.InjectView;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class FxCatalogFragment extends Fragment implements FxCatalogView{
+public class MusicCatalogFragment extends Fragment implements MusicCatalogView {
 
-    FxCatalogAdapter adapter;
-    FxCatalogPresenter presenter;
+    MusicCatalogAdapter adapter;
+    MusicCatalogPresenter presenter;
     private RecyclerView.LayoutManager layoutManager;
 
     @InjectView(R.id.catalog_recycler) RecyclerView recyclerView;
@@ -46,7 +47,7 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.edit_fragment_catalog, container, false);
         ButterKnife.inject(this, v);
-        presenter = new FxCatalogPresenter(this);
+        presenter = new MusicCatalogPresenter(this);
 
         layoutManager= new GridLayoutManager(this.getActivity(), 5);
         recyclerView.setLayoutManager(layoutManager);
@@ -65,8 +66,8 @@ public class FxCatalogFragment extends Fragment implements FxCatalogView{
     }
 
     @Override
-    public void showCatalog(List<EditorElement> elementList) {
-        adapter = new FxCatalogAdapter(elementList);
+    public void showCatalog(List<Music> elementList) {
+        adapter = new MusicCatalogAdapter(elementList);
         adapter.setRecyclerClickListener((RecyclerClickListener)getActivity());
         recyclerView.setAdapter(adapter);
     }
