@@ -12,15 +12,27 @@
 package com.videonasocialmedia.videona.presentation.views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Handler;
+import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+
+import com.videonasocialmedia.videona.R;
 
 public class CustomManualFocusView extends View {
 
     private Paint paint;
+
+    private Bitmap bitmap;
+
+    private Canvas canvas;
 
     public static boolean showDraw = false;
 
@@ -37,6 +49,13 @@ public class CustomManualFocusView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(8);
 
+        //TODO change resource to new design
+        // TODO FUTURE: add animation
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.common_filter_aqua_ad1_normal);
+
+        canvas = new Canvas(bitmap.copy(Bitmap.Config.ARGB_8888, true));
+
+
     }
 
 
@@ -46,7 +65,9 @@ public class CustomManualFocusView extends View {
         super.onDraw(canvas);
 
         if (showDraw) {
-            canvas.drawCircle(x, y, 50, paint);
+
+            canvas.drawBitmap(bitmap, x,y, paint);
+
         }
 
     }
@@ -74,5 +95,39 @@ public class CustomManualFocusView extends View {
 
         }
         return false;
+    }
+
+    public void onPreviewTouchEvent(Context context){
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        x =  size.x / 2;
+        y = size.y / 3;
+
+        Log.d("Focus", " x " + x + " y " + y);
+
+        invalidate();
+
+        showDraw = true;
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // invalidate();
+                showDraw = false;
+                invalidate();
+
+                Log.d("Focus", " postDelayed");
+
+            }
+        }, 1500);
+
+
     }
 }

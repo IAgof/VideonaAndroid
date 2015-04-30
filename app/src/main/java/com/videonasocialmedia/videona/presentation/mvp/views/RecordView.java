@@ -13,14 +13,15 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 
 import java.util.ArrayList;
 
 public interface RecordView extends MVPView {
 
-    void startPreview(CameraPreview cameraPreview);
+    void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
 
-    void stopPreview(CameraPreview cameraPreview);
+    void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
 
     void startRecordVideo();
 

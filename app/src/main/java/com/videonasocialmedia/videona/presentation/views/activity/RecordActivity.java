@@ -59,6 +59,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @InjectView(R.id.button_record)
     ImageButton buttonRecord;
+
     /**
      * Chronometer, indicate time recording video
      */
@@ -85,7 +86,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @InjectView(R.id.framelayout_camera_preview)
     ViewGroup frameLayoutCameraPreview;
 
-    /*CONFIG*/
     /**
      * LOG_TAG
      */
@@ -122,6 +122,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      * RecordPresenter
      */
     private RecordPresenter recordPresenter;
+
+
     /**
      * Position color effect pressed
      */
@@ -153,7 +155,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
-        //  recordPresenter = new RecordPresenter(this, tracker);
 
     }
 
@@ -177,6 +178,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         recordPresenter.start();
 
+
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
@@ -184,8 +186,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onRestart() {
         super.onRestart();
 
-        //   recordPresenter.onRestart();
-
+     
         Log.d(LOG_TAG, "onRestart() RecordActivity");
 
     }
@@ -250,6 +251,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         buttonBackPressed = true;
 
+        //TODO change this text to R String
         Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
 
     }
@@ -307,19 +309,25 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      * @param cameraPreview
      */
     @Override
-    public void startPreview(CameraPreview cameraPreview) {
+    public void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
 
-        frameLayoutCameraPreview.addView(cameraPreview);
-        frameLayoutCameraPreview.addView(new CustomManualFocusView(RecordActivity.this));
+            frameLayoutCameraPreview.addView(cameraPreview);
+            frameLayoutCameraPreview.addView(customManualFocusView);
 
         // Fix format chronometer 00:00. Do in xml, design
-        chronometerRecord.setText("00:00");
+            chronometerRecord.setText("00:00");
+
+            customManualFocusView.onPreviewTouchEvent(this);
+
+            recordPresenter.effectClickListener();
+
     }
 
     @Override
-    public void stopPreview(CameraPreview cameraPreview) {
+    public void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
 
         frameLayoutCameraPreview.removeView(cameraPreview);
+        frameLayoutCameraPreview.removeView(customManualFocusView);
     }
 
     /**
