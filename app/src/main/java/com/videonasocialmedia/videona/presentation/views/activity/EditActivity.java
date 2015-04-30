@@ -103,9 +103,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     ImageButton buttonOkEditActivity;*/
 
 
-    /*CONFIG*/
-    private final String LOG_TAG = "EDIT ACTIVITY";
-
     /*Preview*/
     private MediaController mediaController;
     private MediaPlayer videoPlayer;
