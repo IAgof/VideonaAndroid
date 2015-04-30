@@ -33,7 +33,6 @@ public class MusicCatalogPresenter {
         //TODO ask upper layers for fxList and remove the next
 
         List<Music> elementList = new ArrayList<>();
-        //elementList.add()
 
         elementList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
         elementList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental,R.color.pastel_palette_red));

@@ -104,34 +104,18 @@
                 </RelativeLayout>
 
 
-                <SeekBar
-                    android:id="@+id/edit_seek_bar"
-                    android:layout_width="340dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="true"
-                    android:indeterminate="false"
-                    android:longClickable="true"
-                    android:maxHeight="2dp"
-                    android:progressDrawable="@color/videona_blue_5" />
-
                 <RelativeLayout
                     android:id="@+id/relativeLayoutPreviewVideo"
                     android:layout_width="340dp"
-                    android:layout_height="80dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="0dp"
                     android:orientation="horizontal"
                     android:visibility="visible">
 
                     <RelativeLayout
                         android:id="@+id/relativeLayoutTrim"
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
@@ -353,8 +337,25 @@
                             android:orientation="horizontal" />
                     </RelativeLayout>
 
+
+
                 </RelativeLayout>
 
+                <SeekBar
+                    android:id="@+id/edit_seek_bar"
+                    android:layout_width="340dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="2dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="true"
+                    android:indeterminate="false"
+                    android:longClickable="true"
+                    android:maxHeight="2dp"
+                    android:progressDrawable="@color/videona_blue_5" />
 
             </LinearLayout>
 
@@ -389,20 +390,25 @@
                 android:layout_alignParentStart="false"
                 android:orientation="vertical">
 
+
                 <ImageButton
-                    android:id="@+id/edit_button_scissor"
+                    android:id="@+id/edit_button_look"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/pastel_palette_orange"
+                    android:alpha="0.20"
+                    android:layout_marginBottom="2dp"
+                    android:background="@color/pastel_palette_yellow"
                     android:padding="15dp"
-                    android:src="@drawable/activity_edit_icon_cut_normal" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/activity_edit_icon_look_normal" />
 
                 <ImageButton
                     android:id="@+id/edit_button_fx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="0.05"
+                    android:alpha="0.20"
                     android:background="@color/pastel_palette_grey"
+                    android:layout_marginBottom="2dp"
                     android:padding="15dp"
                     android:src="@drawable/activity_edit_icon_fx_normal" />
 
@@ -412,17 +418,16 @@
                     android:layout_height="wrap_content"
                     android:background="@color/pastel_palette_blue"
                     android:padding="15dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/activity_edit_icon_audio_normal" />
 
                 <ImageButton
-                    android:id="@+id/edit_button_look"
+                    android:id="@+id/edit_button_scissor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="0.10"
-                    android:background="@color/pastel_palette_yellow"
+                    android:background="@color/pastel_palette_orange"
                     android:padding="15dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/activity_edit_icon_look_normal" />
+                    android:src="@drawable/activity_edit_icon_cut_normal" />
 
             </LinearLayout>
         </RelativeLayout>

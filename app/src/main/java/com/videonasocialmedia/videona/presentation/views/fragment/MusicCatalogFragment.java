@@ -49,7 +49,7 @@ public class MusicCatalogFragment extends Fragment implements MusicCatalogView {
         ButterKnife.inject(this, v);
         presenter = new MusicCatalogPresenter(this);
 
-        layoutManager= new GridLayoutManager(this.getActivity(), 5);
+        layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
     }

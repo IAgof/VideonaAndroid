@@ -78,14 +78,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     private final String LOG_TAG = "EDIT ACTIVITY";
 
-    @InjectView(R.id.edit_button_fx)
+    /*@InjectView(R.id.edit_button_fx)
     ImageButton videoFxButton;
     @InjectView(R.id.edit_button_look)
     ImageButton lookFxButton;
     @InjectView(R.id.edit_button_scissor)
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
-    ImageButton audioFxButton;
+    ImageButton audioFxButton;*/
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
     @InjectView(R.id.edit_button_play)
@@ -521,7 +521,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
        }
     */
         if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
-            relativeLayoutPreviewVideo.setVisibility(View.GONE);
+            //relativeLayoutPreviewVideo.setVisibility(View.GONE);
         };
 
 
@@ -720,7 +720,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         }
 
         if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
-            relativeLayoutPreviewVideo.setVisibility(View.GONE);
+            //relativeLayoutPreviewVideo.setVisibility(View.GONE);
         };
 
         if (musicCatalogFragment == null) {
