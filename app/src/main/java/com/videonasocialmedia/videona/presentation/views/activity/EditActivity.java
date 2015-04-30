@@ -38,7 +38,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
@@ -76,8 +80,7 @@ import butterknife.OnTouch;
  */
 public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerClickListener {
 
-    private final String LOG_TAG = "EDIT ACTIVITY";
-
+    /*VIEWS*/
     @InjectView(R.id.edit_button_fx)
     ImageButton videoFxButton;
     @InjectView(R.id.edit_button_look)
@@ -92,6 +95,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     ImageButton playButton;
     @InjectView(R.id.edit_seek_bar)
     SeekBar seekBar;
+    @InjectView(R.id.buttonCancelEditActivity)
+    Button buttonCancelEditActivity;
+    @InjectView(R.id.buttonOkEditActivity)
+    Button buttonOkEditActivity;
+
+    /*CONFIG*/
+    private final String LOG_TAG = "EDIT ACTIVITY";
 
     /*Preview*/
     private MediaController mediaController;
@@ -108,6 +118,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     /*mvp*/
     private EditPresenter editPresenter;
 
+    /**
+     * Tracker google analytics
+     */
+    private VideonaApplication app;
+    private Tracker tracker;
+
     //TODO de aquí en adelante hay que cambiarlo todo!!!!!
     int duration;
 
@@ -120,10 +136,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     //******************************************************************************
     // Start to define variables for old EditActivity, delete after update apk
 
-    @InjectView(R.id.buttonCancelEditActivity)
-    Button buttonCancelEditActivity;
-    @InjectView(R.id.buttonOkEditActivity)
-    Button buttonOkEditActivity;
 
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
     private static final int ADD_MUSIC_REQUEST_CODE = 600;
@@ -185,13 +197,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private ProgressBar progressBar8;
     private ProgressBar progressBar9;
 
-
     private int musicRawSelected;
 
     UserPreferences appPrefs;
     // create RangeSeekBar as Double
     RangeSeekBar<Double> seekBarRange;
-
 
     // Adapt navigation to beta April 22nd
     boolean isButtonAudioPressed = false;
@@ -237,7 +247,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     private void updateSeekProgress() {
 
-       // Log.d(LOG_TAG, "updateSeekProgress");
+        // Log.d(LOG_TAG, "updateSeekProgress");
 
         if (videoPlayer != null && videoPlayer.isPlaying()) {
 
@@ -290,7 +300,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
 
-
     /*fin de la chapu*/
 
     @Override
@@ -299,6 +308,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         ButterKnife.inject(this);
+
+        app = (VideonaApplication) getApplication();
+        tracker = app.getTracker();
 
         editPresenter = new EditPresenter(this);
 
@@ -326,8 +338,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 handler.removeCallbacks(updateTimeTask);
 
 
-
-
                 videoPlayer.seekTo(seekBar.getProgress());
                 if (isMusicON && (musicPlayer != null)) {
                     //amm musicPlayer.seekTo(seekBar.getProgress() + musicPlayer.getCurrentPosition() - seekBarStart);
@@ -337,12 +347,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 updateSeekProgress();
 
                 //amm Delete
-               if(videoPlayer!=null) {
-                   videoProgress = videoPlayer.getCurrentPosition();
-                   appPrefs.setVideoProgress(videoProgress);
-               }
-
-
+                if (videoPlayer != null) {
+                    videoProgress = videoPlayer.getCurrentPosition();
+                    appPrefs.setVideoProgress(videoProgress);
+                }
 
             }
         });
@@ -357,9 +365,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         ft.add(R.id.edit_right_panel, scissorsFxMenuFragment).commit();
 
         this.initVideoPlayer(this.getIntent().getStringExtra("MEDIA_OUTPUT"));
-
-
-
 
 
         //******************************************************************************
@@ -388,7 +393,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         appPrefs = new UserPreferences(getApplicationContext());
         appPrefs.setIsMusicON(false);
-
 
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
@@ -422,20 +426,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
-
     //******************************************************************************
     //******************************************************************************
     // amm Cancel and Ok Edit Activity
 
     @OnClick(R.id.buttonCancelEditActivity)
-    public void cancelEditActivity(){
-
+    public void cancelEditActivity() {
+        sendButtonTracked(R.id.buttonCancelEditActivity);
         this.onBackPressed();
     }
 
     @OnClick(R.id.buttonOkEditActivity)
-    public void okEditActivity(){
-
+    public void okEditActivity() {
+        sendButtonTracked(R.id.buttonOkEditActivity);
         Log.d(LOG_TAG, "trimClickListener");
 
        /* if(isMusicON) {
@@ -457,7 +460,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
         if (musicPlayer != null) {
 // mediaPlayerMusic.stop();
-           // musicPlayer.pause();
+            // musicPlayer.pause();
             musicPlayer.release();
             musicPlayer = null;
         }
@@ -501,13 +504,12 @@ Resources.getSystem().getIdentifier("customPanel", "id",
     }
 
 
-
-
     //******************************************************************************
     //******************************************************************************
 
     @OnClick(R.id.edit_button_fx)
     public void showVideoFxMenu() {
+        sendButtonTracked(R.id.edit_button_fx);
         if (videoFxMenuFragment == null)
             videoFxMenuFragment = new VideoFxMenuFragment();
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
@@ -515,14 +517,17 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
     @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
+        sendButtonTracked(R.id.edit_button_audio);
+
      /*  if (audioFxButton == null) {
            audioFxMenuFragment = new AudioFxMenuFragment();
            switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
        }
     */
-        if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
+        if (relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE) {
             relativeLayoutPreviewVideo.setVisibility(View.GONE);
-        };
+        }
+        ;
 
 
         if (musicCatalogFragment == null) {
@@ -535,26 +540,27 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
     @OnClick(R.id.edit_button_scissor)
     public void showScissorsFxMenu() {
+        sendButtonTracked(R.id.edit_button_scissor);
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
             onEffectTrimMenuSelected();
         }
 
-      //  this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+        //  this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
 
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
 
-        if(edit_bottom_panel.getVisibility() == View.VISIBLE) {
+        if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
             edit_bottom_panel.setVisibility(View.INVISIBLE);
         }
-
 
 
     }
 
     @OnClick(R.id.edit_button_look)
     public void showLookFxMenu() {
+        sendButtonTracked(R.id.edit_button_look);
         if (lookFxMenuFragment == null)
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
@@ -581,7 +587,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-
+        sendButtonTracked(R.id.edit_button_play);
         if (videoPlayer.isPlaying()) {
             videoPlayer.pause();
             if (musicPlayer != null) {
@@ -600,7 +606,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
             videoPlayer.start();
             if (musicPlayer != null) {
                 musicPlayer.start();
-               // updateSeekProgress();
+                // updateSeekProgress();
             }
             playButton.setVisibility(View.INVISIBLE);
         }
@@ -653,11 +659,9 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
-
 
         //******************************************************************************
         //******************************************************************************
@@ -672,7 +676,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         //******************************************************************************
         //******************************************************************************
     }
-
 
     @Override
     protected void onStop() {
@@ -715,13 +718,14 @@ Resources.getSystem().getIdentifier("customPanel", "id",
     @Override
     public void onEffectMenuSelected() {
 
-        if(edit_bottom_panel.getVisibility() == View.INVISIBLE) {
+        if (edit_bottom_panel.getVisibility() == View.INVISIBLE) {
             edit_bottom_panel.setVisibility(View.VISIBLE);
         }
 
-        if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
+        if (relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE) {
             relativeLayoutPreviewVideo.setVisibility(View.GONE);
-        };
+        }
+        ;
 
         if (musicCatalogFragment == null) {
             musicCatalogFragment = new MusicCatalogFragment();
@@ -740,11 +744,11 @@ Resources.getSystem().getIdentifier("customPanel", "id",
     }
 
     @Override
-    public void onEffectTrimMenuSelected(){
+    public void onEffectTrimMenuSelected() {
 
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
 
-        if(edit_bottom_panel.getVisibility() == View.VISIBLE) {
+        if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
             edit_bottom_panel.setVisibility(View.INVISIBLE);
         }
 
@@ -822,7 +826,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         }
     }
 
-
     @Override
     public void initMusicPlayer(Music music) {
         if (musicPlayer != null) {
@@ -836,7 +839,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         // amm
         appPrefs.setIsMusicON(true);
     }
-
 
     /**
      * Needs to refactor
@@ -860,14 +862,14 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
         List<Music> musicList = musicCatalogFragment.getFxList();
 
-        if (position == (musicList.size()-1)) {
+        if (position == (musicList.size() - 1)) {
 
             Log.d(LOG_TAG, "Detenida la música");
-            if(musicPlayer!=null){
+            if (musicPlayer != null) {
                 musicPlayer.release();
-                musicPlayer=null;
-                isMusicON=false;
-                selectedMusic=null;
+                musicPlayer = null;
+                isMusicON = false;
+                selectedMusic = null;
 
             }
 
@@ -889,7 +891,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
         }
 
-
     }
 
 
@@ -898,8 +899,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
     //******************************************************************************
     //******************************************************************************
     // amm Delete
-
-
 
     private void setEditVideoProgress(int videoProgress, int seekBarStart, int seekBarEnd) {
         videoProgress = videoProgress;
@@ -936,7 +935,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         */
     }
 
-
     private void setVideoInfo() {
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -950,7 +948,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         durationVideoRecorded = (int) duration;
         appPrefs.setVideoDuration(durationVideoRecorded);
     }
-
 
     private View.OnClickListener trimClickListener() {
         return new View.OnClickListener() {
@@ -1042,7 +1039,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
                 // Delete TRIM temporal file
                 File fTrim = new File(pathvideoTrim);
-                if(fTrim.exists()){
+                if (fTrim.exists()) {
                     fTrim.delete();
                 }
 
@@ -1061,6 +1058,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
             }
         });
     }
+
     public static Thread performOnBackgroundThread(final Runnable runnable) {
         final Thread t = new Thread() {
             @Override
@@ -1074,6 +1072,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         t.start();
         return t;
     }
+
     private void killProcess() {
         System.gc();
         int pid = android.os.Process.myPid();
@@ -1090,6 +1089,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         Log.d(LOG_TAG, "VideonaMainActivity input " + inputFileName + " output " + pathvideoTrim + " start " + start + " length " + length);
         VideonaMainActivity.cut(inputFileName, pathvideoTrim, start, length);
     }
+
     private void renameTrimVideo(String videoTrim) {
         String newVideoTrim = videoTrim;
         String videoTrimAux = Constants.PATH_APP + Constants.VIDEO_CUT_AUX_NAME;
@@ -1100,8 +1100,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         File newTrimVideo = new File(videoTrimAux);
         newTrimVideo.renameTo(originalVideo);
     }
-
-
 
     /**
      * Previewing recorded video
@@ -1150,7 +1148,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
             e.printStackTrace();
         }
     }
-
 
     @Override
     public Object onRetainNonConfigurationInstance() {
@@ -1238,6 +1235,7 @@ height_opt));*/
             }
         }
     }
+
     public void paintSeekBar() { // Initialize seekbar
         Log.d(LOG_TAG, "paintSeekBar Activity");
         //amm durationVideoCut = preview.getDuration() / 1000;
@@ -1284,6 +1282,7 @@ height_opt));*/
         });
         layoutSeekBar.addView(seekBarRange);
     }
+
     private void refreshDetailView() {
         Log.d(LOG_TAG, "refreshDetailView");
         int startSeekBar = seekBarStart;
@@ -1304,6 +1303,7 @@ height_opt));*/
             "audio_clasica_violin.m4a", "audio_clasica_flauta.m4a",
             "audio_ambiental.m4a"
     };
+
     private class PaintFramesTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -1316,6 +1316,7 @@ height_opt));*/
             });
             return " null ";
         }
+
         @Override
         protected void onPostExecute(String result) {
         }
@@ -1364,12 +1365,47 @@ height_opt));*/
         }
     }
 
-
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
     //******************************************************************************
     // amm Delete
 
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id the identifier of the clicked button
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.buttonCancelEditActivity:
+                label = "cancel, return to the camera";
+                break;
+            case R.id.buttonOkEditActivity:
+                label = "ok, export the project";
+                break;
+            case R.id.edit_button_fx:
+                label = "show video fx menu";
+                break;
+            case R.id.edit_button_audio:
+                label = "show audio fx menu";
+                break;
+            case R.id.edit_button_scissor:
+                label = "show scissor fx menu";
+                break;
+            case R.id.edit_button_look:
+                label = "show look fx menu";
+                break;
+            default:
+                label = "other";
+        }
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("EditActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
 
 }

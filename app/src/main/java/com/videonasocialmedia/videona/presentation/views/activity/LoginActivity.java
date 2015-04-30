@@ -40,7 +40,7 @@ public class LoginActivity extends Activity implements LoginView {
     private SharedPreferences config;
 
     /*ANALYTICS*/
-    Tracker t;
+    Tracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,9 @@ public class LoginActivity extends Activity implements LoginView {
         ButterKnife.inject(this);
 
         app = (VideonaApplication) getApplication();
-        loginPresenter= new LoginPresenter(this);
-        t = app.getTracker();
+        tracker = app.getTracker();
+
+        loginPresenter = new LoginPresenter(this);
     }
 
     /**
@@ -60,6 +61,7 @@ public class LoginActivity extends Activity implements LoginView {
 
     @OnClick(R.id.new_user_button)
     public void goToUserSignUpActivity() {
+        sendButtonTracked(R.id.new_user_button);
         navigate(com.videonasocialmedia.videona.presentation.views.login.UserSignUpActivity.class);
     }
 
@@ -76,27 +78,31 @@ public class LoginActivity extends Activity implements LoginView {
 
     @Override
     public void showError(int errorMessageResource) {
-        Toast.makeText(this,errorMessageResource, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, errorMessageResource, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void navigate(Class<? extends Activity> activity) {
-        Intent i= new Intent(getApplicationContext(), activity);
+        Intent i = new Intent(getApplicationContext(), activity);
         startActivity(i);
     }
 
-
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id the identifier of the clicked button
+     */
     private void sendButtonTracked(int id) {
         String label;
         switch (id) {
             case R.id.send_login_button:
-                label = "login with google";
+                label = "Login with google";
                 break;
             case R.id.login_facebook_button:
-                label = "login with google";
+                label = "Login with google";
                 break;
             case R.id.login_g_plus_button:
-                label = "login with google";
+                label = "Login with google";
                 break;
             case R.id.login_twitter_button:
                 label = "Login with twitter";
@@ -105,16 +111,13 @@ public class LoginActivity extends Activity implements LoginView {
                 label = "Create new User";
                 break;
             default:
-                label = "other";
+                label = "Other";
         }
-        t.send(new HitBuilders.EventBuilder()
-                .setCategory("Login")
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("EditActivity")
                 .setAction("button clicked")
                 .setLabel(label)
                 .build());
-        GoogleAnalytics.getInstance(app.getBaseContext()).dispatchLocalHits();
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
-
-
-
 }
