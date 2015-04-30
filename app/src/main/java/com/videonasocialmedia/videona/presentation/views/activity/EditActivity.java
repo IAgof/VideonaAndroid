@@ -526,7 +526,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
        }
     */
         if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
-            relativeLayoutPreviewVideo.setVisibility(View.GONE);
+            //relativeLayoutPreviewVideo.setVisibility(View.GONE);
         };
 
 
@@ -723,7 +723,7 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         }
 
         if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
-            relativeLayoutPreviewVideo.setVisibility(View.GONE);
+            //relativeLayoutPreviewVideo.setVisibility(View.GONE);
         };
 
         if (musicCatalogFragment == null) {
