@@ -19,6 +19,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.onColorEffectL
 import com.videonasocialmedia.videona.presentation.mvp.presenters.onPreviewListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.onRecordEventListener;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -45,6 +46,11 @@ public class RecordUseCase {
      * CameraPreview
      */
     private CameraPreview cameraPreview;
+
+    /**
+     * CustomManualFocusView
+     */
+    private CustomManualFocusView customManualFocusView;
 
     /**
      * Int cameraId. Future use to multicamera
@@ -85,6 +91,8 @@ public class RecordUseCase {
 
         cameraPreview = new CameraPreview(context, camera);
 
+        customManualFocusView = new CustomManualFocusView(context);
+
         timer = new Chronometer(context);
 
         Log.d(LOG_TAG, "RecordUseCase");
@@ -98,7 +106,7 @@ public class RecordUseCase {
      */
     public void startPreview(onPreviewListener listener){
 
-        listener.onPreviewStarted(cameraPreview);
+        listener.onPreviewStarted(cameraPreview, customManualFocusView);
 
     }
 
@@ -110,7 +118,7 @@ public class RecordUseCase {
      */
     public void reStartPreview(onPreviewListener listener){
 
-        listener.onPreviewReStarted(cameraPreview);
+        listener.onPreviewReStarted(cameraPreview, customManualFocusView);
 
     }
 

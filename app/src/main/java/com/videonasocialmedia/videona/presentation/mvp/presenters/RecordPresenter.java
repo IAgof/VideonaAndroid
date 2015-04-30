@@ -19,6 +19,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.domain.record.RecordUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 
 import java.util.ArrayList;
 
@@ -244,17 +245,17 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     }
 
     @Override
-    public void onPreviewStarted(CameraPreview cameraPreview){
+    public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
 
-        recordView.startPreview(cameraPreview);
+        recordView.startPreview(cameraPreview, customManualFocusView);
 
         Log.d(LOG_TAG, "onPreviewStarted");
     }
 
     @Override
-    public void onPreviewReStarted(CameraPreview cameraPreview){
+    public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
 
-        recordView.stopPreview(cameraPreview);
+        recordView.stopPreview(cameraPreview, customManualFocusView);
 
         Log.d(LOG_TAG, "onPreviewReStarted");
     }

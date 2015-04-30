@@ -16,10 +16,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -195,6 +197,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         recordPresenter.start();
 
+
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
@@ -213,6 +216,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         super.onResume();
 
         recordPresenter.onResume();
+
+        // Start activity with button effect clicked and focus
+        startRecordView();
 
         Log.d(LOG_TAG, "onResume() RecordActivity");
 
@@ -269,6 +275,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         buttonBackPressed = true;
 
+        //TODO change this text to R String
         Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
 
     }
@@ -328,19 +335,25 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      * @param cameraPreview
      */
     @Override
-    public void startPreview(CameraPreview cameraPreview){
+    public void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
 
             frameLayoutCameraPreview.addView(cameraPreview);
-            frameLayoutCameraPreview.addView(new CustomManualFocusView(RecordActivity.this));
+            frameLayoutCameraPreview.addView(customManualFocusView);
 
         // Fix format chronometer 00:00. Do in xml, design
             chronometerRecord.setText("00:00");
+
+            customManualFocusView.onPreviewTouchEvent(this);
+
+            recordPresenter.effectClickListener();
+
     }
 
     @Override
-    public void stopPreview(CameraPreview cameraPreview){
+    public void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
 
         frameLayoutCameraPreview.removeView(cameraPreview);
+        frameLayoutCameraPreview.removeView(customManualFocusView);
     }
 
     /**
@@ -521,6 +534,26 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
     }
 
+
+    private void startRecordView(){
+
+       /* CustomManualFocusView view = new CustomManualFocusView(RecordActivity.this);
+
+        view.onPreviewTouchEvent(RecordActivity.this);
+
+
+        //WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        //Display display = wm.getDefaultDisplay();
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+*/
+
+    }
+
     /**
      * Sends button clicks to GA
      *
@@ -550,6 +583,79 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
+
+    class onFocusPreviewTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String LOG_TAG = this.getClass().getSimpleName();
+
+
+        // Obtain MotionEvent object
+        long downTime = SystemClock.uptimeMillis();
+        long eventTime = SystemClock.uptimeMillis() + 100;
+        float x = 0.0f;
+        float y = 0.0f;
+
+        // List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
+        int metaState = 0;
+        MotionEvent motionEventDown = MotionEvent.obtain(
+                downTime,
+                eventTime,
+                MotionEvent.ACTION_DOWN,
+                x,
+                y,
+                metaState
+        );
+
+        MotionEvent motionEventUP = MotionEvent.obtain(
+                downTime + 500,
+                eventTime + 700,
+                MotionEvent.ACTION_UP,
+                x,
+                y,
+                metaState
+        );
+
+        View view = new CustomManualFocusView(RecordActivity.this);
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+
+
+            try {
+
+
+                // Dispatch touch event to view
+                //frameLayoutCameraPreview.dispatchTouchEvent(motionEvent);
+                //view.onTouchEvent(motionEvent);
+                //view.onTouchEvent(motionEvent);
+              //  view.onTouchEvent(motionEventDown);
+
+             //   Log.d(LOG_TAG, "onTouchEvent Down");
+
+            //    view.onTouchEvent(motionEventUP);
+
+                // 3 seconds, time in milliseconds
+                Thread.sleep(3000);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            return true;
+
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean state) {
+
+
+
+            recordPresenter.effectClickListener();
+
+        }
+    }
 
 
 }
