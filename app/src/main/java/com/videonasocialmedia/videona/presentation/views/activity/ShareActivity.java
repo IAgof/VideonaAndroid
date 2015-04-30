@@ -25,7 +25,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
@@ -48,6 +52,13 @@ import butterknife.InjectView;
  */
 public class ShareActivity extends Activity {
 
+    /*VIEWS*/
+    @InjectView(R.id.imageButtonShare)
+    ImageButton btnShare;
+    @InjectView(R.id.imageButtonPlayShare)
+    ImageButton btnPlay;
+
+    /*CONFIG*/
     private final String LOG_TAG = this.getClass().getSimpleName();
 
     private static final int CHOOSE_SHARE_REQUEST_CODE = 600;
@@ -58,12 +69,6 @@ public class ShareActivity extends Activity {
     private int durationVideoRecorded;
 
     private String videoEdited;
-
-    // Buttons
-    @InjectView(R.id.imageButtonShare)
-    ImageButton btnShare;
-    @InjectView(R.id.imageButtonPlayShare)
-    ImageButton btnPlay;
 
     private SeekBar seekBar;
 
@@ -83,6 +88,11 @@ public class ShareActivity extends Activity {
             updateSeekProgress();
         }
     };
+    /**
+     * Tracker google analytics
+     */
+    private VideonaApplication app;
+    private Tracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +101,9 @@ public class ShareActivity extends Activity {
         setContentView(R.layout.activity_share);
 
         ButterKnife.inject(this);
+
+        app = (VideonaApplication) getApplication();
+        tracker = app.getTracker();
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Medium.ttf");
 
@@ -110,10 +123,9 @@ public class ShareActivity extends Activity {
 
             videoEdited = appPrefs.getVideoMusicAux();
 
-          //  setVideoInfo();
+            //  setVideoInfo();
 
-          //  previewVideo();
-
+            //  previewVideo();
 
             final Runnable r = new Runnable() {
                 public void run() {
@@ -126,7 +138,6 @@ public class ShareActivity extends Activity {
             };
 
             performOnBackgroundThread(r);
-
 
         } else {
 
@@ -147,9 +158,7 @@ public class ShareActivity extends Activity {
                 previewVideo();
 
             }
-
         }
-
 
         seekBar = (SeekBar) findViewById(R.id.seekBarShare);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -198,7 +207,6 @@ public class ShareActivity extends Activity {
             }
         });
 
-
     }
 
     private void setProgressDialog() {
@@ -213,7 +221,6 @@ public class ShareActivity extends Activity {
 
         // Custom progress dialog
         progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
-
 
         ((TextView) progressDialog.findViewById(Resources.getSystem()
                 .getIdentifier("message", "id", "android")))
@@ -235,7 +242,6 @@ public class ShareActivity extends Activity {
                 Resources.getSystem().getIdentifier("customPanel", "id",
                         "android"))
                 .setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
-
 
     }
 
@@ -263,17 +269,15 @@ public class ShareActivity extends Activity {
 
     };
 
-
     private void doTrimAudio() {
 
         trimAudio();
 
         File temp = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
 
-        if(temp.exists()){
+        if (temp.exists()) {
             temp.delete();
         }
-
 
         this.runOnUiThread(new Runnable() {
             public void run() {
@@ -284,10 +288,8 @@ public class ShareActivity extends Activity {
 
                 previewVideo();
 
-
             }
         });
-
 
     }
 
@@ -308,7 +310,6 @@ public class ShareActivity extends Activity {
         videoEdited = pathVideonaFinal;
 
         music_selected = true;
-
 
     }
 
@@ -338,7 +339,6 @@ public class ShareActivity extends Activity {
                 mediaPlayer.pause();
                 btnPlay.setVisibility(View.VISIBLE);
 
-
             } else {
 
                 btnPlay.setVisibility(View.VISIBLE);
@@ -354,7 +354,7 @@ public class ShareActivity extends Activity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-
+                sendButtonTracked(arg0.getId());
                 Log.d(LOG_TAG, "shareClickListener");
 
           /*      videoView.pause();
@@ -370,7 +370,6 @@ public class ShareActivity extends Activity {
                     btnPlay.setVisibility(View.VISIBLE);
 
                 }
-
 
                 ContentValues content = new ContentValues(4);
                 content.put(Video.VideoColumns.TITLE, videoEdited);
@@ -421,9 +420,7 @@ public class ShareActivity extends Activity {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
 
-
                     mediaPlayer = mp;
-
 
                     seekBar.setMax(durationVideoRecorded * 1000);
 
@@ -459,7 +456,6 @@ public class ShareActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-
         if (music_selected) {
 
           /*  videoView.pause();
@@ -472,7 +468,6 @@ public class ShareActivity extends Activity {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
             }
-
 
             // Kill process. Needed to load again ffmpeg libraries
             int pid = android.os.Process.myPid();
@@ -504,7 +499,6 @@ public class ShareActivity extends Activity {
         } else {
             Log.d(LOG_TAG, "requestCode " + requestCode + "resultCode " + resultCode + "intent data " + data.getDataString());
 
-
             if (requestCode == CHOOSE_SHARE_REQUEST_CODE) {
 
                 //setResult(Activity.RESULT_OK);
@@ -517,9 +511,28 @@ public class ShareActivity extends Activity {
             }
 
         }
-
-
     }
 
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id the identifier of the clicked button
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.imageButtonShare:
+                label = "Share video";
+                break;
+            default:
+                label = "Other";
+        }
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("ShareActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
 
 }
