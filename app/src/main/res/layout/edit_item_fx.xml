@@ -11,8 +11,9 @@
 
     <ImageView
         android:id="@+id/edit_item_fx_background"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="3dp"/>
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_margin="1dp"
+        android:scaleType="fitXY"/>
 
 </RelativeLayout>

@@ -120,10 +120,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     //******************************************************************************
     // Start to define variables for old EditActivity, delete after update apk
 
-    @InjectView(R.id.buttonCancelEditActivity)
-    Button buttonCancelEditActivity;
+    /*@InjectView(R.id.buttonCancelEditActivity)
+    ImageButton buttonCancelEditActivity;
     @InjectView(R.id.buttonOkEditActivity)
-    Button buttonOkEditActivity;
+    ImageButton buttonOkEditActivity;*/
 
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
     private static final int ADD_MUSIC_REQUEST_CODE = 600;
