@@ -80,25 +80,28 @@ import butterknife.OnTouch;
  */
 public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerClickListener {
 
-    /*VIEWS*/
-    @InjectView(R.id.edit_button_fx)
+    private final String LOG_TAG = "EDIT ACTIVITY";
+
+    /*@InjectView(R.id.edit_button_fx)
     ImageButton videoFxButton;
     @InjectView(R.id.edit_button_look)
     ImageButton lookFxButton;
     @InjectView(R.id.edit_button_scissor)
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
-    ImageButton audioFxButton;
+    ImageButton audioFxButton;*/
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
     @InjectView(R.id.edit_button_play)
     ImageButton playButton;
     @InjectView(R.id.edit_seek_bar)
     SeekBar seekBar;
-    @InjectView(R.id.buttonCancelEditActivity)
-    Button buttonCancelEditActivity;
+    
+        /*@InjectView(R.id.buttonCancelEditActivity)
+    ImageButton buttonCancelEditActivity;
     @InjectView(R.id.buttonOkEditActivity)
-    Button buttonOkEditActivity;
+    ImageButton buttonOkEditActivity;*/
+
 
     /*CONFIG*/
     private final String LOG_TAG = "EDIT ACTIVITY";
@@ -135,6 +138,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     //******************************************************************************
     //******************************************************************************
     // Start to define variables for old EditActivity, delete after update apk
+
 
 
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
@@ -524,10 +528,9 @@ Resources.getSystem().getIdentifier("customPanel", "id",
            switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
        }
     */
-        if (relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE) {
+        if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
             relativeLayoutPreviewVideo.setVisibility(View.GONE);
-        }
-        ;
+        };
 
 
         if (musicCatalogFragment == null) {
@@ -722,10 +725,9 @@ Resources.getSystem().getIdentifier("customPanel", "id",
             edit_bottom_panel.setVisibility(View.VISIBLE);
         }
 
-        if (relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE) {
+        if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
             relativeLayoutPreviewVideo.setVisibility(View.GONE);
-        }
-        ;
+        };
 
         if (musicCatalogFragment == null) {
             musicCatalogFragment = new MusicCatalogFragment();

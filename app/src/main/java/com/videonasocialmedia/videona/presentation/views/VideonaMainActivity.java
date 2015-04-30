@@ -207,7 +207,7 @@ public class VideonaMainActivity extends Activity {
                 loadingProjectPresenter.startLoadingProject();
 
                 // 3 seconds, time in milliseconds
-                Thread.sleep(3000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
