@@ -3,7 +3,6 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +110,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         colorEffectName = colorEffectItems.get(position);
 
-        Log.d(LOG_TAG, "getView position " + position + " colorEffectName " + colorEffectName + " positionColorEffectPressed " + RecordActivity.positionColorEffectPressed);
+       // Log.d(LOG_TAG, "getView position " + position + " colorEffectName " + colorEffectName + " positionColorEffectPressed " + RecordActivity.positionColorEffectPressed);
 
         String colorEffectDrawableName = "common_filter_" + colorEffectName;
 

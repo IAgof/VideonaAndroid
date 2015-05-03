@@ -101,6 +101,69 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/common_icon_play_on_normal" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/edit_text_start_trim"
+                        android:layout_alignBottom="@+id/edit_preview_player"
+                        android:layout_alignLeft="@+id/edit_preview_player"
+                        android:textColor="#ffd3ff00"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/edit_text_end_trim"
+                        android:layout_alignRight="@+id/edit_preview_player"
+                        android:layout_alignBottom="@+id/edit_preview_player"
+                        android:textColor="#ffd3ff00"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/edit_text_seekbar"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="#ff18ff05"
+                        android:layout_alignTop="@+id/edit_preview_player" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/edit_text_start_video"
+                        android:layout_alignLeft="@+id/edit_preview_player"
+                        android:layout_alignTop="@+id/edit_preview_player"
+                        android:textColor="#ff18ff05" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/edit_text_end_video"
+                        android:layout_alignTop="@+id/edit_preview_player"
+                        android:layout_alignRight="@+id/edit_preview_player"
+                        android:textColor="#ff18ff05" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="Small Text"
+                        android:id="@+id/edit_text_time_trim"
+                        android:layout_alignBottom="@+id/edit_preview_player"
+                        android:textColor="#ffd3ff00"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="invisible" />
+
                 </RelativeLayout>
 
 
@@ -109,9 +172,10 @@
                     android:layout_width="340dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="0dp"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="visible"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
 
                     <RelativeLayout
                         android:id="@+id/relativeLayoutTrim"
@@ -120,22 +184,20 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/linearLayoutFrames"
                             android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:paddingLeft="10dp"
-                            android:paddingRight="10dp">
+                            android:paddingRight="10dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="1dp">
 
                             <RelativeLayout
                                 android:id="@+id/relativeLayoutImageFrame1"
@@ -144,16 +206,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame1"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:scaleType="fitXY" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -163,16 +222,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame2"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:scaleType="fitXY" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -182,16 +238,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame3"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame3"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -201,16 +254,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame4"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame4"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -220,16 +270,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame5"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame5"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:scaleType="fitXY" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -239,16 +286,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame6"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame6"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:scaleType="fitXY" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -258,16 +302,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame7"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame7"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:scaleType="fitXY" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -277,16 +318,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame8"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame8"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:scaleType="fitXY" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -296,16 +334,13 @@
                                 android:layout_gravity="top"
                                 android:layout_weight="1">
 
-                                <ProgressBar
-                                    android:id="@+id/progressBarImageFrame9"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="fill_parent" />
-
                                 <ImageView
                                     android:id="@+id/imageViewFrame9"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone" />
+                                    android:visibility="visible"
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:scaleType="fitXY" />
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
@@ -313,7 +348,7 @@
                     <RelativeLayout
                         android:id="@+id/relativeLayoutRangeSeekBar"
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentBottom="false"
                         android:layout_alignParentTop="false"
                         android:layout_centerHorizontal="true"

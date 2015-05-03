@@ -53,14 +53,12 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final Bitmap thumbImageRight = BitmapFactory.decodeResource(getResources(), R.drawable.activity_edit_icon_thumb_left_normal);
 
     //	private final Bitmap point = BitmapFactory.decodeResource(getResources(), R.drawable.point);        
-    private final Bitmap line = BitmapFactory.decodeResource(getResources(), R.drawable.activity_edit_icon_thumb_left_normal);
+    private final Bitmap lineleft = BitmapFactory.decodeResource(getResources(), R.drawable.activity_edit_icon_thumb_left_normal);
     private final Bitmap lineright = BitmapFactory.decodeResource(getResources(), R.drawable.activity_edit_icon_thumb_right_normal);
-    private final float lineHeightHalf = 0.5f * line.getHeight();
-    private final float lineWidthHalf = 0.5f * line.getWidth();
+    private final float lineHeightHalf = 0.5f * lineleft.getHeight();
+    private final float lineWidthHalf = 0.5f * lineleft.getWidth();
 
-
-    private final float thumbWidth = thumbImageRight.getWidth();
-    private final float thumbHalfWidth = 0.5f * thumbWidth;
+    private final float thumbHalfWidth = 0.5f *  thumbImageRight.getWidth();
     private final float thumbHalfHeight = 0.5f * thumbImageRight.getHeight();
 
     //  private final float lineHeight = 0.53f * thumbHalfHeight;
@@ -430,13 +428,17 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // draw seek bar background line
+        // draw seek bar background lineleft
 
-        final RectF rect = new RectF(0, 0, getWidth() - padding, getHeight());
+      //amm  final RectF rect = new RectF(0, 0, getWidth() - padding, getHeight());
 
-       // paint.setColor(R.color.pastel_palette_grey);
-        paint.setColor(Color.WHITE);
-      //  paint.setAlpha(160);
+        final RectF rect = new RectF(0, 0, getWidth(), getHeight());
+
+
+
+        paint.setColor(R.color.pastel_palette_grey);
+        //paint.setColor(Color.LTGRAY);
+        //paint.setAlpha(200);
         paint.setAntiAlias(true);
 
         //    canvas.drawRect(rect, paint);
@@ -446,8 +448,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         float max_thumb = (int) normalizedToScreen(normalizedMaxValue);
 
 
-        // draw seek bar active range line (videona color blue)
-        rect.left = padding;
+        // draw seek bar active range lineleft (videona color blue)
+       // rect.left = padding;
+        rect.left = 0;
         rect.right = min_thumb;
 
         canvas.drawRect(rect, paint);
@@ -459,12 +462,14 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         //rect.left = Math.min(max_thumb, min_thumb);
         rect.left = max_thumb;
-        rect.right = getWidth() - padding;
+        //rect.right = getWidth() - padding;
+        rect.right = getWidth();
 
 
-      //  paint.setColor(R.color.pastel_palette_grey);
-       // paint.setAlpha(160);
-        paint.setColor(Color.WHITE);
+       // paint.setColor(R.color.alvaro_green);
+       // paint.setColor(Color.LTGRAY);
+       // paint.setAlpha(200);
+       // paint.setColor(Color.WHITE);
         canvas.drawRect(rect, paint);
 
         canvas2 = canvas;
@@ -490,6 +495,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     @Override
     protected Parcelable onSaveInstanceState() {
+
+        Log.d(LOG_TAG, "bundle onSaveInstanceState");
+
         final Bundle bundle = new Bundle();
         bundle.putParcelable("SUPER", super.onSaveInstanceState());
         bundle.putDouble("MIN", normalizedMinValue);
@@ -503,6 +511,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     @Override
     protected void onRestoreInstanceState(Parcelable parcel) {
+
+        Log.d(LOG_TAG, "bundle onRestoreInstanceState");
+
         final Bundle bundle = (Bundle) parcel;
         super.onRestoreInstanceState(bundle.getParcelable("SUPER"));
         normalizedMinValue = bundle.getDouble("MIN");
@@ -519,13 +530,14 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     private void drawThumbRight(float screenCoord, boolean pressed, Canvas canvas) {
 
-        canvas.drawBitmap(lineright, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), paint);
+        //canvas.drawBitmap(lineright, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), paint);
+        canvas.drawBitmap(lineright, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), null);
         postInvalidate();
     }
 
     private void drawThumbLeft(float screenCoord, boolean pressed, Canvas canvas) {
 
-        canvas.drawBitmap(line, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), paint);
+        canvas.drawBitmap(lineleft, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), null);
         postInvalidate();
     }
 
@@ -580,7 +592,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     public void setNormalizedMinValue(double value) {
         value = roundToClosest(value);//set value on the beginning of second in video
         // amm Nov'14 normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
-        normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
+        normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
+        //normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
         Log.d(LOG_TAG, "setNormalizedMinValue " + value + " normalizedMinValue " + normalizedMinValue);
         invalidate();
     }
@@ -594,7 +607,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         value = roundToClosest(value); //set value on the beginning of second in video
         // amm Nov'14 normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
-        normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
+        //normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
+        normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
         Log.d(LOG_TAG, "setNormalizedMaxValue " + value + " normalizedMaxValue " + normalizedMaxValue);
         invalidate();
     }

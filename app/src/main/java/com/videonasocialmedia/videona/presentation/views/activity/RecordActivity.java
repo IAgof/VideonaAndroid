@@ -149,9 +149,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Context context = getApplicationContext();
         appPrefs = new UserPreferences(context);
 
-        // check if tempAV exists and jump to ShareActivity and trim Audio
-        checkIsMusicOn();
-
         app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
@@ -234,7 +231,11 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
+
         if (requestCode == CAMERA_EDIT_VIDEO_REQUEST_CODE) {
+
+            recordPresenter = null;
 
             // Restart recordActivity
             onCreate(null);
@@ -321,6 +322,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             recordPresenter.effectClickListener();
 
+            ///  TEST jump to EditActivity
+            String test2min = Constants.PATH_APP_MASTERS + File.separator + "test_AV2.mp4";
+        //    navigateEditActivity(test2min);
     }
 
     @Override
@@ -475,26 +479,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         recordPresenter.recordClickListener();
     }
 
-    /**
-     * Check if a temporal file is created and jump to ShareActivity
-     * Needed to work with FFMpeg when add music to edition
-     */
-    private void checkIsMusicOn() {
-
-        Log.d(LOG_TAG, "RecordActivity checkIsMusicOn getIsMusicON " + appPrefs.getIsMusicON());
-
-        File fTempAV = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
-
-        if (appPrefs.getIsMusicON() && fTempAV.exists()) {
-
-
-            Intent share = new Intent();
-            //  share.putExtra("MEDIA_OUTPUT", pathvideoTrim);
-            share.setClass(RecordActivity.this, ShareActivity.class);
-            startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-        }
-
-    }
 
     /**
      * Sends button clicks to GA
