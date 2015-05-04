@@ -19,16 +19,27 @@
         android:src="@drawable/activity_edit_icon_fx_normal"
         android:background="@color/pastel_palette_orange"
         android:padding="15dp"
-        android:alpha="0.10" />
+        android:layout_marginBottom="2dp"
+        android:alpha="0.20" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/activity_edit_icon_fx_normal"
         android:background="@color/pastel_palette_orange"
+        android:layout_marginBottom="2dp"
         android:padding="15dp"
         android:adjustViewBounds="false"
-        android:alpha="0.10" />
+        android:alpha="0.20" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/activity_edit_icon_fx_normal"
+        android:layout_marginBottom="2dp"
+        android:background="@color/pastel_palette_orange"
+        android:padding="15dp"
+        android:alpha="0.20" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -36,13 +47,5 @@
         android:src="@drawable/activity_edit_icon_fx_normal"
         android:background="@color/pastel_palette_orange"
         android:padding="15dp"
-        android:alpha="0.10" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/activity_edit_icon_fx_normal"
-        android:background="@color/pastel_palette_orange"
-        android:padding="15dp"
-        android:alpha="0.10" />
+        android:alpha="0.20" />
 </LinearLayout>
