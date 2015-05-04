@@ -28,7 +28,7 @@
             <RelativeLayout
                 android:id="@+id/relativeLayoutTop"
                 android:layout_width="fill_parent"
-                android:layout_height="45dp"
+                android:layout_height="35dp"
                 android:layout_weight="1">
 
 

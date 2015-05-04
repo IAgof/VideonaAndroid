@@ -6,13 +6,24 @@
     tools:context=".mainActivity">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:layout_centerInParent="true"
+    android:src="@drawable/splashscreen" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageBetaLabel"
+        android:src="@drawable/beta_label"
+        android:layout_gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:src="@drawable/splashscreen" />
+        android:contentDescription="Beta Label"
+        android:layout_alignParentLeft="false" />
 
 </RelativeLayout>

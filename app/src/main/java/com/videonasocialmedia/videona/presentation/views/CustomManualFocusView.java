@@ -51,7 +51,7 @@ public class CustomManualFocusView extends View {
 
         //TODO change resource to new design
         // TODO FUTURE: add animation
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.common_filter_aqua_ad1_normal);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_record_icon_focus_focused);
 
         canvas = new Canvas(bitmap.copy(Bitmap.Config.ARGB_8888, true));
 
@@ -66,7 +66,7 @@ public class CustomManualFocusView extends View {
 
         if (showDraw) {
 
-            canvas.drawBitmap(bitmap, x,y, paint);
+            canvas.drawBitmap(bitmap, x-50 ,y-50, paint);
 
         }
 
@@ -126,7 +126,7 @@ public class CustomManualFocusView extends View {
                 Log.d("Focus", " postDelayed");
 
             }
-        }, 1500);
+        }, 2500);
 
 
     }

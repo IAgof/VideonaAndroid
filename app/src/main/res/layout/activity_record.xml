@@ -86,9 +86,11 @@
 
             android:id="@+id/button_color_effect"
 
-            android:layout_width="25dp"
+            android:layout_width="55dp"
 
-            android:layout_height="25dp"
+            android:layout_height="55dp"
+
+            android:padding="15dp"
 
             android:layout_above="@+id/button_record"
 
@@ -100,7 +102,7 @@
 
             android:focusableInTouchMode="false"
 
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
 
             android:src="@drawable/common_icon_filters_normal" />
 

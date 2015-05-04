@@ -137,7 +137,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     // Start to define variables for old EditActivity, delete after update apk
 
 
-
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
     private static final int ADD_MUSIC_REQUEST_CODE = 600;
 
@@ -292,7 +291,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                         musicPlayer.setVolume(0f, 0f);
 
                         isVideoMute = true;
-
                     }
 
                 }
@@ -514,26 +512,30 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         if (videoFxMenuFragment == null)
             videoFxMenuFragment = new VideoFxMenuFragment();
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
+        if (musicCatalogFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
     }
 
     @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
         sendButtonTracked(R.id.edit_button_audio);
 
-     /*  if (audioFxButton == null) {
-           audioFxMenuFragment = new AudioFxMenuFragment();
-           switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
-       }
-    */
-        if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
-            //relativeLayoutPreviewVideo.setVisibility(View.GONE);
-        };
 
-
-        if (musicCatalogFragment == null) {
-            musicCatalogFragment = new MusicCatalogFragment();
+        if (audioFxMenuFragment == null) {
+            audioFxMenuFragment = new AudioFxMenuFragment();
         }
-        this.switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
+        switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
+        //if (musicCatalogFragment == null) {
+
+        //    musicCatalogFragment = new MusicCatalogFragment();
+
+        //}
+        //this.switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
+
+        //FragmentTransaction ft= this.getFragmentManager().beginTransaction();
+        //ft.remove(musicCatalogFragment).commit();
+        //ft.add(R.id.edit_bottom_panel, musicCatalogFragment).commit();
+
 
         onEffectMenuSelected();
     }
@@ -544,17 +546,13 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
-            onEffectTrimMenuSelected();
         }
 
-        //  this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+        this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
 
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
-
-        if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
-            edit_bottom_panel.setVisibility(View.INVISIBLE);
-        }
-
+        if (musicCatalogFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
 
     }
 
@@ -564,6 +562,9 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         if (lookFxMenuFragment == null)
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
+
+        if (musicCatalogFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
     }
 
     @OnTouch(R.id.edit_preview_player)
@@ -722,24 +723,12 @@ Resources.getSystem().getIdentifier("customPanel", "id",
             edit_bottom_panel.setVisibility(View.VISIBLE);
         }
 
-        if(relativeLayoutPreviewVideo.getVisibility() == View.VISIBLE){
-            //relativeLayoutPreviewVideo.setVisibility(View.GONE);
-        };
-
-        if (musicCatalogFragment == null) {
-            musicCatalogFragment = new MusicCatalogFragment();
-        } else {
-            //TODO cambiar la lista del fragment
-        }
-
+        musicCatalogFragment = new MusicCatalogFragment();
         switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
 
-      /*  if(audioFxMenuFragment == null){
-            audioFxMenuFragment = new AudioFxMenuFragment();
+        if (selectedMusic!= null){
+            //TODO change icon of selected music
         }
-        switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
-        */
-
     }
 
     @Override
@@ -750,7 +739,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
         if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
             edit_bottom_panel.setVisibility(View.INVISIBLE);
         }
-
     }
 
     /**
