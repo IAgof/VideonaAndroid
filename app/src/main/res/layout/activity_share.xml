@@ -7,7 +7,7 @@
     android:background="@color/videona_blue_1">
 
     <VideoView
-        android:id="@+id/videoViewShare"
+        android:id="@+id/share_video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -18,13 +18,13 @@
         android:visibility="visible" />
 
     <ImageButton
-        android:id="@+id/imageButtonShare"
+        android:id="@+id/share_button_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="53dp"
         android:background="@null"
         android:src="@drawable/activity_share_icon_share_normal"
-        android:layout_above="@+id/imageButtonPlayShare"
+        android:layout_above="@+id/share_button_play"
         android:layout_alignParentEnd="true"
         android:scaleType="fitCenter"
         android:layout_marginEnd="48dp"
@@ -33,7 +33,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButtonPlayShare"
+        android:id="@+id/share_button_play"
         android:background="@null"
         android:src="@drawable/common_icon_play_on_normal"
         android:layout_centerVertical="true"
@@ -42,7 +42,7 @@
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBarShare"
+        android:id="@+id/share_seekbar"
         android:thumb="@drawable/point"
         android:progressDrawable="@color/pastel_palette_grey"
         android:indeterminate="false"
@@ -64,14 +64,14 @@
         android:layout_alignParentLeft="false" />
 
     <ImageButton
-        android:id="@+id/buttonRateApp"
+        android:id="@+id/share_button_rate_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="53dp"
         android:background="#fffdff43"
         android:src="@drawable/activity_share_icon_share_normal"
         android:scaleType="fitCenter"
-        android:layout_alignTop="@+id/imageButtonShare"
+        android:layout_alignTop="@+id/share_button_share"
         android:layout_alignParentStart="true"
         android:layout_marginStart="84dp" />
 
