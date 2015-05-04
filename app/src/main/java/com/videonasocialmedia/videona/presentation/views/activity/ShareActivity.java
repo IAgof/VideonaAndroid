@@ -315,6 +315,8 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
             setResult(Activity.RESULT_OK);
 
+            finish();
+
     }
 
     @Override
