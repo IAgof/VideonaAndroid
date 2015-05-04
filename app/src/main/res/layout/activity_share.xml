@@ -63,4 +63,16 @@
         android:contentDescription="Beta Label"
         android:layout_alignParentLeft="false" />
 
+    <ImageButton
+        android:id="@+id/buttonRateApp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="53dp"
+        android:background="#fffdff43"
+        android:src="@drawable/activity_share_icon_share_normal"
+        android:scaleType="fitCenter"
+        android:layout_alignTop="@+id/imageButtonShare"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="84dp" />
+
 </RelativeLayout>

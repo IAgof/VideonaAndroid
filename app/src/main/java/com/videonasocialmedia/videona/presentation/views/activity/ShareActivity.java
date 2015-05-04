@@ -30,14 +30,11 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
-import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
-
-import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
@@ -57,6 +54,9 @@ public class ShareActivity extends Activity {
     ImageButton btnShare;
     @InjectView(R.id.imageButtonPlayShare)
     ImageButton btnPlay;
+    @InjectView(R.id.buttonRateApp)
+    ImageButton btnRateApp;
+
 
     /*CONFIG*/
     private final String LOG_TAG = this.getClass().getSimpleName();
@@ -117,48 +117,16 @@ public class ShareActivity extends Activity {
 
         appPrefs = new UserPreferences(getApplicationContext());
 
-        Log.d(LOG_TAG, "getIsMusicON " + appPrefs.getIsMusicON());
+        // getting intent data
+        Intent in = getIntent();
+        videoEdited = in.getStringExtra("MEDIA_OUTPUT");
 
-        if (appPrefs.getIsMusicON()) {
+        Log.d(LOG_TAG, "VideoEdited " + videoEdited);
 
-            videoEdited = appPrefs.getVideoMusicAux();
+        setVideoInfo();
 
-            //  setVideoInfo();
+        previewVideo();
 
-            //  previewVideo();
-
-            final Runnable r = new Runnable() {
-                public void run() {
-
-                    doTrimAudio();
-
-                    appPrefs.setIsMusicON(false);
-
-                }
-            };
-
-            performOnBackgroundThread(r);
-
-        } else {
-
-            // getting intent data
-            Intent in = getIntent();
-            videoEdited = in.getStringExtra("MEDIA_OUTPUT");
-
-            Log.d(LOG_TAG, "VideoEdited " + videoEdited);
-
-            if (videoEdited == null) {
-
-                finish();
-
-            } else {
-
-                setVideoInfo();
-
-                previewVideo();
-
-            }
-        }
 
         seekBar = (SeekBar) findViewById(R.id.seekBarShare);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -206,6 +174,18 @@ public class ShareActivity extends Activity {
 
             }
         });
+
+    }
+
+    @OnClick (R.id.buttonRateApp)
+    public void rateApp(){
+
+        //Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        // Redirect to videozone
+        Uri uri = Uri.parse("market://details?id=" + "com.visiona.videozone");
+        Intent rateApp = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(rateApp);
+
 
     }
 
@@ -269,49 +249,7 @@ public class ShareActivity extends Activity {
 
     };
 
-    private void doTrimAudio() {
 
-        trimAudio();
-
-        File temp = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
-
-        if (temp.exists()) {
-            temp.delete();
-        }
-
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-
-                progressDialog.dismiss();
-
-                setVideoInfo();
-
-                previewVideo();
-
-            }
-        });
-
-    }
-
-    private void trimAudio() {
-
-        videoEdited = appPrefs.getVideoMusicAux();
-
-        String videonaMusic = "V_EDIT_" + new File(videoEdited).getName().substring(7);
-
-        String pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
-
-        int length = appPrefs.getVideoDurationTrim();
-
-        Log.d(LOG_TAG, "VideonaMainActivity trimAudio cut " + Constants.VIDEO_MUSIC_TEMP_FILE + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + length);
-
-        VideonaMainActivity.cut(Constants.VIDEO_MUSIC_TEMP_FILE, pathVideonaFinal, 0, length);
-
-        videoEdited = pathVideonaFinal;
-
-        music_selected = true;
-
-    }
 
     public static Thread performOnBackgroundThread(final Runnable runnable) {
         final Thread t = new Thread() {

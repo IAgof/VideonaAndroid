@@ -18,7 +18,8 @@ public class TimeUtils {
 		public static final int ONE_MINUTE = (1000 * 60);
 		public static final int ONE_HOUR = (1000 * 60 * 60);
 	  }
-	
+
+    // Time in milliSeconds
 	 public static String toFormattedTime(int time) {
 		int remainingTime = time;
 
