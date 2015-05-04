@@ -474,9 +474,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-
-        sendButtonTracked(R.id.edit_button_play);
-
         if (videoPlayer.isPlaying()) {
             videoPlayer.pause();
             if (musicPlayer != null) {

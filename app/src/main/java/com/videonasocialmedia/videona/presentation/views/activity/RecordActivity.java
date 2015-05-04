@@ -481,7 +481,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
 
     /**
-     * Sends button clicks to GA
+     * Sends button clicks to Google Analytics
      *
      * @param id identifier of the clicked view
      */
@@ -493,10 +493,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                 break;
             case R.id.button_color_effect:
                 label = "show available effects";
-                break;
-            case R.id.button5:
-                //TODO change text
-                label = "not a single clue of what should this button do";
                 break;
             default:
                 label = "other";
