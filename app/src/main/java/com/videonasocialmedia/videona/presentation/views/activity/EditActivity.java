@@ -291,8 +291,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         audioFxMenuFragment = new AudioFxMenuFragment();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
-        ft.add(R.id.edit_right_panel, scissorsFxMenuFragment).commit();
+        ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
+        this.onEffectMenuSelected();
+        //ft.add(R.id.edit_right_panel, scissorsFxMenuFragment).commit();
 
         this.initVideoPlayer(this.getIntent().getStringExtra("MEDIA_OUTPUT"));
 
@@ -664,10 +665,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public void onEffectMenuSelected() {
-
-        if (edit_bottom_panel.getVisibility() == View.INVISIBLE) {
-            edit_bottom_panel.setVisibility(View.VISIBLE);
-        }
 
         musicCatalogFragment = new MusicCatalogFragment();
         switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
