@@ -36,9 +36,9 @@
                     android:id="@+id/buttonCancelEditActivity"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="8dp"
-                    android:layout_centerVertical="true"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:src="@drawable/edit_activity_icon_cancel_normal" />
@@ -47,9 +47,9 @@
                     android:id="@+id/buttonOkEditActivity"
                     android:layout_width="28dp"
                     android:layout_height="25dp"
-                    android:layout_marginRight="25dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="25dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
                     android:src="@drawable/edit_activity_icon_ok_normal" />
@@ -102,66 +102,66 @@
                         android:src="@drawable/common_icon_play_on_normal" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Small Text"
                         android:id="@+id/edit_text_start_trim"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/edit_preview_player"
                         android:layout_alignLeft="@+id/edit_preview_player"
+                        android:text="Small Text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#ffd3ff00"
                         android:visibility="invisible" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Small Text"
                         android:id="@+id/edit_text_end_trim"
-                        android:layout_alignRight="@+id/edit_preview_player"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/edit_preview_player"
+                        android:layout_alignRight="@+id/edit_preview_player"
+                        android:text="Small Text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#ffd3ff00"
                         android:visibility="invisible" />
 
                     <TextView
+                        android:id="@+id/edit_text_seekbar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Small Text"
-                        android:id="@+id/edit_text_seekbar"
+                        android:layout_alignTop="@+id/edit_preview_player"
                         android:layout_centerHorizontal="true"
-                        android:textColor="#ff18ff05"
-                        android:layout_alignTop="@+id/edit_preview_player" />
+                        android:text="Small Text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#ff18ff05" />
 
                     <TextView
+                        android:id="@+id/edit_text_start_video"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Small Text"
-                        android:id="@+id/edit_text_start_video"
                         android:layout_alignLeft="@+id/edit_preview_player"
                         android:layout_alignTop="@+id/edit_preview_player"
+                        android:text="Small Text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#ff18ff05" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Small Text"
                         android:id="@+id/edit_text_end_video"
-                        android:layout_alignTop="@+id/edit_preview_player"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/edit_preview_player"
+                        android:layout_alignTop="@+id/edit_preview_player"
+                        android:text="Small Text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#ff18ff05" />
 
                     <TextView
+                        android:id="@+id/edit_text_time_trim"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Small Text"
-                        android:id="@+id/edit_text_time_trim"
                         android:layout_alignBottom="@+id/edit_preview_player"
-                        android:textColor="#ffd3ff00"
                         android:layout_centerHorizontal="true"
+                        android:text="Small Text"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#ffd3ff00"
                         android:visibility="invisible" />
 
                 </RelativeLayout>
@@ -172,10 +172,10 @@
                     android:layout_width="340dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
 
                     <RelativeLayout
                         android:id="@+id/relativeLayoutTrim"
@@ -192,12 +192,12 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginTop="1dp"
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp">
+                            android:paddingRight="10dp">
 
                             <RelativeLayout
                                 android:id="@+id/relativeLayoutImageFrame1"
@@ -210,9 +210,9 @@
                                     android:id="@+id/imageViewFrame1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -226,9 +226,9 @@
                                     android:id="@+id/imageViewFrame2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -242,9 +242,9 @@
                                     android:id="@+id/imageViewFrame3"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal" />
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -258,9 +258,9 @@
                                     android:id="@+id/imageViewFrame4"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal" />
+                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -274,9 +274,9 @@
                                     android:id="@+id/imageViewFrame5"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -290,9 +290,9 @@
                                     android:id="@+id/imageViewFrame6"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -306,9 +306,9 @@
                                     android:id="@+id/imageViewFrame7"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -322,9 +322,9 @@
                                     android:id="@+id/imageViewFrame8"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:visibility="visible" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -338,9 +338,9 @@
                                     android:id="@+id/imageViewFrame9"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="visible"
+                                    android:scaleType="fitXY"
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:visibility="visible" />
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
@@ -371,7 +371,6 @@
                             android:gravity="center"
                             android:orientation="horizontal" />
                     </RelativeLayout>
-
 
 
                 </RelativeLayout>
@@ -412,8 +411,7 @@
                 android:id="@+id/edit_right_panel"
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                >
+                android:layout_alignParentRight="true">
 
             </FrameLayout>
 
@@ -430,20 +428,20 @@
                     android:id="@+id/edit_button_look"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="0.20"
                     android:layout_marginBottom="2dp"
+                    android:alpha="0.20"
                     android:background="@color/pastel_palette_yellow"
                     android:padding="15dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/activity_edit_icon_look_normal" />
-
                 <ImageButton
                     android:id="@+id/edit_button_fx"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+
                     android:alpha="0.20"
                     android:background="@color/pastel_palette_grey"
-                    android:layout_marginBottom="2dp"
                     android:padding="15dp"
                     android:src="@drawable/activity_edit_icon_fx_normal" />
 
@@ -451,16 +449,16 @@
                     android:id="@+id/edit_button_audio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/pastel_palette_blue"
-                    android:padding="15dp"
                     android:layout_marginBottom="2dp"
+                    android:background="@drawable/common_button_selector_blue_pastel"
+                    android:padding="15dp"
                     android:src="@drawable/activity_edit_icon_audio_normal" />
 
                 <ImageButton
                     android:id="@+id/edit_button_scissor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/pastel_palette_orange"
+                    android:background="@drawable/common_button_selector_orange_pastel"
                     android:padding="15dp"
                     android:src="@drawable/activity_edit_icon_cut_normal" />
 
