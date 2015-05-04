@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,8 +47,8 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.VideonaMainActivity;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
-import com.videonasocialmedia.videona.presentation.views.fragment.MusicCatalogFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.MusicCatalogFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
@@ -587,7 +586,6 @@ Resources.getSystem().getIdentifier("customPanel", "id",
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-        sendButtonTracked(R.id.edit_button_play);
         if (videoPlayer.isPlaying()) {
             videoPlayer.pause();
             if (musicPlayer != null) {
