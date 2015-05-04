@@ -54,7 +54,6 @@ import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFra
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.CutVideoPlayerState;
 import com.videonasocialmedia.videona.utils.RangeSeekBar;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
@@ -139,37 +138,18 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     TextView textSeekBar;
 
     //TODO de aquí en adelante hay que cambiarlo todo!!!!!
-    int duration;
 
     Music selectedMusic;
 
     private boolean isVideoMute = false;
     private boolean isMusicON = false;
 
-    //******************************************************************************
-    //******************************************************************************
-    // Start to define variables for old EditActivity, delete after update apk
-
-
-
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
     private static final int ADD_MUSIC_REQUEST_CODE = 600;
-
-    public static VideoView videoView;
-
-    private TextView detailVideoCut;
-    private TextView detailVideoSeek;
-    private TextView detailViewDetails;
-
-    private CutVideoPlayerState cutvideoPlayerState = new CutVideoPlayerState();
 
     public static int seekBarStart = 0;
     public static int seekBarEnd = 0;
     private static int videoProgress = 0;
-    // public static int seekBar = 0;
-    public static int seekBarPositionFull;
-
-    private int progress;
 
     private boolean isRunning = false;
 
@@ -221,40 +201,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     boolean isButtonAudioPressed = false;
 
 
-    //******************************************************************************
-    //******************************************************************************
-    // End of changes
-
-    //******************************************************************************
-    //******************************************************************************
-
-   /* private Handler handler = new Handler();
-
-    private Runnable updateTimeTask = new Runnable() {
-        public void run() {
-          // amm
-            if(videoPlayer != null) {
-                seekBar.setProgress(videoPlayer.getCurrentPosition());
-                seekBar.setMax(videoPlayer.getDuration());
-                handler.postDelayed(this, 50);
-            }
-        }
-    };
-
-    */
-
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekProgress();
         }
     };
-
-
-    //******************************************************************************
-    //******************************************************************************
-    // amm end of changes
-
 
 
     public EditActivity() {
@@ -315,11 +267,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
 
-    /*fin de la chapu*/
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -347,11 +294,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
 
-        //******************************************************************************
-        //******************************************************************************
-        // Changes on onCreate
-
-
         appPrefs = new UserPreferences(getApplicationContext());
         appPrefs.setIsMusicON(false);
         appPrefs.setSeekBarStart(0);
@@ -360,39 +302,31 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
 
-       // videoPlayer = new MediaPlayer();
 
         appPrefs.setVideoProgress(videoProgress);
 
         // getting intent data
         Intent in = getIntent();
 
-        // Test pruebas 2 min
-        //videoRecorded = Environment.getExternalStorageDirectory() + File.separator + "alvaro/dosminutos.mp4";
-       // this.initVideoPlayer(videoRecorded);
-        // videoRecorded = Environment.getExternalStorageDirectory() + File.separator + "Videona/vlc-player.mp4";
+
         Log.d(LOG_TAG, " videoRecorded " + videoRecorded + " vs " + in.getStringExtra("MEDIA_OUTPUT"));
         videoRecorded = in.getStringExtra("MEDIA_OUTPUT");
         videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
+
+        // TODO Probar si butterknife acepta estos findViewById y sus propiedades, son layout, no buttons.
+
         layoutSeekBar = (ViewGroup) findViewById(R.id.linearLayoutRangeSeekBar);
+
         linearLayoutFrames = (LinearLayout) findViewById(R.id.linearLayoutFrames);
+
         progressDialog = new ProgressDialog(EditActivity.this);
 
         relativeLayoutPreviewVideo = (RelativeLayout) findViewById(R.id.relativeLayoutPreviewVideo);
 
         edit_bottom_panel = (FrameLayout) findViewById(R.id.edit_bottom_panel);
 
-
-
-        //******************************************************************************
-        //******************************************************************************
-        // End of changes on onCreate
-
     }
 
-    //******************************************************************************
-    //******************************************************************************
-    // amm Cancel and Ok Edit Activity
 
     @OnClick(R.id.buttonCancelEditActivity)
     public void cancelEditActivity() {
@@ -421,13 +355,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             videoPlayer = null;
         }
         if (musicPlayer != null) {
-// mediaPlayerMusic.stop();
+            // mediaPlayerMusic.stop();
             // musicPlayer.pause();
             musicPlayer.release();
             musicPlayer = null;
         }
-/// TODO Wait until define progressDialog Design
-         progressDialog.setMessage(getString(R.string.dialog_processing));
+
+        /// TODO Wait until define progressDialog Design
+        progressDialog.setMessage(getString(R.string.dialog_processing));
         progressDialog.setTitle(getString(R.string.please_wait));
         progressDialog.setIndeterminate(true);
         progressDialog.show();
@@ -455,12 +390,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             }
         };
+
         performOnBackgroundThread(r);
     }
 
-
-    //******************************************************************************
-    //******************************************************************************
 
     @OnClick(R.id.edit_button_fx)
     public void showVideoFxMenu() {
@@ -556,7 +489,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             // amm
             videoProgress = videoPlayer.getCurrentPosition();
             appPrefs.setVideoProgress(videoProgress);
-            seekBar.setProgress(videoProgress);
+            //seekBar.setProgress(videoProgress);
 
             textSeekBar.setVisibility(View.VISIBLE);
             textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
@@ -583,9 +516,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     protected void onStart() {
         super.onStart();
 
-        // amm
-        //******************************************************************************
-        //******************************************************************************
         Log.d(LOG_TAG, "onStart");
         seekBarEnd = durationVideoRecorded;
 
@@ -595,19 +525,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         PaintFramesTask task = new PaintFramesTask();
         task.execute();
 
-
-        //******************************************************************************
-        //******************************************************************************
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        //******************************************************************************
-        //******************************************************************************
-
 
 
         setVideoInfo();
@@ -648,17 +570,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         Log.d(LOG_TAG, "onResume seekBar progress " + appPrefs.getVideoProgress());
 
-        //******************************************************************************
-        //******************************************************************************
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        //******************************************************************************
-        //******************************************************************************
 
         Log.d(LOG_TAG, "onPause");
 
@@ -670,10 +587,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             playPausePreview();
         }
        */
-     //   videoPlayer.reset();
+         //   videoPlayer.reset();
 
-        //******************************************************************************
-        //******************************************************************************
     }
 
     @Override
@@ -729,9 +644,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         seekBar.setProgress(videoProgress);
     }
   */
-    // amm
-    //******************************************************************************
-    //******************************************************************************
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -744,8 +656,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
-    //******************************************************************************
-    //******************************************************************************
 
     private void switchFragment(Fragment f, int panel) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -819,7 +729,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 public void onPrepared(MediaPlayer mp) {
 
                     Log.d(LOG_TAG, "EditVideoActivity setOnPreparedListener onPrepared");
-                    //int duration = durationVideoRecorded * 1000;
+
 
                     setVideoInfo();
 
@@ -955,13 +865,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
-
-    //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    // amm Delete
-
     private void setEditVideoProgress(int videoProgress, int seekBarStart, int seekBarEnd) {
         videoProgress = videoProgress;
         Log.d(LOG_TAG, "setEditVideoProgress " + "videoProgress " + videoProgress + " seekBarStart " + seekBarStart + " seekBarEnd " + seekBarEnd);
@@ -1044,12 +947,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
 
-     @Override
-    public Object onRetainNonConfigurationInstance() {
-        return cutvideoPlayerState;
-    }
-
-
     private void paintFramesVideo(String pathVideoName) {
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -1078,7 +975,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         int millis = mp.getDuration();
 
-// Get 9 key frames from video in separate time
+        // Get 9 key frames from video in separate time
         for (int j = 1; j < 10; j++) {
             int value = j;
             Bitmap bitmap = retriever.getFrameAtTime((int) (millis / 9) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
@@ -1461,11 +1358,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
-    //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    //******************************************************************************
-    // amm Delete
 
     /**
      * Sends button clicks to Google Analytics

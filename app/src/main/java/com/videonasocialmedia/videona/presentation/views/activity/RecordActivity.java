@@ -324,7 +324,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             ///  TEST jump to EditActivity
             String test2min = Constants.PATH_APP_MASTERS + File.separator + "test_AV2.mp4";
-        //    navigateEditActivity(test2min);
+           // navigateEditActivity(test2min);
     }
 
     @Override
