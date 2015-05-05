@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2015. Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas Abascal
+ * Verónica Lago Fominaya
+ */
+
 package com.videonasocialmedia.videona.presentation.views.login;
 
 import android.app.Activity;
@@ -61,7 +72,6 @@ public class LoginActivity extends Activity implements LoginView {
 
     @OnClick(R.id.new_user_button)
     public void goToUserSignUpActivity() {
-        sendButtonTracked(R.id.new_user_button);
         navigate(com.videonasocialmedia.videona.presentation.views.login.UserSignUpActivity.class);
     }
 
@@ -71,7 +81,6 @@ public class LoginActivity extends Activity implements LoginView {
      */
     @OnClick(R.id.send_login_button)
     public void login(View v) {
-        sendButtonTracked(v.getId());
         loginPresenter.userPasswordLogin(userTextField.getText().toString(), passwordTextField.getText().toString());
 
     }
@@ -85,6 +94,12 @@ public class LoginActivity extends Activity implements LoginView {
     public void navigate(Class<? extends Activity> activity) {
         Intent i = new Intent(getApplicationContext(), activity);
         startActivity(i);
+    }
+
+    @OnClick({R.id.send_login_button, R.id.login_facebook_button, R.id.login_g_plus_button,
+            R.id.login_twitter_button, R.id.new_user_button})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
     }
 
     /**

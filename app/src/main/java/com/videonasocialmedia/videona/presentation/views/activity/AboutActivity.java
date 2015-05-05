@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -46,9 +47,9 @@ public class AboutActivity extends Activity {
     /**
      * Tracks when user clicks the link to go to Videona web page
      */
-    @OnClick(R.id.videona_web)
-    public void showVideonaWeb() {
-        sendButtonTracked(R.id.videona_web);
+    @OnClick({ R.id.videona_web})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
     }
 
     /**
@@ -63,7 +64,7 @@ public class AboutActivity extends Activity {
                 label = "Go to Videona web page from App";
                 break;
             default:
-                label = "other";
+                label = "Other";
         }
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("AboutActivity")
