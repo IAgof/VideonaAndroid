@@ -280,13 +280,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.buttonCancelEditActivity)
     public void cancelEditActivity() {
-        sendButtonTracked(R.id.buttonCancelEditActivity);
+
         this.onBackPressed();
     }
 
     @OnClick(R.id.buttonOkEditActivity)
     public void okEditActivity() {
-        sendButtonTracked(R.id.buttonOkEditActivity);
+
         Log.d(LOG_TAG, "trimClickListener");
 
         if(seekBarEnd - seekBarStart > ConfigUtils.maxDurationVideo) {
@@ -350,7 +350,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         audioFxButton.setActivated(false);
         videoFxButton.setActivated(true);
         scissorButton.setActivated(false);
-        sendButtonTracked(R.id.edit_button_fx);
+
         if (videoFxMenuFragment == null)
             videoFxMenuFragment = new VideoFxMenuFragment();
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
@@ -360,7 +360,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
-        sendButtonTracked(R.id.edit_button_audio);
+
 
     if (!audioFxButton.isActivated()) {
 
@@ -381,7 +381,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void showScissorsFxMenu() {
         audioFxButton.setActivated(false);
         scissorButton.setActivated(true);
-        sendButtonTracked(R.id.edit_button_scissor);
+
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
@@ -397,7 +397,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_look)
     public void showLookFxMenu() {
-        sendButtonTracked(R.id.edit_button_look);
+
         scissorButton.setActivated(false);
         audioFxButton.setActivated(false);
         if (lookFxMenuFragment == null)
