@@ -232,6 +232,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
+        audioFxButton.setActivated(true);
         this.onEffectMenuSelected();
         //ft.add(R.id.edit_right_panel, scissorsFxMenuFragment).commit();
 
