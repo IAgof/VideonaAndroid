@@ -28,7 +28,8 @@
         android:background="@color/pastel_palette_purple"
         android:padding="15dp"
         android:layout_marginBottom="2dp"
-        android:src="@drawable/edit_fragment_scissors_icon_crop_normal" />
+        android:src="@drawable/edit_fragment_scissors_icon_crop_normal"
+        android:alpha="0.20"/>
 
     <ImageButton
         android:id="@+id/edit_fragment_scissors_button_add_clip"

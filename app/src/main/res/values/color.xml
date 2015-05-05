@@ -36,6 +36,28 @@
     <color name="pastel_palette_yellow">#eace83</color>
 
 
+    <color name="pastel_palette_brown_dark">#8b8471</color>
+
+    <color name="pastel_palette_blue_dark">#6688ab</color>
+
+    <color name="pastel_palette_orange_dark">#b3774c</color>
+
+    <color name="pastel_palette_pink_dark">#b8978c</color>
+
+    <color name="pastel_palette_red_dark">#a85040</color>
+
+    <color name="pastel_palette_green_dark">#9ca25f</color>
+
+    <color name="pastel_palette_purple_dark">#736471</color>
+
+    <color name="pastel_palette_pink_2_dark">#973435</color>
+
+    <color name="pastel_palette_grey_dark">#545c69</color>
+
+    <color name="pastel_palette_yellow_dark">#b8974a</color>
+
+
+
     <color name="alvaro_grey">#FF00FF00</color>
 
 

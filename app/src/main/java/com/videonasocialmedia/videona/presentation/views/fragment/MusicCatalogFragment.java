@@ -38,21 +38,25 @@ public class MusicCatalogFragment extends Fragment implements MusicCatalogView {
     MusicCatalogPresenter presenter;
     private RecyclerView.LayoutManager layoutManager;
 
-    @InjectView(R.id.catalog_recycler) RecyclerView recyclerView;
+    @InjectView(R.id.catalog_recycler)
+    RecyclerView recyclerView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.edit_fragment_catalog, container, false);
         ButterKnife.inject(this, v);
-        presenter = new MusicCatalogPresenter(this);
+        if (presenter == null)
+            presenter = new MusicCatalogPresenter(this);
 
-        layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
+        layoutManager = new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
         return v;
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
     }
@@ -66,7 +70,7 @@ public class MusicCatalogFragment extends Fragment implements MusicCatalogView {
     @Override
     public void showCatalog(List<Music> elementList) {
         adapter = new MusicCatalogAdapter(elementList);
-        adapter.setRecyclerClickListener((RecyclerClickListener)getActivity());
+        adapter.setRecyclerClickListener((RecyclerClickListener) getActivity());
         recyclerView.setAdapter(adapter);
     }
 
@@ -106,12 +110,20 @@ public class MusicCatalogFragment extends Fragment implements MusicCatalogView {
     }
 
     @Override
-    public void appendFx(List<Effect> movieList) {
-
+    public void appendFx(List<Effect> effectList) {
+        //adapter.appendMusicList(effectList);
     }
 
-    public List<Music> getFxList(){
+    public List<Music> getFxList() {
         return adapter.getElementList();
+    }
+
+
+    /**
+     * @deprecated
+     */
+    public MusicCatalogAdapter getAdapter() {
+        return adapter;
     }
 
 

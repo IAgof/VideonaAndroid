@@ -27,6 +27,9 @@ import com.videonasocialmedia.videona.VideonaApplication;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 /**
  * This class is used to show the right panel of the look fx menu
  */
@@ -87,4 +90,7 @@ public class LookFxMenuFragment extends Fragment {
                 .build());
         GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();
     }
+
+
+
 }

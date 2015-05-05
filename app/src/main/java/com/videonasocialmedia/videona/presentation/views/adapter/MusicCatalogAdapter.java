@@ -54,6 +54,8 @@ public class MusicCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> 
         this.recyclerClickListener = recyclerClickListener;
     }
 
+
+
     @Override
     public FxItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
@@ -78,12 +80,20 @@ public class MusicCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> 
         return elementList.size();
     }
 
-    public void appendEffects(List<Effect> effectList) {
+    public void appendMusicList(List<Music> musicList) {
 
-        effectList.addAll(effectList);
+        elementList.addAll(musicList);
         notifyDataSetChanged();
     }
 
+
+    public void removeMusic(int position){
+
+    }
+
+    public void addMusic (Music music, int position){
+        elementList.add(position, music);
+    }
 
 }
 
@@ -117,10 +127,45 @@ class FxItemViewHolder extends RecyclerView.ViewHolder implements View.OnTouchLi
         if (event.getAction() == MotionEvent.ACTION_UP) {
 
             onClickListener.onClick(getPosition());
-
         }
-
         return true;
+    }
+
+    private void resetBackground(View v){
+            v.setBackgroundResource(R.color.button_material_dark);
+
+
+        /*
+        switch (selectedMusic.getColorResourceId()) {
+            case R.color.pastel_palette_red:
+                selectedBackground = R.color.pastel_palette_red_dark;
+                break;
+            case R.color.pastel_palette_blue:
+                selectedBackground = R.color.pastel_palette_blue_dark;
+                break;
+            case R.color.pastel_palette_brown:
+                selectedBackground = R.color.pastel_palette_brown_dark;
+                break;
+            case R.color.pastel_palette_green:
+                selectedBackground = R.color.pastel_palette_green_dark;
+                break;
+            case R.color.pastel_palette_purple:
+                selectedBackground = R.color.pastel_palette_purple_dark;
+                break;
+            case R.color.pastel_palette_orange:
+                selectedBackground = R.color.pastel_palette_orange_dark;
+                break;
+            case R.color.pastel_palette_yellow:
+                selectedBackground = R.color.pastel_palette_yellow_dark;
+                break;
+            case R.color.pastel_palette_grey:
+                selectedBackground = R.color.pastel_palette_grey_dark;
+                break;
+            case R.color.pastel_palette_pink:
+                selectedBackground = R.color.pastel_palette_pink_dark;
+                break;
+                */
+
     }
 }
 
