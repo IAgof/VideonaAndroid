@@ -361,10 +361,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
         sendButtonTracked(R.id.edit_button_audio);
-        scissorButton.setActivated(false);
-        audioFxButton.setActivated(true);
-        videoFxButton.setActivated(false);
 
+    if (!audioFxButton.isActivated()) {
 
         if (audioFxMenuFragment == null) {
             audioFxMenuFragment = new AudioFxMenuFragment();
@@ -373,6 +371,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         //if (musicCatalogFragment == null) {
 
         onEffectMenuSelected();
+    }
+        scissorButton.setActivated(false);
+        audioFxButton.setActivated(true);
+        videoFxButton.setActivated(false);
     }
 
     @OnClick(R.id.edit_button_scissor)
