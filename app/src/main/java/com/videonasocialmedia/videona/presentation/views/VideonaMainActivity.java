@@ -29,13 +29,6 @@ import java.util.List;
 
 public class VideonaMainActivity extends Activity {
 
-    static {
-
-        System.loadLibrary("ffmpeg");
-        System.loadLibrary("videona-editor");
-
-    }
-
     public static native int cut(String inputFile, String outputFile, int startTime, int length);
 
     private final String LOG_TAG = this.getClass().getSimpleName();
