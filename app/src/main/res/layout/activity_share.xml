@@ -20,9 +20,9 @@
 
 
     <ImageButton
+        android:id="@+id/share_button_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/share_button_play"
         android:background="@null"
         android:src="@drawable/common_icon_play_on_normal"
         android:layout_centerVertical="true"
@@ -43,9 +43,9 @@
         android:progressDrawable="@color/videona_blue_5" />
 
     <ImageView
+        android:id="@+id/imageBetaLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageBetaLabel"
         android:src="@drawable/beta_label"
         android:layout_gravity="center"
         android:layout_alignParentBottom="true"
@@ -57,9 +57,9 @@
         android:id="@+id/share_button_rate_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fffdff43"
-        android:src="@drawable/activity_share_icon_share_normal"
+        android:src="@drawable/share_activity_button_rate_app_selector"
         android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
         android:layout_alignParentStart="true"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp" />
