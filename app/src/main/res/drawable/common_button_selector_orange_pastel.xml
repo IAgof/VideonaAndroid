@@ -7,6 +7,7 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/pastel_palette_orange_dark" android:state_pressed="true" />
+    <item android:drawable="@color/pastel_palette_orange_dark" android:state_activated="true" />
     <!-- pressed state -->
     <item android:drawable="@color/pastel_palette_orange" />
     <!-- default state -->

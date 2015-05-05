@@ -16,6 +16,9 @@ import android.view.ViewGroup;
 
 import com.videonasocialmedia.videona.R;
 
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 /**
  * @author Juan Javier Cabanas Abascal
  */
@@ -26,4 +29,7 @@ public class LookFxMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.edit_fragment_look,container,false);
     }
+
+
+
 }

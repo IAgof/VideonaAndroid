@@ -15,6 +15,7 @@ public class Music extends Audio{
     //TODO en el futuro no será un recurso sino que se obtendrá
     private int musicResourceId;
     private int colorResourceId;
+    //TODO refactorizar nombre
     private String nameResourceId;
     private int iconResourceId;
 

@@ -41,7 +41,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/edit_activity_icon_cancel_normal" />
+                    android:src="@drawable/edit_activity_button_cancel_selector" />
 
                 <ImageButton
                     android:id="@+id/buttonOkEditActivity"
@@ -52,7 +52,7 @@
                     android:layout_marginRight="25dp"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/edit_activity_icon_ok_normal" />
+                    android:src="@drawable/edit_activity_button_ok_selector" />
 
 
                 <TextView

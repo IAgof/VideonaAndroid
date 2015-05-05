@@ -79,14 +79,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     private final String LOG_TAG = "EDIT ACTIVITY";
 
-    /*@InjectView(R.id.edit_button_fx)
+    @InjectView(R.id.edit_button_fx)
     ImageButton videoFxButton;
     @InjectView(R.id.edit_button_look)
     ImageButton lookFxButton;
     @InjectView(R.id.edit_button_scissor)
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
-    ImageButton audioFxButton;*/
+    ImageButton audioFxButton;
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
     @InjectView(R.id.edit_button_play)
@@ -291,6 +291,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
+        audioFxButton.setActivated(true);
         this.onEffectMenuSelected();
         //ft.add(R.id.edit_right_panel, scissorsFxMenuFragment).commit();
 
@@ -402,6 +403,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_fx)
     public void showVideoFxMenu() {
+        audioFxButton.setActivated(false);
+        videoFxButton.setActivated(true);
+        scissorButton.setActivated(false);
         sendButtonTracked(R.id.edit_button_fx);
         if (videoFxMenuFragment == null)
             videoFxMenuFragment = new VideoFxMenuFragment();
@@ -413,7 +417,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
         sendButtonTracked(R.id.edit_button_audio);
-
+        scissorButton.setActivated(false);
+        audioFxButton.setActivated(true);
+        videoFxButton.setActivated(false);
 
         if (audioFxMenuFragment == null) {
             audioFxMenuFragment = new AudioFxMenuFragment();
@@ -426,6 +432,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_scissor)
     public void showScissorsFxMenu() {
+        audioFxButton.setActivated(false);
+        scissorButton.setActivated(true);
         sendButtonTracked(R.id.edit_button_scissor);
 
         if (scissorsFxMenuFragment == null) {
@@ -443,6 +451,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @OnClick(R.id.edit_button_look)
     public void showLookFxMenu() {
         sendButtonTracked(R.id.edit_button_look);
+        scissorButton.setActivated(false);
+        audioFxButton.setActivated(false);
         if (lookFxMenuFragment == null)
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
@@ -663,48 +673,18 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public void onEffectMenuSelected() {
-
-        musicCatalogFragment = new MusicCatalogFragment();
+        if (musicCatalogFragment == null)
+            musicCatalogFragment = new MusicCatalogFragment();
         switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
-        int selectedBackground = R.color.pastel_palette_grey_dark;
-        if (selectedMusic != null) {
-            //TODO change icon of selected music
-            switch (selectedMusic.getColorResourceId()) {
-                case R.color.pastel_palette_red:
-                    selectedBackground = R.color.pastel_palette_red_dark;
-                    break;
-                case R.color.pastel_palette_blue:
-                    selectedBackground = R.color.pastel_palette_blue_dark;
-                    break;
-                case R.color.pastel_palette_brown:
-                    selectedBackground = R.color.pastel_palette_brown_dark;
-                    break;
-                case R.color.pastel_palette_green:
-                    selectedBackground = R.color.pastel_palette_green_dark;
-                    break;
-                case R.color.pastel_palette_purple:
-                    selectedBackground = R.color.pastel_palette_purple_dark;
-                    break;
-                case R.color.pastel_palette_orange:
-                    selectedBackground = R.color.pastel_palette_orange_dark;
-                    break;
-                case R.color.pastel_palette_yellow:
-                    selectedBackground = R.color.pastel_palette_yellow_dark;
-                    break;
-                case R.color.pastel_palette_grey:
-                    selectedBackground = R.color.pastel_palette_grey_dark;
-                    break;
-                case R.color.pastel_palette_pink:
-                    selectedBackground = R.color.pastel_palette_pink_dark;
-                    break;
-            }
-            for (Music music : musicCatalogFragment.getFxList()) {
-                if (music.getMusicResourceId() == selectedMusic.getMusicResourceId())
-                    music.setColorResourceId(selectedBackground);
-            }
+//        int selectedBackground = R.color.pastel_palette_grey_dark;
+//
+//                      for (Music music : musicCatalogFragment.getFxList()) {
+//                if (music.getMusicResourceId() == selectedMusic.getMusicResourceId())
+//                    music.setColorResourceId(selectedBackground);
+//            }
+//            musicCatalogFragment.getAdapter().notifyDataSetChanged();
 
 
-        }
     }
 
 
@@ -823,11 +803,95 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     /**
      * Needs to refactor
+     * <p/>
+     * Method that receives events from recyclerview
      *
      * @param position clicked on recycler
      */
     @Override
     public void onClick(int position) {
+
+        List<Music> musicList = musicCatalogFragment.getFxList();
+
+        for (Music m : musicList) {
+            int selectedBackground;
+            //TODO change icon of selected music
+            switch (m.getColorResourceId()) {
+                case R.color.pastel_palette_red_dark:
+                    selectedBackground = R.color.pastel_palette_red;
+                    break;
+                case R.color.pastel_palette_blue_dark:
+                    selectedBackground = R.color.pastel_palette_blue;
+                    break;
+                case R.color.pastel_palette_brown_dark:
+                    selectedBackground = R.color.pastel_palette_brown;
+                    break;
+                case R.color.pastel_palette_green_dark:
+                    selectedBackground = R.color.pastel_palette_green;
+                    break;
+                case R.color.pastel_palette_purple_dark:
+                    selectedBackground = R.color.pastel_palette_purple;
+                    break;
+                case R.color.pastel_palette_orange_dark:
+                    selectedBackground = R.color.pastel_palette_orange;
+                    break;
+                case R.color.pastel_palette_yellow_dark:
+                    selectedBackground = R.color.pastel_palette_yellow;
+                    break;
+                case R.color.pastel_palette_grey_dark:
+                    selectedBackground = R.color.pastel_palette_grey;
+                    break;
+                case R.color.pastel_palette_pink_dark:
+                    selectedBackground = R.color.pastel_palette_pink;
+                    break;
+                case R.color.pastel_palette_pink_2_dark:
+                    selectedBackground = R.color.pastel_palette_pink_2;
+                    break;
+                default:
+                    selectedBackground = m.getColorResourceId();
+                    break;
+            }
+            m.setColorResourceId(selectedBackground);
+        }
+        int selectedBackground;
+        switch (musicList.get(position).getColorResourceId()) {
+            case R.color.pastel_palette_red:
+                selectedBackground = R.color.pastel_palette_red_dark;
+                break;
+            case R.color.pastel_palette_blue:
+                selectedBackground = R.color.pastel_palette_blue_dark;
+                break;
+            case R.color.pastel_palette_brown:
+                selectedBackground = R.color.pastel_palette_brown_dark;
+                break;
+            case R.color.pastel_palette_green:
+                selectedBackground = R.color.pastel_palette_green_dark;
+                break;
+            case R.color.pastel_palette_purple:
+                selectedBackground = R.color.pastel_palette_purple_dark;
+                break;
+            case R.color.pastel_palette_orange:
+                selectedBackground = R.color.pastel_palette_orange_dark;
+                break;
+            case R.color.pastel_palette_yellow:
+                selectedBackground = R.color.pastel_palette_yellow_dark;
+                break;
+            case R.color.pastel_palette_grey:
+                selectedBackground = R.color.pastel_palette_grey_dark;
+                break;
+            case R.color.pastel_palette_pink:
+                selectedBackground = R.color.pastel_palette_pink_dark;
+                break;
+            case R.color.pastel_palette_pink_2:
+                selectedBackground = R.color.pastel_palette_pink_2_dark;
+                break;
+            default:
+                selectedBackground = musicList.get(position).getColorResourceId();
+                break;
+        }
+
+        musicList.get(position).setColorResourceId(selectedBackground);
+
 
         if (videoPlayer.isPlaying()) {
             videoPlayer.pause();
@@ -844,7 +908,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
         }
 
-        List<Music> musicList = musicCatalogFragment.getFxList();
 
         if (position == (musicList.size() - 1)) {
 
@@ -860,7 +923,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         } else {
 
-            selectedMusic = (Music) musicList.get(position);
+            selectedMusic = musicList.get(position);
 
             Log.d(LOG_TAG, "adquirida la música");
 
@@ -875,6 +938,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             }
 
         }
+
+        musicCatalogFragment.getAdapter().notifyDataSetChanged();
+
 
     }
 
