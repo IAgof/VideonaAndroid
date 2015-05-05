@@ -112,6 +112,12 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
     }
 
+    @OnClick(R.id.share_button_about)
+    public void showAbout(){
+        Intent intent = new Intent(ShareActivity.this, AboutActivity.class);
+        startActivity(intent);
+    }
+
     @OnClick (R.id.share_button_play)
     public void playPauseVideo(){
 
