@@ -41,17 +41,13 @@ import butterknife.OnTouch;
  * Authors:
  * Juan Javier Cabanas
  * Álvaro Martínez Marco
- *
+ * Verónica Lago Fominaya
  */
 public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeListener {
 
     /*VIEWS*/
-    @InjectView(R.id.share_button_share)
-    ImageButton buttonShare;
     @InjectView(R.id.share_button_play)
     ImageButton buttonPlay;
-    @InjectView(R.id.share_button_rate_app)
-    ImageButton buttonRateApp;
     @InjectView(R.id.share_video_view)
     VideoView videoView;
     @InjectView(R.id.share_seekbar)
@@ -147,14 +143,10 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         Uri uri = Uri.parse("market://details?id=" + "com.visiona.videozone");
         Intent rateApp = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(rateApp);
-
-
     }
 
     @OnClick (R.id.share_button_share)
     public void shareVideo(){
-
-        sendButtonTracked(R.id.share_button_share);
 
         Log.d(LOG_TAG, "shareClickListener");
 
@@ -349,28 +341,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         }
     }
 
-    /**
-     * Sends button clicks to Google Analytics
-     *
-     * @param id the identifier of the clicked button
-     */
-    private void sendButtonTracked(int id) {
-        String label;
-        switch (id) {
-            case R.id.share_button_share:
-                label = "Share video";
-                break;
-            default:
-                label = "Other";
-        }
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("ShareActivity")
-                .setAction("button clicked")
-                .setLabel(label)
-                .build());
-        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-    }
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -420,5 +390,35 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
         durationVideoRecorded = (int) duration;
 
+    }
+
+    @OnClick({ R.id.share_button_share, R.id.share_button_rate_app})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id the identifier of the clicked button
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.share_button_share:
+                label = "Share video";
+                break;
+            case R.id.share_button_rate_app:
+                label = "Vote app";
+                break;
+            default:
+                label = "Other";
+        }
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("ShareActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 }

@@ -3,6 +3,10 @@
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas Abascal
+ * Verónica Lago Fominaya
  */
 
 package com.videonasocialmedia.videona.presentation.views.activity;
@@ -149,7 +153,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     // Start to define variables for old EditActivity, delete after update apk
 
 
-
     private static final int VIDEO_SHARE_REQUEST_CODE = 500;
     private static final int ADD_MUSIC_REQUEST_CODE = 600;
 
@@ -271,7 +274,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -336,16 +338,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.buttonCancelEditActivity)
     public void cancelEditActivity() {
-        sendButtonTracked(R.id.buttonCancelEditActivity);
         this.onBackPressed();
     }
 
     @OnClick(R.id.buttonOkEditActivity)
     public void okEditActivity() {
-        sendButtonTracked(R.id.buttonOkEditActivity);
         Log.d(LOG_TAG, "trimClickListener");
 
-        if(seekBarEnd - seekBarStart > 60) {
+        if (seekBarEnd - seekBarStart > 60) {
 
             Toast.makeText(getApplicationContext(), "Please trim your video, max 1 min", Toast.LENGTH_SHORT).show();
 
@@ -376,18 +376,18 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
 
         ((TextView) progressDialog.findViewById(Resources.getSystem()
-        .getIdentifier("message", "id", "android")))
-        .setTextColor(Color.WHITE);
+                .getIdentifier("message", "id", "android")))
+                .setTextColor(Color.WHITE);
 
         ((TextView) progressDialog.findViewById(Resources.getSystem()
-        .getIdentifier("alertTitle", "id", "android")))
-        .setTextColor(Color.WHITE);
+                .getIdentifier("alertTitle", "id", "android")))
+                .setTextColor(Color.WHITE);
 
         progressDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id",
-        "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
+                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
 
         progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
-        "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
+                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
 
         final Runnable r = new Runnable() {
             public void run() {
@@ -403,7 +403,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_fx)
     public void showVideoFxMenu() {
-        sendButtonTracked(R.id.edit_button_fx);
         if (videoFxMenuFragment == null)
             videoFxMenuFragment = new VideoFxMenuFragment();
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
@@ -413,8 +412,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_audio)
     public void showAudioFxMenu() {
-        sendButtonTracked(R.id.edit_button_audio);
-
 
         if (audioFxMenuFragment == null) {
             audioFxMenuFragment = new AudioFxMenuFragment();
@@ -427,7 +424,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_scissor)
     public void showScissorsFxMenu() {
-        sendButtonTracked(R.id.edit_button_scissor);
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
@@ -443,7 +439,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.edit_button_look)
     public void showLookFxMenu() {
-        sendButtonTracked(R.id.edit_button_look);
         if (lookFxMenuFragment == null)
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
@@ -553,7 +548,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 */
 
         textStartVideo.setText(TimeUtils.toFormattedTime(0));
-        textEndVideo.setText(TimeUtils.toFormattedTime(durationVideoRecorded*1000));
+        textEndVideo.setText(TimeUtils.toFormattedTime(durationVideoRecorded * 1000));
         textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
 
         seekBarStart = appPrefs.getSeekBarStart();
@@ -580,7 +575,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             playPausePreview();
         }
        */
-         //   videoPlayer.reset();
+        //   videoPlayer.reset();
 
     }
 
@@ -637,7 +632,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         seekBar.setProgress(videoProgress);
     }
   */
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -666,7 +660,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         musicCatalogFragment = new MusicCatalogFragment();
         switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
 
-        if (selectedMusic!= null){
+        if (selectedMusic != null) {
             //TODO change icon of selected music
         }
     }
@@ -777,7 +771,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         musicPlayer = MediaPlayer.create(getApplicationContext(), music.getMusicResourceId());
         musicPlayer.setVolume(0.5f, 0.5f);
         // videoPlayerMute
-        videoPlayer.setVolume(0.0f,0.0f);
+        videoPlayer.setVolume(0.0f, 0.0f);
 
         isMusicON = true;
         // amm
@@ -943,7 +937,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         retriever.setDataSource(videoFile.getAbsolutePath());
 
         // Prevent null pointer exception. App crush. Paint frames by default
-        if(retriever.getFrameAtTime() == null) {
+        if (retriever.getFrameAtTime() == null) {
             return;
         }
 
@@ -1044,13 +1038,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         int stopSeekBar = appPrefs.getSeekBarEnd();
 
 
-
         durationVideoCut = stopSeekBar - startSeekBar;
 
 
-        textStartTrim.setText(TimeUtils.toFormattedTime(startSeekBar*1000));
-        textEndTrim.setText(TimeUtils.toFormattedTime(stopSeekBar*1000));
-        textTimeTrim.setText(TimeUtils.toFormattedTime(durationVideoCut*1000));
+        textStartTrim.setText(TimeUtils.toFormattedTime(startSeekBar * 1000));
+        textEndTrim.setText(TimeUtils.toFormattedTime(stopSeekBar * 1000));
+        textTimeTrim.setText(TimeUtils.toFormattedTime(durationVideoCut * 1000));
     }
 
 
@@ -1061,8 +1054,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             "audio_clasica_violin.m4a", "audio_clasica_flauta.m4a",
             "audio_ambiental.m4a"
     };
-
-
 
 
     /**
@@ -1219,7 +1210,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
     }
 
-    public void exportVideo(){
+    public void exportVideo() {
 
         // 1st trimVideo
 
@@ -1282,7 +1273,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
 
 
-
             Log.d(LOG_TAG, "VideonaMainActivity trimAudio cut " + Constants.VIDEO_MUSIC_TEMP_FILE + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + appPrefs.getVideoDurationTrim());
 
             //  VideonaMainActivity.cut(Constants.VIDEO_MUSIC_TEMP_FILE, pathVideonaFinal, 0, length);
@@ -1319,7 +1309,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
 
         File fVideoFinal = new File(pathVideonaFinal);
-        if(fVideoFinal.exists()) {
+        if (fVideoFinal.exists()) {
 
             Intent share = new Intent();
             share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
@@ -1334,6 +1324,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
+    @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity,
+            R.id.edit_button_fx, R.id.edit_button_audio, R.id.edit_button_scissor,
+            R.id.edit_button_look})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
 
     /**
      * Sends button clicks to Google Analytics
@@ -1344,25 +1341,25 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         String label;
         switch (id) {
             case R.id.buttonCancelEditActivity:
-                label = "cancel, return to the camera";
+                label = "Cancel, return to the camera";
                 break;
             case R.id.buttonOkEditActivity:
-                label = "ok, export the project";
+                label = "Ok, export the project";
                 break;
             case R.id.edit_button_fx:
-                label = "show video fx menu";
+                label = "Show video fx menu";
                 break;
             case R.id.edit_button_audio:
-                label = "show audio fx menu";
+                label = "Show audio fx menu";
                 break;
             case R.id.edit_button_scissor:
-                label = "show scissor fx menu";
+                label = "Show scissor fx menu";
                 break;
             case R.id.edit_button_look:
-                label = "show look fx menu";
+                label = "Show look fx menu";
                 break;
             default:
-                label = "other";
+                label = "Other";
         }
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("EditActivity")
