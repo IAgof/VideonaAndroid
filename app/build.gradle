@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
-        targetSdkVersion 18
-        versionCode 7
-        versionName "0.1.5"
+        targetSdkVersion 21
+        versionCode 10
+        versionName "0.1.8"
     }
     buildTypes {
         release {

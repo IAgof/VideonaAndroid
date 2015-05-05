@@ -319,6 +319,26 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+
+
+
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        if (mediaPlayer.isPlaying()) {
+
+            mediaPlayer.pause();
+            buttonPlay.setVisibility(View.VISIBLE);
+
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
 
@@ -331,10 +351,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
                 //setResult(Activity.RESULT_OK);
                 //finish();
-
-                // Kill process. Needed to load again ffmpeg libraries
-               // int pid = android.os.Process.myPid();
-               // android.os.Process.killProcess(pid);
 
             }
 

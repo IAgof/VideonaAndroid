@@ -71,6 +71,10 @@
     <string name="loginError">Something was wrong. Try to login again</string>
     <string name="signUpError">Something bad happend. Try to register again</string>
 
+    <!-- Activity Editor -->
+    <string name="addMediaItemToTrackError">Something bad happened. Try to add again</string>
+
+
     <!-- Activity About -->
     <string name="aboutUsTitle"><u>Sobre nosotros</u></string>
     <string name="aboutUsContent">
