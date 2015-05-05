@@ -70,7 +70,8 @@
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
             android:layout_width="40dp"
-            android:layout_height="40dp"/>
+            android:layout_height="40dp"
+            android:layout_gravity="center" />
 
         <ImageButton
             android:id="@+id/share_button_rate_app"
@@ -80,7 +81,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="2dp"/>
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
