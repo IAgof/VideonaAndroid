@@ -6,7 +6,7 @@
  *
  * Authors:
  * Juan Javier Cabanas Abascal
- * Verónica Lago Fominaya
+  * Verónica Lago Fominaya
  */
 
 package com.videonasocialmedia.videona.presentation.views.activity;
