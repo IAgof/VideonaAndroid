@@ -13,7 +13,7 @@
     android:orientation="vertical">
 
     <ImageButton
-        android:id="@+id/boton_video_prueba"
+        android:id="@+id/edit_fragment_fx_button_item1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/activity_edit_icon_fx_normal"
@@ -23,6 +23,7 @@
         android:alpha="0.20" />
 
     <ImageButton
+        android:id="@+id/edit_fragment_fx_button_item2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/activity_edit_icon_fx_normal"
@@ -33,6 +34,7 @@
         android:alpha="0.20" />
 
     <ImageButton
+        android:id="@+id/edit_fragment_fx_button_item3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/activity_edit_icon_fx_normal"
@@ -42,6 +44,7 @@
         android:alpha="0.20" />
 
     <ImageButton
+        android:id="@+id/edit_fragment_fx_button_item4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/activity_edit_icon_fx_normal"

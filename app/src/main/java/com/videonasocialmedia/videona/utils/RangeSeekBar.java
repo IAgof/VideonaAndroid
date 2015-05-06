@@ -436,7 +436,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
 
 
-        paint.setColor(R.color.pastel_palette_grey);
+        paint.setColor(R.color.pastel_palette_red);
         //paint.setColor(Color.LTGRAY);
         //paint.setAlpha(200);
         paint.setAntiAlias(true);
@@ -593,6 +593,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         value = roundToClosest(value);//set value on the beginning of second in video
         // amm Nov'14 normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
         normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
+
+        // test try to move MaxValue if touches in MinValue
+        normalizedMaxValue = Math.min(normalizedMaxValue, normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)));
+
         //normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
         Log.d(LOG_TAG, "setNormalizedMinValue " + value + " normalizedMinValue " + normalizedMinValue);
         invalidate();
@@ -606,9 +610,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     public void setNormalizedMaxValue(double value) {
 
         value = roundToClosest(value); //set value on the beginning of second in video
-        // amm Nov'14 normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
-        //normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
+
         normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
+
+        //normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
+
+        // test try to move MinValue if touches in MaxValue
+        normalizedMinValue = Math.max(normalizedMinValue, normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)));
+
+        //normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
         Log.d(LOG_TAG, "setNormalizedMaxValue " + value + " normalizedMaxValue " + normalizedMaxValue);
         invalidate();
     }

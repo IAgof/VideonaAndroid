@@ -1,8 +1,20 @@
+/*
+ * Copyright (c) 2015. Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Juan Javier Cabanas Abascal
+ * Verónica Lago Fominaya
+ */
+
 package com.videonasocialmedia.videona.presentation.views.login;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +66,6 @@ public class UserSignUpActivity extends Activity implements RegisterView {
 
     @OnClick(R.id.register_button)
     public void register() {
-        sendButtonTracked(R.id.register_button);
         String pass, confirmPass, usrName, email;
 
         pass = password.getText().toString();
@@ -90,8 +101,13 @@ public class UserSignUpActivity extends Activity implements RegisterView {
         startActivity(i);
     }
 
+    @OnClick({ R.id.register_button})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
     /**
-     * Sends button clicks to GA
+     * Sends button clicks to Google Analytics
      *
      * @param id identifier of the clicked view
      */
