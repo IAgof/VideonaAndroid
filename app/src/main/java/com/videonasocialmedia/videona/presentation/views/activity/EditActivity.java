@@ -790,52 +790,52 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         switch (musicList.get(position).getColorResourceId()) {
             case R.color.pastel_palette_red:
                 selectedBackground = R.color.pastel_palette_red_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_ambiental_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_ambiental_normal);
                 break;
             case R.color.pastel_palette_blue:
                 selectedBackground = R.color.pastel_palette_blue_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_clarinet_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_clarinet_normal);
                 break;
             case R.color.pastel_palette_brown:
                 selectedBackground = R.color.pastel_palette_brown_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_classic_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_classic_normal);
                 break;
             case R.color.pastel_palette_green:
                 selectedBackground = R.color.pastel_palette_green_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_hip_hop_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_hip_hop_normal);
                 break;
             case R.color.pastel_palette_purple:
                 selectedBackground = R.color.pastel_palette_purple_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_pop_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_pop_normal);
                 break;
             case R.color.pastel_palette_orange:
                 selectedBackground = R.color.pastel_palette_orange_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_reggae_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_reggae_normal);
                 break;
             case R.color.pastel_palette_yellow:
                 selectedBackground = R.color.pastel_palette_yellow_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_violin_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_violin_normal);
                 break;
             case R.color.pastel_palette_grey:
                 selectedBackground = R.color.pastel_palette_grey_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_remove_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_remove_normal);
                 break;
             case R.color.pastel_palette_pink:
                 selectedBackground = R.color.pastel_palette_pink_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_folk_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_folk_normal);
                 break;
             case R.color.pastel_palette_pink_2:
                 selectedBackground = R.color.pastel_palette_pink_2_dark;
-                selectedIcon = R.drawable.gatito_rules;
+                selectedIcon = R.drawable.activity_music_icon_rock_pressed;
                 sendButtonTracked(R.drawable.activity_music_icon_rock_normal);
                 break;
             default:
