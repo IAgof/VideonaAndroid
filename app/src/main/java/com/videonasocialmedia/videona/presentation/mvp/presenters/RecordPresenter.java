@@ -20,6 +20,7 @@ import com.videonasocialmedia.videona.domain.record.RecordUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
+import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -47,8 +48,6 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     /*ANALYTICS*/
     private Tracker tracker;
-
-
 
     public RecordPresenter(RecordView recordView, Tracker tracker) {
 
@@ -173,7 +172,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     public void onColorEffectAdded(String colorEffect, long time) {
 
 
-        trackColorEffect(colorEffect, time);
+        sendButtonTracked(colorEffect, time);
 
         recordView.showEffectSelected(colorEffect);
 
@@ -261,15 +260,57 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     }
 
     /**
-     * Tracks the effects applied by the user
+     * Sends button clicks to Google Analytics
      *
-     * @param colorEffect
+     * @param colorEffect name of the clicked filter
+     * @param time time in which the effect is applied
      */
-    private void trackColorEffect(String colorEffect, long time) {
+    private void sendButtonTracked(String colorEffect, long time) {
+        String label;
+        switch (colorEffect) {
+            case Constants.COLOR_EFFECT_NONE:
+                label = "AD0";
+                break;
+            case Constants.COLOR_EFFECT_AQUA:
+                label = "AD1";
+                break;
+            case Constants.COLOR_EFFECT_BLACKBOARD:
+                label = "AD2";
+                break;
+            case Constants.COLOR_EFFECT_EMBOSS:
+                label = "AD3";
+                break;
+            case Constants.COLOR_EFFECT_MONO:
+                label = "AD4";
+                break;
+            case Constants.COLOR_EFFECT_NEGATIVE:
+                label = "AD5";
+                break;
+            case Constants.COLOR_EFFECT_NEON:
+                label = "AD6";
+                break;
+            case Constants.COLOR_EFFECT_POSTERIZE:
+                label = "AD7";
+                break;
+            case Constants.COLOR_EFFECT_SEPIA:
+                label = "AD8";
+                break;
+            case Constants.COLOR_EFFECT_SKETCH:
+                label = "AD9";
+                break;
+            case Constants.COLOR_EFFECT_SOLARIZE:
+                label = "AD10";
+                break;
+            case Constants.COLOR_EFFECT_WHITEBOARD:
+                label = "AD11";
+                break;
+            default:
+                label = "Other";
+        }
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("RecordActivity")
-                .setAction("Color effect applied")
-                .setCategory(colorEffect)
+                .setAction("color effect applied")
+                .setLabel(label)
                 .setValue(time)
                 .build());
     }

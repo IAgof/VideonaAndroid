@@ -7,7 +7,7 @@
  * Authors:
  * Juan Javier Cabanas
  * Álvaro Martínez Marco
- *
+ * Verónica Lago Fominaya
  */
 
 package com.videonasocialmedia.videona.presentation.views.activity;
@@ -324,7 +324,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             ///  TEST jump to EditActivity
             String test2min = Constants.PATH_APP_MASTERS + File.separator + "test_AV2.mp4";
-           // navigateEditActivity(test2min);
+            //navigateEditActivity(test2min);
     }
 
     @Override
@@ -464,7 +464,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @OnClick(R.id.button_color_effect)
     public void colorEffectButtonListener() {
-        sendButtonTracked(R.id.button_color_effect);
         recordPresenter.effectClickListener();
     }
 
@@ -475,13 +474,16 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @OnClick(R.id.button_record)
     public void buttonRecordListener() {
-        sendButtonTracked(R.id.button_record);
         recordPresenter.recordClickListener();
     }
 
+    @OnClick({R.id.button_record, R.id.button_color_effect})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
 
     /**
-     * Sends button clicks to GA
+     * Sends button clicks to Google Analytics
      *
      * @param id identifier of the clicked view
      */
@@ -489,17 +491,13 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         String label;
         switch (id) {
             case R.id.button_record:
-                label = "capture ";
+                label = "Capture ";
                 break;
             case R.id.button_color_effect:
-                label = "show available effects";
-                break;
-            case R.id.button5:
-                //TODO change text
-                label = "not a single clue of what should this button do";
+                label = "Show available effects";
                 break;
             default:
-                label = "other";
+                label = "Other";
         }
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("RecordActivity")

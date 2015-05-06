@@ -2,13 +2,11 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
@@ -98,7 +96,6 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
             viewHolder = new ViewHolder();
 
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageColorEffect);
-            viewHolder.textView = (TextView) convertView.findViewById(R.id.textColorEffect);
 
             convertView.setTag(viewHolder);
 
@@ -127,8 +124,6 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         }
 
         viewHolder.imageView.setImageResource(resourceId);
-
-        viewHolder.textView.setText(getColorEffectName(colorEffectName));
 
 
         //TODO  Save position color_effect, setBackground and bold text
@@ -164,7 +159,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
                 viewHolder.imageView.setImageResource(resourceIdPressed);
                 isPressed = false;
                 // viewHolder.imageView.setBackgroundColor(R.color.videona_blue_5);
-                viewHolder.textView.setTypeface(null, Typeface.BOLD);
+               // viewHolder.textView.setTypeface(null, Typeface.BOLD);
 
 
             }
@@ -177,7 +172,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
     private static class ViewHolder {
 
         ImageView imageView;
-        TextView textView;
+       // TextView textView;
 
     }
 
