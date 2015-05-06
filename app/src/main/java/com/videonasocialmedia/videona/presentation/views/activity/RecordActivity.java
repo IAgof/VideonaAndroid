@@ -137,22 +137,17 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_record);
-
         ButterKnife.inject(this);
 
-        // Keep screen ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 
         Context context = getApplicationContext();
         appPrefs = new UserPreferences(context);
-
         app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
-
+        recordPresenter = new RecordPresenter(this, tracker);
     }
 
     @Override
@@ -171,10 +166,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onStart() {
         super.onStart();
 
-        recordPresenter = new RecordPresenter(this, tracker);
-
         recordPresenter.start();
-
 
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
@@ -227,7 +219,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         fileUri = savedInstanceState.getParcelable("file_uri");
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -242,7 +234,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         }
 
-    }
+    }*/
 
     /**
      * Register back pressed to exit app
@@ -455,7 +447,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         edit.putExtra("MEDIA_OUTPUT", videoRecordName);
         edit.setClass(RecordActivity.this, EditActivity.class);
 
-        startActivityForResult(edit, CAMERA_EDIT_VIDEO_REQUEST_CODE);
+        //startActivityForResult(edit, CAMERA_EDIT_VIDEO_REQUEST_CODE);
+        startActivity(edit);
     }
 
 
