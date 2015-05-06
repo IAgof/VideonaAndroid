@@ -67,6 +67,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
     private boolean isRunning = false;
 
+    Uri uri;
 
     private final Runnable updateTimeTask = new Runnable() {
         @Override
@@ -108,18 +109,27 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
         initMediaPlayer(videoEdited);
 
+        ContentValues content = new ContentValues(4);
+        content.put(Video.VideoColumns.TITLE, videoEdited);
+        content.put(Video.VideoColumns.DATE_ADDED,
+                System.currentTimeMillis() / 1000);
+        content.put(Video.Media.MIME_TYPE, "video/mp4");
+        content.put(MediaStore.Video.Media.DATA, videoEdited);
+        ContentResolver resolver = getContentResolver();
+        uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                content);
+
 
     }
 
     @OnClick(R.id.share_button_about)
-    public void showAbout(){
+    public void showAbout() {
         Intent intent = new Intent(ShareActivity.this, AboutActivity.class);
         startActivity(intent);
     }
 
-    @OnClick (R.id.share_button_play)
-    public void playPauseVideo(){
-
+    @OnClick(R.id.share_button_play)
+    public void playPauseVideo() {
 
 
         if (mediaPlayer.isPlaying()) {
@@ -130,7 +140,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         } else {
 
             mediaPlayer.start();
-
             buttonPlay.setVisibility(View.INVISIBLE);
 
         }
@@ -140,8 +149,8 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
     }
 
-    @OnClick (R.id.share_button_rate_app)
-    public void rateApp(){
+    @OnClick(R.id.share_button_rate_app)
+    public void rateApp() {
 
         Uri uri = Uri.parse("market://details?id=" + getPackageName());
         // Redirect to videozone
@@ -150,8 +159,8 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         startActivity(rateApp);
     }
 
-    @OnClick (R.id.share_button_share)
-    public void shareVideo(){
+    @OnClick(R.id.share_button_share)
+    public void shareVideo() {
 
         // Log.d(LOG_TAG, "shareClickListener");
 
@@ -161,16 +170,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
             buttonPlay.setVisibility(View.VISIBLE);
 
         }
-
-        ContentValues content = new ContentValues(4);
-        content.put(Video.VideoColumns.TITLE, videoEdited);
-        content.put(Video.VideoColumns.DATE_ADDED,
-                System.currentTimeMillis() / 1000);
-        content.put(Video.Media.MIME_TYPE, "video/mp4");
-        content.put(MediaStore.Video.Media.DATA, videoEdited);
-        ContentResolver resolver = getContentResolver();
-        Uri uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                content);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
@@ -205,7 +204,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     };
 
 
-
     public static Thread performOnBackgroundThread(final Runnable runnable) {
         final Thread t = new Thread() {
             @Override
@@ -224,7 +222,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     /**
      * Use screen touches to toggle the video between playing and paused.
      */
-    @OnTouch (R.id.share_video_view)
+    @OnTouch(R.id.share_video_view)
     public boolean onTouchEvent(MotionEvent ev) {
         boolean result;
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -257,86 +255,83 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     public void initMediaPlayer(final String videoPath) {
 
 
-        if(mediaPlayer == null ){
-
-            videoView.setVideoPath(videoPath);
-            videoView.setMediaController(mediaController);
-            videoView.canSeekBackward();
-            videoView.canSeekForward();
-
-            videoView.setOnPreparedListener(new OnPreparedListener() {
-
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-
-                    mediaPlayer = mp;
-
-                    seekBar.setMax(durationVideoRecorded * 1000);
-                    seekBar.setProgress(mediaPlayer.getCurrentPosition());
-
-                    mediaPlayer.start();
-
-                    mediaPlayer.seekTo(100);
-
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    mediaPlayer.pause();
-
-                }
-            });
-
-            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-
-                    // Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
-
-                    buttonPlay.setVisibility(View.VISIBLE);
-
-                    updateSeekProgress();
-
-                }
-
-            });
-
-            videoView.requestFocus();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
+
+        videoView.setVideoPath(videoPath);
+        videoView.setMediaController(mediaController);
+        videoView.canSeekBackward();
+        videoView.canSeekForward();
+
+        videoView.setOnPreparedListener(new OnPreparedListener() {
+
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+
+                mediaPlayer = mp;
+
+                seekBar.setMax(durationVideoRecorded * 1000);
+                seekBar.setProgress(mediaPlayer.getCurrentPosition());
+
+                mediaPlayer.start();
+
+                mediaPlayer.seekTo(100);
+
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                mediaPlayer.pause();
+
+            }
+        });
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+
+                // Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
+
+                buttonPlay.setVisibility(View.VISIBLE);
+
+                updateSeekProgress();
+
+            }
+
+        });
+
+        videoView.requestFocus();
     }
 
-    @Override
+
+    /*@Override
     public void onBackPressed() {
 
             setResult(Activity.RESULT_OK);
 
             finish();
 
-    }
+    }*/
 
     @Override
     protected void onStart() {
         super.onStart();
-
         isRunning = true;
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-
-
-
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
-
         if (mediaPlayer.isPlaying()) {
-
             mediaPlayer.pause();
             buttonPlay.setVisibility(View.VISIBLE);
 
@@ -346,60 +341,40 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
-
         if (data == null) {
-
         } else {
             // Log.d(LOG_TAG, "requestCode " + requestCode + "resultCode " + resultCode + "intent data " + data.getDataString());
-
             if (requestCode == CHOOSE_SHARE_REQUEST_CODE) {
-
                 //setResult(Activity.RESULT_OK);
                 //finish();
-
             }
-
         }
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-
         if (fromUser) {
-
             mediaPlayer.seekTo(progress);
-
         }
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         handler.removeCallbacks(updateTimeTask);
-
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-
         handler.removeCallbacks(updateTimeTask);
-
         if (mediaPlayer.isPlaying()) {
-
             mediaPlayer.pause();
-
             buttonPlay.setVisibility(View.VISIBLE);
-
         }
-
         updateSeekProgress();
-
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
-
     }
 
     private void setVideoInfo() {
-
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(videoEdited);
         String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -408,12 +383,10 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         long hours = duration / 3600;
         long minutes = (duration - hours * 3600) / 60;
         long seconds = duration - (hours * 3600 + minutes * 60);
-
         durationVideoRecorded = (int) duration;
-
     }
 
-    @OnClick({ R.id.share_button_share, R.id.share_button_rate_app})
+    @OnClick({R.id.share_button_share, R.id.share_button_rate_app})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }

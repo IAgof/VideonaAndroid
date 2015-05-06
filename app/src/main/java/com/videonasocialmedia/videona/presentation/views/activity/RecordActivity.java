@@ -136,18 +136,13 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_record);
-
         ButterKnife.inject(this);
 
-        // Keep screen ON
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 
         Context context = getApplicationContext();
         appPrefs = new UserPreferences(context);
-
         app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
@@ -169,40 +164,28 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     protected void onStart() {
         super.onStart();
-
         recordPresenter = new RecordPresenter(this, tracker);
-
         recordPresenter.start();
-
-
        // Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-
-     
         // Log.d(LOG_TAG, "onRestart() RecordActivity");
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         recordPresenter.onResume();
-
         // Log.d(LOG_TAG, "onResume() RecordActivity");
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         // Log.d(LOG_TAG, "onPause() RecordActivity");
-
     }
 
     /**
@@ -229,18 +212,12 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
-
         if (requestCode == CAMERA_EDIT_VIDEO_REQUEST_CODE) {
-
             recordPresenter = null;
-
             // Restart recordActivity
             onCreate(null);
-
         }
-
     }
 
     /**
@@ -248,16 +225,12 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void onBackPressed() {
-
         buttonBackPressed = true;
-
         Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if (keyCode == KeyEvent.KEYCODE_BACK && buttonBackPressed == true) {
             // do something on back.
             buttonBackPressed = false;
@@ -272,11 +245,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             return true;
         }
-
         buttonBackPressed = false;
-
         return super.onKeyDown(keyCode, event);
-
     }
 
     /**
@@ -287,18 +257,13 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void onColorEffectClicked(ColorEffectAdapter adapter, String colorEffect, int position) {
-
         positionColorEffectPressed = position;
-
         adapter.notifyDataSetChanged();
-
         recordPresenter.setEffect(colorEffect);
-
     }
 
     @Override
     public Context getContext() {
-
         return this;
     }
 
@@ -309,17 +274,12 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
-
             frameLayoutCameraPreview.addView(cameraPreview);
             frameLayoutCameraPreview.addView(customManualFocusView);
-
         // Fix format chronometer 00:00. Do in xml, design
             chronometerRecord.setText("00:00");
-
             customManualFocusView.onPreviewTouchEvent(this);
-
-            recordPresenter.effectClickListener();
-
+           recordPresenter.effectClickListener();
             ///  TEST jump to EditActivity
             String test2min = Constants.PATH_APP_MASTERS + File.separator + "test_AV2.mp4";
            // navigateEditActivity(test2min);
