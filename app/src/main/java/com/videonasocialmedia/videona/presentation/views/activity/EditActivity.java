@@ -293,11 +293,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         // Log.d(LOG_TAG, "trimClickListener");
 
-        if(seekBarEnd - seekBarStart > ConfigUtils.maxDurationVideo) {
+        if (seekBarEnd - seekBarStart > ConfigUtils.maxDurationVideo) {
 
-           // Toast.makeText(getApplicationContext(), "Please trim your video, max 1 min", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), "Please trim your video, max 1 min", Toast.LENGTH_SHORT).show();
 
-           // return;
+            // return;
 
             seekBarEnd = seekBarStart + ConfigUtils.maxDurationVideo;
             appPrefs.setSeekBarEnd(seekBarEnd);
@@ -370,16 +370,16 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void showAudioFxMenu() {
 
 
-    if (!audioFxButton.isActivated()) {
+        if (!audioFxButton.isActivated()) {
 
-        if (audioFxMenuFragment == null) {
-            audioFxMenuFragment = new AudioFxMenuFragment();
+            if (audioFxMenuFragment == null) {
+                audioFxMenuFragment = new AudioFxMenuFragment();
+            }
+            switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
+            //if (musicCatalogFragment == null) {
+
+            onEffectMenuSelected();
         }
-        switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
-        //if (musicCatalogFragment == null) {
-
-        onEffectMenuSelected();
-    }
         scissorButton.setActivated(false);
         audioFxButton.setActivated(true);
         videoFxButton.setActivated(false);
@@ -600,7 +600,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @Override
     public void onBackPressed() {
 
-        if(buttonBackPressed) {
+        if (buttonBackPressed) {
             setResult(Activity.RESULT_OK);
             finish();
 
@@ -746,7 +746,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
                     playButton.setVisibility(View.VISIBLE);
 
-                    if(musicPlayer != null && musicPlayer.isPlaying()) {
+                    if (musicPlayer != null && musicPlayer.isPlaying()) {
                         musicPlayer.pause();
                     }
 
@@ -935,7 +935,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
 
         musicCatalogFragment.getAdapter().notifyDataSetChanged();
-
 
 
         if (videoPlayer.isPlaying()) {
@@ -1192,7 +1191,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             videoPlayer.seekTo(startSeekBar * 1000);
             seekBar.setProgress(startSeekBar * 1000);
 
-            if(musicPlayer != null){
+            if (musicPlayer != null) {
                 musicPlayer.seekTo(0);
             }
         }
@@ -1255,7 +1254,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
                 } else {
 
-                  //   Log.d(LOG_TAG, " Estoy fuera progress " + videoProgress);
+                    //   Log.d(LOG_TAG, " Estoy fuera progress " + videoProgress);
 
                     if (isOnTrimming) {
 
@@ -1345,8 +1344,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         appPrefs.setSeekBarStart(seekBarStart);
         appPrefs.setSeekBarEnd(seekBarEnd);
 
-        if(onPause) {
-
+        if (onPause) {
 
 
         } else {
@@ -1425,7 +1423,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void exportVideo() {
 
         videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
-        videoTrim= videoTrim+System.currentTimeMillis();
+        videoTrim = videoTrim + System.currentTimeMillis();
 
         // 1st trimVideo
 
@@ -1507,7 +1505,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         this.runOnUiThread(new Runnable() {
             public void run() {
                 progressDialog.dismiss();
-             //   Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -1523,7 +1521,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         } else {
 
-           // Toast.makeText(getApplicationContext(), "pathVideoFinal falló", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), "pathVideoFinal falló", Toast.LENGTH_SHORT).show();
         }
 
 
