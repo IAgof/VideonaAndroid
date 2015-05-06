@@ -175,17 +175,13 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         intent.setType("video/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.share_using)), CHOOSE_SHARE_REQUEST_CODE);
-
     }
 
 
     private void updateSeekProgress() {
-
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
             handler.postDelayed(updateTimeTask, 50);
-
         }
     }
 
@@ -414,5 +410,12 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
                 .setLabel(label)
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
     }
 }
