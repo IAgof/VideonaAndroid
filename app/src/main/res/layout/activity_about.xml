@@ -46,6 +46,17 @@
             style="@style/Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/versionTitle" />
+
+        <TextView
+            android:text="@string/versionContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/licenseTitle" />
 
         <TextView
@@ -58,12 +69,13 @@
             style="@style/Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/versionTitle" />
+            android:text="@string/licenseMusicTitle" />
 
         <TextView
-            android:text="@string/versionContent"
+            android:text="@string/licenseMusicContent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right" />
 
         <TextView
             style="@style/Title"
