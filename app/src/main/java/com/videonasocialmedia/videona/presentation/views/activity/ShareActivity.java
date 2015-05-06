@@ -143,9 +143,9 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     @OnClick (R.id.share_button_rate_app)
     public void rateApp(){
 
-        //Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
         // Redirect to videozone
-        Uri uri = Uri.parse("market://details?id=" + "com.visiona.videozone");
+        //Uri uri = Uri.parse("market://details?id=" + "com.visiona.videozone");
         Intent rateApp = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(rateApp);
     }
