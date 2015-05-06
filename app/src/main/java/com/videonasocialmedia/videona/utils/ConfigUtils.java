@@ -24,9 +24,9 @@ public class ConfigUtils {
     final public static int VIDEO_FRAME_RATE = 30;
     final public static int VIDEO_SIZE_WIDTH = 1280;
     final public static int VIDEO_SIZE_HEIGHT = 720;
-    final public static int VIDEO_ENCODING_BIT_RATE = 5000000;
+    final public static int VIDEO_ENCODING_BIT_RATE = 2000000;
 
-    final public static int maxDurationVideo = 60;
+    final public static int maxDurationVideo = 99;
 
     public static boolean isAndroidL = false;
 }

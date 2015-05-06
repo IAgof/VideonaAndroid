@@ -56,12 +56,12 @@
 
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/edit_title_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="Editor Room"
+                    android:text="@string/edit_title_name"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/videona_blue_5" />
             </RelativeLayout>
@@ -109,7 +109,7 @@
                         android:id="@+id/edit_text_start_trim"
                         android:layout_alignBottom="@+id/edit_preview_player"
                         android:layout_alignLeft="@+id/edit_preview_player"
-                        android:textColor="#ffd3ff00"
+                        android:textColor="@android:color/white"
                         android:visibility="visible" />
 
                     <TextView
@@ -120,7 +120,7 @@
                         android:id="@+id/edit_text_end_trim"
                         android:layout_alignRight="@+id/edit_preview_player"
                         android:layout_alignBottom="@+id/edit_preview_player"
-                        android:textColor="#ffd3ff00"
+                        android:textColor="@android:color/white"
                         android:visibility="visible" />
 
                     <TextView
@@ -130,7 +130,7 @@
                         android:text="00:00"
                         android:id="@+id/edit_text_time_trim"
                         android:layout_alignBottom="@+id/edit_preview_player"
-                        android:textColor="#ffd3ff00"
+                        android:textColor="@android:color/white"
                         android:layout_centerHorizontal="true"
                         android:visibility="visible" />
 
@@ -139,13 +139,11 @@
 
                 <RelativeLayout
                     android:id="@+id/relativeLayoutPreviewVideo"
-                    android:layout_width="340dp"
+                    android:layout_width="370dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
+                    android:visibility="visible">
 
                     <RelativeLayout
                         android:id="@+id/relativeLayoutTrim"
@@ -155,7 +153,9 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp">
 
                         <LinearLayout
                             android:id="@+id/linearLayoutFrames"
@@ -265,6 +265,7 @@
                                     android:scaleType="fitXY" />
                             </RelativeLayout>
 
+                            <!--
                             <RelativeLayout
                                 android:id="@+id/relativeLayoutImageFrame7"
                                 android:layout_width="fill_parent"
@@ -312,6 +313,8 @@
                                     android:src="@drawable/common_filter_aqua_ad1_normal"
                                     android:scaleType="fitXY" />
                             </RelativeLayout>
+                            -->
+
                         </LinearLayout>
                     </RelativeLayout>
 
@@ -336,8 +339,6 @@
                             android:layout_alignParentStart="false"
                             android:layout_alignParentTop="false"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
                             android:gravity="center"
                             android:orientation="horizontal" />
                     </RelativeLayout>

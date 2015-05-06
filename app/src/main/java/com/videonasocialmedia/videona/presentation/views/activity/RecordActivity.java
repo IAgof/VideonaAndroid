@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,7 +162,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         recordPresenter = null;
 
-        Log.d(LOG_TAG, "onStop() RecordActivity");
+        // Log.d(LOG_TAG, "onStop() RecordActivity");
 
     }
 
@@ -176,7 +175,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         recordPresenter.start();
 
 
-        Log.d(LOG_TAG, "onStart() RecordActivity");
+       // Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
     @Override
@@ -184,7 +183,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         super.onRestart();
 
      
-        Log.d(LOG_TAG, "onRestart() RecordActivity");
+        // Log.d(LOG_TAG, "onRestart() RecordActivity");
 
     }
 
@@ -194,7 +193,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         recordPresenter.onResume();
 
-        Log.d(LOG_TAG, "onResume() RecordActivity");
+        // Log.d(LOG_TAG, "onResume() RecordActivity");
 
     }
 
@@ -202,7 +201,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onPause() {
         super.onPause();
 
-        Log.d(LOG_TAG, "onPause() RecordActivity");
+        // Log.d(LOG_TAG, "onPause() RecordActivity");
 
     }
 
@@ -231,7 +230,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
+        // Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
 
         if (requestCode == CAMERA_EDIT_VIDEO_REQUEST_CODE) {
 
@@ -252,7 +251,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         buttonBackPressed = true;
 
-        //TODO change this text to R String
         Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
 
     }
@@ -263,7 +261,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         if (keyCode == KeyEvent.KEYCODE_BACK && buttonBackPressed == true) {
             // do something on back.
             buttonBackPressed = false;
-            Log.d(LOG_TAG, "onKeyDown");
+            // Log.d(LOG_TAG, "onKeyDown");
 
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
@@ -324,7 +322,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             ///  TEST jump to EditActivity
             String test2min = Constants.PATH_APP_MASTERS + File.separator + "test_AV2.mp4";
-            //navigateEditActivity(test2min);
+           // navigateEditActivity(test2min);
     }
 
     @Override
