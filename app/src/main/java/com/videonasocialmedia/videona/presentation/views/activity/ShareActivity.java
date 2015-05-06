@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Video;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -103,7 +102,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         Intent in = getIntent();
         videoEdited = in.getStringExtra("MEDIA_OUTPUT");
 
-        Log.d(LOG_TAG, "VideoEdited " + videoEdited);
+        // Log.d(LOG_TAG, "VideoEdited " + videoEdited);
 
         setVideoInfo();
 
@@ -154,7 +153,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     @OnClick (R.id.share_button_share)
     public void shareVideo(){
 
-        Log.d(LOG_TAG, "shareClickListener");
+        // Log.d(LOG_TAG, "shareClickListener");
 
         if (mediaPlayer.isPlaying()) {
 
@@ -294,7 +293,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
                 @Override
                 public void onCompletion(MediaPlayer mp) {
 
-                    Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
+                    // Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
 
                     buttonPlay.setVisibility(View.VISIBLE);
 
@@ -351,7 +350,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         if (data == null) {
 
         } else {
-            Log.d(LOG_TAG, "requestCode " + requestCode + "resultCode " + resultCode + "intent data " + data.getDataString());
+            // Log.d(LOG_TAG, "requestCode " + requestCode + "resultCode " + resultCode + "intent data " + data.getDataString());
 
             if (requestCode == CHOOSE_SHARE_REQUEST_CODE) {
 

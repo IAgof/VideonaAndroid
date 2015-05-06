@@ -7,6 +7,8 @@
     <string name="action_settings">Settings</string>
     <string name="toast_trim">Video Recorded trimmed in /sdcard/Movies/Videona</string>
     <string name="toast_exit">Press back to exit</string>
+    <string name="edit_title_name">Edit Room</string>
+    <string name="toast_exit_edit">Press back again to exit the edit room</string>
     <string name="not_ask_again">Not ask again</string>
     <string name="not_thanks">Not thanks</string>
     <string name="ok">Ok</string>
@@ -21,8 +23,8 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="text_video_duration">"Duration: "</string>
     <string name="text_video_description">"Description: "</string>
     <string name="share_using">"Share video using "</string>
-    <string name="please_wait">"Please wait &#8230; "</string>
-    <string name="dialog_processing">"Trimming video "</string>
+    <string name="please_wait">Please wait</string>
+    <string name="dialog_processing">Making magic on your video</string>
     <string name="dialog_processing_audio">"Adding audio "</string>
     <string name="getit">"Get it"</string>
     <string name="action_finish">"Finish"</string>

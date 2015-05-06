@@ -31,7 +31,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
@@ -58,13 +57,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final float lineHeightHalf = 0.5f * lineleft.getHeight();
     private final float lineWidthHalf = 0.5f * lineleft.getWidth();
 
-    private final float thumbHalfWidth = 0.5f *  thumbImageRight.getWidth();
+   // private final float thumbHalfWidth = 0.5f *  thumbImageRight.getWidth();
+   private final float thumbHalfWidth = thumbImageRight.getWidth();
     private final float thumbHalfHeight = 0.5f * thumbImageRight.getHeight();
 
     //  private final float lineHeight = 0.53f * thumbHalfHeight;
     private final float lineHeight = thumbHalfHeight;
     //private final float padding = thumbHalfWidth / 2;
-    private final float padding = thumbHalfWidth;
+    //private final float padding = thumbHalfWidth*2;
+    private final float padding = thumbImageRight.getWidth();
     private final T absoluteMinValue, absoluteMaxValue;
     private final NumberType numberType;
     private final double absoluteMinValuePrim, absoluteMaxValuePrim;
@@ -142,6 +143,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
     private final void init() {
         mScaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+
+        // Simulate start on thumb left pressed,
+        setNormalizedMinValue(0);
     }
 
     public boolean isNotifyWhileDragging() {
@@ -248,7 +252,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
             case MotionEvent.ACTION_DOWN:
 
-                Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Down");
+                // Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Down");
 
                 // Remember where the motion event started
                 mActivePointerId = event.getPointerId(event.getPointerCount() - 1);
@@ -270,7 +274,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 break;
             case MotionEvent.ACTION_MOVE:
 
-                Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Move");
+                // Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Move");
 
                 if (pressedThumb != null) {
 
@@ -298,7 +302,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 break;
             case MotionEvent.ACTION_UP:
 
-                Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Up");
+                // Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Up");
 
                 if (mIsDragging) {
                     trackTouchEvent(event);
@@ -321,7 +325,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 break;
             case MotionEvent.ACTION_POINTER_DOWN: {
 
-                Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Pointer_Down");
+                // Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Pointer_Down");
 
                 final int index = event.getPointerCount() - 1;
                 // final int index = ev.getActionIndex();
@@ -332,14 +336,14 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             }
             case MotionEvent.ACTION_POINTER_UP:
 
-                Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Pointer_Up");
+                // Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Pointer_Up");
 
                 onSecondaryPointerUp(event);
                 invalidate();
                 break;
             case MotionEvent.ACTION_CANCEL:
 
-                Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Cancel");
+                // Log.d(LOG_TAG, "RangeSeekBar onTouchEvent Action_Cancel");
 
                 if (mIsDragging) {
                     onStopTrackingTouch();
@@ -436,9 +440,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
 
 
-        paint.setColor(R.color.pastel_palette_red);
+        //paint.setColor(R.color.videona_blue_1);
+        paint.setColor(Color.WHITE);
         //paint.setColor(Color.LTGRAY);
-        //paint.setAlpha(200);
+        paint.setAlpha(200);
         paint.setAntiAlias(true);
 
         //    canvas.drawRect(rect, paint);
@@ -449,8 +454,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
 
         // draw seek bar active range lineleft (videona color blue)
-       // rect.left = padding;
-        rect.left = 0;
+        rect.left = padding;
+       // rect.left = 0;
         rect.right = min_thumb;
 
         canvas.drawRect(rect, paint);
@@ -462,8 +467,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         //rect.left = Math.min(max_thumb, min_thumb);
         rect.left = max_thumb;
-        //rect.right = getWidth() - padding;
-        rect.right = getWidth();
+        rect.right = getWidth() - padding;
+       // rect.right = getWidth();
 
 
        // paint.setColor(R.color.alvaro_green);
@@ -496,7 +501,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     @Override
     protected Parcelable onSaveInstanceState() {
 
-        Log.d(LOG_TAG, "bundle onSaveInstanceState");
+        // Log.d(LOG_TAG, "bundle onSaveInstanceState");
 
         final Bundle bundle = new Bundle();
         bundle.putParcelable("SUPER", super.onSaveInstanceState());
@@ -512,7 +517,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     @Override
     protected void onRestoreInstanceState(Parcelable parcel) {
 
-        Log.d(LOG_TAG, "bundle onRestoreInstanceState");
+        // Log.d(LOG_TAG, "bundle onRestoreInstanceState");
 
         final Bundle bundle = (Bundle) parcel;
         super.onRestoreInstanceState(bundle.getParcelable("SUPER"));
@@ -531,13 +536,14 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private void drawThumbRight(float screenCoord, boolean pressed, Canvas canvas) {
 
         //canvas.drawBitmap(lineright, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), paint);
-        canvas.drawBitmap(lineright, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), null);
+        canvas.drawBitmap(lineright, screenCoord, (float) ((0.5f * getHeight()) - lineHeightHalf), null);
         postInvalidate();
     }
 
     private void drawThumbLeft(float screenCoord, boolean pressed, Canvas canvas) {
 
-        canvas.drawBitmap(lineleft, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), null);
+        //canvas.drawBitmap(lineleft, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), null);
+        canvas.drawBitmap(lineleft, screenCoord - (2*lineWidthHalf), (float) ((0.5f * getHeight()) - lineHeightHalf), null);
         postInvalidate();
     }
 
@@ -560,11 +566,11 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         } else if (minThumbPressed) {
             result = Thumb.MIN;
-            Log.d(LOG_TAG, "RangeSeekBar evalPressedThumb ThumbMin " + result.toString() + " " + touchX);
+            // Log.d(LOG_TAG, "RangeSeekBar evalPressedThumb ThumbMin " + result.toString() + " " + touchX);
 
         } else if (maxThumbPressed) {
             result = Thumb.MAX;
-            Log.d(LOG_TAG, "RangeSeekBar evalPressedThumb ThumbMax" + result.toString() + " " + touchX);
+            // Log.d(LOG_TAG, "RangeSeekBar evalPressedThumb ThumbMax" + result.toString() + " " + touchX);
 
         }
 
@@ -579,7 +585,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @return true if x-coordinate is in thumb range, false otherwise.
      */
     private boolean isInThumbRange(float touchX, double normalizedThumbValue) {
-        Log.d(LOG_TAG, "RangeSeekBar isInThumbRange " + touchX + " / " + normalizedThumbValue);
+        // Log.d(LOG_TAG, "RangeSeekBar isInThumbRange " + touchX + " / " + normalizedThumbValue);
         return Math.abs(touchX - normalizedToScreen(normalizedThumbValue)) <= thumbHalfWidth;
     }
 
@@ -598,7 +604,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         normalizedMaxValue = Math.min(normalizedMaxValue, normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)));
 
         //normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
-        Log.d(LOG_TAG, "setNormalizedMinValue " + value + " normalizedMinValue " + normalizedMinValue);
+        // Log.d(LOG_TAG, "setNormalizedMinValue " + value + " normalizedMinValue " + normalizedMinValue);
         invalidate();
     }
 
@@ -619,7 +625,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         normalizedMinValue = Math.max(normalizedMinValue, normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)));
 
         //normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
-        Log.d(LOG_TAG, "setNormalizedMaxValue " + value + " normalizedMaxValue " + normalizedMaxValue);
+        // // Log.d(LOG_TAG, "setNormalizedMaxValue " + value + " normalizedMaxValue " + normalizedMaxValue);
         invalidate();
     }
 
