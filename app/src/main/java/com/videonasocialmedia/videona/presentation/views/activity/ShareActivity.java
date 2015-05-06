@@ -68,6 +68,8 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
     private boolean isRunning = false;
 
+    Uri uri;
+
 
     private final Runnable updateTimeTask = new Runnable() {
         @Override
@@ -109,6 +111,15 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
         initMediaPlayer(videoEdited);
 
+        ContentValues content = new ContentValues(4);
+        content.put(Video.VideoColumns.TITLE, videoEdited);
+        content.put(Video.VideoColumns.DATE_ADDED,
+                System.currentTimeMillis() / 1000);
+        content.put(Video.Media.MIME_TYPE, "video/mp4");
+        content.put(MediaStore.Video.Media.DATA, videoEdited);
+        ContentResolver resolver = getContentResolver();
+        uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                content);
 
     }
 
@@ -131,7 +142,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         } else {
 
             mediaPlayer.start();
-
             buttonPlay.setVisibility(View.INVISIBLE);
 
         }
@@ -162,16 +172,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
             buttonPlay.setVisibility(View.VISIBLE);
 
         }
-
-        ContentValues content = new ContentValues(4);
-        content.put(Video.VideoColumns.TITLE, videoEdited);
-        content.put(Video.VideoColumns.DATE_ADDED,
-                System.currentTimeMillis() / 1000);
-        content.put(Video.Media.MIME_TYPE, "video/mp4");
-        content.put(MediaStore.Video.Media.DATA, videoEdited);
-        ContentResolver resolver = getContentResolver();
-        Uri uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                content);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
@@ -308,14 +308,14 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         }
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
 
             setResult(Activity.RESULT_OK);
 
             finish();
 
-    }
+    }*/
 
     @Override
     protected void onStart() {

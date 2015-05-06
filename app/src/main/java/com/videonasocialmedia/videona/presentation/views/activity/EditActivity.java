@@ -1430,7 +1430,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             Intent share = new Intent();
             share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
             share.setClass(EditActivity.this, ShareActivity.class);
-            startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
+            //startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
+            startActivity(share);
 
         } else {
 
