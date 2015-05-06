@@ -797,83 +797,117 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         for (Music m : musicList) {
             int selectedBackground;
-            //TODO change icon of selected music
+            int selectedIcon;
+
             switch (m.getColorResourceId()) {
                 case R.color.pastel_palette_red_dark:
                     selectedBackground = R.color.pastel_palette_red;
+                    selectedIcon = R.drawable.activity_music_icon_ambiental_normal;
                     break;
                 case R.color.pastel_palette_blue_dark:
                     selectedBackground = R.color.pastel_palette_blue;
+                    selectedIcon = R.drawable.activity_music_icon_clarinet_normal;
                     break;
                 case R.color.pastel_palette_brown_dark:
                     selectedBackground = R.color.pastel_palette_brown;
+                    selectedIcon = R.drawable.activity_music_icon_classic_normal;
                     break;
                 case R.color.pastel_palette_green_dark:
                     selectedBackground = R.color.pastel_palette_green;
+                    selectedIcon = R.drawable.activity_music_icon_hip_hop_normal;
                     break;
                 case R.color.pastel_palette_purple_dark:
                     selectedBackground = R.color.pastel_palette_purple;
+                    selectedIcon = R.drawable.activity_music_icon_pop_normal;
                     break;
                 case R.color.pastel_palette_orange_dark:
                     selectedBackground = R.color.pastel_palette_orange;
+                    selectedIcon = R.drawable.activity_music_icon_reggae_normal;
                     break;
                 case R.color.pastel_palette_yellow_dark:
                     selectedBackground = R.color.pastel_palette_yellow;
+                    selectedIcon = R.drawable.activity_music_icon_violin_normal;
                     break;
                 case R.color.pastel_palette_grey_dark:
                     selectedBackground = R.color.pastel_palette_grey;
+                    selectedIcon = R.drawable.activity_music_icon_remove_normal;
                     break;
                 case R.color.pastel_palette_pink_dark:
                     selectedBackground = R.color.pastel_palette_pink;
+                    selectedIcon = R.drawable.activity_music_icon_folk_normal;
                     break;
                 case R.color.pastel_palette_pink_2_dark:
                     selectedBackground = R.color.pastel_palette_pink_2;
+                    selectedIcon = R.drawable.activity_music_icon_rock_normal;
                     break;
                 default:
                     selectedBackground = m.getColorResourceId();
+                    selectedIcon = m.getIconResourceId();
                     break;
             }
             m.setColorResourceId(selectedBackground);
+            m.setIconResourceId(selectedIcon);
         }
         int selectedBackground;
+        int selectedIcon;
         switch (musicList.get(position).getColorResourceId()) {
             case R.color.pastel_palette_red:
                 selectedBackground = R.color.pastel_palette_red_dark;
+                selectedIcon = R.drawable.activity_music_icon_ambiental_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_ambiental_normal);
                 break;
             case R.color.pastel_palette_blue:
                 selectedBackground = R.color.pastel_palette_blue_dark;
+                selectedIcon = R.drawable.activity_music_icon_clarinet_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_clarinet_normal);
                 break;
             case R.color.pastel_palette_brown:
                 selectedBackground = R.color.pastel_palette_brown_dark;
+                selectedIcon = R.drawable.activity_music_icon_classic_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_classic_normal);
                 break;
             case R.color.pastel_palette_green:
                 selectedBackground = R.color.pastel_palette_green_dark;
+                selectedIcon = R.drawable.activity_music_icon_hip_hop_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_hip_hop_normal);
                 break;
             case R.color.pastel_palette_purple:
                 selectedBackground = R.color.pastel_palette_purple_dark;
+                selectedIcon = R.drawable.activity_music_icon_pop_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_pop_normal);
                 break;
             case R.color.pastel_palette_orange:
                 selectedBackground = R.color.pastel_palette_orange_dark;
+                selectedIcon = R.drawable.activity_music_icon_reggae_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_reggae_normal);
                 break;
             case R.color.pastel_palette_yellow:
                 selectedBackground = R.color.pastel_palette_yellow_dark;
+                selectedIcon = R.drawable.activity_music_icon_violin_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_violin_normal);
                 break;
             case R.color.pastel_palette_grey:
                 selectedBackground = R.color.pastel_palette_grey_dark;
+                selectedIcon = R.drawable.activity_music_icon_remove_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_remove_normal);
                 break;
             case R.color.pastel_palette_pink:
                 selectedBackground = R.color.pastel_palette_pink_dark;
+                selectedIcon = R.drawable.activity_music_icon_folk_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_folk_normal);
                 break;
             case R.color.pastel_palette_pink_2:
                 selectedBackground = R.color.pastel_palette_pink_2_dark;
+                selectedIcon = R.drawable.activity_music_icon_rock_pressed;
+                sendButtonTracked(R.drawable.activity_music_icon_rock_normal);
                 break;
             default:
                 selectedBackground = musicList.get(position).getColorResourceId();
+                selectedIcon = musicList.get(position).getIconResourceId();
                 break;
         }
-
         musicList.get(position).setColorResourceId(selectedBackground);
-
+        musicList.get(position).setIconResourceId(selectedIcon);
 
         if (position == (musicList.size() - 1)) {
 
@@ -1546,6 +1580,36 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             case R.id.edit_button_look:
                 label = "Show look fx menu";
                 Toast.makeText(getApplicationContext(), getString(R.string.edit_text_look), Toast.LENGTH_SHORT).show();
+                break;
+            case R.drawable.activity_music_icon_ambiental_normal:
+                label = "DJ music icon selected";
+                break;
+            case R.drawable.activity_music_icon_clarinet_normal:
+                label = "Clarinet music icon selected";
+                break;
+            case R.drawable.activity_music_icon_classic_normal:
+                label = "Treble clef music icon selected";
+                break;
+            case R.drawable.activity_music_icon_hip_hop_normal:
+                label = "Cap music icon selected";
+                break;
+            case R.drawable.activity_music_icon_pop_normal:
+                label = "Microphone music icon selected";
+                break;
+            case R.drawable.activity_music_icon_reggae_normal:
+                label = "Conga drum music icon selected";
+                break;
+            case R.drawable.activity_music_icon_violin_normal:
+                label = "Violin music icon selected";
+                break;
+            case R.drawable.activity_music_icon_folk_normal:
+                label = "Spanish guitar music icon selected";
+                break;
+            case R.drawable.activity_music_icon_rock_normal:
+                label = "Electric guitar music icon selected";
+                break;
+            case R.drawable.activity_music_icon_remove_normal:
+                label = "Remove music icon selected";
                 break;
             default:
                 label = "Other";

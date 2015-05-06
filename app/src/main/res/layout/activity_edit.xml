@@ -432,7 +432,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/common_button_selector_orange_pastel"
                     android:padding="15dp"
-                    android:src="@drawable/activity_edit_icon_cut_normal" />
+                    android:src="@drawable/edit_activity_button_scissor_selector" />
 
             </LinearLayout>
         </RelativeLayout>
