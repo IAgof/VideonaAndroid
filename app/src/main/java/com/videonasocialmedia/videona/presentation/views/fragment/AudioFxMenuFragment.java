@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -110,15 +111,19 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
         switch (id) {
             case R.id.edit_fragment_sound_button_fx:
                 label = "Go to effects of edit fragment sound";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_sound_button_music:
                 label = "Go to music of edit fragment sound";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_sound_button_audio:
                 label = "Go to audio of edit fragment sound";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_sound_button_music_catalog:
                 label = "Go to music catalog of edit fragment sound";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 label = "Other";
