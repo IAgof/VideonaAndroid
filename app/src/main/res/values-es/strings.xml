@@ -22,7 +22,7 @@
     <string name="text_video_description">"Description: "</string>
     <string name="share_using">"Compartir vídeo con "</string>
     <string name="please_wait">Espera por favor</string>
-    <string name="dialog_processing">Haciendo mágia en tu vídeo</string>
+    <string name="dialog_processing">Haciendo magia en tu vídeo</string>
     <string name="dialog_processing_audio">"Adding audio "</string>
     <string name="getit">"Entendido"</string>
     <string name="action_finish">"Finish"</string>
