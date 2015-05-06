@@ -8,6 +8,9 @@
     <string name="toast_exit">Pulsa otra vez para salir</string>
     <string name="toast_exit_edit">Pulsa para salir del editor</string>
     <string name="edit_title_name">Sala de edición</string>
+    <string name="edit_text_fx">Trabajando en los efectos</string>
+    <string name="edit_text_look">Trabajando en la magia</string>
+    <string name="edit_text_special">Características especiales</string>
     <string name="not_ask_again">Not ask again</string>
     <string name="not_thanks">Not thanks</string>
     <string name="ok">Ok</string>

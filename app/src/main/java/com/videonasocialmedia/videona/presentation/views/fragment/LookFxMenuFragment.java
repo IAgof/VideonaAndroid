@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -25,9 +26,6 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -70,15 +68,19 @@ public class LookFxMenuFragment extends Fragment {
         switch (id) {
             case R.id.edit_fragment_look_button_item1:
                 label = "Go to item1 of edit fragment look";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_look_button_item2:
                 label = "Go to item2 of edit fragment look";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_look_button_item3:
                 label = "Go to item3 of edit fragment look";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_look_button_item4:
                 label = "Go to item4 of edit fragment look";
+                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 label = "Other";
