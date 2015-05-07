@@ -292,21 +292,29 @@ public class VideonaMainActivity extends Activity {
                 e.printStackTrace();
 
             }
-            byte[] buff = new byte[1024];
-            int read = 0;
-            try {
-                while ((read = in.read(buff)) > 0) {
-                    out.write(buff, 0, read);
+
+            // Prevent null pointer exception
+            if(out == null) {
+
+            } else {
+
+                byte[] buff = new byte[1024];
+                int read = 0;
+                try {
+                    while ((read = in.read(buff)) > 0) {
+                        out.write(buff, 0, read);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                } finally {
+
+                    in.close();
+                    out.flush();
+                    out.close();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
 
-            } finally {
-                in.close();
-                out.flush();
-                out.close();
             }
-
 
         }
     }
