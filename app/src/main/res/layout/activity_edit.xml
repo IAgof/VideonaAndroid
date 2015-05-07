@@ -181,7 +181,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:visibility="visible"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:src="@drawable/activity_edit_image_frame_preview_default"
                                     android:scaleType="fitXY" />
                             </RelativeLayout>
 
@@ -197,8 +197,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:visibility="visible"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/activity_edit_image_frame_preview_default" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -214,7 +214,7 @@
                                     android:layout_height="wrap_content"
                                     android:visibility="visible"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal" />
+                                    android:src="@drawable/activity_edit_image_frame_preview_default" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -230,7 +230,7 @@
                                     android:layout_height="wrap_content"
                                     android:visibility="visible"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal" />
+                                    android:src="@drawable/activity_edit_image_frame_preview_default" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -245,7 +245,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:visibility="visible"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:src="@drawable/activity_edit_image_frame_preview_default"
                                     android:scaleType="fitXY" />
                             </RelativeLayout>
 
@@ -261,7 +261,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:visibility="visible"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal"
+                                    android:src="@drawable/activity_edit_image_frame_preview_default"
                                     android:scaleType="fitXY" />
                             </RelativeLayout>
 

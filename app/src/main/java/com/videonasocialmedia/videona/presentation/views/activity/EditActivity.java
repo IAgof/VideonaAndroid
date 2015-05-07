@@ -1069,17 +1069,28 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(videoFile.getAbsolutePath());
 
-        // Prevent null pointer exception. App crush. Paint frames by default
-        if (retriever.getFrameAtTime() == null) {
-            return;
-        }
 
         MediaPlayer mp = MediaPlayer.create(getBaseContext(), videoFileUri);
 
         int millis = mp.getDuration();
 
-        // Get 9 key frames from video in separate time
-        for (int j = 1; j < 10; j++) {
+
+        // Prevent null pointer exception. App crush. Paint frames by default
+        //if (retriever.getFrameAtTime(0,  MediaMetadataRetriever.OPTION_CLOSEST_SYNC) == null) {
+          //  return;
+        //}
+        // Ñapa, hacer bien
+        for (int j = 1; j < 7; j++) {
+
+            int value = j;
+            //Bitmap bitmap = retriever.getFrameAtTime((int) (millis / 9) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+           if(retriever.getFrameAtTime((int) (millis / 6) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC) == null) {
+               return;
+           }
+        }
+
+        // Get 6 key frames from video in separate time
+        for (int j = 1; j < 7; j++) {
             int value = j;
             //Bitmap bitmap = retriever.getFrameAtTime((int) (millis / 9) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
             Bitmap bitmap = retriever.getFrameAtTime((int) (millis / 6) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
