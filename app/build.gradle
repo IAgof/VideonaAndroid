@@ -8,12 +8,13 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 11
-        versionName "0.1.9"
+        versionCode 12
+        versionName "0.2"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
