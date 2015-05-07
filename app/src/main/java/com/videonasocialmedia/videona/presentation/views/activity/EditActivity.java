@@ -645,6 +645,18 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }*/
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
+        if (requestCode == VIDEO_SHARE_REQUEST_CODE) {
+            startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+            //setResult(Activity.RESULT_OK);
+            //finish();
+        }
+    }
+
+
     private void switchFragment(Fragment f, int panel) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
@@ -1524,11 +1536,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         File fVideoFinal = new File(pathVideonaFinal);
         if (fVideoFinal.exists()) {
 
-            Intent share = new Intent();
+          /*  Intent share = new Intent();
             share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
             share.setClass(this, ShareActivity.class);
             //startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
             startActivity(share);
+            */
+
+            Intent share = new Intent(EditActivity.this, ShareActivity.class);
+            share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
+            //share.setClass(this, ShareActivity.class);
+            startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
+
+
 
         } else {
 

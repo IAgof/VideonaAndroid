@@ -80,6 +80,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
      */
     private VideonaApplication app;
     private Tracker tracker;
+    private boolean buttonBackPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,14 +305,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     }
 
 
-    /*@Override
-    public void onBackPressed() {
 
-            setResult(Activity.RESULT_OK);
-
-            finish();
-
-    }*/
 
     @Override
     protected void onStart() {
@@ -418,4 +412,5 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         super.onBackPressed();
         this.finish();
     }
+
 }

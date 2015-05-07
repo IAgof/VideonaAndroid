@@ -178,7 +178,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     protected void onResume() {
         super.onResume();
-        recordPresenter.onResume();
+        if(recordPresenter != null) {
+            recordPresenter.onResume();
+        }
         // Log.d(LOG_TAG, "onResume() RecordActivity");
     }
 
