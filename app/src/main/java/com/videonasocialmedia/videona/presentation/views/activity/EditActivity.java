@@ -69,9 +69,12 @@ import com.videonasocialmedia.videona.utils.Utils;
 import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -306,6 +309,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
 
 
+        preview.stopPlayback();
 
 
         if (videoPlayer != null && videoPlayer.isPlaying()){
@@ -376,6 +380,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             alert.show();
         }
     }
+
 
     @OnClick(R.id.edit_button_fx)
     public void showVideoFxMenu() {
@@ -682,8 +687,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
 
     private void switchFragment(Fragment f, int panel) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        getFragmentManager().executePendingTransactions();
+        if (!f.isAdded()) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        }
     }
 
     @Override
@@ -939,7 +947,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
         musicList.get(position).setColorResourceId(selectedBackground);
         musicList.get(position).setIconResourceId(selectedIcon);
-
+        
         if (position == (musicList.size() - 1)) {
 
             // Log.d(LOG_TAG, "Detenida la música");
@@ -954,29 +962,39 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         } else {
 
-            selectedMusic = musicList.get(position);
+            // if click on same music icon, pause the video
+           if(selectedMusic == musicList.get(position)) {
 
-            // Log.d(LOG_TAG, "adquirida la música");
+               playPausePreview();
 
-            initMusicPlayer(selectedMusic);
+               videoProgress = videoPlayer.getCurrentPosition();
+               appPrefs.setVideoProgress(videoProgress);
+               seekBar.setProgress(videoProgress);
 
-            musicSelected = Constants.PATH_APP_TEMP + File.separator + selectedMusic.getNameResourceId() + Constants.AUDIO_MUSIC_FILE_EXTENSION;
+               return;
 
-            // TODO: change this variable of 30MB (size of the raw folder)
-            if (Utils.isAvailableSpace(30)) {
-                try {
-                    downloadResource(selectedMusic.getMusicResourceId());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+           } else {
+               selectedMusic = musicList.get(position);
 
+               // Log.d(LOG_TAG, "adquirida la música");
 
+               initMusicPlayer(selectedMusic);
+
+               musicSelected = Constants.PATH_APP_TEMP + File.separator + selectedMusic.getNameResourceId() + Constants.AUDIO_MUSIC_FILE_EXTENSION;
+
+               // TODO: change this variable of 30MB (size of the raw folder)
+               if (Utils.isAvailableSpace(30)) {
+                   try {
+                       downloadResource(selectedMusic.getMusicResourceId());
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
         }
 
         musicCatalogFragment.getAdapter().notifyDataSetChanged();
-
-
+        
         if (videoPlayer.isPlaying()) {
 
             videoPlayer.pause();
@@ -1396,17 +1414,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         appPrefs.setSeekBarEnd(seekBarEnd);
 
         if (!onPause) {
-
             refreshDetailTrimView();
-
             onPause = false;
         }
 
         isRunning = true; // free flag to prevent collision with
 
     }
-
-
+    
     private class PaintFramesTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -1462,8 +1477,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     public void exportVideo() {
 
-        videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
-        videoTrim = videoTrim + System.currentTimeMillis();
+        //videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
+        videoTrim = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
 
         // 1st trimVideo
 
@@ -1514,7 +1529,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             // 3rd trim Video + Audio
 
-            String videonaMusic = "V_EDIT_" + new File(pathvideoTrim).getName().substring(7);
+            String videonaMusic = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
             pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
 
 
@@ -1552,29 +1567,17 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         File fVideoFinal = new File(pathVideonaFinal);
         if (fVideoFinal.exists()) {
-
-          /*  Intent share = new Intent();
+            Intent share = new Intent();
             share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
             share.setClass(this, ShareActivity.class);
-            //startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-            startActivity(share);
-            */
-
-            Intent share = new Intent(EditActivity.this, ShareActivity.class);
-            share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
-            //share.setClass(this, ShareActivity.class);
             startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-
-
+            //startActivity(share);
         } else {
 
             // Toast.makeText(getApplicationContext(), "pathVideoFinal falló", Toast.LENGTH_SHORT).show();
         }
-
-
     }
-
-
+    
     @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity,
             R.id.edit_button_fx, R.id.edit_button_audio, R.id.edit_button_scissor,
             R.id.edit_button_look})

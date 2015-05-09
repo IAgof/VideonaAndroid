@@ -146,6 +146,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
+        recordPresenter = new RecordPresenter(this, tracker);
+
 
     }
 
@@ -164,7 +166,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     protected void onStart() {
         super.onStart();
-        recordPresenter = new RecordPresenter(this, tracker);
+
         recordPresenter.start();
        // Log.d(LOG_TAG, "onStart() RecordActivity");
     }
@@ -302,6 +304,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         buttonRecord.setImageResource(R.drawable.activity_record_icon_stop_normal);
         buttonRecord.setImageAlpha(125); // (50%)
+
     }
 
     /**
@@ -311,6 +314,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     public void stopRecordVideo() {
 
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
+        buttonRecord.setEnabled(false);
 
     }
 

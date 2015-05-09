@@ -157,17 +157,25 @@ public class RecordUseCase {
      */
     public void stopRecord(onRecordEventListener listener) {
 
+        Log.d(LOG_TAG, "timer " + (SystemClock.uptimeMillis() - timeColorEffect));
 
-        mediaRecorder.stop();  // stop the recording
-        releaseMediaRecorder(camera); // release the MediaRecorder object
-        camera.lock();         // take camera access back from MediaRecorder
+        // Disable stop record during 2 second
+        if((SystemClock.uptimeMillis() - timeColorEffect) < 2000) {
+            //Do nothing
 
-        releaseCamera(camera, cameraPreview);
+        } else {
 
-        timer.stop();
+            mediaRecorder.stop();  // stop the recording
+            releaseMediaRecorder(camera); // release the MediaRecorder object
+            camera.lock();         // take camera access back from MediaRecorder
 
-        // inform the user that recording has stopped
-        listener.onRecordStopped();
+            releaseCamera(camera, cameraPreview);
+
+            timer.stop();
+
+            // inform the user that recording has stopped
+            listener.onRecordStopped();
+        }
 
     }
 
@@ -334,6 +342,7 @@ public class RecordUseCase {
      *
      * @return boolean isPrepared
      */
+
     private boolean prepareVideoRecorder(Camera camera, CameraPreview cameraPreview) {
 
         mediaRecorder = new MediaRecorder();
