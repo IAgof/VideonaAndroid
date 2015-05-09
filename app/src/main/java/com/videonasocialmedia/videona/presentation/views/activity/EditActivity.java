@@ -912,8 +912,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 selectedIcon = musicList.get(position).getIconResourceId();
                 break;
         }
+
         musicList.get(position).setColorResourceId(selectedBackground);
         musicList.get(position).setIconResourceId(selectedIcon);
+
+
 
         if (position == (musicList.size() - 1)) {
 
@@ -929,23 +932,40 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         } else {
 
-            selectedMusic = musicList.get(position);
+            // if click on same music icon, pause the video
+           if(selectedMusic == musicList.get(position)) {
 
-            // Log.d(LOG_TAG, "adquirida la música");
+               playPausePreview();
 
-            initMusicPlayer(selectedMusic);
+               videoProgress = videoPlayer.getCurrentPosition();
+               appPrefs.setVideoProgress(videoProgress);
+               seekBar.setProgress(videoProgress);
 
-            musicSelected = Constants.PATH_APP_TEMP + File.separator + selectedMusic.getNameResourceId() + Constants.AUDIO_MUSIC_FILE_EXTENSION;
+               return;
 
-            try {
-                downloadResource(selectedMusic.getMusicResourceId());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+           } else {
+
+
+               selectedMusic = musicList.get(position);
+
+               // Log.d(LOG_TAG, "adquirida la música");
+
+               initMusicPlayer(selectedMusic);
+
+               musicSelected = Constants.PATH_APP_TEMP + File.separator + selectedMusic.getNameResourceId() + Constants.AUDIO_MUSIC_FILE_EXTENSION;
+
+               try {
+                   downloadResource(selectedMusic.getMusicResourceId());
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+
+           }
 
         }
 
         musicCatalogFragment.getAdapter().notifyDataSetChanged();
+
 
 
         if (videoPlayer.isPlaying()) {
