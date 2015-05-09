@@ -1,21 +1,15 @@
-package com.videonasocialmedia.videona.utils;
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Álvaro Martínez Marco
+ *
+ */
 
-/************************************************************************
-*	Main/TimeUtils
-*
-*	2012 Álvaro Martínez Marco,	amm@gatv.ssr.upm.es
-*
-*	Descripción:
-*
-*	Convierte un valor en formato horas, minutos y segundos.
-*
-*	Comentarios: 
-*
-*	Para CutAudio y CutVideo y CutVideo_saveNewClip Activity.
-*
-*	En otras clases se calcula directamente, duplicando código.
-*
-* ***********************************************************************/
+package com.videonasocialmedia.videona.utils;
 
 public class TimeUtils {
      
@@ -24,7 +18,8 @@ public class TimeUtils {
 		public static final int ONE_MINUTE = (1000 * 60);
 		public static final int ONE_HOUR = (1000 * 60 * 60);
 	  }
-	
+
+    // Time in milliSeconds
 	 public static String toFormattedTime(int time) {
 		int remainingTime = time;
 
