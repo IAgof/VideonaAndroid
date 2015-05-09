@@ -658,8 +658,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
 
     private void switchFragment(Fragment f, int panel) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        getFragmentManager().executePendingTransactions();
+        if (!f.isAdded()) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        }
     }
 
     @Override
@@ -672,15 +675,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (musicCatalogFragment == null)
             musicCatalogFragment = new MusicCatalogFragment();
         switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
-
-
     }
 
     @Override
     public void onEffectTrimMenuSelected() {
-
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
-
         if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
             edit_bottom_panel.setVisibility(View.INVISIBLE);
         }
@@ -1089,16 +1088,16 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         // Prevent null pointer exception. App crush. Paint frames by default
         //if (retriever.getFrameAtTime(0,  MediaMetadataRetriever.OPTION_CLOSEST_SYNC) == null) {
-          //  return;
+        //  return;
         //}
         // Ñapa, hacer bien
         for (int j = 1; j < 7; j++) {
 
             int value = j;
             //Bitmap bitmap = retriever.getFrameAtTime((int) (millis / 9) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-           if(retriever.getFrameAtTime((int) (millis / 6) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC) == null) {
-               return;
-           }
+            if (retriever.getFrameAtTime((int) (millis / 6) * 1000 * value, MediaMetadataRetriever.OPTION_CLOSEST_SYNC) == null) {
+                return;
+            }
         }
 
         // Get 6 key frames from video in separate time
@@ -1549,7 +1548,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
 
 
-
         } else {
 
             // Toast.makeText(getApplicationContext(), "pathVideoFinal falló", Toast.LENGTH_SHORT).show();
@@ -1557,7 +1555,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
 
     }
-
 
 
     @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity,
