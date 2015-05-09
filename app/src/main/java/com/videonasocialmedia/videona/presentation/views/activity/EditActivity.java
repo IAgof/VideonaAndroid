@@ -70,6 +70,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -924,7 +926,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 isMusicON = false;
                 videoPlayer.setVolume(0.5f, 0.5f);
                 selectedMusic = null;
-
             }
 
         } else {
@@ -1444,8 +1445,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     public void exportVideo() {
 
-        videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
-        videoTrim = videoTrim + System.currentTimeMillis();
+        //videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
+        videoTrim = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
 
         // 1st trimVideo
 
@@ -1467,7 +1468,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
 
         // Log.d(LOG_TAG, "Video Trimmed");
-
 
         if (isMusicON) {
 
@@ -1496,7 +1496,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             // 3rd trim Video + Audio
 
-            String videonaMusic = "V_EDIT_" + new File(pathvideoTrim).getName().substring(7);
+            String videonaMusic = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
             pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
 
 
@@ -1520,7 +1520,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             // Log.d(LOG_TAG, "Video isMusic ON trimVideo with audio ");
 
             isMusicON = false;
-
         }
 
 
@@ -1534,26 +1533,15 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         File fVideoFinal = new File(pathVideonaFinal);
         if (fVideoFinal.exists()) {
-
-          /*  Intent share = new Intent();
+            Intent share = new Intent();
             share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
             share.setClass(this, ShareActivity.class);
-            //startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-            startActivity(share);
-            */
-
-            Intent share = new Intent(EditActivity.this, ShareActivity.class);
-            share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
-            //share.setClass(this, ShareActivity.class);
             startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-
-
+            //startActivity(share);
         } else {
 
             // Toast.makeText(getApplicationContext(), "pathVideoFinal falló", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
 
