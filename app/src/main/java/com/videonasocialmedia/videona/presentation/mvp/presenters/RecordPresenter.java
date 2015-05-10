@@ -24,7 +24,7 @@ import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
 
-public class RecordPresenter extends Presenter implements onRecordEventListener, onColorEffectListener, onPreviewListener {
+public class RecordPresenter extends Presenter implements onRecordEventListener, onColorEffectListener, onPreviewListener, onOrientationEventListener {
 
     /**
      * Record Use Case
@@ -48,6 +48,13 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     /*ANALYTICS*/
     private Tracker tracker;
+
+    /**
+     *  Rotation View
+     */
+    private int rotationView;
+
+
 
     public RecordPresenter(RecordView recordView, Tracker tracker) {
 
@@ -259,6 +266,13 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
         Log.d(LOG_TAG, "onPreviewReStarted");
     }
 
+    @Override
+    public void onOrientationChanged(int rotationView) {
+
+        recordUseCase.setRotationView(rotationView);
+
+    }
+
     /**
      * Sends button clicks to Google Analytics
      *
@@ -314,5 +328,6 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
                 .setValue(time)
                 .build());
     }
+
 
 }
