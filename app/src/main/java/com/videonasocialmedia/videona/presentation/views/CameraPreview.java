@@ -50,6 +50,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     private Rect touchArea = null;
 
+    private int rotationView;
+
+    private boolean detectScreenOrientation90 = true;
+    private boolean detectScreenOrientation270 = true;
+
     public CameraPreview(Context context, Camera camera) {
 
         super(context);
@@ -88,6 +93,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         colorEffects = mCamera.getParameters().getSupportedColorEffects();
 
+
+
+    }
+
+    public void setCameraOrientation(int cameraOrientation){
+
+        mCamera.setDisplayOrientation(cameraOrientation);
+
     }
 
 
@@ -96,6 +109,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         // The Surface has been created, now tell the camera where to draw the preview.
 
         try {
+
 
             mCamera.setPreviewDisplay(holder);
 

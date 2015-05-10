@@ -5,7 +5,7 @@
  * All rights reserved
  *
  * Authors:
- * Verónica Lago Fominaya
+ * Veronica Lago Fominaya
  */
 
 package com.videonasocialmedia.videona.utils;

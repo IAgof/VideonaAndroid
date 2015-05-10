@@ -24,7 +24,7 @@ import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
 
-public class RecordPresenter extends Presenter implements onRecordEventListener, onColorEffectListener, onPreviewListener {
+public class RecordPresenter extends Presenter implements onRecordEventListener, onColorEffectListener, onPreviewListener, onOrientationEventListener {
 
     /**
      * Record View
@@ -45,6 +45,11 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     /*ANALYTICS*/
     private Tracker tracker;
+
+    /**
+     *  Rotation View
+     */
+    private int rotationView;
 
     public RecordPresenter(RecordView recordView, Tracker tracker) {
         this.recordView = recordView;
@@ -72,8 +77,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     /**
      * on Resume Presenter
      */
-    public void onResume() {
-        Log.d(LOG_TAG,"voy a llamar al onResume");
+    public void onResume(){
         recordUseCase.onResume();
     }
 
@@ -97,10 +101,8 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     public void onStop() {
         if (recordUseCase != null) {
             if (isRecording) {
-                Log.d(LOG_TAG, "recordusecase is not null and is recording");
                 recordUseCase.stopMediaRecorder(this);
             } else {
-                Log.d(LOG_TAG, "recordusecase is not null and is not recording");
                 recordUseCase.stopCamera();
             }
             //recordView.setEffect(Camera.Parameters.EFFECT_NONE);
@@ -199,6 +201,13 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
         recordView.stopPreview(cameraPreview, customManualFocusView);
         Log.d(LOG_TAG, "onPreviewReStarted");
+    }
+
+    @Override
+    public void onOrientationChanged(int rotationView) {
+
+        recordUseCase.setRotationView(rotationView);
+
     }
 
     /**
