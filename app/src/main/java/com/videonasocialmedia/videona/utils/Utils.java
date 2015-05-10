@@ -5,7 +5,7 @@
  * All rights reserved
  *
  * Authors:
- * Verónica Lago Fominaya
+ * Veronica Lago Fominaya
  */
 
 package com.videonasocialmedia.videona.utils;
@@ -14,7 +14,7 @@ import android.os.Environment;
 import android.os.StatFs;
 
 /**
- * Created by Verónica Lago Fominaya on 09/05/2015.
+ * Created by Veronica Lago Fominaya on 09/05/2015.
  */
 public class Utils {
     /**

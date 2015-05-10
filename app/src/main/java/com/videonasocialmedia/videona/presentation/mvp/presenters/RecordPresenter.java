@@ -330,4 +330,3 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     }
 }
 
-}

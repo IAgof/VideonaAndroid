@@ -172,7 +172,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     private int displayOrientation = 0;
 
 
-
     /**
      *  OrientationEventListener
      */
