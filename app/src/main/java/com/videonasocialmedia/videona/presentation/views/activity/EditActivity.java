@@ -13,9 +13,11 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -63,6 +65,7 @@ import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.RangeSeekBar;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
+import com.videonasocialmedia.videona.utils.Utils;
 import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
@@ -70,6 +73,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -306,50 +311,74 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         preview.stopPlayback();
 
-        if (videoPlayer != null) {
-            // mediaPlayer.stop();
-            //videoPlayer.pause();
-            videoPlayer.release();
-            videoPlayer = null;
+
+        if (videoPlayer != null && videoPlayer.isPlaying()){
+            videoPlayer.pause();
+            playButton.setVisibility(View.VISIBLE);
         }
-        if (musicPlayer != null) {
-            // mediaPlayerMusic.stop();
-            // musicPlayer.pause();
-            musicPlayer.release();
-            musicPlayer = null;
+        if (musicPlayer != null && musicPlayer.isPlaying()){
+            musicPlayer.pause();
         }
 
-        /// TODO Wait until define progressDialog Design
-        progressDialog.setMessage(getString(R.string.dialog_processing));
-        progressDialog.setTitle(getString(R.string.please_wait));
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
-        // Custom progress dialog
-        progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
+        // TODO: change this variable of 50MB (max size of the temp video and final video)
+        if (Utils.isAvailableSpace(50)) {
 
-        ((TextView) progressDialog.findViewById(Resources.getSystem()
-                .getIdentifier("message", "id", "android")))
-                .setTextColor(Color.WHITE);
+            preview.stopPlayback();
 
-        ((TextView) progressDialog.findViewById(Resources.getSystem()
-                .getIdentifier("alertTitle", "id", "android")))
-                .setTextColor(Color.WHITE);
-
-        progressDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id",
-                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
-
-        progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
-                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
-
-        final Runnable r = new Runnable() {
-            public void run() {
-
-                exportVideo();
-
+            if (videoPlayer != null) {
+                // mediaPlayer.stop();
+                //videoPlayer.pause();
+                videoPlayer.release();
+                videoPlayer = null;
             }
-        };
+            if (musicPlayer != null) {
+                // mediaPlayerMusic.stop();
+                // musicPlayer.pause();
+                musicPlayer.release();
+                musicPlayer = null;
+            }
 
-        performOnBackgroundThread(r);
+            /// TODO Wait until define progressDialog Design
+            progressDialog.setMessage(getString(R.string.dialog_processing));
+            progressDialog.setTitle(getString(R.string.please_wait));
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+            // Custom progress dialog
+            progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
+
+            ((TextView) progressDialog.findViewById(Resources.getSystem()
+                    .getIdentifier("message", "id", "android")))
+                    .setTextColor(Color.WHITE);
+
+            ((TextView) progressDialog.findViewById(Resources.getSystem()
+                    .getIdentifier("alertTitle", "id", "android")))
+                    .setTextColor(Color.WHITE);
+
+            progressDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id",
+                    "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
+
+            progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
+                    "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
+
+            final Runnable r = new Runnable() {
+                public void run() {
+                    exportVideo();
+                }
+            };
+
+            performOnBackgroundThread(r);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
+            builder.setMessage(R.string.edit_text_insufficient_memory)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //finish();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
 
@@ -675,11 +704,15 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (musicCatalogFragment == null)
             musicCatalogFragment = new MusicCatalogFragment();
         switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
+
+
     }
 
     @Override
     public void onEffectTrimMenuSelected() {
+
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
+
         if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
             edit_bottom_panel.setVisibility(View.INVISIBLE);
         }
@@ -912,12 +945,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 selectedIcon = musicList.get(position).getIconResourceId();
                 break;
         }
-
         musicList.get(position).setColorResourceId(selectedBackground);
         musicList.get(position).setIconResourceId(selectedIcon);
-
-
-
+        
         if (position == (musicList.size() - 1)) {
 
             // Log.d(LOG_TAG, "Detenida la música");
@@ -944,8 +974,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                return;
 
            } else {
-
-
                selectedMusic = musicList.get(position);
 
                // Log.d(LOG_TAG, "adquirida la música");
@@ -954,20 +982,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
                musicSelected = Constants.PATH_APP_TEMP + File.separator + selectedMusic.getNameResourceId() + Constants.AUDIO_MUSIC_FILE_EXTENSION;
 
-               try {
-                   downloadResource(selectedMusic.getMusicResourceId());
-               } catch (IOException e) {
-                   e.printStackTrace();
+               // TODO: change this variable of 30MB (size of the raw folder)
+               if (Utils.isAvailableSpace(30)) {
+                   try {
+                       downloadResource(selectedMusic.getMusicResourceId());
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
                }
-
            }
-
         }
 
         musicCatalogFragment.getAdapter().notifyDataSetChanged();
-
-
-
+        
         if (videoPlayer.isPlaying()) {
 
             videoPlayer.pause();
@@ -1386,21 +1413,15 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         appPrefs.setSeekBarStart(seekBarStart);
         appPrefs.setSeekBarEnd(seekBarEnd);
 
-        if (onPause) {
-
-
-        } else {
-
+        if (!onPause) {
             refreshDetailTrimView();
-
             onPause = false;
         }
 
         isRunning = true; // free flag to prevent collision with
 
     }
-
-
+    
     private class PaintFramesTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -1431,41 +1452,33 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         File fSong = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
 
-        if (fSong.exists()) {
-
-
-        } else {
+        if (!fSong.exists()) {
 
             FileOutputStream out = null;
             try {
                 out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
 
-            }
-            byte[] buff = new byte[1024];
-            int read = 0;
-            try {
+                byte[] buff = new byte[1024];
+                int read = 0;
+
                 while ((read = in.read(buff)) > 0) {
                     out.write(buff, 0, read);
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
 
             } finally {
                 in.close();
-                out.flush();
                 out.close();
             }
-
-
         }
     }
 
     public void exportVideo() {
 
-        videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
-        videoTrim = videoTrim + System.currentTimeMillis();
+        //videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
+        videoTrim = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
 
         // 1st trimVideo
 
@@ -1516,7 +1529,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             // 3rd trim Video + Audio
 
-            String videonaMusic = "V_EDIT_" + new File(pathvideoTrim).getName().substring(7);
+            String videonaMusic = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
             pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
 
 
@@ -1554,29 +1567,17 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         File fVideoFinal = new File(pathVideonaFinal);
         if (fVideoFinal.exists()) {
-
-          /*  Intent share = new Intent();
+            Intent share = new Intent();
             share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
             share.setClass(this, ShareActivity.class);
-            //startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-            startActivity(share);
-            */
-
-            Intent share = new Intent(EditActivity.this, ShareActivity.class);
-            share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
-            //share.setClass(this, ShareActivity.class);
             startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-
-
+            //startActivity(share);
         } else {
 
             // Toast.makeText(getApplicationContext(), "pathVideoFinal falló", Toast.LENGTH_SHORT).show();
         }
-
-
     }
-
-
+    
     @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity,
             R.id.edit_button_fx, R.id.edit_button_audio, R.id.edit_button_scissor,
             R.id.edit_button_look})

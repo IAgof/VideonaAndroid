@@ -328,6 +328,6 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
                 .setValue(time)
                 .build());
     }
-
+}
 
 }

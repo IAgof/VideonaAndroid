@@ -1,6 +1,8 @@
 package com.videonasocialmedia.videona.presentation.views;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -18,9 +20,9 @@ import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
+import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -117,6 +119,7 @@ public class VideonaMainActivity extends Activity {
 
     /**
      * Check Videona app paths, PATH_APP, pathVideoTrim, pathVideoMusic, ...
+     *
      * @throws IOException
      */
     private void checkPathApp() throws IOException {
@@ -204,7 +207,10 @@ public class VideonaMainActivity extends Activity {
                 // Loading project use case
                 loadingProjectPresenter.startLoadingProject();
 
-                downloadingMusicResources();
+                // TODO: change this variable of 30MB (size of the raw folder)
+                if (Utils.isAvailableSpace(30)) {
+                    downloadingMusicResources();
+                }
 
                 // 3 seconds, time in milliseconds
                 Thread.sleep(2000);
@@ -220,6 +226,22 @@ public class VideonaMainActivity extends Activity {
         @Override
         protected void onPostExecute(Boolean loggedIn) {
 
+            // TODO: change this variable of 30MB (size of the raw folder)
+            if (Utils.isAvailableSpace(30)) {
+                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(VideonaMainActivity.this);
+                builder.setMessage(R.string.edit_text_insufficient_memory)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                (VideonaMainActivity.this).finish();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+            /*
             //launchCameraActivity();
             if (loggedIn) {
 
@@ -233,6 +255,7 @@ public class VideonaMainActivity extends Activity {
                 //startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 startActivity(new Intent(getApplicationContext(), RecordActivity.class));
             }
+            */
         }
     }
 
@@ -240,29 +263,25 @@ public class VideonaMainActivity extends Activity {
      * Download music to sdcard.
      * Download items during loading screen, first time the user open the app.
      * Export video engine, need  a music resources in file system, not raw folder.
-     *
+     * <p/>
      * TODO DownloadResourcesUseCase
-     *
      */
     private void downloadingMusicResources() {
 
         List<Music> musicList = getMusicList();
 
-
-        for(Music resource: musicList) {
+        for (Music resource : musicList) {
             try {
                 downloadMusicResource(resource.getMusicResourceId());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
 
     /**
      * Copy resource from raw folder app to sdcard.
-     *
      *
      * @param raw_resource
      * @throws IOException
@@ -280,41 +299,31 @@ public class VideonaMainActivity extends Activity {
 
         File fSong = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
 
-        if (fSong.exists()) {
+        if (!fSong.exists()) {
 
-
-        } else {
 
             FileOutputStream out = null;
             try {
                 out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
 
-            }
-
-            // Prevent null pointer exception
-            if(out == null) {
-
-            } else {
 
                 byte[] buff = new byte[1024];
                 int read = 0;
-                try {
-                    while ((read = in.read(buff)) > 0) {
-                        out.write(buff, 0, read);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
 
-                } finally {
-
-                    in.close();
-                    out.flush();
-                    out.close();
+                while ((read = in.read(buff)) > 0) {
+                    out.write(buff, 0, read);
                 }
 
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            } finally {
+
+                in.close();
+                out.close();
             }
+
+
 
         }
     }
@@ -324,20 +333,20 @@ public class VideonaMainActivity extends Activity {
      *
      * @return getMusicList
      */
-    private List<Music> getMusicList(){
+    private List<Music> getMusicList() {
 
         List<Music> elementList = new ArrayList<>();
 
         elementList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
-        elementList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental,R.color.pastel_palette_red));
-        elementList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta,R.color.pastel_palette_blue));
-        elementList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano,R.color.pastel_palette_brown));
-        elementList.add(new Music(R.drawable.activity_music_icon_folk_normal, "audio_folk", R.raw.audio_folk,R.color.pastel_palette_red));
-        elementList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "audio_hiphop", R.raw.audio_hiphop,R.color.pastel_palette_green));
-        elementList.add(new Music(R.drawable.activity_music_icon_pop_normal, "audio_pop", R.raw.audio_pop,R.color.pastel_palette_purple));
-        elementList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "audio_reggae", R.raw.audio_reggae,R.color.pastel_palette_orange));
-        elementList.add(new Music(R.drawable.activity_music_icon_violin_normal, "audio_clasica_violin", R.raw.audio_clasica_violin,R.color.pastel_palette_yellow));
-        elementList.add(new Music(R.drawable.activity_music_icon_remove_normal,"Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
+        elementList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental, R.color.pastel_palette_red));
+        elementList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta, R.color.pastel_palette_blue));
+        elementList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.pastel_palette_brown));
+        elementList.add(new Music(R.drawable.activity_music_icon_folk_normal, "audio_folk", R.raw.audio_folk, R.color.pastel_palette_red));
+        elementList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "audio_hiphop", R.raw.audio_hiphop, R.color.pastel_palette_green));
+        elementList.add(new Music(R.drawable.activity_music_icon_pop_normal, "audio_pop", R.raw.audio_pop, R.color.pastel_palette_purple));
+        elementList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "audio_reggae", R.raw.audio_reggae, R.color.pastel_palette_orange));
+        elementList.add(new Music(R.drawable.activity_music_icon_violin_normal, "audio_clasica_violin", R.raw.audio_clasica_violin, R.color.pastel_palette_yellow));
+        elementList.add(new Music(R.drawable.activity_music_icon_remove_normal, "Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
 
         return elementList;
     }
