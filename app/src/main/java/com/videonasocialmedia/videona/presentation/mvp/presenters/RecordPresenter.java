@@ -24,20 +24,23 @@ import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
 
-public class RecordPresenter extends Presenter implements onRecordEventListener, onColorEffectListener, onPreviewListener {
+public class RecordPresenter extends Presenter implements onRecordEventListener, onColorEffectListener, onPreviewListener, onOrientationEventListener {
+
+    /**
+     * Record Use Case
+     */
+    RecordUseCase recordUseCase;
 
     /**
      * Record View
      */
     private final RecordView recordView;
+
     /**
      * LOG_TAG
      */
     private final String LOG_TAG = getClass().getSimpleName();
-    /**
-     * Record Use Case
-     */
-    RecordUseCase recordUseCase;
+
     /**
      * Boolean, control is recording file
      */
@@ -46,10 +49,21 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     /*ANALYTICS*/
     private Tracker tracker;
 
+    /**
+     *  Rotation View
+     */
+    private int rotationView;
+
+
+
     public RecordPresenter(RecordView recordView, Tracker tracker) {
+
         this.recordView = recordView;
+
         this.tracker = tracker;
+
         recordUseCase = new RecordUseCase(recordView.getContext());
+
     }
 
     /**
@@ -57,7 +71,9 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
      */
     @Override
     public void start() {
+
         recordUseCase.startPreview(this);
+
     }
 
     /**
@@ -66,43 +82,60 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
      */
     @Override
     public void stop() {
-        // recordUseCase.stopRecord(this);
+
+     // recordUseCase.stopRecord(this);
+
     }
 
     /**
      * on Resume Presenter
      */
-    public void onResume() {
+    public void onResume(){
+
         recordUseCase.onResume();
+
+
     }
 
     /**
      * on Pause Presenter
      */
-    public void onPause() {
+    public void onPause(){
+
         recordUseCase.onPause();
     }
 
     /**
      * on Restart Presenter
      */
-    public void onRestart() {
+    public void onRestart(){
+
         recordUseCase.reStartPreview(this);
     }
 
     /**
      * on Stop Presenter
      */
-    public void onStop() {
-        if (recordUseCase == null) {
+    public void onStop(){
+
+        if(recordUseCase == null) {
+
             Log.d(LOG_TAG, "recordUseCase null end of Activity");
+
         } else {
+
             if (isRecording) {
+
                 recordUseCase.stopMediaRecorder(this);
+
             } else {
+
                 recordUseCase.stopCamera();
+
             }
         }
+
+
     }
 
     /**
@@ -110,10 +143,15 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
      */
 
     public void recordClickListener() {
+
         if (isRecording) {
-            recordUseCase.stopRecord(this);
+
+           recordUseCase.stopRecord(this);
+
         } else {
+
             recordUseCase.startRecord(this);
+
         }
 
     }
@@ -121,86 +159,125 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
     /**
      * Effect Button pressed
      */
-    public void effectClickListener() {
+    public void effectClickListener(){
+
         recordUseCase.getAvailableEffects(this);
     }
 
     /**
-     * Effect selected
+     *  Effect selected
      *
      * @param effect
      */
-    public void setEffect(String effect) {
-        recordUseCase.addEffect(effect, this);
+    public void setEffect(String effect){
+
+           recordUseCase.addEffect(effect, this);
+
     }
 
     @Override
     public void onColorEffectAdded(String colorEffect, long time) {
+
+
         sendButtonTracked(colorEffect, time);
+
         recordView.showEffectSelected(colorEffect);
+
         Log.d(LOG_TAG, "onColorEffectAdded");
     }
 
     @Override
     public void onColorEffectRemoved(String colorEffect, long time) {
+
         recordView.showEffectSelected(colorEffect);
+
         Log.d(LOG_TAG, "onColorEffectRemoved");
     }
 
     @Override
     public void onColorEffectListRetrieved(ArrayList<String> effects) {
-        //  ColorEffectAdapter colorEffectAdapter = new ColorEffectAdapter(this, effects);
+
+      //  ColorEffectAdapter colorEffectAdapter = new ColorEffectAdapter(this, effects);
+
         recordView.showEffects(effects);
+
         Log.d(LOG_TAG, "onColorEffectListRetrieved");
     }
 
 
     @Override
     public void onRecordStarted() {
+
         recordView.startRecordVideo();
+
         //initialize chronometerRecord
         recordView.startChronometer();
+
         isRecording = true;
+
         Log.d(LOG_TAG, "onRecordStarted");
+
     }
 
     @Override
     public void onRecordStopped() {
+
         recordView.stopRecordVideo();
         recordView.stopChronometer();
+
         isRecording = false;
+
         ///TODO onRecordStopped, add media to Project useCase and navigate to EditActivity
+
         //recordUseCase.addMedia();
+
         recordView.navigateEditActivity(recordUseCase.getVideoRecordName());
+
         recordUseCase = null;
+
         Log.d(LOG_TAG, "onRecordStopped");
 
     }
 
     @Override
-    public void onRecordRestarted() {
+    public void onRecordRestarted(){
+
+
         recordView.stopRecordVideo();
         recordView.stopChronometer();
+
         isRecording = false;
+
     }
 
     @Override
-    public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
+    public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
+
         recordView.startPreview(cameraPreview, customManualFocusView);
+
         Log.d(LOG_TAG, "onPreviewStarted");
     }
 
     @Override
-    public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
+    public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
+
         recordView.stopPreview(cameraPreview, customManualFocusView);
+
         Log.d(LOG_TAG, "onPreviewReStarted");
+    }
+
+    @Override
+    public void onOrientationChanged(int rotationView) {
+
+        recordUseCase.setRotationView(rotationView);
+
     }
 
     /**
      * Sends button clicks to Google Analytics
      *
      * @param colorEffect name of the clicked filter
-     * @param time        time in which the effect is applied
+     * @param time time in which the effect is applied
      */
     private void sendButtonTracked(String colorEffect, long time) {
         String label;
@@ -251,4 +328,6 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
                 .setValue(time)
                 .build());
     }
+}
+
 }

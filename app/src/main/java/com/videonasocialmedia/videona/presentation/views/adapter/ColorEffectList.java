@@ -58,6 +58,7 @@ public class ColorEffectList {
         for(String effect: camera.getParameters().getSupportedColorEffects()) {
 
             colorEffects.add(effect);
+
         }
 
         return colorEffects;

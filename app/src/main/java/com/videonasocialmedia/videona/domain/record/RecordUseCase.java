@@ -13,6 +13,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Surface;
 import android.widget.Chronometer;
 
 import com.videonasocialmedia.videona.presentation.mvp.presenters.onColorEffectListener;
@@ -82,12 +83,18 @@ public class RecordUseCase {
      */
     private long timeColorEffect = 0;
 
+    /**
+     *  Rotation View
+     */
+    private int rotationView = 0;
 
     public RecordUseCase(Context context){
 
         if(camera == null){
             camera = getCameraInstance();
         }
+
+        this.rotationView = rotationView;
 
         cameraPreview = new CameraPreview(context, camera);
 
@@ -252,6 +259,8 @@ public class RecordUseCase {
 
         Camera.Parameters parameters = camera.getParameters();
         parameters.setColorEffect(colorEffect);
+
+        //camera.setDisplayOrientation(180);
         camera.setParameters(parameters);
 
         listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
@@ -386,8 +395,12 @@ public class RecordUseCase {
 
         setVideoRecordName(videoRecordName);
 
+        // rotateBackVideo
+        rotateBackVideo(getRotationView(), mediaRecorder);
+
         // Set the frameLayoutCameraPreview output
         mediaRecorder.setPreviewDisplay(cameraPreview.getHolder().getSurface());
+
 
         // Prepare configured MediaRecorder
         try {
@@ -402,6 +415,35 @@ public class RecordUseCase {
             return false;
         }
         return true;
+    }
+
+
+
+    /**
+     *
+     * @param rotationPreview mMediaRecorder
+     * @return
+     */
+    private void  rotateBackVideo(int rotationPreview, MediaRecorder mediaRecorder) {
+        /**
+         * Define Orientation of video in here,
+         * if in portrait mode, use value = 90,
+         * if in landscape mode, use value = 0
+         */
+
+        Log.d(LOG_TAG, "rotationPreview MediaRecorder rotation Preview " + rotationPreview);
+
+        switch (rotationPreview) {
+            case 1:
+                mediaRecorder.setOrientationHint(0);
+                break;
+            case 3:
+                mediaRecorder.setOrientationHint(180);
+                break;
+
+        }
+
+
     }
 
     /**
@@ -499,6 +541,30 @@ public class RecordUseCase {
 
     private void setVideoRecordName(String videoRecordName){
         this.videoRecordName = videoRecordName;
+    }
+
+
+    private int getRotationView() {
+
+        return rotationView;
+    }
+
+    public void setRotationView(int rotationView){
+
+        this.rotationView = rotationView;
+
+        int displayOrientation = 0;
+
+        if(rotationView == Surface.ROTATION_90){
+            displayOrientation = 0;
+        }
+
+        if(rotationView == Surface.ROTATION_270){
+            displayOrientation = 180;
+        }
+
+        cameraPreview.setCameraOrientation(displayOrientation);
+
     }
 
 }
