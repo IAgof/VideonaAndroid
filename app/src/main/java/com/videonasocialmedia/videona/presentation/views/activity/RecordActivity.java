@@ -18,7 +18,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -38,12 +38,10 @@ import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
-import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import org.lucasr.twowayview.TwoWayView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -136,6 +134,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate() RecordActivity");
         setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
 
@@ -145,83 +144,45 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         appPrefs = new UserPreferences(context);
         app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
-
-        recordPresenter = new RecordPresenter(this, tracker);
-
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
+        Log.d(LOG_TAG, "onStop() RecordActivity");
         recordPresenter.onStop();
-
         recordPresenter = null;
-
-        // Log.d(LOG_TAG, "onStop() RecordActivity");
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
+        recordPresenter = new RecordPresenter(this, tracker);
+        Log.d(LOG_TAG, "onStart() RecordActivity");
         recordPresenter.start();
-       // Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        // Log.d(LOG_TAG, "onRestart() RecordActivity");
+        Log.d(LOG_TAG, "onRestart() RecordActivity");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(LOG_TAG, "onResume() RecordActivity");
         if(recordPresenter != null) {
             recordPresenter.onResume();
         }
-        // Log.d(LOG_TAG, "onResume() RecordActivity");
+        buttonRecord.setEnabled(true);
+        chronometerRecord.setText("00:00");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // Log.d(LOG_TAG, "onPause() RecordActivity");
-    }
-
-    /**
-     * Here we store the file url as it will be null after returning from camera
-     * app
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // save file url in bundle as it will be null on scren orientation
-        // changes
-        outState.putParcelable("file_uri", fileUri);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        // get the file url
-        fileUri = savedInstanceState.getParcelable("file_uri");
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
-        if (requestCode == CAMERA_EDIT_VIDEO_REQUEST_CODE) {
-            recordPresenter = null;
-            // Restart recordActivity
-            onCreate(null);
-        }
+        Log.d(LOG_TAG, "onPause() RecordActivity");
     }
 
     /**
@@ -229,16 +190,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void onBackPressed() {
-        buttonBackPressed = true;
-        Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && buttonBackPressed == true) {
-            // do something on back.
+        if (buttonBackPressed) {
             buttonBackPressed = false;
-            // Log.d(LOG_TAG, "onKeyDown");
 
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
@@ -246,11 +199,10 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             startActivity(intent);
             finish();
             System.exit(0);
-
-            return true;
+        } else {
+            buttonBackPressed = true;
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
         }
-        buttonBackPressed = false;
-        return super.onKeyDown(keyCode, event);
     }
 
     /**
@@ -261,6 +213,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void onColorEffectClicked(ColorEffectAdapter adapter, String colorEffect, int position) {
+        Log.d(LOG_TAG, "onColorEffectClicked() RecordActivity");
         positionColorEffectPressed = position;
         adapter.notifyDataSetChanged();
         recordPresenter.setEffect(colorEffect);
@@ -268,6 +221,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
     @Override
     public Context getContext() {
+        Log.d(LOG_TAG, "getContext() RecordActivity");
+
         return this;
     }
 
@@ -278,20 +233,18 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
+        Log.d(LOG_TAG, "startPreview() RecordActivity");
             frameLayoutCameraPreview.addView(cameraPreview);
             frameLayoutCameraPreview.addView(customManualFocusView);
-        // Fix format chronometer 00:00. Do in xml, design
+            // Fix format chronometer 00:00. Do in xml, design
             chronometerRecord.setText("00:00");
             customManualFocusView.onPreviewTouchEvent(this);
-           recordPresenter.effectClickListener();
-            ///  TEST jump to EditActivity
-            String test2min = Constants.PATH_APP_MASTERS + File.separator + "test_AV2.mp4";
-           // navigateEditActivity(test2min);
+            recordPresenter.effectClickListener();
     }
 
     @Override
     public void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView){
-
+        Log.d(LOG_TAG, "stopPreview() RecordActivity");
         frameLayoutCameraPreview.removeView(cameraPreview);
         frameLayoutCameraPreview.removeView(customManualFocusView);
     }
@@ -301,10 +254,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void startRecordVideo() {
-
+        Log.d(LOG_TAG, "startRecordVideo() RecordActivity");
         buttonRecord.setImageResource(R.drawable.activity_record_icon_stop_normal);
         buttonRecord.setImageAlpha(125); // (50%)
-
     }
 
     /**
@@ -312,21 +264,18 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void stopRecordVideo() {
-
+        Log.d(LOG_TAG, "stopRecordVideo() RecordActivity");
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
         buttonRecord.setEnabled(false);
-
     }
-
 
     /**
      * Start chronometer
      */
     @Override
     public void startChronometer() {
-
+        Log.d(LOG_TAG, "startChronometer() RecordActivity");
         setChronometer();
-
         chronometerRecord.start();
     }
 
@@ -335,19 +284,16 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void stopChronometer() {
-
+        Log.d(LOG_TAG, "stopChronometer() RecordActivity");
         chronometerRecord.stop();
-
     }
 
     /**
      * Set chronometer with format 00:00
      */
-
     public void setChronometer() {
-
+        Log.d(LOG_TAG, "setChronometer() RecordActivity");
         chronometerRecord.setBase(SystemClock.elapsedRealtime());
-
         chronometerRecord.setOnChronometerTickListener(new android.widget.Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(android.widget.Chronometer chronometer) {
@@ -365,7 +311,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             }
         });
-
     }
 
     /**
@@ -375,7 +320,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void showEffects(ArrayList<String> effects) {
-
+        Log.d(LOG_TAG, "showEffects() RecordActivity");
         //colorEffectAdapter = adapter;
         colorEffectAdapter = new ColorEffectAdapter(this, effects);
 
@@ -388,15 +333,10 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             return;
 
         }
-
         relativeLayoutColorEffect.setVisibility(View.VISIBLE);
-
         buttonColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
-
         colorEffectAdapter.setViewClickListener(RecordActivity.this);
-
         listViewItemsColorEffect.setAdapter(colorEffectAdapter);
-
     }
 
     /**
@@ -406,22 +346,18 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @Override
     public void showEffectSelected(String colorEffect) {
-
+        Log.d(LOG_TAG, "showEffectSelected() RecordActivity");
         /// TODO apply animation effect
-
         colorEffectAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void navigateEditActivity(String videoRecordName) {
-
-        Intent edit = new Intent();
+        Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
+        Intent edit = new Intent(RecordActivity.this, EditActivity.class);
         edit.putExtra("MEDIA_OUTPUT", videoRecordName);
-        edit.setClass(RecordActivity.this, EditActivity.class);
-
-        startActivityForResult(edit, CAMERA_EDIT_VIDEO_REQUEST_CODE);
+        startActivity(edit);
     }
-
 
     /**
      * Color effect on click listener
@@ -470,6 +406,4 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
-
-
 }

@@ -169,7 +169,7 @@ public class RecordUseCase {
             releaseMediaRecorder(camera); // release the MediaRecorder object
             camera.lock();         // take camera access back from MediaRecorder
 
-            releaseCamera(camera, cameraPreview);
+            //releaseCamera(camera, cameraPreview);
 
             timer.stop();
 
@@ -220,7 +220,6 @@ public class RecordUseCase {
      * onPause UseCase, release camera and mediaRecorder
      */
     public void onPause(){
-
         releaseMediaRecorder(camera);       // if you are using MediaRecorder, release it first
         releaseCamera(camera, cameraPreview);
     }
@@ -434,8 +433,6 @@ public class RecordUseCase {
         }
     }
 
-
-
     /**
      * Create a file Uri for saving video
      */
@@ -450,10 +447,7 @@ public class RecordUseCase {
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-
-                Log.d("GetVideoRecordedUseCaseController", "failed to create directory");
-                return null;
-
+               return null;
             }
         }
 

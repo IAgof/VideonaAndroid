@@ -73,6 +73,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
      * on Resume Presenter
      */
     public void onResume() {
+        Log.d(LOG_TAG,"voy a llamar al onResume");
         recordUseCase.onResume();
     }
 
@@ -94,25 +95,29 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
      * on Stop Presenter
      */
     public void onStop() {
-        if (recordUseCase == null) {
-            Log.d(LOG_TAG, "recordUseCase null end of Activity");
-        } else {
+        if (recordUseCase != null) {
             if (isRecording) {
+                Log.d(LOG_TAG, "recordusecase is not null and is recording");
                 recordUseCase.stopMediaRecorder(this);
             } else {
+                Log.d(LOG_TAG, "recordusecase is not null and is not recording");
                 recordUseCase.stopCamera();
             }
+            //recordView.setEffect(Camera.Parameters.EFFECT_NONE);
+            recordUseCase = null;
         }
     }
 
     /**
      * Record Button pressed
      */
-
     public void recordClickListener() {
         if (isRecording) {
             recordUseCase.stopRecord(this);
         } else {
+            if (recordUseCase == null) {
+                recordUseCase = new RecordUseCase(recordView.getContext());
+            }
             recordUseCase.startRecord(this);
         }
 
@@ -172,7 +177,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
         ///TODO onRecordStopped, add media to Project useCase and navigate to EditActivity
         //recordUseCase.addMedia();
         recordView.navigateEditActivity(recordUseCase.getVideoRecordName());
-        recordUseCase = null;
+        //recordUseCase = null;
         Log.d(LOG_TAG, "onRecordStopped");
 
     }

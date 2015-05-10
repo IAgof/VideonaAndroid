@@ -14,7 +14,7 @@ import android.os.Environment;
 import android.os.StatFs;
 
 /**
- * Created by Verónica Lago Fominaya on 09/05/2015.
+ * Utils.
  */
 public class Utils {
     /**

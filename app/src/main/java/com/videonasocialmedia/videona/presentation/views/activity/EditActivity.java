@@ -69,7 +69,6 @@ import com.videonasocialmedia.videona.utils.Utils;
 import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -307,10 +306,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             seekBarEnd = seekBarStart + ConfigUtils.maxDurationVideo;
             appPrefs.setSeekBarEnd(seekBarEnd);
         }
-
-
-        preview.stopPlayback();
-
 
         if (videoPlayer != null && videoPlayer.isPlaying()){
             videoPlayer.pause();
