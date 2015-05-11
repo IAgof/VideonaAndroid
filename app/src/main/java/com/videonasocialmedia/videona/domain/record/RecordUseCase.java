@@ -111,9 +111,11 @@ public class RecordUseCase {
      *
      * @param listener
      */
-    public void startPreview(onPreviewListener listener){
+    public void startPreview(onPreviewListener listener, int displayOrientation){
 
         listener.onPreviewStarted(cameraPreview, customManualFocusView);
+
+        setCameraOrientation(displayOrientation);
 
     }
 
@@ -416,6 +418,15 @@ public class RecordUseCase {
         return true;
     }
 
+
+    /**
+     *  Set camera displayOrientation
+     * @param displayOrientation
+     */
+    private void setCameraOrientation(int displayOrientation){
+
+        camera.setDisplayOrientation(displayOrientation);
+    }
 
 
     /**

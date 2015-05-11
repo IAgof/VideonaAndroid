@@ -230,7 +230,8 @@ public class VideonaMainActivity extends Activity {
             if (Utils.isAvailableSpace(30)) {
                 startActivity(new Intent(getApplicationContext(), RecordActivity.class));
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(VideonaMainActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(VideonaMainActivity.this,
+                        AlertDialog.THEME_HOLO_LIGHT);
                 builder.setMessage(R.string.edit_text_insufficient_memory)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

@@ -59,10 +59,16 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     /**
      * Called when the presenter is initialized
+     *
+     * //TODO delete extends Presenter
      */
     @Override
-    public void start() {
-        recordUseCase.startPreview(this);
+    public void start(int displayOrientation) {
+        recordUseCase.startPreview(this, displayOrientation);
+
+        // Start with effect NONE, position 0
+      //  setEffect(Camera.Parameters.EFFECT_NONE);
+      //  recordView.showEffectSelected(Camera.Parameters.EFFECT_NONE);
     }
 
     /**
@@ -109,6 +115,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
             recordUseCase = null;
         }
     }
+
 
     /**
      * Record Button pressed

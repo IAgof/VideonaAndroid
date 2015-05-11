@@ -20,7 +20,7 @@ public abstract class Presenter {
     /**
      * Called when the presenter is initialized
      */
-    public abstract void start ();
+    public abstract void start (int displayOrientation);
     /**
      * Called when the presenter is stop, i.e when an activity
      * or a fragment finishes

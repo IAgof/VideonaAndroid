@@ -363,7 +363,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             performOnBackgroundThread(r);
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this,
+                    AlertDialog.THEME_HOLO_LIGHT);
             builder.setMessage(R.string.edit_text_insufficient_memory)
                     .setCancelable(false)
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
