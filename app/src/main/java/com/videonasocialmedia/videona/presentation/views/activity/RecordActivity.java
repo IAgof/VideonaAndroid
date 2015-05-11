@@ -204,8 +204,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         super.onResume();
         Log.d(LOG_TAG, "onResume() RecordActivity");
         recordPresenter = new RecordPresenter(this, tracker);
-        recordPresenter.start();
-        recordPresenter.onResume();
         /*
         if(recordPresenter != null) {
             recordPresenter.onResume();
@@ -217,6 +215,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             colorEffectAdapter = null;
             recordPresenter.effectClickListener();
         }
+        recordPresenter.onResume();
         buttonRecord.setEnabled(true);
         chronometerRecord.setText("00:00");
     }
