@@ -185,21 +185,12 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "onStop() RecordActivity");
-        recordPresenter.onStop();
-        recordPresenter = null;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        recordPresenter = new RecordPresenter(this, tracker);
         Log.d(LOG_TAG, "onStart() RecordActivity");
-        detectRotationView(this);
-        recordPresenter.start(displayOrientation);
-        if(colorEffectAdapter != null){
-            colorEffectAdapter = null;
-            recordPresenter.effectClickListener();
-        }
     }
 
     @Override
@@ -212,19 +203,30 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume() RecordActivity");
-
+        recordPresenter = new RecordPresenter(this, tracker);
+        recordPresenter.start();
+        recordPresenter.onResume();
+        /*
         if(recordPresenter != null) {
             recordPresenter.onResume();
         }
+        */
+        detectRotationView(this);
+        recordPresenter.start(displayOrientation);
+        if(colorEffectAdapter != null){
+            colorEffectAdapter = null;
+            recordPresenter.effectClickListener();
+        }
         buttonRecord.setEnabled(true);
         chronometerRecord.setText("00:00");
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(LOG_TAG, "onPause() RecordActivity");
+        recordPresenter.onStop();
+        recordPresenter = null;
     }
 
     /**
