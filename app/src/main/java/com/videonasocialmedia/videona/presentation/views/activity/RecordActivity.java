@@ -196,6 +196,10 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "onStart() RecordActivity");
         detectRotationView(this);
         recordPresenter.start(displayOrientation);
+        if(colorEffectAdapter != null){
+            colorEffectAdapter = null;
+            recordPresenter.effectClickListener();
+        }
     }
 
     @Override
@@ -285,12 +289,12 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                 } else {
 
                    if (orientation == SCREEN_ORIENTATION_90) {
-                        Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
+                      //  Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
                         if (detectScreenOrientation90) {
                             if (rotationView == Surface.ROTATION_90 && detectScreenOrientation270) {
                                 return;
                             }
-                            Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 90");
+                        //    Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 90");
                             if (rotationView == Surface.ROTATION_270) {
                                 rotationView = Surface.ROTATION_90;
                                 if(recordPresenter!=null) {
@@ -298,14 +302,14 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                                         recordPresenter.onOrientationChanged(rotationView);
                                     }
                                 }
-                                Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 90 rotation Preview 3");
+                          //      Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 90 rotation Preview 3");
                             } else {
                                 if (rotationView == Surface.ROTATION_90) {
                                     rotationView = Surface.ROTATION_270;
                                     if(recordPresenter!=null) {
                                         recordPresenter.onOrientationChanged(rotationView);
                                     }
-                                    Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 90 rotation Preview 1");
+                                  //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 90 rotation Preview 1");
                                 }
                             }
                             detectScreenOrientation90 = false;
@@ -313,9 +317,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                         }
                    }
                     if (orientation == SCREEN_ORIENTATION_270) {
-                        Log.d("CameraPreview", "rotationPreview onOrientationChanged " + orientation);
+                      //  Log.d("CameraPreview", "rotationPreview onOrientationChanged " + orientation);
                         if (detectScreenOrientation270) {
-                            Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
+                          //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
                             if (rotationView == Surface.ROTATION_270 && detectScreenOrientation90) {
                                 return;
                             }
@@ -324,14 +328,14 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                                 if(recordPresenter!=null) {
                                     recordPresenter.onOrientationChanged(rotationView);
                                 }
-                                Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270 rotation Preview 3");
+                              //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270 rotation Preview 3");
                             } else {
                                 if (rotationView == Surface.ROTATION_90) {
                                     rotationView = Surface.ROTATION_270;
                                     if(recordPresenter!=null) {
                                         recordPresenter.onOrientationChanged(rotationView);
                                     }
-                                    Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270 rotation Preview 1");
+                                   // Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270 rotation Preview 1");
                                 }
                             }
                             detectScreenOrientation90 = true;

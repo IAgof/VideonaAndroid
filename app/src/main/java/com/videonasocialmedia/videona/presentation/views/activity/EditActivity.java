@@ -217,6 +217,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
     };
 
+    /**
+     *  String, pathVideoEdited final, data to ShareActivity
+     */
+    private String pathVideoEdited;
 
     public EditActivity() {
 
@@ -357,10 +361,24 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             final Runnable r = new Runnable() {
                 public void run() {
-                    exportVideo();
+
+                    if(exportVideo()) {
+
+
+                        File fVideoFinal = new File(pathVideoEdited);
+                        if (fVideoFinal.exists()) {
+                            Intent share = new Intent();
+                            share.putExtra("MEDIA_OUTPUT", pathVideoEdited);
+                            share.setClass(getApplicationContext(), ShareActivity.class);
+                            startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
+                            //startActivity(share);
+                        } else {
+
+
+                        }
+                    }
                 }
             };
-
             performOnBackgroundThread(r);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this,
@@ -448,12 +466,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             playPausePreview();
             result = true;
 
-            // amm
             videoProgress = videoPlayer.getCurrentPosition();
             appPrefs.setVideoProgress(videoProgress);
             seekBar.setProgress(videoProgress);
             // textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
-            // amm End
 
         } else {
             result = false;
@@ -658,18 +674,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Log.d(LOG_TAG, " requestCode " + requestCode + " resultCode " + resultCode);
-        if (requestCode == VIDEO_SHARE_REQUEST_CODE) {
-            setResult(Activity.RESULT_OK);
-            finish();
-        }
-
-    }*/
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -677,7 +681,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (requestCode == VIDEO_SHARE_REQUEST_CODE) {
             startActivity(new Intent(getApplicationContext(), RecordActivity.class));
             //setResult(Activity.RESULT_OK);
-            //finish();
+            finish();
         }
     }
 
@@ -1471,7 +1475,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
     }
 
-    public void exportVideo() {
+    public boolean exportVideo() {
 
         //videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
         videoTrim = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
@@ -1479,18 +1483,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         // 1st trimVideo
 
         int start = appPrefs.getSeekBarStart();
+        // +1 seconds, trim extra second. Trimming doesn't work properly
         int length = appPrefs.getSeekBarEnd() - start + 1;
         String inputFileName = videoRecorded;
         pathvideoTrim = Constants.PATH_APP + File.separator + videoTrim;
         // Log.d(LOG_TAG, "VideonaMainActivity input " + inputFileName + " output " + pathvideoTrim + " start " + start + " length " + length);
 
 
-        String pathVideonaFinal = pathvideoTrim;
+        pathVideoEdited = pathvideoTrim;
 
         //VideonaMainActivity.cut(inputFileName, pathvideoTrim, start, length);
 
         try {
-            VideoUtils.trimVideo(inputFileName, start, appPrefs.getSeekBarEnd(), pathVideonaFinal);
+            VideoUtils.trimVideo(inputFileName, start, appPrefs.getSeekBarEnd(), pathVideoEdited);
         } catch (IOException e) {
             //Log.e(LOG_TAG, "Video Trimm failed", e);
         }
@@ -1504,13 +1509,25 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
                 // 2nd Switch audio
 
-                // String audio_test = Environment.getExternalStorageDirectory() + "/Videona/audio_m4a.m4a";
-                // VideoUtils.switchAudio(pathvideoTrim, audio_test, Config.videoMusicTempFile);
                 // Log.d(LOG_TAG, "pathVideoTrim " + pathvideoTrim + "  " + " musicSelected " + musicSelected);
 
-                VideoUtils.switchAudio(pathvideoTrim, musicSelected, Constants.VIDEO_MUSIC_TEMP_FILE);
+                File fMusicSelected = new File(musicSelected);
+                if(fMusicSelected.exists()) {
+                    VideoUtils.switchAudio(pathvideoTrim, musicSelected, Constants.VIDEO_MUSIC_TEMP_FILE);
+                } else {
 
-                // Delete TRIM temporal file
+                    this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            progressDialog.dismiss();
+                            //   Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    return true;
+
+                }
+
+                // Delete TRIM temporal file in this UserCase
                 File fTrim = new File(pathvideoTrim);
                 if (fTrim.exists()) {
                     fTrim.delete();
@@ -1526,15 +1543,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             // 3rd trim Video + Audio
 
             String videonaMusic = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
-            pathVideonaFinal = Constants.PATH_APP + File.separator + videonaMusic;
-
+            pathVideoEdited = Constants.PATH_APP + File.separator + videonaMusic;
 
             // Log.d(LOG_TAG, "VideonaMainActivity trimAudio cut " + Constants.VIDEO_MUSIC_TEMP_FILE + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + appPrefs.getVideoDurationTrim());
-
-            //VideonaMainActivity.cut(Constants.VIDEO_MUSIC_TEMP_FILE, pathVideonaFinal, 0, length);
-
             try {
-                VideoUtils.trimVideo(Constants.VIDEO_MUSIC_TEMP_FILE, 0, length, pathVideonaFinal);
+                VideoUtils.trimVideo(Constants.VIDEO_MUSIC_TEMP_FILE, 0, length, pathVideoEdited);
             } catch (IOException e) {
                 //Log.e(LOG_TAG, "Video isMusic ON trimVideo with audio failed", e);
             }
@@ -1560,18 +1573,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             }
         });
 
+        return true;
 
-        File fVideoFinal = new File(pathVideonaFinal);
-        if (fVideoFinal.exists()) {
-            Intent share = new Intent();
-            share.putExtra("MEDIA_OUTPUT", pathVideonaFinal);
-            share.setClass(this, ShareActivity.class);
-            startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
-            //startActivity(share);
-        } else {
-
-            // Toast.makeText(getApplicationContext(), "pathVideoFinal falló", Toast.LENGTH_SHORT).show();
-        }
     }
     
     @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity,
