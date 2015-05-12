@@ -23,6 +23,7 @@ import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -306,24 +307,34 @@ public class VideonaMainActivity extends Activity {
             FileOutputStream out = null;
             try {
                 out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-
-
-                byte[] buff = new byte[1024];
-                int read = 0;
-
-                while ((read = in.read(buff)) > 0) {
-                    out.write(buff, 0, read);
-                }
-
-            } catch (IOException e) {
+            } catch (FileNotFoundException e) {
                 e.printStackTrace();
 
-            } finally {
-
-                in.close();
-                out.close();
             }
 
+            // Prevent null pointer exception
+            if (out == null) {
+
+            } else {
+
+                    byte[] buff = new byte[1024];
+                    int read = 0;
+
+                try {
+
+                    while ((read = in.read(buff)) > 0) {
+                        out.write(buff, 0, read);
+                    }
+
+                }   catch(IOException e){
+                    e.printStackTrace();
+
+                }   finally{
+
+                    in.close();
+                    out.close();
+                }
+            }
 
 
         }

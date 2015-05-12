@@ -69,6 +69,7 @@ import com.videonasocialmedia.videona.utils.Utils;
 import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1457,20 +1458,33 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             FileOutputStream out = null;
             try {
                 out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+
+            }
+
+            // Prevent null pointer exception
+            if (out == null) {
+
+            } else {
 
                 byte[] buff = new byte[1024];
                 int read = 0;
 
-                while ((read = in.read(buff)) > 0) {
-                    out.write(buff, 0, read);
+                try {
+
+                    while ((read = in.read(buff)) > 0) {
+                        out.write(buff, 0, read);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                } finally {
+
+                    in.close();
+                    out.close();
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            } finally {
-                in.close();
-                out.close();
             }
         }
     }
