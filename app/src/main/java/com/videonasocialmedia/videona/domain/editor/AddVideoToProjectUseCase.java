@@ -2,10 +2,10 @@
  * Copyright (c) 2015. Videona Socialmedia SL
  * http://www.videona.com
  * info@videona.com
-* All rights reserved
-*
-* Authors:
-* Veronica Lago Fominaya
+ * All rights reserved
+ *
+ * Authors:
+ * Veronica Lago Fominaya
  */
 
 package com.videonasocialmedia.videona.domain.editor;
@@ -22,9 +22,6 @@ import java.util.ArrayList;
 
 /**
  * This class is used to add a new videos to the project.
- *
- * @author vlf
- * @since 27/04/2015
  */
 public class AddVideoToProjectUseCase implements AddMediaToProjectUseCase {
 
@@ -70,7 +67,6 @@ public class AddVideoToProjectUseCase implements AddMediaToProjectUseCase {
         try {
             mediaTrack.insertItem(new Video(null, null, videoPath, 0, 0, authors, null));
             result = true;
-            // TODO: check if this file is a video object and if not throws a new exception
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             result = false;
         }
