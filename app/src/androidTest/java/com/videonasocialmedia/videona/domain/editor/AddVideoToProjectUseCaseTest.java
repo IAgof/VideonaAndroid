@@ -16,12 +16,16 @@ import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFinishedListener;
 import com.videonasocialmedia.videona.utils.Constants;
 
+import org.mockito.ArgumentCaptor;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 
@@ -37,7 +41,6 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
     public AddVideoToProjectUseCaseTest(){
         useCase = new AddVideoToProjectUseCase();
         listener = mock(OnAddMediaFinishedListener.class);
-        mediaTrack = new MediaTrack();
     }
 
 
@@ -53,8 +56,9 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
 
         useCase.addMediaItemsToProject(list, listener);
 
-        verify(listener).onAddMediaItemToTrackSuccess(mediaTrack);
-        verify(listener).onAddMediaItemToTrackError();
+        ArgumentCaptor<MediaTrack> fooCaptor = ArgumentCaptor.forClass(MediaTrack.class);
+        verify(listener, atLeastOnce()).onAddMediaItemToTrackSuccess(fooCaptor.capture());
+        verify(listener, never()).onAddMediaItemToTrackError();
     }
 
     public void testAddMediaItemToTrack () throws NoSuchMethodException,
