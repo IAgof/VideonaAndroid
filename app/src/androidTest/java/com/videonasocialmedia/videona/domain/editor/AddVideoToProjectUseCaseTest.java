@@ -14,11 +14,9 @@ import android.test.AndroidTestCase;
 
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFinishedListener;
-import com.videonasocialmedia.videona.utils.Constants;
 
 import org.mockito.ArgumentCaptor;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -36,23 +34,20 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
 
     AddVideoToProjectUseCase useCase;
     OnAddMediaFinishedListener listener;
-    MediaTrack mediaTrack;
 
     public AddVideoToProjectUseCaseTest(){
         useCase = new AddVideoToProjectUseCase();
         listener = mock(OnAddMediaFinishedListener.class);
     }
 
-
-    @Override
-    protected void setUp() throws Exception {
-        //MockitoAnnotations.initMocks(this);
-    }
-
+    /**
+     * This class is used to check if the listener of add video use case is calling some method
+     * when a list of paths of video files is passed it.
+     */
     public void testAddMediaItemsToProject() {
         ArrayList<String> list = new ArrayList<>();
-        list.add(Constants.PATH_APP + File.separator + "V_EDIT_AV2.mp4");
-        list.add(Constants.PATH_APP + File.separator + "V_EDIT_AV2.mp4");
+        list.add("path/to/video");
+        list.add("path/to/video");
 
         useCase.addMediaItemsToProject(list, listener);
 
@@ -61,6 +56,10 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
         verify(listener, never()).onAddMediaItemToTrackError();
     }
 
+    /**
+     * This class is used to check if the use case returns a boolean when try to insert item in
+     * mediatrack.
+     */
     public void testAddMediaItemToTrack () throws NoSuchMethodException,
             InvocationTargetException, IllegalAccessException {
 
