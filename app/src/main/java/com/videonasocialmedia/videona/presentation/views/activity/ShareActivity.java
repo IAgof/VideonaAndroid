@@ -44,6 +44,11 @@ import butterknife.OnTouch;
  */
 public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeListener {
 
+    // Intent
+    private static final int CHOOSE_SHARE_REQUEST_CODE = 600;
+    private static MediaPlayer mediaPlayer;
+    /*CONFIG*/
+    private final String LOG_TAG = this.getClass().getSimpleName();
     /*VIEWS*/
     @InjectView(R.id.share_button_play)
     ImageButton buttonPlay;
@@ -51,24 +56,25 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     VideoView videoView;
     @InjectView(R.id.share_seekbar)
     SeekBar seekBar;
-
-    /*CONFIG*/
-    private final String LOG_TAG = this.getClass().getSimpleName();
-
-    // Intent
-    private static final int CHOOSE_SHARE_REQUEST_CODE = 600;
-
+    Uri uri;
     //Preview
     private MediaController mediaController;
-    private static MediaPlayer mediaPlayer;
-
     private int durationVideoRecorded;
     private String videoEdited;
-
     private boolean isRunning = false;
+    protected Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (mediaPlayer.isPlaying() && isRunning) {
 
-    Uri uri;
+                mediaPlayer.pause();
 
+            }
+
+
+        }
+
+    };
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
@@ -78,27 +84,38 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     /**
      * Tracker google analytics
      */
-    private VideonaApplication app;
     private Tracker tracker;
     private boolean buttonBackPressed = false;
+
+    public static Thread performOnBackgroundThread(final Runnable runnable) {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } finally {
+
+                }
+            }
+        };
+        t.start();
+        return t;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_share);
-
         ButterKnife.inject(this);
 
-        app = (VideonaApplication) getApplication();
+        VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
-
 
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
 
         mediaController = new MediaController(this);
-        mediaController.setVisibility(View.INVISIBLE);
+        mediaController.setVisibility(View.GONE);
 
         // getting intent data
         Intent in = getIntent();
@@ -119,8 +136,6 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         ContentResolver resolver = getContentResolver();
         uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 content);
-
-
     }
 
     @OnClick(R.id.share_button_about)
@@ -130,29 +145,24 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     }
 
     @OnClick(R.id.share_button_play)
-    public void playPauseVideo() {
+    public void playVideo() {
+        if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+            buttonPlay.setVisibility(View.GONE);
+            updateSeekProgress();
+        }
+    }
 
-
+    public void pauseVideo() {
         if (mediaPlayer.isPlaying()) {
-
             mediaPlayer.pause();
             buttonPlay.setVisibility(View.VISIBLE);
-
-        } else {
-
-            mediaPlayer.start();
-            buttonPlay.setVisibility(View.INVISIBLE);
-
+            updateSeekProgress();
         }
-
-        updateSeekProgress();
-
-
     }
 
     @OnClick(R.id.share_button_rate_app)
     public void rateApp() {
-
         Uri uri = Uri.parse("market://details?id=" + getPackageName());
         // Redirect to videozone
         //Uri uri = Uri.parse("market://details?id=" + "com.visiona.videozone");
@@ -166,10 +176,8 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         // Log.d(LOG_TAG, "shareClickListener");
 
         if (mediaPlayer.isPlaying()) {
-
             mediaPlayer.pause();
             buttonPlay.setVisibility(View.VISIBLE);
-
         }
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -178,42 +186,11 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         startActivityForResult(Intent.createChooser(intent, getString(R.string.share_using)), CHOOSE_SHARE_REQUEST_CODE);
     }
 
-
     private void updateSeekProgress() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
             handler.postDelayed(updateTimeTask, 50);
         }
-    }
-
-    protected Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (mediaPlayer.isPlaying() && isRunning) {
-
-                mediaPlayer.pause();
-
-            }
-
-
-        }
-
-    };
-
-
-    public static Thread performOnBackgroundThread(final Runnable runnable) {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } finally {
-
-                }
-            }
-        };
-        t.start();
-        return t;
     }
 
     /**
@@ -223,25 +200,9 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     public boolean onTouchEvent(MotionEvent ev) {
         boolean result;
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-        /*    if (mediaPlayer.isPlaying()) {
-
-                mediaPlayer.pause();
-                buttonPlay.setVisibility(View.VISIBLE);
-
-            } else {
-
-                buttonPlay.setVisibility(View.VISIBLE);
-
-            }
-         */
-
-            playPauseVideo();
-
+            pauseVideo();
             result = true;
-
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
-
-
         } else {
             result = false;
         }
@@ -250,61 +211,43 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
 
 
     public void initMediaPlayer(final String videoPath) {
-
-
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
         }
-
         videoView.setVideoPath(videoPath);
         videoView.setMediaController(mediaController);
         videoView.canSeekBackward();
         videoView.canSeekForward();
-
         videoView.setOnPreparedListener(new OnPreparedListener() {
-
             @Override
             public void onPrepared(MediaPlayer mp) {
-
                 mediaPlayer = mp;
-
                 seekBar.setMax(durationVideoRecorded * 1000);
                 seekBar.setProgress(mediaPlayer.getCurrentPosition());
-
                 mediaPlayer.start();
-
                 mediaPlayer.seekTo(100);
-
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
                 mediaPlayer.pause();
-
             }
         });
 
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-
                 // Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
-
                 buttonPlay.setVisibility(View.VISIBLE);
-
                 updateSeekProgress();
-
             }
 
         });
 
         videoView.requestFocus();
     }
-
-
 
 
     @Override
@@ -321,11 +264,7 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     @Override
     protected void onPause() {
         super.onPause();
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            buttonPlay.setVisibility(View.VISIBLE);
-
-        }
+        pauseVideo();
     }
 
     @Override
@@ -406,11 +345,9 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
     }
-
 }

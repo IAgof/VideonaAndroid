@@ -112,11 +112,8 @@ public class RecordUseCase {
      * @param listener
      */
     public void startPreview(onPreviewListener listener, int displayOrientation){
-
         listener.onPreviewStarted(cameraPreview, customManualFocusView);
-
         setCameraOrientation(displayOrientation);
-
     }
 
 
@@ -424,7 +421,6 @@ public class RecordUseCase {
      * @param displayOrientation
      */
     private void setCameraOrientation(int displayOrientation){
-
         camera.setDisplayOrientation(displayOrientation);
     }
 
@@ -462,8 +458,8 @@ public class RecordUseCase {
     private void releaseMediaRecorder(Camera camera) {
 
         if (mediaRecorder != null) {
-            mediaRecorder.reset();   // clear recorder configuration
-            mediaRecorder.release(); // release the recorder object
+            mediaRecorder.reset();   //clear recorder configuration
+            mediaRecorder.release(); //release the recorder object
             mediaRecorder = null;
             camera.setPreviewCallback(null);
             camera.lock();           // lock camera for later use
@@ -528,11 +524,8 @@ public class RecordUseCase {
     private long getTimeColorEffect(){
 
         if(timeColorEffect == 0) {
-
             return 0;
-
         } else {
-
             return SystemClock.uptimeMillis() - timeColorEffect;
         }
     }
@@ -540,7 +533,6 @@ public class RecordUseCase {
 
     //TODO To delete. Temporal, necessary to navigate to EditActivity
     public String getVideoRecordName(){
-
         return videoRecordName;
     }
 
@@ -550,24 +542,18 @@ public class RecordUseCase {
 
 
     private int getRotationView() {
-
         return rotationView;
     }
 
     public void setRotationView(int rotationView){
-
         this.rotationView = rotationView;
-
         int displayOrientation = 0;
-
         if(rotationView == Surface.ROTATION_90){
             displayOrientation = 0;
         }
-
         if(rotationView == Surface.ROTATION_270){
             displayOrientation = 180;
         }
-
         cameraPreview.setCameraOrientation(displayOrientation);
 
     }

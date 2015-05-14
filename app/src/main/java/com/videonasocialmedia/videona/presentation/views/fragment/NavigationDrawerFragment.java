@@ -32,23 +32,22 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the video fx menu
  */
-public class VideoFxMenuFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment {
 
     /*CONFIG*/
     /**
      * Tracker google analytics
      */
-    private VideonaApplication app;
     private Tracker tracker;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.edit_fragment_fx, container, false);
+        View view = inflater.inflate(R.layout.common_fragment_navigator, container, false);
         ButterKnife.inject(this, view);
 
-        app = (VideonaApplication) getActivity().getApplication();
+        VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
 
         return view;
@@ -60,16 +59,7 @@ public class VideoFxMenuFragment extends Fragment {
         ButterKnife.reset(this);
     }
 
-    @OnClick(R.id.edit_fragment_fx_button_item1)
-    public void showLog() {
-        Log.d("Fragment Video", "he pulsado un botón");
-    }
 
-    @OnClick({ R.id.edit_fragment_fx_button_item1, R.id.edit_fragment_fx_button_item2,
-            R.id.edit_fragment_fx_button_item3, R.id.edit_fragment_fx_button_item4 })
-    public void clickListener(View view) {
-        sendButtonTracked(view.getId());
-    }
 
     /**
      * Sends button clicks to Google Analytics
