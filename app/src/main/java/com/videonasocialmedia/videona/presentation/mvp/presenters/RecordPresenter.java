@@ -67,7 +67,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
         recordUseCase.startPreview(this, displayOrientation);
 
         // Start with effect NONE, position 0
-      //  setEffect(Camera.Parameters.EFFECT_NONE);
+      // setEffect(Camera.Parameters.EFFECT_NONE);
       //  recordView.showEffectSelected(Camera.Parameters.EFFECT_NONE);
     }
 
@@ -119,6 +119,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     /**
      * Record Button pressed
+     * @deprecated
      */
     public void recordClickListener() {
         if (isRecording) {
@@ -129,7 +130,6 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
             }
             recordUseCase.startRecord(this);
         }
-
     }
 
     /**
@@ -171,8 +171,10 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     @Override
     public void onRecordStarted() {
-        recordView.startRecordVideo();
+        recordView.showRecordStarted();
         //initialize chronometerRecord
+        recordView.lockScreenRotation();
+        recordView.lockNavigator();
         recordView.startChronometer();
         isRecording = true;
         Log.d(LOG_TAG, "onRecordStarted");
@@ -180,8 +182,9 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     @Override
     public void onRecordStopped() {
-        recordView.stopRecordVideo();
+        recordView.showRecordFinished();
         recordView.stopChronometer();
+        recordView.unLockNavigator();
         isRecording = false;
         ///TODO onRecordStopped, add media to Project useCase and navigate to EditActivity
         //recordUseCase.addMedia();
@@ -193,7 +196,7 @@ public class RecordPresenter extends Presenter implements onRecordEventListener,
 
     @Override
     public void onRecordRestarted() {
-        recordView.stopRecordVideo();
+        recordView.showRecordFinished();
         recordView.stopChronometer();
         isRecording = false;
     }

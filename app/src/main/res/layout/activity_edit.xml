@@ -7,446 +7,462 @@
 ~ All rights reserved
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical"
-    android:paddingTop="2dp">
+    android:layout_height="match_parent">
 
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:paddingTop="2dp">
+
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/relativeLayoutTop"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="35dp"
-                android:layout_weight="1">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayoutTop"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:layout_weight="1">
 
 
-                <ImageButton
-                    android:id="@+id/buttonCancelEditActivity"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/edit_activity_button_cancel_selector" />
+                    <ImageButton
+                        android:id="@+id/buttonCancelEditActivity"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/edit_activity_button_cancel_selector" />
 
-                <ImageButton
-                    android:id="@+id/buttonOkEditActivity"
-                    android:layout_width="28dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="25dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/edit_activity_button_ok_selector" />
+                    <ImageButton
+                        android:id="@+id/buttonOkEditActivity"
+                        android:layout_width="28dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="25dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/edit_activity_button_ok_selector" />
 
 
-                <TextView
-                    android:id="@+id/edit_title_text_view"
+                    <TextView
+                        android:id="@+id/edit_title_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/edit_title_name"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/videona_blue_5" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <LinearLayout
+                    android:id="@+id/edit_view_panel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/edit_title_name"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/videona_blue_5" />
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <LinearLayout
-                android:id="@+id/edit_view_panel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:orientation="vertical">
-
-                <RelativeLayout
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="0.5">
-
-                    <VideoView
-                        android:id="@+id/edit_preview_player"
-                        android:layout_width="320dp"
-                        android:layout_height="180dp"
-                        android:layout_gravity="center_horizontal" />
-
-                    <ImageButton
-                        android:id="@+id/edit_button_play"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="@null"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/common_icon_play_on_normal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="00:00"
-                        android:id="@+id/edit_text_start_trim"
-                        android:layout_alignBottom="@+id/edit_preview_player"
-                        android:layout_alignLeft="@+id/edit_preview_player"
-                        android:textColor="@android:color/white"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="00:00"
-                        android:id="@+id/edit_text_end_trim"
-                        android:layout_alignRight="@+id/edit_preview_player"
-                        android:layout_alignBottom="@+id/edit_preview_player"
-                        android:textColor="@android:color/white"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="00:00"
-                        android:id="@+id/edit_text_time_trim"
-                        android:layout_alignBottom="@+id/edit_preview_player"
-                        android:textColor="@android:color/white"
-                        android:layout_centerHorizontal="true"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:id="@+id/relativeLayoutPreviewVideo"
-                    android:layout_width="370dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:orientation="vertical">
 
                     <RelativeLayout
-                        android:id="@+id/relativeLayoutTrim"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp">
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutFrames"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.5">
+
+                        <VideoView
+                            android:id="@+id/edit_preview_player"
+                            android:layout_width="320dp"
+                            android:layout_height="180dp"
+                            android:layout_gravity="center_horizontal" />
+
+                        <ImageButton
+                            android:id="@+id/edit_button_play"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:background="@null"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/common_icon_play_on_normal" />
+
+                        <TextView
+                            android:id="@+id/edit_text_start_trim"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/edit_preview_player"
+                            android:layout_alignLeft="@+id/edit_preview_player"
+                            android:text="00:00"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@android:color/white"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/edit_text_end_trim"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/edit_preview_player"
+                            android:layout_alignRight="@+id/edit_preview_player"
+                            android:text="00:00"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@android:color/white"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/edit_text_time_trim"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/edit_preview_player"
+                            android:layout_centerHorizontal="true"
+                            android:text="00:00"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@android:color/white"
+                            android:visibility="visible" />
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayoutPreviewVideo"
+                        android:layout_width="370dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <RelativeLayout
+                            android:id="@+id/relativeLayoutTrim"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutFrames"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="1dp"
+                                android:layout_marginTop="1dp"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp">
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame1"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/activity_edit_image_frame_preview_default"
+                                        android:visibility="visible" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame2"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/activity_edit_image_frame_preview_default"
+                                        android:visibility="visible" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame3"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame3"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/activity_edit_image_frame_preview_default"
+                                        android:visibility="visible" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame4"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame4"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/activity_edit_image_frame_preview_default"
+                                        android:visibility="visible" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame5"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame5"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/activity_edit_image_frame_preview_default"
+                                        android:visibility="visible" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame6"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame6"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:scaleType="fitXY"
+                                        android:src="@drawable/activity_edit_image_frame_preview_default"
+                                        android:visibility="visible" />
+                                </RelativeLayout>
+
+                                <!--
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame7"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame7"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="visible"
+                                        android:src="@drawable/common_filter_aqua_ad1_normal"
+                                        android:scaleType="fitXY" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame8"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame8"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="visible"
+                                        android:src="@drawable/common_filter_aqua_ad1_normal"
+                                        android:scaleType="fitXY" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/relativeLayoutImageFrame9"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="1">
+
+                                    <ImageView
+                                        android:id="@+id/imageViewFrame9"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="visible"
+                                        android:src="@drawable/common_filter_aqua_ad1_normal"
+                                        android:scaleType="fitXY" />
+                                </RelativeLayout>
+                                -->
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/relativeLayoutRangeSeekBar"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp">
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame1"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame1"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:src="@drawable/activity_edit_image_frame_preview_default"
-                                    android:scaleType="fitXY" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame2"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame2"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:scaleType="fitXY"
-                                    android:src="@drawable/activity_edit_image_frame_preview_default" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame3"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame3"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:scaleType="fitXY"
-                                    android:src="@drawable/activity_edit_image_frame_preview_default" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame4"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame4"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:scaleType="fitXY"
-                                    android:src="@drawable/activity_edit_image_frame_preview_default" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame5"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame5"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:src="@drawable/activity_edit_image_frame_preview_default"
-                                    android:scaleType="fitXY" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame6"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame6"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:src="@drawable/activity_edit_image_frame_preview_default"
-                                    android:scaleType="fitXY" />
-                            </RelativeLayout>
-
-                            <!--
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame7"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame7"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame8"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame8"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayoutImageFrame9"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_gravity="top"
-                                android:layout_weight="1">
-
-                                <ImageView
-                                    android:id="@+id/imageViewFrame9"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="visible"
-                                    android:src="@drawable/common_filter_aqua_ad1_normal"
-                                    android:scaleType="fitXY" />
-                            </RelativeLayout>
-                            -->
-
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/relativeLayoutRangeSeekBar"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="false"
-                        android:layout_alignParentTop="false"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:backgroundTint="@color/pastel_palette_blue"
-                        android:focusableInTouchMode="true"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/linearLayoutRangeSeekBar"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:layout_alignParentEnd="false"
-                            android:layout_alignParentStart="false"
+                            android:layout_alignParentBottom="false"
                             android:layout_alignParentTop="false"
                             android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:backgroundTint="@color/pastel_palette_blue"
+                            android:focusableInTouchMode="true"
                             android:gravity="center"
-                            android:orientation="horizontal" />
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutRangeSeekBar"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_alignParentEnd="false"
+                                android:layout_alignParentStart="false"
+                                android:layout_alignParentTop="false"
+                                android:layout_centerHorizontal="true"
+                                android:gravity="center"
+                                android:orientation="horizontal" />
+                        </RelativeLayout>
+
+
                     </RelativeLayout>
 
+                    <SeekBar
+                        android:id="@+id/edit_seek_bar"
+                        android:layout_width="340dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="2dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="true"
+                        android:indeterminate="false"
+                        android:longClickable="true"
+                        android:maxHeight="2dp"
+                        android:progressDrawable="@color/videona_blue_5" />
+
+                </LinearLayout>
 
 
-                </RelativeLayout>
-
-                <SeekBar
-                    android:id="@+id/edit_seek_bar"
-                    android:layout_width="340dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="2dp"
+                <FrameLayout
+                    android:id="@+id/edit_bottom_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/edit_view_panel"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="2dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="true"
-                    android:indeterminate="false"
-                    android:longClickable="true"
-                    android:maxHeight="2dp"
-                    android:progressDrawable="@color/videona_blue_5" />
+                    android:layout_toEndOf="@+id/edit_left_panel"
+                    android:layout_toStartOf="@+id/edit_right_panel">
 
-            </LinearLayout>
+                </FrameLayout>
 
+                <FrameLayout
+                    android:id="@+id/edit_right_panel"
+                    android:layout_width="75dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true">
 
-            <FrameLayout
-                android:id="@+id/edit_bottom_panel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@+id/edit_view_panel"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_toEndOf="@+id/edit_left_panel"
-                android:layout_toStartOf="@+id/edit_right_panel">
+                </FrameLayout>
 
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/edit_right_panel"
-                android:layout_width="75dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true">
-
-            </FrameLayout>
-
-            <LinearLayout
-                android:id="@+id/edit_left_panel"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="false"
-                android:orientation="vertical">
-
-
-                <ImageButton
-                    android:id="@+id/edit_button_look"
+                <LinearLayout
+                    android:id="@+id/edit_left_panel"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.20"
-                    android:layout_marginBottom="2dp"
-                    android:background="@color/pastel_palette_yellow"
-                    android:padding="15dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/activity_edit_icon_look_normal" />
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="false"
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/edit_button_fx"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.20"
-                    android:background="@color/pastel_palette_grey"
-                    android:layout_marginBottom="2dp"
-                    android:padding="15dp"
-                    android:src="@drawable/activity_edit_icon_fx_normal" />
 
-                <ImageButton
-                    android:id="@+id/edit_button_audio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/common_button_selector_blue_pastel"
-                    android:padding="15dp"
-                    android:src="@drawable/edit_activity_button_audio_selector" />
+                    <ImageButton
+                        android:id="@+id/edit_button_look"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:alpha="0.20"
+                        android:background="@color/pastel_palette_yellow"
+                        android:padding="15dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/activity_edit_icon_look_normal" />
 
-                <ImageButton
-                    android:id="@+id/edit_button_scissor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/common_button_selector_orange_pastel"
-                    android:padding="15dp"
-                    android:src="@drawable/edit_activity_button_scissor_selector" />
+                    <ImageButton
+                        android:id="@+id/edit_button_fx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:alpha="0.20"
+                        android:background="@color/pastel_palette_grey"
+                        android:padding="15dp"
+                        android:src="@drawable/activity_edit_icon_fx_normal" />
 
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/edit_button_audio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/common_button_selector_blue_pastel"
+                        android:padding="15dp"
+                        android:src="@drawable/edit_activity_button_audio_selector" />
 
-    <ImageView
-        android:id="@+id/imageBetaLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center"
-        android:contentDescription="Beta Label"
-        android:src="@drawable/beta_label" />
+                    <ImageButton
+                        android:id="@+id/edit_button_scissor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/common_button_selector_orange_pastel"
+                        android:padding="15dp"
+                        android:src="@drawable/edit_activity_button_scissor_selector" />
 
-</RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageBetaLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:contentDescription="Beta Label"
+            android:src="@drawable/beta_label" />
+
+    </RelativeLayout>
+
+    <!-- Left Drawrer -->
+    <fragment android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        tools:layout="@layout/common_fragment_navigator"
+        android:id="@+id/navigation_drawer"/>
+
+</android.support.v4.widget.DrawerLayout>

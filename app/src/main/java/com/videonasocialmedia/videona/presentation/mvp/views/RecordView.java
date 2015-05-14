@@ -23,9 +23,9 @@ public interface RecordView extends MVPView {
 
     void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
 
-    void startRecordVideo();
+    void showRecordStarted();
 
-    void stopRecordVideo();
+    void showRecordFinished();
 
     void startChronometer();
 
@@ -36,5 +36,11 @@ public interface RecordView extends MVPView {
     void showEffectSelected(String colorEffect);
 
     void navigateEditActivity(String videoRecordName);
+
+    void lockScreenRotation();
+
+    void lockNavigator();
+
+    void unLockNavigator();
 
 }

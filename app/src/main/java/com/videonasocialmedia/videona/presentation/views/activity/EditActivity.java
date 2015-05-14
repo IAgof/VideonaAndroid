@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -85,7 +86,7 @@ import butterknife.OnTouch;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerClickListener, SeekBar.OnSeekBarChangeListener, RangeSeekBar.OnRangeSeekBarChangeListener {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerClickListener, SeekBar.OnSeekBarChangeListener, RangeSeekBar.OnRangeSeekBarChangeListener, DrawerLayout.DrawerListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
 
@@ -144,7 +145,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
      */
     private boolean buttonBackPressed = false;
 
-
     Music selectedMusic;
 
     private boolean isMusicON = false;
@@ -172,7 +172,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public static String pathvideoTrim;
     public static int durationVideoRecorded;
     private static String musicSelected;
-
 
     private ProgressDialog progressDialog;
 
@@ -222,10 +221,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
      */
     private String pathVideoEdited;
 
-    public EditActivity() {
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -237,7 +232,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         tracker = app.getTracker();
 
         editPresenter = new EditPresenter(this);
-
 
         //TODO mover a donde se deba
         /// amm Start with ScissorFx
@@ -259,40 +253,30 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         appPrefs.setIsMusicON(false);
         appPrefs.setSeekBarStart(0);
 
-
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
-
 
         appPrefs.setVideoProgress(videoProgress);
 
         // getting intent data
         Intent in = getIntent();
 
-
         // Log.d(LOG_TAG, " videoRecorded " + videoRecorded + " vs " + in.getStringExtra("MEDIA_OUTPUT"));
         videoRecorded = in.getStringExtra("MEDIA_OUTPUT");
-
 
         // TODO Probar si butterknife acepta estos findViewById y sus propiedades, son layout, no buttons.
 
         layoutSeekBar = (ViewGroup) findViewById(R.id.linearLayoutRangeSeekBar);
-
         linearLayoutFrames = (LinearLayout) findViewById(R.id.linearLayoutFrames);
-
         progressDialog = new ProgressDialog(EditActivity.this);
-
         relativeLayoutPreviewVideo = (RelativeLayout) findViewById(R.id.relativeLayoutPreviewVideo);
-
         edit_bottom_panel = (FrameLayout) findViewById(R.id.edit_bottom_panel);
-
         textStartTrim.setText(TimeUtils.toFormattedTime(0));
     }
 
 
     @OnClick(R.id.buttonCancelEditActivity)
     public void cancelEditActivity() {
-
         this.onBackPressed();
     }
 
@@ -302,11 +286,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         // Log.d(LOG_TAG, "trimClickListener");
 
         if (seekBarEnd - seekBarStart > ConfigUtils.maxDurationVideo) {
-
             // Toast.makeText(getApplicationContext(), "Please trim your video, max 1 min", Toast.LENGTH_SHORT).show();
-
-            // return;
-
             seekBarEnd = seekBarStart + ConfigUtils.maxDurationVideo;
             appPrefs.setSeekBarEnd(seekBarEnd);
         }
@@ -361,10 +341,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             final Runnable r = new Runnable() {
                 public void run() {
-
                     if(exportVideo()) {
-
-
                         File fVideoFinal = new File(pathVideoEdited);
                         if (fVideoFinal.exists()) {
                             Intent share = new Intent();
@@ -373,8 +350,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                             startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
                             //startActivity(share);
                         } else {
-
-
                         }
                     }
                 }
@@ -414,7 +389,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
 
         if (!audioFxButton.isActivated()) {
-
             if (audioFxMenuFragment == null) {
                 audioFxMenuFragment = new AudioFxMenuFragment();
             }
@@ -432,7 +406,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void showScissorsFxMenu() {
         audioFxButton.setActivated(false);
         scissorButton.setActivated(true);
-
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
@@ -481,76 +454,45 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void playPausePreview() {
 
         if (videoPlayer.isPlaying()) {
-
             videoPlayer.pause();
-
             if (musicPlayer != null && musicPlayer.isPlaying()) {
-
                 musicPlayer.pause();
-            }
-
+           }
             playButton.setVisibility(View.VISIBLE);
-
             videoProgress = videoPlayer.getCurrentPosition();
             appPrefs.setVideoProgress(videoProgress);
-
-            //seekBar.setProgress(videoProgress);
-            // textSeekBar.setVisibility(View.VISIBLE);
-            // textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
-
         } else {
-
             videoPlayer.start();
-
             if (musicPlayer != null) {
-
                 musicPlayer.start();
-
             }
-
             playButton.setVisibility(View.INVISIBLE);
-
-            //textSeekBar.setVisibility(View.INVISIBLE);
         }
-
         updateSeekProgress();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         // Log.d(LOG_TAG, "onStart");
         seekBarEnd = durationVideoRecorded;
-
         // Log.d(LOG_TAG, "onStart seekBarEnd " + seekBarEnd);
-
         isRunning = true;
         PaintFramesTask task = new PaintFramesTask();
         task.execute();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
         setVideoInfo();
-
         // Log.d(LOG_TAG, " onResume isMusicON " + isMusicON);
-
         seekBarStart = appPrefs.getSeekBarStart();
         seekBarEnd = appPrefs.getSeekBarEnd();
-
         //refreshDetailTrimView();
-
         // Log.d(LOG_TAG, "onResume seekBar progress " + appPrefs.getVideoProgress());
-
         // this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, 60.0);
-
         this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, Math.min((double) ConfigUtils.maxDurationVideo, appPrefs.getSeekBarEnd()));
-
     }
 
     @Override
@@ -1576,7 +1518,28 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         return true;
 
     }
-    
+
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
     @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity,
             R.id.edit_button_fx, R.id.edit_button_audio, R.id.edit_button_scissor,
             R.id.edit_button_look})
