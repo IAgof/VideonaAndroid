@@ -10,7 +10,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 
-public interface onPreviewListener {
+public interface OnPreviewListener {
 
     public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
 

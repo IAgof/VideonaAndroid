@@ -9,7 +9,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import java.util.ArrayList;
 
-public interface onColorEffectListener {
+public interface OnColorEffectListener {
 
     public void onColorEffectAdded(String colorEffect, long time);
 

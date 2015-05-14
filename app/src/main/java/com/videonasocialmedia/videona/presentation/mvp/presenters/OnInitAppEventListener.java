@@ -7,7 +7,9 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface onOrientationEventListener {
+public interface OnInitAppEventListener {
 
-    public void onOrientationChanged(int rotationView);
+    public void onCreatePathsAppSuccess();
+
+    public void onLoadingProjectSuccess();
 }

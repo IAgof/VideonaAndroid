@@ -47,6 +47,15 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+
+/**
+ * RecordActivity.
+ *
+ * Activity to preview and record video, apply color effects.
+ *
+ * When the video is recorded, navigate to EditActivity.
+ *
+ */
 public class RecordActivity extends Activity implements RecordView, ColorEffectClickListener {
 
     /*VIEWS*/
