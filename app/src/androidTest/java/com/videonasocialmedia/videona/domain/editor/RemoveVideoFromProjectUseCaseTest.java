@@ -40,6 +40,9 @@ public class RemoveVideoFromProjectUseCaseTest extends AndroidTestCase {
     String videoPath;
     ArrayList<User> authors;
 
+    // TODO: we need to access to the Project to obtain the mediatrack, because this test returns
+    // null value for it when try to remove the media item
+
     public RemoveVideoFromProjectUseCaseTest(){
         listener = mock(OnRemoveMediaFinishedListener.class);
         authors = new ArrayList<>();
