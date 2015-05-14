@@ -6,17 +6,16 @@
 
 
     <RelativeLayout
+        android:id="@+id/relativeLayoutRecordActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:id="@+id/relativeLayoutRecordActivity" >
+        android:orientation="horizontal">
 
         <FrameLayout
             android:id="@+id/framelayout_camera_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true">
-        </FrameLayout>
+            android:layout_centerInParent="true"></FrameLayout>
 
 
         <RelativeLayout
@@ -25,6 +24,7 @@
             android:layout_height="450dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="false">
+
             <ImageButton
                 android:id="@+id/button_record"
                 android:layout_width="100dp"
@@ -36,6 +36,7 @@
                 android:paddingEnd="16dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/activity_record_icon_rec_normal" />
+
             <Chronometer
                 android:id="@+id/chronometer_record"
                 android:layout_width="wrap_content"
@@ -53,12 +54,12 @@
                 android:id="@+id/button_color_effect"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                android:padding="15dp"
                 android:layout_above="@+id/button_record"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="16dp"
                 android:background="@null"
                 android:focusableInTouchMode="false"
+                android:padding="15dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/common_icon_filters_normal" />
 
@@ -82,8 +83,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true">
 
-            <org.lucasr.twowayview.TwoWayView
-                xmlns:tools="http://schemas.android.com/tools"
+            <org.lucasr.twowayview.TwoWayView xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/listview_items_color_effect"
                 style="@style/TwoWayView"
                 android:layout_width="wrap_content"
@@ -95,26 +95,27 @@
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/imageBetaLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageBetaLabel"
-            android:src="@drawable/beta_label"
-            android:layout_gravity="center"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="false"
             android:layout_alignParentRight="true"
+            android:layout_gravity="center"
             android:contentDescription="Beta Label"
-            android:layout_alignParentLeft="false" />
+            android:src="@drawable/beta_label" />
 
     </RelativeLayout>
 
     <!-- Left Drawrer -->
 
 
-    <fragment android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
+    <fragment
+        android:id="@+id/activity_record_navigation_drawer"
+        android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        tools:layout="@layout/common_fragment_navigator"
-        android:id="@+id/navigation_drawer"/>
+        tools:layout="@layout/common_fragment_navigator" />
 
 </android.support.v4.widget.DrawerLayout>

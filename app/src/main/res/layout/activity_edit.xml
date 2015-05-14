@@ -9,7 +9,6 @@
 
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -458,11 +457,12 @@
     </RelativeLayout>
 
     <!-- Left Drawrer -->
-    <fragment android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
+    <fragment
+        android:id="@+id/activity_edit_navigation_drawer"
+        android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        tools:layout="@layout/common_fragment_navigator"
-        android:id="@+id/navigation_drawer"/>
+        tools:layout="@layout/common_fragment_navigator" />
 
 </android.support.v4.widget.DrawerLayout>
