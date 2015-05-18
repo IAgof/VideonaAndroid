@@ -76,7 +76,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
     }
 
     @Override
-    public void onCreatePathsAppSuccess() {
+    public void onCheckPathsAppSuccess() {
 
         // Go to starLoadingProject. If not path, not project, waterfall model.
         startLoadingProject();

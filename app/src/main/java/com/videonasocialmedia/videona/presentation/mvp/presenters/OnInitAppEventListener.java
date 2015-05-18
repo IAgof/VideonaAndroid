@@ -9,7 +9,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 public interface OnInitAppEventListener {
 
-    public void onCreatePathsAppSuccess();
+    public void onCheckPathsAppSuccess();
 
     public void onLoadingProjectSuccess();
 }

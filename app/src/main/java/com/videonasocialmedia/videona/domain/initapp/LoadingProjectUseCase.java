@@ -45,6 +45,7 @@ public class LoadingProjectUseCase {
         if(isProjectStarted()) {
 
             initProject();
+
         } else {
             // Default
             startNewProject();

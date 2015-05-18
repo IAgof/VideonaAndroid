@@ -66,7 +66,7 @@ public class CheckPathsAppUseCase {
             e.printStackTrace();
         }
 
-        listener.onCreatePathsAppSuccess();
+        listener.onCheckPathsAppSuccess();
     }
 
 
