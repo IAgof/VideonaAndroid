@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.videonasocialmedia.videona"
     android:versionCode="12"
-    android:versionName="0.2">
+    android:versionName="0.2" >
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -13,10 +13,10 @@
         android:required="false" />
 
     <supports-screens
-        android:smallScreens="false"
         android:largeScreens="true"
         android:normalScreens="true"
-        android:xlargeScreens="false"/>
+        android:smallScreens="false"
+        android:xlargeScreens="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -25,18 +25,23 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:name=".VideonaApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".presentation.views.activity.RecordActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|screenSize" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".presentation.views.activity.RecordAndroidLActivity"
             android:label="@string/app_name"
@@ -51,15 +56,15 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".presentation.views.activity.ShareActivity"
-            android:parentActivityName=".presentation.views.activity.EditActivity"
             android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".presentation.views.VideonaMainActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -69,17 +74,23 @@
         <activity
             android:name=".presentation.views.activity.AboutActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen"/>
+            android:screenOrientation="sensorLandscape" />
 
-        <!-- LoginActivy and UserSignUpActivity commented on code, use yours.
+        <!--
+        LoginActivy and UserSignUpActivity commented on code, use yours.
         <activity
             android:name=".presentation.views.activity.LoginActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".presentation.views.activity.UserSignUpActivity"
             android:label="@string/app_name" />
-            -->
+        -->
+        <activity
+            android:name=".presentation.views.activity.VideoPreviewActivity"
+            android:label="@string/title_activity_video_player"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" >
+        </activity>
     </application>
 
 </manifest>
