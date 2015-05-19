@@ -1,6 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+}
+
+android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
