@@ -60,7 +60,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.MusicCatalogFr
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.RangeSeekBar;
@@ -87,7 +87,7 @@ import butterknife.OnTouch;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerClickListener, SeekBar.OnSeekBarChangeListener, RangeSeekBar.OnRangeSeekBarChangeListener, DrawerLayout.DrawerListener {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerViewClickListener, SeekBar.OnSeekBarChangeListener, RangeSeekBar.OnRangeSeekBarChangeListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
 

@@ -17,9 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class MusicCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> 
 
     private Context context;
 
-    private RecyclerClickListener recyclerClickListener;
+    private RecyclerViewClickListener recyclerViewClickListener;
 
     private List<Music> elementList;
 
@@ -46,12 +45,12 @@ public class MusicCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> 
         this.elementList = elementList;
     }
 
-    public RecyclerClickListener getRecyclerClickListener() {
-        return recyclerClickListener;
+    public RecyclerViewClickListener getRecyclerViewClickListener() {
+        return recyclerViewClickListener;
     }
 
-    public void setRecyclerClickListener(RecyclerClickListener recyclerClickListener) {
-        this.recyclerClickListener = recyclerClickListener;
+    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
+        this.recyclerViewClickListener = recyclerViewClickListener;
     }
 
 
@@ -61,7 +60,7 @@ public class MusicCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> 
         context = parent.getContext();
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.edit_item_fx, parent, false);
-        return new FxItemViewHolder(view, recyclerClickListener);
+        return new FxItemViewHolder(view, recyclerViewClickListener);
     }
 
 
@@ -99,12 +98,12 @@ public class MusicCatalogAdapter extends RecyclerView.Adapter<FxItemViewHolder> 
 
 class FxItemViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
 
-    private RecyclerClickListener onClickListener;
+    private RecyclerViewClickListener onClickListener;
 
     @InjectView(R.id.edit_item_fx_background)
     ImageView background;
 
-    public FxItemViewHolder(View itemView, RecyclerClickListener onClickListener) {
+    public FxItemViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
         super(itemView);
         ButterKnife.inject(this, itemView);
 
@@ -125,7 +124,6 @@ class FxItemViewHolder extends RecyclerView.ViewHolder implements View.OnTouchLi
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
-
             onClickListener.onClick(getPosition());
         }
         return true;

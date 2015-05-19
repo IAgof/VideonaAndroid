@@ -31,6 +31,9 @@
 -keep public class * implements com.coremedia.**
 -keep public class * implements com.googlecode.**
 -keep public class * implements com.mp4parser.**
+-keep class com.coremedia.**
+-keep class com.googlecode.** { *; }
+-keep class com.mp4parser.** { *; }
 
 -keep public class com.videonasocialmedia.videona.utils.VideoUtils
 
@@ -68,12 +71,15 @@
 -dontwarn javax.xml.bind.DatatypeConverter
 -dontwarn org.apache.commons.codec.binary.Base64
 
-
-
+#Glide
 -keep class org.aspectj.**
--keep class com.coremedia.**
--keep class com.googlecode.** { *; }
--keep class com.mp4parser.** { *; }
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+    **[] $VALUES;
+    public *;
+}
+
+
 -keepclassmembers class com.googlecode.**
 
 
