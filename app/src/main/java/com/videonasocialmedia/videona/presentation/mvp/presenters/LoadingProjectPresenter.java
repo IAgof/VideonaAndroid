@@ -9,7 +9,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.record.LoadingProjectUseCase;
 
-public class LoadingProjectPresenter implements onLoadingProjectFinishedListener {
+public class LoadingProjectPresenter implements OnLoadingProjectFinishedListener {
 
     private LoadingProjectUseCase loadingProjectUseCase;
 

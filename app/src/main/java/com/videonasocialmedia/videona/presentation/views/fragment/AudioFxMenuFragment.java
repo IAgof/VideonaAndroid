@@ -45,7 +45,6 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
     /**
      * Tracker google analytics
      */
-    private VideonaApplication app;
     private Tracker tracker;
 
     @Override
@@ -66,7 +65,7 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
         View view = inflater.inflate(R.layout.edit_fragment_sound, container, false);
         ButterKnife.inject(this, view);
 
-        app = (VideonaApplication) getActivity().getApplication();
+        VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
 
         return view;

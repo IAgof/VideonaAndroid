@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.LoadingProjectPresenter;
+import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -229,7 +230,7 @@ public class VideonaMainActivity extends Activity {
 
             // TODO: change this variable of 30MB (size of the raw folder)
             if (Utils.isAvailableSpace(30)) {
-                startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+                startActivity(new Intent(getApplicationContext(), GalleryActivity.class));
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(VideonaMainActivity.this,
                         AlertDialog.THEME_HOLO_LIGHT);
