@@ -43,10 +43,6 @@
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".presentation.views.activity.RecordAndroidLActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" />
-        <activity
             android:name=".presentation.views.activity.EditActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape" />

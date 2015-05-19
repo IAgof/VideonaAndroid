@@ -48,7 +48,7 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
         ButterKnife.inject(this);
 
         Bundle bundle = getIntent().getExtras();
-        videoPath = bundle.getString("videoPath");
+        videoPath = bundle.getString("VIDEO_PATH");
     }
 
     @Override
