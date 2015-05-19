@@ -1530,34 +1530,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-    }
-
-    @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity,
-            R.id.edit_button_fx, R.id.edit_button_audio, R.id.edit_button_scissor,
-            R.id.edit_button_look})
-    public void clickListener(View view) {
-        sendButtonTracked(view.getId());
-    }
-
     /**
      * Sends button clicks to Google Analytics
      *
