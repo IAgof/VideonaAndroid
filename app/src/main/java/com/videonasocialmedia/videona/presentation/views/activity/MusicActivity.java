@@ -489,8 +489,6 @@ public class MusicActivity extends Activity {
         mThumbMusicImageBackground[0] = mThumbMusicImageBackground[position];
         mThumbMusicImageBackground[position] = mThumbMusicImageBackgroundAux;
 
-        appPrefs.setPositionMusic(position);
-
         Log.d(LOG_TAG, " updateDataMusic position: " + position + " mThumbMusicImage[0] " + mThumbMusicImage[0].toString() + " mThumbMusicImage[position] " + mThumbMusicImage[position].toString());
 
     }

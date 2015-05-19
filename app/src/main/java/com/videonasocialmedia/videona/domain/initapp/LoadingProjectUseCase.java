@@ -5,30 +5,47 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.domain.record;
+package com.videonasocialmedia.videona.domain.initapp;
 
 
 //TODO move to correct folder path. By default, app begins in record activity. During SplashScreen makes LoadingProjectUseCase
 
+import android.content.Context;
+
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.onLoadingProjectFinishedListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.UserPreferences;
 
 public class LoadingProjectUseCase {
 
+    /**
+     * LOG_TAG
+     */
+    private final String LOG_TAG = getClass().getSimpleName();
 
-    public LoadingProjectUseCase(){
+    /**
+     * Context of application
+     */
+    private Context context;
 
+    UserPreferences userPreferences;
+
+    public LoadingProjectUseCase(Context context){
+
+        this.context = context;
+
+        userPreferences = new UserPreferences(context);
 
     }
 
-    public void checkProjectState(onLoadingProjectFinishedListener listener){
-    //public void checkProjectState(){
+    public void checkProjectState(OnInitAppEventListener listener){
 
         if(isProjectStarted()) {
 
             initProject();
+
         } else {
             // Default
             startNewProject();
@@ -40,9 +57,12 @@ public class LoadingProjectUseCase {
     private void startNewProject(){
 
         //TODO Define project title (by date, by project count, ...)
-        //TODO Define path project. By default, path app. ¿Path .temp, private data
+        //TODO Define path project. By default, path app. Path .temp, private data
 
-        Project.getInstance(Constants.PROJECT_TITLE, Constants.PATH_PROJECT, checkProfile());
+
+        Project.getInstance(Constants.PROJECT_TITLE, userPreferences.getPrivatePath(), checkProfile());
+
+
 
 
     }

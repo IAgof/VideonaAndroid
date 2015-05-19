@@ -24,7 +24,7 @@ import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
 
-public class RecordPresenter extends Presenter implements onRecordEventListener, onColorEffectListener, onPreviewListener, onOrientationEventListener {
+public class RecordPresenter extends Presenter implements OnRecordEventListener, OnColorEffectListener, OnPreviewListener, OnOrientationEventListener {
 
     /**
      * Record View

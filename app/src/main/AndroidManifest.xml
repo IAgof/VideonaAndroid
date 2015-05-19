@@ -55,7 +55,7 @@
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".presentation.views.VideonaMainActivity"
+            android:name=".presentation.views.activity.InitAppActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
             android:configChanges="orientation|screenSize"

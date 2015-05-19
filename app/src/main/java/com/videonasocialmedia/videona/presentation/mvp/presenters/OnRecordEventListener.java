@@ -7,7 +7,12 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface onOrientationEventListener {
+public interface OnRecordEventListener {
 
-    public void onOrientationChanged(int rotationView);
+    public void onRecordStarted();
+
+    public void onRecordStopped();
+
+    public void onRecordRestarted();
+
 }

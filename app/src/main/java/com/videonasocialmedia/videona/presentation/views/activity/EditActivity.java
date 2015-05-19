@@ -106,7 +106,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @InjectView(R.id.edit_seek_bar)
     SeekBar seekBar;
     
-        /*@InjectView(R.id.buttonCancelEditActivity)
+    /*@InjectView(R.id.buttonCancelEditActivity)
     ImageButton buttonCancelEditActivity;
     @InjectView(R.id.buttonOkEditActivity)
     ImageButton buttonOkEditActivity;*/
@@ -251,13 +251,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         seekBar.setOnSeekBarChangeListener(this);
 
         appPrefs = new UserPreferences(getApplicationContext());
-        appPrefs.setIsMusicON(false);
         appPrefs.setSeekBarStart(0);
 
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
 
-        appPrefs.setVideoProgress(videoProgress);
 
         // getting intent data
         Intent in = getIntent();
@@ -441,7 +439,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             result = true;
 
             videoProgress = videoPlayer.getCurrentPosition();
-            appPrefs.setVideoProgress(videoProgress);
             seekBar.setProgress(videoProgress);
             // textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
 
@@ -461,7 +458,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
            }
             playButton.setVisibility(View.VISIBLE);
             videoProgress = videoPlayer.getCurrentPosition();
-            appPrefs.setVideoProgress(videoProgress);
+
+            //seekBar.setProgress(videoProgress);
+            // textSeekBar.setVisibility(View.VISIBLE);
+            // textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
+
         } else {
             videoPlayer.start();
             if (musicPlayer != null) {
@@ -488,11 +489,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         super.onResume();
         setVideoInfo();
         // Log.d(LOG_TAG, " onResume isMusicON " + isMusicON);
+
         seekBarStart = appPrefs.getSeekBarStart();
         seekBarEnd = appPrefs.getSeekBarEnd();
         //refreshDetailTrimView();
         // Log.d(LOG_TAG, "onResume seekBar progress " + appPrefs.getVideoProgress());
         // this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, 60.0);
+
         this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, Math.min((double) ConfigUtils.maxDurationVideo, appPrefs.getSeekBarEnd()));
     }
 
@@ -516,7 +519,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             playButton.setVisibility(View.VISIBLE);
 
             videoProgress = videoPlayer.getCurrentPosition();
-            appPrefs.setVideoProgress(videoProgress);
 
         }
 
@@ -761,8 +763,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         //videoPlayer.setVolume(0.0f,0.0f);
 
         isMusicON = true;
-        // amm
-        appPrefs.setIsMusicON(true);
+
     }
 
     /**
@@ -911,7 +912,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                playPausePreview();
 
                videoProgress = videoPlayer.getCurrentPosition();
-               appPrefs.setVideoProgress(videoProgress);
                seekBar.setProgress(videoProgress);
 
                return;
@@ -950,7 +950,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             // playButton.setVisibility(View.VISIBLE);
 
             videoProgress = videoPlayer.getCurrentPosition();
-            appPrefs.setVideoProgress(videoProgress);
 
             videoPlayer.seekTo(seekBarStart * 1000);
             videoPlayer.start();
@@ -1005,7 +1004,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         long minutes = (duration - hours * 3600) / 60;
         long seconds = duration - (hours * 3600 + minutes * 60);
         durationVideoRecorded = (int) duration;
-        appPrefs.setVideoDuration(durationVideoRecorded);
 
         // Log.d(LOG_TAG, " setVideoInfo " + durationVideoRecorded + " duration " + duration);
     }
@@ -1310,10 +1308,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         updateSeekProgress();
 
-        //amm Delete
         if (videoPlayer != null) {
             videoProgress = videoPlayer.getCurrentPosition();
-            appPrefs.setVideoProgress(videoProgress);
+
             //textSeekBar.setText(TimeUtils.toFormattedTime(videoProgress));
 
             seekBar.setProgress(videoProgress);
@@ -1501,7 +1498,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             String videonaMusic = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
             pathVideoEdited = Constants.PATH_APP + File.separator + videonaMusic;
 
-            // Log.d(LOG_TAG, "VideonaMainActivity trimAudio cut " + Constants.VIDEO_MUSIC_TEMP_FILE + " .-.-.-. " + pathVideonaFinal + " .-.-.-. " + appPrefs.getVideoDurationTrim());
+
             try {
                 VideoUtils.trimVideo(Constants.VIDEO_MUSIC_TEMP_FILE, 0, length, pathVideoEdited);
             } catch (IOException e) {
