@@ -12,7 +12,7 @@ package com.videonasocialmedia.videona.domain.record;
 
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnLoadingProjectFinishedListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.onLoadingProjectFinishedListener;
 import com.videonasocialmedia.videona.utils.Constants;
 
 public class LoadingProjectUseCase {
@@ -23,7 +23,7 @@ public class LoadingProjectUseCase {
 
     }
 
-    public void checkProjectState(OnLoadingProjectFinishedListener listener){
+    public void checkProjectState(onLoadingProjectFinishedListener listener){
     //public void checkProjectState(){
 
         if(isProjectStarted()) {
