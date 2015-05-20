@@ -29,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -56,7 +55,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
-import com.videonasocialmedia.videona.presentation.views.fragment.MusicCatalogFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
@@ -122,7 +121,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
     private LookFxMenuFragment lookFxMenuFragment;
-    private MusicCatalogFragment musicCatalogFragment;
+    private MusicGalleryFragment musicGalleryFragment;
 
     /*mvp*/
     private EditPresenter editPresenter;
@@ -147,6 +146,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private boolean buttonBackPressed = false;
 
     Music selectedMusic;
+    private boolean selectedRemoveMusic = false;
 
     private boolean isMusicON = false;
     private boolean isOnTrimming = false;
@@ -379,8 +379,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (videoFxMenuFragment == null)
             videoFxMenuFragment = new VideoFxMenuFragment();
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
-        if (musicCatalogFragment != null)
-            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
+        if (musicGalleryFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
     }
 
     @OnClick(R.id.edit_button_audio)
@@ -392,7 +392,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 audioFxMenuFragment = new AudioFxMenuFragment();
             }
             switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
-            //if (musicCatalogFragment == null) {
+            //if (musicGalleryFragment == null) {
 
             onEffectMenuSelected();
         }
@@ -413,8 +413,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
 
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
-        if (musicCatalogFragment != null)
-            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
+        if (musicGalleryFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
 
     }
 
@@ -427,8 +427,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
 
-        if (musicCatalogFragment != null)
-            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
+        if (musicGalleryFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
     }
 
     @OnTouch(R.id.edit_preview_player)
@@ -646,9 +646,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public void onEffectMenuSelected() {
-        if (musicCatalogFragment == null)
-            musicCatalogFragment = new MusicCatalogFragment();
-        switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
+        if (musicGalleryFragment == null)
+            musicGalleryFragment = new MusicGalleryFragment();
+        switchFragment(musicGalleryFragment, R.id.edit_bottom_panel);
 
 
     }
@@ -776,7 +776,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @Override
     public void onClick(int position) {
 
-        List<Music> musicList = musicCatalogFragment.getFxList();
+        List<Music> musicList = musicGalleryFragment.getFxList();
 
         for (Music m : musicList) {
             int selectedBackground;
@@ -891,21 +891,31 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
         musicList.get(position).setColorResourceId(selectedBackground);
         musicList.get(position).setIconResourceId(selectedIcon);
-        
-        if (position == (musicList.size() - 1)) {
 
-            // Log.d(LOG_TAG, "Detenida la música");
-            if (musicPlayer != null) {
-                musicPlayer.release();
-                musicPlayer = null;
-                isMusicON = false;
-                videoPlayer.setVolume(0.5f, 0.5f);
-                selectedMusic = null;
+        if (position == 0) {
 
+            if (selectedRemoveMusic == true) {
+                playPausePreview();
+
+                videoProgress = videoPlayer.getCurrentPosition();
+                seekBar.setProgress(videoProgress);
+
+                return;
+            } else {
+                selectedRemoveMusic = true;
+                // Log.d(LOG_TAG, "Detenida la música");
+                if (musicPlayer != null) {
+                    musicPlayer.release();
+                    musicPlayer = null;
+                    isMusicON = false;
+                    videoPlayer.setVolume(0.5f, 0.5f);
+                    selectedMusic = null;
+                }
             }
 
         } else {
 
+            selectedRemoveMusic = false;
             // if click on same music icon, pause the video
            if(selectedMusic == musicList.get(position)) {
 
@@ -936,7 +946,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
            }
         }
 
-        musicCatalogFragment.getAdapter().notifyDataSetChanged();
+        musicGalleryFragment.getAdapter().notifyDataSetChanged();
         
         if (videoPlayer.isPlaying()) {
 

@@ -122,6 +122,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
 
             // Start app in RecordActivity.
             initAppView.navigate(RecordActivity.class);
+            //initAppView.navigate(MusicGalleryActivity.class);
         }
     }
 

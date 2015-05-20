@@ -64,6 +64,7 @@ public class MusicGalleryPresenter implements OnMusicRetrieved {
      */
     private void createMusicList(){
         ArrayList <Music> musicList= new ArrayList<>();
+        musicList.add(new Music(R.drawable.activity_music_icon_remove_normal,"Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
         musicList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
         musicList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental,R.color.pastel_palette_red));
         musicList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta,R.color.pastel_palette_blue));
@@ -73,7 +74,6 @@ public class MusicGalleryPresenter implements OnMusicRetrieved {
         musicList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "audio_reggae", R.raw.audio_reggae,R.color.pastel_palette_orange));
         musicList.add(new Music(R.drawable.activity_music_icon_violin_normal, "audio_clasica_violin", R.raw.audio_clasica_violin,R.color.pastel_palette_yellow));
         musicList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano,R.color.pastel_palette_brown));
-        musicList.add(new Music(R.drawable.activity_music_icon_remove_normal,"Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
         onMusicRetrieved(musicList);
     }
 }

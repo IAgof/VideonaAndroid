@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
@@ -27,7 +28,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * This class is used to show the music gallery.
@@ -45,10 +45,14 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
         this.musicList = musicList;
     }
 
+    public List<Music> getElementList() {
+        return musicList;
+    }
+
     @Override
     public MusicViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View rowView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.fragment_gallery_video_item, viewGroup, false);
+                .inflate(R.layout.fragment_gallery_music_item, viewGroup, false);
 
         this.context = viewGroup.getContext();
         return new MusicViewHolder(rowView, recyclerViewClickListener);
@@ -58,14 +62,13 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
     public void onBindViewHolder(MusicViewHolder holder, int position) {
 
         Music selectedMusic = musicList.get(position);
-        String path = selectedMusic.getIconPath() != null
-                ? selectedMusic.getIconPath() : selectedMusic.getMediaPath();
+        holder.thumb.setBackgroundResource(selectedMusic.getColorResourceId());
         Glide.with(context)
-                .load(path)
-                .centerCrop()
+                .load(selectedMusic.getIconResourceId())
                 .error(R.drawable.gatito_rules)
                 .into(holder.thumb);
         holder.overlay.setSelected(position == selectedMusicPosition);
+        holder.overlayIcon.setSelected(position == selectedMusicPosition);
     }
 
     @Override
@@ -102,7 +105,10 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
         ImageView thumb;
 
         @InjectView(R.id.gallery_overlay)
-        ImageView overlay;
+        RelativeLayout overlay;
+
+        @InjectView(R.id.gallery_overlay_icon)
+        ImageView overlayIcon;
 
         public MusicViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
             super(itemView);
@@ -120,13 +126,6 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
                 onClickListener.onClick(selectedMusicPosition);
             }
             return true;
-        }
-
-        //
-        @OnClick(R.id.gallery_preview_button)
-        public void updateMusicSelected(View v){
-            String musicPath=musicList.get(getPosition()).getMediaPath();
-            //TODO mirar si le digo aquí a la actividad que se ha pulsado otra o lo hago en el onTouch
         }
 
     }

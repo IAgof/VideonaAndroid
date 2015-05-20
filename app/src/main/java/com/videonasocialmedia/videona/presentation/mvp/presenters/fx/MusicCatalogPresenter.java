@@ -24,6 +24,7 @@ public class MusicCatalogPresenter {
 
     public MusicCatalogPresenter(MusicCatalogView musicCatalogView) {
         this.musicCatalogView = musicCatalogView;
+        elementList.add(new Music(R.drawable.activity_music_icon_remove_normal,"Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
         elementList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
         elementList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental,R.color.pastel_palette_red));
         elementList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta,R.color.pastel_palette_blue));
@@ -33,7 +34,6 @@ public class MusicCatalogPresenter {
         elementList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "audio_reggae", R.raw.audio_reggae,R.color.pastel_palette_orange));
         elementList.add(new Music(R.drawable.activity_music_icon_violin_normal, "audio_clasica_violin", R.raw.audio_clasica_violin,R.color.pastel_palette_yellow));
         elementList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano,R.color.pastel_palette_brown));
-        elementList.add(new Music(R.drawable.activity_music_icon_remove_normal,"Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
     }
 
 

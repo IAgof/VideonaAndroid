@@ -114,4 +114,15 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView, 
         selectedMusic = musicGalleryAdapter.getMusic(position);
         //videoGalleryAdapter.notifyDataSetChanged();
     }
+
+    public List<Music> getFxList() {
+        return musicGalleryAdapter.getElementList();
+    }
+
+    /**
+     * @deprecated
+     */
+    public MusicGalleryAdapter getAdapter() {
+        return musicGalleryAdapter;
+    }
 }
