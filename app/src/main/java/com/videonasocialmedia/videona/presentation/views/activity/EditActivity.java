@@ -67,15 +67,12 @@ import com.videonasocialmedia.videona.utils.RangeSeekBar;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
-import com.videonasocialmedia.videona.utils.VideoUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -87,7 +84,9 @@ import butterknife.OnTouch;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerClickListener, SeekBar.OnSeekBarChangeListener, RangeSeekBar.OnRangeSeekBarChangeListener, DrawerLayout.DrawerListener {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener,
+        RecyclerClickListener, SeekBar.OnSeekBarChangeListener,
+        RangeSeekBar.OnRangeSeekBarChangeListener, DrawerLayout.DrawerListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
 
@@ -232,7 +231,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
-        editPresenter = new EditPresenter(this);
+        editPresenter = new EditPresenter(this, getApplicationContext());
 
         //TODO mover a donde se deba
         /// amm Start with ScissorFx
@@ -258,10 +257,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
 
         // getting intent data
-        Intent in = getIntent();
+       // Intent in = getIntent();
 
         // Log.d(LOG_TAG, " videoRecorded " + videoRecorded + " vs " + in.getStringExtra("MEDIA_OUTPUT"));
-        videoRecorded = in.getStringExtra("MEDIA_OUTPUT");
+       // videoRecorded = in.getStringExtra("MEDIA_OUTPUT");
+
+        //TODO do this properly
+        editPresenter.onCreate();
 
         // TODO Probar si butterknife acepta estos findViewById y sus propiedades, son layout, no buttons.
 
@@ -340,7 +342,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
             final Runnable r = new Runnable() {
                 public void run() {
-                    if(exportVideo()) {
+                   /* if(exportVideo()) {
                         File fVideoFinal = new File(pathVideoEdited);
                         if (fVideoFinal.exists()) {
                             Intent share = new Intent();
@@ -351,6 +353,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                         } else {
                         }
                     }
+                    */
+                    editPresenter.okEditClickListener();
                 }
             };
             performOnBackgroundThread(r);
@@ -497,6 +501,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         // this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, 60.0);
 
         this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, Math.min((double) ConfigUtils.maxDurationVideo, appPrefs.getSeekBarEnd()));
+
+
+        //TODO Do this correctly
+        editPresenter.onResume();
     }
 
     @Override
@@ -587,6 +595,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void onBackPressed() {
 
         if (buttonBackPressed) {
+
+            editPresenter.cancelEditClickListener();
+
             setResult(Activity.RESULT_OK);
             finish();
 
@@ -640,7 +651,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
     @Override
-    public void navigate() {
+    public void navigate(Class cls, String pathVideoEdited) {
+
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                progressDialog.dismiss();
+                //   Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Intent share = new Intent();
+        share.putExtra("MEDIA_OUTPUT", pathVideoEdited);
+        share.setClass(getApplicationContext(), cls);
+        startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
 
     }
 
@@ -763,6 +786,22 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         //videoPlayer.setVolume(0.0f,0.0f);
 
         isMusicON = true;
+        appPrefs.setIsMusicSelected(isMusicON);
+
+    }
+
+    @Override
+    public void exportProjectError() {
+
+        //TODO Manage exportProjectError
+
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                progressDialog.dismiss();
+
+                //Toast.makeText(getApplicationContext(), "Algo fue mal", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -899,6 +938,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 musicPlayer.release();
                 musicPlayer = null;
                 isMusicON = false;
+                appPrefs.setIsMusicSelected(isMusicON);
                 videoPlayer.setVolume(0.5f, 0.5f);
                 selectedMusic = null;
 
@@ -924,6 +964,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                initMusicPlayer(selectedMusic);
 
                musicSelected = Constants.PATH_APP_TEMP + File.separator + selectedMusic.getNameResourceId() + Constants.AUDIO_MUSIC_FILE_EXTENSION;
+
+               appPrefs.setMusicSelected(musicSelected);
 
                // TODO: change this variable of 30MB (size of the raw folder)
                if (Utils.isAvailableSpace(30)) {
@@ -1361,7 +1403,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         isRunning = true; // free flag to prevent collision with
 
     }
-    
+
     private class PaintFramesTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -1430,6 +1472,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     public boolean exportVideo() {
 
+     /*
         //videoTrim = "V_EDIT_" + new File(videoRecorded).getName().substring(4);
         videoTrim = "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
 
@@ -1515,6 +1558,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             // Log.d(LOG_TAG, "Video isMusic ON trimVideo with audio ");
 
             isMusicON = false;
+            appPrefs.setIsMusicSelected(isMusicON);
 
         }
 
@@ -1525,6 +1569,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 //   Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
             }
         });
+
+        return true;
+
+
+        */
 
         return true;
 
