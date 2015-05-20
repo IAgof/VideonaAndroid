@@ -29,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -147,6 +146,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private boolean buttonBackPressed = false;
 
     Music selectedMusic;
+    private boolean selectedRemoveMusic = false;
 
     private boolean isMusicON = false;
     private boolean isOnTrimming = false;
@@ -891,21 +891,31 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
         musicList.get(position).setColorResourceId(selectedBackground);
         musicList.get(position).setIconResourceId(selectedIcon);
-        
-        if (position == (musicList.size() - 1)) {
 
-            // Log.d(LOG_TAG, "Detenida la música");
-            if (musicPlayer != null) {
-                musicPlayer.release();
-                musicPlayer = null;
-                isMusicON = false;
-                videoPlayer.setVolume(0.5f, 0.5f);
-                selectedMusic = null;
+        if (position == 0) {
 
+            if (selectedRemoveMusic == true) {
+                playPausePreview();
+
+                videoProgress = videoPlayer.getCurrentPosition();
+                seekBar.setProgress(videoProgress);
+
+                return;
+            } else {
+                selectedRemoveMusic = true;
+                // Log.d(LOG_TAG, "Detenida la música");
+                if (musicPlayer != null) {
+                    musicPlayer.release();
+                    musicPlayer = null;
+                    isMusicON = false;
+                    videoPlayer.setVolume(0.5f, 0.5f);
+                    selectedMusic = null;
+                }
             }
 
         } else {
 
+            selectedRemoveMusic = false;
             // if click on same music icon, pause the video
            if(selectedMusic == musicList.get(position)) {
 
