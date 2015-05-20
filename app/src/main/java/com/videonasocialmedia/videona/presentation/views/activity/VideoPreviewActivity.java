@@ -106,7 +106,7 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
     }
 
     /**
-     * This method release the media player and the video view
+     * Releases the media player and the video view
      */
     private void releaseVideoView() {
         videoView.stopPlayback();
