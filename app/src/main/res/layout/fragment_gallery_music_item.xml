@@ -7,21 +7,19 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:layout_margin="3dp">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/gallery_thumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/gatito_rules"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_margin="1dp"
         android:padding="3dp"
         />
     <RelativeLayout
         android:id="@+id/gallery_overlay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignBottom="@id/gallery_thumb"
         android:layout_alignStart="@id/gallery_thumb"
         android:layout_alignEnd="@id/gallery_thumb"
@@ -31,8 +29,8 @@
         >
             <ImageView
                 android:id="@+id/gallery_overlay_icon"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:src="@drawable/fragment_gallery_music_overlay_icon_selector_icon"

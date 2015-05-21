@@ -76,8 +76,8 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
         return musicList.size();
     }
 
-//    public List<Video> getVideoList() {
-//        return videoList;
+//    public List<Music> getMusicList() {
+//        return musicList;
 //    }
 
     public Music getMusic(int position) {
@@ -95,7 +95,6 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
     public boolean isMusicListEmpty() {
         return musicList.isEmpty();
     }
-
 
     class MusicViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
 

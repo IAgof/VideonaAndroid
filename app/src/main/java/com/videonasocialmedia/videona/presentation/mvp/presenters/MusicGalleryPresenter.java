@@ -23,6 +23,7 @@ import java.util.List;
 public class MusicGalleryPresenter implements OnMusicRetrieved {
 
     private MusicGalleryView galleryView;
+    ArrayList <Music> musicList= new ArrayList<>();
 
     public MusicGalleryPresenter(MusicGalleryView galleryView) {
         this.galleryView = galleryView;
@@ -31,11 +32,14 @@ public class MusicGalleryPresenter implements OnMusicRetrieved {
 
     @Override
     public void onMusicRetrieved(List<Music> musicList) {
-
-        if (galleryView.isTheListEmpty())
+        if (galleryView.isTheListEmpty()) {
             galleryView.showMusic(musicList);
-//        else
-//            galleryView.appendMusic(musicList);
+        }
+        /*
+        else {
+            //galleryView.appendMusic(musicList);
+        }
+        */
     }
 
     @Override
@@ -50,6 +54,8 @@ public class MusicGalleryPresenter implements OnMusicRetrieved {
         if (galleryView.isTheListEmpty()) {
             //TODO llamar al caso de uso para obtener las canciones
             createMusicList();
+        } else {
+            galleryView.reloadMusic(musicList);
         }
     }
 
@@ -63,7 +69,6 @@ public class MusicGalleryPresenter implements OnMusicRetrieved {
      * temporal para poder probar la interfaz
      */
     private void createMusicList(){
-        ArrayList <Music> musicList= new ArrayList<>();
         musicList.add(new Music(R.drawable.activity_music_icon_remove_normal,"Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
         musicList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
         musicList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental,R.color.pastel_palette_red));

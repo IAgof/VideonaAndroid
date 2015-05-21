@@ -37,6 +37,13 @@ public interface MusicGalleryView {
     void showMusic(List<Music> musicList);
 
     /**
+     * Shows the list of the available songs.
+     *
+     * @param musicList the list of the available songs
+     */
+    void reloadMusic(List<Music> musicList);
+
+    /**
      * Checks if the list of the available songs is empty.
      */
     boolean isTheListEmpty();

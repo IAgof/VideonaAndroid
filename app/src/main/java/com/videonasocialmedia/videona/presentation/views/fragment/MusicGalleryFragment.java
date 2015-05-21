@@ -34,7 +34,7 @@ import butterknife.InjectView;
 /**
  * This class is used to show the music gallery.
  */
-public class MusicGalleryFragment extends Fragment implements MusicGalleryView, RecyclerViewClickListener {
+public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
 
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;
@@ -50,7 +50,7 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView, 
         ButterKnife.inject(this, v);
         if (musicGalleryPresenter == null)
             musicGalleryPresenter = new MusicGalleryPresenter(this);
-        layoutManager = new GridLayoutManager(this.getActivity(), 6, GridLayoutManager.VERTICAL, false);
+        layoutManager = new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
     }
@@ -76,9 +76,17 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView, 
         super.onStop();
     }
 
+    /*
     @Override
     public void onDestroy() {
         super.onDestroy();
+        ButterKnife.reset(this);
+    }
+    */
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
         ButterKnife.reset(this);
     }
 
@@ -95,7 +103,13 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView, 
     @Override
     public void showMusic(List<Music> musicList) {
         musicGalleryAdapter = new MusicGalleryAdapter(musicList);
-        musicGalleryAdapter.setRecyclerViewClickListener(this);
+        musicGalleryAdapter.setRecyclerViewClickListener((RecyclerViewClickListener) this.getActivity());
+        recyclerView.setAdapter(musicGalleryAdapter);
+    }
+
+    @Override
+    public void reloadMusic(List<Music> musicList) {
+        musicGalleryAdapter.setRecyclerViewClickListener((RecyclerViewClickListener) this.getActivity());
         recyclerView.setAdapter(musicGalleryAdapter);
     }
 
@@ -109,13 +123,7 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView, 
         musicGalleryAdapter.appendMusic(musicList);
     }
 
-    @Override
-    public void onClick(int position) {
-        selectedMusic = musicGalleryAdapter.getMusic(position);
-        //videoGalleryAdapter.notifyDataSetChanged();
-    }
-
-    public List<Music> getFxList() {
+    public List<Music> getMusicList() {
         return musicGalleryAdapter.getElementList();
     }
 
