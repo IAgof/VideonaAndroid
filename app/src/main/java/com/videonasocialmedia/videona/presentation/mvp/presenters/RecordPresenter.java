@@ -16,7 +16,9 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.record.RecordUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
@@ -24,7 +26,9 @@ import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.ArrayList;
 
-public class RecordPresenter extends Presenter implements OnRecordEventListener, OnColorEffectListener, OnPreviewListener, OnOrientationEventListener {
+public class RecordPresenter extends Presenter implements OnRecordEventListener,
+        OnColorEffectListener, OnPreviewListener, OnOrientationEventListener,
+        OnAddMediaFinishedListener {
 
     /**
      * Record View
@@ -38,6 +42,17 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
      * Record Use Case
      */
     RecordUseCase recordUseCase;
+
+    /**
+     * Add Media to Project Use Case
+     */
+    AddVideoToProjectUseCase addVideoToProjectUseCase;
+
+    /**
+     * String path video recorded
+     */
+    private String pathVideoRecorded;
+
     /**
      * Boolean, control is recording file
      */
@@ -55,6 +70,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
         this.recordView = recordView;
         this.tracker = tracker;
         recordUseCase = new RecordUseCase(recordView.getContext());
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
     }
 
     /**
@@ -186,11 +202,19 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
         recordView.stopChronometer();
         recordView.unLockNavigator();
         isRecording = false;
-        ///TODO onRecordStopped, add media to Project useCase and navigate to EditActivity
-        //recordUseCase.addMedia();
-        recordView.navigateEditActivity(recordUseCase.getVideoRecordName());
-        //recordUseCase = null;
+
         Log.d(LOG_TAG, "onRecordStopped");
+
+        ///TODO onRecordStopped, add media to Project useCase and navigate to EditActivity
+
+        pathVideoRecorded = recordUseCase.getVideoRecordName();
+
+        ArrayList<String> list = new ArrayList<String>();
+        list.add(pathVideoRecorded);
+
+        Log.d(LOG_TAG, "onRecordStopped addVideoToProject " + pathVideoRecorded);
+
+        addVideoToProjectUseCase.addMediaItemsToProject(list,this);
 
     }
 
@@ -274,5 +298,21 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
                 .setLabel(label)
                 .setValue(time)
                 .build());
+    }
+
+    @Override
+    public void onAddMediaItemToTrackError() {
+
+    }
+
+    @Override
+    public void onAddMediaItemToTrackSuccess(MediaTrack mediaTrack) {
+
+        Log.d(LOG_TAG, "add video to project done");
+
+        recordView.navigateEditActivity();
+
+        Log.d(LOG_TAG, "navigateEditActivity");
+
     }
 }

@@ -35,7 +35,7 @@ public interface RecordView extends MVPView {
 
     void showEffectSelected(String colorEffect);
 
-    void navigateEditActivity(String videoRecordName);
+    void navigateEditActivity();
 
     void lockScreenRotation();
 

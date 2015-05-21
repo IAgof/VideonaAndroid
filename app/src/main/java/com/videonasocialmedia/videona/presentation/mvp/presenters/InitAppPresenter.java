@@ -83,6 +83,11 @@ public class InitAppPresenter  implements OnInitAppEventListener {
     }
 
     @Override
+    public void onCheckPathsAppError() {
+
+    }
+
+    @Override
     public void onLoadingProjectSuccess() {
 
         //TODO navigate to last activity saved or whatever
@@ -91,6 +96,11 @@ public class InitAppPresenter  implements OnInitAppEventListener {
         // Dummy wait two seconds to show splashScreen
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
+
+    }
+
+    @Override
+    public void onLoadingProjectError() {
 
     }
 

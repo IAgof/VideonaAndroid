@@ -488,10 +488,10 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     }
 
     @Override
-    public void navigateEditActivity(String videoRecordName) {
+    public void navigateEditActivity() {
+
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
         Intent edit = new Intent(RecordActivity.this, EditActivity.class);
-        edit.putExtra("MEDIA_OUTPUT", videoRecordName);
         startActivity(edit);
     }
 

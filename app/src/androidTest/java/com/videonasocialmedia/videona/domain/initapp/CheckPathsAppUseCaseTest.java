@@ -18,14 +18,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-/**
- * Loading project use case
- *
- * //TODO Make different state test project (startNewProject, deleteProject, restartProject, ...)
- */
-public class LoadingProjectUseCaseTest extends ActivityInstrumentationTestCase2<InitAppActivity> {
+public class CheckPathsAppUseCaseTest extends ActivityInstrumentationTestCase2<InitAppActivity> {
 
-    LoadingProjectUseCase useCase;
+    CheckPathsAppUseCase useCase;
 
     OnInitAppEventListener listener;
 
@@ -34,11 +29,10 @@ public class LoadingProjectUseCaseTest extends ActivityInstrumentationTestCase2<
     Context context;
 
 
-    public LoadingProjectUseCaseTest(){
+    public CheckPathsAppUseCaseTest(){
         super(InitAppActivity.class);
 
     }
-
 
     public void setUp() throws Exception {
 
@@ -47,22 +41,19 @@ public class LoadingProjectUseCaseTest extends ActivityInstrumentationTestCase2<
 
     }
 
-
-    public void testStartNewProject(){
+    public void testCheckPathsApp() {
 
         assertNotNull(activity);
         assertNotNull(context);
 
-        useCase = new LoadingProjectUseCase(context);
+        useCase = new CheckPathsAppUseCase(context);
 
         listener = mock(OnInitAppEventListener.class);
 
-        useCase.checkProjectState(listener);
+        useCase.checkPaths(listener);
 
-        verify(listener, atLeastOnce()).onLoadingProjectSuccess();
-        verify(listener, never()).onLoadingProjectError();
-
+        verify(listener, atLeastOnce()).onCheckPathsAppSuccess();
+        verify(listener, never()).onCheckPathsAppError();
     }
-
 
 }

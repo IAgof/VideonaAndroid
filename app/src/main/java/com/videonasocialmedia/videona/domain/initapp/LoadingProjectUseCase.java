@@ -59,10 +59,7 @@ public class LoadingProjectUseCase {
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
 
-
         Project.getInstance(Constants.PROJECT_TITLE, userPreferences.getPrivatePath(), checkProfile());
-
-
 
 
     }

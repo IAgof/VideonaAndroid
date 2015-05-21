@@ -25,6 +25,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.SharePresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -42,7 +44,7 @@ import butterknife.OnTouch;
  * Álvaro Martínez Marco
  * Verónica Lago Fominaya
  */
-public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeListener {
+public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeekBarChangeListener {
 
     // Intent
     private static final int CHOOSE_SHARE_REQUEST_CODE = 600;
@@ -57,10 +59,15 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
     @InjectView(R.id.share_seekbar)
     SeekBar seekBar;
     Uri uri;
+
+
+    /*mvp*/
+    private SharePresenter sharePresenter;
+
     //Preview
     private MediaController mediaController;
     private int durationVideoRecorded;
-    private String videoEdited;
+    public static String videoEdited;
     private boolean isRunning = false;
     protected Handler handler = new Handler() {
         @Override
@@ -117,9 +124,14 @@ public class ShareActivity extends Activity implements SeekBar.OnSeekBarChangeLi
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.GONE);
 
+        sharePresenter = new SharePresenter(this, getApplicationContext());
+
+        //TODO do this properly
+        sharePresenter.onCreate();
+
         // getting intent data
-        Intent in = getIntent();
-        videoEdited = in.getStringExtra("MEDIA_OUTPUT");
+      //  Intent in = getIntent();
+      //  videoEdited = in.getStringExtra("MEDIA_OUTPUT");
 
         // Log.d(LOG_TAG, "VideoEdited " + videoEdited);
 
