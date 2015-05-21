@@ -17,12 +17,13 @@ public interface EditorView {
     //public void changeBottomFragment(Class<?extends Fragment> fragmentClass);
     //public void changeRightFragment(Class<?extends Fragment> fragmentClass);
 
-    public void navigate(Class cls, String pathVideoEdited);
+    public void navigate(Class cls);
 
     public void initVideoPlayer(String videoPath);
     public void initMusicPlayer(Music music);
 
     //public void exportProjectSucces();
     public void exportProjectError();
+
 
 }

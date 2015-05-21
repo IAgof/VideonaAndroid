@@ -11,6 +11,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 
+import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ExportProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
@@ -26,7 +27,8 @@ import java.util.LinkedList;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditPresenter implements OnExportProjectFinishedListener, OnRemoveMediaFinishedListener{
+public class EditPresenter implements OnExportProjectFinishedListener, OnAddMediaFinishedListener,
+        OnRemoveMediaFinishedListener{
 
     /**
      * LOG_TAG
@@ -69,6 +71,22 @@ public class EditPresenter implements OnExportProjectFinishedListener, OnRemoveM
     GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
 
     /**
+     * Add Media to Project Use Case
+     */
+    AddVideoToProjectUseCase addVideoToProjectUseCase;
+
+    /**
+     *
+     */
+     boolean isOnExportSuccess = false;
+
+    /**
+     * String path video edited
+     */
+    private String pathVideoEdited;
+
+
+    /**
      * Constructor
      *
      * @param editorView
@@ -81,6 +99,7 @@ public class EditPresenter implements OnExportProjectFinishedListener, OnRemoveM
         exportProjectUseCase = new ExportProjectUseCase(context);
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
     }
 
 
@@ -103,7 +122,9 @@ public class EditPresenter implements OnExportProjectFinishedListener, OnRemoveM
         String pathMedia = listMedia.getLast().getMediaPath();
         EditActivity.videoRecorded = pathMedia;
 
-        Log.d(LOG_TAG, "onCreate EditPresenter pathMedia " + pathMedia );
+        Log.d(LOG_TAG, "EditPresenter onCreate pathMedia " + pathMedia );
+
+        editorView.initVideoPlayer(pathMedia);
 
     }
 
@@ -164,11 +185,13 @@ public class EditPresenter implements OnExportProjectFinishedListener, OnRemoveM
         LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
         ArrayList<Media> list = new ArrayList<Media>(listMedia);
 
-        Log.d(LOG_TAG, "cancel EditActivity, delete video from Project " +
-                list.get(0).getMediaPath());
+
+        Log.d(LOG_TAG, "EditPresenter  cancelEditClickListener  " + list.get(0).getMediaPath() );
+
 
         //TODO do this properly. Remove all videos from project, not only one.
         removeVideoFromProjectUseCase.removeMediaItemsFromProject(list, this);
+
     }
 
     @Override
@@ -179,10 +202,18 @@ public class EditPresenter implements OnExportProjectFinishedListener, OnRemoveM
     }
 
     @Override
-    public void onExportProjectSuccess(String pathVideoEdited) {
+    public void onExportProjectSuccess(String pathVideoEditedDone) {
 
-        // Navigate to ShareActivity
-        editorView.navigate(ShareActivity.class, pathVideoEdited);
+        isOnExportSuccess = true;
+        pathVideoEdited = pathVideoEditedDone;
+
+        //TODO Change this Delete video from project and addd video Edited
+
+        LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
+        ArrayList<Media> list = new ArrayList<Media>(listMedia);
+
+        removeVideoFromProjectUseCase.removeMediaItemsFromProject(list, this);
+
 
     }
 
@@ -194,6 +225,32 @@ public class EditPresenter implements OnExportProjectFinishedListener, OnRemoveM
     @Override
     public void onRemoveMediaItemFromTrackSuccess(MediaTrack mediaTrack) {
 
+        if(isOnExportSuccess) {
 
+            // Add new video edited to project
+
+            Log.d(LOG_TAG, "EditPresenter  onRemoveMediaItemFromTrackSuccess onExportSuccess  " + pathVideoEdited );
+
+            ArrayList<String> listAddMedia = new ArrayList<String>();
+            listAddMedia.add(pathVideoEdited);
+
+            addVideoToProjectUseCase.addMediaItemsToProject(listAddMedia, this);
+
+
+        }
+
+
+    }
+
+    @Override
+    public void onAddMediaItemToTrackError() {
+
+    }
+
+    @Override
+    public void onAddMediaItemToTrackSuccess(MediaTrack mediaTrack) {
+
+        // Navigate to ShareActivity
+        editorView.navigate(ShareActivity.class);
     }
 }

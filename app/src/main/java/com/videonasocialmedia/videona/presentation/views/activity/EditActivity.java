@@ -244,7 +244,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         this.onEffectMenuSelected();
         //ft.add(R.id.edit_right_panel, scissorsFxMenuFragment).commit();
 
-        this.initVideoPlayer(this.getIntent().getStringExtra("MEDIA_OUTPUT"));
+       // this.initVideoPlayer(videoRecorded);
 
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
@@ -630,6 +630,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -651,7 +652,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
     @Override
-    public void navigate(Class cls, String pathVideoEdited) {
+    public void navigate(Class cls) {
 
         this.runOnUiThread(new Runnable() {
             public void run() {
@@ -661,7 +662,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         });
 
         Intent share = new Intent();
-        share.putExtra("MEDIA_OUTPUT", pathVideoEdited);
         share.setClass(getApplicationContext(), cls);
         startActivityForResult(share, VIDEO_SHARE_REQUEST_CODE);
 

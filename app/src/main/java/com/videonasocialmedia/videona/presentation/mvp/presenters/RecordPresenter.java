@@ -310,7 +310,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
 
         Log.d(LOG_TAG, "add video to project done");
 
-        recordView.navigateEditActivity(pathVideoRecorded);
+        recordView.navigateEditActivity();
 
         Log.d(LOG_TAG, "navigateEditActivity");
 
