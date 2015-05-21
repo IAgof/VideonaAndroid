@@ -22,7 +22,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.fx.MusicCatalogPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicCatalogView;
 import com.videonasocialmedia.videona.presentation.views.adapter.MusicCatalogAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class MusicCatalogFragment extends Fragment implements MusicCatalogView {
     @Override
     public void showCatalog(List<Music> elementList) {
         adapter = new MusicCatalogAdapter(elementList);
-        adapter.setRecyclerClickListener((RecyclerClickListener) getActivity());
+        adapter.setRecyclerViewClickListener((RecyclerViewClickListener) getActivity());
         recyclerView.setAdapter(adapter);
     }
 

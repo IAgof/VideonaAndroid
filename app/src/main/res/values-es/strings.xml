@@ -47,7 +47,6 @@
 
 
     <!-- Activity Login -->
-
     <string name="title_activity_login">LoginActivity</string>
     <string name="login_hint">ohvideo@videona.es</string>
     <string name="login">Login</string>
@@ -57,6 +56,9 @@
     <string name="accesibility_login_with_facebook">login with facebook</string>
     <string name="checkBox_remember_me">Remember Me</string>
     <string name="please_login">Please login in your account</string>
+
+    <!-- Activity Video Preview -->
+    <string name="invalid_video">Este vídeo no se puede reproducir. Por favor, seleccione otro</string>
 
 
     <!-- Filters_Effects -->
