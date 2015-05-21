@@ -36,6 +36,9 @@ public class UserPreferences {
     private String cameraId = "back_camera";
 
     private String privatePath = "private_path";
+
+    private String musicSelected = "musicSelected";
+    private String isMusicSelected = "isMusicSelected";
 	 
 	public UserPreferences(Context context){
 	 this.appUserPreferences = context.getSharedPreferences(USER_INFO, Activity.MODE_PRIVATE);
@@ -97,6 +100,23 @@ public class UserPreferences {
         prefsEditor.putInt(seekBarEnd, end).commit();
     }
 
+
+    //TODO delete this part and obtaind this data from Project
+    public String getMusicSelected() {
+        return appUserPreferences.getString(musicSelected, "");
+    }
+
+    public void setMusicSelected(String pathMusic) {
+        prefsEditor.putString(musicSelected, pathMusic).commit();
+    }
+
+    public boolean getIsMusicSelected(){
+        return appUserPreferences.getBoolean(isMusicSelected, false);
+    }
+
+    public void setIsMusicSelected(boolean isMusicON) {
+        prefsEditor.putBoolean(isMusicSelected, isMusicON).commit();
+    }
 
     /*
      // Future use, save last cameraId used
