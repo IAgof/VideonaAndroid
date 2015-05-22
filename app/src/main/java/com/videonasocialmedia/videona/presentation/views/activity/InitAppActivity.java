@@ -90,9 +90,7 @@ public class InitAppActivity extends Activity implements InitAppView {
 
     @Override
     public void navigate(Class cls) {
-
         startActivity(new Intent(getApplicationContext(), cls));
-
     }
 
 

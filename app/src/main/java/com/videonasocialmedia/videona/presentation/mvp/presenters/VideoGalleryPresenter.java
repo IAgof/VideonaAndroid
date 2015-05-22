@@ -1,11 +1,9 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import com.videonasocialmedia.videona.domain.ObtainLocalVideosUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
-import com.videonasocialmedia.videona.utils.Constants;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,18 +11,22 @@ import java.util.List;
  */
 public class VideoGalleryPresenter implements OnVideosRetrieved {
 
+    public static final int MASTERS_FOLDER = 0;
+    public static final int EDITED_FOLDER = 1;
+
     private VideoGalleryView galleryView;
+    private ObtainLocalVideosUseCase obtainLocalVideosUseCase;
 
     public VideoGalleryPresenter(VideoGalleryView galleryView) {
         this.galleryView = galleryView;
+        obtainLocalVideosUseCase = new ObtainLocalVideosUseCase();
     }
-
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
 
-        if (galleryView.isTheListEmpty())
-            galleryView.showVideos(videoList);
+        //if (galleryView.isTheListEmpty())
+        galleryView.showVideos(videoList);
 //        else
 //            galleryView.appendVideos(videoList);
     }
@@ -36,9 +38,18 @@ public class VideoGalleryPresenter implements OnVideosRetrieved {
 
 
     public void start() {
-        if (galleryView.isTheListEmpty()) {
-            //TODO llamar al caso de uso para obtener los videos
-            createVideoList();
+
+    }
+
+    public void obtainVideos(int folder) {
+        switch (folder) {
+            case MASTERS_FOLDER:
+                obtainLocalVideosUseCase.obtainRawVideos(this);
+                break;
+            case EDITED_FOLDER:
+            default:
+                obtainLocalVideosUseCase.obtainEditedVideos(this);
+                break;
         }
     }
 
@@ -46,48 +57,4 @@ public class VideoGalleryPresenter implements OnVideosRetrieved {
     public void stop() {
     }
 
-
-    //temporal para poder probar la interfaz
-    private void createVideoList(){
-        ArrayList <Video> videoList= new ArrayList<>();
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_3.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_23.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_t.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_1.mp4", 0));
-        videoList.add(new Video(Constants.PATH_APP_MASTERS+ File.separator+"video_2.mp4", 0));
-        onVideosRetrieved(videoList);
-    }
 }
