@@ -41,7 +41,7 @@ public class Constants {
 
     // Folders
     final public static String FOLDER_VIDEONA_MASTERS = "Videona_Masters";
-    final public static String FOLDER_VIDEONA_EDITED = "Videona";
+    final public static String FOLDER_VIDEONA_EDITED = "Videona_edited";
 
     final public static String FOLDER_VIDEONA_TEMP = ".temp";
     final public static String PATH_APP = Environment.getExternalStoragePublicDirectory(
