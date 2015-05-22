@@ -10,50 +10,70 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoTrackView;
+import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * This class is used for adding new videos to the project.
  */
-public class GalleryPagerPresenter implements OnAddMediaFinishedListener {
+public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
+
     RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
+    //GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     AddVideoToProjectUseCase addVideoToProjectUseCase;
-    VideoTrackView videoTrackView;
+    ArrayList<String> videoList;
+    GalleryPagerView galleryPagerView;
 
     /**
      * Constructor.
-     *
-     * @param path the path of the video item
      */
-    public GalleryPagerPresenter(String path) {
+    public GalleryPagerPresenter(GalleryPagerView galleryPagerView) {
+        this.galleryPagerView = galleryPagerView;
+        removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
+        //getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
-        this.videoTrackView = videoTrackView;
+        videoList = new ArrayList<>();
     }
 
     /**
-     * This method is used to add new videos to the actual track which makes use of addVideosToProject
-     * method.
+     * This method is used to add new videos to the actual track.
      *
-     * @param videos the list of the paths of the new elements which user wants to add to the project
+     * @param videoPath the path of the new video which user wants to add to the project
      */
-    public void addVideosToProject(ArrayList<String> videos) {
-        addVideoToProjectUseCase.addMediaItemsToProject(videos, this);
+    public void loadVideoToProject(String videoPath) {
+        // LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
+        Project project = Project.getInstance(null, null, null);
+        MediaTrack mediaTrack = project.getMediaTrack();
+        LinkedList<Media> listMedia = mediaTrack.getItems();
+        ArrayList<Media> list = new ArrayList<>(listMedia);
+        removeVideoFromProjectUseCase.removeMediaItemsFromProject(list, this);
+        videoList.add(videoPath);
+    }
+
+    @Override
+    public void onRemoveMediaItemFromTrackError() {
+
+    }
+
+    @Override
+    public void onRemoveMediaItemFromTrackSuccess(MediaTrack mediaTrack) {
+        addVideoToProjectUseCase.addMediaItemsToProject(videoList, this);
     }
 
     @Override
     public void onAddMediaItemToTrackError() {
-        videoTrackView.showError(R.string.addMediaItemToTrackError);
-        throw new RuntimeException();
+
     }
 
     @Override
     public void onAddMediaItemToTrackSuccess(MediaTrack mediaTrack) {
-        videoTrackView.drawMediaList(mediaTrack);
+        galleryPagerView.navigate();
     }
 }
