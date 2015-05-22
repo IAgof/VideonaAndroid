@@ -60,5 +60,7 @@
 
     <color name="alvaro_grey">#FF00FF00</color>
 
+    <color name="transparent_palette_grey">#66666666</color>
+
 
 </resources>

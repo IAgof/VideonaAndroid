@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -55,7 +56,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
-import com.videonasocialmedia.videona.presentation.views.fragment.MusicCatalogFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
@@ -83,12 +84,7 @@ import butterknife.OnTouch;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView,
-        OnEffectMenuSelectedListener, RecyclerViewClickListener, SeekBar.OnSeekBarChangeListener, 
-        RangeSeekBar.OnRangeSeekBarChangeListener {
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener,
-        RecyclerClickListener, SeekBar.OnSeekBarChangeListener,
-        RangeSeekBar.OnRangeSeekBarChangeListener, DrawerLayout.DrawerListener {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerViewClickListener, SeekBar.OnSeekBarChangeListener, RangeSeekBar.OnRangeSeekBarChangeListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
 
@@ -123,7 +119,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
     private LookFxMenuFragment lookFxMenuFragment;
-    private MusicCatalogFragment musicCatalogFragment;
+    private MusicGalleryFragment musicGalleryFragment;
 
     /*mvp*/
     private EditPresenter editPresenter;
@@ -386,8 +382,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (videoFxMenuFragment == null)
             videoFxMenuFragment = new VideoFxMenuFragment();
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
-        if (musicCatalogFragment != null)
-            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
+        if (musicGalleryFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
     }
 
     @OnClick(R.id.edit_button_audio)
@@ -399,7 +395,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 audioFxMenuFragment = new AudioFxMenuFragment();
             }
             switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
-            //if (musicCatalogFragment == null) {
+            //if (musicGalleryFragment == null) {
 
             onEffectMenuSelected();
         }
@@ -420,8 +416,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
 
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
-        if (musicCatalogFragment != null)
-            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
+        if (musicGalleryFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
 
     }
 
@@ -434,8 +430,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
 
-        if (musicCatalogFragment != null)
-            this.getFragmentManager().beginTransaction().remove(musicCatalogFragment).commit();
+        if (musicGalleryFragment != null)
+            this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
     }
 
     @OnTouch(R.id.edit_preview_player)
@@ -504,8 +500,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         // this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, 60.0);
 
         this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, Math.min((double) ConfigUtils.maxDurationVideo, appPrefs.getSeekBarEnd()));
-
-
+        
         //TODO Do this correctly
         editPresenter.onResume();
     }
@@ -598,19 +593,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void onBackPressed() {
 
         if (buttonBackPressed) {
-
             editPresenter.cancelEditClickListener();
-
             setResult(Activity.RESULT_OK);
             finish();
 
             return;
         }
-
         buttonBackPressed = true;
-
         Toast.makeText(getApplicationContext(), getString(R.string.toast_exit_edit), Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -632,7 +622,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         return super.onKeyDown(keyCode, event);
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -672,11 +661,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public void onEffectMenuSelected() {
-        if (musicCatalogFragment == null)
-            musicCatalogFragment = new MusicCatalogFragment();
-        switchFragment(musicCatalogFragment, R.id.edit_bottom_panel);
-
-
+        if (musicGalleryFragment == null)
+            musicGalleryFragment = new MusicGalleryFragment();
+        switchFragment(musicGalleryFragment, R.id.edit_bottom_panel);
     }
 
     @Override
@@ -817,135 +804,17 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
      */
     @Override
     public void onClick(int position) {
-
-        List<Music> musicList = musicCatalogFragment.getFxList();
-
-        for (Music m : musicList) {
-            int selectedBackground;
-            int selectedIcon;
-
-            switch (m.getColorResourceId()) {
-                case R.color.pastel_palette_red_dark:
-                    selectedBackground = R.color.pastel_palette_red;
-                    selectedIcon = R.drawable.activity_music_icon_ambiental_normal;
-                    break;
-                case R.color.pastel_palette_blue_dark:
-                    selectedBackground = R.color.pastel_palette_blue;
-                    selectedIcon = R.drawable.activity_music_icon_clarinet_normal;
-                    break;
-                case R.color.pastel_palette_brown_dark:
-                    selectedBackground = R.color.pastel_palette_brown;
-                    selectedIcon = R.drawable.activity_music_icon_classic_normal;
-                    break;
-                case R.color.pastel_palette_green_dark:
-                    selectedBackground = R.color.pastel_palette_green;
-                    selectedIcon = R.drawable.activity_music_icon_hip_hop_normal;
-                    break;
-                case R.color.pastel_palette_purple_dark:
-                    selectedBackground = R.color.pastel_palette_purple;
-                    selectedIcon = R.drawable.activity_music_icon_pop_normal;
-                    break;
-                case R.color.pastel_palette_orange_dark:
-                    selectedBackground = R.color.pastel_palette_orange;
-                    selectedIcon = R.drawable.activity_music_icon_reggae_normal;
-                    break;
-                case R.color.pastel_palette_yellow_dark:
-                    selectedBackground = R.color.pastel_palette_yellow;
-                    selectedIcon = R.drawable.activity_music_icon_violin_normal;
-                    break;
-                case R.color.pastel_palette_grey_dark:
-                    selectedBackground = R.color.pastel_palette_grey;
-                    selectedIcon = R.drawable.activity_music_icon_remove_normal;
-                    break;
-                case R.color.pastel_palette_pink_dark:
-                    selectedBackground = R.color.pastel_palette_pink;
-                    selectedIcon = R.drawable.activity_music_icon_folk_normal;
-                    break;
-                case R.color.pastel_palette_pink_2_dark:
-                    selectedBackground = R.color.pastel_palette_pink_2;
-                    selectedIcon = R.drawable.activity_music_icon_rock_normal;
-                    break;
-                default:
-                    selectedBackground = m.getColorResourceId();
-                    selectedIcon = m.getIconResourceId();
-                    break;
-            }
-            m.setColorResourceId(selectedBackground);
-            m.setIconResourceId(selectedIcon);
-        }
-        int selectedBackground;
-        int selectedIcon;
-        switch (musicList.get(position).getColorResourceId()) {
-            case R.color.pastel_palette_red:
-                selectedBackground = R.color.pastel_palette_red_dark;
-                selectedIcon = R.drawable.activity_music_icon_ambiental_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_ambiental_normal);
-                break;
-            case R.color.pastel_palette_blue:
-                selectedBackground = R.color.pastel_palette_blue_dark;
-                selectedIcon = R.drawable.activity_music_icon_clarinet_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_clarinet_normal);
-                break;
-            case R.color.pastel_palette_brown:
-                selectedBackground = R.color.pastel_palette_brown_dark;
-                selectedIcon = R.drawable.activity_music_icon_classic_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_classic_normal);
-                break;
-            case R.color.pastel_palette_green:
-                selectedBackground = R.color.pastel_palette_green_dark;
-                selectedIcon = R.drawable.activity_music_icon_hip_hop_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_hip_hop_normal);
-                break;
-            case R.color.pastel_palette_purple:
-                selectedBackground = R.color.pastel_palette_purple_dark;
-                selectedIcon = R.drawable.activity_music_icon_pop_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_pop_normal);
-                break;
-            case R.color.pastel_palette_orange:
-                selectedBackground = R.color.pastel_palette_orange_dark;
-                selectedIcon = R.drawable.activity_music_icon_reggae_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_reggae_normal);
-                break;
-            case R.color.pastel_palette_yellow:
-                selectedBackground = R.color.pastel_palette_yellow_dark;
-                selectedIcon = R.drawable.activity_music_icon_violin_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_violin_normal);
-                break;
-            case R.color.pastel_palette_grey:
-                selectedBackground = R.color.pastel_palette_grey_dark;
-                selectedIcon = R.drawable.activity_music_icon_remove_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_remove_normal);
-                break;
-            case R.color.pastel_palette_pink:
-                selectedBackground = R.color.pastel_palette_pink_dark;
-                selectedIcon = R.drawable.activity_music_icon_folk_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_folk_normal);
-                break;
-            case R.color.pastel_palette_pink_2:
-                selectedBackground = R.color.pastel_palette_pink_2_dark;
-                selectedIcon = R.drawable.activity_music_icon_rock_pressed;
-                sendButtonTracked(R.drawable.activity_music_icon_rock_normal);
-                break;
-            default:
-                selectedBackground = musicList.get(position).getColorResourceId();
-                selectedIcon = musicList.get(position).getIconResourceId();
-                break;
-        }
-        musicList.get(position).setColorResourceId(selectedBackground);
-        musicList.get(position).setIconResourceId(selectedIcon);
+        List<Music> musicList = musicGalleryFragment.getMusicList();
 
         if (position == 0) {
-
             if (selectedRemoveMusic == true) {
                 playPausePreview();
-
                 videoProgress = videoPlayer.getCurrentPosition();
                 seekBar.setProgress(videoProgress);
 
                 return;
             } else {
                 selectedRemoveMusic = true;
-                // Log.d(LOG_TAG, "Detenida la música");
                 if (musicPlayer != null) {
                     musicPlayer.release();
                     musicPlayer = null;
@@ -954,29 +823,20 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                     selectedMusic = null;
                 }
             }
-
         } else {
-
             selectedRemoveMusic = false;
+            videoPlayer.setVolume(0.0f, 0.0f);
             // if click on same music icon, pause the video
            if(selectedMusic == musicList.get(position)) {
-
                playPausePreview();
-
                videoProgress = videoPlayer.getCurrentPosition();
                seekBar.setProgress(videoProgress);
 
                return;
-
            } else {
                selectedMusic = musicList.get(position);
-
-               // Log.d(LOG_TAG, "adquirida la música");
-
-               initMusicPlayer(selectedMusic);
-
+                initMusicPlayer(selectedMusic);
                musicSelected = Constants.PATH_APP_TEMP + File.separator + selectedMusic.getNameResourceId() + Constants.AUDIO_MUSIC_FILE_EXTENSION;
-
                appPrefs.setMusicSelected(musicSelected);
 
                // TODO: change this variable of 30MB (size of the raw folder)
@@ -990,53 +850,38 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
            }
         }
 
-        musicCatalogFragment.getAdapter().notifyDataSetChanged();
+        musicGalleryFragment.getAdapter().notifyDataSetChanged();
         
         if (videoPlayer.isPlaying()) {
 
             videoPlayer.pause();
 
             if (musicPlayer != null && musicPlayer.isPlaying()) {
-
                 musicPlayer.pause();
             }
 
             // playButton.setVisibility(View.VISIBLE);
-
             videoProgress = videoPlayer.getCurrentPosition();
-
             videoPlayer.seekTo(seekBarStart * 1000);
             videoPlayer.start();
 
             if (musicPlayer != null) {
-
                 musicPlayer.seekTo(videoProgress - (seekBarStart * 1000));
                 musicPlayer.start();
-
             }
-
             //  playButton.setVisibility(View.INVISIBLE);
-
-
         } else {
-
             videoPlayer.seekTo(seekBarStart * 1000);
             videoPlayer.start();
 
             if (musicPlayer != null) {
-
                 musicPlayer.seekTo(videoProgress - (seekBarStart * 1000));
                 musicPlayer.start();
-
             }
 
             playButton.setVisibility(View.INVISIBLE);
-
         }
-
-
         updateSeekProgress();
-
     }
 
     private void setEditVideoProgress(int videoProgress, int seekBarStart, int seekBarEnd) {
@@ -1296,9 +1141,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
                     // Log.d(LOG_TAG, " Estoy dentro progress " + videoProgress);
 
-                    if (isOnTrimming) {
-
-                    } else {
+                    if (!isOnTrimming) {
                         musicPlayer.seekTo(videoProgress - (seekBarStart * 1000));
                         musicPlayer.start();
                         isOnTrimming = true;
@@ -1415,7 +1258,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         isRunning = true; // free flag to prevent collision with
 
     }
-
+    
     private class PaintFramesTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
@@ -1574,17 +1417,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         }
 
-
         this.runOnUiThread(new Runnable() {
             public void run() {
                 progressDialog.dismiss();
                 //   Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
             }
         });
-
         return true;
-
-
         */
 
         return true;

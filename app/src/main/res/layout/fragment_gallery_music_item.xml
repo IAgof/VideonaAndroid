@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  ~
+  ~ Authors:
+  ~ Veronica Lago Fominaya
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/gallery_thumb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="1dp"
+        android:padding="3dp" />
+
+    <RelativeLayout
+        android:id="@+id/gallery_overlay"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/gallery_thumb"
+        android:layout_alignEnd="@id/gallery_thumb"
+        android:layout_alignStart="@id/gallery_thumb"
+        android:layout_alignTop="@id/gallery_thumb"
+        android:background="@drawable/fragment_gallery_music_overlay_selector_background"
+        android:clickable="false">
+
+        <ImageView
+            android:id="@+id/gallery_overlay_icon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/fragment_gallery_music_overlay_icon_selector_background"
+            android:clickable="false"
+            android:src="@drawable/fragment_gallery_music_overlay_icon_selector_icon" />
+    </RelativeLayout>
+
+</RelativeLayout>

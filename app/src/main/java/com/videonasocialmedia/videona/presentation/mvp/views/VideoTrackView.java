@@ -21,12 +21,12 @@ public interface VideoTrackView {
      *
      * @param errorMessageResource
      */
-    public void showError(int errorMessageResource);
+    void showError(int errorMessageResource);
 
     /**
      * Draws the media track with the new items.
      *
      * @param mediaTrack the media track with the new items added
      */
-    public void drawMediaList(MediaTrack mediaTrack);
+    void drawMediaList(MediaTrack mediaTrack);
 }
