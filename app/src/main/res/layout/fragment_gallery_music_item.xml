@@ -32,10 +32,12 @@
 
         <ImageView
             android:id="@+id/gallery_overlay_icon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp"
             android:background="@drawable/fragment_gallery_music_overlay_icon_selector_background"
             android:clickable="false"
             android:src="@drawable/fragment_gallery_music_overlay_icon_selector_icon" />
