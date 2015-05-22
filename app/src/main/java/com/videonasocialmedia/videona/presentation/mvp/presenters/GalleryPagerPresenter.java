@@ -28,7 +28,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
     RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
     //GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     AddVideoToProjectUseCase addVideoToProjectUseCase;
-    ArrayList<String> videoList;
+    ArrayList<String> itemsToAdd;
     GalleryPagerView galleryPagerView;
 
     /**
@@ -39,7 +39,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         //getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
-        videoList = new ArrayList<>();
+        itemsToAdd = new ArrayList<>();
     }
 
     /**
@@ -48,13 +48,19 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
      * @param videoPath the path of the new video which user wants to add to the project
      */
     public void loadVideoToProject(String videoPath) {
+        itemsToAdd.add(videoPath);
+
         // LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
         Project project = Project.getInstance(null, null, null);
         MediaTrack mediaTrack = project.getMediaTrack();
         LinkedList<Media> listMedia = mediaTrack.getItems();
-        ArrayList<Media> list = new ArrayList<>(listMedia);
-        removeVideoFromProjectUseCase.removeMediaItemsFromProject(list, this);
-        videoList.add(videoPath);
+        ArrayList<Media> items = new ArrayList<>(listMedia);
+
+        if (items.size()>0) {
+            removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
+        }else{
+            addVideoToProjectUseCase.addMediaItemsToProject(itemsToAdd, this);
+        }
     }
 
     @Override
@@ -64,7 +70,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
 
     @Override
     public void onRemoveMediaItemFromTrackSuccess(MediaTrack mediaTrack) {
-        addVideoToProjectUseCase.addMediaItemsToProject(videoList, this);
+        addVideoToProjectUseCase.addMediaItemsToProject(itemsToAdd, this);
     }
 
     @Override

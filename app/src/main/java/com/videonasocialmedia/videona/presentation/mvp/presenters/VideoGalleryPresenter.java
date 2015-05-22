@@ -28,7 +28,7 @@ public class VideoGalleryPresenter implements OnVideosRetrieved {
         //if (galleryView.isTheListEmpty())
         galleryView.showVideos(videoList);
 //        else
-//            galleryView.appendVideos(videoList);
+//            galleryView.appendVideos(itemsToAdd);
     }
 
     @Override
