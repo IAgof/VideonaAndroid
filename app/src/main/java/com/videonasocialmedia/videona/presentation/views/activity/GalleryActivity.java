@@ -82,6 +82,11 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         }
     }
 
+    @OnClick(R.id.button_cancel_gallery)
+    public void goBack(){
+        this.finish();
+    }
+
 
     @Override
     public void navigate() {

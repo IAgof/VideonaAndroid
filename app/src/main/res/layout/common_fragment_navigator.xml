@@ -17,6 +17,7 @@
         android:src="@drawable/share_activity_button_about_selector" />
 
     <LinearLayout
+        android:id="@+id/fragment_navigator_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

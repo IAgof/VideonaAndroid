@@ -8,11 +8,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.views.activity.ShareActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 
 import java.util.List;
@@ -55,9 +56,10 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         Glide.with(context)
                 .load(path)
                 .centerCrop()
-                .error(R.drawable.gatito_rules)
+                .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
         holder.overlay.setSelected(position == selectedVideoPosition);
+        holder.overlayIcon.setSelected(position == selectedVideoPosition);
     }
 
     @Override
@@ -94,7 +96,10 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         ImageView thumb;
 
         @InjectView(R.id.gallery_overlay)
-        ImageView overlay;
+        RelativeLayout overlay;
+
+        @InjectView(R.id.gallery_overlay_icon)
+        ImageView overlayIcon;
 
         public VideoViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
             super(itemView);
@@ -116,11 +121,10 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         }
 
         @OnClick(R.id.gallery_preview_button)
-        public void startVideoPreview(View v){
-            String videoPath=videoList.get(getPosition()).getMediaPath();
-            //TODO cambiar la actividad de share por la de preview
-            Intent i= new Intent(v.getContext(), ShareActivity.class);
-            i.putExtra("MEDIA_OUTPUT", videoPath);
+        public void startVideoPreview(View v) {
+            String videoPath = videoList.get(getPosition()).getMediaPath();
+            Intent i = new Intent(v.getContext(), VideoPreviewActivity.class);
+            i.putExtra("VIDEO_PATH", videoPath);
             v.getContext().startActivity(i);
         }
 

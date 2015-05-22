@@ -13,9 +13,11 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -26,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -110,6 +113,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
     @InjectView(R.id.activity_record_drawer_layout)
     DrawerLayout drawerLayout;
+
     /**
      * OrientationEventListener
      */
@@ -157,16 +161,28 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "onCreate() RecordActivity");
         setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
-
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
+
+        //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        Handler h=new Handler();
+        h.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                drawerLayout.closeDrawers();
+            }
+        }, 150);
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
