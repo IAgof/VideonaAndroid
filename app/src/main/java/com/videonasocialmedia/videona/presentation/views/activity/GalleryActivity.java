@@ -10,15 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.widget.ImageButton;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.Profile;
-import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.GalleryPagerPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
-
-import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -98,11 +93,15 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     private void addVideoToProject(Video selectedVideo) {
         //TODO sacar esto de aquí!!!!!
+        String path = selectedVideo.getMediaPath();
+        GalleryPagerPresenter galleryPagerPresenter = new GalleryPagerPresenter(path);
+        /*
         Project project = Project.getInstance("title", "path", Profile.getInstance(Profile.ProfileType.free));
         MediaTrack track = project.getMediaTrack();
         LinkedList<Media> items = new LinkedList<>();
         items.add(selectedVideo);
         track.setItems(items);
+        */
         //TODO Intent to edit
     }
 
