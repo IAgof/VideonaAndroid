@@ -8,14 +8,13 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:background="#723"
     android:layout_margin="3dp">
 
     <ImageView
         android:id="@+id/gallery_thumb"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/gatito_rules"
+        android:src="@android:drawable/ic_menu_gallery"
         />
     <ImageView
         android:id="@+id/gallery_overlay"
@@ -33,7 +32,7 @@
         android:layout_alignEnd="@id/gallery_thumb"
         android:layout_alignBottom="@id/gallery_thumb"
         android:src="@drawable/common_icon_play_on_normal"
-        android:background="#aa22aa44"
+        android:background="#66666666"
         />
 
 </RelativeLayout>

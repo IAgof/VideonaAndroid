@@ -12,6 +12,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -25,6 +26,9 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -57,6 +61,28 @@ public class NavigationDrawerFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+    }
+
+    @OnClick(R.id.fragment_navigator_record_button)
+    public void navigateToRecord(){
+        Intent record = new Intent(this.getActivity(), RecordActivity.class);
+        startActivity(record);
+    }
+
+    @OnClick(R.id.fragment_navigator_edit_button)
+    public void navigateToEdit(){
+        Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
+        gallery.putExtra("SHARE", false);
+        startActivity(gallery);
+    }
+
+
+    @OnClick(R.id.fragment_navigator_share_button)
+    public void navigateToShare(){
+
+        Intent share = new Intent(this.getActivity(), GalleryActivity.class);
+        share.putExtra("SHARE", true);
+        startActivity(share);
     }
 
 

@@ -32,6 +32,23 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     private VideoGalleryPresenter videoGalleryPresenter;
     private RecyclerView.LayoutManager layoutManager;
     private Video selectedVideo;
+    private int folder;
+    //private Bundle args;
+
+    public static VideoGalleryFragment newInstance(int folder) {
+        VideoGalleryFragment videoGalleryFragment = new VideoGalleryFragment();
+        Bundle args = new Bundle();
+        args.putInt("FOLDER", folder);
+        videoGalleryFragment.setArguments(args);
+        return videoGalleryFragment;
+    }
+
+    // Store instance variables based on arguments passed
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        folder= this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
+    }
 
     @Nullable
     @Override
@@ -40,7 +57,8 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         ButterKnife.inject(this, v);
         if (videoGalleryPresenter == null)
             videoGalleryPresenter = new VideoGalleryPresenter(this);
-        layoutManager = new GridLayoutManager(this.getActivity(), 6, GridLayoutManager.VERTICAL, false);
+        layoutManager = new GridLayoutManager(this.getActivity(), 6,
+                GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
     }
@@ -49,6 +67,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     public void onStart() {
         super.onStart();
         videoGalleryPresenter.start();
+        videoGalleryPresenter.obtainVideos(folder);
     }
 
     @Override
@@ -67,8 +86,8 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         ButterKnife.reset(this);
     }
 
@@ -103,5 +122,9 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     public void onClick(int position) {
         selectedVideo = videoGalleryAdapter.getVideo(position);
         //videoGalleryAdapter.notifyDataSetChanged();
+    }
+
+    public Video getSelectedVideo() {
+        return selectedVideo;
     }
 }
