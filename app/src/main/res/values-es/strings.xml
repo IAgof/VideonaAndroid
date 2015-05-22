@@ -45,6 +45,8 @@
     <string name="music_genre_caribbean">"Caribbean"</string>
     <string name="music_genre_folk">"Folk"</string>
 
+    <string name="title_activity_video_player">Video Player</string>
+
 
     <!-- Activity Login -->
     <string name="title_activity_login">LoginActivity</string>
