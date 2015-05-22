@@ -38,10 +38,10 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
 
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;
+
     private MusicGalleryAdapter musicGalleryAdapter;
     private MusicGalleryPresenter musicGalleryPresenter;
     private RecyclerView.LayoutManager layoutManager;
-    private Music selectedMusic;
 
     @Nullable
     @Override
@@ -76,14 +76,6 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
         super.onStop();
     }
 
-    /*
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ButterKnife.reset(this);
-    }
-    */
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -92,12 +84,10 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
 
     @Override
     public void showLoading() {
-
     }
 
     @Override
     public void hideLoading() {
-
     }
 
     @Override
@@ -123,6 +113,11 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
         musicGalleryAdapter.appendMusic(musicList);
     }
 
+    /**
+     * Returns the list of the available songs
+     *
+     * @return
+     */
     public List<Music> getMusicList() {
         return musicGalleryAdapter.getElementList();
     }

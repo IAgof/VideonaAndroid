@@ -23,12 +23,16 @@ import java.util.List;
 public class MusicGalleryPresenter implements OnMusicRetrieved {
 
     private MusicGalleryView galleryView;
-    ArrayList <Music> musicList= new ArrayList<>();
+    private ArrayList <Music> musicList= new ArrayList<>();
 
+    /**
+     * Constructor.
+     *
+     * @param galleryView the view of the music in the editor activity
+     */
     public MusicGalleryPresenter(MusicGalleryView galleryView) {
         this.galleryView = galleryView;
     }
-
 
     @Override
     public void onMusicRetrieved(List<Music> musicList) {
@@ -48,7 +52,7 @@ public class MusicGalleryPresenter implements OnMusicRetrieved {
     }
 
     /**
-     *
+     * Creates the list of the available songs if not exists or reload it if exists
      */
     public void start() {
         if (galleryView.isTheListEmpty()) {
@@ -59,9 +63,6 @@ public class MusicGalleryPresenter implements OnMusicRetrieved {
         }
     }
 
-    /**
-     *
-     */
     public void stop() {
     }
 
