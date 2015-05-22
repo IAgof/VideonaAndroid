@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -114,6 +115,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @InjectView(R.id.activity_record_drawer_layout)
     DrawerLayout drawerLayout;
 
+    @InjectView(R.id.activity_record_navigation_drawer)
+    View navigatorView;
+
     /**
      * OrientationEventListener
      */
@@ -180,9 +184,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             @Override
             public void run() {
-                drawerLayout.closeDrawers();
+                drawerLayout.closeDrawer(navigatorView);
             }
-        }, 150);
+        }, 3500);
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
