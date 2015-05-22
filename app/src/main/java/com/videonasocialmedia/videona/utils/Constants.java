@@ -41,11 +41,16 @@ public class Constants {
 
     // Folders
     final public static String FOLDER_VIDEONA_MASTERS = "Videona_Masters";
-    final public static String FOLDER_VIDEONA_EDITED = "Videona_edited";
-
+    final public static String FOLDER_VIDEONA_EDITED = "Videona_Edited";
+    final public static String FOLDER_VIDEONA = "Videona";
     final public static String FOLDER_VIDEONA_TEMP = ".temp";
+
     final public static String PATH_APP = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA;
+
+    final public static String PATH_APP_EDITED = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA_EDITED;
+
     final public static String PATH_APP_MASTERS = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA_MASTERS;
 
