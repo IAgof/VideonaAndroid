@@ -14,7 +14,7 @@
         android:id="@+id/gallery_thumb"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/gallery_fragment_no_image"
+        android:src="@drawable/fragment_gallery_no_image"
         />
 
     <RelativeLayout
