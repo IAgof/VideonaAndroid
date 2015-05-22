@@ -77,44 +77,22 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     public void onClick() {
         Video selectedVideo = getSelectedVideoFromCurrentFragment();
         if (selectedVideo != null) {
-            if (sharing) {
-                shareVideo(selectedVideo);
-            } else {
-                addVideoToProject(selectedVideo);
-            }
+            String path = selectedVideo.getMediaPath();
+            galleryPagerPresenter.loadVideoToProject(path);
         }
     }
 
-    private void shareVideo(Video selectedVideo) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("video/*");
-        Uri uri = Uri.parse(selectedVideo.getMediaPath());
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-
-        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
-    }
-
-
-    private void addVideoToProject(Video selectedVideo) {
-        //TODO sacar esto de aquí!!!!!
-        String path = selectedVideo.getMediaPath();
-        galleryPagerPresenter.loadVideoToProject(path);
-        /*
-        Project project = Project.getInstance("title", "path", Profile.getInstance(Profile.ProfileType.free));
-        MediaTrack track = project.getMediaTrack();
-        LinkedList<Media> items = new LinkedList<>();
-        items.add(selectedVideo);
-        track.setItems(items);
-        */
-        //TODO Intent to edit
-    }
 
     @Override
     public void navigate() {
-        Intent intent = new Intent(GalleryActivity.this, EditActivity.class);
+        Intent intent;
+        if (sharing) {
+            intent = new Intent(this, ShareActivity.class);
+        }else{
+            intent = new Intent(this, EditActivity.class);
+        }
         startActivity(intent);
     }
-
 
 }
 
@@ -147,8 +125,8 @@ class MyPagerAdapter extends FragmentPagerAdapter {
                 result = mastersFragment;
                 break;
             case 1: // Fragment # 0 - This will show FirstFragment different title
-                if (editedFragment==null){
-                    editedFragment=
+                if (editedFragment == null) {
+                    editedFragment =
                             VideoGalleryFragment.newInstance(VideoGalleryPresenter.EDITED_FOLDER);
                 }
                 result = editedFragment;
