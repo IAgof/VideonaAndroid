@@ -10,15 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.widget.ImageButton;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.Profile;
-import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.GalleryPagerPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
-
-import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,11 +23,12 @@ import butterknife.OnClick;
 /**
  * Created by jca on 20/5/15.
  */
-public class GalleryActivity extends Activity implements ViewPager.OnPageChangeListener {
+public class GalleryActivity extends Activity implements ViewPager.OnPageChangeListener, GalleryPagerView {
 
     MyPagerAdapter adapterViewPager;
     boolean sharing;
     int selectedPage = 0;
+    GalleryPagerPresenter galleryPagerPresenter;
 
     @InjectView(R.id.button_ok_gallery)
     ImageButton okButton;
@@ -52,6 +49,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         vpPager.setAdapter(adapterViewPager);
 
         vpPager.setOnPageChangeListener(this);
+
+        galleryPagerPresenter = new GalleryPagerPresenter(this);
     }
 
     @Override
@@ -98,12 +97,22 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     private void addVideoToProject(Video selectedVideo) {
         //TODO sacar esto de aquí!!!!!
+        String path = selectedVideo.getMediaPath();
+        galleryPagerPresenter.loadVideoToProject(path);
+        /*
         Project project = Project.getInstance("title", "path", Profile.getInstance(Profile.ProfileType.free));
         MediaTrack track = project.getMediaTrack();
         LinkedList<Media> items = new LinkedList<>();
         items.add(selectedVideo);
         track.setItems(items);
+        */
         //TODO Intent to edit
+    }
+
+    @Override
+    public void navigate() {
+        Intent intent = new Intent(GalleryActivity.this, EditActivity.class);
+        startActivity(intent);
     }
 
 
