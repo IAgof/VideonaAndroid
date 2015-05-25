@@ -13,14 +13,12 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -29,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -96,6 +93,16 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @InjectView(R.id.button_color_effect)
     ImageButton buttonColorEffect;
+    /**
+     * Button flash mode
+     */
+    @InjectView(R.id.button_flash_mode)
+    ImageButton buttonFlashMode;
+    /**
+     * Button change camera
+     */
+    @InjectView((R.id.button_change_camera))
+    ImageButton buttonChangeCamera;
     /**
      * ListView to use horizontal adapter
      */
@@ -171,6 +178,11 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
+
+        recordPresenter = new RecordPresenter(this, tracker);
+
+        recordPresenter.onCreate();
+
     }
 
 
@@ -200,7 +212,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume() RecordActivity");
-        recordPresenter = new RecordPresenter(this, tracker);
+        if(recordPresenter == null) {
+            recordPresenter = new RecordPresenter(this, tracker);
+        }
         /*
         if(recordPresenter != null) {
             recordPresenter.onResume();
@@ -533,7 +547,15 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         recordPresenter.recordClickListener();
     }
 
-    @OnClick({R.id.button_record, R.id.button_color_effect})
+    /**
+     * Camera flash mode listener
+     */
+    @OnClick(R.id.button_flash_mode)
+    public void buttonFlashModeListener(){
+        recordPresenter.onFlashModeTorchListener();
+    }
+
+    @OnClick({R.id.button_record, R.id.button_color_effect, R.id.button_flash_mode, R.id.button_change_camera})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -546,6 +568,41 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void unLockNavigator() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    @Override
+    public void showFlash(boolean isFlashSupported) {
+        if(isFlashSupported){
+            buttonFlashMode.setVisibility(View.VISIBLE);
+        } else {
+            // ¿View.GONE or View.INVISIBLE?
+            buttonFlashMode.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showFlashModeTorch(boolean mode) {
+
+        if(mode){
+            buttonFlashMode.setImageResource(R.drawable.gatito_rules_pressed);
+        } else {
+            buttonFlashMode.setImageResource(R.drawable.gatito_rules);
+        }
+
+    }
+
+    @Override
+    public void showChangeCamera(boolean isChangeCameraSupported) {
+
+        Log.d(LOG_TAG, "showChangeCamera boolean " +  isChangeCameraSupported);
+
+        if(isChangeCameraSupported){
+            buttonChangeCamera.setVisibility(View.VISIBLE);
+        } else {
+            // ¿View.GONE or View.INVISIBLE?
+            buttonChangeCamera.setVisibility(View.GONE);
+        }
+
     }
 
     /**

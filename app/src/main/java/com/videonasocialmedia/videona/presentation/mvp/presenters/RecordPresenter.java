@@ -12,6 +12,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 
+import android.hardware.Camera;
 import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 
 public class RecordPresenter extends Presenter implements OnRecordEventListener,
         OnColorEffectListener, OnPreviewListener, OnOrientationEventListener,
-        OnAddMediaFinishedListener {
+        OnAddMediaFinishedListener, OnSupportChangeCamera, OnSupportFlashMode, OnFlashModeListener {
 
     /**
      * Record View
@@ -57,6 +58,11 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
      * Boolean, control is recording file
      */
     private boolean isRecording = false;
+
+    /**
+     * Boolean, control flash mode, pressed or not
+     */
+    private boolean isFlahModeON = false;
 
     /*ANALYTICS*/
     private Tracker tracker;
@@ -94,6 +100,19 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
     @Override
     public void stop() {
         // recordUseCase.stopRecord(this);
+    }
+
+    /**
+     * on Create Presenter
+     */
+    public void onCreate(){
+
+
+        recordUseCase.supportChangeCamera(this);
+
+        recordUseCase.supportFlashMode(this);
+
+
     }
 
     /**
@@ -153,6 +172,30 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
      */
     public void effectClickListener() {
         recordUseCase.getAvailableEffects(this);
+    }
+
+    /**
+     * Flash Mode Torch pressed
+     *
+     * //TODO change to onFlashModeListener, support all kind of flash models.
+     * // Get list of supportedFlashModel on SplashScreen and save to model.
+     */
+    public void onFlashModeTorchListener(){
+
+        if(isFlahModeON){
+
+            recordUseCase.removeFlashMode(Camera.Parameters.FLASH_MODE_OFF, this);
+            isFlahModeON = false;
+
+        } else {
+
+            recordUseCase.addFlashMode(Camera.Parameters.FLASH_MODE_TORCH, this);
+            isFlahModeON = true;
+        }
+
+
+
+
     }
 
     /**
@@ -314,5 +357,30 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
 
         Log.d(LOG_TAG, "navigateEditActivity");
 
+    }
+
+    @Override
+    public void onFlashModeTorchAdded() {
+
+        recordView.showFlashModeTorch(true);
+
+    }
+
+    @Override
+    public void onFlashModeTorchRemoved() {
+
+        recordView.showFlashModeTorch(false);
+
+    }
+
+    @Override
+    public void showFlash(boolean isFlashSupported) {
+
+        recordView.showFlash(isFlashSupported);
+    }
+
+    @Override
+    public void showChangeCamera(boolean isShowChangeCameraSupported) {
+        recordView.showChangeCamera(isShowChangeCameraSupported);
     }
 }

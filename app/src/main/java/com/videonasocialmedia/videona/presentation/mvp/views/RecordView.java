@@ -43,4 +43,10 @@ public interface RecordView extends MVPView {
 
     void unLockNavigator();
 
+    void showFlash(boolean isFlashSupported);
+
+    void showFlashModeTorch(boolean mode);
+
+    void showChangeCamera(boolean mode);
+
 }

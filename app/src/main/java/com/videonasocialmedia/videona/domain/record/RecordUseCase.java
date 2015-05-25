@@ -17,13 +17,17 @@ import android.view.Surface;
 import android.widget.Chronometer;
 
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnColorEffectListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnPreviewListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSupportChangeCamera;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSupportFlashMode;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,7 +92,14 @@ public class RecordUseCase {
      */
     private int rotationView = 0;
 
+    /**
+     * User preferences, private data
+     */
+    UserPreferences userPreferences;
+
     public RecordUseCase(Context context){
+
+        userPreferences = new UserPreferences(context);
 
         if(camera == null){
             camera = getCameraInstance();
@@ -288,6 +299,68 @@ public class RecordUseCase {
 
     }
 
+    /**
+     * Support change camera. Minimum quality 720p
+     */
+    public void supportChangeCamera(OnSupportChangeCamera listener){
+
+        if(userPreferences.getFrontCameraSupported() &&
+                userPreferences.getFrontCamera720pSupported()) {
+            listener.showChangeCamera(true);
+        }
+
+    }
+
+    /**
+     * Support flash mode
+     * //TODO check flash support from model, now check from SharePreferences, private data.
+     *
+     */
+    public void supportFlashMode(OnSupportFlashMode listener){
+
+        int cameraId = getCameraId(camera);
+
+        if(cameraId == 0) {
+            listener.showFlash(userPreferences.getBackCameraFlashSupported());
+        }
+
+        if(cameraId == 1) {
+            listener.showFlash(userPreferences.getFrontCameraFlashSupported());
+        }
+
+
+    }
+
+    /**
+     * Add flash mode torch
+     *
+     */
+    public void addFlashMode(String flashMode, OnFlashModeListener listener){
+
+        Camera.Parameters parameters = camera.getParameters();
+
+        parameters.setFlashMode(flashMode);
+        camera.setParameters(parameters);
+
+        listener.onFlashModeTorchAdded();
+
+    }
+
+    /**
+     * Remove flash mode torch
+     *
+     */
+    public void removeFlashMode(String flashMode, OnFlashModeListener listener){
+
+        Camera.Parameters parameters = camera.getParameters();
+
+        parameters.setFlashMode(flashMode);
+        camera.setParameters(parameters);
+
+        listener.onFlashModeTorchRemoved();
+
+    }
+
     /*
     * A safe way to get an instance of the Camera object.
     */
@@ -336,10 +409,25 @@ public class RecordUseCase {
         Log.d(LOG_TAG, " getCameraInstance camera " + c);
 
 
-
         return c; // returns null if camera is unavailable
     }
 
+    /**
+     * Get Camera Id in use
+     *
+     * //TODO get this info from camera or userPreferences.
+     *
+     * @param camera
+     * @return
+     */
+    private int getCameraId(Camera camera){
+
+        int cameraId = userPreferences.getCameraId();
+
+      //  Camera.CameraInfo.CAMERA_FACING_BACK
+
+        return cameraId;
+    };
 
     /**
      * Prepare VideoRecorder.

@@ -73,6 +73,15 @@
                 android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
                 android:visibility="invisible" />
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_flash_mode"
+                android:src="@drawable/gatito_rules"
+                android:layout_below="@+id/chronometer_record"
+                android:layout_alignStart="@+id/chronometer_record"
+                android:visibility="gone" />
+
         </RelativeLayout>
 
 
@@ -104,6 +113,13 @@
             android:layout_gravity="center"
             android:contentDescription="Beta Label"
             android:src="@drawable/beta_label" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_change_camera"
+            android:src="@drawable/gatito_rules"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
