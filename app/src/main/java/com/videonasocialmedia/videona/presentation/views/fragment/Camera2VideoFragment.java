@@ -429,9 +429,9 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //        switch (view.getId()) {
 //            case R.id.button_record: {
 //                if (mIsRecordingVideo) {
-//                    stopRecordVideo();
+//                    showRecordFinished();
 //                } else {
-//                    startRecordVideo();
+//                    showRecordStarted();
 //                }
 //                break;
 //            }
@@ -801,7 +801,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //    }
 //
 //    @Override
-//    public void startRecordVideo() {
+//    public void showRecordStarted() {
 //
 //        try {
 //            // UI
@@ -826,7 +826,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //    }
 //
 //    @Override
-//    public void stopRecordVideo() {
+//    public void showRecordFinished() {
 //
 //        // UI
 //        mIsRecordingVideo = false;

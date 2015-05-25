@@ -43,7 +43,8 @@ public class VideoFxMenuFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_fragment_fx, container, false);
         ButterKnife.inject(this, view);
 

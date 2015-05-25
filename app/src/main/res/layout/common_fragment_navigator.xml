@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:id="@+id/pepito"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_navigator_list"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true">
 
     <ImageButton
-        android:id="@+id/imageButton12"
+        android:id="@+id/fragment_navigator_settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="16dp"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_launcher" />
+        android:layout_margin="10dp"
+        android:background="@null"
+        android:src="@drawable/common_button_settings_selector" />
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -30,7 +28,7 @@
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/fragment_navigator_record_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -40,7 +38,7 @@
             android:src="@drawable/common_icon_film_normal" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/fragment_navigator_edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -51,7 +49,7 @@
             android:src="@drawable/common_icon_edit_normal" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/fragment_navigator_share_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -61,7 +59,7 @@
             android:src="@drawable/common_icon_redsocial_normal" />
 
         <ImageButton
-            android:id="@+id/imageButton4"
+            android:id="@+id/fragment_navigator_game_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -69,7 +67,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:background="@null"
-            android:src="@drawable/common_icon_gamification_normal" />
+            android:src="@drawable/common_icon_gamification_normal"
+            android:alpha="0.60"/>
     </LinearLayout>
 
 </RelativeLayout>

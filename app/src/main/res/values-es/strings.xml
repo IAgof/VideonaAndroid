@@ -45,9 +45,10 @@
     <string name="music_genre_caribbean">"Caribbean"</string>
     <string name="music_genre_folk">"Folk"</string>
 
+    <string name="title_activity_video_player">Video Player</string>
+
 
     <!-- Activity Login -->
-
     <string name="title_activity_login">LoginActivity</string>
     <string name="login_hint">ohvideo@videona.es</string>
     <string name="login">Login</string>
@@ -57,6 +58,9 @@
     <string name="accesibility_login_with_facebook">login with facebook</string>
     <string name="checkBox_remember_me">Remember Me</string>
     <string name="please_login">Please login in your account</string>
+
+    <!-- Activity Video Preview -->
+    <string name="invalid_video">Este vídeo no se puede reproducir. Por favor, seleccione otro</string>
 
 
     <!-- Filters_Effects -->
@@ -370,5 +374,9 @@ Cuando resulten de aplicación al Item, el Comprador podrá hacer uso de las gar
 Videona otorga a los Usuarios una licencia personal, revocable, no exclusiva y no transferible para cargar y utilizar el software de la Aplicación exclusivamente para el uso de los Servicios previstos en las presentes Condiciones Particulares. El software no podrá ser utilizado, copiado, reproducido, transmitido, mostrado, distribuido, vendido, licenciado, descargado o explotado en cualquier forma diferente al funcionamiento del Servicio. Queda prohibido al Usuario realizar ingeniería inversa, descompilar, desensamblar o de cualquier otra forma crear códigos fuentes a partir del software.
 Con respecto a las funcionalidades y herramientas de la Aplicación que permiten al Usuario crear Features, Videona otorga a los Usuarios una licencia para utilizarlas, reproducirlas y preparar trabajos u obras derivadas, exclusivamente para la creación y venta de Features, conforme a las presentes Condiciones Particulares.\n
     </string>
+    <string name="galleryActivityTitle">Galería</string>
+    <string name="mastersFolderTitle">Originales</string>
+    <string name="editedFolderTitle">Editados</string>
+
 
 </resources>

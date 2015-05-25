@@ -20,18 +20,10 @@ public class UserPreferences {
 	private static final String USER_INFO = "USER_INFO";
 	private SharedPreferences appUserPreferences;
 	private SharedPreferences.Editor prefsEditor;
-	private String userName = "user_name_prefs";
+
+    private String userName = "user_name_prefs";
 	private String userId = "user_id_prefs";
 	private String userSession = "user_session";
-
-    private String checkIndiegogo = "check_indiegogo";
-    private String checkIndiegogoToday = "check_indiegogo_today";
-
-    private String isMusicON = "isMusicON";
-
-    private String positionMusic = "positionMusic";
-
-    private String videoMusicAux = "videoMusicAux";
 
     private String seekBarStart = "seekBarStart";
     private String seekBarEnd = "seekBarEnd";
@@ -42,12 +34,26 @@ public class UserPreferences {
     private String colorEffect = "setEffect";
     private String isColorEffect = "isColorEffect";
     private String cameraId = "back_camera";
+
+    private String privatePath = "private_path";
+
+    private String musicSelected = "musicSelected";
+    private String isMusicSelected = "isMusicSelected";
 	 
 	public UserPreferences(Context context){
 	 this.appUserPreferences = context.getSharedPreferences(USER_INFO, Activity.MODE_PRIVATE);
 	 this.prefsEditor = appUserPreferences.edit();
 	}
 
+
+    // Private path
+    public String getPrivatePath() {
+        return appUserPreferences.getString(privatePath, "");
+    }
+
+    public void setPrivatePath(String path) {
+        prefsEditor.putString(privatePath, path).commit();;
+    }
 
     /*
 	public String getUserId() {
@@ -77,30 +83,7 @@ public class UserPreferences {
     */
 
 
-    public boolean getIsMusicON() {
-        return appUserPreferences.getBoolean(isMusicON, false);
-    }
-
-    public void setIsMusicON( Boolean musicON) {
-        prefsEditor.putBoolean(isMusicON, musicON).commit();
-    }
-
-    public int getPositionMusic() {
-        return appUserPreferences.getInt(positionMusic, 0);
-    }
-
-    public void setPositionMusic( int position) {
-        prefsEditor.putInt(positionMusic, position).commit();
-    }
-
-    public String getVideoMusicAux() {
-        return appUserPreferences.getString(videoMusicAux, "unkown");
-    }
-
-    public void setVideoMusicAux( String username) {
-        prefsEditor.putString(videoMusicAux, username).commit();
-    }
-
+    //Future delete trimming values
     public int getSeekBarStart() {
         return appUserPreferences.getInt(seekBarStart, 0);
     }
@@ -117,29 +100,26 @@ public class UserPreferences {
         prefsEditor.putInt(seekBarEnd, end).commit();
     }
 
-    public int getVideoProgress() {
-        return appUserPreferences.getInt(videoProgress, 0);
+
+    //TODO delete this part and obtaind this data from Project
+    public String getMusicSelected() {
+        return appUserPreferences.getString(musicSelected, "");
     }
 
-    public void setVideoProgress( int progress) {
-        prefsEditor.putInt(videoProgress, progress).commit();
+    public void setMusicSelected(String pathMusic) {
+        prefsEditor.putString(musicSelected, pathMusic).commit();
     }
 
-    public int getVideoDuration() {
-        return appUserPreferences.getInt(videoDuration, 0);
+    public boolean getIsMusicSelected(){
+        return appUserPreferences.getBoolean(isMusicSelected, false);
     }
 
-    public void setVideoDuration( int duration) {
-        prefsEditor.putInt(videoDuration, duration).commit();
+    public void setIsMusicSelected(boolean isMusicON) {
+        prefsEditor.putBoolean(isMusicSelected, isMusicON).commit();
     }
 
-    public int getVideoDurationTrim() {
-        return appUserPreferences.getInt(videoDurationTrim, 0);
-    }
-
-    public void setVideoDurationTrim( int duration) {
-        prefsEditor.putInt(videoDurationTrim, duration).commit();
-    }
+    /*
+     // Future use, save last cameraId used
 
     public int getCameraId() {
         return appUserPreferences.getInt(cameraId, 0);
@@ -148,22 +128,7 @@ public class UserPreferences {
     public void setCameraId( int camera) {
         prefsEditor.putInt(cameraId, camera).commit();
     }
+    */
 
-
-    public String getColorEffect() {
-        return appUserPreferences.getString(colorEffect, "unkown");
-    }
-
-    public void setColorEffect( String colorEffectSelected) {
-        prefsEditor.putString(colorEffect, colorEffectSelected).commit();
-    }
-
-    public boolean getIsColorEffect() {
-        return appUserPreferences.getBoolean(isColorEffect, false);
-    }
-
-    public void setIsColorEffect( Boolean isColorEffectSelected) {
-        prefsEditor.putBoolean(isColorEffect, isColorEffectSelected).commit();
-    }
 
 }

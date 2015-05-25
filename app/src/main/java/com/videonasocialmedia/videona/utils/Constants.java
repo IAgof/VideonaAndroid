@@ -37,15 +37,18 @@ public class Constants {
     final public static String COLOR_EFFECT_SKETCH = "sketch";
     final public static String COLOR_EFFECT_NEON = "neon";
 
-
-
     // Folders
     final public static String FOLDER_VIDEONA_MASTERS = "Videona_Masters";
-    final public static String FOLDER_VIDEONA_EDITED = "Videona";
-
+    final public static String FOLDER_VIDEONA_EDITED = "Videona_Edited";
+    final public static String FOLDER_VIDEONA = "Videona";
     final public static String FOLDER_VIDEONA_TEMP = ".temp";
+
     final public static String PATH_APP = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA;
+
+    final public static String PATH_APP_EDITED = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA_EDITED;
+
     final public static String PATH_APP_MASTERS = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA_MASTERS;
 
@@ -56,8 +59,9 @@ public class Constants {
     final public static String AUDIO_MUSIC_FILE_EXTENSION = ".m4a";
 
     // Project
-    final public static String PROJECT_TITLE = "Project";
-    final public static String PATH_PROJECT = PATH_APP;
+    //TODO define this values
+    final public static String PROJECT_TITLE = "model";
+    final public static String FOLDER_VIDEONA_PRIVATE_MODEL = "model" ;
 
 
 }

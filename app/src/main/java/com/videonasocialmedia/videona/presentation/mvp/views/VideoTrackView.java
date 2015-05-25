@@ -3,6 +3,9 @@
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
+ *
+ * Authors:
+ * Veronica Lago Fominaya
  */
 
 package com.videonasocialmedia.videona.presentation.mvp.views;
@@ -10,10 +13,20 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 
 /**
- * Created by vlf on 27/04/2015.
+ * This interface is used to update the track view in the editor activity.
  */
 public interface VideoTrackView {
-    public void showError(int errorMessageResource);
+    /**
+     * Shows the error if the new item hasn't been added to the track.
+     *
+     * @param errorMessageResource
+     */
+    void showError(int errorMessageResource);
 
-    public void drawMediaList(MediaTrack mediaTrack);
+    /**
+     * Draws the media track with the new items.
+     *
+     * @param mediaTrack the media track with the new items added
+     */
+    void drawMediaList(MediaTrack mediaTrack);
 }
