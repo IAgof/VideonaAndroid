@@ -13,14 +13,12 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -29,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -221,14 +218,24 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onPause() {
         super.onPause();
         Log.d(LOG_TAG, "onPause() RecordActivity");
-        recordPresenter.onStop();
-        recordPresenter = null;
+        releaseRecordPresenter();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "onStop() RecordActivity");
+        releaseRecordPresenter();
+    }
+
+    /**
+     * Releases the record presenter
+     */
+    private void releaseRecordPresenter() {
+        if (recordPresenter != null) {
+            recordPresenter.onStop();
+            recordPresenter = null;
+        }
     }
 
     /**
