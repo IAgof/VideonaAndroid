@@ -375,5 +375,8 @@ Videona otorga a los Usuarios una licencia personal, revocable, no exclusiva y n
 Con respecto a las funcionalidades y herramientas de la Aplicación que permiten al Usuario crear Features, Videona otorga a los Usuarios una licencia para utilizarlas, reproducirlas y preparar trabajos u obras derivadas, exclusivamente para la creación y venta de Features, conforme a las presentes Condiciones Particulares.\n
     </string>
     <string name="title_activity_video_player">Video Player</string>
+    <string name="galleryActivityTitle">Gallery</string>
+    <string name="mastersFolderTitle">Raw</string>
+    <string name="editedFolderTitle">Edited</string>
 
 </resources>

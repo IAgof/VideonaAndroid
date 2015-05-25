@@ -63,7 +63,7 @@ public class CheckPathsAppUseCase {
         try {
             checkPathApp(context);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("CHECK PATH", "error", e);
         }
 
         listener.onCheckPathsAppSuccess();

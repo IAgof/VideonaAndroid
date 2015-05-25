@@ -179,6 +179,12 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         super.onStart();
 
         //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
         Handler h=new Handler();
         h.postDelayed(new Runnable() {
 
@@ -186,7 +192,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             public void run() {
                 drawerLayout.closeDrawer(navigatorView);
             }
-        }, 3500);
+        }, 1500);
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
