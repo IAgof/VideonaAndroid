@@ -29,8 +29,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -274,6 +274,97 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         textStartTrim.setText(TimeUtils.toFormattedTime(0));
     }
 
+    @Override
+    protected void onStart() {
+        Log.d(LOG_TAG, "onStart");
+        super.onStart();
+        /*
+        seekBarEnd = durationVideoRecorded;
+        isRunning = true;
+        PaintFramesTask task = new PaintFramesTask();
+        task.execute();
+        */
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(LOG_TAG, "onResume");
+        super.onResume();
+        seekBarEnd = durationVideoRecorded;
+        isRunning = true;
+        PaintFramesTask task = new PaintFramesTask();
+        task.execute();
+        setVideoInfo();
+        // Log.d(LOG_TAG, " onResume isMusicON " + isMusicON);
+
+        seekBarStart = appPrefs.getSeekBarStart();
+        seekBarEnd = appPrefs.getSeekBarEnd();
+        //refreshDetailTrimView();
+        // Log.d(LOG_TAG, "onResume seekBar progress " + appPrefs.getVideoProgress());
+        // this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, 60.0);
+
+        this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, Math.min((double) ConfigUtils.maxDurationVideo, appPrefs.getSeekBarEnd()));
+
+        //TODO Do this correctly
+        editPresenter.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(LOG_TAG, "onPause");
+        super.onPause();
+
+        // Log.d(LOG_TAG, "onPause");
+
+        onPause = true;
+
+        if (videoPlayer != null && videoPlayer.isPlaying()) {
+
+            videoPlayer.pause();
+
+            if (musicPlayer != null && musicPlayer.isPlaying()) {
+
+                musicPlayer.pause();
+            }
+
+            playButton.setVisibility(View.VISIBLE);
+
+            videoProgress = videoPlayer.getCurrentPosition();
+
+        }
+        releaseVideoView();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(LOG_TAG, "onStop");
+        super.onStop();
+        releaseVideoView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(LOG_TAG, "onDestroy");
+        super.onDestroy();
+    }
+
+    /**
+     * Releases the media player and the video view
+     */
+    private void releaseVideoView() {
+        preview.stopPlayback();
+        preview.clearFocus();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            videoPlayer = null;
+        }
+        if (musicPlayer != null) {
+            // mediaPlayerMusic.stop();
+            // musicPlayer.pause();
+            musicPlayer.release();
+            musicPlayer = null;
+        }
+    }
 
     @OnClick(R.id.buttonCancelEditActivity)
     public void cancelEditActivity() {
@@ -302,22 +393,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         // TODO: change this variable of 50MB (max size of the temp video and final video)
         if (Utils.isAvailableSpace(50)) {
 
-            preview.stopPlayback();
-
-            if (videoPlayer != null) {
-                // mediaPlayer.stop();
-                //videoPlayer.pause();
-                videoPlayer.release();
-                videoPlayer = null;
-            }
-            if (musicPlayer != null) {
-                // mediaPlayerMusic.stop();
-                // musicPlayer.pause();
-                musicPlayer.release();
-                musicPlayer = null;
-            }
-
-            /// TODO Wait until define progressDialog Design
+            // TODO Wait until define progressDialog Design
             progressDialog.setMessage(getString(R.string.dialog_processing));
             progressDialog.setTitle(getString(R.string.please_wait));
             progressDialog.setIndeterminate(true);
@@ -475,72 +551,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
         updateSeekProgress();
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Log.d(LOG_TAG, "onStart");
-        seekBarEnd = durationVideoRecorded;
-        // Log.d(LOG_TAG, "onStart seekBarEnd " + seekBarEnd);
-        isRunning = true;
-        PaintFramesTask task = new PaintFramesTask();
-        task.execute();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setVideoInfo();
-        // Log.d(LOG_TAG, " onResume isMusicON " + isMusicON);
-
-        seekBarStart = appPrefs.getSeekBarStart();
-        seekBarEnd = appPrefs.getSeekBarEnd();
-        //refreshDetailTrimView();
-        // Log.d(LOG_TAG, "onResume seekBar progress " + appPrefs.getVideoProgress());
-        // this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, 60.0);
-
-        this.onRangeSeekBarValuesChanged(seekBarRange, 0.0, Math.min((double) ConfigUtils.maxDurationVideo, appPrefs.getSeekBarEnd()));
-        
-        //TODO Do this correctly
-        editPresenter.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Log.d(LOG_TAG, "onPause");
-
-        onPause = true;
-
-        if (videoPlayer != null && videoPlayer.isPlaying()) {
-
-            videoPlayer.pause();
-
-            if (musicPlayer != null && musicPlayer.isPlaying()) {
-
-                musicPlayer.pause();
-            }
-
-            playButton.setVisibility(View.VISIBLE);
-
-            videoProgress = videoPlayer.getCurrentPosition();
-
-        }
-
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
 
     /**
      * Overridden to save instance trim text and seekBar
