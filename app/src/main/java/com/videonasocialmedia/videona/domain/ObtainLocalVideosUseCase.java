@@ -14,9 +14,6 @@ public class ObtainLocalVideosUseCase {
 
     public void obtainEditedVideos(OnVideosRetrieved listener) {
         ArrayList<Video> videos = obtainVideosFromPath(Constants.PATH_APP_EDITED);
-        ArrayList<Video> oldVideos =  obtainVideosFromPath(Constants.PATH_APP);
-        if (!oldVideos.isEmpty())
-            videos.addAll(oldVideos);
         if (videos == null) {
             listener.onNoVideosRetrieved();
         } else {
