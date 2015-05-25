@@ -14,7 +14,7 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 16
+        versionCode 17
         versionName "0.2.4"
     }
     buildTypes {
@@ -48,8 +48,6 @@ dependencies {
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
 
     compile 'com.github.bumptech.glide:glide:3.6.0'
-
-
 
 
     debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
