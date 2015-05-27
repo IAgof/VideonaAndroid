@@ -38,7 +38,9 @@ public class VideoGalleryPresenter implements OnVideosRetrieved {
 
 
     public void start() {
+    }
 
+    public void stop() {
     }
 
     public void obtainVideos(int folder) {
@@ -53,8 +55,5 @@ public class VideoGalleryPresenter implements OnVideosRetrieved {
         }
     }
 
-
-    public void stop() {
-    }
 
 }

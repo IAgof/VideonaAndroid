@@ -1,10 +1,14 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +32,11 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
 
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;
+    private TimeChangesHandler timeChangesHandler = new TimeChangesHandler();
     private VideoGalleryAdapter videoGalleryAdapter;
     private VideoGalleryPresenter videoGalleryPresenter;
-    private RecyclerView.LayoutManager layoutManager;
     private Video selectedVideo;
     private int folder;
-    //private Bundle args;
 
     public static VideoGalleryFragment newInstance(int folder) {
         VideoGalleryFragment videoGalleryFragment = new VideoGalleryFragment();
@@ -47,7 +50,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        folder= this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
+        folder = this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
     }
 
     @Nullable
@@ -57,7 +60,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         ButterKnife.inject(this, v);
         if (videoGalleryPresenter == null)
             videoGalleryPresenter = new VideoGalleryPresenter(this);
-        layoutManager = new GridLayoutManager(this.getActivity(), 6,
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 6,
                 GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
@@ -89,6 +92,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        timeChangesHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -106,6 +110,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         videoGalleryAdapter = new VideoGalleryAdapter(videoList);
         videoGalleryAdapter.setRecyclerViewClickListener(this);
         recyclerView.setAdapter(videoGalleryAdapter);
+        showTimeTag(videoList);
     }
 
     @Override
@@ -126,5 +131,38 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
 
     public Video getSelectedVideo() {
         return selectedVideo;
+    }
+
+    private void showTimeTag(final List<Video> videoList) {
+        Runnable updateVideoTime = new Runnable() {
+            @Override
+            public void run() {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                for (int index = 0; index < videoList.size(); index++) {
+                    Video video = videoList.get(index);
+                    try {
+                        Log.d("SHOW TIME TAG", "" + index);
+                        retriever.setDataSource(video.getMediaPath());
+                        String duration = retriever.extractMetadata(
+                                MediaMetadataRetriever.METADATA_KEY_DURATION);
+                        int durationInt = Integer.parseInt(duration);
+                        video.setDuration(durationInt);
+                        timeChangesHandler.sendEmptyMessage(index);
+                    } catch (Exception e) {
+                        video.setDuration(0);
+                    }
+                }
+
+            }
+        };
+        Thread thread = new Thread(updateVideoTime);
+        thread.start();
+    }
+
+    private class TimeChangesHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            videoGalleryAdapter.notifyItemChanged(msg.what);
+        }
     }
 }

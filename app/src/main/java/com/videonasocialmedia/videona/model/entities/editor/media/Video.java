@@ -66,4 +66,8 @@ public class Video extends Media {
         super(null, null, mediaPath, fileStartTime, 0, null, null);
     }
 
+    public Video (String mediaPath, long fileStartTime, long duration){
+        super(null, null, mediaPath, fileStartTime, duration, null, null);
+    }
+
 }
