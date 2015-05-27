@@ -22,7 +22,6 @@ import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewCl
 
 import java.util.List;
 
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -33,14 +32,11 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
 
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;
+    private TimeChangesHandler timeChangesHandler = new TimeChangesHandler();
     private VideoGalleryAdapter videoGalleryAdapter;
     private VideoGalleryPresenter videoGalleryPresenter;
-    private RecyclerView.LayoutManager layoutManager;
     private Video selectedVideo;
     private int folder;
-    //private Bundle args;
-
-
 
     public static VideoGalleryFragment newInstance(int folder) {
         VideoGalleryFragment videoGalleryFragment = new VideoGalleryFragment();
@@ -64,7 +60,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         ButterKnife.inject(this, v);
         if (videoGalleryPresenter == null)
             videoGalleryPresenter = new VideoGalleryPresenter(this);
-        layoutManager = new GridLayoutManager(this.getActivity(), 6,
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 6,
                 GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
@@ -96,6 +92,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+        timeChangesHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -137,14 +134,6 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     }
 
     private void showTimeTag(final List<Video> videoList) {
-
-        final Handler timeChangesHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                videoGalleryAdapter.notifyItemChanged(msg.what);
-            }
-        };
-
         Runnable updateVideoTime = new Runnable() {
             @Override
             public void run() {
@@ -168,5 +157,12 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         };
         Thread thread = new Thread(updateVideoTime);
         thread.start();
+    }
+
+    private class TimeChangesHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            videoGalleryAdapter.notifyItemChanged(msg.what);
+        }
     }
 }
