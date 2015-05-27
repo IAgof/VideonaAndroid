@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.InitAppPresenter;
@@ -34,32 +35,25 @@ public class InitAppActivity extends Activity implements InitAppView {
      */
     private InitAppPresenter initAppPresenter;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_init_app);
-
         initAppPresenter = new InitAppPresenter(this, getApplicationContext());
-
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-
         initAppPresenter.start();
     }
-
 
     /*+++++++++*/
     /* SESSION */
@@ -92,8 +86,4 @@ public class InitAppActivity extends Activity implements InitAppView {
     public void navigate(Class cls) {
         startActivity(new Intent(getApplicationContext(), cls));
     }
-
-
-
-
 }
