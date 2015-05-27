@@ -1,10 +1,14 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAda
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 
 import java.util.List;
+
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -35,6 +40,8 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     private int folder;
     //private Bundle args;
 
+
+
     public static VideoGalleryFragment newInstance(int folder) {
         VideoGalleryFragment videoGalleryFragment = new VideoGalleryFragment();
         Bundle args = new Bundle();
@@ -47,7 +54,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        folder= this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
+        folder = this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
     }
 
     @Nullable
@@ -106,6 +113,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         videoGalleryAdapter = new VideoGalleryAdapter(videoList);
         videoGalleryAdapter.setRecyclerViewClickListener(this);
         recyclerView.setAdapter(videoGalleryAdapter);
+        showTimeTag(videoList);
     }
 
     @Override
@@ -126,5 +134,39 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
 
     public Video getSelectedVideo() {
         return selectedVideo;
+    }
+
+    private void showTimeTag(final List<Video> videoList) {
+
+        final Handler timeChangesHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                videoGalleryAdapter.notifyItemChanged(msg.what);
+            }
+        };
+
+        Runnable updateVideoTime = new Runnable() {
+            @Override
+            public void run() {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                for (int index = 0; index < videoList.size(); index++) {
+                    Video video = videoList.get(index);
+                    try {
+                        Log.d("SHOW TIME TAG", "" + index);
+                        retriever.setDataSource(video.getMediaPath());
+                        String duration = retriever.extractMetadata(
+                                MediaMetadataRetriever.METADATA_KEY_DURATION);
+                        int durationInt = Integer.parseInt(duration);
+                        video.setDuration(durationInt);
+                        timeChangesHandler.sendEmptyMessage(index);
+                    } catch (Exception e) {
+                        video.setDuration(0);
+                    }
+                }
+
+            }
+        };
+        Thread thread = new Thread(updateVideoTime);
+        thread.start();
     }
 }

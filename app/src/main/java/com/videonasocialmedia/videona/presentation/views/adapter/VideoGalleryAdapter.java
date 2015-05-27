@@ -9,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.util.List;
 
@@ -49,7 +51,6 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     @Override
     public void onBindViewHolder(VideoViewHolder holder, int position) {
-
         Video selectedVideo = videoList.get(position);
         String path = selectedVideo.getIconPath() != null
                 ? selectedVideo.getIconPath() : selectedVideo.getMediaPath();
@@ -60,6 +61,8 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .into(holder.thumb);
         holder.overlay.setSelected(position == selectedVideoPosition);
         holder.overlayIcon.setSelected(position == selectedVideoPosition);
+        String duration= TimeUtils.toFormattedTime(selectedVideo.getDuration());
+        holder.duration.setText(duration);
     }
 
     @Override
@@ -95,11 +98,16 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         @InjectView(R.id.gallery_thumb)
         ImageView thumb;
 
+        @InjectView(R.id.gallery_duration)
+        TextView duration;
+
         @InjectView(R.id.gallery_overlay)
         RelativeLayout overlay;
 
         @InjectView(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
+
+
 
         public VideoViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
             super(itemView);
