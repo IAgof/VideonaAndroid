@@ -90,11 +90,11 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="high_resolution_name">Excellent (4K)</string>
     <string name="high_resolution_value">Excellent</string>
     <string name="quality">Quality</string>
-    <string name="low_quality_name">Good (720p)</string>
-    <string name="low_quality_value">2 Mbps</string>
-    <string name="good_quality_name">Very good (1080p)</string>
-    <string name="good_quality_value">5 Mbps</string>
-    <string name="high_quality_name">10 Mbps</string>
+    <string name="low_quality_name">Good (2 Mbps)</string>
+    <string name="low_quality_value">Good</string>
+    <string name="good_quality_name">Very good (5 Mbps)</string>
+    <string name="good_quality_value">Very good</string>
+    <string name="high_quality_name">Excellent (10 Mbps)</string>
     <string name="high_quality_value">Excellent</string>
     <string name="title_second_section">About</string>
 

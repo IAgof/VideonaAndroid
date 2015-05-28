@@ -1,3 +1,13 @@
+/*
+ * Copyright (c) 2015. Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Veronica Lago Fominaya
+ */
+
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
@@ -6,7 +16,7 @@ import android.os.Bundle;
 import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
 
 /**
- * Created by Veronica Lago Fominaya on 26/05/2015.
+ * This class is used to manage the setting menu.
  */
 public class SettingsActivity extends Activity {
 
