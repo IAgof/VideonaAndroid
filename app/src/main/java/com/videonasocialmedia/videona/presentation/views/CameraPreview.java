@@ -32,7 +32,7 @@ import java.util.List;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
 
-    private static final String TAG = "CameraPreview";
+    private static final String LOG_TAG = "CameraPreview";
 
     public static List<String> colorEffects;
 
@@ -55,6 +55,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private boolean detectScreenOrientation90 = true;
     private boolean detectScreenOrientation270 = true;
 
+    private boolean supportAutoFocus = true;
+
     public CameraPreview(Context context, Camera camera) {
 
         super(context);
@@ -74,7 +76,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         for (Camera.Size str : mSupportedPreviewSizes)
 
-            Log.e(TAG, " cameraPreview " + str.width + "/" + str.height);
+            Log.e(LOG_TAG, " cameraPreview " + str.width + "/" + str.height);
 
 
         // Install a SurfaceHolder.Callback so we get notified when the
@@ -128,14 +130,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceDestroyed(SurfaceHolder holder) {
 
         // empty. Take care of releasing the Camera preview in your activity.
-
+        mCamera.stopPreview();
+        mCamera.release();
+        mCamera = null;
 
     }
 
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 
-        Log.e(TAG, "surfaceChanged => width=" + w + ", height=" + h);
+        Log.e(LOG_TAG, "surfaceChanged => width=" + w + ", height=" + h);
 
         // If your preview can change or rotate, take care of those events here.
 
@@ -145,7 +149,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             // preview surface does not exist
 
-            Log.d("TAG", "la superficie no ha cambiado");
+            Log.d("LOG_TAG", "la superficie no ha cambiado");
             return;
 
         }
@@ -168,14 +172,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             parameters.setPreviewSize(ConfigUtils.VIDEO_SIZE_WIDTH, ConfigUtils.VIDEO_SIZE_HEIGHT);
             //parameters.setPreviewSize(size.width, size.height);
 
-            Log.e(TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
+            Log.e(LOG_TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
 
 
             // Focus_continuous doesn't work well on OnePlus One
             // parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
 
             // AutoFocus onTouch ON
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            if(supportAutoFocus(mCamera)) {
+                 parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            }
 
 
             mCamera.setParameters(parameters);
@@ -185,9 +191,25 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         } catch (Exception e) {
 
             // ignore: tried to stop a non-existent preview
-            Log.e(TAG, "Error starting camera preview: ", e);
+            Log.e(LOG_TAG, "Error starting camera preview: ", e);
 
         }
+    }
+
+    private boolean supportAutoFocus(Camera mCamera) {
+
+        Camera.Parameters parameters = mCamera.getParameters();
+
+        for(String autoFocus: parameters.getSupportedFocusModes()){
+            if(autoFocus.compareTo(Camera.Parameters.FOCUS_MODE_AUTO) == 0){
+                Log.d(LOG_TAG, "Autofocus supported");
+                supportAutoFocus = true;
+                return true;
+            }
+        }
+
+        supportAutoFocus = false;
+        return supportAutoFocus;
     }
 
     @Override
@@ -330,22 +352,26 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
      * @param - Rect - new area for auto focus
      */
     public void doTouchFocus(final Rect tfocusRect) {
-        Log.i(TAG, "TouchFocus");
-        try {
-            final List<Camera.Area> focusList = new ArrayList<Camera.Area>();
-            Camera.Area focusArea = new Camera.Area(tfocusRect, 1000);
-            focusList.add(focusArea);
-            Camera.Parameters para = mCamera.getParameters();
-            para.setFocusAreas(focusList);
-            para.setMeteringAreas(focusList);
-            mCamera.setParameters(para);
-            mCamera.autoFocus(myAutoFocusCallback);
+        Log.i(LOG_TAG, "TouchFocus");
 
-            touchArea = tfocusRect;
+        if(supportAutoFocus) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.i(TAG, "Unable to autofocus");
+            try {
+                final List<Camera.Area> focusList = new ArrayList<Camera.Area>();
+                Camera.Area focusArea = new Camera.Area(tfocusRect, 1000);
+                focusList.add(focusArea);
+                Camera.Parameters para = mCamera.getParameters();
+                para.setFocusAreas(focusList);
+                para.setMeteringAreas(focusList);
+                mCamera.setParameters(para);
+                mCamera.autoFocus(myAutoFocusCallback);
+
+                touchArea = tfocusRect;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.i(LOG_TAG, "Unable to autofocus");
+            }
         }
     }
 

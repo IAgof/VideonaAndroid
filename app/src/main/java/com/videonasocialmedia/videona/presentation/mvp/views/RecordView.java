@@ -19,9 +19,11 @@ import java.util.ArrayList;
 
 public interface RecordView extends MVPView {
 
-    void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
+    void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView,
+                      boolean supportAutoFocus);
 
-    void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
+    void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView,
+                     boolean supportAutoFocus);
 
     void showRecordStarted();
 
@@ -43,10 +45,10 @@ public interface RecordView extends MVPView {
 
     void unLockNavigator();
 
-    void showFlash(boolean isFlashSupported);
+    void showSettingsCamera(boolean isFlashSupported,boolean isChangeCameraSupported);
 
     void showFlashModeTorch(boolean mode);
 
-    void showChangeCamera(boolean mode);
+    void showCamera(int cameraMode);
 
 }

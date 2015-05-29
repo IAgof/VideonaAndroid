@@ -7,7 +7,15 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import com.videonasocialmedia.videona.presentation.views.CameraPreview;
+import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
+
 public interface OnChangeCameraListener {
 
-    public void onChangeCamera();
+    public void onChangeCameraSuccess(int cameraMode);
+
+    public void onReleaseChangeCameraPreview(CameraPreview cameraPreview,
+                                CustomManualFocusView customManualFocusView, boolean autoFocus);
+
+    public void onChangeCameraError();
 }

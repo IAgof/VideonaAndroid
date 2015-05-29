@@ -47,9 +47,7 @@ public class CheckCameraSettingsUseCase {
 
         userPreferences = new UserPreferences(context);
 
-        if(camera == null){
-            camera = getCameraInstance(cameraId);
-        }
+
 
     }
 
@@ -77,6 +75,10 @@ public class CheckCameraSettingsUseCase {
 
     public void checkNumCameras(){
 
+        if(camera == null){
+            camera = getCameraInstance(cameraId);
+        }
+
         int numCameras = camera.getNumberOfCameras();
 
         if(numCameras > 1) {
@@ -85,11 +87,16 @@ public class CheckCameraSettingsUseCase {
 
         }
 
+        camera.release();
+
     }
 
 
     public void checkFlashMode(){
 
+        if(camera == null){
+            camera = getCameraInstance(cameraId);
+        }
 
         int numCameras = camera.getNumberOfCameras();
 
@@ -133,11 +140,16 @@ public class CheckCameraSettingsUseCase {
             }
         }
 
+        camera.release();
+
     }
 
 
     public void checkCameraVideoSize(){
 
+        if(camera == null){
+            camera = getCameraInstance(cameraId);
+        }
 
         int numCameras = camera.getNumberOfCameras();
 
@@ -193,10 +205,8 @@ public class CheckCameraSettingsUseCase {
             }
         }
 
-    }
-
-    public void releaseCamera(){
-
         camera.release();
+
     }
+
 }

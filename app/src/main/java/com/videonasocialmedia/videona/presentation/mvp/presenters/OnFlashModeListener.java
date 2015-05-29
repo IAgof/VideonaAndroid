@@ -12,4 +12,6 @@ public interface OnFlashModeListener {
     public void onFlashModeTorchAdded();
 
     public void onFlashModeTorchRemoved();
+
+    public void onFlashModeTorchError();
 }

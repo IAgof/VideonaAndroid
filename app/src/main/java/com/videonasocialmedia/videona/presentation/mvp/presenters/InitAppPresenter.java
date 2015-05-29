@@ -47,6 +47,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
         checkPathsAppUseCase = new CheckPathsAppUseCase(context);
         loadingProjectUseCase = new LoadingProjectUseCase(context);
         checkCameraSettingsUseCase = new CheckCameraSettingsUseCase(context);
+        //TODO initAppUseCase setDefault userPreferences back camera, etc, ...
 
     }
 
@@ -59,7 +60,6 @@ public class InitAppPresenter  implements OnInitAppEventListener {
         checkCameraSettingsUseCase.checkNumCameras();
         checkCameraSettingsUseCase.checkFlashMode();
         checkCameraSettingsUseCase.checkCameraVideoSize();
-        checkCameraSettingsUseCase.releaseCamera();
 
         checkPathsApp();
 

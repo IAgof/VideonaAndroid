@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface OnSupportChangeCamera {
+public interface OnSettingsCameraListener {
 
-    public void showChangeCamera(boolean isChangeCameraSupported);
+    public void onSettingsCameraSuccess(boolean isChangeCameraSupported, boolean isFlashSupported);
 }

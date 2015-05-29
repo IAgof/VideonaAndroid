@@ -29,7 +29,8 @@ import java.util.ArrayList;
 
 public class RecordPresenter extends Presenter implements OnRecordEventListener,
         OnColorEffectListener, OnPreviewListener, OnOrientationEventListener,
-        OnAddMediaFinishedListener, OnSupportChangeCamera, OnSupportFlashMode, OnFlashModeListener {
+        OnAddMediaFinishedListener, OnChangeCameraListener, OnSettingsCameraListener,
+        OnFlashModeListener {
 
     /**
      * Record View
@@ -107,11 +108,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
      */
     public void onCreate(){
 
-
-        recordUseCase.supportChangeCamera(this);
-
-        recordUseCase.supportFlashMode(this);
-
+        recordUseCase.onCreate();
 
     }
 
@@ -151,6 +148,14 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
         }
     }
 
+    /**
+     * ReStart camera
+     */
+    public void reStartCamera(int displayOrientation){
+
+        recordUseCase.startPreview(this, displayOrientation);
+
+    }
 
     /**
      * Record Button pressed
@@ -174,6 +179,16 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
         recordUseCase.getAvailableEffects(this);
     }
 
+
+    /**
+     *
+     */
+    public void onSettingsCameraListener(){
+
+        recordUseCase.getSettingsCamera(this);
+
+    }
+
     /**
      * Flash Mode Torch pressed
      *
@@ -193,8 +208,11 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
             isFlahModeON = true;
         }
 
+    }
 
+    public void onChangeCameraListener(){
 
+        recordUseCase.changeCamera(this);
 
     }
 
@@ -257,7 +275,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
 
         Log.d(LOG_TAG, "onRecordStopped addVideoToProject " + pathVideoRecorded);
 
-        addVideoToProjectUseCase.addMediaItemsToProject(list,this);
+        addVideoToProjectUseCase.addMediaItemsToProject(list, this);
 
     }
 
@@ -266,17 +284,20 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
         recordView.showRecordFinished();
         recordView.stopChronometer();
         isRecording = false;
+        Log.d(LOG_TAG, "onRecordRestarted");
     }
 
     @Override
-    public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
-        recordView.startPreview(cameraPreview, customManualFocusView);
+    public void onPreviewStarted(CameraPreview cameraPreview,
+                                 CustomManualFocusView customManualFocusView, boolean autofocus) {
+        recordView.startPreview(cameraPreview, customManualFocusView, autofocus);
         Log.d(LOG_TAG, "onPreviewStarted");
     }
 
     @Override
-    public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
-        recordView.stopPreview(cameraPreview, customManualFocusView);
+    public void onPreviewReStarted(CameraPreview cameraPreview,
+                                   CustomManualFocusView customManualFocusView, boolean autofocus) {
+        recordView.stopPreview(cameraPreview, customManualFocusView, autofocus);
         Log.d(LOG_TAG, "onPreviewReStarted");
     }
 
@@ -284,6 +305,8 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
     public void onOrientationChanged(int rotationView) {
 
         recordUseCase.setRotationView(rotationView);
+
+        Log.d(LOG_TAG, "onOrientationChanged");
 
     }
 
@@ -363,6 +386,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
     public void onFlashModeTorchAdded() {
 
         recordView.showFlashModeTorch(true);
+        Log.d(LOG_TAG, "onFlashModeTorchAdded");
 
     }
 
@@ -370,17 +394,43 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
     public void onFlashModeTorchRemoved() {
 
         recordView.showFlashModeTorch(false);
+        Log.d(LOG_TAG, "onFlashModeTorchRemoved");
 
     }
 
     @Override
-    public void showFlash(boolean isFlashSupported) {
+    public void onFlashModeTorchError(){
+        //TODO something happened
+        //recordView.showErrorMessage(String blablabla)
+    }
 
-        recordView.showFlash(isFlashSupported);
+
+    @Override
+    public void onSettingsCameraSuccess(boolean isChangeCameraSupported,
+                                        boolean isFlashSupported) {
+        recordView.showSettingsCamera(isChangeCameraSupported, isFlashSupported);
+        Log.d(LOG_TAG, "onSettingsCameraSuccess isChangeCameraSupported " + isChangeCameraSupported
+         + " isFlashSupported " + isFlashSupported);
     }
 
     @Override
-    public void showChangeCamera(boolean isShowChangeCameraSupported) {
-        recordView.showChangeCamera(isShowChangeCameraSupported);
+    public void onChangeCameraSuccess(int cameraMode){
+        recordView.showCamera(cameraMode);
+        Log.d(LOG_TAG, "onChangeCameraSuccess cameraMode " + cameraMode);
+    }
+
+    @Override
+    public void onReleaseChangeCameraPreview(CameraPreview cameraPreview,
+                                              CustomManualFocusView customManualFocusView, boolean
+                                             autofocus){
+        recordView.stopPreview(cameraPreview, customManualFocusView, autofocus);
+        Log.d(LOG_TAG, "onReleaseChangeCameraPreview");
+    }
+
+    @Override
+    public void onChangeCameraError(){
+
+        //TODO something happened
+        //recordView.showErrorMessage(String blablabla);
     }
 }
