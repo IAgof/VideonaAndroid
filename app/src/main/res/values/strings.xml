@@ -80,6 +80,27 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="filter_effect_whiteboard">whiteboard</string>
     <string name="filter_effect_blackboard">blackboard</string>
 
+    <!-- Activity Settings -->
+    <string name="title_first_section">Camera</string>
+    <string name="resolution">Resolution</string>
+    <string name="low_resolution_name">Good (720p)</string>
+    <string name="low_resolution_value">Good</string>
+    <string name="good_resolution_name">Very good (1080p)</string>
+    <string name="good_resolution_value">Very good</string>
+    <string name="high_resolution_name">Excellent (4K)</string>
+    <string name="high_resolution_value">Excellent</string>
+    <string name="quality">Quality</string>
+    <string name="low_quality_name">Good (2 Mbps)</string>
+    <string name="low_quality_value">Good</string>
+    <string name="good_quality_name">Very good (5 Mbps)</string>
+    <string name="good_quality_value">Very good</string>
+    <string name="high_quality_name">Excellent (10 Mbps)</string>
+    <string name="high_quality_value">Excellent</string>
+    <string name="title_second_section">About</string>
+    <string name="title_third_section">Vote</string>
+    <string name="content_third_section">Vote our app</string>
+    <string name="preferences_resolution_not_supported">Incompatible device</string>
+    <string name="preferences_quality_not_supported">Incompatible device</string>
 
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Something bad happened. Try to add again</string>

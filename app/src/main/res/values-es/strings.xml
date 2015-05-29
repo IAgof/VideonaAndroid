@@ -81,6 +81,28 @@
     <string name="loginError">Something was wrong. Try to login again</string>
     <string name="signUpError">Something bad happend. Try to register again</string>
 
+    <!-- Activity Settings -->
+    <string name="title_first_section">Cámara</string>
+    <string name="resolution">Resolución</string>
+    <string name="low_resolution_name">Buena (720p)</string>
+    <string name="low_resolution_value">Buena</string>
+    <string name="good_resolution_name">Muy buena (1080p)</string>
+    <string name="good_resolution_value">Muy buena</string>
+    <string name="high_resolution_name">Excelente (4K)</string>
+    <string name="high_resolution_value">Excelente</string>
+    <string name="quality">Calidad</string>
+    <string name="low_quality_name">Buena (720p)</string>
+    <string name="low_quality_value">Buena</string>
+    <string name="good_quality_name">Muy buena (1080p)</string>
+    <string name="good_quality_value">Muy buena</string>
+    <string name="high_quality_name">Excelente (10 Mbps)</string>
+    <string name="high_quality_value">Excelente</string>
+    <string name="title_second_section">Sobre nosotros</string>
+    <string name="title_third_section">Vota</string>
+    <string name="content_third_section">Vota nuestra aplicación</string>
+    <string name="preferences_resolution_not_supported">Su dispositivo no es compatible</string>
+    <string name="preferences_quality_not_supported">Su dispositivo no es compatible</string>
+
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Something bad happened. Try to add again</string>
 
