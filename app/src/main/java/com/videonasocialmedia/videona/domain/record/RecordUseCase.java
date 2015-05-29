@@ -16,14 +16,18 @@ import android.util.Log;
 import android.view.Surface;
 import android.widget.Chronometer;
 
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnChangeCameraListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnColorEffectListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnPreviewListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSettingsCameraListener;
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,9 +58,19 @@ public class RecordUseCase {
     private CustomManualFocusView customManualFocusView;
 
     /**
-     * Int cameraId. Future use to multicamera
+     * Int cameraId. default back camera
      */
     private int cameraId = 0;
+
+    /**
+     * Camera ID back camera
+     */
+    private final int BACK_CAMERA = 0;
+
+    /**
+     * Camera ID front camera
+     */
+    private final int FRONT_CAMERA = 1;
 
     /**
      * Camera Android
@@ -88,13 +102,32 @@ public class RecordUseCase {
      */
     private int rotationView = 0;
 
+    /**
+     * User preferences, private data
+     */
+    UserPreferences userPreferences;
+
+    /**
+     * Context
+     */
+    private Context context;
+
+    /**
+     * Boolean supportAutofocus
+     */
+    private boolean autoFocus = true;
+
     public RecordUseCase(Context context){
 
+        this.context = context;
+
+        userPreferences = new UserPreferences(context);
+
         if(camera == null){
-            camera = getCameraInstance();
+            camera = getCameraInstance(userPreferences.getCameraId());
         }
 
-        this.rotationView = rotationView;
+       // this.rotationView = rotationView;
 
         cameraPreview = new CameraPreview(context, camera);
 
@@ -113,7 +146,7 @@ public class RecordUseCase {
      */
     public void startPreview(OnPreviewListener listener, int displayOrientation){
 
-        listener.onPreviewStarted(cameraPreview, customManualFocusView);
+        listener.onPreviewStarted(cameraPreview, customManualFocusView, autoFocus);
         setCameraOrientation(displayOrientation);
     }
 
@@ -125,7 +158,7 @@ public class RecordUseCase {
      */
     public void reStartPreview(OnPreviewListener listener){
 
-        listener.onPreviewReStarted(cameraPreview, customManualFocusView);
+        listener.onPreviewReStarted(cameraPreview, customManualFocusView, autoFocus);
 
     }
 
@@ -206,6 +239,16 @@ public class RecordUseCase {
     }
 
     /**
+     * onCreate UseCase
+     */
+    public void onCreate(){
+
+        // set default back camera onCreate
+        userPreferences.setCameraId(FRONT_CAMERA);
+
+    }
+
+    /**
      * onResume UseCase, getCamera
      */
     public void onResume(){
@@ -216,8 +259,10 @@ public class RecordUseCase {
 
             Log.d(LOG_TAG, "RecordUseCase onResume() camera null ");
 
-              camera = getCameraInstance();
+              camera = getCameraInstance(userPreferences.getCameraId());
         }
+
+
 
         //   recordView.startPreview(camera, cameraPreview);
 
@@ -288,10 +333,129 @@ public class RecordUseCase {
 
     }
 
+    /**
+     * Get camera settings
+     */
+    public void getSettingsCamera(OnSettingsCameraListener listener){
+
+
+        listener.onSettingsCameraSuccess(supportChangeCamera(),supportFlashMode());
+    }
+
+    /**
+     * Support change camera. Minimum quality 720p
+     */
+    private boolean supportChangeCamera(){
+
+        if(userPreferences.getFrontCameraSupported()) {
+            return true;
+        }
+        return false;
+
+    }
+
+    /**
+     * Change camera
+     */
+    public void changeCamera(OnChangeCameraListener listener){
+
+        int cameraMode = userPreferences.getCameraId();
+
+        int newCameraMode = cameraMode;
+
+        switch (cameraMode){
+            case BACK_CAMERA:
+                userPreferences.setCameraId(FRONT_CAMERA);
+                newCameraMode = FRONT_CAMERA;
+                break;
+            case FRONT_CAMERA:
+                userPreferences.setCameraId(BACK_CAMERA);
+                newCameraMode = BACK_CAMERA;
+                break;
+            default:
+                userPreferences.setCameraId(BACK_CAMERA);
+                newCameraMode = BACK_CAMERA;
+                listener.onChangeCameraError();
+        }
+
+        //Update cameraId
+        cameraId = newCameraMode;
+
+        if(cameraMode != newCameraMode) {
+
+            // release camera, needed to open new cameraMode
+            releasePreviewCameraChanged(camera, cameraPreview);
+            // listener to removePreview, needed to open nee CameraPreview
+            listener.onReleaseChangeCameraPreview(cameraPreview, customManualFocusView,
+                    autoFocus);
+            // Update new camera, cameraPreview, customManualFocuscView
+
+            // listener succes, change icon resource
+            listener.onChangeCameraSuccess(newCameraMode);
+        } else {
+            listener.onChangeCameraError();
+        }
+    }
+
+    /**
+     * Support flash mode
+     * //TODO check flash support from model, now check from SharePreferences, private data.
+     *
+     */
+    private boolean supportFlashMode(){
+
+        int cameraId = getCameraId(camera);
+        boolean isFlashSupported;
+
+        switch (cameraId){
+            case BACK_CAMERA:
+                isFlashSupported = userPreferences.getBackCameraFlashSupported();
+                break;
+            case FRONT_CAMERA:
+                isFlashSupported = userPreferences.getFrontCameraFlashSupported();
+                break;
+            default:
+                isFlashSupported = userPreferences.getBackCameraFlashSupported();
+        }
+
+        return isFlashSupported;
+
+    }
+
+    /**
+     * Add flash mode torch
+     *
+     */
+    public void addFlashMode(String flashMode, OnFlashModeListener listener){
+
+        Camera.Parameters parameters = camera.getParameters();
+
+        parameters.setFlashMode(flashMode);
+        camera.setParameters(parameters);
+
+        listener.onFlashModeTorchAdded();
+
+    }
+
+    /**
+     * Remove flash mode torch
+     *
+     */
+    public void removeFlashMode(String flashMode, OnFlashModeListener listener){
+
+        Camera.Parameters parameters = camera.getParameters();
+
+        parameters.setFlashMode(flashMode);
+        camera.setParameters(parameters);
+
+        listener.onFlashModeTorchRemoved();
+
+    }
+
     /*
     * A safe way to get an instance of the Camera object.
     */
-    public Camera getCameraInstance() {
+    public Camera getCameraInstance(int cameraId) {
 
         Camera c = null;
 
@@ -325,6 +489,7 @@ public class RecordUseCase {
             }
 
 
+           // autoFocus = supportAutoFocus(c);
 
             //  }
 
@@ -336,10 +501,48 @@ public class RecordUseCase {
         Log.d(LOG_TAG, " getCameraInstance camera " + c);
 
 
-
         return c; // returns null if camera is unavailable
     }
 
+    /**
+     *  Change camera, release camera and preview
+     */
+    private void releasePreviewCameraChanged(Camera camera, CameraPreview cameraPreview){
+
+        releaseCamera(camera, cameraPreview);
+    }
+
+    private boolean supportAutoFocus(Camera mCamera) {
+
+        Camera.Parameters parameters = mCamera.getParameters();
+
+        for(String autoFocus: parameters.getSupportedFocusModes()){
+            if(autoFocus.compareTo(Camera.Parameters.FOCUS_MODE_AUTO) == 0){
+                Log.d(LOG_TAG, "Autofocus supported");
+                return true;
+            }
+        }
+
+        Log.d(LOG_TAG, "Autofocus not supported");
+        return false;
+    }
+
+    /**
+     * Get Camera Id in use
+     *
+     * //TODO get this info from camera or userPreferences.
+     *
+     * @param camera
+     * @return
+     */
+    private int getCameraId(Camera camera){
+
+        int cameraId = userPreferences.getCameraId();
+
+      //  Camera.CameraInfo.CAMERA_FACING_BACK
+
+        return cameraId;
+    };
 
     /**
      * Prepare VideoRecorder.
@@ -479,7 +682,6 @@ public class RecordUseCase {
             camera.setPreviewCallback(null);
             cameraPreview.getHolder().removeCallback(cameraPreview);
             camera.release();        // release the camera for other applications
-            camera = null;
 
         }
     }

@@ -10,6 +10,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.videonasocialmedia.videona.domain.initapp.CheckCameraSettingsUseCase;
 import com.videonasocialmedia.videona.domain.initapp.CheckPathsAppUseCase;
 import com.videonasocialmedia.videona.domain.initapp.LoadingProjectUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
@@ -35,6 +36,8 @@ public class InitAppPresenter  implements OnInitAppEventListener {
 
     private CheckPathsAppUseCase checkPathsAppUseCase;
 
+    private CheckCameraSettingsUseCase checkCameraSettingsUseCase;
+
     private Context context;
 
     public InitAppPresenter(InitAppView initAppView, Context context){
@@ -43,6 +46,8 @@ public class InitAppPresenter  implements OnInitAppEventListener {
         this.context = context;
         checkPathsAppUseCase = new CheckPathsAppUseCase(context);
         loadingProjectUseCase = new LoadingProjectUseCase(context);
+        checkCameraSettingsUseCase = new CheckCameraSettingsUseCase(context);
+        //TODO initAppUseCase setDefault userPreferences back camera, etc, ...
 
     }
 
@@ -50,6 +55,11 @@ public class InitAppPresenter  implements OnInitAppEventListener {
      * Start presenter
      */
     public void start(){
+
+        // Check Camera Settings
+        checkCameraSettingsUseCase.checkNumCameras();
+        checkCameraSettingsUseCase.checkFlashMode();
+        checkCameraSettingsUseCase.checkCameraVideoSize();
 
         checkPathsApp();
 
