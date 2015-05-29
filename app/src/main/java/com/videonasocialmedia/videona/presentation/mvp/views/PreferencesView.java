@@ -31,8 +31,8 @@ public interface PreferencesView {
      * This method sets the default settings supported by the device
      *
      * @param preference
-     * @param name
-     * @param key
+     * @param name the value for the key
+     * @param key the key of the preference
      */
     void setDefaultPreference(ListPreference preference, String name, String key);
 }

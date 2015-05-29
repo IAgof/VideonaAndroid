@@ -26,4 +26,13 @@
         </Preference>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/title_third_section">
+        <Preference
+            android:title="@string/content_third_section">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="market://details?id=com.videonasocialmedia.videona" />
+        </Preference>
+    </PreferenceCategory>
+
 </PreferenceScreen>

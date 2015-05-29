@@ -12,6 +12,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -26,7 +27,8 @@ import java.util.ArrayList;
 /**
  * This class is used to manage the setting menu.
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, PreferencesView {
+public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener,
+        PreferencesView {
 
     ListPreference resolutionPref;
     ListPreference qualityPref;
@@ -65,7 +67,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     @Override
-    public void setAvailablePreferences(ListPreference preference, ArrayList<String> listNames, ArrayList<String> listValues) {
+    public void setAvailablePreferences(ListPreference preference, ArrayList<String> listNames,
+                                        ArrayList<String> listValues) {
         int size = listNames.size();
         CharSequence entries[] = new String[size];
         CharSequence entryValues[] = new String[size];
@@ -84,12 +87,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         editor.commit();
     }
 
-    /**
-     * Call this method when user changes the shared preferences
-     *
-     * @param sharedPreferences
-     * @param key
-     */
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         Preference connectionPref = findPreference(key);

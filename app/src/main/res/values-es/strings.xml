@@ -98,6 +98,10 @@
     <string name="high_quality_name">Excelente (10 Mbps)</string>
     <string name="high_quality_value">Excelente</string>
     <string name="title_second_section">Sobre nosotros</string>
+    <string name="title_third_section">Vota</string>
+    <string name="content_third_section">Vota nuestra aplicación</string>
+    <string name="preferences_resolution_not_supported">Su dispositivo no es compatible</string>
+    <string name="preferences_quality_not_supported">Su dispositivo no es compatible</string>
 
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Something bad happened. Try to add again</string>
