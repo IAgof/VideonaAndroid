@@ -108,7 +108,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
      */
     public void onCreate(){
 
-        recordUseCase.onCreate();
+       // recordUseCase.onCreate();
 
     }
 
@@ -181,7 +181,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
 
 
     /**
-     *
+     * Settings Camera listener
      */
     public void onSettingsCameraListener(){
 

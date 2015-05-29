@@ -244,7 +244,7 @@ public class RecordUseCase {
     public void onCreate(){
 
         // set default back camera onCreate
-        userPreferences.setCameraId(FRONT_CAMERA);
+        //userPreferences.setCameraId(FRONT_CAMERA);
 
     }
 

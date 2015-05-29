@@ -15,6 +15,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -27,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -89,6 +91,11 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @InjectView(R.id.chronometer_record)
     Chronometer chronometerRecord;
+    /**
+     * Rec point, animation
+     */
+    @InjectView(R.id.imageRecPoint)
+    ImageView imageRecPoint;
     /**
      * Button to apply color effects
      */
@@ -252,8 +259,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             colorEffectAdapter = null;
             recordPresenter.effectClickListener();
         }
-        recordPresenter.onSettingsCameraListener();
+
         recordPresenter.onResume();
+        recordPresenter.onSettingsCameraListener();
         buttonRecord.setEnabled(true);
         chronometerRecord.setText("00:00");
     }
@@ -490,6 +498,16 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "startChronometer() RecordActivity");
         setChronometer();
         chronometerRecord.start();
+        // Activate animation rec
+        imageRecPoint.setVisibility(View.VISIBLE);
+        AnimationDrawable frameAnimation = (AnimationDrawable)imageRecPoint.getDrawable();
+        frameAnimation.setCallback(imageRecPoint);
+        frameAnimation.setVisible(true, true);
+
+        // Camera options disabled
+        buttonChangeCamera.setVisibility(View.GONE);
+
+
     }
 
     /**
@@ -499,6 +517,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     public void stopChronometer() {
         Log.d(LOG_TAG, "stopChronometer() RecordActivity");
         chronometerRecord.stop();
+        imageRecPoint.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -616,11 +635,13 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             // Hide menu
             linearLayoutRecordCameraOptions.setVisibility(View.GONE);
             buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_normal);
+            buttonSettingsCamera.setBackground(null);
             isSettingsCameraPressed = false;
         } else {
             // Show menu
             linearLayoutRecordCameraOptions.setVisibility(View.VISIBLE);
             buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_pressed);
+            buttonSettingsCamera.setBackgroundResource(R.color.transparent_palette_grey);
             isSettingsCameraPressed = true;
         }
     }
@@ -721,9 +742,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             colorEffectAdapter = null;
             recordPresenter.effectClickListener();
         }
-        recordPresenter.onSettingsCameraListener();
 
         recordPresenter.onResume();
+        recordPresenter.onSettingsCameraListener();
     }
 
     /**

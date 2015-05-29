@@ -47,7 +47,8 @@ public class CheckCameraSettingsUseCase {
 
         userPreferences = new UserPreferences(context);
 
-
+        //start back camera
+        userPreferences.setCameraId(0);
 
     }
 
