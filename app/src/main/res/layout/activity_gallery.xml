@@ -36,12 +36,12 @@
 
 
         <TextView
-            android:id="@+id/edit_title_text_view"
+            android:id="@+id/gallery_title_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="@string/edit_title_name"
+            android:text="@string/galleryActivityTitle"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/videona_blue_5" />
     </RelativeLayout>
@@ -60,7 +60,7 @@
             android:layout_gravity="top"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:background="@color/pastel_palette_blue"
+            android:background="@color/pastel_palette_red"
             />
 
     </android.support.v4.view.ViewPager>

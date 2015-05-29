@@ -63,8 +63,7 @@ public class ExportProjectUseCase {
         this.userPreferences = new UserPreferences(context);
         this.track = project.getMediaTrack();
 
-        pathVideoEdited = Constants.PATH_APP + File.separator + "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
-
+        pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
     }
 
     public void exportProject(OnExportProjectFinishedListener listener) {

@@ -15,20 +15,18 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -64,13 +62,13 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @OnClick(R.id.fragment_navigator_record_button)
-    public void navigateToRecord(){
+    public void navigateToRecord() {
         Intent record = new Intent(this.getActivity(), RecordActivity.class);
         startActivity(record);
     }
 
     @OnClick(R.id.fragment_navigator_edit_button)
-    public void navigateToEdit(){
+    public void navigateToEdit() {
         Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
         gallery.putExtra("SHARE", false);
         startActivity(gallery);
@@ -78,13 +76,24 @@ public class NavigationDrawerFragment extends Fragment {
 
 
     @OnClick(R.id.fragment_navigator_share_button)
-    public void navigateToShare(){
+    public void navigateToShare() {
 
         Intent share = new Intent(this.getActivity(), GalleryActivity.class);
         share.putExtra("SHARE", true);
         startActivity(share);
     }
 
+    @OnClick(R.id.fragment_navigator_settings_button)
+    public void navigateToSettings() {
+        Intent intent = new Intent(this.getActivity(), SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick({R.id.fragment_navigator_record_button, R.id.fragment_navigator_edit_button,
+            R.id.fragment_navigator_share_button, R.id.fragment_navigator_settings_button})
+    public void trackClicks(View view) {
+        sendButtonTracked(view.getId());
+    }
 
 
     /**
@@ -95,28 +104,24 @@ public class NavigationDrawerFragment extends Fragment {
     private void sendButtonTracked(int id) {
         String label;
         switch (id) {
-            case R.id.edit_fragment_fx_button_item1:
-                label = "Go to item1 of edit fragment fx";
-                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
+            case R.id.fragment_navigator_record_button:
+                label = "Go to Record from " + this.getActivity().getLocalClassName();
                 break;
-            case R.id.edit_fragment_fx_button_item2:
-                label = "Go to item2 of edit fragment fx";
-                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
+            case R.id.fragment_navigator_edit_button:
+                label = "Go to edit " + this.getActivity().getLocalClassName();
                 break;
-            case R.id.edit_fragment_fx_button_item3:
-                label = "Go to item3 of edit fragment fx";
-                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
+            case R.id.fragment_navigator_share_button:
+                label = "Go to share " + this.getActivity().getLocalClassName();
                 break;
-            case R.id.edit_fragment_fx_button_item4:
-                label = "Go to item4 of edit fragment fx";
-                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
+            case R.id.fragment_navigator_settings_button:
+                label = "Go to settings " + this.getActivity().getLocalClassName();
                 break;
             default:
                 label = "Other";
         }
         tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("FxMenuFragment")
-                .setAction("item menu clicked")
+                .setCategory("Navigation Drawer")
+                .setAction("button clicked")
                 .setLabel(label)
                 .build());
         GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();

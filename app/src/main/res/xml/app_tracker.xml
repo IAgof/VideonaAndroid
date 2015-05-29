@@ -27,6 +27,9 @@
     <screenName name="com.videonasocialmedia.videona.presentation.views.activity.AboutActivity">
         VideonaApplication-Android AboutActivity
     </screenName>
+    <screenName name="com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity">
+        VideonaApplication-Android GalleryActivity
+    </screenName>
     <!--  The following value should be replaced with correct property id. -->
     <!--<string name="ga_trackingId">UA-59687187-1</string>-->
     <string name="ga_trackingId">UA-XXXXXXXX-1</string>

@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Video;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -48,6 +48,7 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
 
     // Intent
     private static final int CHOOSE_SHARE_REQUEST_CODE = 600;
+    public static String videoEdited;
     private static MediaPlayer mediaPlayer;
     /*CONFIG*/
     private final String LOG_TAG = this.getClass().getSimpleName();
@@ -59,29 +60,15 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
     @InjectView(R.id.share_seekbar)
     SeekBar seekBar;
     Uri uri;
-
-
     /*mvp*/
     private SharePresenter sharePresenter;
-
     //Preview
     private MediaController mediaController;
     private int durationVideoRecorded;
-    public static String videoEdited;
     private boolean isRunning = false;
-    protected Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (mediaPlayer.isPlaying() && isRunning) {
 
-                mediaPlayer.pause();
+    protected Handler handler = new Handler();
 
-            }
-
-
-        }
-
-    };
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
@@ -93,21 +80,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
      */
     private Tracker tracker;
     private boolean buttonBackPressed = false;
-
-    public static Thread performOnBackgroundThread(final Runnable runnable) {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } finally {
-
-                }
-            }
-        };
-        t.start();
-        return t;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,29 +102,60 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         sharePresenter.onCreate();
 
         // getting intent data
-      //  Intent in = getIntent();
-      //  videoEdited = in.getStringExtra("MEDIA_OUTPUT");
-
-        // Log.d(LOG_TAG, "VideoEdited " + videoEdited);
+        //  Intent in = getIntent();
+        //  videoEdited = in.getStringExtra("MEDIA_OUTPUT");
 
         setVideoInfo();
+    }
 
+    @Override
+    protected void onStart() {
+        Log.d(LOG_TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(LOG_TAG, "onResume");
+        super.onResume();
         initMediaPlayer(videoEdited);
 
         ContentValues content = new ContentValues(4);
-        content.put(Video.VideoColumns.TITLE, videoEdited);
-        content.put(Video.VideoColumns.DATE_ADDED,
+        content.put(MediaStore.Video.VideoColumns.TITLE, videoEdited);
+        content.put(MediaStore.Video.VideoColumns.DATE_ADDED,
                 System.currentTimeMillis() / 1000);
-        content.put(Video.Media.MIME_TYPE, "video/mp4");
+        content.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
         content.put(MediaStore.Video.Media.DATA, videoEdited);
         ContentResolver resolver = getContentResolver();
         uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
                 content);
+        isRunning = true;
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(LOG_TAG, "onPause");
+        super.onPause();
+        pauseVideo();
+        releaseVideoView();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(LOG_TAG, "onStop");
+        super.onStop();
+        releaseVideoView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
     }
 
     @OnClick(R.id.share_button_about)
     public void showAbout() {
-        Intent intent = new Intent(ShareActivity.this, AboutActivity.class);
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 
@@ -195,7 +198,7 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.share_using)), CHOOSE_SHARE_REQUEST_CODE);
+        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
     }
 
     private void updateSeekProgress() {
@@ -220,7 +223,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         }
         return result;
     }
-
 
     public void initMediaPlayer(final String videoPath) {
         if (mediaPlayer != null) {
@@ -261,34 +263,15 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         videoView.requestFocus();
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        isRunning = true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        pauseVideo();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) {
-        } else {
-            // Log.d(LOG_TAG, "requestCode " + requestCode + "resultCode " + resultCode + "intent data " + data.getDataString());
-            if (requestCode == CHOOSE_SHARE_REQUEST_CODE) {
-                //setResult(Activity.RESULT_OK);
-                //finish();
-            }
+    /**
+     * Releases the media player and the video view
+     */
+    private void releaseVideoView() {
+        videoView.stopPlayback();
+        videoView.clearFocus();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 

@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -211,6 +210,12 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         super.onStart();
 
         //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
         Handler h=new Handler();
         h.postDelayed(new Runnable() {
 
@@ -218,7 +223,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             public void run() {
                 drawerLayout.closeDrawer(navigatorView);
             }
-        }, 3500);
+        }, 1500);
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
@@ -256,14 +261,24 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onPause() {
         super.onPause();
         Log.d(LOG_TAG, "onPause() RecordActivity");
-        recordPresenter.onStop();
-        recordPresenter = null;
+        releaseRecordPresenter();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "onStop() RecordActivity");
+        releaseRecordPresenter();
+    }
+
+    /**
+     * Releases the record presenter
+     */
+    private void releaseRecordPresenter() {
+        if (recordPresenter != null) {
+            recordPresenter.onStop();
+            recordPresenter = null;
+        }
     }
 
     /**

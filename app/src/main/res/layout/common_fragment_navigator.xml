@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
         android:background="@null"
-        android:src="@drawable/share_activity_button_about_selector" />
+        android:src="@drawable/common_button_settings_selector" />
 
     <LinearLayout
 

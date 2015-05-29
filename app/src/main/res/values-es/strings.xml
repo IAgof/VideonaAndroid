@@ -81,6 +81,28 @@
     <string name="loginError">Something was wrong. Try to login again</string>
     <string name="signUpError">Something bad happend. Try to register again</string>
 
+    <!-- Activity Settings -->
+    <string name="title_first_section">Cámara</string>
+    <string name="resolution">Resolución</string>
+    <string name="low_resolution_name">Buena (720p)</string>
+    <string name="low_resolution_value">Buena</string>
+    <string name="good_resolution_name">Muy buena (1080p)</string>
+    <string name="good_resolution_value">Muy buena</string>
+    <string name="high_resolution_name">Excelente (4K)</string>
+    <string name="high_resolution_value">Excelente</string>
+    <string name="quality">Calidad</string>
+    <string name="low_quality_name">Buena (720p)</string>
+    <string name="low_quality_value">Buena</string>
+    <string name="good_quality_name">Muy buena (1080p)</string>
+    <string name="good_quality_value">Muy buena</string>
+    <string name="high_quality_name">Excelente (10 Mbps)</string>
+    <string name="high_quality_value">Excelente</string>
+    <string name="title_second_section">Sobre nosotros</string>
+    <string name="title_third_section">Vota</string>
+    <string name="content_third_section">Vota nuestra aplicación</string>
+    <string name="preferences_resolution_not_supported">Su dispositivo no es compatible</string>
+    <string name="preferences_quality_not_supported">Su dispositivo no es compatible</string>
+
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Something bad happened. Try to add again</string>
 
@@ -374,5 +396,9 @@ Cuando resulten de aplicación al Item, el Comprador podrá hacer uso de las gar
 Videona otorga a los Usuarios una licencia personal, revocable, no exclusiva y no transferible para cargar y utilizar el software de la Aplicación exclusivamente para el uso de los Servicios previstos en las presentes Condiciones Particulares. El software no podrá ser utilizado, copiado, reproducido, transmitido, mostrado, distribuido, vendido, licenciado, descargado o explotado en cualquier forma diferente al funcionamiento del Servicio. Queda prohibido al Usuario realizar ingeniería inversa, descompilar, desensamblar o de cualquier otra forma crear códigos fuentes a partir del software.
 Con respecto a las funcionalidades y herramientas de la Aplicación que permiten al Usuario crear Features, Videona otorga a los Usuarios una licencia para utilizarlas, reproducirlas y preparar trabajos u obras derivadas, exclusivamente para la creación y venta de Features, conforme a las presentes Condiciones Particulares.\n
     </string>
+    <string name="galleryActivityTitle">Galería</string>
+    <string name="mastersFolderTitle">Originales</string>
+    <string name="editedFolderTitle">Editados</string>
+
 
 </resources>

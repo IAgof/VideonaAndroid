@@ -51,6 +51,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         vpPager.setOnPageChangeListener(this);
 
         galleryPagerPresenter = new GalleryPagerPresenter(this);
+
+
     }
 
     @Override
@@ -99,10 +101,10 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         startActivity(intent);
     }
 
-}
+
 
 class MyPagerAdapter extends FragmentPagerAdapter {
-    private static int NUM_ITEMS = 2;
+    private int NUM_ITEMS = 2;
 
     private VideoGalleryFragment mastersFragment;
     private VideoGalleryFragment editedFragment;
@@ -147,15 +149,15 @@ class MyPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0: // Fragment # 0 - This will show FirstFragment
-                return "Masters";
-            case 1: // Fragment # 0 - This will show FirstFragment different title
-                return "Edited";
+            case 0:
+                return getResources().getString(R.string.mastersFolderTitle);
+            case 1:
+                return getResources().getString(R.string.editedFolderTitle);
             default:
-                return "Gallery";
+                return getResources().getString(R.string.galleryActivityTitle);
         }
     }
-
+}
 
 }
 
