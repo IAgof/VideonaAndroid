@@ -68,19 +68,19 @@ public class PreferencesPresenter {
         boolean isPaidApp = true;
         // TODO check with flavors the app version (free/paid)
 
-        if (sharedPreferences.getBoolean("backCamera720pSupported", false) == true && isPaidApp == true) {
+        if (sharedPreferences.getBoolean("backCamera720pSupported", false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.low_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.low_resolution_value));
             defaultResolution = context.getResources().getString(R.string.low_resolution_value);
         }
-        if (sharedPreferences.getBoolean("backCamera1080pSupported", false) == true && isPaidApp == true) {
+        if (sharedPreferences.getBoolean("backCamera1080pSupported", false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.good_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.good_resolution_value));
             if (defaultResolution == null) {
                 defaultResolution = context.getResources().getString(R.string.good_resolution_value);
             }
         }
-        if (sharedPreferences.getBoolean("backCamera2160pSupported", false) == true && isPaidApp == true) {
+        if (sharedPreferences.getBoolean("backCamera2160pSupported", false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.high_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.high_resolution_value));
             if (defaultResolution == null) {
@@ -110,19 +110,19 @@ public class PreferencesPresenter {
         boolean isPaidApp = true;
         // TODO check with flavors the app version (free/paid)
 
-        if (isPaidApp == true) {
+        if (isPaidApp) {
             qualityNames.add(context.getResources().getString(R.string.low_quality_name));
             qualityValues.add(context.getResources().getString(R.string.low_quality_value));
             if (defaultQuality == null) {
                 defaultQuality = context.getResources().getString(R.string.low_quality_value);
             }
         }
-        if (isPaidApp == true) {
+        if (isPaidApp) {
             qualityNames.add(context.getResources().getString(R.string.good_quality_name));
             qualityValues.add(context.getResources().getString(R.string.good_quality_value));
             defaultQuality = context.getResources().getString(R.string.good_quality_value);
         }
-        if (isPaidApp == true) {
+        if (isPaidApp) {
             qualityNames.add(context.getResources().getString(R.string.high_quality_name));
             qualityValues.add(context.getResources().getString(R.string.high_quality_value));
             if (defaultQuality == null) {
