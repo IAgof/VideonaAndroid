@@ -24,7 +24,7 @@ public class ApiHeaders implements RequestInterceptor {
     @Override
     public void intercept(RequestFacade request) {
         request.addHeader("User-Agent", "Videona-App");
-        Session session= Session.getInstance();
+        Session session = Session.getInstance();
         if (Session.getInstance().hasToken()) {
             request.addHeader("Authorization", "Bearer " + session.getAuthToken().getToken());
         }

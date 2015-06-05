@@ -47,12 +47,17 @@ public abstract class Media extends EditorElement {
     /**
      * The start time of the media resource within the file it represents.
      */
-    protected long fileStartTime;
+    protected int fileStartTime;
+
+    /**
+     * The start time of the media resource within the file it represents.
+     */
+    protected int fileStopTime;
 
     /**
      * The long of the media resource to be added to the project
      */
-    protected long duration;
+    protected int duration;
 
     /**
      * Transition before the media item.
@@ -87,21 +92,22 @@ public abstract class Media extends EditorElement {
     /**
      * Constructor of minimum number of parameters. Default constructor.
      *
-     * @param identifier - Unique identifier of the media for the current project.
-     * @param iconPath - Path to a resource that allows represent the media in the view.
-     * @param mediaPath - Path to the resource file that this media represents.
+     * @param identifier    - Unique identifier of the media for the current project.
+     * @param iconPath      - Path to a resource that allows represent the media in the view.
+     * @param mediaPath     - Path to the resource file that this media represents.
      * @param fileStartTime - Media item initial time in milliseconds within the file referenced
-     * @param duration - Media item duration in milliseconds within the file referenced
-     * @param license - Legal stuff.
-     * @param authors - List of authors of the media item.
+     * @param duration      - Media item duration in milliseconds within the file referenced
+     * @param license       - Legal stuff.
+     * @param authors       - List of authors of the media item.
      */
-    protected Media(String identifier, String iconPath, String mediaPath, long fileStartTime,
-                    long duration, ArrayList<User> authors, License license) {
+    protected Media(String identifier, String iconPath, String mediaPath, int fileStartTime,
+                    int duration, ArrayList<User> authors, License license) {
         super(identifier, iconPath);
         this.mediaPath = mediaPath;
         this.source = new File(this.mediaPath);
         this.fileStartTime = fileStartTime;
         this.duration = duration;
+        this.fileStopTime = duration;
         this.authors = authors;
         this.license = license;
     }
@@ -109,22 +115,22 @@ public abstract class Media extends EditorElement {
     /**
      * Parametrized constructor. It requires all possible attributes for an effect object.
      *
-     * @param identifier - Unique identifier of the media for the current project.
-     * @param iconPath - Path to a resource that allows represent the media in the view.
+     * @param identifier       - Unique identifier of the media for the current project.
+     * @param iconPath         - Path to a resource that allows represent the media in the view.
      * @param selectedIconPath - if not null used as icon when something interact with the element.
-     *                           If null it will be used the iconPath as default.
-     * @param title - Human friendly title for the media item.
-     * @param mediaPath - Path to the resource file that this media represents.
-     * @param fileStartTime - Media item initial time in milliseconds within the file referenced
-     * @param duration - Media item duration in milliseconds within the file referenced
-     * @param opening - reference to a transition after the media item in the track.
-     * @param ending - reference to a transition before the media item in the track.
-     * @param metadata - File metadata.
-     * @param license - Legal stuff.
-     * @param authors - List of authors of the media item.
+     *                         If null it will be used the iconPath as default.
+     * @param title            - Human friendly title for the media item.
+     * @param mediaPath        - Path to the resource file that this media represents.
+     * @param fileStartTime    - Media item initial time in milliseconds within the file referenced
+     * @param duration         - Media item duration in milliseconds within the file referenced
+     * @param opening          - reference to a transition after the media item in the track.
+     * @param ending           - reference to a transition before the media item in the track.
+     * @param metadata         - File metadata.
+     * @param license          - Legal stuff.
+     * @param authors          - List of authors of the media item.
      */
     protected Media(String identifier, String iconPath, String selectedIconPath, String title,
-                    String mediaPath, long fileStartTime, long duration, Transition opening,
+                    String mediaPath, int fileStartTime, int duration, Transition opening,
                     Transition ending, MediaMetadata metadata, ArrayList<User> authors,
                     License license) {
         super(identifier, iconPath, selectedIconPath);
@@ -132,6 +138,7 @@ public abstract class Media extends EditorElement {
         this.mediaPath = mediaPath;
         this.source = new File(this.mediaPath);
         this.fileStartTime = fileStartTime;
+        this.fileStopTime = duration;
         this.duration = duration;
         this.opening = opening;
         this.ending = ending;
@@ -140,8 +147,8 @@ public abstract class Media extends EditorElement {
         this.license = license;
     }
 
-    public boolean hashTransitions(){
-        return (this.opening!=null || this.ending!=null);
+    public boolean hashTransitions() {
+        return (this.opening != null || this.ending != null);
     }
 
 
@@ -149,51 +156,75 @@ public abstract class Media extends EditorElement {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getMediaPath() {
         return mediaPath;
     }
+
     public void setMediaPath(String mediaPath) {
         this.mediaPath = mediaPath;
     }
-    public long getFileStartTime() {
+
+    public int getFileStartTime() {
         return fileStartTime;
     }
-    public void setFileStartTime(long fileStartTime) {
+
+    public void setFileStartTime(int fileStartTime) {
         this.fileStartTime = fileStartTime;
     }
-    public long getDuration() {
+
+    public int getDuration() {
         return duration;
     }
-    public void setDuration(long duration) {
+
+    public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    public int getFileStopTime() {
+        return fileStopTime;
+    }
+
+    public void setFileStopTime(int fileStopTime) {
+        this.fileStopTime = fileStopTime;
+    }
+
     public MediaMetadata getMetadata() {
         return metadata;
     }
+
     public void setMetadata(MediaMetadata metadata) {
         this.metadata = metadata;
     }
+
     public ArrayList<User> getAuthors() {
         return authors;
     }
+
     public void setAuthors(ArrayList<User> authors) {
         this.authors = authors;
     }
+
     public ArrayList<String> getAuthorsNames() {
         return authorsNames;
     }
+
     public void setAuthorsNames(ArrayList<String> authorsNames) {
         this.authorsNames = authorsNames;
     }
+
     public License getLicense() {
         return license;
     }
+
     public void setLicense(License license) {
         this.license = license;
     }
+
     public Transition getOpening() {
         return opening;
     }
@@ -201,8 +232,8 @@ public abstract class Media extends EditorElement {
     public void setOpening(Transition opening) {
 
         //if null then we are erasing relations between media and transition
-        if(opening == null && this.opening != null){
-            if(this.opening.getAfterMediaItem() != null){
+        if (opening == null && this.opening != null) {
+            if (this.opening.getAfterMediaItem() != null) {
                 this.opening.setAfterMediaItem(null);
             }
         }
@@ -210,18 +241,20 @@ public abstract class Media extends EditorElement {
         this.opening = opening;
 
         //check that afterMediaItem of transition is THIS.
-        if(this.opening != null && this.opening.getAfterMediaItem() != this){
+        if (this.opening != null && this.opening.getAfterMediaItem() != this) {
             this.opening.setAfterMediaItem(this);
         }
     }
+
     public Transition getEnding() {
         return ending;
     }
+
     public void setEnding(Transition ending) {
 
         //if null then we are erasing relations between media and transition
-        if(ending == null && this.ending != null){
-            if(this.ending.getBeforeMediaItem() != null){
+        if (ending == null && this.ending != null) {
+            if (this.ending.getBeforeMediaItem() != null) {
                 this.ending.setBeforeMediaItem(null);
             }
         }
@@ -229,7 +262,7 @@ public abstract class Media extends EditorElement {
         this.ending = ending;
 
         //check that beforerMediaItem of transition is THIS.
-        if(this.ending != null && this.ending.getBeforeMediaItem() != this){
+        if (this.ending != null && this.ending.getBeforeMediaItem() != this) {
             this.opening.setBeforeMediaItem(this);
         }
     }

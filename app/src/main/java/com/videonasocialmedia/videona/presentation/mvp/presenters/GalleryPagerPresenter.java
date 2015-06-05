@@ -14,6 +14,7 @@ import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 
@@ -45,10 +46,9 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
     /**
      * This method is used to add new videos to the actual track.
      *
-     * @param videoPath the path of the new video which user wants to add to the project
+     * @param video the path of the new video which user wants to add to the project
      */
-    public void loadVideoToProject(String videoPath) {
-        itemsToAdd.add(videoPath);
+    public void loadVideoToProject(Video video) {
 
         // LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
         Project project = Project.getInstance(null, null, null);
@@ -56,11 +56,11 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
         LinkedList<Media> listMedia = mediaTrack.getItems();
         ArrayList<Media> items = new ArrayList<>(listMedia);
 
-        if (items.size()>0) {
+        if (items.size() > 0) {
             removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
-        }else{
-            addVideoToProjectUseCase.addMediaItemsToProject(itemsToAdd, this);
         }
+        addVideoToProjectUseCase.addVideoToTrack(video, this);
+
     }
 
     @Override
@@ -69,8 +69,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
     }
 
     @Override
-    public void onRemoveMediaItemFromTrackSuccess(MediaTrack mediaTrack) {
-        addVideoToProjectUseCase.addMediaItemsToProject(itemsToAdd, this);
+    public void onRemoveMediaItemFromTrackSuccess() {
     }
 
     @Override
@@ -79,7 +78,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
     }
 
     @Override
-    public void onAddMediaItemToTrackSuccess(MediaTrack mediaTrack) {
+    public void onAddMediaItemToTrackSuccess(Media video) {
         galleryPagerView.navigate();
     }
 }

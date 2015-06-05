@@ -22,7 +22,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
-
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.SignUpPresenter;
 
@@ -101,7 +100,7 @@ public class UserSignUpActivity extends Activity implements RegisterView {
         startActivity(i);
     }
 
-    @OnClick({ R.id.register_button})
+    @OnClick({R.id.register_button})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }

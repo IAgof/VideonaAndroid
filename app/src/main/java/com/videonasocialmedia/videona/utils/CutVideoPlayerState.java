@@ -10,8 +10,6 @@
 
 package com.videonasocialmedia.videona.utils;
 
-import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
-
 public class CutVideoPlayerState {
 
     //private String filename = EditActivity.videoRecorded;

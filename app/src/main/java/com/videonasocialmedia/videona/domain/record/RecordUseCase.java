@@ -84,13 +84,13 @@ public class RecordUseCase {
     private long timeColorEffect = 0;
 
     /**
-     *  Rotation View
+     * Rotation View
      */
     private int rotationView = 0;
 
-    public RecordUseCase(Context context){
+    public RecordUseCase(Context context) {
 
-        if(camera == null){
+        if (camera == null) {
             camera = getCameraInstance();
         }
 
@@ -111,7 +111,7 @@ public class RecordUseCase {
      *
      * @param listener
      */
-    public void startPreview(OnPreviewListener listener, int displayOrientation){
+    public void startPreview(OnPreviewListener listener, int displayOrientation) {
 
         listener.onPreviewStarted(cameraPreview, customManualFocusView);
         setCameraOrientation(displayOrientation);
@@ -123,7 +123,7 @@ public class RecordUseCase {
      *
      * @param listener
      */
-    public void reStartPreview(OnPreviewListener listener){
+    public void reStartPreview(OnPreviewListener listener) {
 
         listener.onPreviewReStarted(cameraPreview, customManualFocusView);
 
@@ -134,7 +134,7 @@ public class RecordUseCase {
      *
      * @param listener
      */
-    public void startRecord(OnRecordEventListener listener){
+    public void startRecord(OnRecordEventListener listener) {
 
 
         if (prepareVideoRecorder(camera, cameraPreview)) {
@@ -152,8 +152,7 @@ public class RecordUseCase {
         } else {
             // prepare didn't work, release the camera
             releaseMediaRecorder(camera);
-            // inform user
-            listener.onRecordStopped();
+            listener.onRecordError();
         }
     }
 
@@ -167,7 +166,7 @@ public class RecordUseCase {
         Log.d(LOG_TAG, "timer " + (SystemClock.uptimeMillis() - timeColorEffect));
 
         // Disable stop record during 2 second
-        if((SystemClock.uptimeMillis() - timeColorEffect) < 2000) {
+        if ((SystemClock.uptimeMillis() - timeColorEffect) < 2000) {
             //Do nothing
 
         } else {
@@ -181,17 +180,17 @@ public class RecordUseCase {
             timer.stop();
 
             // inform the user that recording has stopped
-            listener.onRecordStopped();
+            listener.onRecordStopped(videoRecordName);
         }
 
     }
 
-    public void stopCamera(){
+    public void stopCamera() {
 
-            releaseCamera(camera, cameraPreview);
+        releaseCamera(camera, cameraPreview);
     }
 
-    public void stopMediaRecorder(OnRecordEventListener listener){
+    public void stopMediaRecorder(OnRecordEventListener listener) {
 
         mediaRecorder.stop();  // stop the recording
         releaseMediaRecorder(camera); // release the MediaRecorder object
@@ -208,15 +207,15 @@ public class RecordUseCase {
     /**
      * onResume UseCase, getCamera
      */
-    public void onResume(){
+    public void onResume() {
 
         Log.d(LOG_TAG, "RecordUseCase onResume() ");
 
-        if(camera == null) {
+        if (camera == null) {
 
             Log.d(LOG_TAG, "RecordUseCase onResume() camera null ");
 
-              camera = getCameraInstance();
+            camera = getCameraInstance();
         }
 
         //   recordView.startPreview(camera, cameraPreview);
@@ -226,7 +225,7 @@ public class RecordUseCase {
     /**
      * onPause UseCase, release camera and mediaRecorder
      */
-    public void onPause(){
+    public void onPause() {
         releaseMediaRecorder(camera);       // if you are using MediaRecorder, release it first
         releaseCamera(camera, cameraPreview);
     }
@@ -236,7 +235,7 @@ public class RecordUseCase {
      *
      * @param listener
      */
-    public void getAvailableEffects(OnColorEffectListener listener){
+    public void getAvailableEffects(OnColorEffectListener listener) {
 
 
         /// TODO getAvailableEffects from model
@@ -253,7 +252,7 @@ public class RecordUseCase {
      * @param colorEffect
      * @param listener
      */
-    public void addEffect(String colorEffect, OnColorEffectListener listener){
+    public void addAndroidCameraEffect(String colorEffect, OnColorEffectListener listener) {
 
 
         Camera.Parameters parameters = camera.getParameters();
@@ -264,7 +263,7 @@ public class RecordUseCase {
 
         listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
 
-        Log.d(LOG_TAG, " addEffect " + colorEffect + " time " + getTimeColorEffect());
+        Log.d(LOG_TAG, " addAndroidCameraEffect " + colorEffect + " time " + getTimeColorEffect());
 
 
     }
@@ -275,9 +274,9 @@ public class RecordUseCase {
      * @param colorEffect
      * @param listener
      */
-    public void removeEffect(String colorEffect, OnColorEffectListener listener){
+    public void removeEffect(String colorEffect, OnColorEffectListener listener) {
 
-       // removeEffect, addEffect none. Implement effect.getDefaultName()
+        // removeEffect, addAndroidCameraEffect none. Implement effect.getDefaultName()
 
         Camera.Parameters parameters = camera.getParameters();
         // parameters.setEffect(effect.getDefaultName());
@@ -293,20 +292,20 @@ public class RecordUseCase {
     */
     public Camera getCameraInstance() {
 
-        Camera c = null;
+        Camera camera = null;
 
         try {
 
-            c = Camera.open(cameraId); // attempt to get a Camera instance
+            camera = Camera.open(cameraId); // attempt to get a Camera instance
 
-            // if (c != null) {
-            Camera.Parameters params = c.getParameters();
+            // if (camera != null) {
+            Camera.Parameters params = camera.getParameters();
 
             ///TODO get VideoSize from model, Project Profile
             params.setPictureSize(ConfigUtils.VIDEO_SIZE_HEIGHT, ConfigUtils.VIDEO_SIZE_WIDTH);
-            c.setParameters(params);
+            camera.setParameters(params);
 
-            Log.d(LOG_TAG, "getCameraInstance height " + c.getParameters().getPictureSize().height + " width " + c.getParameters().getPictureSize().width);
+            Log.d(LOG_TAG, "getCameraInstance height " + camera.getParameters().getPictureSize().height + " width " + camera.getParameters().getPictureSize().width);
 
             // SetFrameRate
             params.setPreviewFrameRate(30);
@@ -314,38 +313,33 @@ public class RecordUseCase {
 
 
             // Log CameraParameters info
-            Log.d(LOG_TAG, " getParameters().getSupportedPreviewFrameRates() " );
-            for(int framerate: c.getParameters().getSupportedPreviewFrameRates()){
+            Log.d(LOG_TAG, " getParameters().getSupportedPreviewFrameRates() ");
+            for (int framerate : camera.getParameters().getSupportedPreviewFrameRates()) {
                 Log.d(LOG_TAG, " framerate: " + framerate);
             }
 
-            Log.d(LOG_TAG, " getParameters(). getSupportedPreviewFpsRange ()() " );
-            for(int[] fpsrange: c.getParameters().getSupportedPreviewFpsRange()){
+            Log.d(LOG_TAG, " getParameters(). getSupportedPreviewFpsRange ()() ");
+            for (int[] fpsrange : camera.getParameters().getSupportedPreviewFpsRange()) {
                 Log.d(LOG_TAG, " fpsrange: " + fpsrange[0] + " x " + fpsrange[1]);
             }
-
-
-
-            //  }
 
         } catch (Exception e) {
             Log.d("DEBUG", "Camera did not open");
             // Camera is not available (in use or does not exist)
         }
 
-        Log.d(LOG_TAG, " getCameraInstance camera " + c);
+        Log.d(LOG_TAG, " getCameraInstance camera " + camera);
 
 
-
-        return c; // returns null if camera is unavailable
+        return camera; // returns null if camera is unavailable
     }
 
 
     /**
      * Prepare VideoRecorder.
-     *
+     * <p/>
      * Set Audio and Video Settings, ConfigUtils
-     *
+     * <p/>
      * Use Videona Profile to record Video
      *
      * @return boolean isPrepared
@@ -416,23 +410,20 @@ public class RecordUseCase {
         return true;
     }
 
-
     /**
-     *  Set camera displayOrientation
+     * Set camera displayOrientation
+     *
      * @param displayOrientation
      */
-    private void setCameraOrientation(int displayOrientation){
-
+    private void setCameraOrientation(int displayOrientation) {
         camera.setDisplayOrientation(displayOrientation);
     }
 
-
     /**
-     *
      * @param rotationPreview mMediaRecorder
      * @return
      */
-    private void  rotateBackVideo(int rotationPreview, MediaRecorder mediaRecorder) {
+    private void rotateBackVideo(int rotationPreview, MediaRecorder mediaRecorder) {
         /**
          * Define Orientation of video in here,
          * if in portrait mode, use value = 90,
@@ -448,14 +439,11 @@ public class RecordUseCase {
             case 3:
                 mediaRecorder.setOrientationHint(180);
                 break;
-
         }
-
-
     }
 
     /**
-     *  Release MediaRecorder
+     * Release MediaRecorder
      */
     private void releaseMediaRecorder(Camera camera) {
 
@@ -469,18 +457,15 @@ public class RecordUseCase {
     }
 
     /**
-     *  Release Camera
+     * Release Camera
      */
     private void releaseCamera(Camera camera, CameraPreview cameraPreview) {
-
         if (camera != null) {
-
             camera.stopPreview();
             camera.setPreviewCallback(null);
             cameraPreview.getHolder().removeCallback(cameraPreview);
             camera.release();        // release the camera for other applications
             camera = null;
-
         }
     }
 
@@ -498,7 +483,7 @@ public class RecordUseCase {
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-               return null;
+                return null;
             }
         }
 
@@ -511,21 +496,16 @@ public class RecordUseCase {
         } else {
             return null;
         }
-
         return mediaFile;
     }
 
-
-
     private void setTimer() {
-
         timeColorEffect = SystemClock.uptimeMillis();
-
     }
 
-    private long getTimeColorEffect(){
+    private long getTimeColorEffect() {
 
-        if(timeColorEffect == 0) {
+        if (timeColorEffect == 0) {
             return 0;
         } else {
             return SystemClock.uptimeMillis() - timeColorEffect;
@@ -534,11 +514,11 @@ public class RecordUseCase {
 
 
     //TODO To delete. Temporal, necessary to navigate to EditActivity
-    public String getVideoRecordName(){
+    public String getVideoRecordName() {
         return videoRecordName;
     }
 
-    private void setVideoRecordName(String videoRecordName){
+    private void setVideoRecordName(String videoRecordName) {
         this.videoRecordName = videoRecordName;
     }
 
@@ -547,17 +527,16 @@ public class RecordUseCase {
         return rotationView;
     }
 
-    public void setRotationView(int rotationView){
+    public void setRotationView(int rotationView) {
         this.rotationView = rotationView;
         int displayOrientation = 0;
-        if(rotationView == Surface.ROTATION_90){
+        if (rotationView == Surface.ROTATION_90) {
             displayOrientation = 0;
         }
-        if(rotationView == Surface.ROTATION_270){
+        if (rotationView == Surface.ROTATION_270) {
             displayOrientation = 180;
         }
         cameraPreview.setCameraOrientation(displayOrientation);
-
     }
 
 }

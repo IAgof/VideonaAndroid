@@ -12,7 +12,6 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-
 /**
  * Root class for view classes
  */

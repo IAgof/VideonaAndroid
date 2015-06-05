@@ -7,5 +7,6 @@ import android.app.Activity;
  */
 public interface LoginView {
     public void showError(int errorMessageResource);
-    public void navigate(Class <? extends Activity> activity);
+
+    public void navigate(Class<? extends Activity> activity);
 }

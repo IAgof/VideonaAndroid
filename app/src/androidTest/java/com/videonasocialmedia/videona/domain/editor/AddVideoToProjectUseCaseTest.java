@@ -35,7 +35,7 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
     AddVideoToProjectUseCase useCase;
     OnAddMediaFinishedListener listener;
 
-    public AddVideoToProjectUseCaseTest(){
+    public AddVideoToProjectUseCaseTest() {
         useCase = new AddVideoToProjectUseCase();
         listener = mock(OnAddMediaFinishedListener.class);
     }
@@ -60,7 +60,7 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
      * This class is used to check if the use case returns a boolean when try to insert item in
      * mediatrack.
      */
-    public void testAddMediaItemToTrack () throws NoSuchMethodException,
+    public void testAddMediaItemToTrack() throws NoSuchMethodException,
             InvocationTargetException, IllegalAccessException {
 
         String videoPath = "path/to/video";
@@ -76,7 +76,7 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
         boolean result = false;
         try {
             result = (boolean) method.invoke(useCase, videoPath);
-        } catch(InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             e.getCause().printStackTrace();
         } catch (Exception e) {
             // generic exception handling
@@ -84,6 +84,6 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
         }
 
         boolean anyBoolean = true;
-        assertSame(anyBoolean,result);
+        assertSame(anyBoolean, result);
     }
 }

@@ -26,7 +26,7 @@ public class ConfigUtils {
     final public static int VIDEO_SIZE_HEIGHT = 720;
     final public static int VIDEO_ENCODING_BIT_RATE = 5000000;
 
-    final public static int maxDurationVideo = 99;
+    final public static int MAX_VIDEO_DURATION_MILLIS = 99000;
 
     public static boolean isAndroidL = false;
 }

@@ -54,21 +54,21 @@ public class ColorEffectList {
 
 
         // Color Effects in pre_Android_L depends on camera getSupportedColorEffects
-       // for (String effect : CameraPreview.colorEffects) {
-        for(String effect: camera.getParameters().getSupportedColorEffects()) {
+        // for (String effect : CameraPreview.colorEffects) {
+        for (String effect : camera.getParameters().getSupportedColorEffects()) {
 
             colorEffects.add(effect);
 
         }
 
         return colorEffects;
-       // return sortColorEffectList();
+        // return sortColorEffectList();
     }
 
 
     /**
-     *  Sort Color Effect List
-     *
+     * Sort Color Effect List
+     * <p/>
      * List sort by filter number, AD0, AD5, ... Design
      *
      * @return ArrayList
@@ -78,10 +78,10 @@ public class ColorEffectList {
 
         ArrayList<String> colorEffectsSorted = new ArrayList<String>();
 
-     //   ArrayList<String> colorEffects = getColorEffectList();
+        //   ArrayList<String> colorEffects = getColorEffectList();
 
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             Log.d("RecordActivity", " colorEffects " + effect);
 
@@ -92,7 +92,7 @@ public class ColorEffectList {
 
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_AQUA.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_AQUA);
@@ -100,7 +100,7 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_BLACKBOARD.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_BLACKBOARD);
@@ -108,7 +108,7 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_EMBOSS.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_EMBOSS);
@@ -116,14 +116,14 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
             if (Constants.COLOR_EFFECT_MONO.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_MONO);
 
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_NEGATIVE.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_NEGATIVE);
@@ -131,14 +131,14 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
             if (Constants.COLOR_EFFECT_NEON.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_NEON);
 
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_POSTERIZE.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_POSTERIZE);
@@ -146,7 +146,7 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_SEPIA.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_SEPIA);
@@ -154,7 +154,7 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_SKETCH.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_SKETCH);
@@ -162,7 +162,7 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_SOLARIZE.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_SOLARIZE);
@@ -170,7 +170,7 @@ public class ColorEffectList {
             }
         }
 
-        for(String effect: colorEffects) {
+        for (String effect : colorEffects) {
 
             if (Constants.COLOR_EFFECT_WHITEBOARD.compareTo(effect) == 0) {
                 colorEffectsSorted.add(Constants.COLOR_EFFECT_WHITEBOARD);

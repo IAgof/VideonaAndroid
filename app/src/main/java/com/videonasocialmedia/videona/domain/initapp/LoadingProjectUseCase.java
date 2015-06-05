@@ -32,7 +32,7 @@ public class LoadingProjectUseCase {
 
     UserPreferences userPreferences;
 
-    public LoadingProjectUseCase(Context context){
+    public LoadingProjectUseCase(Context context) {
 
         this.context = context;
 
@@ -40,9 +40,9 @@ public class LoadingProjectUseCase {
 
     }
 
-    public void checkProjectState(OnInitAppEventListener listener){
+    public void checkProjectState(OnInitAppEventListener listener) {
 
-        if(isProjectStarted()) {
+        if (isProjectStarted()) {
 
             initProject();
 
@@ -51,10 +51,10 @@ public class LoadingProjectUseCase {
             startNewProject();
         }
 
-       listener.onLoadingProjectSuccess();
+        listener.onLoadingProjectSuccess();
     }
 
-    private void startNewProject(){
+    private void startNewProject() {
 
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
@@ -66,20 +66,20 @@ public class LoadingProjectUseCase {
 
 
     //TODO load last project activated
-    private void initProject(){
+    private void initProject() {
 
     }
 
 
     //TODO Check user profile, by default 720p free
-    private Profile checkProfile(){
+    private Profile checkProfile() {
 
         return Profile.getInstance(Profile.ProfileType.free);
     }
 
 
     //TODO Check if a project has been initialized and start in that state (Future).
-    private boolean isProjectStarted(){
+    private boolean isProjectStarted() {
 
         // Default startNewProject()
         return false;

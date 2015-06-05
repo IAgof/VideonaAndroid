@@ -7,10 +7,11 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface OnExportProjectFinishedListener {
+public interface OnExportFinishedListener {
 
-    public void onExportProjectError();
+    void onExportError();
 
-    public void onExportProjectSuccess(String pathVideoEdited);
+    void onExportSuccess(String pathVideoEdited);
+
 
 }

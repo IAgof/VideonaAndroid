@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2015. Videona Socialmedia SL
   ~ http://www.videona.com
   ~ info@videona.com
@@ -7,15 +6,15 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_margin="3dp">
 
     <ImageView
         android:id="@+id/gallery_thumb"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/fragment_gallery_no_image"
-        />
+        android:src="@drawable/fragment_gallery_no_image" />
 
     <RelativeLayout
         android:id="@+id/gallery_overlay"
@@ -49,7 +48,6 @@
         android:layout_height="35dp"
         android:layout_alignEnd="@id/gallery_thumb"
         android:layout_alignBottom="@id/gallery_thumb"
-        android:background="@drawable/activity_gallery_icon_play_normal"
-        />
+        android:background="@drawable/activity_gallery_icon_play_normal" />
 
 </RelativeLayout>

@@ -3,7 +3,6 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -79,13 +78,12 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     public void onClick() {
         Video selectedVideo = getSelectedVideoFromCurrentFragment();
         if (selectedVideo != null) {
-            String path = selectedVideo.getMediaPath();
-            galleryPagerPresenter.loadVideoToProject(path);
+            galleryPagerPresenter.loadVideoToProject(selectedVideo);
         }
     }
 
     @OnClick(R.id.button_cancel_gallery)
-    public void goBack(){
+    public void goBack() {
         this.finish();
     }
 
@@ -95,69 +93,68 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         Intent intent;
         if (sharing) {
             intent = new Intent(this, ShareActivity.class);
-        }else{
-            intent = new Intent(this, EditActivity.class);
+        } else {
+            intent = new Intent(this, EditActivity2.class);
         }
         startActivity(intent);
     }
 
 
+    class MyPagerAdapter extends FragmentPagerAdapter {
+        private int NUM_ITEMS = 2;
 
-class MyPagerAdapter extends FragmentPagerAdapter {
-    private int NUM_ITEMS = 2;
+        private VideoGalleryFragment mastersFragment;
+        private VideoGalleryFragment editedFragment;
 
-    private VideoGalleryFragment mastersFragment;
-    private VideoGalleryFragment editedFragment;
-
-    public MyPagerAdapter(FragmentManager fragmentManager) {
-        super(fragmentManager);
-    }
-
-    // Returns total number of pages
-    @Override
-    public int getCount() {
-        return NUM_ITEMS;
-    }
-
-    // Returns the fragment to display for that page
-    @Override
-    public VideoGalleryFragment getItem(int position) {
-        VideoGalleryFragment result;
-        switch (position) {
-            case 0: // Fragment # 0 - This will show FirstFragment
-                if (mastersFragment == null) {
-                    mastersFragment =
-                            VideoGalleryFragment.newInstance(VideoGalleryPresenter.MASTERS_FOLDER);
-                }
-                result = mastersFragment;
-                break;
-            case 1: // Fragment # 0 - This will show FirstFragment different title
-                if (editedFragment == null) {
-                    editedFragment =
-                            VideoGalleryFragment.newInstance(VideoGalleryPresenter.EDITED_FOLDER);
-                }
-                result = editedFragment;
-                break;
-            default:
-                result = null;
-
+        public MyPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
         }
-        return result;
-    }
 
-    // Returns the page title for the top indicator
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return getResources().getString(R.string.mastersFolderTitle);
-            case 1:
-                return getResources().getString(R.string.editedFolderTitle);
-            default:
-                return getResources().getString(R.string.galleryActivityTitle);
+        // Returns total number of pages
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        // Returns the fragment to display for that page
+        @Override
+        public VideoGalleryFragment getItem(int position) {
+            VideoGalleryFragment result;
+            switch (position) {
+                case 0: // Fragment # 0 - This will show FirstFragment
+                    if (mastersFragment == null) {
+                        mastersFragment =
+                                VideoGalleryFragment.newInstance(VideoGalleryPresenter.MASTERS_FOLDER);
+                    }
+                    result = mastersFragment;
+                    break;
+                case 1: // Fragment # 0 - This will show FirstFragment different title
+                    if (editedFragment == null) {
+                        editedFragment =
+                                VideoGalleryFragment.newInstance(VideoGalleryPresenter.EDITED_FOLDER);
+                    }
+                    result = editedFragment;
+                    break;
+                default:
+                    result = null;
+
+            }
+            return result;
+        }
+
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getResources().getString(R.string.mastersFolderTitle);
+                case 1:
+                    return getResources().getString(R.string.editedFolderTitle);
+                default:
+                    return getResources().getString(R.string.galleryActivityTitle);
+            }
         }
     }
-}
 
 }
 

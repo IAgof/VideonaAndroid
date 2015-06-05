@@ -8,13 +8,11 @@
 package com.videonasocialmedia.videona.model.sources;
 
 
-
 import com.videonasocialmedia.videona.model.entities.social.Session;
 import com.videonasocialmedia.videona.model.entities.social.User;
 import com.videonasocialmedia.videona.model.entities.social.Video;
 
 /**
- *
  * @author Juan Javier Cabanas
  */
 public interface DataSource {

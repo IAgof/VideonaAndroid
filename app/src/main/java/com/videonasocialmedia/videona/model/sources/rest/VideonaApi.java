@@ -21,6 +21,7 @@ import retrofit.http.Query;
 
 /**
  * Interface that defines the interactions with videona api
+ *
  * @author Juan Javier Cabanas
  */
 public interface VideonaApi {

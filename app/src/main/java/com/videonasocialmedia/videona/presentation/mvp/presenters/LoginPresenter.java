@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.social.LoginUseCase;
-import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 
 /**
  * Created by jca on 9/3/15.
@@ -15,16 +15,16 @@ public class LoginPresenter implements OnLoginFinishedListener {
     LoginUseCase loginUseCase;
     LoginView loginView;
 
-    public LoginPresenter (LoginView loginView){
-        loginUseCase= new LoginUseCase();
-        this.loginView=loginView;
+    public LoginPresenter(LoginView loginView) {
+        loginUseCase = new LoginUseCase();
+        this.loginView = loginView;
     }
 
     public void userPasswordLogin(String userName, String password) {
-       loginUseCase.videonaLogin(userName, password, this);
+        loginUseCase.videonaLogin(userName, password, this);
     }
 
-    public boolean thirdPartyLogin(){
+    public boolean thirdPartyLogin() {
         boolean result = false;
         return result;
     }

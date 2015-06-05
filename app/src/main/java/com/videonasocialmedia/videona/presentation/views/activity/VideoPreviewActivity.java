@@ -52,10 +52,11 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
     }
 
     @Override
-     protected void onStart() {
+    protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -100,7 +101,7 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.d(LOG_TAG, "onError");
+        Log.d(LOG_TAG, "onRecordError");
         showError();
         return true;
     }

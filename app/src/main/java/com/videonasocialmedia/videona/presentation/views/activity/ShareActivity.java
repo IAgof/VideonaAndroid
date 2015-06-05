@@ -115,21 +115,21 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         sharePresenter.onCreate();
 
         // getting intent data
-      //  Intent in = getIntent();
-      //  videoEdited = in.getStringExtra("MEDIA_OUTPUT");
+        //  Intent in = getIntent();
+        //  videoEdited = in.getStringExtra("MEDIA_OUTPUT");
 
         setVideoInfo();
     }
 
     @Override
     protected void onStart() {
-        Log.d(LOG_TAG,"onStart");
+        Log.d(LOG_TAG, "onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        Log.d(LOG_TAG,"onResume");
+        Log.d(LOG_TAG, "onResume");
         super.onResume();
         initMediaPlayer(videoEdited);
 
@@ -147,7 +147,7 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
 
     @Override
     protected void onPause() {
-        Log.d(LOG_TAG,"onPause");
+        Log.d(LOG_TAG, "onPause");
         super.onPause();
         pauseVideo();
         releaseVideoView();
@@ -155,7 +155,7 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
 
     @Override
     protected void onStop() {
-        Log.d(LOG_TAG,"onStop");
+        Log.d(LOG_TAG, "onStop");
         super.onStop();
         releaseVideoView();
     }

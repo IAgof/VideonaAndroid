@@ -53,11 +53,10 @@ import butterknife.OnClick;
 
 /**
  * RecordActivity.
- *
+ * <p/>
  * Activity to preview and record video, apply color effects.
- *
+ * <p/>
  * When the video is recorded, navigate to EditActivity.
- *
  */
 public class RecordActivity extends Activity implements RecordView, ColorEffectClickListener {
 
@@ -182,7 +181,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Handler h=new Handler();
+        Handler h = new Handler();
         h.postDelayed(new Runnable() {
 
             @Override
@@ -203,7 +202,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume() RecordActivity");
-        recordPresenter = new RecordPresenter(this, tracker);
+        recordPresenter = new RecordPresenter(this, tracker, this.getApplicationContext());
         /*
         if(recordPresenter != null) {
             recordPresenter.onResume();
@@ -524,7 +523,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     public void navigateEditActivity() {
 
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
-        Intent edit = new Intent(RecordActivity.this, EditActivity.class);
+        Intent edit = new Intent(RecordActivity.this, EditActivity2.class);
         startActivity(edit);
     }
 
@@ -543,7 +542,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @OnClick(R.id.button_record)
     public void buttonRecordListener() {
-        recordPresenter.recordClickListener();
+        recordPresenter.toggleRecord();
     }
 
     @OnClick({R.id.button_record, R.id.button_color_effect})

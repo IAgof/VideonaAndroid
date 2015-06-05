@@ -14,7 +14,7 @@ package com.videonasocialmedia.videona.model.entities.licensing;
 /**
  * First implementation of licensing for media used in videona. This need to be revised and probably
  * replaced by supported classes of android development community like DRM or something.
- *
+ * <p/>
  * Created by dfa on 8/4/15.
  */
 public class License {

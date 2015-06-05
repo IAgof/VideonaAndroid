@@ -16,15 +16,13 @@ import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 
 /**
- *
  * InitAppPresenter. Presenter to initialize the app.
- *
+ * <p/>
  * The view part is only a splashScreen.
- *
+ * <p/>
  * Initialize all use cases needed to start the app.
- *
  */
-public class InitAppPresenter  implements OnInitAppEventListener {
+public class InitAppPresenter implements OnInitAppEventListener {
 
     /**
      * InitApp View
@@ -37,7 +35,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
 
     private Context context;
 
-    public InitAppPresenter(InitAppView initAppView, Context context){
+    public InitAppPresenter(InitAppView initAppView, Context context) {
 
         this.initAppView = initAppView;
         this.context = context;
@@ -49,7 +47,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
     /**
      * Start presenter
      */
-    public void start(){
+    public void start() {
 
         checkPathsApp();
 
@@ -58,19 +56,19 @@ public class InitAppPresenter  implements OnInitAppEventListener {
     /**
      * Stop presenter
      */
-    public void stop(){
+    public void stop() {
 
 
     }
 
 
-    private void startLoadingProject(){
+    private void startLoadingProject() {
 
         loadingProjectUseCase.checkProjectState(this);
 
     }
 
-    private void checkPathsApp(){
+    private void checkPathsApp() {
 
         checkPathsAppUseCase.checkPaths(this);
     }

@@ -5,6 +5,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
  */
 public interface OnSignedUpListener {
 
-   public void onSignUpSuccess();
-   public void onSignUpError();
+    public void onSignUpSuccess();
+
+    public void onSignUpError();
 }

@@ -24,26 +24,24 @@ import java.util.ArrayList;
  */
 public class RemoveVideoFromProjectUseCase implements RemoveMediaFromProjectUseCase {
 
-    MediaTrack mediaTrack;
 
     /**
      * Constructor.
      */
     public RemoveVideoFromProjectUseCase() {
-        this.mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
     }
 
     @Override
     public void removeMediaItemsFromProject(ArrayList<Media> list, OnRemoveMediaFinishedListener listener) {
         boolean correct = false;
-
+        MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
         for (Media media : list) {
-            correct = removeMediaItemFromTrack(media);
+            correct = removeVideoItemFromTrack(media, mediaTrack);
             if (!correct) break;
         }
 
         if (correct) {
-            listener.onRemoveMediaItemFromTrackSuccess(mediaTrack);
+            listener.onRemoveMediaItemFromTrackSuccess();
         } else {
             listener.onRemoveMediaItemFromTrackError();
         }
@@ -55,7 +53,7 @@ public class RemoveVideoFromProjectUseCase implements RemoveMediaFromProjectUseC
      * @param video the video which wants to delete
      * @return bool if the item has been deleted from the track, return true. If it fails, return false
      */
-    private boolean removeMediaItemFromTrack(Media video) {
+    private boolean removeVideoItemFromTrack(Media video, MediaTrack mediaTrack) {
         boolean result;
         try {
             mediaTrack.deleteItem(video);

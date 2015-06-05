@@ -161,7 +161,6 @@ public class VideoUtils {
     }
 
 
-
     /**
      * Switch audio in video file for new audio file.
      * Create new output file with VideoTrack from video file and AudioTrack from audio file.
@@ -173,7 +172,7 @@ public class VideoUtils {
      */
     public static void switchAudio(String pathVideoFile, String newPathAudioFile, String pathOutputFile) throws IOException {
 
-        Log.d(LOG_TAG, " mergeAudio " + pathVideoFile + " .-.-.- " + newPathAudioFile + " .-.-.- " + pathOutputFile );
+        Log.d(LOG_TAG, " mergeAudio " + pathVideoFile + " .-.-.- " + newPathAudioFile + " .-.-.- " + pathOutputFile);
 
         Movie video = null;
         try {
@@ -259,7 +258,7 @@ public class VideoUtils {
 
                 Movie movie = null;
 
-                String pathFile = speratedDirPath  + File.separator + file;
+                String pathFile = speratedDirPath + File.separator + file;
 
                 try {
                     movie = new MovieCreator().build(pathFile);
@@ -359,9 +358,13 @@ public class VideoUtils {
         }
         return true;
     }
+
     public static int createSnapshot(String videoFile, int kind, String snapshotFilepath) {
         return 0;
-    };
+    }
+
+    ;
+
     public static int createSnapshot(String videoFile, int width, int height, String snapshotFilepath) {
         return 0;
     }

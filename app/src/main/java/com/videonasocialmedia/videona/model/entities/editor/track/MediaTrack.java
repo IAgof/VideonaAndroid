@@ -47,7 +47,7 @@ public class MediaTrack extends Track {
      * @see com.videonasocialmedia.videona.model.entities.editor.track.Track
      */
     public MediaTrack(LinkedList<Media> items, HashMap<Integer, LinkedList<Effect>> effects,
-                      HashMap<String, Transition> transitions){
+                      HashMap<String, Transition> transitions) {
         super(items, effects, transitions);
         this.checkItems();
     }
@@ -55,9 +55,9 @@ public class MediaTrack extends Track {
     /**
      * Ensure there are only Media items on items list.
      */
-    private void checkItems(){
-        for(Media item : items){
-            if(item instanceof Audio){
+    private void checkItems() {
+        for (Media item : items) {
+            if (item instanceof Audio) {
                 //throw new IllegalItemOnMediaTrack("Cannot add media audio items to a media track");
                 this.items.removeFirstOccurrence(item);
             }
@@ -67,12 +67,12 @@ public class MediaTrack extends Track {
     /**
      * Insert a new Media item in the media track. Get sure it is not an Audio media item.
      *
-     * @see com.videonasocialmedia.videona.model.entities.editor.track.Track
      * @throws IllegalItemOnTrack - when trying to add a Audio item on
+     * @see com.videonasocialmedia.videona.model.entities.editor.track.Track
      */
     @Override
     public boolean insertItemAt(int position, Media itemToAdd) throws IllegalItemOnTrack {
-        if(itemToAdd instanceof Audio) {
+        if (itemToAdd instanceof Audio) {
             throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
         }
         return super.insertItemAt(position, itemToAdd);
@@ -80,10 +80,10 @@ public class MediaTrack extends Track {
 
     @Override
     public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
-        if(itemToAdd instanceof Audio) {
+        if (itemToAdd instanceof Audio) {
             throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
         }
-       // With super works, waiting merge model branch to dev return this.insertItem(itemToAdd);
+        // With super works, waiting merge model branch to dev return this.insertItem(itemToAdd);
         return super.insertItem(itemToAdd);
     }
 
@@ -107,7 +107,7 @@ public class MediaTrack extends Track {
     @Override
     public Media deleteItemAt(int position) throws IllegalOrphanTransitionOnTrack,
             NoSuchElementException, IllegalItemOnTrack {
-        if(this.items.get(position) instanceof Audio) {
+        if (this.items.get(position) instanceof Audio) {
             throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
         }
         return super.deleteItemAt(position);
@@ -117,19 +117,18 @@ public class MediaTrack extends Track {
      * Moves Media item to the given position.
      *
      * @param newPosition - The new position in the track for the media item.
-     * @param itemToMove - The media item to ve moved.
+     * @param itemToMove  - The media item to ve moved.
      */
     @Override
     public boolean moveItemTo(int newPosition, Media itemToMove) throws IllegalItemOnTrack,
             IllegalOrphanTransitionOnTrack {
-        if(itemToMove instanceof Audio) {
+        if (itemToMove instanceof Audio) {
             throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
         }
         return super.moveItemTo(newPosition, itemToMove);
     }
 
     /**
-     *
      * @param items
      */
     @Override

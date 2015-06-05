@@ -203,7 +203,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //        }
 //
 //        @Override
-//        public void onError(CameraDevice cameraDevice, int error) {
+//        public void onRecordError(CameraDevice cameraDevice, int error) {
 //            mCameraOpenCloseLock.release();
 //            cameraDevice.close();
 //            mCameraDevice = null;

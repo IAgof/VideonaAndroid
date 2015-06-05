@@ -5,14 +5,14 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.domain.editor;
+package com.videonasocialmedia.videona.domain.editor.export;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.track.Track;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportProjectFinishedListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
 import com.videonasocialmedia.videona.utils.VideoUtils;
@@ -46,7 +46,7 @@ public class ExportProjectUseCase {
     Project project;
 
     /**
-     *  Path VideoEdited
+     * Path VideoEdited
      */
     String pathVideoEdited;
 
@@ -55,7 +55,7 @@ public class ExportProjectUseCase {
      */
     Track track;
 
-    public ExportProjectUseCase(Context context){
+    public ExportProjectUseCase(Context context) {
 
         this.context = context;
         this.project = Project.getInstance(null, null, null);
@@ -63,12 +63,10 @@ public class ExportProjectUseCase {
         this.userPreferences = new UserPreferences(context);
         this.track = project.getMediaTrack();
 
-        pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" +  new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+        pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
     }
 
-    public void exportProject(OnExportProjectFinishedListener listener) {
-
-
+    public void exportProject(OnExportFinishedListener listener) {
         // 1st trimVideo
 
         int start = userPreferences.getSeekBarStart();
@@ -85,60 +83,29 @@ public class ExportProjectUseCase {
         try {
             VideoUtils.trimVideo(inputFileName, start, userPreferences.getSeekBarEnd(), pathVideoEdited);
         } catch (IOException e) {
-            //Log.e(LOG_TAG, "Video Trimm failed", e);
+            Log.e(LOG_TAG, "Video Trimm failed", e);
         }
-
-        // Log.d(LOG_TAG, "Video Trimmed");
-
-
         if (userPreferences.getIsMusicSelected()) {
-
             try {
-
-                // 2nd Switch audio
-
-                // Log.d(LOG_TAG, "pathVideoTrim " + pathvideoTrim + "  " + " musicSelected " + musicSelected);
-
                 File fMusicSelected = new File(userPreferences.getMusicSelected());
-                if(fMusicSelected.exists()) {
+                if (fMusicSelected.exists()) {
                     VideoUtils.switchAudio(pathVideoEdited, userPreferences.getMusicSelected(), Constants.VIDEO_MUSIC_TEMP_FILE);
-                } else {
-
-                  /*  this.runOnUiThread(new Runnable() {
-                        public void run() {
-                            progressDialog.dismiss();
-                            //   Toast.makeText(getApplicationContext(), getString(R.string.toast_trim), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    return true;
-                    */
-
                 }
-
                 // Delete TRIM temporal file in this UserCase
                 File fTrim = new File(pathVideoEdited);
                 if (fTrim.exists()) {
                     fTrim.delete();
                 }
-
             } catch (IOException e) {
-                //Log.e(LOG_TAG, "Video isMusic ON switchAudio failed", e);
+                Log.e(LOG_TAG, "Video isMusic ON switchAudio failed", e);
             }
-
-            // Log.d(LOG_TAG, "Video isMusic ON switchAudio");
-
-
-            // 3rd trim Video + Audio
-
 
             try {
                 VideoUtils.trimVideo(Constants.VIDEO_MUSIC_TEMP_FILE, 0, length, pathVideoEdited);
             } catch (IOException e) {
-                //Log.e(LOG_TAG, "Video isMusic ON trimVideo with audio failed", e);
+                Log.e(LOG_TAG, "Video isMusic ON trimVideo with audio failed", e);
             }
 
-            // Delete TempAV temporal file
             File fTemp = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
 
             if (fTemp.exists()) {
@@ -152,9 +119,9 @@ public class ExportProjectUseCase {
 
         File fVideoFinal = new File(pathVideoEdited);
         if (fVideoFinal.exists()) {
-            listener.onExportProjectSuccess(pathVideoEdited);
+            listener.onExportSuccess(pathVideoEdited);
         } else {
-            listener.onExportProjectError();
+            listener.onExportError();
         }
 
     }

@@ -47,9 +47,9 @@ public class SharePresenter {
      * @param shareView
      * @param context
      */
-    public SharePresenter(ShareView shareView, Context context){
+    public SharePresenter(ShareView shareView, Context context) {
 
-        this.shareView=shareView;
+        this.shareView = shareView;
         this.context = context;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
 
@@ -59,7 +59,7 @@ public class SharePresenter {
     /**
      * on Create Presenter
      */
-    public void onCreate(){
+    public void onCreate() {
 
         // Add videoRecorded to EditActivity, only one media
         //TODO do not use static variable videoRecorded
@@ -75,7 +75,7 @@ public class SharePresenter {
     /**
      * on Start Presenter
      */
-    public void onStart(){
+    public void onStart() {
         // TODO edit use case onStart
     }
 
@@ -83,7 +83,7 @@ public class SharePresenter {
     /**
      * on Resume Presenter
      */
-    public void onResume(){
+    public void onResume() {
         // TODO edit use case onResume
     }
 
