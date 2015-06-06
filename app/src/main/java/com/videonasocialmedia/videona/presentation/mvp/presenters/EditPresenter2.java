@@ -136,7 +136,6 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
     public void onAddMediaItemToTrackSuccess(Media media) {
         if (media instanceof Music)
             editorView.enableMusicPlayer((Music) media);
-
     }
 
     @Override
@@ -150,18 +149,17 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
     }
 
     public void cancel() {
-
     }
 
     @Override
     public void onExportError() {
-        editorView.hideProgressDialog();
+        //editorView.hideProgressDialog();
         //TODO modify error message
-        editorView.showError(R.string.addMediaItemToTrackError);
+        //editorView.showError(R.string.addMediaItemToTrackError);
     }
 
     @Override
-    public void onExportSuccess(String exportedVideoPath) {
-        editorView.goToShare(exportedVideoPath);
+    public void onExportSuccess(Video exportedVideo) {
+        editorView.goToShare(exportedVideo.getMediaPath());
     }
 }

@@ -7,11 +7,13 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+
 public interface OnExportFinishedListener {
 
     void onExportError();
 
-    void onExportSuccess(String pathVideoEdited);
+    void onExportSuccess(Video video);
 
 
 }

@@ -46,8 +46,7 @@ public class Utils {
 
         InputStream in = ctx.getResources().openRawResource(rawResourceId);
 
-        String nameFile = ctx.getResources().getResourceName(rawResourceId);
-        nameFile = nameFile.substring(nameFile.lastIndexOf("/") + 1);
+        String nameFile = String.valueOf(rawResourceId);
 
         // Log.d(LOG_TAG, "copyResourceToTemp " + nameFile);
 
@@ -73,4 +72,13 @@ public class Utils {
     public static void copyMusicResourceToTemp(Context ctx, int rawResourceId) throws IOException {
         copyResourceToTemp(ctx, rawResourceId, Constants.AUDIO_MUSIC_FILE_EXTENSION);
     }
+
+
+    public static File getMusicFileById(int rawResourceId){
+        File f= new  File(Constants.PATH_APP_TEMP + File.separator + rawResourceId + Constants.AUDIO_MUSIC_FILE_EXTENSION);
+        if (!f.exists())
+            f=null;
+        return f;
+    }
+
 }
