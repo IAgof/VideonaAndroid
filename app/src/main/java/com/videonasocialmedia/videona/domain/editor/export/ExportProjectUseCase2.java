@@ -28,32 +28,39 @@ public class ExportProjectUseCase2 {
 
     public ExportProjectUseCase2(OnExportFinishedListener onExportFinishedListener) {
         this.onExportFinishedListener = onExportFinishedListener;
-        exporter=new ExporterImpl();
+        exporter = new ExporterImpl();
     }
 
     public void export() {
-        Project project= Project.getInstance(null,null,null);
+        boolean success= false;
+        Project project = Project.getInstance(null, null, null);
         String pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
-        Video video=(Video) project.getMediaTrack().getItems().getFirst();
+        Video video = (Video) project.getMediaTrack().getItems().getFirst();
 
         try {
             video = exporter.trimVideo(video, pathVideoEdited);
+            success=true;
         } catch (IOException e) {
-            Log.e("ERROR","trimming video", e);
+            Log.e("ERROR", "trimming video", e);
+            success= false;
+        }
+        //TODO refactor this condition
+        if (success && project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size()>0) {
+            try {
+                Music music = (Music) project.getAudioTracks().get(0).getItems().getFirst();
+                video = exporter.addMusicToVideo(video, music, pathVideoEdited);
+                onExportFinishedListener.onExportSuccess(video);
+                success=true;
+            } catch (Exception e) {
+                Log.e("ERROR", "adding Music", e);
+                success=false;
+            }
         }
 
-        try {
-
-            Music music = (Music) project.getAudioTracks().get(0).getItems().getFirst();
-            String pathWithMusic= Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + "-music.mp4";
-            video=exporter.addMusicToVideo(video,music,pathWithMusic);
-
-        }catch (Exception e) {
-            Log.e("ERROR","adding Music", e);
-            //onExportFinishedListener.onExportError();
+        if (success){
+            onExportFinishedListener.onExportSuccess(video);
+        }else{
+            onExportFinishedListener.onExportError();
         }
-
-        onExportFinishedListener.onExportSuccess(video);
-
     }
 }

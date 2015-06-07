@@ -304,6 +304,8 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
 
         progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
                 "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
+
+        progressDialog.show();
     }
 
     @OnClick(R.id.edit_button_fx)
@@ -445,6 +447,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         Intent share = new Intent();
         share.putExtra("VIDEO_EDITED", videoToSharePath);
         share.setClass(this, ShareActivity.class);
+        this.startActivity(share);
     }
 
     @Override

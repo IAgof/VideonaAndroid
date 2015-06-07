@@ -96,6 +96,7 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
      * Ok edit button click listener
      */
     public void startExport() {
+        editorView.showProgressDialog();
         exportProjectUseCase.export();
     }
 
@@ -153,9 +154,9 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
 
     @Override
     public void onExportError() {
-        //editorView.hideProgressDialog();
+        editorView.hideProgressDialog();
         //TODO modify error message
-        //editorView.showError(R.string.addMediaItemToTrackError);
+        editorView.showError(R.string.addMediaItemToTrackError);
     }
 
     @Override

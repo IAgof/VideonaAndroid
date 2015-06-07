@@ -32,8 +32,8 @@ public class ExporterImpl implements Exporter {
         movie.setTracks(new LinkedList<Track>());
 
         //MP4 parser usa segundos en vez de ms
-        double startTime = videoToTrim.getFileStartTime()/1000;
-        double endTime = videoToTrim.getFileStopTime()/1000;
+        double startTime = videoToTrim.getFileStartTime() / 1000;
+        double endTime = videoToTrim.getFileStopTime() / 1000;
         boolean timeCorrected = false;
         for (Track track : tracks) {
             if (track.getSyncSamples() != null && track.getSyncSamples().length > 0) {
@@ -102,7 +102,6 @@ public class ExporterImpl implements Exporter {
             }
             currentTime += (double) delta / (double) track.getTrackMetaData().getTimescale();
             currentSample++;
-
         }
         double previous = 0;
         for (double timeOfSyncSample : timeOfSyncSamples) {
@@ -126,23 +125,21 @@ public class ExporterImpl implements Exporter {
     @Override
     public Video addMusicToVideo(Video video, Music music, String outputPath) {
         try {
-            File fMusicSelected = Utils.getMusicFileById(music.getMusicResourceId());
-            if (fMusicSelected != null) {
+            File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
+            if (musicFile != null) {
                 Movie videoMovie = MovieCreator.build(video.getMediaPath());
                 videoMovie.getTracks().remove(1);
-
-                CroppedTrack musicTrack = trimMusicTrack(fMusicSelected.getPath(), video.getDuration());
-
+                CroppedTrack musicTrack = trimMusicTrack(musicFile.getPath(), video.getDuration());
                 videoMovie.addTrack(new AppendTrack(musicTrack));
-
+                File f= new File(outputPath);
+                if (f.exists())
+                    f.delete();
                 {
                     Container out = new DefaultMp4Builder().build(videoMovie);
                     FileOutputStream fos = new FileOutputStream(new File(outputPath));
                     out.writeContainer(fos.getChannel());
                     fos.close();
                 }
-
-                //VideoUtils.switchAudio(pathVideoEdited, userPreferences.getMusicSelected(), Constants.VIDEO_MUSIC_TEMP_FILE);
             }
         } catch (IOException ioe) {
             Log.e("ERROR", "IOE", ioe);
@@ -151,8 +148,10 @@ public class ExporterImpl implements Exporter {
     }
 
     private CroppedTrack trimMusicTrack(String musicFilePath, double endTime) throws IOException {
-        Movie musicMovie = MovieCreator.build(musicFilePath);
-        Track musicTrack = musicMovie.getTracks().get(0);
+        Movie music = MovieCreator.build(musicFilePath);
+        Track musicTrack = music.getTracks().get(0);
+        //Mp4parser needs seconds instead of milliseconds
+        endTime = endTime / 1000;
         if (musicTrack.getSyncSamples() != null && musicTrack.getSyncSamples().length > 0)
             endTime = correctTimeToSyncSample(musicTrack, endTime, true);
         long[] samples = getStartAndStopSamples(musicTrack, 0, endTime);
