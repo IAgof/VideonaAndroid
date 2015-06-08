@@ -10,7 +10,6 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -153,12 +152,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         handler.removeCallbacksAndMessages(null);
     }
 
-    @OnClick(R.id.share_button_about)
-    public void showAbout() {
-        Intent intent = new Intent(this, AboutActivity.class);
-        startActivity(intent);
-    }
-
     @OnClick(R.id.share_button_play)
     public void playVideo() {
         if (!mediaPlayer.isPlaying()) {
@@ -174,15 +167,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
             buttonPlay.setVisibility(View.VISIBLE);
             updateSeekProgress();
         }
-    }
-
-    @OnClick(R.id.share_button_rate_app)
-    public void rateApp() {
-        Uri uri = Uri.parse("market://details?id=" + getPackageName());
-        // Redirect to videozone
-        //Uri uri = Uri.parse("market://details?id=" + "com.visiona.videozone");
-        Intent rateApp = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(rateApp);
     }
 
     @OnClick(R.id.share_button_share)
@@ -310,7 +294,7 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         durationVideoRecorded = (int) duration;
     }
 
-    @OnClick({R.id.share_button_share, R.id.share_button_rate_app})
+    @OnClick({R.id.share_button_share})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -325,9 +309,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         switch (id) {
             case R.id.share_button_share:
                 label = "Share video";
-                break;
-            case R.id.share_button_rate_app:
-                label = "Vote app";
                 break;
             default:
                 label = "Other";
