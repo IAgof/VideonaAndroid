@@ -32,7 +32,7 @@ public interface EditorView {
 
     void refreshDurationTag(int duration);
 
-    void showTrimBar(int videoDuration);
+    void showTrimBar(int videoDuration, int min, int max);
 
     void enableMusicPlayer(Music music);
 

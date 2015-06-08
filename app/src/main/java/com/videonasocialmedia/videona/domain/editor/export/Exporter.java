@@ -12,7 +12,7 @@ import java.util.List;
 public interface Exporter {
     Video trimVideo(Video videoToTrim, String outputPath) throws IOException;
     Video mergeVideos(List<Video>videoList);
-    Video addMusicToVideo(Video video, Music music, String outputPath);
+    Video addMusicToVideo(Video video, Music music, String outputPath) throws IOException;
 
     //Falta meter la resolución de salida
     Video transcodeVideo (Video video);

@@ -1,7 +1,5 @@
 package com.videonasocialmedia.videona.domain.editor.export;
 
-import android.util.Log;
-
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
@@ -123,26 +121,22 @@ public class ExporterImpl implements Exporter {
     }
 
     @Override
-    public Video addMusicToVideo(Video video, Music music, String outputPath) {
-        try {
-            File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
-            if (musicFile != null) {
-                Movie videoMovie = MovieCreator.build(video.getMediaPath());
-                videoMovie.getTracks().remove(1);
-                CroppedTrack musicTrack = trimMusicTrack(musicFile.getPath(), video.getDuration());
-                videoMovie.addTrack(new AppendTrack(musicTrack));
-                File f= new File(outputPath);
-                if (f.exists())
-                    f.delete();
-                {
-                    Container out = new DefaultMp4Builder().build(videoMovie);
-                    FileOutputStream fos = new FileOutputStream(new File(outputPath));
-                    out.writeContainer(fos.getChannel());
-                    fos.close();
-                }
+    public Video addMusicToVideo(Video video, Music music, String outputPath) throws IOException {
+        File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
+        if (musicFile != null) {
+            Movie videoMovie = MovieCreator.build(video.getMediaPath());
+            videoMovie.getTracks().remove(1);
+            CroppedTrack musicTrack = trimMusicTrack(musicFile.getPath(), video.getDuration());
+            videoMovie.addTrack(new AppendTrack(musicTrack));
+            File f = new File(outputPath);
+            if (f.exists())
+                f.delete();
+            {
+                Container out = new DefaultMp4Builder().build(videoMovie);
+                FileOutputStream fos = new FileOutputStream(new File(outputPath));
+                out.writeContainer(fos.getChannel());
+                fos.close();
             }
-        } catch (IOException ioe) {
-            Log.e("ERROR", "IOE", ioe);
         }
         return new Video(outputPath);
     }

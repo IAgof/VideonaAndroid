@@ -68,9 +68,12 @@ public class Video extends Media {
             duration = Integer.parseInt(retriever.extractMetadata(
                     MediaMetadataRetriever.METADATA_KEY_DURATION));
             fileDuration = duration;
+            fileStartTime=0;
+            fileStopTime= duration;
         }catch (Exception e){
             fileDuration=0;
             duration=0;
+            fileStopTime= 0;
         }
     }
 

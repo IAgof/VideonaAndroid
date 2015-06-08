@@ -32,7 +32,7 @@ public class ExportProjectUseCase2 {
     }
 
     public void export() {
-        boolean success= false;
+        boolean success;
         Project project = Project.getInstance(null, null, null);
         String pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
         Video video = (Video) project.getMediaTrack().getItems().getFirst();
@@ -45,11 +45,10 @@ public class ExportProjectUseCase2 {
             success= false;
         }
         //TODO refactor this condition
-        if (success && project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size()>0) {
+        if (success && isMusicOnProject(project)) {
             try {
                 Music music = (Music) project.getAudioTracks().get(0).getItems().getFirst();
                 video = exporter.addMusicToVideo(video, music, pathVideoEdited);
-                onExportFinishedListener.onExportSuccess(video);
                 success=true;
             } catch (Exception e) {
                 Log.e("ERROR", "adding Music", e);
@@ -62,5 +61,9 @@ public class ExportProjectUseCase2 {
         }else{
             onExportFinishedListener.onExportError();
         }
+    }
+
+    private boolean isMusicOnProject(Project project) {
+        return project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size() > 0;
     }
 }

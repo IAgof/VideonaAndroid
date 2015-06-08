@@ -61,28 +61,9 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
      * on Create Presenter
      */
     public void onCreate() {
-        LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
-        videoToEdit = (Video) listMedia.getLast();
-
-        String videoPath = videoToEdit.getMediaPath();
-        Log.d(LOG_TAG, "EditPresenter onCreate pathMedia " + videoPath);
-
-        //Sustituir el path con el video??
-        editorView.initVideoPlayer(videoPath);
-        editorView.showTrimBar(videoToEdit.getFileDuration());
-        showTagsWithInitialValues();
-        try {
-            editorView.createAndPaintVideoThumbs(videoPath, videoToEdit.getDuration());
-        } catch (Exception e) {
-            //TODO Determine what to do when the thumbs cannot be drawn
-        }
     }
 
-    private void showTagsWithInitialValues() {
-        editorView.refreshDurationTag(videoToEdit.getDuration());
-        editorView.refreshStartTimeTag(0);
-        editorView.refreshStopTimeTag(videoToEdit.getFileStopTime());
-    }
+
 
     /**
      * on Start Presenter
@@ -91,6 +72,30 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
         // TODO edit use case onStart
     }
 
+    public void onResume(){
+
+        LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
+        videoToEdit = (Video) listMedia.getLast();
+
+        String videoPath = videoToEdit.getMediaPath();
+        Log.d(LOG_TAG, "EditPresenter onCreate pathMedia " + videoPath);
+
+        editorView.initVideoPlayer(videoPath);
+        editorView.showTrimBar(videoToEdit.getFileDuration(), videoToEdit.getFileStartTime(), videoToEdit.getFileStopTime());
+        showTimeTags();
+        try {
+            editorView.createAndPaintVideoThumbs(videoPath, videoToEdit.getFileDuration());
+        } catch (Exception e) {
+            //TODO Determine what to do when the thumbs cannot be drawn
+        }
+
+    }
+
+    private void showTimeTags() {
+        editorView.refreshDurationTag(videoToEdit.getDuration());
+        editorView.refreshStartTimeTag(videoToEdit.getFileStartTime());
+        editorView.refreshStopTimeTag(videoToEdit.getFileStopTime());
+    }
 
     /**
      * Ok edit button click listener
@@ -161,6 +166,7 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
 
     @Override
     public void onExportSuccess(Video exportedVideo) {
+        editorView.hideProgressDialog();
         editorView.goToShare(exportedVideo.getMediaPath());
     }
 }

@@ -25,15 +25,6 @@ public class SharePresenter {
      */
     private final String LOG_TAG = getClass().getSimpleName();
 
-    /**
-     * Share View
-     */
-    private ShareView shareView;
-
-    /**
-     * Context
-     */
-    private Context context;
 
     /**
      * Get media list from project use case
@@ -44,15 +35,8 @@ public class SharePresenter {
     /**
      * Constructor
      *
-     * @param shareView
-     * @param context
      */
-    public SharePresenter(ShareView shareView, Context context) {
-
-        this.shareView = shareView;
-        this.context = context;
-        getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-
+    public SharePresenter(){
     }
 
 
@@ -63,13 +47,6 @@ public class SharePresenter {
 
         // Add videoRecorded to EditActivity, only one media
         //TODO do not use static variable videoRecorded
-
-        LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
-        String pathMedia = listMedia.getLast().getMediaPath();
-        ShareActivity.videoEdited = pathMedia;
-
-        Log.d(LOG_TAG, "onCreate SharePresenter pathMedia " + pathMedia);
-
     }
 
     /**
