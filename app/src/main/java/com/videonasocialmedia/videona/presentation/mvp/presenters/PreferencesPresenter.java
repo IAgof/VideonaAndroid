@@ -24,11 +24,11 @@ import java.util.ArrayList;
  */
 public class PreferencesPresenter {
 
-    Context context;
-    SharedPreferences sharedPreferences;
-    PreferencesView preferencesView;
-    ListPreference resolutionPref;
-    ListPreference qualityPref;
+    private Context context;
+    private SharedPreferences sharedPreferences;
+    private PreferencesView preferencesView;
+    private ListPreference resolutionPref;
+    private ListPreference qualityPref;
 
     /**
      * Constructor
@@ -68,19 +68,19 @@ public class PreferencesPresenter {
         boolean isPaidApp = true;
         // TODO check with flavors the app version (free/paid)
 
-        if (sharedPreferences.getBoolean("backCamera720pSupported", false) && isPaidApp) {
+        if (sharedPreferences.getBoolean("back_camera_720_supported", false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.low_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.low_resolution_value));
             defaultResolution = context.getResources().getString(R.string.low_resolution_value);
         }
-        if (sharedPreferences.getBoolean("backCamera1080pSupported", false) && isPaidApp) {
+        if (sharedPreferences.getBoolean("back_camera_1080_supported", false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.good_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.good_resolution_value));
             if (defaultResolution == null) {
                 defaultResolution = context.getResources().getString(R.string.good_resolution_value);
             }
         }
-        if (sharedPreferences.getBoolean("backCamera2160pSupported", false) && isPaidApp) {
+        if (sharedPreferences.getBoolean("back_camera_2160_supported", false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.high_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.high_resolution_value));
             if (defaultResolution == null) {
@@ -91,6 +91,8 @@ public class PreferencesPresenter {
             preferencesView.setAvailablePreferences(resolutionPref, resolutionNames, resolutionValues);
             if (updateDefaultPreference(key, resolutionValues)) {
                 preferencesView.setDefaultPreference(resolutionPref, defaultResolution, key);
+            } else {
+                preferencesView.setPreference(resolutionPref, sharedPreferences.getString(key, ""));
             }
         } else {
             resolutionNames.add(context.getResources().getString(R.string.low_resolution_name));
@@ -133,6 +135,8 @@ public class PreferencesPresenter {
             preferencesView.setAvailablePreferences(qualityPref, qualityNames, qualityValues);
             if (updateDefaultPreference(key, qualityValues)) {
                 preferencesView.setDefaultPreference(qualityPref, defaultQuality, key);
+            } else {
+                preferencesView.setPreference(qualityPref, sharedPreferences.getString(key, ""));
             }
         } else {
             qualityNames.add(context.getResources().getString(R.string.good_quality_name));
@@ -150,7 +154,7 @@ public class PreferencesPresenter {
      */
     private boolean updateDefaultPreference(String key, ArrayList<String> values) {
         boolean result = false;
-        String actualDefaultValue = sharedPreferences.getString(key, "null");
+        String actualDefaultValue = sharedPreferences.getString(key, "");
         if (!values.contains(actualDefaultValue)) {
             result = true;
         }

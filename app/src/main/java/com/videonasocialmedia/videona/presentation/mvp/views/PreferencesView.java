@@ -35,4 +35,12 @@ public interface PreferencesView {
      * @param key the key of the preference
      */
     void setDefaultPreference(ListPreference preference, String name, String key);
+
+    /**
+     * Sets the actual settings selected by the user
+     *
+     * @param preference
+     * @param name
+     */
+    void setPreference(ListPreference preference, String name);
 }
