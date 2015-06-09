@@ -11,6 +11,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
@@ -27,7 +28,7 @@ import java.util.LinkedList;
 public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
 
     RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
-    //GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
+    RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     AddVideoToProjectUseCase addVideoToProjectUseCase;
     ArrayList<String> itemsToAdd;
     GalleryPagerView galleryPagerView;
@@ -38,7 +39,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
     public GalleryPagerPresenter(GalleryPagerView galleryPagerView) {
         this.galleryPagerView = galleryPagerView;
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
-        //getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         itemsToAdd = new ArrayList<>();
     }
@@ -50,17 +51,21 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
      */
     public void loadVideoToProject(Video video) {
 
-        // LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
+        resetProject();
+        addVideoToProjectUseCase.addVideoToTrack(video, this);
+
+    }
+
+    private void resetProject() {
         Project project = Project.getInstance(null, null, null);
         MediaTrack mediaTrack = project.getMediaTrack();
         LinkedList<Media> listMedia = mediaTrack.getItems();
         ArrayList<Media> items = new ArrayList<>(listMedia);
-
         if (items.size() > 0) {
             removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
         }
-        addVideoToProjectUseCase.addVideoToTrack(video, this);
 
+        removeMusicFromProjectUseCase.removeAllMusic(0,this);
     }
 
     @Override

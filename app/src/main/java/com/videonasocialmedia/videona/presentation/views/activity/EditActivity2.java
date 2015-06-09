@@ -227,7 +227,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         } else {
             playPreview();
         }
-        //updateSeekBarProgress();
+        updateSeekBarProgress();
     }
 
     private void playPreview() {
@@ -464,7 +464,9 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
                         e.printStackTrace();
                     }
                     videoPlayer.pause();
+
                     editPresenter.prepareMusicPreview();
+                    pausePreview();
                     updateSeekBarProgress();
                 }
             });
@@ -475,8 +477,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
                     if (musicPlayer != null && musicPlayer.isPlaying()) {
                         musicPlayer.pause();
                     }
-
-                    //updateSeekBarProgress();
+                    updateSeekBarProgress();
                 }
             });
 
@@ -493,7 +494,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
      */
     @Override
     public void onClick(int position) {
-        //updateSeekBarProgress();
+        updateSeekBarProgress();
         if (isAlreadySelected(position)) {
             playPausePreview();
         } else {
@@ -532,7 +533,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         }
         if (videoPlayer != null)
             videoPlayer.setVolume(0.5f, 0.5f);
-        //updateSeekBarProgress();
+        updateSeekBarProgress();
         playPreviewFromTrimmingStart();
     }
 
