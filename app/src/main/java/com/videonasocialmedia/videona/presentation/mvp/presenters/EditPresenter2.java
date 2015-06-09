@@ -15,6 +15,7 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase2;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -74,6 +75,8 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
 
     public void onResume(){
 
+
+
         LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
         videoToEdit = (Video) listMedia.getLast();
 
@@ -91,6 +94,16 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
 
     }
 
+    public void prepareMusicPreview(){
+        try {
+            Project project= Project.getInstance(null,null,null);
+            Music music = (Music) project.getAudioTracks().get(0).getItems().get(0);
+            editorView.initMusicPlayer(music);
+        }catch (Exception e){
+            //do nothing
+        }
+    }
+
     private void showTimeTags() {
         editorView.refreshDurationTag(videoToEdit.getDuration());
         editorView.refreshStartTimeTag(videoToEdit.getFileStartTime());
@@ -101,7 +114,7 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
      * Ok edit button click listener
      */
     public void startExport() {
-        editorView.showProgressDialog();
+        //editorView.showProgressDialog();
         exportProjectUseCase.export();
     }
 
@@ -116,8 +129,8 @@ public class EditPresenter2 implements OnExportFinishedListener, ModifyVideoDura
     @Override
     public void onVideoDurationModified(Video modifiedVideo) {
         editorView.refreshDurationTag(modifiedVideo.getDuration());
-        editorView.refreshStartTimeTag(modifiedVideo.getFileStartTime());
         editorView.refreshStopTimeTag(modifiedVideo.getFileStopTime());
+        editorView.refreshStartTimeTag(modifiedVideo.getFileStartTime());
     }
 
     public void addMusic(Music music) {

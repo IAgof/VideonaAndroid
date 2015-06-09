@@ -267,9 +267,6 @@ public class VideoUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                     //return false;
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    //return false;
                 }
 
                 for (Track t : movie.getTracks()) {
@@ -281,9 +278,6 @@ public class VideoUtils {
                     }
                 }
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return false;
-            } catch (IOException e) {
                 e.printStackTrace();
                 return false;
             }

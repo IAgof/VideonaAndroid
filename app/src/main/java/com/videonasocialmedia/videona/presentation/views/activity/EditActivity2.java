@@ -164,7 +164,14 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         mediaController.setVisibility(View.INVISIBLE);
 
         editPresenter.onCreate();
+        createProgressDialog();
+    }
 
+    private void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.dialog_processing));
+        progressDialog.setTitle(getString(R.string.please_wait));
+        progressDialog.setIndeterminate(true);
     }
 
     @Override
@@ -191,7 +198,6 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
     protected void onStop() {
         Log.d(LOG_TAG, "onStop");
         super.onStop();
-
     }
 
     @Override
@@ -221,11 +227,11 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         } else {
             playPreview();
         }
-        updateSeekBarProgress();
+        //updateSeekBarProgress();
     }
 
     private void playPreview() {
-        if (videoPlayer!=null) {
+        if (videoPlayer != null) {
             videoPlayer.start();
             if (musicPlayer != null) {
                 playMusicSyncedWithVideo();
@@ -239,9 +245,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
             videoPlayer.pause();
         if (musicPlayer != null && musicPlayer.isPlaying())
             musicPlayer.pause();
-
         playButton.setVisibility(View.VISIBLE);
-
     }
 
     @OnClick(R.id.buttonCancelEditActivity)
@@ -252,6 +256,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
     @OnClick(R.id.buttonOkEditActivity)
     public void okEditActivity() {
         pausePreview();
+        showProgressDialog();
         editPresenter.startExport();
     }
 
@@ -268,15 +273,6 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
 
     @Override
     public void showProgressDialog() {
-        createProgressDialog();
-        progressDialog.show();
-    }
-
-    private void createProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.dialog_processing));
-        progressDialog.setTitle(getString(R.string.please_wait));
-        progressDialog.setIndeterminate(true);
         progressDialog.show();
         // Custom progress dialog
         progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
@@ -294,7 +290,9 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
 
         progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
                 "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
+
     }
+
 
     @OnClick(R.id.edit_button_fx)
     public void showVideoFxMenu() {
@@ -323,22 +321,6 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         videoFxButton.setActivated(false);
     }
 
-
-//    /**
-//     * Overridden to save instance trim text and seekBar
-//     */
-//    @Override
-//    protected void onSaveInstanceState(Bundle savedInstanceState) {
-//
-//        // Log.d(LOG_TAG, "Bundle savedInstanceState");
-//
-//        savedInstanceState.putInt("START_TRIM", seekBarStart);
-//        savedInstanceState.putInt("END_TRIM", seekBarEnd);
-//        savedInstanceState.putInt("SEEKBAR_PROGRESS", videoProgress);
-//
-//        // Always call the superclass so it can save the view hierarchy state
-//        super.onSaveInstanceState(savedInstanceState);
-//    }
 
     @OnClick(R.id.edit_button_scissor)
     public void showScissorsFxMenu() {
@@ -482,6 +464,8 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
                         e.printStackTrace();
                     }
                     videoPlayer.pause();
+                    editPresenter.prepareMusicPreview();
+                    updateSeekBarProgress();
                 }
             });
             preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -491,11 +475,13 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
                     if (musicPlayer != null && musicPlayer.isPlaying()) {
                         musicPlayer.pause();
                     }
-                    updateSeekBarProgress();
+
+                    //updateSeekBarProgress();
                 }
             });
 
             preview.requestFocus();
+
         }
     }
 
@@ -507,7 +493,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
      */
     @Override
     public void onClick(int position) {
-        updateSeekBarProgress();
+        //updateSeekBarProgress();
         if (isAlreadySelected(position)) {
             playPausePreview();
         } else {
@@ -546,7 +532,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         }
         if (videoPlayer != null)
             videoPlayer.setVolume(0.5f, 0.5f);
-        updateSeekBarProgress();
+        //updateSeekBarProgress();
         playPreviewFromTrimmingStart();
     }
 
@@ -556,13 +542,13 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         playPreviewFromTrimmingStart();
     }
 
-    private void playPreviewFromTrimmingStart(){
+    private void playPreviewFromTrimmingStart() {
         seekToTrimmingStart();
         playPreview();
     }
 
     private void seekToTrimmingStart() {
-        if (videoPlayer!=null) {
+        if (videoPlayer != null) {
             pausePreview();
             int trimBarStart = (int) Math.round(trimBar.getSelectedMinValue());
             videoPlayer.seekTo(trimBarStart);
@@ -580,12 +566,14 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
 
     @Override
     public void hideProgressDialog() {
-        progressDialog.dismiss();
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
     }
 
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
-            seekBar.setProgress(videoPlayer.getCurrentPosition());
+            if (videoPlayer.isPlaying())
+                seekBar.setProgress(videoPlayer.getCurrentPosition());
             handler.postDelayed(updateTimeTask, 20);
         }
     }
@@ -627,11 +615,11 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
 
     private Bitmap createVideoThumb(MediaMetadataRetriever retriever, Size size, int frameTime) throws Exception {
         Bitmap bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-        if (bitmap==null)
+        if (bitmap == null)
             bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_CLOSEST);
-        if (bitmap==null)
+        if (bitmap == null)
             bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_NEXT_SYNC);
-        if (bitmap==null)
+        if (bitmap == null)
             bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
         if (bitmap == null) {
             throw new Exception();
@@ -702,7 +690,7 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
     }
 
     private boolean isOnSelectedVideoSection() {
-        int videoProgress= videoPlayer.getCurrentPosition();
+        int videoProgress = videoPlayer.getCurrentPosition();
         int trimBarStart = (int) Math.round(trimBar.getSelectedMinValue());
         int trimBarEnd = (int) Math.round(trimBar.getSelectedMaxValue());
         return videoProgress >= trimBarStart && videoProgress <= trimBarEnd;
@@ -741,9 +729,9 @@ public class EditActivity2 extends Activity implements EditorView, OnEffectMenuS
         int finishTimeMs = (int) Math.round((double) maxValue);
         editPresenter.modifyVideoStartTime(startTimeMs);
         editPresenter.modifyVideoFinishTime(finishTimeMs);
-        if (videoPlayer.isPlaying()){
+        if (videoPlayer.isPlaying()) {
             playPreviewFromTrimmingStart();
-        }else{
+        } else {
             seekToTrimmingStart();
         }
 
