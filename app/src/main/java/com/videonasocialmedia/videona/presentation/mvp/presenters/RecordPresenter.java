@@ -87,6 +87,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
      */
     @Override
     public void start(int displayOrientation) {
+
         recordUseCase.startPreview(this, displayOrientation);
 
         // Start with effect NONE, position 0
@@ -310,6 +311,16 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
 
     }
 
+    public void setRotationView(int rotationView){
+
+        this.rotationView = rotationView;
+
+        recordUseCase.setRotationView(rotationView);
+
+        Log.d(LOG_TAG, "setRotationView " + rotationView);
+
+    }
+
     /**
      * Sends button clicks to Google Analytics
      *
@@ -415,6 +426,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
 
     @Override
     public void onChangeCameraSuccess(int cameraMode){
+
         recordView.showCamera(cameraMode);
         Log.d(LOG_TAG, "onChangeCameraSuccess cameraMode " + cameraMode);
     }
