@@ -89,6 +89,7 @@ public class CheckCameraSettingsUseCase {
         }
 
         camera.release();
+        camera = null;
 
     }
 
@@ -107,6 +108,7 @@ public class CheckCameraSettingsUseCase {
             if(camera != null){
 
                 camera.release();
+                camera = null;
                 cameraId = 1;
                 camera = getCameraInstance(cameraId);
 
@@ -127,6 +129,7 @@ public class CheckCameraSettingsUseCase {
         if(camera != null){
 
             camera.release();
+            camera = null;
             cameraId = 0;
             camera = getCameraInstance(cameraId);
 
@@ -142,6 +145,7 @@ public class CheckCameraSettingsUseCase {
         }
 
         camera.release();
+        camera = null;
 
     }
 
@@ -160,6 +164,7 @@ public class CheckCameraSettingsUseCase {
             if(camera != null){
 
                 camera.release();
+                camera = null;
                 cameraId = 1;
                 camera = getCameraInstance(cameraId);
 
@@ -185,6 +190,7 @@ public class CheckCameraSettingsUseCase {
         if(camera != null){
 
             camera.release();
+            camera = null;
             cameraId = 0;
             camera = getCameraInstance(cameraId);
 
@@ -207,6 +213,7 @@ public class CheckCameraSettingsUseCase {
         }
 
         camera.release();
+        camera = null;
 
     }
 
