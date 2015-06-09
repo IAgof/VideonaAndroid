@@ -128,9 +128,6 @@ public class ExporterImpl implements Exporter {
             videoMovie.getTracks().remove(1);
             CroppedTrack musicTrack = trimMusicTrack(musicFile.getPath(), video.getDuration());
             videoMovie.addTrack(new AppendTrack(musicTrack));
-            File f = new File(outputPath);
-            if (f.exists())
-                f.delete();
             {
                 Container out = new DefaultMp4Builder().build(videoMovie);
                 FileOutputStream fos = new FileOutputStream(new File(outputPath));
