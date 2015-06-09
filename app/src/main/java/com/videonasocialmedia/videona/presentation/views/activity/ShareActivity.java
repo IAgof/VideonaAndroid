@@ -266,7 +266,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                // Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
                 buttonPlay.setVisibility(View.VISIBLE);
                 updateSeekProgress();
             }
@@ -311,13 +310,9 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
-    }
 
-    @OnClick({R.id.share_button_share, R.id.share_button_rate_app})
+
+    @OnClick(R.id.share_button_share)
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -332,9 +327,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         switch (id) {
             case R.id.share_button_share:
                 label = "Share video";
-                break;
-            case R.id.share_button_rate_app:
-                label = "Vote app";
                 break;
             default:
                 label = "Other";

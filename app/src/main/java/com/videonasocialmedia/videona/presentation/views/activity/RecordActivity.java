@@ -523,7 +523,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     public void navigateEditActivity() {
 
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
-        Intent edit = new Intent(RecordActivity.this, EditActivity2.class);
+        Intent edit = new Intent(RecordActivity.this, EditActivity.class);
         startActivity(edit);
     }
 

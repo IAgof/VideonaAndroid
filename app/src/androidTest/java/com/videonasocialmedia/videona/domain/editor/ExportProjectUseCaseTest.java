@@ -10,19 +10,17 @@ package com.videonasocialmedia.videona.domain.editor;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase2;
+import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class ExportProjectUseCaseTest extends ActivityInstrumentationTestCase2<EditActivity> {
 
 
-    ExportProjectUseCase2 useCase;
+    ExportProjectUseCase useCase;
 
     OnExportFinishedListener listener;
 

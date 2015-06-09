@@ -94,7 +94,7 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         if (sharing) {
             intent = new Intent(this, ShareActivity.class);
         } else {
-            intent = new Intent(this, EditActivity2.class);
+            intent = new Intent(this, EditActivity.class);
         }
         startActivity(intent);
     }
