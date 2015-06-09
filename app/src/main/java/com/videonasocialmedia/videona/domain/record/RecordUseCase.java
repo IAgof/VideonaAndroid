@@ -339,7 +339,7 @@ public class RecordUseCase {
     public void getSettingsCamera(OnSettingsCameraListener listener){
 
 
-        listener.onSettingsCameraSuccess(supportChangeCamera(),supportFlashMode());
+        listener.onSettingsCameraSuccess(supportChangeCamera(), supportFlashMode());
     }
 
     /**
@@ -597,8 +597,8 @@ public class RecordUseCase {
 
         setVideoRecordName(videoRecordName);
 
-        // rotateBackVideo
-        rotateBackVideo(getRotationView(), mediaRecorder);
+        // rotateVideo according to preview
+        rotateVideo(getRotationView(), mediaRecorder);
 
         // Set the frameLayoutCameraPreview output
         mediaRecorder.setPreviewDisplay(cameraPreview.getHolder().getSurface());
@@ -635,22 +635,41 @@ public class RecordUseCase {
      * @param rotationPreview mMediaRecorder
      * @return
      */
-    private void  rotateBackVideo(int rotationPreview, MediaRecorder mediaRecorder) {
+    private void rotateVideo(int rotationPreview, MediaRecorder mediaRecorder) {
         /**
          * Define Orientation of video in here,
          * if in portrait mode, use value = 90,
          * if in landscape mode, use value = 0
          */
 
+        int cameraOrientation = getCameraDisplayOrientation(userPreferences.getCameraId());
+
         Log.d(LOG_TAG, "rotationPreview MediaRecorder rotation Preview " + rotationPreview);
 
         switch (rotationPreview) {
             case 1:
-                mediaRecorder.setOrientationHint(0);
+                if(cameraOrientation == 90) {
+                    mediaRecorder.setOrientationHint(0);
+                }
+                if(cameraOrientation == 270){
+                    mediaRecorder.setOrientationHint(180);
+                }
                 break;
             case 3:
-                mediaRecorder.setOrientationHint(180);
+                if(cameraOrientation == 90) {
+                    mediaRecorder.setOrientationHint(180);
+                }
+                if(cameraOrientation == 270){
+                    mediaRecorder.setOrientationHint(0);
+                }
                 break;
+            default:
+                if(cameraOrientation == 90) {
+                    mediaRecorder.setOrientationHint(0);
+                }
+                if(cameraOrientation == 270){
+                    mediaRecorder.setOrientationHint(180);
+                };
 
         }
 
@@ -750,16 +769,69 @@ public class RecordUseCase {
     }
 
     public void setRotationView(int rotationView){
+
         this.rotationView = rotationView;
+
+        int cameraOrientation = getCameraDisplayOrientation(userPreferences.getCameraId());
+
         int displayOrientation = 0;
+
         if(rotationView == Surface.ROTATION_90){
-            displayOrientation = 0;
+            if(cameraOrientation == 90) {
+                displayOrientation = 0;
+            }
+            if(cameraOrientation == 270){
+                displayOrientation = 180;
+            }
+            Log.d(LOG_TAG, "setRotationView rotation 90, cameraOrientation " + cameraOrientation );
         }
         if(rotationView == Surface.ROTATION_270){
-            displayOrientation = 180;
+            if(cameraOrientation == 90) {
+                displayOrientation = 180;
+            }
+            if(cameraOrientation == 270){
+                displayOrientation = 0;
+            }
+            Log.d(LOG_TAG, "setRotationView rotation 270, cameraOrientation " + cameraOrientation );
         }
+
         cameraPreview.setCameraOrientation(displayOrientation);
 
+
     }
+
+
+    // setDisplayOrientation, fix Iago camera settings
+   // public static void setCameraDisplayOrientation(Activity activity,
+     //                                              int cameraId, android.hardware.Camera camera) {
+    public int getCameraDisplayOrientation(int cameraId) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+        //int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+       /* int rotation = displayOrientation;
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
+        */
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation ) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation + 360) % 360;
+        }
+       // camera.setDisplayOrientation(result);
+
+        Log.d(LOG_TAG, "getCameraDisplayOrientation cameraId " + cameraId + " result "  + result);
+
+        return result;
+    }
+
 
 }

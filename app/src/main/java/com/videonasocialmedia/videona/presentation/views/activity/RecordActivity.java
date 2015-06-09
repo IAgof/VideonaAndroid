@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -138,6 +139,10 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @InjectView(R.id.activity_record_navigation_drawer)
     View navigatorView;
 
+    /**
+     * Camera Id, to detect rotation view
+     */
+    private int cameraId = 0;
     /**
      * OrientationEventListener
      */
@@ -314,20 +319,35 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         rotationView = getWindowManager().getDefaultDisplay().getRotation();
 
+        int cameraOrientation = getCameraDisplayOrientation(cameraId);
+
         if (rotationView == Surface.ROTATION_90) {
             detectScreenOrientation90 = true;
 
-            displayOrientation = 0;
+            if(cameraOrientation == 90) {
+                displayOrientation = 0;
+            }
+            if(cameraOrientation == 270){
+                displayOrientation = 180;
+            }
+            Log.d(LOG_TAG, "detectRotationView rotation 90, cameraOrientation " + cameraOrientation );
 
         }
 
         if (rotationView == Surface.ROTATION_270) {
             detectScreenOrientation270 = true;
 
-            displayOrientation = 180;
+            if(cameraOrientation == 90) {
+                displayOrientation = 180;
+            }
+            if(cameraOrientation == 270){
+                displayOrientation = 0;
+            }
+            Log.d(LOG_TAG, "detectRotationView rotation 270, cameraOrientation " + cameraOrientation );
         }
 
-        Log.d(LOG_TAG, "rotationPreview " + rotationView);
+        Log.d(LOG_TAG, "detectRotationView rotationPreview " + rotationView +
+                " displayOrientation " + displayOrientation);
 
         myOrientationEventListener = getOrientationEventListener(context);
 
@@ -339,6 +359,27 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             myOrientationEventListener.disable();
         }
 
+        // Test Camara Iago
+        recordPresenter.setRotationView(rotationView);
+
+    }
+
+    private int getCameraDisplayOrientation(int cameraId) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation ) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation + 360) % 360;
+        }
+
+        Log.d(LOG_TAG, "setCameraDisplayOrientation cameraId " + cameraId + " result " + result);
+
+        return result;
     }
 
     private OrientationEventListener getOrientationEventListener(Context context) {
@@ -346,13 +387,13 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         myOrientationEventListener = new OrientationEventListener(context) {
             @Override
             public void onOrientationChanged(int orientation) {
-                //  Log.d("CameraPreview", "onOrientationChanged " + orientation);
+                //  Log.d(LOG_TAG, "onOrientationChanged " + orientation);
                 if (lockRotation) { // || recordPresenter == null){
                     return;
                 } else {
 
                     if (orientation == SCREEN_ORIENTATION_90) {
-                        //  Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
+                         // Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
                         if (detectScreenOrientation90) {
                             if (rotationView == Surface.ROTATION_90 && detectScreenOrientation270) {
                                 return;
@@ -380,7 +421,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                         }
                     }
                     if (orientation == SCREEN_ORIENTATION_270) {
-                        //  Log.d("CameraPreview", "rotationPreview onOrientationChanged " + orientation);
+                       //   Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
                         if (detectScreenOrientation270) {
                             //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
                             if (rotationView == Surface.ROTATION_270 && detectScreenOrientation90) {
@@ -482,6 +523,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "showRecordFinished() RecordActivity");
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
         buttonRecord.setEnabled(false);
+        lockRotation = false;
     }
 
     @Override
@@ -714,13 +756,16 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
             case 0:
                 // Back camera
+                cameraId = 0;
                 buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
                 break;
             case 1:
                 // Front camera
+                cameraId = 1;
                 buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
                 break;
             default:
+                cameraId = 0;
                 buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
         }
 
@@ -738,6 +783,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         detectRotationView(this);
 
         recordPresenter.start(displayOrientation);
+
         if (colorEffectAdapter != null) {
             colorEffectAdapter = null;
             recordPresenter.effectClickListener();
