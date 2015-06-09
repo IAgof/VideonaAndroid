@@ -21,7 +21,7 @@ import android.preference.PreferenceFragment;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
 
@@ -44,8 +44,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         addPreferencesFromResource(R.xml.preferences);
         context = getActivity().getApplicationContext();
-        getPreferenceManager().setSharedPreferencesName(Constants.SETTINGS_SHARED_PREFERENCES_FILE_NAME);
-        sharedPreferences = getActivity().getSharedPreferences(Constants.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+        getPreferenceManager().setSharedPreferencesName(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME);
+        sharedPreferences = getActivity().getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         resolutionPref = (ListPreference) findPreference("list_preference_resolution");

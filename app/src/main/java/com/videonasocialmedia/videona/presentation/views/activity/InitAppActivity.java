@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.InitAppPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
-import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
  *  InitAppActivity.
@@ -43,7 +43,7 @@ public class InitAppActivity extends Activity implements InitAppView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init_app);
-        sharedPreferences = getSharedPreferences(Constants.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         initAppPresenter = new InitAppPresenter(this, getApplicationContext(), sharedPreferences, editor);

@@ -19,6 +19,7 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -70,7 +71,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
      * Initializes the camera id parameter in shared preferences to back camera
      */
     private void initSettings() {
-        editor.putInt("camera_id", 0).commit();
+        editor.putInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.BACK_CAMERA).commit();
     }
 
     /**
@@ -97,11 +98,13 @@ public class InitAppPresenter  implements OnInitAppEventListener {
      */
     private void checkAvailableCameras() {
         if(camera == null) {
-            camera = getCameraInstance(sharedPreferences.getInt("camera_id",0));
+            camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
+                    ConfigPreferences.BACK_CAMERA));
         }
+        editor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, true).commit();
         numSupportedCameras = camera.getNumberOfCameras();
         if(numSupportedCameras > 1) {
-            editor.putBoolean("front_camera_supported", true).commit();
+            editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
         }
         releaseCamera();
     }
@@ -114,19 +117,19 @@ public class InitAppPresenter  implements OnInitAppEventListener {
             releaseCamera();
         }
         if(numSupportedCameras > 1) {
-            camera = getCameraInstance(1);
+            camera = getCameraInstance(ConfigPreferences.FRONT_CAMERA);
             if(camera.getParameters().getSupportedFlashModes() != null) {
-                editor.putBoolean("front_camera_flash_supported", true).commit();
+                editor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, true).commit();
             } else {
-                editor.putBoolean("front_camera_flash_supported", false).commit();
+                editor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, false).commit();
             }
             releaseCamera();
         }
-        camera = getCameraInstance(0);
+        camera = getCameraInstance(ConfigPreferences.BACK_CAMERA);
         if(camera.getParameters().getSupportedFlashModes() != null) {
-            editor.putBoolean("back_camera_flash_supported", true).commit();
+            editor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, true).commit();
         } else {
-            editor.putBoolean("back_camera_flash_supported", false).commit();
+            editor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, false).commit();
         }
         releaseCamera();
     }
@@ -135,34 +138,90 @@ public class InitAppPresenter  implements OnInitAppEventListener {
      * Checks the supported resolutions by the device
      */
     private void checkCameraVideoSize() {
+        List<Camera.Size> supportedVideoSizes;
         if(camera != null){
             releaseCamera();
         }
         if(numSupportedCameras > 1) {
-            camera = getCameraInstance(1);
-            for(Camera.Size size: camera.getParameters().getSupportedVideoSizes()) {
-                if(size.width == 1280 && size.height == 720) {
-                    editor.putBoolean("front_camera_720_supported", true).commit();
+            camera = getCameraInstance(ConfigPreferences.FRONT_CAMERA);
+            supportedVideoSizes = camera.getParameters().getSupportedVideoSizes();
+            boolean frontCameraResolutionSupported = false;
+            if (supportedVideoSizes != null) {
+                for(Camera.Size size: supportedVideoSizes) {
+                    if(size.width == 1280 && size.height == 720) {
+                        editor.putBoolean(ConfigPreferences.FRONT_CAMERA_720P_SUPPORTED, true).commit();
+                        frontCameraResolutionSupported = true;
+                    }
+                    if(size.width == 1920 && size.height == 1080) {
+                        editor.putBoolean(ConfigPreferences.FRONT_CAMERA_1080P_SUPPORTED, true).commit();
+                        frontCameraResolutionSupported = true;
+                    }
+                    if(size.width == 3840 && size.height == 2160) {
+                        editor.putBoolean(ConfigPreferences.FRONT_CAMERA_2160P_SUPPORTED, true).commit();
+                        frontCameraResolutionSupported = true;
+                    }
                 }
-                if(size.width == 1920 && size.height == 1080) {
-                    editor.putBoolean("front_camera_1080_supported", true).commit();
+            } else {
+                supportedVideoSizes = camera.getParameters().getSupportedPreviewSizes();
+                if (supportedVideoSizes != null) {
+                    for(Camera.Size size: supportedVideoSizes) {
+                        if(size.width == 1280 && size.height == 720) {
+                            editor.putBoolean(ConfigPreferences.FRONT_CAMERA_720P_SUPPORTED, true).commit();
+                            frontCameraResolutionSupported = true;
+                        }
+                        if(size.width == 1920 && size.height == 1080) {
+                            editor.putBoolean(ConfigPreferences.FRONT_CAMERA_1080P_SUPPORTED, true).commit();
+                            frontCameraResolutionSupported = true;
+                        }
+                        if(size.width == 3840 && size.height == 2160) {
+                            editor.putBoolean(ConfigPreferences.FRONT_CAMERA_2160P_SUPPORTED, true).commit();
+                            frontCameraResolutionSupported = true;
+                        }
+                    }
+                } else {
+                    editor.putBoolean(ConfigPreferences.FRONT_CAMERA_720P_SUPPORTED, false).commit();
+                    editor.putBoolean(ConfigPreferences.FRONT_CAMERA_1080P_SUPPORTED, false).commit();
+                    editor.putBoolean(ConfigPreferences.FRONT_CAMERA_2160P_SUPPORTED, false).commit();
                 }
-                if(size.width == 3840 && size.height == 2160) {
-                    editor.putBoolean("front_camera_2160_supported", true).commit();
-                }
+            }
+            if(!frontCameraResolutionSupported) {
+                editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, false).commit();
             }
             releaseCamera();
         }
-        camera = getCameraInstance(0);
-        for(Camera.Size size: camera.getParameters().getSupportedVideoSizes()) {
-            if(size.width == 1280 && size.height == 720) {
-                editor.putBoolean("back_camera_720_supported", true).commit();
+        camera = getCameraInstance(ConfigPreferences.BACK_CAMERA);
+        supportedVideoSizes = camera.getParameters().getSupportedVideoSizes();
+        if (supportedVideoSizes != null) {
+            for(Camera.Size size: camera.getParameters().getSupportedVideoSizes()) {
+                if(size.width == 1280 && size.height == 720) {
+                    editor.putBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, true).commit();
+                }
+                if(size.width == 1920 && size.height == 1080) {
+                    editor.putBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, true).commit();
+                }
+                if(size.width == 3840 && size.height == 2160) {
+                    editor.putBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, true).commit();
+                }
             }
-            if(size.width == 1920 && size.height == 1080) {
-                editor.putBoolean("back_camera_1080_supported", true).commit();
-            }
-            if(size.width == 3840 && size.height == 2160) {
-                editor.putBoolean("back_camera_2160_supported", true).commit();
+        } else {
+            supportedVideoSizes = camera.getParameters().getSupportedPreviewSizes();
+            if(supportedVideoSizes != null) {
+                for(Camera.Size size: camera.getParameters().getSupportedPreviewSizes()) {
+                    if(size.width == 1280 && size.height == 720) {
+                        editor.putBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, true).commit();
+                    }
+                    if(size.width == 1920 && size.height == 1080) {
+                        editor.putBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, true).commit();
+                    }
+                    if(size.width == 3840 && size.height == 2160) {
+                        editor.putBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, true).commit();
+                    }
+                }
+            } else {
+                editor.putBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, false).commit();
+                editor.putBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, false).commit();
+                editor.putBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, false).commit();
+                editor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, false).commit();
             }
         }
         releaseCamera();
@@ -234,7 +293,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
         }
         File privateDataFolderModel = context.getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
-        editor.putString("private_path", privatePath).commit();
+        editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
 
         // TODO: change this variable of 30MB (size of the raw folder)
         if (Utils.isAvailableSpace(30)) {
@@ -318,7 +377,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
     private void startLoadingProject(OnInitAppEventListener listener){
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
-        Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString("private_path", ""), checkProfile());
+        Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
         listener.onLoadingProjectSuccess();
     }
 

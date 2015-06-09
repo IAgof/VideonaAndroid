@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.domain.record;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -25,9 +26,9 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSettingsCame
 import com.videonasocialmedia.videona.presentation.views.CameraPreview;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,24 +59,10 @@ public class RecordUseCase {
     private CustomManualFocusView customManualFocusView;
 
     /**
-     * Int cameraId. default back camera
-     */
-    private int cameraId = 0;
-
-    /**
-     * Camera ID back camera
-     */
-    private final int BACK_CAMERA = 0;
-
-    /**
-     * Camera ID front camera
-     */
-    private final int FRONT_CAMERA = 1;
-
-    /**
      * Camera Android
      */
     private Camera camera;
+    private int cameraId = 0;
 
     /**
      * Media type video
@@ -105,7 +92,8 @@ public class RecordUseCase {
     /**
      * User preferences, private data
      */
-    UserPreferences userPreferences;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     /**
      * Context
@@ -118,25 +106,19 @@ public class RecordUseCase {
     private boolean autoFocus = true;
 
     public RecordUseCase(Context context){
-
         this.context = context;
-
-        userPreferences = new UserPreferences(context);
-
+        sharedPreferences = context.getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         if(camera == null){
-            camera = getCameraInstance(userPreferences.getCameraId());
+            camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,ConfigPreferences.BACK_CAMERA));
         }
-
        // this.rotationView = rotationView;
-
         cameraPreview = new CameraPreview(context, camera);
-
         customManualFocusView = new CustomManualFocusView(context);
-
         timer = new Chronometer(context);
-
         Log.d(LOG_TAG, "RecordUseCase");
-
     }
 
     /**
@@ -145,7 +127,6 @@ public class RecordUseCase {
      * @param listener
      */
     public void startPreview(OnPreviewListener listener, int displayOrientation){
-
         listener.onPreviewStarted(cameraPreview, customManualFocusView, autoFocus);
         setCameraOrientation(displayOrientation);
     }
@@ -157,9 +138,7 @@ public class RecordUseCase {
      * @param listener
      */
     public void reStartPreview(OnPreviewListener listener){
-
         listener.onPreviewReStarted(cameraPreview, customManualFocusView, autoFocus);
-
     }
 
     /**
@@ -168,20 +147,13 @@ public class RecordUseCase {
      * @param listener
      */
     public void startRecord(OnRecordEventListener listener){
-
-
         if (prepareVideoRecorder(camera, cameraPreview)) {
             // Camera is available and unlocked, MediaRecorder is prepared,
             // now you can start recording
-
             mediaRecorder.start();
-
             setTimer();
-
             timer.start();
-
             listener.onRecordStarted();
-
         } else {
             // prepare didn't work, release the camera
             releaseMediaRecorder(camera);
@@ -196,76 +168,44 @@ public class RecordUseCase {
      * @param listener
      */
     public void stopRecord(OnRecordEventListener listener) {
-
         Log.d(LOG_TAG, "timer " + (SystemClock.uptimeMillis() - timeColorEffect));
-
         // Disable stop record during 2 second
         if((SystemClock.uptimeMillis() - timeColorEffect) < 2000) {
             //Do nothing
-
         } else {
-
             mediaRecorder.stop();  // stop the recording
             releaseMediaRecorder(camera); // release the MediaRecorder object
             camera.lock();         // take camera access back from MediaRecorder
-
             //releaseCamera(camera, cameraPreview);
-
             timer.stop();
-
             // inform the user that recording has stopped
             listener.onRecordStopped();
         }
-
     }
 
     public void stopCamera(){
-
             releaseCamera(camera, cameraPreview);
     }
 
     public void stopMediaRecorder(OnRecordEventListener listener){
-
         mediaRecorder.stop();  // stop the recording
         releaseMediaRecorder(camera); // release the MediaRecorder object
         camera.lock();         // take camera access back from MediaRecorder
-
         releaseCamera(camera, cameraPreview);
-
         timer.stop();
-
         listener.onRecordRestarted();
-
-    }
-
-    /**
-     * onCreate UseCase
-     */
-    public void onCreate(){
-
-        // set default back camera onCreate
-        //userPreferences.setCameraId(FRONT_CAMERA);
-
     }
 
     /**
      * onResume UseCase, getCamera
      */
     public void onResume(){
-
         Log.d(LOG_TAG, "RecordUseCase onResume() ");
-
         if(camera == null) {
-
-            Log.d(LOG_TAG, "RecordUseCase onResume() camera null ");
-
-              camera = getCameraInstance(userPreferences.getCameraId());
+            camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
+                    ConfigPreferences.BACK_CAMERA));
         }
-
-
-
         //   recordView.startPreview(camera, cameraPreview);
-
     }
 
     /**
@@ -282,14 +222,10 @@ public class RecordUseCase {
      * @param listener
      */
     public void getAvailableEffects(OnColorEffectListener listener){
-
-
         /// TODO getAvailableEffects from model
         ArrayList<String> effectList = ColorEffectList.getColorEffectList(camera);
         //ArrayList<String> effectList = ColorEffectList.getColorEffectList(getCameraInstance());
-
         listener.onColorEffectListRetrieved(effectList);
-
     }
 
     /**
@@ -299,19 +235,12 @@ public class RecordUseCase {
      * @param listener
      */
     public void addEffect(String colorEffect, OnColorEffectListener listener){
-
-
         Camera.Parameters parameters = camera.getParameters();
         parameters.setColorEffect(colorEffect);
-
         //camera.setDisplayOrientation(180);
         camera.setParameters(parameters);
-
         listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
-
         Log.d(LOG_TAG, " addEffect " + colorEffect + " time " + getTimeColorEffect());
-
-
     }
 
     /**
@@ -321,24 +250,18 @@ public class RecordUseCase {
      * @param listener
      */
     public void removeEffect(String colorEffect, OnColorEffectListener listener){
-
        // removeEffect, addEffect none. Implement effect.getDefaultName()
-
         Camera.Parameters parameters = camera.getParameters();
         // parameters.setEffect(effect.getDefaultName());
         parameters.setColorEffect(Constants.COLOR_EFFECT_NONE);
         camera.setParameters(parameters);
-
         listener.onColorEffectRemoved(colorEffect, timer.getBase());
-
     }
 
     /**
      * Get camera settings
      */
     public void getSettingsCamera(OnSettingsCameraListener listener){
-
-
         listener.onSettingsCameraSuccess(supportChangeCamera(),supportFlashMode());
     }
 
@@ -346,50 +269,43 @@ public class RecordUseCase {
      * Support change camera. Minimum quality 720p
      */
     private boolean supportChangeCamera(){
-
-        if(userPreferences.getFrontCameraSupported()) {
+        if(sharedPreferences.getBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, false)) {
             return true;
         }
         return false;
-
     }
 
     /**
      * Change camera
      */
     public void changeCamera(OnChangeCameraListener listener){
-
-        int cameraMode = userPreferences.getCameraId();
-
+        int cameraMode = sharedPreferences.getInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.BACK_CAMERA);
         int newCameraMode = cameraMode;
-
         switch (cameraMode){
-            case BACK_CAMERA:
-                userPreferences.setCameraId(FRONT_CAMERA);
-                newCameraMode = FRONT_CAMERA;
+            case ConfigPreferences.BACK_CAMERA:
+                editor.putInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.FRONT_CAMERA).commit();
+                newCameraMode = ConfigPreferences.FRONT_CAMERA;
                 break;
-            case FRONT_CAMERA:
-                userPreferences.setCameraId(BACK_CAMERA);
-                newCameraMode = BACK_CAMERA;
+            case ConfigPreferences.FRONT_CAMERA:
+                editor.putInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.BACK_CAMERA).commit();
+                newCameraMode = ConfigPreferences.BACK_CAMERA;
                 break;
             default:
-                userPreferences.setCameraId(BACK_CAMERA);
-                newCameraMode = BACK_CAMERA;
+                editor.putInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.BACK_CAMERA).commit();
+                newCameraMode = ConfigPreferences.BACK_CAMERA;
                 listener.onChangeCameraError();
+                break;
         }
-
         //Update cameraId
         cameraId = newCameraMode;
 
         if(cameraMode != newCameraMode) {
-
             // release camera, needed to open new cameraMode
             releasePreviewCameraChanged(camera, cameraPreview);
             // listener to removePreview, needed to open nee CameraPreview
             listener.onReleaseChangeCameraPreview(cameraPreview, customManualFocusView,
                     autoFocus);
             // Update new camera, cameraPreview, customManualFocuscView
-
             // listener succes, change icon resource
             listener.onChangeCameraSuccess(newCameraMode);
         } else {
@@ -403,38 +319,30 @@ public class RecordUseCase {
      *
      */
     private boolean supportFlashMode(){
-
-        int cameraId = getCameraId(camera);
+        cameraId = sharedPreferences.getInt(ConfigPreferences.CAMERA_ID, ConfigPreferences.BACK_CAMERA);
         boolean isFlashSupported;
-
         switch (cameraId){
-            case BACK_CAMERA:
-                isFlashSupported = userPreferences.getBackCameraFlashSupported();
+            case ConfigPreferences.BACK_CAMERA:
+                isFlashSupported = sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, false);
                 break;
-            case FRONT_CAMERA:
-                isFlashSupported = userPreferences.getFrontCameraFlashSupported();
+            case ConfigPreferences.FRONT_CAMERA:
+                isFlashSupported = sharedPreferences.getBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, false);
                 break;
             default:
-                isFlashSupported = userPreferences.getBackCameraFlashSupported();
+                isFlashSupported = sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, false);
+                break;
         }
-
         return isFlashSupported;
-
     }
 
     /**
      * Add flash mode torch
-     *
      */
     public void addFlashMode(String flashMode, OnFlashModeListener listener){
-
         Camera.Parameters parameters = camera.getParameters();
-
         parameters.setFlashMode(flashMode);
         camera.setParameters(parameters);
-
         listener.onFlashModeTorchAdded();
-
     }
 
     /**
@@ -442,65 +350,44 @@ public class RecordUseCase {
      *
      */
     public void removeFlashMode(String flashMode, OnFlashModeListener listener){
-
         Camera.Parameters parameters = camera.getParameters();
-
         parameters.setFlashMode(flashMode);
         camera.setParameters(parameters);
-
         listener.onFlashModeTorchRemoved();
-
     }
 
     /*
     * A safe way to get an instance of the Camera object.
     */
     public Camera getCameraInstance(int cameraId) {
-
         Camera c = null;
-
         try {
-
             c = Camera.open(cameraId); // attempt to get a Camera instance
-
             // if (c != null) {
             Camera.Parameters params = c.getParameters();
-
             ///TODO get VideoSize from model, Project Profile
             params.setPictureSize(ConfigUtils.VIDEO_SIZE_HEIGHT, ConfigUtils.VIDEO_SIZE_WIDTH);
             c.setParameters(params);
-
             Log.d(LOG_TAG, "getCameraInstance height " + c.getParameters().getPictureSize().height + " width " + c.getParameters().getPictureSize().width);
-
             // SetFrameRate
             params.setPreviewFrameRate(30);
             params.setPreviewFpsRange(30000, 30000);
-
-
             // Log CameraParameters info
             Log.d(LOG_TAG, " getParameters().getSupportedPreviewFrameRates() " );
             for(int framerate: c.getParameters().getSupportedPreviewFrameRates()){
                 Log.d(LOG_TAG, " framerate: " + framerate);
             }
-
             Log.d(LOG_TAG, " getParameters(). getSupportedPreviewFpsRange ()() " );
             for(int[] fpsrange: c.getParameters().getSupportedPreviewFpsRange()){
                 Log.d(LOG_TAG, " fpsrange: " + fpsrange[0] + " x " + fpsrange[1]);
             }
-
-
            // autoFocus = supportAutoFocus(c);
-
             //  }
-
         } catch (Exception e) {
             Log.d("DEBUG", "Camera did not open");
             // Camera is not available (in use or does not exist)
         }
-
         Log.d(LOG_TAG, " getCameraInstance camera " + c);
-
-
         return c; // returns null if camera is unavailable
     }
 
@@ -508,41 +395,20 @@ public class RecordUseCase {
      *  Change camera, release camera and preview
      */
     private void releasePreviewCameraChanged(Camera camera, CameraPreview cameraPreview){
-
         releaseCamera(camera, cameraPreview);
     }
 
     private boolean supportAutoFocus(Camera mCamera) {
-
         Camera.Parameters parameters = mCamera.getParameters();
-
         for(String autoFocus: parameters.getSupportedFocusModes()){
             if(autoFocus.compareTo(Camera.Parameters.FOCUS_MODE_AUTO) == 0){
                 Log.d(LOG_TAG, "Autofocus supported");
                 return true;
             }
         }
-
         Log.d(LOG_TAG, "Autofocus not supported");
         return false;
     }
-
-    /**
-     * Get Camera Id in use
-     *
-     * //TODO get this info from camera or userPreferences.
-     *
-     * @param camera
-     * @return
-     */
-    private int getCameraId(Camera camera){
-
-        int cameraId = userPreferences.getCameraId();
-
-      //  Camera.CameraInfo.CAMERA_FACING_BACK
-
-        return cameraId;
-    };
 
     /**
      * Prepare VideoRecorder.
@@ -553,57 +419,40 @@ public class RecordUseCase {
      *
      * @return boolean isPrepared
      */
-
     private boolean prepareVideoRecorder(Camera camera, CameraPreview cameraPreview) {
-
         mediaRecorder = new MediaRecorder();
-
         // Unlock and set camera to MediaRecorder
         camera.unlock();
         mediaRecorder.setCamera(camera);
-
         // Set sources
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //.CAMCORDER);
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         //  mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-
         // Audio
         mediaRecorder.setAudioSamplingRate(ConfigUtils.AUDIO_SAMPLING_RATE);
         mediaRecorder.setAudioChannels(ConfigUtils.AUDIO_CHANNELS);
         mediaRecorder.setAudioEncodingBitRate(ConfigUtils.AUDIO_ENCODING_BIT_RATE);
-
         // Video
-
         ///TODO get VideoSize from model, Project Profile
         mediaRecorder.setVideoSize(ConfigUtils.VIDEO_SIZE_WIDTH, ConfigUtils.VIDEO_SIZE_HEIGHT);
         mediaRecorder.setVideoFrameRate(ConfigUtils.VIDEO_FRAME_RATE);
         mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         mediaRecorder.setVideoEncodingBitRate(ConfigUtils.VIDEO_ENCODING_BIT_RATE);
-
         // Set output file
         videoRecordName = getOutputRecordFile(MEDIA_TYPE_VIDEO).toString();
-
         // Check if videoRecordName exists
         File f = new File(videoRecordName);
         if (f.exists()) {
             videoRecordName = videoRecordName + "1";
         }
-
         mediaRecorder.setOutputFile(videoRecordName);
-
         setVideoRecordName(videoRecordName);
-
         // rotateBackVideo
         rotateBackVideo(getRotationView(), mediaRecorder);
-
         // Set the frameLayoutCameraPreview output
         mediaRecorder.setPreviewDisplay(cameraPreview.getHolder().getSurface());
-
-
         // Prepare configured MediaRecorder
         try {
             mediaRecorder.prepare();
@@ -619,16 +468,13 @@ public class RecordUseCase {
         return true;
     }
 
-
     /**
      *  Set camera displayOrientation
      * @param displayOrientation
      */
     private void setCameraOrientation(int displayOrientation){
-
         camera.setDisplayOrientation(displayOrientation);
     }
-
 
     /**
      *
@@ -641,9 +487,7 @@ public class RecordUseCase {
          * if in portrait mode, use value = 90,
          * if in landscape mode, use value = 0
          */
-
         Log.d(LOG_TAG, "rotationPreview MediaRecorder rotation Preview " + rotationPreview);
-
         switch (rotationPreview) {
             case 1:
                 mediaRecorder.setOrientationHint(0);
@@ -651,17 +495,13 @@ public class RecordUseCase {
             case 3:
                 mediaRecorder.setOrientationHint(180);
                 break;
-
         }
-
-
     }
 
     /**
      *  Release MediaRecorder
      */
     private void releaseMediaRecorder(Camera camera) {
-
         if (mediaRecorder != null) {
             mediaRecorder.reset();   //clear recorder configuration
             mediaRecorder.release(); //release the recorder object
@@ -675,14 +515,11 @@ public class RecordUseCase {
      *  Release Camera
      */
     private void releaseCamera(Camera camera, CameraPreview cameraPreview) {
-
         if (camera != null) {
-
             camera.stopPreview();
             camera.setPreviewCallback(null);
             cameraPreview.getHolder().removeCallback(cameraPreview);
             camera.release();        // release the camera for other applications
-
         }
     }
 
@@ -694,16 +531,13 @@ public class RecordUseCase {
     }
 
     private static File getOutputRecordFile(int type) {
-
         File mediaStorageDir = new File(Constants.PATH_APP_MASTERS);
-
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                return null;
             }
         }
-
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
@@ -713,27 +547,20 @@ public class RecordUseCase {
         } else {
             return null;
         }
-
         return mediaFile;
     }
 
-
-
     private void setTimer() {
-
         timeColorEffect = SystemClock.uptimeMillis();
-
     }
 
     private long getTimeColorEffect(){
-
         if(timeColorEffect == 0) {
             return 0;
         } else {
             return SystemClock.uptimeMillis() - timeColorEffect;
         }
     }
-
 
     //TODO To delete. Temporal, necessary to navigate to EditActivity
     public String getVideoRecordName(){
@@ -743,7 +570,6 @@ public class RecordUseCase {
     private void setVideoRecordName(String videoRecordName){
         this.videoRecordName = videoRecordName;
     }
-
 
     private int getRotationView() {
         return rotationView;
@@ -759,7 +585,5 @@ public class RecordUseCase {
             displayOrientation = 180;
         }
         cameraPreview.setCameraOrientation(displayOrientation);
-
     }
-
 }

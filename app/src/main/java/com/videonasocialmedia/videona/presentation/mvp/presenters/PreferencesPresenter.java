@@ -16,6 +16,7 @@ import android.preference.ListPreference;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
 
@@ -68,19 +69,19 @@ public class PreferencesPresenter {
         boolean isPaidApp = true;
         // TODO check with flavors the app version (free/paid)
 
-        if (sharedPreferences.getBoolean("back_camera_720_supported", false) && isPaidApp) {
+        if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.low_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.low_resolution_value));
             defaultResolution = context.getResources().getString(R.string.low_resolution_value);
         }
-        if (sharedPreferences.getBoolean("back_camera_1080_supported", false) && isPaidApp) {
+        if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.good_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.good_resolution_value));
             if (defaultResolution == null) {
                 defaultResolution = context.getResources().getString(R.string.good_resolution_value);
             }
         }
-        if (sharedPreferences.getBoolean("back_camera_2160_supported", false) && isPaidApp) {
+        if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.high_resolution_name));
             resolutionValues.add(context.getResources().getString(R.string.high_resolution_value));
             if (defaultResolution == null) {

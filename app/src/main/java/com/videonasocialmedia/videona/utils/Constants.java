@@ -37,9 +37,6 @@ public class Constants {
     final public static String COLOR_EFFECT_SKETCH = "sketch";
     final public static String COLOR_EFFECT_NEON = "neon";
 
-    // Preferences
-    public final static String SETTINGS_SHARED_PREFERENCES_FILE_NAME = "SETTINGS_SHARED_PREFERENCES_CAMERA";
-
     // Folders
     final public static String FOLDER_VIDEONA_MASTERS = "Videona_Masters";
     final public static String FOLDER_VIDEONA_EDITED = "Videona_Edited";
