@@ -7,11 +7,28 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+/**
+ * This interface is used to control the init config of the app on shared preferences.
+ */
 public interface OnInitAppEventListener {
 
-    public void onCheckPathsAppSuccess();
-    public void onCheckPathsAppError();
+    /**
+     *  Fires when the paths of the app has been created
+     */
+    void onCheckPathsAppSuccess();
 
-    public void onLoadingProjectSuccess();
-    public void onLoadingProjectError();
+    /**
+     *  Fires when failed creating the paths of the app
+     */
+    void onCheckPathsAppError();
+
+    /**
+     *  Fires when the project has been created
+     */
+    void onLoadingProjectSuccess();
+
+    /**
+     *  Fires when failed creating the project
+     */
+    void onLoadingProjectError();
 }

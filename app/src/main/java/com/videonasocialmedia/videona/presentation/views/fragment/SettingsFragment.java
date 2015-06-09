@@ -21,6 +21,7 @@ import android.preference.PreferenceFragment;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
 
@@ -30,12 +31,12 @@ import java.util.ArrayList;
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener,
         PreferencesView {
 
-    ListPreference resolutionPref;
-    ListPreference qualityPref;
-    PreferencesPresenter preferencesPresenter;
-    Context context;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    private ListPreference resolutionPref;
+    private ListPreference qualityPref;
+    private PreferencesPresenter preferencesPresenter;
+    private Context context;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,21 +44,22 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
         addPreferencesFromResource(R.xml.preferences);
         context = getActivity().getApplicationContext();
-        sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        getPreferenceManager().setSharedPreferencesName(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME);
+        sharedPreferences = getActivity().getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         resolutionPref = (ListPreference) findPreference("list_preference_resolution");
         qualityPref = (ListPreference) findPreference("list_preference_quality");
         preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
                 sharedPreferences);
-        preferencesPresenter.checkAvailablePreferences();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        resolutionPref.setSummary(sharedPreferences.getString("list_preference_resolution", ""));
-        qualityPref.setSummary(sharedPreferences.getString("list_preference_quality", ""));
     }
 
     @Override
@@ -83,8 +85,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     @Override
     public void setDefaultPreference(ListPreference preference, String name, String key) {
         preference.setValue(name);
+        preference.setSummary(name);
         editor.putString(key, name);
         editor.commit();
+    }
+
+    @Override
+    public void setPreference(ListPreference preference, String name) {
+        preference.setValue(name);
+        preference.setSummary(name);
     }
 
     @Override
