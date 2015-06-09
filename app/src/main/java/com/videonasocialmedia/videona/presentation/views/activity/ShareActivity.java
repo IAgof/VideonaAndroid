@@ -48,7 +48,8 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
 
     // Intent
     private static final int CHOOSE_SHARE_REQUEST_CODE = 600;
-    private static MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
+    private String videoPath;
     /*CONFIG*/
     private final String LOG_TAG = this.getClass().getSimpleName();
     /*VIEWS*/
@@ -59,28 +60,19 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
     @InjectView(R.id.share_seekbar)
     SeekBar seekBar;
     Uri uri;
-
-
     /*mvp*/
     private SharePresenter sharePresenter;
-
     //Preview
     private MediaController mediaController;
     private int durationVideoRecorded;
-    public static String videoEdited;
     private boolean isRunning = false;
     protected Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (mediaPlayer.isPlaying() && isRunning) {
-
                 mediaPlayer.pause();
-
             }
-
-
         }
-
     };
     private final Runnable updateTimeTask = new Runnable() {
         @Override
@@ -109,45 +101,53 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.GONE);
 
-        sharePresenter = new SharePresenter(this, getApplicationContext());
+        sharePresenter = new SharePresenter();
 
         //TODO do this properly
         sharePresenter.onCreate();
 
-        // getting intent data
-      //  Intent in = getIntent();
-      //  videoEdited = in.getStringExtra("MEDIA_OUTPUT");
+        Intent in = getIntent();
+        videoPath = in.getStringExtra("VIDEO_EDITED");
+        createUriToShare();
+    }
 
-        setVideoInfo();
+    private void createUriToShare() {
+        if (videoPath!=null) {
+            ContentValues content = new ContentValues(4);
+            content.put(MediaStore.Video.VideoColumns.TITLE, videoPath);
+            content.put(MediaStore.Video.VideoColumns.DATE_ADDED,
+                    System.currentTimeMillis());
+            content.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+            content.put(MediaStore.Video.Media.DATA, videoPath);
+            ContentResolver resolver = getContentResolver();
+            uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    content);
+        }
     }
 
     @Override
     protected void onStart() {
-        Log.d(LOG_TAG,"onStart");
+        Log.d(LOG_TAG, "onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        Log.d(LOG_TAG,"onResume");
+        Log.d(LOG_TAG, "onResume");
         super.onResume();
-        initMediaPlayer(videoEdited);
 
-        ContentValues content = new ContentValues(4);
-        content.put(MediaStore.Video.VideoColumns.TITLE, videoEdited);
-        content.put(MediaStore.Video.VideoColumns.DATE_ADDED,
-                System.currentTimeMillis() / 1000);
-        content.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
-        content.put(MediaStore.Video.Media.DATA, videoEdited);
-        ContentResolver resolver = getContentResolver();
-        uri = resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                content);
-        isRunning = true;
+        if (videoPath!=null) {
+            initMediaPlayer(videoPath);
+        }else{
+         finish();
+        }
     }
+
+
 
     @Override
     protected void onPause() {
-        Log.d(LOG_TAG,"onPause");
+        Log.d(LOG_TAG, "onPause");
         super.onPause();
         pauseVideo();
         releaseVideoView();
@@ -155,9 +155,15 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
 
     @Override
     protected void onStop() {
-        Log.d(LOG_TAG,"onStop");
+        Log.d(LOG_TAG, "onStop");
         super.onStop();
         releaseVideoView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(null);
     }
 
     @OnClick(R.id.share_button_about)
@@ -211,7 +217,7 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
     private void updateSeekProgress() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             seekBar.setProgress(mediaPlayer.getCurrentPosition());
-            handler.postDelayed(updateTimeTask, 50);
+            handler.postDelayed(updateTimeTask, 20);
         }
     }
 
@@ -260,7 +266,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                // Log.d(LOG_TAG, "EditVideoActivity setOnCompletionListener");
                 buttonPlay.setVisibility(View.VISIBLE);
                 updateSeekProgress();
             }
@@ -305,19 +310,9 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         seekBar.setProgress(mediaPlayer.getCurrentPosition());
     }
 
-    private void setVideoInfo() {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(videoEdited);
-        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        long timeInmillisec = Long.parseLong(time);
-        long duration = timeInmillisec / 1000;
-        long hours = duration / 3600;
-        long minutes = (duration - hours * 3600) / 60;
-        long seconds = duration - (hours * 3600 + minutes * 60);
-        durationVideoRecorded = (int) duration;
-    }
 
-    @OnClick({R.id.share_button_share, R.id.share_button_rate_app})
+
+    @OnClick(R.id.share_button_share)
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -333,9 +328,6 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
             case R.id.share_button_share:
                 label = "Share video";
                 break;
-            case R.id.share_button_rate_app:
-                label = "Vote app";
-                break;
             default:
                 label = "Other";
         }
@@ -347,9 +339,4 @@ public class ShareActivity extends Activity implements ShareView, SeekBar.OnSeek
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
-    }
 }

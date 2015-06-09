@@ -37,9 +37,9 @@ public class ObtainLocalVideosUseCase {
         File file[] = f.listFiles();
         if (file != null && file.length > 0) {
             videos = new ArrayList<>();
-            for (int i = file.length-1; i >= 0; i--) {
+            for (int i = file.length - 1; i >= 0; i--) {
                 if (file[i].getName().endsWith(".mp4"))
-                    videos.add(new Video(path + File.separator + file[i].getName(), 0));
+                    videos.add(new Video(path + File.separator + file[i].getName()));
             }
         }
         return videos;

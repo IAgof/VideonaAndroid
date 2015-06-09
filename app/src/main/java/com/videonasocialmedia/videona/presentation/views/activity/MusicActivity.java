@@ -27,9 +27,9 @@ import android.widget.TextView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserPreferences;
-import com.videonasocialmedia.videona.VideonaApplication;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -501,7 +501,7 @@ public class MusicActivity extends Activity {
         String nameFile = getResources().getResourceName(raw_resource);
         nameFile = nameFile.substring(nameFile.lastIndexOf("/") + 1);
 
-        Log.d(LOG_TAG, "downloadResource " + nameFile);
+        Log.d(LOG_TAG, "copyResourceToTemp " + nameFile);
 
         File fSong = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
 

@@ -10,7 +10,7 @@ package com.videonasocialmedia.videona.model.entities.editor.media;
 /**
  * @deprecated
  */
-public class Music extends Audio{
+public class Music extends Audio {
 
     //TODO en el futuro no será un recurso sino que se obtendrá
     private int musicResourceId;
@@ -19,7 +19,7 @@ public class Music extends Audio{
     private String nameResourceId;
     private int iconResourceId;
 
-    public Music(int iconResourceId, String nameResourceId, int musicResourceId, int colorResourceId ) {
+    public Music(int iconResourceId, String nameResourceId, int musicResourceId, int colorResourceId) {
         super("", "", "", 0, 0, null, null);
         this.musicResourceId = musicResourceId;
         this.colorResourceId = colorResourceId;
@@ -43,11 +43,11 @@ public class Music extends Audio{
         this.colorResourceId = colorResourceId;
     }
 
-    public void setNameResourceId(String name){
+    public void setNameResourceId(String name) {
         this.nameResourceId = name;
     }
 
-    public String getNameResourceId(){
+    public String getNameResourceId() {
         return nameResourceId;
     }
 

@@ -47,7 +47,7 @@ public class AboutActivity extends Activity {
     /**
      * Tracks when user clicks the link to go to Videona web page
      */
-    @OnClick({ R.id.videona_web})
+    @OnClick({R.id.videona_web})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }

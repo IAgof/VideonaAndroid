@@ -68,23 +68,23 @@ public abstract class Transition extends EditorElement {
     /**
      * Constructor of minimum number of parameters. Default constructor.
      *
-     * @param identifier - Unique identifier of the media for the current project.
-     * @param iconPath - Path to a resource that allows represent the media in the view.
-     * @param type - Opengl unique identifier for transition.
-     * @param afterMediaItem - Media item immediately preceding the transition. If null the
-     *                         transition must be the first item of the editor track, and therefore
-     *                         it must be added a void media (blackout 1 sec) during assembly
-     *                         proccess.
+     * @param identifier      - Unique identifier of the media for the current project.
+     * @param iconPath        - Path to a resource that allows represent the media in the view.
+     * @param type            - Opengl unique identifier for transition.
+     * @param afterMediaItem  - Media item immediately preceding the transition. If null the
+     *                        transition must be the first item of the editor track, and therefore
+     *                        it must be added a void media (blackout 1 sec) during assembly
+     *                        proccess.
      * @param beforeMediaItem - Media item immediately following the transition. If null the
-     *                         transition must be the last item of the editor track, and therefore
-     *                         it must be added a void media (blackout 1 sec) during assembly
-     *                         proccess.
-     * @param duration - transition elapsed time.
-     * @param author - Transition owner's user reference.
-     * @param license - Owner's choice licensing for the transition.
+     *                        transition must be the last item of the editor track, and therefore
+     *                        it must be added a void media (blackout 1 sec) during assembly
+     *                        proccess.
+     * @param duration        - transition elapsed time.
+     * @param author          - Transition owner's user reference.
+     * @param license         - Owner's choice licensing for the transition.
      */
     public Transition(String identifier, String iconPath, String type, Media afterMediaItem,
-                         Media beforeMediaItem, long duration, User author, License license) {
+                      Media beforeMediaItem, long duration, User author, License license) {
         super(identifier, iconPath);
         this.type = type;
         this.afterMediaItem = afterMediaItem;
@@ -95,26 +95,25 @@ public abstract class Transition extends EditorElement {
     }
 
     /**
-     *
-     * @param identifier - Unique identifier of the media for the current project.
-     * @param iconPath - Path to a resource that allows represent the media in the view.
+     * @param identifier       - Unique identifier of the media for the current project.
+     * @param iconPath         - Path to a resource that allows represent the media in the view.
      * @param selectedIconPath - if not null used as icon when something interact with the element.
-     * @param type - Opengl unique identifier for transition.
-     * @param afterMediaItem - Media item immediately preceding the transition. If null the
+     * @param type             - Opengl unique identifier for transition.
+     * @param afterMediaItem   - Media item immediately preceding the transition. If null the
      *                         transition must be the first item of the editor track, and therefore
      *                         it must be added a void media (blackout 1 sec) during assembly
      *                         proccess.
-     * @param beforeMediaItem - Media item immediately following the transition. If null the
+     * @param beforeMediaItem  - Media item immediately following the transition. If null the
      *                         transition must be the last item of the editor track, and therefore
      *                         it must be added a void media (blackout 1 sec) during assembly
      *                         proccess.
-     * @param duration - transition elapsed time.
-     * @param author - Transition owner's user reference.
-     * @param license - Owner's choice licensing for the transition.
+     * @param duration         - transition elapsed time.
+     * @param author           - Transition owner's user reference.
+     * @param license          - Owner's choice licensing for the transition.
      */
     public Transition(String identifier, String iconPath, String selectedIconPath, String type,
-                         Media afterMediaItem, Media beforeMediaItem, long duration, User author,
-                         License license) {
+                      Media afterMediaItem, Media beforeMediaItem, long duration, User author,
+                      License license) {
         super(identifier, iconPath, selectedIconPath);
         this.type = type;
         this.afterMediaItem = afterMediaItem;
@@ -125,6 +124,7 @@ public abstract class Transition extends EditorElement {
     }
 
     //applying methods
+
     /**
      * This method is called by the editor export functionality when the assembly has been triggered.
      * His functions consist on add the transition between two given media items in the editor track.
@@ -144,47 +144,60 @@ public abstract class Transition extends EditorElement {
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public long getDuration() {
         return duration;
     }
+
     public void setDuration(long duration) {
         this.duration = duration;
     }
+
     public long getStartTime() {
         return startTime;
     }
+
     public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
+
     public License getLicense() {
         return license;
     }
+
     public void setLicense(License license) {
         this.license = license;
     }
+
     public String getAuthorName() {
         return authorName;
     }
+
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
     }
+
     public User getAuthor() {
         return author;
     }
+
     public void setAuthor(User author) {
         this.author = author;
     }
+
     public Media getAfterMediaItem() {
         return afterMediaItem;
     }
+
     public void setAfterMediaItem(Media afterMediaItem) {
 
         //if null then we are erasing relations between media and transition
-        if(afterMediaItem == null && this.afterMediaItem != null){
-            if(this.afterMediaItem.getOpening() != null){
+        if (afterMediaItem == null && this.afterMediaItem != null) {
+            if (this.afterMediaItem.getOpening() != null) {
                 this.afterMediaItem.setOpening(null);
             }
         }
@@ -192,18 +205,20 @@ public abstract class Transition extends EditorElement {
         this.afterMediaItem = afterMediaItem;
 
         //after assigned the media, check if opening is THIS
-        if(this.afterMediaItem != null && this.afterMediaItem.getOpening() != this) {
+        if (this.afterMediaItem != null && this.afterMediaItem.getOpening() != this) {
             this.afterMediaItem.setOpening(this);
         }
     }
+
     public Media getBeforeMediaItem() {
         return beforeMediaItem;
     }
-    public void setBeforeMediaItem(Media beforeMediaItem){
+
+    public void setBeforeMediaItem(Media beforeMediaItem) {
 
         //if null then we are erasing relations between media and transition
-        if(beforeMediaItem == null && this.beforeMediaItem != null){
-            if(this.beforeMediaItem.getEnding() != null){
+        if (beforeMediaItem == null && this.beforeMediaItem != null) {
+            if (this.beforeMediaItem.getEnding() != null) {
                 this.beforeMediaItem.setEnding(null);
             }
         }
@@ -211,7 +226,7 @@ public abstract class Transition extends EditorElement {
         this.beforeMediaItem = beforeMediaItem;
 
         //after assigned the media, check if opening is THIS
-        if(this.beforeMediaItem != null && this.beforeMediaItem.getEnding() != this) {
+        if (this.beforeMediaItem != null && this.beforeMediaItem.getEnding() != this) {
             this.beforeMediaItem.setEnding(this);
         }
     }

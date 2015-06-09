@@ -139,7 +139,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
         /**
          * Constructor.
          *
-         * @param itemView the view of the music elements
+         * @param itemView        the view of the music elements
          * @param onClickListener the listener which controls the actions over the music elements
          */
         public MusicViewHolder(View itemView, RecyclerViewClickListener onClickListener) {

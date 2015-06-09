@@ -28,7 +28,6 @@ import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.LoginPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.LoginView;
 
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;

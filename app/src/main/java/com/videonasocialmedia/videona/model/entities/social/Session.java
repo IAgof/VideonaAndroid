@@ -23,15 +23,16 @@ public class Session {
     /**
      * @hide
      */
-    private Session(){user= new User("anonymous");}
+    private Session() {
+        user = new User("anonymous");
+    }
 
     /**
-     *
      * @return instance of UserSession
      */
-    public static Session getInstance(){
-        if (INSTANCE==null){
-            INSTANCE=new Session();
+    public static Session getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Session();
         }
         return INSTANCE;
     }
@@ -44,7 +45,9 @@ public class Session {
         this.authToken = authToken;
     }
 
-    public boolean hasToken() {return authToken!=null;}
+    public boolean hasToken() {
+        return authToken != null;
+    }
 
 
     public User getUser() {

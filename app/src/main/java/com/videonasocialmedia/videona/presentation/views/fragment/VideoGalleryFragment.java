@@ -47,7 +47,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        folder= this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
+        folder = this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
     }
 
     @Nullable

@@ -68,7 +68,7 @@
             android:layout_marginTop="8dp"
             android:background="@null"
             android:src="@drawable/common_icon_gamification_normal"
-            android:alpha="0.60"/>
+            android:alpha="0.60" />
     </LinearLayout>
 
 </RelativeLayout>

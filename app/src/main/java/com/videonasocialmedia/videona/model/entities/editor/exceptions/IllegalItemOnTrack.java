@@ -15,7 +15,8 @@ public class IllegalItemOnTrack extends Throwable {
     public IllegalItemOnTrack(String s) {
         super(s);
     }
-    public IllegalItemOnTrack(){
+
+    public IllegalItemOnTrack() {
         super();
     }
 }

@@ -10,8 +10,10 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 public interface OnInitAppEventListener {
 
     public void onCheckPathsAppSuccess();
+
     public void onCheckPathsAppError();
 
     public void onLoadingProjectSuccess();
+
     public void onLoadingProjectError();
 }

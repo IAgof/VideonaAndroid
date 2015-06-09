@@ -65,8 +65,8 @@ public class VideoFxMenuFragment extends Fragment {
         Log.d("Fragment Video", "he pulsado un botón");
     }
 
-    @OnClick({ R.id.edit_fragment_fx_button_item1, R.id.edit_fragment_fx_button_item2,
-            R.id.edit_fragment_fx_button_item3, R.id.edit_fragment_fx_button_item4 })
+    @OnClick({R.id.edit_fragment_fx_button_item1, R.id.edit_fragment_fx_button_item2,
+            R.id.edit_fragment_fx_button_item3, R.id.edit_fragment_fx_button_item4})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
