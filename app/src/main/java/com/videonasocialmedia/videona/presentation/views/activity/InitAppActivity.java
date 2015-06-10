@@ -1,13 +1,16 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.InitAppPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
  * InitAppActivity.
@@ -32,6 +35,9 @@ public class InitAppActivity extends Activity implements InitAppView {
      * Init app presenter. Needed to expand app context between model layers.
      */
     private InitAppPresenter initAppPresenter;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
 
 
     @Override
@@ -39,25 +45,23 @@ public class InitAppActivity extends Activity implements InitAppView {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_init_app);
-
-        initAppPresenter = new InitAppPresenter(this, getApplicationContext());
-
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        initAppPresenter = new InitAppPresenter(this, getApplicationContext(), sharedPreferences, editor);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         initAppPresenter.start();
     }
-
 
     /*+++++++++*/
     /* SESSION */

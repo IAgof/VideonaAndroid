@@ -203,6 +203,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @Override
     protected void onDestroy() {
         Log.d(LOG_TAG, "onDestroy");
+        handler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 

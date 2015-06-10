@@ -13,9 +13,7 @@
             android:id="@+id/share_video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            />
-
+            android:layout_centerInParent="true" />
 
         <ImageButton
             android:id="@+id/share_button_play"
@@ -41,35 +39,6 @@
             android:longClickable="true"
             android:maxHeight="2dp"
             android:progressDrawable="@color/videona_blue_5" />
-
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/share_button_about"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/common_button_settings_selector" />
-
-            <ImageButton
-                android:id="@+id/share_button_rate_app"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/share_activity_button_rate_app_selector" />
-        </LinearLayout>
 
         <ImageButton
             android:id="@+id/share_button_share"

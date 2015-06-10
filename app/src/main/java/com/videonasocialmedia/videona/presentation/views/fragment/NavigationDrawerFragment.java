@@ -24,9 +24,9 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.activity.AboutActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -85,7 +85,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @OnClick(R.id.fragment_navigator_settings_button)
     public void navigateToSettings() {
-        Intent intent = new Intent(this.getActivity(), AboutActivity.class);
+        Intent intent = new Intent(this.getActivity(), SettingsActivity.class);
         startActivity(intent);
     }
 

@@ -16,6 +16,16 @@
         android:layout_height="100dp"
         android:src="@drawable/fragment_gallery_no_image" />
 
+    <TextView
+        android:id="@+id/gallery_duration"
+        android:layout_width="45dp"
+        android:layout_height="20dp"
+        android:layout_margin="2dp"
+        android:text="00:00"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/gallery_thumb"
+        android:background="#aa333333"/>
+
     <RelativeLayout
         android:id="@+id/gallery_overlay"
         android:layout_width="100dp"

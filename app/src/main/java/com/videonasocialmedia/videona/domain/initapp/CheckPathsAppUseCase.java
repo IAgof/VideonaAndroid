@@ -61,11 +61,10 @@ public class CheckPathsAppUseCase {
 
         try {
             checkPathApp(context);
+            listener.onCheckPathsAppSuccess();
         } catch (IOException e) {
             Log.e("CHECK PATH", "error", e);
         }
-
-        listener.onCheckPathsAppSuccess();
     }
 
 
@@ -111,11 +110,9 @@ public class CheckPathsAppUseCase {
             fTempAV.delete();
         }
 
+        File privateDataFolderModel = context.getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
 
-        // Private data folder model
-        File fModel = context.getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
-
-        String privatePath = fModel.getAbsolutePath();
+        String privatePath = privateDataFolderModel.getAbsolutePath();
 
         Log.d(LOG_TAG, "private path " + privatePath);
 

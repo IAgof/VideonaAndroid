@@ -1,5 +1,7 @@
 package com.videonasocialmedia.videona.domain;
 
+import android.media.MediaMetadataRetriever;
+
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnVideosRetrieved;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
  * Created by jca on 20/5/15.
  */
 public class ObtainLocalVideosUseCase {
+
+    private final String LOG_TAG = "ObtainLocalVideos";
 
     public void obtainEditedVideos(OnVideosRetrieved listener) {
         ArrayList<Video> videos = obtainVideosFromPath(Constants.PATH_APP_EDITED);
@@ -38,8 +42,9 @@ public class ObtainLocalVideosUseCase {
         if (file != null && file.length > 0) {
             videos = new ArrayList<>();
             for (int i = file.length - 1; i >= 0; i--) {
-                if (file[i].getName().endsWith(".mp4"))
-                    videos.add(new Video(path + File.separator + file[i].getName()));
+                if (file[i].getName().endsWith(".mp4")) {
+                    videos.add(new Video(path + File.separator + file[i].getName(), 0));
+                }
             }
         }
         return videos;

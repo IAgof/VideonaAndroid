@@ -15,8 +15,9 @@
             android:id="@+id/framelayout_camera_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"></FrameLayout>
+            android:layout_centerInParent="true">
 
+        </FrameLayout>
 
         <RelativeLayout
             android:id="@+id/rec_1"
@@ -29,51 +30,30 @@
                 android:id="@+id/button_record"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:layout_gravity="center_horizontal|end"
                 android:background="@null"
                 android:paddingEnd="16dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/activity_record_icon_rec_normal" />
-
-            <Chronometer
-                android:id="@+id/chronometer_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignWithParentIfMissing="false"
-                android:layout_below="@+id/button_record"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:textSize="18sp" />
+                android:src="@drawable/activity_record_icon_rec_normal"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
             <ImageButton
                 android:id="@+id/button_color_effect"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
-                android:layout_above="@+id/button_record"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="16dp"
                 android:background="@null"
                 android:focusableInTouchMode="false"
                 android:padding="15dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/common_icon_filters_normal" />
-
-            <ImageButton
-                android:id="@+id/imageButton5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/button_color_effect"
-                android:background="@null"
-                android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
-                android:visibility="invisible" />
+                android:src="@drawable/common_icon_filters_normal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_above="@+id/button_record"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
+
 
 
         <RelativeLayout
@@ -104,6 +84,117 @@
             android:layout_gravity="center"
             android:contentDescription="Beta Label"
             android:src="@drawable/beta_label" />
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/relativeLayoutRecordCameraOptions"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout"
+                android:gravity="center_horizontal"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentEnd="true"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:measureWithLargestChild="false"
+                android:layout_margin="16dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/linearLayoutRecordCameraOptions"
+                    android:background="@color/transparent_palette_grey">
+
+                    <ImageButton
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:id="@+id/button_flash_mode"
+                        android:src="@drawable/activity_record_icon_flash_camera_normal"
+                        android:visibility="visible"
+                        android:layout_centerHorizontal="true"
+                        android:focusableInTouchMode="false"
+                        android:padding="15dp"
+                        android:scaleType="fitXY"
+                        android:background="@null" />
+
+                    <ImageButton
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:id="@+id/button_change_camera"
+                        android:src="@drawable/activity_record_change_camera_normal"
+                        android:visibility="visible"
+                        android:background="@null"
+                        android:layout_toStartOf="@+id/button_flash_mode"
+                        android:layout_centerHorizontal="true"
+                        android:focusableInTouchMode="false"
+                        android:padding="15dp"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="center_horizontal|top"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true" />
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/button_settings_camera"
+                    android:src="@drawable/activity_record_settings_camera_normal"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_above="@+id/button_color_effect"
+                    android:layout_centerHorizontal="true"
+                    android:background="@null"
+                    android:focusableInTouchMode="false"
+                    android:padding="15dp"
+                    android:scaleType="fitXY" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayoutRecTimer"
+                android:gravity="center_horizontal"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:measureWithLargestChild="false"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="50dp">
+
+                <ImageView
+                    android:id="@+id/imageRecPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toStartOf="@+id/chronometer_record"
+                    android:src="@anim/activity_record_drawable_rec_progress"
+                    android:background="@color/transparent_palette_grey"
+                    android:visibility="invisible"
+                    android:paddingLeft="5dp" />
+
+                <Chronometer
+                    android:id="@+id/chronometer_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="10dp"
+                    android:textSize="18sp"
+                    android:background="@color/transparent_palette_grey"
+                    android:paddingLeft="10dp" />
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
