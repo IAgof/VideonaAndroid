@@ -45,7 +45,7 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         sharing = this.getIntent().getBooleanExtra("SHARE", true);
 
         if (sharing)
-            okButton.setImageResource(R.drawable.activity_share_icon_share_pressed);
+            okButton.setImageResource(R.drawable.share_activity_button_share_selector);
 
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
         adapterViewPager = new MyPagerAdapter(getFragmentManager());

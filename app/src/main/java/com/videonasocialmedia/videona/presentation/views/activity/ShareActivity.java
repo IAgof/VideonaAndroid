@@ -44,8 +44,8 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
 
 
     private final String LOG_TAG = this.getClass().getSimpleName();
-    @InjectView(R.id.share_button_play)
-    ImageButton buttonPlay;
+    //@InjectView(R.id.share_button_play)
+    //ImageButton buttonPlay;
     @InjectView(R.id.share_video_view)
     VideoView videoView;
     Uri uri;
@@ -149,11 +149,11 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
         super.onDestroy();
     }
 
-    @OnClick(R.id.share_button_play)
+    //@OnClick(R.id.share_button_play)
     public void playVideo() {
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
-            buttonPlay.setVisibility(View.GONE);
+            //buttonPlay.setVisibility(View.GONE);
             //updateSeekProgress();
         }
     }
@@ -161,8 +161,7 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     public void pauseVideo() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            buttonPlay.setVisibility(View.VISIBLE);
-
+            //buttonPlay.setVisibility(View.VISIBLE);
         }
     }
 
@@ -221,13 +220,13 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
         videoView.setVideoPath(videoPath);
         videoView.setMediaController(mediaController);
         videoView.setOnPreparedListener(this);
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                buttonPlay.setVisibility(View.VISIBLE);
-            }
-
-        });
+//        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                buttonPlay.setVisibility(View.VISIBLE);
+//            }
+//
+//        });
 
         videoView.requestFocus();
     }
