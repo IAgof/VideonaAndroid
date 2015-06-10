@@ -75,6 +75,8 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
     /*ANALYTICS*/
     private Tracker tracker;
 
+    Context context;
+
     /**
      * Rotation View
      */
@@ -83,6 +85,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
     public RecordPresenter(RecordView recordView, Tracker tracker, Context applicationContext) {
         this.recordView = recordView;
         this.tracker = tracker;
+        context= applicationContext;
         recordUseCase = new RecordUseCase(applicationContext);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         removeMusicFromProjectUseCase= new RemoveMusicFromProjectUseCase();
@@ -162,7 +165,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
             recordUseCase.stopRecord(this);
         } else {
             if (recordUseCase == null) {
-                recordUseCase = new RecordUseCase(recordView.getContext());
+                recordUseCase = new RecordUseCase(context);
             }
             recordUseCase.startRecord(this);
         }
@@ -287,14 +290,14 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
     }
 
     @Override
-    public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
-        recordView.startPreview(cameraPreview, customManualFocusView);
+    public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView, boolean autofocusSupport) {
+        recordView.startPreview(cameraPreview, customManualFocusView, autofocusSupport);
         Log.d(LOG_TAG, "onPreviewStarted");
     }
 
     @Override
-    public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
-        recordView.stopPreview(cameraPreview, customManualFocusView);
+    public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView, boolean autofocusSupport) {
+        recordView.stopPreview(cameraPreview, customManualFocusView, autofocusSupport);
         Log.d(LOG_TAG, "onPreviewReStarted");
     }
 
@@ -377,7 +380,7 @@ public class RecordPresenter extends Presenter implements OnRecordEventListener,
 
     @Override
     public void onRecordError() {
-
+        recordView.showError();
     }
 
     @Override

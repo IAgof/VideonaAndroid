@@ -459,9 +459,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     }
 
     @Override
-    public Context getContext() {
-        Log.d(LOG_TAG, "getContext() RecordActivity");
-        return this;
+    public void showError() {
+        Toast.makeText(this, R.string.recordError, Toast.LENGTH_LONG);
     }
 
     /**
@@ -769,7 +768,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         recordPresenter.stop();
         recordPresenter = null;
 
-        recordPresenter = new RecordPresenter(this, tracker);
+        recordPresenter = new RecordPresenter(this, tracker, this.getApplicationContext());
 
         detectRotationView(this);
 

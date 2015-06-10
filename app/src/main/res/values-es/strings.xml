@@ -18,31 +18,31 @@
     <string name="indiegogo">Indiegogo</string>
     <string name="welcome">"Esta es la versión beta de la nueva Plataforma Social de Vídeo, puedes ayudarnos a desarrollarla dándonos tu opinión sobre ella, o puedes acceder a nuestra campaña de crowdfunding en Indiegogo para obtener alguna mejora en la app. También te estaremos muy agradecidos si difundes la campaña en tus redes sociales."</string>
     <string name="videona_web">http://www.videona.es</string>
-    <string name="text_video_name">"Video name: "</string>
-    <string name="text_video_duration">"Duration: "</string>
-    <string name="text_video_description">"Description: "</string>
-    <string name="share_using">"Compartir vídeo con "</string>
+    <string name="text_video_name">Video name: </string>
+    <string name="text_video_duration">Duration: </string>
+    <string name="text_video_description">Description: </string>
+    <string name="share_using">Compartir vídeo con</string>
     <string name="please_wait">Espera por favor</string>
     <string name="dialog_processing">Haciendo magia en tu vídeo</string>
-    <string name="dialog_processing_audio">"Adding audio "</string>
+    <string name="dialog_processing_audio">Añadiendo audio</string>
     <string name="getit">"Entendido"</string>
     <string name="action_finish">"Finish"</string>
     <string name="action_next">"Next"</string>
 
     <!-- Music genres -->
-    <string name="music_genre_rock">"Rock"</string>
-    <string name="music_genre_reggae">"Reggae"</string>
+    <string name="music_genre_rock">Rock</string>
+    <string name="music_genre_reggae">Reggae</string>
     <string name="music_genre_hiphop">"Hip Hop"</string>
     <string name="music_genre_jazz">"Jazz"</string>
     <string name="music_genre_pop">"Pop"</string>
     <string name="music_genre_country">"Country</string>
     <string name="music_genre_electronic">"Electronic"</string>
-    <string name="music_genre_classic">"Classic"</string>
-    <string name="music_genre_classic_piano">"Piano"</string>
-    <string name="music_genre_classic_violin">"Violin"</string>
-    <string name="music_genre_classic_clarinet">"Clarinet"</string>
-    <string name="music_genre_ambiental">"Ambiental"</string>
-    <string name="music_genre_caribbean">"Caribbean"</string>
+    <string name="music_genre_classic">Classic</string>
+    <string name="music_genre_classic_piano">Piano</string>
+    <string name="music_genre_classic_violin">"Violin</string>
+    <string name="music_genre_classic_clarinet">Clarinet</string>
+    <string name="music_genre_ambiental">Ambiental</string>
+    <string name="music_genre_caribbean">Caribbean</string>
     <string name="music_genre_folk">"Folk"</string>
 
     <string name="title_activity_video_player">Video Player</string>
@@ -401,4 +401,6 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="editedFolderTitle">Editados</string>
 
 
+    <string name="recordError">Algo ha fallado. Imposible grabar el vídeo</string>
+    <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
 </resources>

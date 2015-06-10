@@ -9,5 +9,5 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 public interface OnOrientationEventListener {
 
-    public void onOrientationChanged(int rotationView);
+    void onOrientationChanged(int rotationView);
 }

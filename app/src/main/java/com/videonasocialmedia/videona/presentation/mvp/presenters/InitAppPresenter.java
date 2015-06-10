@@ -103,8 +103,9 @@ public class InitAppPresenter implements OnInitAppEventListener {
             camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
                     ConfigPreferences.BACK_CAMERA));
         }
+
         editor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, true).commit();
-        numSupportedCameras = camera.getNumberOfCameras();
+        numSupportedCameras = Camera.getNumberOfCameras();
         if(numSupportedCameras > 1) {
             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
         }
@@ -297,11 +298,11 @@ public class InitAppPresenter implements OnInitAppEventListener {
      */
     private void downloadingMusicResources() {
         List<Music> musicList = getMusicList();
-        for (Music resource : musicList) {
+        for (Music music : musicList) {
             try {
-                downloadMusicResource(resource.getMusicResourceId());
+                Utils.copyMusicResourceToTemp(context, music.getMusicResourceId());
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.d("Init App", "Error copying resources to temp");
             }
         }
     }
@@ -317,40 +318,6 @@ public class InitAppPresenter implements OnInitAppEventListener {
             listener.onCheckPathsAppSuccess();
         } catch (IOException e) {
             Log.e("CHECK PATH", "error", e);
-        }
-    }
-        /**
-     * Copy resource from raw folder app to sdcard.
-     *
-     * @param raw_resource
-     * @throws IOException
-     */
-    private void downloadMusicResource(int raw_resource) throws IOException {
-        InputStream in = context.getResources().openRawResource(raw_resource);
-        String nameFile = context.getResources().getResourceName(raw_resource);
-        nameFile = nameFile.substring(nameFile.lastIndexOf("/") + 1);
-        File fSong = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-        if (!fSong.exists()) {
-            FileOutputStream out = null;
-            try {
-                out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            if(out != null) {
-                byte[] buff = new byte[1024];
-                int read = 0;
-                try {
-                    while ((read = in.read(buff)) > 0) {
-                        out.write(buff, 0, read);
-                    }
-                } catch(IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    in.close();
-                    out.close();
-                }
-            }
         }
     }
 

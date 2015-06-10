@@ -258,7 +258,26 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void okEditActivity() {
         pausePreview();
         showProgressDialog();
-        editPresenter.startExport();
+        final Runnable r = new Runnable() {
+            public void run() {
+                editPresenter.startExport();
+            }
+        };
+        performOnBackgroundThread(r);
+    }
+
+    public static Thread performOnBackgroundThread(final Runnable runnable) {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } finally {
+                }
+            }
+        };
+        t.start();
+        return t;
     }
 
     @Override

@@ -30,7 +30,6 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
     RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
     RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     AddVideoToProjectUseCase addVideoToProjectUseCase;
-    ArrayList<String> itemsToAdd;
     GalleryPagerView galleryPagerView;
 
     /**
@@ -41,7 +40,6 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
-        itemsToAdd = new ArrayList<>();
     }
 
     /**

@@ -3,10 +3,12 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -14,6 +16,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.GalleryPagerPr
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
+import com.videonasocialmedia.videona.utils.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,6 +34,7 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     @InjectView(R.id.button_ok_gallery)
     ImageButton okButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +54,6 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         vpPager.setOnPageChangeListener(this);
 
         galleryPagerPresenter = new GalleryPagerPresenter(this);
-
-
     }
 
     @Override
@@ -78,7 +80,23 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     public void onClick() {
         Video selectedVideo = getSelectedVideoFromCurrentFragment();
         if (selectedVideo != null) {
-            galleryPagerPresenter.loadVideoToProject(selectedVideo);
+            if (sharing)
+                shareVideo(selectedVideo);
+            else
+                galleryPagerPresenter.loadVideoToProject(selectedVideo);
+        }
+    }
+
+    private void shareVideo(Video selectedVideo) {
+        String videoPath = selectedVideo.getMediaPath();
+        Uri uri = Utils.obtainUriToShare(this, videoPath);
+        if (uri!=null) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("video/*");
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+        }else{
+            Toast.makeText(this, R.string.shareError,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -87,18 +105,14 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         this.finish();
     }
 
-
     @Override
     public void navigate() {
-        Intent intent;
-        if (sharing) {
-            intent = new Intent(this, ShareActivity.class);
-        } else {
+        if (!sharing) {
+            Intent intent;
             intent = new Intent(this, EditActivity.class);
+            startActivity(intent);
         }
-        startActivity(intent);
     }
-
 
     class MyPagerAdapter extends FragmentPagerAdapter {
         private int NUM_ITEMS = 2;

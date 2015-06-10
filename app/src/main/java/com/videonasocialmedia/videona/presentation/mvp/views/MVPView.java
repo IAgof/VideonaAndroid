@@ -17,6 +17,4 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
  */
 public interface MVPView {
 
-    public android.content.Context getContext();
-
 }

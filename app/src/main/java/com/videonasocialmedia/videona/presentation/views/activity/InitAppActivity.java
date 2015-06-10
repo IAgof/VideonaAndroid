@@ -35,19 +35,15 @@ public class InitAppActivity extends Activity implements InitAppView {
      * Init app presenter. Needed to expand app context between model layers.
      */
     private InitAppPresenter initAppPresenter;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_init_app);
-        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+        SharedPreferences sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         initAppPresenter = new InitAppPresenter(this, getApplicationContext(), sharedPreferences, editor);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }

@@ -107,18 +107,6 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
     }
 
     /**
-     * Releases the media player and the video view
-     */
-    private void releaseVideoView() {
-        videoView.stopPlayback();
-        videoView.clearFocus();
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-    }
-
-    /**
      * Shows an alert dialog if an error occurs and returns to the previous activity
      */
     private void showError() {
@@ -134,4 +122,18 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    /**
+     * Releases the media player and the video view
+     */
+    private void releaseVideoView() {
+        videoView.stopPlayback();
+        videoView.clearFocus();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+
 }

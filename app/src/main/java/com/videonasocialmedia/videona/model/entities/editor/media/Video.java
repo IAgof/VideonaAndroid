@@ -12,6 +12,7 @@
 package com.videonasocialmedia.videona.model.entities.editor.media;
 
 import android.media.MediaMetadata;
+import android.media.MediaMetadataRetriever;
 
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
@@ -76,6 +77,10 @@ public class Video extends Media {
         }
     }
 
+    public Video (String mediaPath, int fileStartTime, int duration){
+        super(null, null, mediaPath, fileStartTime, duration, null, null);
+    }
+
     public int getFileDuration() {
         return fileDuration;
     }
@@ -83,8 +88,7 @@ public class Video extends Media {
     public void setFileDuration(int fileDuration) {
         this.fileDuration = fileDuration;
     }
-    public Video (String mediaPath, long fileStartTime, long duration){
-        super(null, null, mediaPath, fileStartTime, duration, null, null);
-    }
+
+
 
 }

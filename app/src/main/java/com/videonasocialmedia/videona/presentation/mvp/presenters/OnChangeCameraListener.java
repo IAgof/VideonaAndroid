@@ -12,10 +12,11 @@ import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 
 public interface OnChangeCameraListener {
 
-    public void onChangeCameraSuccess(int cameraMode);
+    void onChangeCameraSuccess(int cameraMode);
 
-    public void onReleaseChangeCameraPreview(CameraPreview cameraPreview,
-                                CustomManualFocusView customManualFocusView, boolean autoFocus);
+    void onReleaseChangeCameraPreview(CameraPreview cameraPreview,
+                                      CustomManualFocusView customManualFocusView,
+                                      boolean autoFocus);
 
-    public void onChangeCameraError();
+    void onChangeCameraError();
 }
