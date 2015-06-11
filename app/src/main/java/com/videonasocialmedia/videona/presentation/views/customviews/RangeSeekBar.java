@@ -19,7 +19,7 @@
  * Álvaro Martínez Marco
  */
 
-package com.videonasocialmedia.videona.utils;
+package com.videonasocialmedia.videona.presentation.views.customviews;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -36,7 +36,7 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.utils.ConfigUtils;
 
 import java.math.BigDecimal;
 
@@ -57,8 +57,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final float lineHeightHalf = 0.5f * lineleft.getHeight();
     private final float lineWidthHalf = 0.5f * lineleft.getWidth();
 
-   // private final float thumbHalfWidth = 0.5f *  thumbImageRight.getWidth();
-   private final float thumbHalfWidth = thumbImageRight.getWidth();
+    // private final float thumbHalfWidth = 0.5f *  thumbImageRight.getWidth();
+    private final float thumbHalfWidth = thumbImageRight.getWidth();
     private final float thumbHalfHeight = 0.5f * thumbImageRight.getHeight();
 
     //  private final float lineHeight = 0.53f * thumbHalfHeight;
@@ -126,7 +126,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param context
      * @throws IllegalArgumentException Will be thrown if min/max value type is not one of Long, Double, Integer, Float, Short, Byte or BigDecimal.
      */
-    public RangeSeekBar(T absoluteMinValue, T absoluteMaxValue, Context context) throws IllegalArgumentException {
+    public RangeSeekBar(T absoluteMinValue, T absoluteMaxValue, Context context, int numIncrement) throws IllegalArgumentException {
         super(context);
 
         this.absoluteMinValue = absoluteMinValue;
@@ -134,7 +134,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         absoluteMinValuePrim = absoluteMinValue.doubleValue();
         absoluteMaxValuePrim = absoluteMaxValue.doubleValue();
         numberType = NumberType.fromNumber(absoluteMinValue);
-        numIncrement = EditActivity.durationVideoRecorded;
+        this.numIncrement = numIncrement;
         // make RangeSeekBar focusable. This solves focus handling issues in case EditText widgets are being used along with the RangeSeekBar within ScollViews.
         init();
         //onDraw(canvas2);
@@ -143,7 +143,6 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
     private final void init() {
         mScaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-
         // Simulate start on thumb left pressed,
         setNormalizedMinValue(0);
     }
@@ -434,10 +433,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         // draw seek bar background lineleft
 
-      //amm  final RectF rect = new RectF(0, 0, getWidth() - padding, getHeight());
+        //amm  final RectF rect = new RectF(0, 0, getWidth() - padding, getHeight());
 
         final RectF rect = new RectF(0, 0, getWidth(), getHeight());
-
 
 
         //paint.setColor(R.color.videona_blue_1);
@@ -455,7 +453,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         // draw seek bar active range lineleft (videona color blue)
         rect.left = padding;
-       // rect.left = 0;
+        // rect.left = 0;
         rect.right = min_thumb;
 
         canvas.drawRect(rect, paint);
@@ -468,13 +466,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         //rect.left = Math.min(max_thumb, min_thumb);
         rect.left = max_thumb;
         rect.right = getWidth() - padding;
-       // rect.right = getWidth();
+        // rect.right = getWidth();
 
 
-       // paint.setColor(R.color.alvaro_green);
-       // paint.setColor(Color.LTGRAY);
-       // paint.setAlpha(200);
-       // paint.setColor(Color.WHITE);
+        // paint.setColor(R.color.alvaro_green);
+        // paint.setColor(Color.LTGRAY);
+        // paint.setAlpha(200);
+        // paint.setColor(Color.WHITE);
         canvas.drawRect(rect, paint);
 
         canvas2 = canvas;
@@ -543,7 +541,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private void drawThumbLeft(float screenCoord, boolean pressed, Canvas canvas) {
 
         //canvas.drawBitmap(lineleft, screenCoord - lineWidthHalf, (float) ((0.5f * getHeight()) - lineHeightHalf), null);
-        canvas.drawBitmap(lineleft, screenCoord - (2*lineWidthHalf), (float) ((0.5f * getHeight()) - lineHeightHalf), null);
+        canvas.drawBitmap(lineleft, screenCoord - (2 * lineWidthHalf), (float) ((0.5f * getHeight()) - lineHeightHalf), null);
         postInvalidate();
     }
 
@@ -601,9 +599,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
 
         // test try to move MaxValue if touches in MinValue
-        normalizedMaxValue = Math.min(normalizedMaxValue, normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)));
+        normalizedMaxValue = Math.min(normalizedMaxValue, normalizedMinValue + (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)));
 
-        //normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
+        //normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
         // Log.d(LOG_TAG, "setNormalizedMinValue " + value + " normalizedMinValue " + normalizedMinValue);
         invalidate();
     }
@@ -619,10 +617,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
 
-        //normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.maxDurationVideo * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
+        //normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
 
         // test try to move MinValue if touches in MaxValue
-        normalizedMinValue = Math.max(normalizedMinValue, normalizedMaxValue - (ConfigUtils.maxDurationVideo * (1 / numIncrement)));
+        normalizedMinValue = Math.max(normalizedMinValue, normalizedMaxValue - (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)));
 
         //normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
         // // Log.d(LOG_TAG, "setNormalizedMaxValue " + value + " normalizedMaxValue " + normalizedMaxValue);

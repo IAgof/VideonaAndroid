@@ -5,7 +5,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
  */
 public interface OnLoginFinishedListener {
 
-    public void onLoginCredentialsError();
+    void onLoginCredentialsError();
 
-    public void onLoginSuccess();
+    void onLoginSuccess();
 }

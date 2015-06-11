@@ -67,12 +67,12 @@ public abstract class Effect extends EditorElement {
      * Constructor of minimum number of parameters. Default constructor.
      *
      * @param identifier - Unique identifier for the editor element for the current project.
-     * @param iconPath - Path to a resource that allows represent the element in the view.
-     * @param type - Opengl unique effect identifier.
-     * @param startTime - Track instant in milliseconds in which the effect has to be applied.
-     * @param duration - Duration of effect.
-     * @param license - Legal stuff.
-     * @param author - Author of the effect.
+     * @param iconPath   - Path to a resource that allows represent the element in the view.
+     * @param type       - Opengl unique effect identifier.
+     * @param startTime  - Track instant in milliseconds in which the effect has to be applied.
+     * @param duration   - Duration of effect.
+     * @param license    - Legal stuff.
+     * @param author     - Author of the effect.
      */
     protected Effect(String identifier, String iconPath, String type, long startTime, long duration,
                      License license, User author) {
@@ -87,21 +87,20 @@ public abstract class Effect extends EditorElement {
     /**
      * Parametrized constructor. It requires all possible attributes for an effect object.
      *
-     * @param identifier - Unique identifier for the editor element for the current project.
-     * @param iconPath - Path to a resource that allows represent the element in the view.
+     * @param identifier       - Unique identifier for the editor element for the current project.
+     * @param iconPath         - Path to a resource that allows represent the element in the view.
      * @param selectedIconPath - if not null used as icon when something interact with the element.
-     *                           If null it will be used the iconPath as default.
-     * @param type - Opengl unique effect identifier.
-     * @param startTime - Track instant in milliseconds in which the effect has to be applied.
-     * @param duration - Duration of effect.
-     * @param license - Legal stuff.
-     * @param author - Author of the effect.
-
-     * @param layer - Number of the layer in which the effect has to be applied. Layers define
-     *              which effects expose to further modifications by others. The lower the layer
-     *              number the soner will be applied in assembly time.
-     * @param license - Legal stuff.
-     * @param author - Author of the effect.
+     *                         If null it will be used the iconPath as default.
+     * @param type             - Opengl unique effect identifier.
+     * @param startTime        - Track instant in milliseconds in which the effect has to be applied.
+     * @param duration         - Duration of effect.
+     * @param license          - Legal stuff.
+     * @param author           - Author of the effect.
+     * @param layer            - Number of the layer in which the effect has to be applied. Layers define
+     *                         which effects expose to further modifications by others. The lower the layer
+     *                         number the soner will be applied in assembly time.
+     * @param license          - Legal stuff.
+     * @param author           - Author of the effect.
      */
     protected Effect(String iconPath, String selectedIconPath, String identifier, String type,
                      long startTime, long duration, int layer, User author, License license) {
@@ -115,6 +114,7 @@ public abstract class Effect extends EditorElement {
     }
 
     //applying methods
+
     /**
      * This method is called by the editor export functionality when the assembly has been triggered.
      * His functions consist on modify the portion of the final video track that the effect affects.
@@ -134,42 +134,55 @@ public abstract class Effect extends EditorElement {
     public long getDuration() {
         return duration;
     }
+
     public void setDuration(long duration) {
         this.duration = duration;
     }
+
     public long getStartTime() {
         return startTime;
     }
+
     public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
+
     public int getLayer() {
         return layer;
     }
+
     public void setLayer(int layer) {
         this.layer = layer;
     }
+
     public License getLicense() {
         return license;
     }
+
     public void setLicense(License license) {
         this.license = license;
     }
+
     public String getAuthorName() {
         return authorName;
     }
+
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
     }
+
     public User getAuthor() {
         return author;
     }
+
     public void setAuthor(User author) {
         this.author = author;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }

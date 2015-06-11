@@ -66,7 +66,7 @@ public class CustomManualFocusView extends View {
 
         if (showDraw) {
 
-            canvas.drawBitmap(bitmap, x-50 ,y-50, paint);
+            canvas.drawBitmap(bitmap, x - 50, y - 50, paint);
 
         }
 
@@ -97,7 +97,7 @@ public class CustomManualFocusView extends View {
         return false;
     }
 
-    public void onPreviewTouchEvent(Context context){
+    public void onPreviewTouchEvent(Context context) {
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -106,7 +106,7 @@ public class CustomManualFocusView extends View {
         int width = size.x;
         int height = size.y;
 
-        x =  size.x / 2;
+        x = size.x / 2;
         y = size.y / 3;
 
         Log.d("Focus", " x " + x + " y " + y);

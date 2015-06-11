@@ -35,21 +35,21 @@ public class LoginUseCase {
 
 
     public void videonaLogin(final String userName, final String password, final OnLoginFinishedListener listener) {
-       Runnable r = new Runnable() {
-           @Override
-           public void run() {
-               Looper.prepare();
-               boolean correct = obtainVideonaAccessToken(userName, password);
-               if (correct)
-                   correct = updateUser();
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                boolean correct = obtainVideonaAccessToken(userName, password);
+                if (correct)
+                    correct = updateUser();
 
-               if (correct) {
-                   listener.onLoginSuccess();
-               } else {
-                   listener.onLoginCredentialsError();
-               }
-           }
-      };
+                if (correct) {
+                    listener.onLoginSuccess();
+                } else {
+                    listener.onLoginCredentialsError();
+                }
+            }
+        };
 
         Thread t = new Thread(r);
         t.start();

@@ -2,8 +2,8 @@ package com.videonasocialmedia.videona.model.sources;
 
 
 import com.squareup.okhttp.OkHttpClient;
-
 import com.videonasocialmedia.videona.model.entities.social.Session;
+import com.videonasocialmedia.videona.model.entities.social.User;
 import com.videonasocialmedia.videona.model.entities.social.Video;
 import com.videonasocialmedia.videona.model.sources.rest.ApiHeaders;
 import com.videonasocialmedia.videona.model.sources.rest.RestErrorHandler;
@@ -11,7 +11,6 @@ import com.videonasocialmedia.videona.model.sources.rest.VideonaApi;
 import com.videonasocialmedia.videona.model.sources.rest.callbacks.SignUpCallback;
 import com.videonasocialmedia.videona.model.sources.rest.requests.RegisterRequestBody;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.model.entities.social.User;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -32,7 +31,7 @@ import retrofit.client.Response;
 /**
  * Class implementing a rest source of data
  */
-public class VideonaRestSource implements DataSource{
+public class VideonaRestSource implements DataSource {
 
     private static VideonaRestSource INSTANCE;
 
@@ -42,7 +41,7 @@ public class VideonaRestSource implements DataSource{
     private OkHttpClient okClient;
     private ApiHeaders apiHeaders;
 
-    private VideonaRestSource(){
+    private VideonaRestSource() {
         //rest client setup
         okClient = new OkHttpClient();
         apiHeaders = new ApiHeaders();
@@ -57,26 +56,26 @@ public class VideonaRestSource implements DataSource{
     }
 
     /**
-     *
      * @return a single instance of VideonaRestResource
      */
-    public static VideonaRestSource getInstance(){
+    public static VideonaRestSource getInstance() {
 
-        if (INSTANCE==null){
-            INSTANCE= new VideonaRestSource();
+        if (INSTANCE == null) {
+            INSTANCE = new VideonaRestSource();
         }
         return INSTANCE;
     }
 
     /**
      * Register a new User in Videona Services
+     *
      * @param userName
      * @param email
      * @param password
      */
     @Override
     public void createUser(String userName, String email, String password) {
-        RegisterRequestBody registerRequestBody= new RegisterRequestBody(userName,
+        RegisterRequestBody registerRequestBody = new RegisterRequestBody(userName,
                 email, password);
         apiClient.register(registerRequestBody, new SignUpCallback());
     }
@@ -100,9 +99,9 @@ public class VideonaRestSource implements DataSource{
 
             }
         });
-        User user=null;
-        if (userName!=null){
-            user= new User(userName);
+        User user = null;
+        if (userName != null) {
+            user = new User(userName);
         }
         return user;
     }
@@ -118,10 +117,10 @@ public class VideonaRestSource implements DataSource{
     }
 
 
-
     //PROVISIONAL
-    private void setUserName(String userName){
-        this.userName=userName;
+    private void setUserName(String userName) {
+        this.userName = userName;
     }
+
     String userName;
 }

@@ -31,23 +31,23 @@ public class Size {
         this.width = width;
     }
 
-    public Size (Resolution resolution){
-        switch (resolution){
+    public Size(Resolution resolution) {
+        switch (resolution) {
             case hd1080:
-                this.width=1920;
-                this.heigth=1080;
+                this.width = 1920;
+                this.heigth = 1080;
                 break;
             case hd720:
-                this.width=1280;
-                this.heigth=720;
+                this.width = 1280;
+                this.heigth = 720;
                 break;
             case sd480:
-                this.width=854;
-                this.heigth=480;
+                this.width = 854;
+                this.heigth = 480;
                 break;
             default:
-                this.width=1280;
-                this.heigth=720;
+                this.width = 1280;
+                this.heigth = 720;
         }
 
     }

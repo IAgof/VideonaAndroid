@@ -96,10 +96,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         colorEffects = mCamera.getParameters().getSupportedColorEffects();
 
 
-
     }
 
-    public void setCameraOrientation(int cameraOrientation){
+    public void setCameraOrientation(int cameraOrientation) {
 
         mCamera.setDisplayOrientation(cameraOrientation);
 

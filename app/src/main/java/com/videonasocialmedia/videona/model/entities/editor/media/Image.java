@@ -28,13 +28,13 @@ import java.util.ArrayList;
  */
 public class Image extends Media {
 
-    public static final long DEFAULT_IMAGE_DURATION = 3;
+    public static final int DEFAULT_IMAGE_DURATION = 3;
     public static String IMAGE_PATH = "";
 
 
     /**
      * Constructor of minimum number of parameters. Default constructor.
-     *
+     * <p/>
      * An image always starts at the beginning of the file and has a default duration fixed for
      * recent created image objects. However this duration could be changed during the edition
      * process, but the fileStartTime never could be changed.
@@ -52,7 +52,7 @@ public class Image extends Media {
      * @param mediaPath
      */
     public Image(String mediaPath) {
-        super(null, null,mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, null, null);
+        super(null, null, mediaPath, 0, Image.DEFAULT_IMAGE_DURATION, null, null);
         //check if the mediapath is an image.
 
         //get the iconpath
@@ -68,18 +68,19 @@ public class Image extends Media {
      * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
      */
     public Image(String identifier, String iconPath, String selectedIconPath, String title, String
-            mediaPath, long duration, Transition opening, Transition ending,
+            mediaPath, int duration, Transition opening, Transition ending,
                  MediaMetadata metadata, ArrayList<User> authors, License license) {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, 0, duration,
                 opening, ending, metadata, authors, license);
     }
 
     @Override
-    public long getFileStartTime() {
+    public int getFileStartTime() {
         return 0;
     }
+
     @Override
-    public void setFileStartTime(long fileStartTime) {
+    public void setFileStartTime(int fileStartTime) {
         //
     }
 

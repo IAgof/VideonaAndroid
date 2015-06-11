@@ -30,11 +30,10 @@ import java.util.List;
 
 /**
  * Init application user case
- *
+ * <p/>
  * Check Videona paths to record and export video
- *
+ * <p/>
  * Check internal storage, needed to persistence in app model.
- *
  */
 public class CheckPathsAppUseCase {
 
@@ -50,7 +49,7 @@ public class CheckPathsAppUseCase {
 
     UserPreferences userPreferences;
 
-    public CheckPathsAppUseCase(Context context){
+    public CheckPathsAppUseCase(Context context) {
 
         this.context = context;
 
@@ -58,7 +57,7 @@ public class CheckPathsAppUseCase {
 
     }
 
-    public void checkPaths(OnInitAppEventListener listener){
+    public void checkPaths(OnInitAppEventListener listener) {
 
         try {
             checkPathApp(context);
@@ -82,7 +81,7 @@ public class CheckPathsAppUseCase {
 
             fEdited.mkdir();
 
-          //  Log.d(LOG_TAG, "Path Videona created");
+            //  Log.d(LOG_TAG, "Path Videona created");
 
         }
 
@@ -101,7 +100,7 @@ public class CheckPathsAppUseCase {
 
             fMaster.mkdir();
 
-           // Log.d(LOG_TAG, "Path Videona Masters created");
+            // Log.d(LOG_TAG, "Path Videona Masters created");
         }
 
 
@@ -166,7 +165,7 @@ public class CheckPathsAppUseCase {
         String nameFile = context.getResources().getResourceName(raw_resource);
         nameFile = nameFile.substring(nameFile.lastIndexOf("/") + 1);
 
-        Log.d(LOG_TAG, "downloadResource " + nameFile);
+        Log.d(LOG_TAG, "copyResourceToTemp " + nameFile);
 
         File fSong = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
 
@@ -195,10 +194,10 @@ public class CheckPathsAppUseCase {
                         out.write(buff, 0, read);
                     }
 
-                }   catch(IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
 
-                }   finally{
+                } finally {
 
                     in.close();
                     out.close();

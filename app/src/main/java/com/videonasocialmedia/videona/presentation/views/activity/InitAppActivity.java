@@ -13,16 +13,15 @@ import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
- *  InitAppActivity.
- *
- *  According to clean code and model, use InitAppView, InitAppPresenter for future use.
- *
- *  Main Activity of the app, launch from manifest.
- *
- *  First activity when the user open the app.
- *
- *  Show a dummy splash screen and initialize all data needed to start
- *
+ * InitAppActivity.
+ * <p/>
+ * According to clean code and model, use InitAppView, InitAppPresenter for future use.
+ * <p/>
+ * Main Activity of the app, launch from manifest.
+ * <p/>
+ * First activity when the user open the app.
+ * <p/>
+ * Show a dummy splash screen and initialize all data needed to start
  */
 
 public class InitAppActivity extends Activity implements InitAppView {
@@ -36,16 +35,15 @@ public class InitAppActivity extends Activity implements InitAppView {
      * Init app presenter. Needed to expand app context between model layers.
      */
     private InitAppPresenter initAppPresenter;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_init_app);
-        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+        SharedPreferences sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         initAppPresenter = new InitAppPresenter(this, getApplicationContext(), sharedPreferences, editor);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
@@ -56,7 +54,7 @@ public class InitAppActivity extends Activity implements InitAppView {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         initAppPresenter.start();
     }
@@ -92,4 +90,6 @@ public class InitAppActivity extends Activity implements InitAppView {
     public void navigate(Class cls) {
         startActivity(new Intent(getApplicationContext(), cls));
     }
+
+
 }

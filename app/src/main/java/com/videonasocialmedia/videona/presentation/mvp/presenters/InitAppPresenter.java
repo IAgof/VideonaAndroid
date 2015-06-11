@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.domain.initapp.LoadingProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -32,15 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * InitAppPresenter. Presenter to initialize the app.
- *
+ * <p/>
  * The view part is only a splashScreen.
- *
+ * <p/>
  * Initialize all use cases needed to start the app.
- *
  */
-public class InitAppPresenter  implements OnInitAppEventListener {
+public class InitAppPresenter implements OnInitAppEventListener {
 
     private InitAppView initAppView;
     private Context context;
@@ -48,6 +47,8 @@ public class InitAppPresenter  implements OnInitAppEventListener {
     private SharedPreferences.Editor editor;
     private Camera camera;
     private int numSupportedCameras;
+
+    private LoadingProjectUseCase loadingProjectUseCase;
 
     /**
      * Constructor.
@@ -65,6 +66,7 @@ public class InitAppPresenter  implements OnInitAppEventListener {
         this.sharedPreferences = sharedPreferences;
         this.editor = editor;
         initSettings();
+        loadingProjectUseCase = new LoadingProjectUseCase(context);
     }
 
     /**
@@ -101,8 +103,9 @@ public class InitAppPresenter  implements OnInitAppEventListener {
             camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
                     ConfigPreferences.BACK_CAMERA));
         }
+
         editor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, true).commit();
-        numSupportedCameras = camera.getNumberOfCameras();
+        numSupportedCameras = Camera.getNumberOfCameras();
         if(numSupportedCameras > 1) {
             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
         }
@@ -250,23 +253,8 @@ public class InitAppPresenter  implements OnInitAppEventListener {
         return c;
     }
 
-    /**
-     * Stop presenter
-     */
-    public void stop(){}
-
-    /**
-     * Checks the paths of the app
-     *
-     * @param listener
-     */
-    private void checkPathsApp(OnInitAppEventListener listener){
-        try {
-            checkPath();
-            listener.onCheckPathsAppSuccess();
-        } catch (IOException e) {
-            Log.e("CHECK PATH", "error", e);
-        }
+    private void startLoadingProject(){
+        loadingProjectUseCase.checkProjectState(this);
     }
 
     /**
@@ -310,47 +298,26 @@ public class InitAppPresenter  implements OnInitAppEventListener {
      */
     private void downloadingMusicResources() {
         List<Music> musicList = getMusicList();
-        for (Music resource : musicList) {
+        for (Music music : musicList) {
             try {
-                downloadMusicResource(resource.getMusicResourceId());
+                Utils.copyMusicResourceToTemp(context, music.getMusicResourceId());
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.d("Init App", "Error copying resources to temp");
             }
         }
     }
 
     /**
-     * Copy resource from raw folder app to sdcard.
+     * Checks the paths of the app
      *
-     * @param raw_resource
-     * @throws IOException
+     * @param listener
      */
-    private void downloadMusicResource(int raw_resource) throws IOException {
-        InputStream in = context.getResources().openRawResource(raw_resource);
-        String nameFile = context.getResources().getResourceName(raw_resource);
-        nameFile = nameFile.substring(nameFile.lastIndexOf("/") + 1);
-        File fSong = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-        if (!fSong.exists()) {
-            FileOutputStream out = null;
-            try {
-                out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            if(out != null) {
-                byte[] buff = new byte[1024];
-                int read = 0;
-                try {
-                    while ((read = in.read(buff)) > 0) {
-                        out.write(buff, 0, read);
-                    }
-                } catch(IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    in.close();
-                    out.close();
-                }
-            }
+    private void checkPathsApp(OnInitAppEventListener listener) {
+        try {
+            checkPath();
+            listener.onCheckPathsAppSuccess();
+        } catch (IOException e) {
+            Log.e("CHECK PATH", "error", e);
         }
     }
 

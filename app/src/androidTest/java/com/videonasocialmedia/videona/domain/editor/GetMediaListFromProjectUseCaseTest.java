@@ -19,11 +19,11 @@ public class GetMediaListFromProjectUseCaseTest extends AndroidTestCase {
 
     GetMediaListFromProjectUseCase useCase;
 
-    public GetMediaListFromProjectUseCaseTest(){
+    public GetMediaListFromProjectUseCaseTest() {
         useCase = new GetMediaListFromProjectUseCase();
     }
 
-    public void testGetMediaListFromProject(){
+    public void testGetMediaListFromProject() {
 
         Method method = null;
 
@@ -36,8 +36,8 @@ public class GetMediaListFromProjectUseCaseTest extends AndroidTestCase {
 
         LinkedList<Media> result = null;
         try {
-            result = (LinkedList < Media> ) method.invoke(useCase);
-        } catch(InvocationTargetException e) {
+            result = (LinkedList<Media>) method.invoke(useCase);
+        } catch (InvocationTargetException e) {
             e.getCause().printStackTrace();
         } catch (Exception e) {
             // generic exception handling
@@ -46,7 +46,7 @@ public class GetMediaListFromProjectUseCaseTest extends AndroidTestCase {
 
         LinkedList<Media> anyResult = new LinkedList<Media>();
         assertNotNull(result);
-        assertEquals(result,anyResult);
+        assertEquals(result, anyResult);
 
     }
 }

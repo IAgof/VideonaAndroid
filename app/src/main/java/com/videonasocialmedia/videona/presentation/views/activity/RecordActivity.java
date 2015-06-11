@@ -57,11 +57,10 @@ import butterknife.OnClick;
 
 /**
  * RecordActivity.
- *
+ * <p/>
  * Activity to preview and record video, apply color effects.
- *
+ * <p/>
  * When the video is recorded, navigate to EditActivity.
- *
  */
 public class RecordActivity extends Activity implements RecordView, ColorEffectClickListener {
 
@@ -208,13 +207,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
-        recordPresenter = new RecordPresenter(this, tracker);
-
-        recordPresenter.onCreate();
-
         // Hide menu camera options
         linearLayoutRecordCameraOptions.setVisibility(View.GONE);
-
     }
 
 
@@ -229,7 +223,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Handler h=new Handler();
+        Handler h = new Handler();
         h.postDelayed(new Runnable() {
 
             @Override
@@ -250,9 +244,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume() RecordActivity");
-        if(recordPresenter == null) {
-            recordPresenter = new RecordPresenter(this, tracker);
-        }
+        recordPresenter = new RecordPresenter(this, tracker, this.getApplicationContext());
         /*
         if(recordPresenter != null) {
             recordPresenter.onResume();
@@ -264,7 +256,6 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             colorEffectAdapter = null;
             recordPresenter.effectClickListener();
         }
-
         recordPresenter.onResume();
         recordPresenter.onSettingsCameraListener();
         buttonRecord.setEnabled(true);
@@ -468,9 +459,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     }
 
     @Override
-    public Context getContext() {
-        Log.d(LOG_TAG, "getContext() RecordActivity");
-        return this;
+    public void showError() {
+        Toast.makeText(this, R.string.recordError, Toast.LENGTH_LONG);
     }
 
     /**
@@ -648,7 +638,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @OnClick(R.id.button_record)
     public void buttonRecordListener() {
-        recordPresenter.recordClickListener();
+        recordPresenter.toggleRecord();
     }
 
     /**
@@ -778,7 +768,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         recordPresenter.stop();
         recordPresenter = null;
 
-        recordPresenter = new RecordPresenter(this, tracker);
+        recordPresenter = new RecordPresenter(this, tracker, this.getApplicationContext());
 
         detectRotationView(this);
 

@@ -20,6 +20,7 @@ public class NoMediaInTrackException extends Exception {
     public NoMediaInTrackException(String detailMessage) {
         super(detailMessage);
     }
+
     public NoMediaInTrackException() {
         super();
     }

@@ -9,5 +9,5 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 public interface OnSupportFlashMode {
 
-    public void showFlash(boolean isFlashSupported);
+    void showFlash(boolean isFlashSupported);
 }

@@ -17,13 +17,13 @@ import android.content.SharedPreferences;
 
 public class UserPreferences {
 
-	private static final String USER_INFO = "USER_INFO";
-	private SharedPreferences appUserPreferences;
-	private SharedPreferences.Editor prefsEditor;
+    private static final String USER_INFO = "USER_INFO";
+    private SharedPreferences appUserPreferences;
+    private SharedPreferences.Editor prefsEditor;
 
     private String userName = "user_name_prefs";
-	private String userId = "user_id_prefs";
-	private String userSession = "user_session";
+    private String userId = "user_id_prefs";
+    private String userSession = "user_session";
 
     private String seekBarStart = "seekBarStart";
     private String seekBarEnd = "seekBarEnd";
@@ -58,7 +58,7 @@ public class UserPreferences {
 	 this.appUserPreferences = context.getSharedPreferences(USER_INFO, Activity.MODE_PRIVATE);
 	 this.prefsEditor = appUserPreferences.edit();
 	}
-
+    
 
     // Private path
     public String getPrivatePath() {
@@ -66,11 +66,12 @@ public class UserPreferences {
     }
 
     public void setPrivatePath(String path) {
-        prefsEditor.putString(privatePath, path).commit();;
+        prefsEditor.putString(privatePath, path).commit();
+        
     }
 
     /*
-	public String getUserId() {
+    public String getUserId() {
 	 return appUserPreferences.getString(userId, "");
 	}
 	 
@@ -102,7 +103,7 @@ public class UserPreferences {
         return appUserPreferences.getInt(seekBarStart, 0);
     }
 
-    public void setSeekBarStart( int start) {
+    public void setSeekBarStart(int start) {
         prefsEditor.putInt(seekBarStart, start).commit();
     }
 
@@ -110,7 +111,7 @@ public class UserPreferences {
         return appUserPreferences.getInt(seekBarEnd, 60);
     }
 
-    public void setSeekBarEnd( int end) {
+    public void setSeekBarEnd(int end) {
         prefsEditor.putInt(seekBarEnd, end).commit();
     }
 
@@ -124,7 +125,7 @@ public class UserPreferences {
         prefsEditor.putString(musicSelected, pathMusic).commit();
     }
 
-    public boolean getIsMusicSelected(){
+    public boolean getIsMusicSelected() {
         return appUserPreferences.getBoolean(isMusicSelected, false);
     }
 

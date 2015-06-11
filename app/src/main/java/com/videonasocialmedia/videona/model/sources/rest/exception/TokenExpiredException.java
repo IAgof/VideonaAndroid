@@ -14,8 +14,9 @@ import retrofit.RetrofitError;
  */
 public class TokenExpiredException extends Exception {
     RetrofitError cause;
-    public TokenExpiredException(RetrofitError cause){
+
+    public TokenExpiredException(RetrofitError cause) {
         super();
-        this.cause=cause;
+        this.cause = cause;
     }
 }

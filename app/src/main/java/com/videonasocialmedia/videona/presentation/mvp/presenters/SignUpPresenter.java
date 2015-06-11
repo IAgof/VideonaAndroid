@@ -18,17 +18,17 @@ public class SignUpPresenter implements OnSignedUpListener, OnLoginFinishedListe
     private RegisterView registerView;
     private String userName, password, email;
 
-    public SignUpPresenter (RegisterView registerView){
+    public SignUpPresenter(RegisterView registerView) {
         this.loginUseCase = new LoginUseCase();
         this.userRegistrationUseCase = new UserRegistrationUseCase();
-        this.registerView=registerView;
+        this.registerView = registerView;
     }
 
-    public void attemptSignUp(String userName, String password, String email){
-        this.userName=userName;
-        this.email=email;
-        this.password=email;
-        userRegistrationUseCase.registerUser(userName,password,email,this);
+    public void attemptSignUp(String userName, String password, String email) {
+        this.userName = userName;
+        this.email = email;
+        this.password = email;
+        userRegistrationUseCase.registerUser(userName, password, email, this);
     }
 
     @Override
@@ -49,9 +49,8 @@ public class SignUpPresenter implements OnSignedUpListener, OnLoginFinishedListe
 
     @Override
     public void onLoginSuccess() {
-       registerView.navigate(RecordActivity.class);
+        registerView.navigate(RecordActivity.class);
     }
-
 
 
 }

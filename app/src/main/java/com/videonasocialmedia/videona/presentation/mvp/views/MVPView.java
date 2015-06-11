@@ -12,12 +12,9 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-
 /**
  * Root class for view classes
  */
 public interface MVPView {
-
-    public android.content.Context getContext();
 
 }

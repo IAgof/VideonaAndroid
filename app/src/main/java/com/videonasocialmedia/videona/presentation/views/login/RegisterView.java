@@ -7,7 +7,10 @@ import android.app.Activity;
  */
 public interface RegisterView {
     public void showValidField();
+
     public void showInvalidField();
+
     public void showErrorMessage(int errorMessageResource);
-    public void navigate(Class <? extends Activity> activity);
+
+    public void navigate(Class<? extends Activity> activity);
 }

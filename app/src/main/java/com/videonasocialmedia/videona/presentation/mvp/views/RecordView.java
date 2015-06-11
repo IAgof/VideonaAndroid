@@ -51,4 +51,6 @@ public interface RecordView extends MVPView {
 
     void showCamera(int cameraMode);
 
+    void showError();
+
 }

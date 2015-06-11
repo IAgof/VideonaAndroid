@@ -43,7 +43,7 @@ public class RemoveVideoFromProjectUseCaseTest extends AndroidTestCase {
     // TODO: we need to access to the Project to obtain the mediatrack, because this test returns
     // null value for it when try to remove the media item
 
-    public RemoveVideoFromProjectUseCaseTest(){
+    public RemoveVideoFromProjectUseCaseTest() {
         listener = mock(OnRemoveMediaFinishedListener.class);
         authors = new ArrayList<>();
         authors.add(new User("user"));
@@ -70,7 +70,7 @@ public class RemoveVideoFromProjectUseCaseTest extends AndroidTestCase {
      * This class is used to check if the use case returns a boolean when try to delete item in
      * mediatrack.
      */
-    public void testRemoveMediaItemFromTrack () throws NoSuchMethodException,
+    public void testRemoveMediaItemFromTrack() throws NoSuchMethodException,
             InvocationTargetException, IllegalAccessException {
 
         Method method = null;
@@ -84,7 +84,7 @@ public class RemoveVideoFromProjectUseCaseTest extends AndroidTestCase {
         boolean result = false;
         try {
             result = (boolean) method.invoke(useCase, media);
-        } catch(InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             e.getCause().printStackTrace();
         } catch (Exception e) {
             // generic exception handling
@@ -92,6 +92,6 @@ public class RemoveVideoFromProjectUseCaseTest extends AndroidTestCase {
         }
 
         boolean anyBoolean = true;
-        assertSame(anyBoolean,result);
+        assertSame(anyBoolean, result);
     }
 }

@@ -9,9 +9,9 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 public interface OnFlashModeListener {
 
-    public void onFlashModeTorchAdded();
+    void onFlashModeTorchAdded();
 
-    public void onFlashModeTorchRemoved();
+    void onFlashModeTorchRemoved();
 
-    public void onFlashModeTorchError();
+    void onFlashModeTorchError();
 }
