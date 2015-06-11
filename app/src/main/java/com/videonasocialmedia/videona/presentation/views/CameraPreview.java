@@ -19,6 +19,7 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -56,6 +57,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private boolean detectScreenOrientation270 = true;
 
     private boolean supportAutoFocus = true;
+
+    private boolean hasZoom = false;
+    private int zoomFactor = 0;
+    private int maxZoomFactor = 0;
+    private List<Integer> zoomRatios = null;
+
+    private ScaleGestureDetector scaleGestureDetector;
 
     public CameraPreview(Context context, Camera camera) {
 
@@ -95,10 +103,39 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         colorEffects = mCamera.getParameters().getSupportedColorEffects();
 
+        checkCameraZoom(camera);
+
+        scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
 
     }
 
-    public void setCameraOrientation(int cameraOrientation) {
+    private void checkCameraZoom(Camera camera) {
+
+        Camera.Parameters parameters = camera.getParameters();
+
+        hasZoom = parameters.isZoomSupported();
+
+        Log.d(LOG_TAG, "checkCameraZoom hasZoom " + hasZoom );
+
+        if(hasZoom){
+            maxZoomFactor = parameters.getMaxZoom();
+
+            try {
+                zoomRatios = parameters.getZoomRatios();
+            }
+            catch(NumberFormatException e) {
+                // crash java.lang.NumberFormatException: Invalid int: " 500" reported in v1.4 on device "es209ra", Android 4.1, 3 Jan 2014
+                // this is from java.lang.Integer.invalidInt(Integer.java:138) - unclear if this is a bug in Open Camera, all we can do for now is catch it
+                Log.e(LOG_TAG, "NumberFormatException in getZoomRatios()");
+                e.printStackTrace();
+                hasZoom = false;
+                zoomRatios = null;
+            }
+
+        }
+    }
+
+    public void setCameraOrientation(int cameraOrientation){
 
         mCamera.setDisplayOrientation(cameraOrientation);
 
@@ -111,6 +148,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         try {
 
+            // must be done after setting parameters, as this function may set parameters
+            if( this.hasZoom && zoomFactor != 0 ) {
+                int new_zoom_factor = zoomFactor;
+                zoomFactor = 0; // force zoomTo to actually update the zoom!
+                zoomTo(new_zoom_factor, true);
+            }
 
             mCamera.setPreviewDisplay(holder);
 
@@ -138,7 +181,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
 
-        Log.e(LOG_TAG, "surfaceChanged => width=" + w + ", height=" + h);
+        Log.d(LOG_TAG, "surfaceChanged => width=" + w + ", height=" + h);
 
         // If your preview can change or rotate, take care of those events here.
 
@@ -171,7 +214,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             parameters.setPreviewSize(ConfigUtils.VIDEO_SIZE_WIDTH, ConfigUtils.VIDEO_SIZE_HEIGHT);
             //parameters.setPreviewSize(size.width, size.height);
 
-            Log.e(LOG_TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
+            Log.d(LOG_TAG, "surfaceChanged getBestPreviewSize => width=" + size.width + ", height=" + size.height);
 
 
             // Focus_continuous doesn't work well on OnePlus One
@@ -179,7 +222,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             // AutoFocus onTouch ON
             if(supportAutoFocus(mCamera)) {
-                 parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+               parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             }
 
 
@@ -208,7 +251,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
 
         supportAutoFocus = false;
-        return supportAutoFocus;
+        return false;
+
     }
 
     @Override
@@ -390,6 +434,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        scaleGestureDetector.onTouchEvent(event);
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             float x = event.getX();
             float y = event.getY();
@@ -406,9 +452,99 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             doTouchFocus(targetFocusRect);
 
-
         }
-        return false;
+
+        return true;
+
+    }
+
+
+    // Zoom camera, from OpenCamera app, Preview.java
+    public void scaleZoom(float scaleFactor) {
+
+        Log.d(LOG_TAG, "scaleZoom() " + scaleFactor);
+
+        if( mCamera != null && hasZoom ) {
+            float zoomRatio = zoomRatios.get(zoomFactor)/100.0f;
+            zoomRatio *= scaleFactor;
+
+            int newZoomFactor = zoomFactor;
+            if( zoomRatio <= 1.0f ) {
+                newZoomFactor = 0;
+            }
+            else if( zoomRatio >= zoomRatios.get(maxZoomFactor)/100.0f ) {
+                newZoomFactor = maxZoomFactor;
+            }
+            else {
+                // find the closest zoom level
+                if( scaleFactor > 1.0f ) {
+                    // zooming in
+                    for(int i=zoomFactor;i<zoomRatios.size();i++) {
+                        if( zoomRatios.get(i)/100.0f >= zoomRatio ) {
+                            Log.d(LOG_TAG, "zoom int, found new zoom by comparing " + zoomRatios.get(i)/100.0f + " >= " + zoomRatio);
+                            newZoomFactor = i;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    // zooming out
+                    for(int i=zoomFactor;i>=0;i--) {
+                        if( zoomRatios.get(i)/100.0f <= zoomRatio ) {
+                                Log.d(LOG_TAG, "zoom out, found new zoom by comparing " + zoomRatios.get(i)/100.0f + " <= " + zoomRatio);
+                            newZoomFactor = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+                Log.d(LOG_TAG, "ScaleListener.onScale zoom_ratio is now " + zoomRatio);
+                Log.d(LOG_TAG, "    old zoom_factor " + zoomFactor + " ratio " + zoomRatios.get(zoomFactor)/100.0f);
+                Log.d(LOG_TAG, "    chosen new zoom_factor " + newZoomFactor + " ratio " + zoomRatios.get(newZoomFactor)/100.0f);
+
+            zoomTo(newZoomFactor, true);
+        }
+    }
+
+    public void zoomTo(int newZoomFactor, boolean update_seek_bar) {
+        
+        Log.d(LOG_TAG, "ZoomTo(): " + newZoomFactor);
+        if( newZoomFactor < 0 )
+            newZoomFactor = 0;
+        if( newZoomFactor > maxZoomFactor )
+            newZoomFactor = maxZoomFactor;
+        // problem where we crashed due to calling this function with null camera should be fixed now, but check again just to be safe
+        if(newZoomFactor != zoomFactor && mCamera != null) {
+            Camera.Parameters parameters = mCamera.getParameters();
+            if( parameters.isZoomSupported() ) {
+                Log.d(LOG_TAG, "zoom was: " + parameters.getZoom());
+                parameters.setZoom((int) newZoomFactor);
+                try {
+                    mCamera.setParameters(parameters);
+                    zoomFactor = newZoomFactor;
+                   
+                }
+                catch(RuntimeException e) {
+                    // crash reported in v1.3 on device "PANTONE 5 SoftBank 107SH (SBM107SH)"
+                     Log.e(LOG_TAG, "runtime exception in ZoomTo()");
+                    e.printStackTrace();
+                }
+               // clearFocusAreas();
+            }
+        }
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            Log.d(LOG_TAG, "ScaleListener, scaleZoom ");
+            if( mCamera != null && hasZoom ) {
+                Log.d(LOG_TAG, "ScaleListener, scaleZoom hasZoom ");
+                scaleZoom(detector.getScaleFactor());
+            }
+            return true;
+        }
     }
 
 }
