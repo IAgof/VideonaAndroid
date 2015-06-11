@@ -487,7 +487,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         //  cameraPreview.setCameraOrientation(displayOrientation);
         frameLayoutCameraPreview.addView(cameraPreview);
         if(supportAutoFocus) {
-            frameLayoutCameraPreview.addView(customManualFocusView);
+          frameLayoutCameraPreview.addView(customManualFocusView);
         }
         // Fix format chronometer 00:00. Do in xml, design
         chronometerRecord.setText("00:00");
@@ -524,6 +524,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
         buttonRecord.setEnabled(false);
         lockRotation = false;
+        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
     }
 
     @Override
@@ -546,7 +547,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         frameAnimation.setCallback(imageRecPoint);
         frameAnimation.setVisible(true, true);
 
-        // Camera options disabled
+        // Change camera disabled while recording
         buttonChangeCamera.setVisibility(View.GONE);
 
 

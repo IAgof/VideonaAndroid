@@ -49,9 +49,8 @@ public class CustomManualFocusView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(8);
 
-        //TODO change resource to new design
-        // TODO FUTURE: add animation
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_record_icon_focus_focused);
+        bitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.activity_record_icon_focus_focused);
 
         canvas = new Canvas(bitmap.copy(Bitmap.Config.ARGB_8888, true));
 

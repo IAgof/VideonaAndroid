@@ -12,7 +12,6 @@
 
 package com.videonasocialmedia.videona.presentation.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,9 +19,9 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.SeekBar;
 
 import com.videonasocialmedia.videona.utils.ConfigUtils;
 
@@ -64,6 +63,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private int maxZoomFactor = 0;
     private List<Integer> zoomRatios = null;
 
+    private ScaleGestureDetector scaleGestureDetector;
+
     public CameraPreview(Context context, Camera camera) {
 
         super(context);
@@ -104,6 +105,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         checkCameraZoom(camera);
 
+        scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
+
     }
 
     private void checkCameraZoom(Camera camera) {
@@ -111,6 +114,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         Camera.Parameters parameters = camera.getParameters();
 
         hasZoom = parameters.isZoomSupported();
+
+        Log.d(LOG_TAG, "checkCameraZoom hasZoom " + hasZoom );
 
         if(hasZoom){
             maxZoomFactor = parameters.getMaxZoom();
@@ -217,7 +222,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             // AutoFocus onTouch ON
             if(supportAutoFocus(mCamera)) {
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+               parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             }
 
 
@@ -246,7 +251,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
 
         supportAutoFocus = false;
-        return supportAutoFocus;
+        return false;
+
     }
 
     @Override
@@ -428,6 +434,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        scaleGestureDetector.onTouchEvent(event);
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             float x = event.getX();
             float y = event.getY();
@@ -444,36 +452,37 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
             doTouchFocus(targetFocusRect);
 
-
         }
-        return false;
+
+        return true;
+
     }
 
 
     // Zoom camera, from OpenCamera app, Preview.java
-    public void scaleZoom(float scale_factor) {
+    public void scaleZoom(float scaleFactor) {
 
-        Log.d(LOG_TAG, "scaleZoom() " + scale_factor);
+        Log.d(LOG_TAG, "scaleZoom() " + scaleFactor);
 
         if( mCamera != null && hasZoom ) {
-            float zoom_ratio = zoomRatios.get(zoomFactor)/100.0f;
-            zoom_ratio *= scale_factor;
+            float zoomRatio = zoomRatios.get(zoomFactor)/100.0f;
+            zoomRatio *= scaleFactor;
 
-            int new_zoom_factor = zoomFactor;
-            if( zoom_ratio <= 1.0f ) {
-                new_zoom_factor = 0;
+            int newZoomFactor = zoomFactor;
+            if( zoomRatio <= 1.0f ) {
+                newZoomFactor = 0;
             }
-            else if( zoom_ratio >= zoom_ratios.get(max_zoom_factor)/100.0f ) {
-                new_zoom_factor = max_zoom_factor;
+            else if( zoomRatio >= zoomRatios.get(maxZoomFactor)/100.0f ) {
+                newZoomFactor = maxZoomFactor;
             }
             else {
                 // find the closest zoom level
-                if( scale_factor > 1.0f ) {
+                if( scaleFactor > 1.0f ) {
                     // zooming in
-                    for(int i=zoomFactor;i<zoom_ratios.size();i++) {
-                        if( zoom_ratios.get(i)/100.0f >= zoom_ratio ) {
-                            Log.d(LOG_TAG, "zoom int, found new zoom by comparing " + zoom_ratios.get(i)/100.0f + " >= " + zoom_ratio);
-                            new_zoom_factor = i;
+                    for(int i=zoomFactor;i<zoomRatios.size();i++) {
+                        if( zoomRatios.get(i)/100.0f >= zoomRatio ) {
+                            Log.d(LOG_TAG, "zoom int, found new zoom by comparing " + zoomRatios.get(i)/100.0f + " >= " + zoomRatio);
+                            newZoomFactor = i;
                             break;
                         }
                     }
@@ -481,40 +490,39 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 else {
                     // zooming out
                     for(int i=zoomFactor;i>=0;i--) {
-                        if( zoom_ratios.get(i)/100.0f <= zoom_ratio ) {
-                            if( MyDebug.LOG )
-                                Log.d(TAG, "zoom out, found new zoom by comparing " + zoom_ratios.get(i)/100.0f + " <= " + zoom_ratio);
-                            new_zoom_factor = i;
+                        if( zoomRatios.get(i)/100.0f <= zoomRatio ) {
+                                Log.d(LOG_TAG, "zoom out, found new zoom by comparing " + zoomRatios.get(i)/100.0f + " <= " + zoomRatio);
+                            newZoomFactor = i;
                             break;
                         }
                     }
                 }
             }
 
-                Log.d(LOG_TAG, "ScaleListener.onScale zoom_ratio is now " + zoom_ratio);
-                Log.d(LOG_TAG, "    old zoom_factor " + zoomFactor + " ratio " + zoom_ratios.get(zoomFactor)/100.0f);
-                Log.d(LOG_TAG, "    chosen new zoom_factor " + new_zoom_factor + " ratio " + zoom_ratios.get(new_zoom_factor)/100.0f);
+                Log.d(LOG_TAG, "ScaleListener.onScale zoom_ratio is now " + zoomRatio);
+                Log.d(LOG_TAG, "    old zoom_factor " + zoomFactor + " ratio " + zoomRatios.get(zoomFactor)/100.0f);
+                Log.d(LOG_TAG, "    chosen new zoom_factor " + newZoomFactor + " ratio " + zoomRatios.get(newZoomFactor)/100.0f);
 
-            zoomTo(new_zoom_factor, true);
+            zoomTo(newZoomFactor, true);
         }
     }
 
-    public void zoomTo(int new_zoom_factor, boolean update_seek_bar) {
+    public void zoomTo(int newZoomFactor, boolean update_seek_bar) {
         
-        Log.d(LOG_TAG, "ZoomTo(): " + new_zoom_factor);
-        if( new_zoom_factor < 0 )
-            new_zoom_factor = 0;
-        if( new_zoom_factor > maxZoomFactor )
-            new_zoom_factor = maxZoomFactor;
+        Log.d(LOG_TAG, "ZoomTo(): " + newZoomFactor);
+        if( newZoomFactor < 0 )
+            newZoomFactor = 0;
+        if( newZoomFactor > maxZoomFactor )
+            newZoomFactor = maxZoomFactor;
         // problem where we crashed due to calling this function with null camera should be fixed now, but check again just to be safe
-        if(new_zoom_factor != zoomFactor && mCamera != null) {
+        if(newZoomFactor != zoomFactor && mCamera != null) {
             Camera.Parameters parameters = mCamera.getParameters();
             if( parameters.isZoomSupported() ) {
                 Log.d(LOG_TAG, "zoom was: " + parameters.getZoom());
-                parameters.setZoom((int) new_zoom_factor);
+                parameters.setZoom((int) newZoomFactor);
                 try {
                     mCamera.setParameters(parameters);
-                    zoomFactor = new_zoom_factor;
+                    zoomFactor = newZoomFactor;
                    
                 }
                 catch(RuntimeException e) {
@@ -524,6 +532,18 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 }
                // clearFocusAreas();
             }
+        }
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            Log.d(LOG_TAG, "ScaleListener, scaleZoom ");
+            if( mCamera != null && hasZoom ) {
+                Log.d(LOG_TAG, "ScaleListener, scaleZoom hasZoom ");
+                scaleZoom(detector.getScaleFactor());
+            }
+            return true;
         }
     }
 
