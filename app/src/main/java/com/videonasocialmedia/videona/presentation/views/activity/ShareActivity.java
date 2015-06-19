@@ -151,7 +151,7 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
 
     //@OnClick(R.id.share_button_play)
     public void playVideo() {
-        if (!mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
             //buttonPlay.setVisibility(View.GONE);
             //updateSeekProgress();
@@ -159,7 +159,7 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     }
 
     public void pauseVideo() {
-        if (mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             //buttonPlay.setVisibility(View.VISIBLE);
         }
