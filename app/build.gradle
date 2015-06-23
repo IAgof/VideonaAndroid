@@ -14,7 +14,7 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 21
+        versionCode 22
         versionName "0.2.8"
     }
     buildTypes {
