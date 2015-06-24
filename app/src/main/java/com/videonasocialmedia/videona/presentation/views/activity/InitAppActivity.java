@@ -1,25 +1,27 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.InitAppPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
- *  InitAppActivity.
- *
- *  According to clean code and model, use InitAppView, InitAppPresenter for future use.
- *
- *  Main Activity of the app, launch from manifest.
- *
- *  First activity when the user open the app.
- *
- *  Show a dummy splash screen and initialize all data needed to start
- *
+ * InitAppActivity.
+ * <p/>
+ * According to clean code and model, use InitAppView, InitAppPresenter for future use.
+ * <p/>
+ * Main Activity of the app, launch from manifest.
+ * <p/>
+ * First activity when the user open the app.
+ * <p/>
+ * Show a dummy splash screen and initialize all data needed to start
  */
 
 public class InitAppActivity extends Activity implements InitAppView {
@@ -34,32 +36,28 @@ public class InitAppActivity extends Activity implements InitAppView {
      */
     private InitAppPresenter initAppPresenter;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_init_app);
-
-        initAppPresenter = new InitAppPresenter(this, getApplicationContext());
-
+        SharedPreferences sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        initAppPresenter = new InitAppPresenter(this, getApplicationContext(), sharedPreferences, editor);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-
         initAppPresenter.start();
     }
-
 
     /*+++++++++*/
     /* SESSION */
@@ -92,8 +90,6 @@ public class InitAppActivity extends Activity implements InitAppView {
     public void navigate(Class cls) {
         startActivity(new Intent(getApplicationContext(), cls));
     }
-
-
 
 
 }

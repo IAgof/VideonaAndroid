@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * This interface is used for monitoring when the music items have been retrieved.
  */
-public interface OnMusicRetrieved {
+public interface OnMusicRetrievedListener {
 
     /**
      * This method is used when music items have been retrieved.

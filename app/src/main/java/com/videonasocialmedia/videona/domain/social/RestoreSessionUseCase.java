@@ -5,5 +5,5 @@ package com.videonasocialmedia.videona.domain.social;
  */
 public class RestoreSessionUseCase {
 
-    
+
 }

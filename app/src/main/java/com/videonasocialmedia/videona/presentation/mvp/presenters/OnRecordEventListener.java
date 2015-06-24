@@ -9,10 +9,11 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 public interface OnRecordEventListener {
 
-    public void onRecordStarted();
+    void onRecordStarted();
 
-    public void onRecordStopped();
+    void onRecordStopped(String videoPath);
 
-    public void onRecordRestarted();
+    void onRecordRestarted();
 
+    void onRecordError();
 }

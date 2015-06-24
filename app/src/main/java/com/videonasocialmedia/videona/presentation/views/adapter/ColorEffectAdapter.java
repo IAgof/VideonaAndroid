@@ -44,7 +44,6 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
     private Boolean isPressed = false;
 
 
-
     public void setViewClickListener(RecordActivity viewClickListener) {
 
         mColorEffectClickListener = (ColorEffectClickListener) viewClickListener;
@@ -107,15 +106,15 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         colorEffectName = colorEffectItems.get(position);
 
-       // Log.d(LOG_TAG, "getView position " + position + " colorEffectName " + colorEffectName + " positionColorEffectPressed " + RecordActivity.positionColorEffectPressed);
+        // Log.d(LOG_TAG, "getView position " + position + " colorEffectName " + colorEffectName + " positionColorEffectPressed " + RecordActivity.positionColorEffectPressed);
 
         String colorEffectDrawableName = "common_filter_" + colorEffectName;
 
         // colorEffectName, key value to obtain drawable resources effect_ + colorEffectName
-       // int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
+        // int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
         int resourceId = 0;
 
-        if(RecordActivity.positionColorEffectPressed == position) {
+        if (RecordActivity.positionColorEffectPressed == position) {
             isPressed = true;
             resourceId = getResourceDrawableColorEffect(colorEffectName, isPressed);
             isPressed = false;
@@ -153,13 +152,13 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
                 isPressed = true;
                 colorEffectName = colorEffectItems.get(position);
 
-                mColorEffectClickListener.onColorEffectClicked(new ColorEffectAdapter(activity,colorEffectItems), colorEffectName, position);
+                mColorEffectClickListener.onColorEffectClicked(new ColorEffectAdapter(activity, colorEffectItems), colorEffectName, position);
 
                 int resourceIdPressed = getResourceDrawableColorEffect(colorEffectName, isPressed);
                 viewHolder.imageView.setImageResource(resourceIdPressed);
                 isPressed = false;
                 // viewHolder.imageView.setBackgroundColor(R.color.videona_blue_5);
-               // viewHolder.textView.setTypeface(null, Typeface.BOLD);
+                // viewHolder.textView.setTypeface(null, Typeface.BOLD);
 
 
             }
@@ -172,10 +171,9 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
     private static class ViewHolder {
 
         ImageView imageView;
-       // TextView textView;
+        // TextView textView;
 
     }
-
 
 
     /**
@@ -249,22 +247,22 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         return colorName;
     }
 
-    public int getResourceDrawableColorEffect(String colorEffectName, boolean isPressed){
+    public int getResourceDrawableColorEffect(String colorEffectName, boolean isPressed) {
 
         String colorName = " ";
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_AQUA) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_aqua_ad1_normal;
-            }else {
+            } else {
                 return R.drawable.common_filter_aqua_ad1_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_BLACKBOARD) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_blackboard_ad2_normal;
             } else {
                 return R.drawable.common_filter_blackboard_ad2_pressed;
@@ -273,7 +271,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_MONO) == 0) {
 
-            if(!isPressed){
+            if (!isPressed) {
                 return R.drawable.common_filter_mono_ad4_normal;
             } else {
                 return R.drawable.common_filter_mono_ad4_pressed;
@@ -282,7 +280,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEGATIVE) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_negative_ad5_normal;
             } else {
                 return R.drawable.common_filter_negative_ad5_pressed;
@@ -291,7 +289,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NONE) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_none_ad0_normal;
             } else {
                 return R.drawable.common_filter_none_ad0_pressed;
@@ -300,7 +298,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_POSTERIZE) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_posterize_ad7_normal;
             } else {
                 return R.drawable.common_filter_posterize_ad7_pressed;
@@ -309,7 +307,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SEPIA) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_sepia_ad8_normal;
             } else {
                 return R.drawable.common_filter_sepia_ad8_pressed;
@@ -317,7 +315,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_WHITEBOARD) == 0) {
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_whiteboard_ad11_normal;
             } else {
                 return R.drawable.common_filter_whiteboard_ad11_pressed;
@@ -326,7 +324,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SOLARIZE) == 0) {
 
-            if(!isPressed){
+            if (!isPressed) {
                 return R.drawable.common_filter_solarize_ad10_normal;
             } else {
                 return R.drawable.common_filter_solarize_ad10_pressed;
@@ -335,7 +333,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_EMBOSS) == 0) {
 
-            if(!isPressed){
+            if (!isPressed) {
                 return R.drawable.common_filter_emboss_ad3_normal;
             } else {
                 return R.drawable.common_filter_emboss_ad3_pressed;
@@ -344,7 +342,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SKETCH) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_sketch_ad9_normal;
             } else {
                 return R.drawable.common_filter_sketch_ad9_pressed;
@@ -353,7 +351,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEON) == 0) {
 
-            if(!isPressed) {
+            if (!isPressed) {
                 return R.drawable.common_filter_neon_ad6_normal;
             } else {
                 return R.drawable.common_filter_neon_ad6_pressed;

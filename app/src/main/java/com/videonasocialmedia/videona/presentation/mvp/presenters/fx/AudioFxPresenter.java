@@ -13,5 +13,4 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters.fx;
 public class AudioFxPresenter {
 
 
-
 }

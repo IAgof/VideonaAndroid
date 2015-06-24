@@ -19,7 +19,7 @@ import com.videonasocialmedia.videona.model.entities.social.User;
 /**
  * A type of effect than consist on overlay an image, drawing or video to a track. It defines size
  * and coordinates for the frame in which it will be applied.
- *
+ * <p/>
  * Created by jca on 30/3/15.
  */
 public class Overlay extends Effect {
@@ -50,7 +50,7 @@ public class Overlay extends Effect {
      * Parametrized construct. Requires all possible attributes of an Overlay object.
      *
      * @param frameSize - Size in pixels of the overlay effect.
-     * @param coords - coordinates referred to the video image.
+     * @param coords    - coordinates referred to the video image.
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
     public Overlay(String iconPath, String selectedIconPath, String identifier, String type,
@@ -62,8 +62,10 @@ public class Overlay extends Effect {
     }
 
     //apply methods
+
     /**
      * TODO
+     *
      * @param target - the media file to be modified by the effect.
      */
     @Override
@@ -82,12 +84,15 @@ public class Overlay extends Effect {
     public Size getFrameSize() {
         return frameSize;
     }
+
     public void setFrameSize(Size frameSize) {
         this.frameSize = frameSize;
     }
+
     public Coordinates getCoords() {
         return coords;
     }
+
     public void setCoords(Coordinates coords) {
         this.coords = coords;
     }

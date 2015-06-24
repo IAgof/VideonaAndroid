@@ -7,10 +7,11 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface OnExportProjectFinishedListener {
+public interface OnFlashModeListener {
 
-    public void onExportProjectError();
+    void onFlashModeTorchAdded();
 
-    public void onExportProjectSuccess(String pathVideoEdited);
+    void onFlashModeTorchRemoved();
 
+    void onFlashModeTorchError();
 }

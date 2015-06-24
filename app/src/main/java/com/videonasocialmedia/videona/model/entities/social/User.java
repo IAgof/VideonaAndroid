@@ -19,8 +19,8 @@ public class User {
     private int id;
     private String avatarPath;
 
-    public User (String name){
-        this.name=name;
+    public User(String name) {
+        this.name = name;
     }
 
     public User(String name, String email) {
@@ -28,11 +28,11 @@ public class User {
         this.email = email;
     }
 
-    public User (String name, String email, String avatarPath, int id){
+    public User(String name, String email, String avatarPath, int id) {
         this.name = name;
         this.email = email;
         this.avatarPath = avatarPath;
-        this.id= id;
+        this.id = id;
     }
 
 

@@ -14,62 +14,33 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
-import com.videonasocialmedia.videona.model.entities.social.Session;
-import com.videonasocialmedia.videona.model.entities.social.User;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFinishedListener;
-
-import java.util.ArrayList;
 
 /**
  * This class is used to add a new videos to the project.
  */
-public class AddVideoToProjectUseCase implements AddMediaToProjectUseCase {
-
-    User user;
-    ArrayList<User> authors;
-    MediaTrack mediaTrack;
+public class AddVideoToProjectUseCase {
 
     /**
      * Constructor.
      */
     public AddVideoToProjectUseCase() {
-        this.user = Session.getInstance().getUser();
-        this.mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
     }
 
-    @Override
-    public void addMediaItemsToProject(ArrayList<String> list, OnAddMediaFinishedListener listener) {
-        boolean correct = false;
+    public void addVideoToTrack(String videoPath, OnAddMediaFinishedListener listener) {
+        Video videoToAdd = new Video(videoPath);
+        addVideoToTrack(videoToAdd, listener);
+    }
 
-        for (String path : list) {
-            authors = new ArrayList<>();
-            authors.add(user);
-            // TODO: Add previous authors to the selected video
-            correct = addMediaItemToTrack(path);
-            if (!correct) break;
-        }
-
-        if (correct) {
-            listener.onAddMediaItemToTrackSuccess(mediaTrack);
-        } else {
+    public void addVideoToTrack(Video video, OnAddMediaFinishedListener listener) {
+        try {
+            MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
+            mediaTrack.insertItem(video);
+            listener.onAddMediaItemToTrackSuccess(video);
+        } catch (IllegalItemOnTrack illegalItemOnTrack) {
             listener.onAddMediaItemToTrackError();
         }
     }
 
-    /**
-     * Gets the path of the new video and insert it in the media track.
-     *
-     * @param videoPath the path of the new video item
-     * @return bool if the new item has been added to the track, return true. If it fails, return false
-     */
-    private boolean addMediaItemToTrack(String videoPath) {
-        boolean result;
-        try {
-            mediaTrack.insertItem(new Video(null, null, videoPath, 0, 0, authors, null));
-            result = true;
-        } catch (IllegalItemOnTrack illegalItemOnTrack) {
-            result = false;
-        }
-        return result;
-    }
+
 }

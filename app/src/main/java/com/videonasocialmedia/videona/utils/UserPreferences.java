@@ -17,13 +17,13 @@ import android.content.SharedPreferences;
 
 public class UserPreferences {
 
-	private static final String USER_INFO = "USER_INFO";
-	private SharedPreferences appUserPreferences;
-	private SharedPreferences.Editor prefsEditor;
+    private static final String USER_INFO = "USER_INFO";
+    private SharedPreferences appUserPreferences;
+    private SharedPreferences.Editor prefsEditor;
 
     private String userName = "user_name_prefs";
-	private String userId = "user_id_prefs";
-	private String userSession = "user_session";
+    private String userId = "user_id_prefs";
+    private String userSession = "user_session";
 
     private String seekBarStart = "seekBarStart";
     private String seekBarEnd = "seekBarEnd";
@@ -39,12 +39,26 @@ public class UserPreferences {
 
     private String musicSelected = "musicSelected";
     private String isMusicSelected = "isMusicSelected";
+
+    private String frontCameraFlashSupported = "frontCameraFlashSupported";
+    private String backCameraFlashSupported = "backCameraFlashSupported";
+
+    private String frontCameraSupported = "frontCameraSupported";
+    private String frontCamera720pSupported = "frontCamera720pSupported"; // HD
+    private String frontCamera1080pSupported = "frontCamera1080pSupported"; // Full HD
+
+    private String backCamera720pSupported = "backCamera720pSupported";     // HD
+    private String backCamera1080pSupported = "backCamera1080pSupported";  // Full HD
+    private String backCamera2160pSupported = "backCamera2160pSupported"; // 4k
+
+    private String videoEncodingBitRate = "videoEncodingBitRate";
+
 	 
 	public UserPreferences(Context context){
 	 this.appUserPreferences = context.getSharedPreferences(USER_INFO, Activity.MODE_PRIVATE);
 	 this.prefsEditor = appUserPreferences.edit();
 	}
-
+    
 
     // Private path
     public String getPrivatePath() {
@@ -52,11 +66,12 @@ public class UserPreferences {
     }
 
     public void setPrivatePath(String path) {
-        prefsEditor.putString(privatePath, path).commit();;
+        prefsEditor.putString(privatePath, path).commit();
+        
     }
 
     /*
-	public String getUserId() {
+    public String getUserId() {
 	 return appUserPreferences.getString(userId, "");
 	}
 	 
@@ -88,7 +103,7 @@ public class UserPreferences {
         return appUserPreferences.getInt(seekBarStart, 0);
     }
 
-    public void setSeekBarStart( int start) {
+    public void setSeekBarStart(int start) {
         prefsEditor.putInt(seekBarStart, start).commit();
     }
 
@@ -96,7 +111,7 @@ public class UserPreferences {
         return appUserPreferences.getInt(seekBarEnd, 60);
     }
 
-    public void setSeekBarEnd( int end) {
+    public void setSeekBarEnd(int end) {
         prefsEditor.putInt(seekBarEnd, end).commit();
     }
 
@@ -110,7 +125,7 @@ public class UserPreferences {
         prefsEditor.putString(musicSelected, pathMusic).commit();
     }
 
-    public boolean getIsMusicSelected(){
+    public boolean getIsMusicSelected() {
         return appUserPreferences.getBoolean(isMusicSelected, false);
     }
 
@@ -118,8 +133,88 @@ public class UserPreferences {
         prefsEditor.putBoolean(isMusicSelected, isMusicON).commit();
     }
 
-    /*
-     // Future use, save last cameraId used
+    // Front camera flash supported
+    public boolean getFrontCameraFlashSupported(){
+        return appUserPreferences.getBoolean(frontCameraFlashSupported, false);
+    }
+
+    public void setFrontCameraFlashSupported(boolean isFrontCameraFlashSupported){
+        prefsEditor.putBoolean(frontCameraFlashSupported, isFrontCameraFlashSupported).commit();
+    }
+
+    // Back camera flash supported
+    public boolean getBackCameraFlashSupported(){
+        return appUserPreferences.getBoolean(backCameraFlashSupported, false);
+    }
+
+    public void setBackCameraFlashSupported(boolean isBackCameraFlashSupported){
+        prefsEditor.putBoolean(backCameraFlashSupported, isBackCameraFlashSupported).commit();
+    }
+
+    // Front camera supported
+    public boolean getFrontCameraSupported(){
+        return appUserPreferences.getBoolean(frontCameraSupported, false);
+    }
+
+    public void setFrontCameraSupported(boolean isFrontCameraSupported){
+        prefsEditor.putBoolean(frontCameraSupported, isFrontCameraSupported).commit();
+    }
+
+    // Front camera 720p supported
+    public boolean getFrontCamera720pSupported(){
+        return appUserPreferences.getBoolean(frontCamera720pSupported, false);
+    }
+
+    public void setFrontCamera720pSupported(boolean isFrontCamera720pSupported){
+        prefsEditor.putBoolean(frontCamera720pSupported, isFrontCamera720pSupported).commit();
+    }
+
+    // Front camera 1080p supported
+    public boolean getFrontCamera1080pSupported(){
+        return appUserPreferences.getBoolean(frontCamera1080pSupported, false);
+    }
+
+    public void setFrontCamera1080pSupported(boolean isFrontCamera1080pSupported){
+        prefsEditor.putBoolean(frontCamera1080pSupported, isFrontCamera1080pSupported).commit();
+    }
+
+
+    // Back camera 720p supported
+    public boolean getBackCamera720pSupported(){
+        return appUserPreferences.getBoolean(backCamera720pSupported, false);
+    }
+
+    public void setBackCamera720pSupported(boolean isBackCamera720pSupported){
+        prefsEditor.putBoolean(backCamera720pSupported, isBackCamera720pSupported).commit();
+    }
+
+    // Back camera 1080p supported
+    public boolean getBackCamera1080pSupported(){
+        return appUserPreferences.getBoolean(backCamera1080pSupported, false);
+    }
+
+    public void setBackCamera1080pSupported(boolean isBackCamera1080pSupported){
+        prefsEditor.putBoolean(backCamera1080pSupported, isBackCamera1080pSupported).commit();
+    }
+
+    // Back camera 2160p supported
+    public boolean getBackCamera2160pSupported(){
+        return appUserPreferences.getBoolean(backCamera2160pSupported, false);
+    }
+
+    public void setBackCamera2160pSupported(boolean isBackCamera2160pSupported){
+        prefsEditor.putBoolean(backCamera2160pSupported, isBackCamera2160pSupported).commit();
+    }
+
+
+    // Video Encoder Bit Rate
+    public int getVideoEncodingBitRate() {
+        return appUserPreferences.getInt(videoEncodingBitRate, 5000000);
+    }
+
+    public void setVideoEncodingBitRate( int videoBitRate) {
+        prefsEditor.putInt(videoEncodingBitRate, videoBitRate).commit();
+    }
 
     public int getCameraId() {
         return appUserPreferences.getInt(cameraId, 0);
@@ -128,7 +223,7 @@ public class UserPreferences {
     public void setCameraId( int camera) {
         prefsEditor.putInt(cameraId, camera).commit();
     }
-    */
+
 
 
 }

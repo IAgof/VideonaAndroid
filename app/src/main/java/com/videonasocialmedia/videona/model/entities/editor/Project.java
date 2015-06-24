@@ -63,21 +63,21 @@ public class Project {
     /**
      * Constructor of minimum number of parameters. This is the Default constructor.
      *
-     * @param title - Project and final video name.
+     * @param title    - Project and final video name.
      * @param rootPath - Path to root folder for the current project.
-     * @param profile - Define some characteristics and limitations of the current project.
+     * @param profile  - Define some characteristics and limitations of the current project.
      */
     private Project(String title, String rootPath, Profile profile) {
         this.title = title;
-        this.projectPath = rootPath+"/projects/"+title; //todo probablemente necesitemos un slugify de ese title.
+        this.projectPath = rootPath + "/projects/" + title; //todo probablemente necesitemos un slugify de ese title.
         this.checkPathSetup(rootPath);
         this.mediaTrack = new MediaTrack();
-        this.audioTracks = new ArrayList<AudioTrack>();
+        this.audioTracks = new ArrayList<>();
+        audioTracks.add(new AudioTrack());
         this.profile = profile;
     }
 
     /**
-     *
      * @param rootPath
      */
     private void checkPathSetup(String rootPath) {
@@ -86,16 +86,16 @@ public class Project {
         File projectPath = new File(this.projectPath);
         projectPath.mkdirs();
 
-        Audio.AUDIO_PATH = rootPath+"/audios";
-        File audioPath = new File(Audio.AUDIO_PATH+"/thumbs");
+        Audio.AUDIO_PATH = rootPath + "/audios";
+        File audioPath = new File(Audio.AUDIO_PATH + "/thumbs");
         audioPath.mkdirs();
 
-        Image.IMAGE_PATH = rootPath+"/images";
-        File imagePath = new File(Image.IMAGE_PATH+"thumbs");
+        Image.IMAGE_PATH = rootPath + "/images";
+        File imagePath = new File(Image.IMAGE_PATH + "thumbs");
         imagePath.mkdirs();
 
-        Video.VIDEO_PATH = rootPath+"/videos";
-        File videoPath = new File(Audio.AUDIO_PATH+"/thumbs");
+        Video.VIDEO_PATH = rootPath + "/videos";
+        File videoPath = new File(Audio.AUDIO_PATH + "/thumbs");
         videoPath.mkdirs();
 
     }
@@ -105,9 +105,9 @@ public class Project {
      *
      * @return - Singleton instance of the current project.
      */
-    public static Project getInstance(String title, String rootPath, Profile profile){
-        if (INSTANCE==null){
-            INSTANCE=new Project(title, rootPath, profile);
+    public static Project getInstance(String title, String rootPath, Profile profile) {
+        if (INSTANCE == null) {
+            INSTANCE = new Project(title, rootPath, profile);
         }
         return INSTANCE;
     }
@@ -116,30 +116,39 @@ public class Project {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getProjectPath() {
         return projectPath;
     }
+
     public void setProjectPath(String projectPath) {
         this.projectPath = projectPath;
     }
+
     public MediaTrack getMediaTrack() {
         return mediaTrack;
     }
+
     public void setMediaTrack(MediaTrack mediaTrack) {
         this.mediaTrack = mediaTrack;
     }
+
     public ArrayList<AudioTrack> getAudioTracks() {
         return audioTracks;
     }
+
     public void setAudioTracks(ArrayList<AudioTrack> audioTracks) {
         this.audioTracks = audioTracks;
     }
+
     public Profile getProfile() {
         return profile;
     }
+
     public void setProfile(Profile profile) {
         this.profile = profile;
     }

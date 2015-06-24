@@ -9,72 +9,18 @@
         android:background="@android:color/black"
         android:visibility="visible">
 
+        
+
         <VideoView
             android:id="@+id/share_video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            />
-
-
-        <ImageButton
-            android:id="@+id/share_button_play"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:scaleType="fitXY"
-            android:src="@drawable/share_activity_button_play_selector" />
-
-        <SeekBar
-            android:id="@+id/share_seekbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="18dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:focusable="false"
-            android:focusableInTouchMode="true"
-            android:indeterminate="false"
-            android:longClickable="true"
-            android:maxHeight="2dp"
-            android:progressDrawable="@color/videona_blue_5" />
-
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/share_button_about"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/common_button_settings_selector" />
-
-            <ImageButton
-                android:id="@+id/share_button_rate_app"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/share_activity_button_rate_app_selector" />
-        </LinearLayout>
+            android:layout_centerInParent="true" />
 
         <ImageButton
             android:id="@+id/share_button_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
@@ -91,6 +37,15 @@
             android:layout_gravity="center"
             android:contentDescription="Beta Label"
             android:src="@drawable/beta_label" />
+
+        <ImageView
+            android:layout_width="1px"
+            android:layout_height="1px"
+            android:src="@drawable/gatito_rules"
+            android:layout_margin="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            />
     </RelativeLayout>
 
     <!-- Left Drawrer -->
@@ -100,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:layout_margin="0dp"
         tools:layout="@layout/common_fragment_navigator"/>
 
 </android.support.v4.widget.DrawerLayout>

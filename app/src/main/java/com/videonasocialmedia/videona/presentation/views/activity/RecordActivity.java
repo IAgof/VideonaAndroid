@@ -15,6 +15,8 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -27,6 +29,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -53,11 +57,10 @@ import butterknife.OnClick;
 
 /**
  * RecordActivity.
- *
+ * <p/>
  * Activity to preview and record video, apply color effects.
- *
+ * <p/>
  * When the video is recorded, navigate to EditActivity.
- *
  */
 public class RecordActivity extends Activity implements RecordView, ColorEffectClickListener {
 
@@ -89,10 +92,30 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @InjectView(R.id.chronometer_record)
     Chronometer chronometerRecord;
     /**
+     * Rec point, animation
+     */
+    @InjectView(R.id.imageRecPoint)
+    ImageView imageRecPoint;
+    /**
      * Button to apply color effects
      */
     @InjectView(R.id.button_color_effect)
     ImageButton buttonColorEffect;
+    /**
+     * Button flash mode
+     */
+    @InjectView(R.id.button_flash_mode)
+    ImageButton buttonFlashMode;
+    /**
+     * Button change camera
+     */
+    @InjectView((R.id.button_change_camera))
+    ImageButton buttonChangeCamera;
+    /**
+     * Button camera settings
+     */
+    @InjectView(R.id.button_settings_camera)
+    ImageButton buttonSettingsCamera;
     /**
      * ListView to use horizontal adapter
      */
@@ -115,6 +138,10 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @InjectView(R.id.activity_record_navigation_drawer)
     View navigatorView;
 
+    /**
+     * Camera Id, to detect rotation view
+     */
+    private int cameraId = 0;
     /**
      * OrientationEventListener
      */
@@ -156,6 +183,17 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     private int displayOrientation = 0;
 
+    /**
+     * Boolean, control show settings camera options
+     */
+    private boolean isSettingsCameraPressed = false;
+
+    /**
+     * Relative layout to show, hide camera options
+     */
+    @InjectView(R.id.linearLayoutRecordCameraOptions)
+    LinearLayout linearLayoutRecordCameraOptions;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +206,9 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
+
+        // Hide menu camera options
+        linearLayoutRecordCameraOptions.setVisibility(View.GONE);
     }
 
 
@@ -182,7 +223,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Handler h=new Handler();
+        Handler h = new Handler();
         h.postDelayed(new Runnable() {
 
             @Override
@@ -203,7 +244,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume() RecordActivity");
-        recordPresenter = new RecordPresenter(this, tracker);
+        recordPresenter = new RecordPresenter(this, tracker, this.getApplicationContext());
         /*
         if(recordPresenter != null) {
             recordPresenter.onResume();
@@ -216,6 +257,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             recordPresenter.effectClickListener();
         }
         recordPresenter.onResume();
+        recordPresenter.onSettingsCameraListener();
         buttonRecord.setEnabled(true);
         chronometerRecord.setText("00:00");
     }
@@ -268,20 +310,35 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
 
         rotationView = getWindowManager().getDefaultDisplay().getRotation();
 
+        int cameraOrientation = getCameraDisplayOrientation(cameraId);
+
         if (rotationView == Surface.ROTATION_90) {
             detectScreenOrientation90 = true;
 
-            displayOrientation = 0;
+            if(cameraOrientation == 90) {
+                displayOrientation = 0;
+            }
+            if(cameraOrientation == 270){
+                displayOrientation = 180;
+            }
+            Log.d(LOG_TAG, "detectRotationView rotation 90, cameraOrientation " + cameraOrientation );
 
         }
 
         if (rotationView == Surface.ROTATION_270) {
             detectScreenOrientation270 = true;
 
-            displayOrientation = 180;
+            if(cameraOrientation == 90) {
+                displayOrientation = 180;
+            }
+            if(cameraOrientation == 270){
+                displayOrientation = 0;
+            }
+            Log.d(LOG_TAG, "detectRotationView rotation 270, cameraOrientation " + cameraOrientation );
         }
 
-        Log.d(LOG_TAG, "rotationPreview " + rotationView);
+        Log.d(LOG_TAG, "detectRotationView rotationPreview " + rotationView +
+                " displayOrientation " + displayOrientation);
 
         myOrientationEventListener = getOrientationEventListener(context);
 
@@ -293,6 +350,27 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
             myOrientationEventListener.disable();
         }
 
+        // Test Camara Iago
+        recordPresenter.setRotationView(rotationView);
+
+    }
+
+    private int getCameraDisplayOrientation(int cameraId) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation ) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation + 360) % 360;
+        }
+
+        Log.d(LOG_TAG, "setCameraDisplayOrientation cameraId " + cameraId + " result " + result);
+
+        return result;
     }
 
     private OrientationEventListener getOrientationEventListener(Context context) {
@@ -300,13 +378,13 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         myOrientationEventListener = new OrientationEventListener(context) {
             @Override
             public void onOrientationChanged(int orientation) {
-                //  Log.d("CameraPreview", "onOrientationChanged " + orientation);
+                //  Log.d(LOG_TAG, "onOrientationChanged " + orientation);
                 if (lockRotation) { // || recordPresenter == null){
                     return;
                 } else {
 
                     if (orientation == SCREEN_ORIENTATION_90) {
-                        //  Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
+                         // Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
                         if (detectScreenOrientation90) {
                             if (rotationView == Surface.ROTATION_90 && detectScreenOrientation270) {
                                 return;
@@ -334,7 +412,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                         }
                     }
                     if (orientation == SCREEN_ORIENTATION_270) {
-                        //  Log.d("CameraPreview", "rotationPreview onOrientationChanged " + orientation);
+                       //   Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
                         if (detectScreenOrientation270) {
                             //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
                             if (rotationView == Surface.ROTATION_270 && detectScreenOrientation90) {
@@ -381,9 +459,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     }
 
     @Override
-    public Context getContext() {
-        Log.d(LOG_TAG, "getContext() RecordActivity");
-        return this;
+    public void showError() {
+        Toast.makeText(this, R.string.recordError, Toast.LENGTH_LONG);
     }
 
     /**
@@ -392,13 +469,16 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      * @param cameraPreview
      */
     @Override
-    public void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
+    public void startPreview(CameraPreview cameraPreview,
+                             CustomManualFocusView customManualFocusView, boolean supportAutoFocus) {
         Log.d(LOG_TAG, "startPreview() RecordActivity");
 
         // detectRotationView(this);
         //  cameraPreview.setCameraOrientation(displayOrientation);
         frameLayoutCameraPreview.addView(cameraPreview);
-        frameLayoutCameraPreview.addView(customManualFocusView);
+        if(supportAutoFocus) {
+          frameLayoutCameraPreview.addView(customManualFocusView);
+        }
         // Fix format chronometer 00:00. Do in xml, design
         chronometerRecord.setText("00:00");
         customManualFocusView.onPreviewTouchEvent(this);
@@ -406,10 +486,13 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     }
 
     @Override
-    public void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView) {
+    public void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView,
+                            boolean supportAutoFocus) {
         Log.d(LOG_TAG, "stopPreview() RecordActivity");
         frameLayoutCameraPreview.removeView(cameraPreview);
-        frameLayoutCameraPreview.removeView(customManualFocusView);
+        if(supportAutoFocus) {
+            frameLayoutCameraPreview.removeView(customManualFocusView);
+        }
     }
 
     /**
@@ -430,6 +513,8 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "showRecordFinished() RecordActivity");
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
         buttonRecord.setEnabled(false);
+        lockRotation = false;
+        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
     }
 
     @Override
@@ -446,6 +531,16 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "startChronometer() RecordActivity");
         setChronometer();
         chronometerRecord.start();
+        // Activate animation rec
+        imageRecPoint.setVisibility(View.VISIBLE);
+        AnimationDrawable frameAnimation = (AnimationDrawable)imageRecPoint.getDrawable();
+        frameAnimation.setCallback(imageRecPoint);
+        frameAnimation.setVisible(true, true);
+
+        // Change camera disabled while recording
+        buttonChangeCamera.setVisibility(View.GONE);
+
+
     }
 
     /**
@@ -455,6 +550,7 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     public void stopChronometer() {
         Log.d(LOG_TAG, "stopChronometer() RecordActivity");
         chronometerRecord.stop();
+        imageRecPoint.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -543,10 +639,51 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
      */
     @OnClick(R.id.button_record)
     public void buttonRecordListener() {
-        recordPresenter.recordClickListener();
+        recordPresenter.toggleRecord();
     }
 
-    @OnClick({R.id.button_record, R.id.button_color_effect})
+    /**
+     * Camera flash mode listener
+     */
+    @OnClick(R.id.button_flash_mode)
+    public void buttonFlashModeListener(){
+        recordPresenter.onFlashModeTorchListener();
+    }
+
+    /**
+     * Change camera listener
+     */
+    @OnClick(R.id.button_change_camera)
+    public void buttonChangeCameraListener(){
+        recordPresenter.onChangeCameraListener();
+    }
+
+    /**
+     * Camera settings listener
+     */
+    @OnClick(R.id.button_settings_camera)
+    public void buttonSettinsCameraListener(){
+
+        if(isSettingsCameraPressed){
+            // Hide menu
+            linearLayoutRecordCameraOptions.setVisibility(View.GONE);
+            buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_normal);
+            buttonSettingsCamera.setBackground(null);
+            isSettingsCameraPressed = false;
+        } else {
+            // Show menu
+            linearLayoutRecordCameraOptions.setVisibility(View.VISIBLE);
+            buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_pressed);
+            buttonSettingsCamera.setBackgroundResource(R.color.transparent_palette_grey);
+            isSettingsCameraPressed = true;
+        }
+    }
+
+    /**
+     * OnClick buttons, tracking Google Analytics
+     */
+    @OnClick({R.id.button_record, R.id.button_color_effect, R.id.button_flash_mode,
+            R.id.button_settings_camera, R.id.button_change_camera})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -559,6 +696,92 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
     @Override
     public void unLockNavigator() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    @Override
+    public void showSettingsCamera(boolean isChangeCameraSupported, boolean isFlashSupported) {
+
+        showFlash(isFlashSupported);
+        showChangeCamera(isChangeCameraSupported);
+
+    }
+
+    private void showFlash(boolean isFlashSupported) {
+        if(isFlashSupported){
+            buttonFlashMode.setVisibility(View.VISIBLE);
+        } else {
+            // ¿View.GONE or View.INVISIBLE? Double check
+            buttonFlashMode.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showFlashModeTorch(boolean mode) {
+
+        if(mode){
+            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_pressed);
+        } else {
+            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        }
+
+    }
+
+
+    private void showChangeCamera(boolean isChangeCameraSupported) {
+
+        Log.d(LOG_TAG, "showChangeCamera boolean " + isChangeCameraSupported);
+
+        if(isChangeCameraSupported){
+            buttonChangeCamera.setVisibility(View.VISIBLE);
+        } else {
+            // ¿View.GONE or View.INVISIBLE?
+            buttonChangeCamera.setVisibility(View.GONE);
+        }
+
+    }
+
+    @Override
+    public void showCamera(int cameraMode){
+
+        switch(cameraMode) {
+
+            case 0:
+                // Back camera
+                cameraId = 0;
+                buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
+                break;
+            case 1:
+                // Front camera
+                cameraId = 1;
+                buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
+                break;
+            default:
+                cameraId = 0;
+                buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
+        }
+
+        changeCameraRestartPreview();
+
+    }
+
+    private void changeCameraRestartPreview() {
+
+        recordPresenter.stop();
+        recordPresenter = null;
+
+        recordPresenter = new RecordPresenter(this, tracker, this.getApplicationContext());
+
+        detectRotationView(this);
+
+        recordPresenter.start(displayOrientation);
+
+        if (colorEffectAdapter != null) {
+            colorEffectAdapter = null;
+            recordPresenter.effectClickListener();
+        }
+
+        recordPresenter.onResume();
+        recordPresenter.onSettingsCameraListener();
     }
 
     /**
@@ -574,6 +797,15 @@ public class RecordActivity extends Activity implements RecordView, ColorEffectC
                 break;
             case R.id.button_color_effect:
                 label = "Show available effects";
+                break;
+            case R.id.button_change_camera:
+                label = "Change camera";
+                break;
+            case R.id.button_flash_mode:
+                label = "Flash camera";
+                break;
+            case R.id.button_settings_camera:
+                label = "Settings camera";
                 break;
             default:
                 label = "Other";

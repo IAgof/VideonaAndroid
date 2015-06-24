@@ -49,9 +49,8 @@ public class CustomManualFocusView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(8);
 
-        //TODO change resource to new design
-        // TODO FUTURE: add animation
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.activity_record_icon_focus_focused);
+        bitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.activity_record_icon_focus_focused);
 
         canvas = new Canvas(bitmap.copy(Bitmap.Config.ARGB_8888, true));
 
@@ -66,7 +65,7 @@ public class CustomManualFocusView extends View {
 
         if (showDraw) {
 
-            canvas.drawBitmap(bitmap, x-50 ,y-50, paint);
+            canvas.drawBitmap(bitmap, x - 50, y - 50, paint);
 
         }
 
@@ -97,7 +96,7 @@ public class CustomManualFocusView extends View {
         return false;
     }
 
-    public void onPreviewTouchEvent(Context context){
+    public void onPreviewTouchEvent(Context context) {
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -106,7 +105,7 @@ public class CustomManualFocusView extends View {
         int width = size.x;
         int height = size.y;
 
-        x =  size.x / 2;
+        x = size.x / 2;
         y = size.y / 3;
 
         Log.d("Focus", " x " + x + " y " + y);

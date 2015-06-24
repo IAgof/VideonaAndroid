@@ -52,10 +52,11 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
     }
 
     @Override
-     protected void onStart() {
+    protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -100,21 +101,9 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.d(LOG_TAG, "onError");
+        Log.d(LOG_TAG, "onRecordError");
         showError();
         return true;
-    }
-
-    /**
-     * Releases the media player and the video view
-     */
-    private void releaseVideoView() {
-        videoView.stopPlayback();
-        videoView.clearFocus();
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
     }
 
     /**
@@ -133,4 +122,18 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    /**
+     * Releases the media player and the video view
+     */
+    private void releaseVideoView() {
+        videoView.stopPlayback();
+        videoView.clearFocus();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+
 }

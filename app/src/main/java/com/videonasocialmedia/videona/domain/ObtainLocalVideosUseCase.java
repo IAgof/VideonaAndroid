@@ -43,7 +43,7 @@ public class ObtainLocalVideosUseCase {
             videos = new ArrayList<>();
             for (int i = file.length - 1; i >= 0; i--) {
                 if (file[i].getName().endsWith(".mp4")) {
-                    videos.add(new Video(path + File.separator + file[i].getName(), 0));
+                    videos.add(new Video(path + File.separator + file[i].getName(), 0, 0));
                 }
             }
         }

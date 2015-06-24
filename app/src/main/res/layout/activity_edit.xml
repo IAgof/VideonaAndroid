@@ -59,7 +59,7 @@
                         android:layout_marginRight="25dp"
                         android:background="@android:color/transparent"
                         android:scaleType="fitXY"
-                        android:src="@drawable/edit_activity_button_ok_selector" />
+                        android:src="@drawable/share_activity_button_share_selector" />
 
 
                     <TextView

@@ -15,6 +15,7 @@ public class IllegalOrphanTransitionOnTrack extends Throwable {
     public IllegalOrphanTransitionOnTrack(String s) {
         super(s);
     }
+
     public IllegalOrphanTransitionOnTrack() {
         super();
     }

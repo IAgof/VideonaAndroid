@@ -49,5 +49,5 @@
         android:background="@color/pastel_palette_red"
         android:padding="15dp"
         android:src="@drawable/activity_edit_icon_audio_normal"
-        android:alpha="0.20"/>
+        android:alpha="0.20" />
 </LinearLayout>

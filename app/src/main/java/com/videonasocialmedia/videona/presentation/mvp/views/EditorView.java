@@ -14,16 +14,30 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
  */
 public interface EditorView {
 
-    //public void changeBottomFragment(Class<?extends Fragment> fragmentClass);
-    //public void changeRightFragment(Class<?extends Fragment> fragmentClass);
+    void initVideoPlayer(String videoPath);
 
-    public void navigate(Class cls);
+    void initMusicPlayer(Music music);
 
-    public void initVideoPlayer(String videoPath);
-    public void initMusicPlayer(Music music);
+    void goToShare(String videoToSharePath);
 
-    //public void exportProjectSucces();
-    public void exportProjectError();
+    void showProgressDialog();
 
+    void hideProgressDialog();
+
+    void showError(int causeTextResource);
+
+    void refreshStartTimeTag(int time);
+
+    void refreshStopTimeTag(int time);
+
+    void refreshDurationTag(int duration);
+
+    void showTrimBar(int videoDuration, int min, int max);
+
+    void enableMusicPlayer(Music music);
+
+    void disableMusicPlayer();
+
+    void createAndPaintVideoThumbs(String videoPath, int videoDuration) throws Exception;
 
 }

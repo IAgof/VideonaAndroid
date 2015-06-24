@@ -40,7 +40,7 @@ public abstract class EditorElement {
      * Constructor of minimum number of parameters.
      *
      * @param identifier - Unique identifier of element in the current project.
-     * @param iconPath - Path to a resource that allows represent the element in the view.
+     * @param iconPath   - Path to a resource that allows represent the element in the view.
      */
     protected EditorElement(String identifier, String iconPath) {
         this.identifier = identifier;
@@ -51,8 +51,8 @@ public abstract class EditorElement {
     /**
      * Parametrized constructor. Use all attributes from EditorElement object.
      *
-     * @param identifier - Unique identifier of element in the current project.
-     * @param iconPath - path to a resource to allow represent the element in the view.
+     * @param identifier       - Unique identifier of element in the current project.
+     * @param iconPath         - path to a resource to allow represent the element in the view.
      * @param selectedIconPath - if not null used as icon when something interact with the element.
      *                         If null it will be used the iconPath as default.
      */
@@ -75,12 +75,15 @@ public abstract class EditorElement {
     public String getIconPath() {
         return iconPath;
     }
+
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
     }
+
     public String getSelectedIconPath() {
         return selectedIconPath;
     }
+
     public void setSelectedIconPath(String selectedIconPath) {
         this.selectedIconPath = selectedIconPath;
     }

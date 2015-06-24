@@ -12,7 +12,9 @@ import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 
 public interface OnPreviewListener {
 
-    public void onPreviewStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
+    void onPreviewStarted(CameraPreview cameraPreview,
+                                 CustomManualFocusView customManualFocusView, boolean autoFocus);
 
-    public void onPreviewReStarted(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView);
+    void onPreviewReStarted(CameraPreview cameraPreview,
+                                   CustomManualFocusView customManualFocusView, boolean autoFocus);
 }

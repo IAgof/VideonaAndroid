@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Loading project use case
- *
+ * <p/>
  * //TODO Make different state test project (startNewProject, deleteProject, restartProject, ...)
  */
 public class LoadingProjectUseCaseTest extends ActivityInstrumentationTestCase2<InitAppActivity> {
@@ -34,7 +34,7 @@ public class LoadingProjectUseCaseTest extends ActivityInstrumentationTestCase2<
     Context context;
 
 
-    public LoadingProjectUseCaseTest(){
+    public LoadingProjectUseCaseTest() {
         super(InitAppActivity.class);
 
     }
@@ -48,7 +48,7 @@ public class LoadingProjectUseCaseTest extends ActivityInstrumentationTestCase2<
     }
 
 
-    public void testStartNewProject(){
+    public void testStartNewProject() {
 
         assertNotNull(activity);
         assertNotNull(context);

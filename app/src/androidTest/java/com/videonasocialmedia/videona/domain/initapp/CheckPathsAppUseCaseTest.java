@@ -29,7 +29,7 @@ public class CheckPathsAppUseCaseTest extends ActivityInstrumentationTestCase2<I
     Context context;
 
 
-    public CheckPathsAppUseCaseTest(){
+    public CheckPathsAppUseCaseTest() {
         super(InitAppActivity.class);
 
     }

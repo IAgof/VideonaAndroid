@@ -30,7 +30,6 @@ public class Filter extends Effect {
     }
 
     /**
-     *
      * @see com.videonasocialmedia.videona.model.entities.editor.effects.Effect
      */
     public Filter(String iconPath, String selectedIconPath, String identifier, String type,
@@ -43,6 +42,7 @@ public class Filter extends Effect {
 
     /**
      * TODO
+     *
      * @param target - the media file to be modified by the effect.
      */
     @Override

@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-
+@Deprecated
 public class VideoUtils {
 
 
@@ -52,7 +52,7 @@ public class VideoUtils {
      * @param outputFile
      * @throws IOException
      */
-
+    @Deprecated
     public static void trimVideo(String inputFile, double starTime, double endTime, String outputFile) throws IOException {
 
         //Movie movie = new MovieCreator().build(new RandomAccessFile("/home/sannies/suckerpunch-distantplanet_h1080p/suckerpunch-distantplanet_h1080p.mov", "r").getChannel());
@@ -130,7 +130,7 @@ public class VideoUtils {
         //System.err.println("Writing IsoFile speed : " + (new File(String.format("output-%f-%f--%f-%f.mp4", startTime1, endTime1, startTime2, endTime2)).length() / (start3 - start2) / 1000) + "MB/s");
     }
 
-
+    @Deprecated
     private static double correctTimeToSyncSample(Track track, double cutHere, boolean next) {
         double[] timeOfSyncSamples = new double[track.getSyncSamples().length];
         long currentSample = 0;
@@ -161,7 +161,6 @@ public class VideoUtils {
     }
 
 
-
     /**
      * Switch audio in video file for new audio file.
      * Create new output file with VideoTrack from video file and AudioTrack from audio file.
@@ -171,9 +170,10 @@ public class VideoUtils {
      * @param pathOutputFile
      * @throws IOException
      */
+    @Deprecated
     public static void switchAudio(String pathVideoFile, String newPathAudioFile, String pathOutputFile) throws IOException {
 
-        Log.d(LOG_TAG, " mergeAudio " + pathVideoFile + " .-.-.- " + newPathAudioFile + " .-.-.- " + pathOutputFile );
+        Log.d(LOG_TAG, " mergeAudio " + pathVideoFile + " .-.-.- " + newPathAudioFile + " .-.-.- " + pathOutputFile);
 
         Movie video = null;
         try {
@@ -241,6 +241,7 @@ public class VideoUtils {
      * @param targetFileName
      * @return boolean
      */
+    @Deprecated
     public static boolean MergeFiles(String speratedDirPath,
                                      String targetFileName) {
 
@@ -259,14 +260,11 @@ public class VideoUtils {
 
                 Movie movie = null;
 
-                String pathFile = speratedDirPath  + File.separator + file;
+                String pathFile = speratedDirPath + File.separator + file;
 
                 try {
                     movie = new MovieCreator().build(pathFile);
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    //return false;
-                } catch (NullPointerException e) {
                     e.printStackTrace();
                     //return false;
                 }
@@ -280,9 +278,6 @@ public class VideoUtils {
                     }
                 }
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return false;
-            } catch (IOException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -347,6 +342,7 @@ public class VideoUtils {
      * @param speratedDirPath
      * @return boolean
      */
+
     public static boolean clearFiles(String speratedDirPath) {
         File videoSourceDirFile = new File(speratedDirPath);
         if (videoSourceDirFile != null
@@ -359,9 +355,13 @@ public class VideoUtils {
         }
         return true;
     }
+
     public static int createSnapshot(String videoFile, int kind, String snapshotFilepath) {
         return 0;
-    };
+    }
+
+    ;
+
     public static int createSnapshot(String videoFile, int width, int height, String snapshotFilepath) {
         return 0;
     }

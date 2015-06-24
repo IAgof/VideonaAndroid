@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 public interface OnColorEffectListener {
 
-    public void onColorEffectAdded(String colorEffect, long time);
+    void onColorEffectAdded(String colorEffect, long time);
 
-    public void onColorEffectRemoved(String colorEffect, long time);
+    void onColorEffectRemoved(String colorEffect, long time);
 
-    public void onColorEffectListRetrieved(ArrayList<String> effect);
+    void onColorEffectListRetrieved(ArrayList<String> effect);
 
 }

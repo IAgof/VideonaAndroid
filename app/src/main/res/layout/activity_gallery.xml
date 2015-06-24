@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:animateLayoutChanges="true">
 
     <RelativeLayout
         android:id="@+id/relativeLayoutTop"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        >
+        android:layout_height="35dp">
 
 
         <ImageButton
@@ -60,8 +60,7 @@
             android:layout_gravity="top"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:background="@color/pastel_palette_red"
-            />
+            android:background="@color/pastel_palette_red" />
 
     </android.support.v4.view.ViewPager>
 
