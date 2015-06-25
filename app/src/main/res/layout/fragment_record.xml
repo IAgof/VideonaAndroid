@@ -1,0 +1,234 @@
+<!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_record_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.videonasocialmedia.videona.presentation.views.CustomManualFocusView
+        android:id="@+id/customManualFocusView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+
+    <ImageButton
+        android:id="@+id/button_camera_effect"
+        android:background="@drawable/effects_bg"
+        android:alpha=".7"
+        android:layout_marginRight="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="visible"
+        android:layout_alignBottom="@+id/button_record"
+        android:layout_toStartOf="@+id/relativelayout_camera_effect" />
+
+
+    <ImageButton
+        android:id="@+id/button_color_effect"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:focusableInTouchMode="false"
+        android:padding="15dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/common_icon_filters_normal"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@null"
+        android:layout_below="@+id/relativeLayoutRecordCameraOptions"
+        android:layout_alignStart="@+id/button_record" />
+
+    <ImageButton
+        android:id="@+id/button_record"
+        android:alpha=".7"
+        android:background="@drawable/activity_record_icon_rec_normal"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:gravity="center"
+        android:layout_marginRight="10dp"/>
+
+    <ImageView
+        android:id="@+id/rotateDeviceHint"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:alpha=".7"
+        android:visibility="gone"
+        android:src="@drawable/rotate_device"/>
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_camera_effect"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_alignTop="@+id/button_record"
+        android:layout_centerHorizontal="true">
+
+        <org.lucasr.twowayview.TwoWayView xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/listview_items_camera_effect"
+            style="@style/TwoWayView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:drawSelectorOnTop="false"
+            tools:context=".RecordFragment" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_color_effect"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/relativelayout_camera_effect">
+
+        <org.lucasr.twowayview.TwoWayView xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/listview_items_color_effect"
+            style="@style/TwoWayView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:drawSelectorOnTop="false"
+            tools:context=".RecordFragment" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/relativeLayoutRecordCameraOptions"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout"
+            android:gravity="center_horizontal"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:measureWithLargestChild="false"
+            android:layout_margin="16dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayoutRecordCameraOptions"
+                android:background="@color/transparent_palette_grey">
+
+                <ImageButton
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:id="@+id/button_flash_mode"
+                    android:src="@drawable/activity_record_icon_flash_camera_normal"
+                    android:visibility="visible"
+                    android:layout_centerHorizontal="true"
+                    android:focusableInTouchMode="false"
+                    android:padding="15dp"
+                    android:scaleType="fitXY"
+                    android:background="@null" />
+
+                <ImageButton
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:id="@+id/button_change_camera"
+                    android:src="@drawable/activity_record_change_camera_normal"
+                    android:visibility="visible"
+                    android:background="@null"
+                    android:layout_toStartOf="@+id/button_flash_mode"
+                    android:layout_centerHorizontal="true"
+                    android:focusableInTouchMode="false"
+                    android:padding="15dp"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center_horizontal|top"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/button_settings_camera"
+                android:src="@drawable/activity_record_settings_camera_normal"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_above="@+id/button_color_effect"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:focusableInTouchMode="false"
+                android:padding="15dp"
+                android:scaleType="fitXY" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayoutRecTimer"
+            android:gravity="center_horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:measureWithLargestChild="false"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="50dp">
+
+            <ImageView
+                android:id="@+id/imageRecPoint"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_toStartOf="@+id/chronometer_record"
+                android:src="@anim/activity_record_drawable_rec_progress"
+                android:background="@color/transparent_palette_grey"
+                android:visibility="invisible"
+                android:paddingLeft="5dp" />
+
+            <Chronometer
+                android:id="@+id/chronometer_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingRight="10dp"
+                android:textSize="18sp"
+                android:background="@color/transparent_palette_grey"
+                android:paddingLeft="10dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+    <fragment
+        android:id="@+id/activity_record_navigation_drawer"
+        android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        tools:layout="@layout/common_fragment_navigator" />
+
+</android.support.v4.widget.DrawerLayout>

@@ -12,18 +12,9 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
-
 import java.util.ArrayList;
 
 public interface RecordView extends MVPView {
-
-    void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView,
-                      boolean supportAutoFocus);
-
-    void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView,
-                     boolean supportAutoFocus);
 
     void showRecordStarted();
 
@@ -36,6 +27,10 @@ public interface RecordView extends MVPView {
     void showEffects(ArrayList<String> effects);
 
     void showEffectSelected(String colorEffect);
+
+    void showCameraEffects(ArrayList<String> effects);
+
+    void showCameraEffectSelected(String colorEffect);
 
     void navigateEditActivity();
 

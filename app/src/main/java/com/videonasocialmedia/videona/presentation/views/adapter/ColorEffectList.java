@@ -1,15 +1,11 @@
-package com.videonasocialmedia.videona.presentation.views.adapter;
-
 /*
- * Copyright (C) 2015 Videona Socialmedia SL
+ * Copyright (c) 2015. Videona Socialmedia SL
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
- *
- * Authors:
- * Álvaro Martínez Marco
- *
  */
+
+package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import android.hardware.Camera;
 import android.util.Log;
@@ -20,10 +16,10 @@ import java.util.ArrayList;
 
 public class ColorEffectList {
 
-
     public static ArrayList<String> getColorEffectList(Camera camera) {
 
         ArrayList<String> colorEffects = new ArrayList<String>();
+
 
         /*
 
@@ -65,6 +61,21 @@ public class ColorEffectList {
         // return sortColorEffectList();
     }
 
+
+    /**
+     * Gets an instance of the camera object
+     * @param cameraId
+     * @return
+     */
+    public static Camera getCameraInstance(int cameraId) {
+        Camera c = null;
+        try {
+            c = Camera.open(cameraId);
+        } catch (Exception e) {
+            Log.d("DEBUG", "Camera did not open");
+        }
+        return c;
+    }
 
     /**
      * Sort Color Effect List

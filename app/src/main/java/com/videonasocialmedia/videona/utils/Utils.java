@@ -16,6 +16,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
@@ -127,6 +128,14 @@ public class Utils {
             cursor.close();
         }
         return uri;
+    }
+
+    /**
+     * Returns whether the current device is running Android 4.4, KitKat, or newer
+     *
+     */
+    public static boolean isKitKat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
 }
