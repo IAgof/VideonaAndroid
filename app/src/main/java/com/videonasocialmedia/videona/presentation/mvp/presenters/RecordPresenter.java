@@ -26,7 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class RecordPresenter implements OnCameraEffectListener, OnColorEffectListener,
-        OnFlashModeListener, OnSettingsCameraListener, OnRemoveMediaFinishedListener, OnAddMediaFinishedListener  {
+        OnFlashModeListener, OnSettingsCameraListener,
+        OnRemoveMediaFinishedListener, OnAddMediaFinishedListener  {
 
     /**
      * LOG_TAG
@@ -93,6 +94,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
     public void requestOtherCamera(){
         mCamEncoder.requestOtherCamera();
+
     }
 
     public void requestCamera(int camera){
@@ -343,4 +345,5 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
     public void onAddMediaItemToTrackSuccess(Media media) {
         recordView.navigateEditActivity();
     }
+
 }

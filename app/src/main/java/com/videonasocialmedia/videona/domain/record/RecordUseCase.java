@@ -121,6 +121,7 @@ public class RecordUseCase {
         listener.onSettingsCameraSuccess(supportChangeCamera(camera), supportFlashMode(camera));
     }
 
+
     /**
      * Support flash mode
      * //TODO check flash support from model, now check from SharePreferences, private data.
@@ -133,6 +134,22 @@ public class RecordUseCase {
             return false;
         }
 
+    }
+
+    /**
+     * Support autofocus mode
+     */
+    private boolean supportAutoFocus(Camera camera){
+        List<String> focusModes = camera.getParameters().getSupportedFocusModes();
+        /* Focus continuous doesn't work well, we use autoFocus onTouchEvent
+        if (focusModes.contains(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+            parms.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+        } else */
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

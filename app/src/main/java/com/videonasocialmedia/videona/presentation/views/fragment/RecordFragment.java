@@ -425,6 +425,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void buttonChangeCameraListener(){
 
         recordPresenter.requestOtherCamera();
+
     }
 
     /**
@@ -596,7 +597,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     }
 
     @Override
-    public void showSettingsCamera(boolean isFlashSupported, boolean isChangeCameraSupported) {
+    public void showSettingsCamera(boolean isChangeCameraSupported, boolean isFlashSupported) {
 
         showFlash(isFlashSupported);
         showChangeCamera(isChangeCameraSupported);
@@ -741,7 +742,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 // String hh = h < 10 ? "0"+h: h+"";
                 String mm = m < 10 ? "0" + m : m + "";
                 String ss = s < 10 ? "0" + s : s + "";
-                chronometerRecord.setText(mm+":"+ss);
+                chronometerRecord.setText(mm + ":" + ss);
                 RecordFragment.this.chronometerRecord.setText(mm + ":" + ss);
 
             }
@@ -771,4 +772,5 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         adapter.notifyDataSetChanged();
         recordPresenter.setCameraEffect(position);
     }
+
 }
