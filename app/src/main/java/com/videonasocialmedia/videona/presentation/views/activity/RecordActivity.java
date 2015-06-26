@@ -54,7 +54,7 @@ public class RecordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
-    //  ButterKnife.inject(this);
+        //ButterKnife.inject(this);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -63,7 +63,7 @@ public class RecordActivity extends Activity {
 
             mFragment = RecordFragment.getInstance();
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, mFragment)
+                    .add(R.id.container, mFragment)
                     .commit();
 
         }

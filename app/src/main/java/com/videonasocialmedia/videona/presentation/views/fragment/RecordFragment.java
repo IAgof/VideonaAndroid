@@ -10,7 +10,6 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
@@ -39,7 +38,6 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresente
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
-import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectClickListener;
@@ -388,7 +386,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (recordPresenter == null) {
 
-                // TODO: Don't start recording until stream start response, so we can determine stream type...
+
                 Context context = getActivity().getApplicationContext();
                 try {
 
@@ -412,9 +410,9 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         String fileName = "VID_" + timeStamp + ".mp4";
         String outputLocation = new File(Constants.PATH_APP_MASTERS, fileName).getAbsolutePath();
         mConfig = new SessionConfig.Builder(outputLocation)
-                .withVideoBitrate(1 * 1000 * 1000)
+                .withVideoBitrate(5 * 1000 * 1000)
                 .withVideoResolution(1280,720)
-                .withAudioChannels(2)
+                .withAudioChannels(1)
                 .withAudioSamplerate(48000)
                 .withAudioBitrate(192 * 1000)
                 .build();
@@ -577,8 +575,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void navigateEditActivity() {
 
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
-        Intent edit = new Intent(getActivity(), EditActivity.class);
-        startActivity(edit);
+        //Intent edit = new Intent(getActivity(), EditActivity.class);
+       // startActivity(edit);
     }
 
     @Override
