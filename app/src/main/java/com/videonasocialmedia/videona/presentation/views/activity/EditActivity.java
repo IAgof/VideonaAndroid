@@ -522,6 +522,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             if (!isRemoveMusicPressed(position)) {
                 List<Music> musicList = musicGalleryFragment.getMusicList();
                 Music selectedMusic = musicList.get(position);
+                sendButtonTracked(selectedMusic.getIconResourceId());
                 editPresenter.addMusic(selectedMusic);
                 // TODO: change this variable of 30MB (size of the raw folder)
                 if (Utils.isAvailableSpace(30)) {
@@ -756,6 +757,17 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             seekToTrimmingStart();
         }
 
+    }
+
+    /**
+     * OnClick buttons, tracking Google Analytics
+     */
+    @OnClick
+            ({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity, R.id.edit_button_fx,
+                    R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look,
+            })
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
     }
 
     /**
