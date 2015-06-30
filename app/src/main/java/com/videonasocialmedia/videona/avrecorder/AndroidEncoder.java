@@ -26,6 +26,37 @@ public abstract class AndroidEncoder {
     int mEosSpinCount = 0;
     final int MAX_EOS_SPINS = 10;
 
+
+    /**
+     * Callback listener interface to notify about changed range values.
+     */
+    public interface OnMuxerFinishedEventListener {
+        public void onMuxerFinishedEventVideo();
+        public void onMuxerFinishedEventAudio();
+
+    }
+
+    private OnMuxerFinishedEventListener listenerVideo;
+    private OnMuxerFinishedEventListener listenerAudio;
+
+    /**
+     * Registers given listener callback to notify about changed selected values.
+     *
+     * @param listener The listener to notify about changed selected values.
+     */
+    public void setOnMuxerFinishedEventListenerVideo(OnMuxerFinishedEventListener listener) {
+        this.listenerVideo = listener;
+    }
+
+    /**
+     * Registers given listener callback to notify about changed selected values.
+     *
+     * @param listener The listener to notify about changed selected values.
+     */
+    public void setOnMuxerFinishedEventListenerAudio(OnMuxerFinishedEventListener listener) {
+        this.listenerAudio = listener;
+    }
+
     /**
      * This method should be called before the last input packet is queued
      * Some devices don't honor MediaCodec#signalEndOfInputStream
@@ -43,6 +74,7 @@ public abstract class AndroidEncoder {
             mEncoder.release();
             mEncoder = null;
             if (VERBOSE) Log.i(TAG, "Released encoder");
+          //  listener.onMuxerFinishedEvent();
         }
     }
 
@@ -147,8 +179,14 @@ public abstract class AndroidEncoder {
             if (endOfStream && VERBOSE ) {
                 if (isSurfaceInputEncoder()) {
                     Log.i(TAG, "final video drain complete");
+                    // Listener video
+                    listenerVideo.onMuxerFinishedEventVideo();
+
                 } else {
                     Log.i(TAG, "final audio drain complete");
+                    // Listener audio
+                    //listenerAudio.onMuxerFinishedEventAudio();
+
                 }
             }
         }

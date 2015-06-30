@@ -7,9 +7,10 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface OnRecordEventListener {
+import com.videonasocialmedia.videona.avrecorder.SessionConfig;
 
-    public void onRecordStarted();
+public interface OnSessionConfigListener {
 
-    public void onRecordStopped();
+    void onInitSession(SessionConfig mConfig);
+
 }

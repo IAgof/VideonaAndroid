@@ -10,6 +10,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
@@ -31,26 +32,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.avrecorder.SessionConfig;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.avrecorder.gles.FullFrameRect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
+import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
-import com.videonasocialmedia.videona.utils.Constants;
 
 import org.lucasr.twowayview.TwoWayView;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -80,10 +81,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
      * GLCameraEncoderView, openGL surfaceView
      */
     private GLCameraEncoderView mCameraView;
-    /**
-     * SessionConfig, configure audio and video encoder settings
-     */
-    private SessionConfig mConfig;
+
     /**
      * Button to record video
      */
@@ -184,6 +182,12 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     @InjectView(R.id.activity_record_navigation_drawer)
     View navigatorView;
 
+    /**
+     * Tracker google analytics
+     */
+    private Tracker tracker;
+
+
     private SensorEventListener mOrientationListener = new SensorEventListener() {
         final int SENSOR_CONFIRMATION_THRESHOLD = 5;
         int[] confirmations = new int[2];
@@ -247,9 +251,6 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         // Required empty public constructor
         if (VERBOSE) Log.i(LOG_TAG, "construct");
 
-        if (mConfig == null) {
-            setupDefaultSessionConfig();
-        }
     }
 
     public static RecordFragment getInstance() {
@@ -333,6 +334,11 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         if (recordPresenter != null)
             recordPresenter.onHostActivityPaused();
         stopMonitoringOrientation();
+
+       /* if(recordPresenter.isRecording()){
+            recordPresenter.stopRecording();
+        }
+        */
     }
 
     @Override
@@ -347,10 +353,12 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                              Bundle savedInstanceState) {
         if (VERBOSE) Log.i(LOG_TAG, "onCreateView");
 
+        VideonaApplication app = (VideonaApplication) getActivity().getApplication();
+        tracker = app.getTracker();
 
         final View root;
         if (recordPresenter != null && getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            root = inflater.inflate(R.layout.fragment_record, container, false);
+            root = inflater.inflate(R.layout.record_fragment, container, false);
 
             ButterKnife.inject(this, root);
 
@@ -386,11 +394,9 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (recordPresenter == null) {
 
-
-                Context context = getActivity().getApplicationContext();
                 try {
 
-                    recordPresenter = new RecordPresenter(this, mConfig);
+                    recordPresenter = new RecordPresenter(this);
 
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Unable to create RecordPresenter. Could be trouble creating MediaCodec encoder.");
@@ -401,22 +407,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         }
     }
 
-    private void setupDefaultSessionConfig() {
 
-        //TODO Set this settings from Profile, user preferences
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "VID_" + timeStamp + ".mp4";
-        String outputLocation = new File(Constants.PATH_APP_MASTERS, fileName).getAbsolutePath();
-        mConfig = new SessionConfig.Builder(outputLocation)
-                .withVideoBitrate(5 * 1000 * 1000)
-                .withVideoResolution(1280,720)
-                .withAudioChannels(1)
-                .withAudioSamplerate(48000)
-                .withAudioBitrate(192 * 1000)
-                .build();
-    }
 
     /**
      *  Change camera listener
@@ -475,7 +466,6 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         } else {
             recordPresenter.startRecording();
             //stopMonitoringOrientation();
-            buttonRecord.setBackgroundResource(R.drawable.activity_record_icon_stop_normal);
         }
     }
 
@@ -575,9 +565,23 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     @Override
     public void navigateEditActivity() {
 
+        //Restart original buttonRecord view
+        buttonRecord.setEnabled(true);
+        buttonRecord.setImageAlpha(255); // (100%)
+        chronometerRecord.setText("00:00");
+
+
+        // Avoid problems
+        //recordPresenter.release();
+        //recordPresenter= null;
+
+        onDestroy();
+
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
-        //Intent edit = new Intent(getActivity(), EditActivity.class);
-       // startActivity(edit);
+        Intent edit = new Intent(getActivity(), EditActivity.class);
+        startActivity(edit);
+
+
     }
 
     @Override
@@ -771,6 +775,53 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         positionCameraEffectPressed = position;
         adapter.notifyDataSetChanged();
         recordPresenter.setCameraEffect(position);
+    }
+
+
+    /**
+     * OnClick buttons, tracking Google Analytics
+     */
+    @OnClick({R.id.button_record, R.id.button_color_effect, R.id.button_flash_mode,
+            R.id.button_settings_camera, R.id.button_change_camera})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id identifier of the clicked view
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        Log.d("RecordActivity", "sendButtonTracked");
+        switch (id) {
+            case R.id.button_record:
+                label = "Capture ";
+                break;
+            case R.id.button_color_effect:
+                label = "Show available effects";
+                break;
+            case R.id.button_change_camera:
+                label = "Change camera";
+                break;
+            case R.id.button_flash_mode:
+                label = "Flash camera";
+                break;
+            case R.id.button_settings_camera:
+                label = "Settings camera";
+                break;
+            default:
+                label = "Other";
+        }
+
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();
+
     }
 
 }

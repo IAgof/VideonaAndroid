@@ -53,7 +53,7 @@ public class CameraEffectAdapter extends ArrayAdapter<String> {
     */
 
     public CameraEffectAdapter(RecordFragment recordFragment, ArrayList<String> cameraEffectItems) {
-        super(recordFragment.getActivity(), R.layout.item_camera_effect, cameraEffectItems);
+        super(recordFragment.getActivity(), R.layout.record_item_camera_effect, cameraEffectItems);
         this.cameraEffectItems = cameraEffectItems;
         this.recordFragment = recordFragment;
     }
@@ -81,7 +81,7 @@ public class CameraEffectAdapter extends ArrayAdapter<String> {
         if (convertView == null) {
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_camera_effect, null, false);
+            convertView = inflater.inflate(R.layout.record_item_camera_effect, null, false);
 
             viewHolder = new ViewHolder();
 

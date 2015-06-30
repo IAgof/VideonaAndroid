@@ -7,8 +7,11 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
+import com.videonasocialmedia.videona.avrecorder.AndroidEncoder;
 import com.videonasocialmedia.videona.avrecorder.CameraEncoder;
 import com.videonasocialmedia.videona.avrecorder.MicrophoneEncoder;
 import com.videonasocialmedia.videona.avrecorder.SessionConfig;
@@ -23,19 +26,23 @@ import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraView;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class RecordPresenter implements OnCameraEffectListener, OnColorEffectListener,
-        OnFlashModeListener, OnSettingsCameraListener,
-        OnRemoveMediaFinishedListener, OnAddMediaFinishedListener  {
+        OnFlashModeListener, OnSettingsCameraListener, OnRemoveMediaFinishedListener,
+        OnAddMediaFinishedListener, OnSessionConfigListener,
+        AndroidEncoder.OnMuxerFinishedEventListener, OnRecordEventListener {
 
     /**
      * LOG_TAG
      */
-    private final String LOG_TAG = getClass().getSimpleName();
+    private static final String LOG_TAG = "RecordPresenter"; //getClass().getSimpleName();
 
     private final RecordView recordView;
     private final RecordUseCase recordUseCase;
+
+    private SessionConfig mConfig;
 
     /**
      * Add Media to Project Use Case
@@ -44,47 +51,53 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
     RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
 
-    private SessionConfig mConfig;
-
     protected CameraEncoder mCamEncoder;
+
     protected MicrophoneEncoder mMicEncoder;
 
     private boolean mIsRecording;
+
+    private boolean isEncoderVideoFinished = false;
+
+    private boolean isEncoderAudioFinished = false;
 
     /**
      * Boolean, control flash mode, pressed or not
      */
     private boolean isFlahModeON = false;
 
-    public RecordPresenter(RecordView recordView, SessionConfig config) throws IOException {
+    // Message AVRecorderHandler
+    public static final int MSG_AVRECORDER_FINISH = 100;
+
+    // Handler to control Android Muxer is finished, record file created correctly, audio and video
+    private AVRecorderHandler mHandler = new AVRecorderHandler(this);
+
+    public RecordPresenter(final RecordView recordView) throws IOException {
 
         this.recordView = recordView;
-        mConfig = config;
         recordUseCase = new RecordUseCase();
 
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         removeMusicFromProjectUseCase= new RemoveMusicFromProjectUseCase();
 
-        try {
-            init(getSessionConfig());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        recordUseCase.initSessionConfig(this);
+
     }
 
     private void init(SessionConfig config) throws IOException {
-        mCamEncoder = new CameraEncoder(config);
-        mMicEncoder = new MicrophoneEncoder(config);
-        mConfig = config;
+        mCamEncoder = new CameraEncoder(config, this);
+        mMicEncoder = new MicrophoneEncoder(config, this);
         mIsRecording = false;
+        mConfig = config;
 
     }
+
 
     public SessionConfig getSessionConfig() {
         return mConfig;
     }
 
-    public void setPreviewDisplay(GLCameraView display){
+    public void setPreviewDisplay(GLCameraView display) {
         mCamEncoder.setPreviewDisplay(display);
     }
 
@@ -105,7 +118,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         mCamEncoder.toggleFlashMode();
     }
 
-    public void adjustVideoBitrate(int targetBitRate){
+    public void adjustVideoBitrate(int targetBitRate) {
         mCamEncoder.adjustBitrate(targetBitRate);
     }
 
@@ -127,12 +140,8 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         mMicEncoder.startRecording();
         mCamEncoder.startRecording();
 
-        recordView.showRecordStarted();
-        recordView.lockScreenRotation();
-        recordView.lockNavigator();
-        recordView.startChronometer();
+        recordUseCase.startRecording(this);
 
-        Log.d(LOG_TAG, "onRecordStarted");
     }
 
     public boolean isRecording(){
@@ -144,13 +153,14 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         mMicEncoder.stopRecording();
         mCamEncoder.stopRecording();
 
-        recordView.showRecordFinished();
-        recordView.stopChronometer();
-        recordView.unLockNavigator();
+        recordUseCase.stopRecording(this);
 
-        Log.d(LOG_TAG, "onRecordStopped");
-        clearProject();
-        addVideoToProjectUseCase.addVideoToTrack(mConfig.getOutputPath(), this);
+
+    }
+
+    // TODO study recording pause functionality
+    public void pauseRecording(){
+
     }
 
     private void clearProject() {
@@ -166,11 +176,11 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
      * and before {@link #release()}
      * @param config
      */
-    public void reset(SessionConfig config) throws IOException {
+    private void reset(SessionConfig config) throws IOException {
         mCamEncoder.reset(config);
         mMicEncoder.reset(config);
-        mConfig = config;
         mIsRecording = false;
+
     }
 
     /**
@@ -184,6 +194,8 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         // between recordings. It might someday if we decide to present
         // persistent audio volume meters etc.
         // Until then, we don't need to write MicrophoneEncoder.release()
+
+
     }
 
     public void onHostActivityPaused(){
@@ -205,7 +217,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
     /**
      * Settings Camera listener
      */
-    public void settingsCameraListener(){
+    public void settingsCameraListener() {
 
         recordUseCase.getSettingsCamera(this, mCamEncoder.getCamera());
 
@@ -249,7 +261,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
          */
     //TODO Add effect use case
     public void setColorEffect(String effect) {
-       recordUseCase.addAndroidCameraEffect(effect, mCamEncoder.getCamera(), this);
+        recordUseCase.addAndroidCameraEffect(effect, mCamEncoder.getCamera(), this);
 
     }
 
@@ -343,7 +355,114 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
     @Override
     public void onAddMediaItemToTrackSuccess(Media media) {
+
         recordView.navigateEditActivity();
+
+    }
+
+
+    @Override
+    public void onInitSession(SessionConfig mConfig) {
+
+        try {
+            init(mConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onRecordStarted() {
+
+        recordView.showRecordStarted();
+        recordView.lockScreenRotation();
+        recordView.lockNavigator();
+        recordView.startChronometer();
+
+        Log.d(LOG_TAG, "onRecordStarted");
+    }
+
+    @Override
+    public void onRecordStopped() {
+
+        recordView.showRecordFinished();
+        recordView.stopChronometer();
+        recordView.unLockNavigator();
+
+        Log.d(LOG_TAG, "onRecordStopped");
+
+    }
+
+
+    @Override
+    public void onMuxerFinishedEventVideo() {
+
+        Log.d(LOG_TAG, "onMuxerFinishedEventVideo");
+        isEncoderVideoFinished = true;
+
+        checkFinishEncoder();
+
+
+    }
+
+    @Override
+    public void onMuxerFinishedEventAudio() {
+
+        Log.d(LOG_TAG, "onMuxerFinishedEventAudio");
+
+        isEncoderAudioFinished = true;
+
+        checkFinishEncoder();
+    }
+
+    private boolean checkFinishEncoder(){
+
+        if(isEncoderVideoFinished && isEncoderAudioFinished){
+
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_AVRECORDER_FINISH));
+
+            return true;
+        }
+        return false;
+    }
+
+    public void setMsgAvrecorderFinish() {
+
+        clearProject();
+        addVideoToProjectUseCase.addVideoToTrack(recordUseCase.getOutputVideoPath(), this);
+
+    }
+
+    static class AVRecorderHandler extends Handler {
+
+        private WeakReference<RecordPresenter> mWeakAVRecorder;
+
+        public AVRecorderHandler(RecordPresenter recordPresenter) {
+            mWeakAVRecorder = new WeakReference<RecordPresenter>(recordPresenter);
+        }
+
+        @Override
+        public void handleMessage(Message inputMessage) {
+
+            int what = inputMessage.what;
+            Object obj = inputMessage.obj;
+
+            RecordPresenter recordPresenter = mWeakAVRecorder.get();
+            if (recordPresenter == null) {
+                Log.w(LOG_TAG, "EncoderHandler.handleMessage: encoder is null");
+                return;
+            }
+
+            switch (what) {
+                case MSG_AVRECORDER_FINISH:
+                    recordPresenter.setMsgAvrecorderFinish();
+                    break;
+
+                default:
+                    throw new RuntimeException("Unexpected msg what=" + what);
+            }
+        }
     }
 
 }

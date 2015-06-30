@@ -33,8 +33,12 @@ public class MicrophoneEncoder implements Runnable {
 
     private boolean mRecordingRequested;
 
-    public MicrophoneEncoder(SessionConfig config) throws IOException {
+    private AndroidEncoder.OnMuxerFinishedEventListener onMuxerFinishedEventListener;
+
+    public MicrophoneEncoder(SessionConfig config, AndroidEncoder.OnMuxerFinishedEventListener listener) throws IOException {
         init(config);
+
+        this.onMuxerFinishedEventListener = listener;
     }
 
     private void init(SessionConfig config) throws IOException {
@@ -42,6 +46,7 @@ public class MicrophoneEncoder implements Runnable {
                 config.getAudioBitrate(),
                 config.getAudioSamplerate(),
                 config.getMuxer());
+        mEncoderCore.setOnMuxerFinishedEventListenerAudio(onMuxerFinishedEventListener);
         mMediaCodec = null;
         mThreadReady = false;
         mThreadRunning = false;
@@ -78,6 +83,8 @@ public class MicrophoneEncoder implements Runnable {
         synchronized (mRecordingFence) {
             mRecordingRequested = false;
         }
+
+       // onMuxerFinishedEventListener.onMuxerFinishedEvent();
     }
 
     public void reset(SessionConfig config) throws IOException {
@@ -142,7 +149,8 @@ public class MicrophoneEncoder implements Runnable {
 
         }
         mThreadReady = false;
-        /*if (VERBOSE) */ Log.i(TAG, "Exiting audio encode loop. Draining Audio Encoder");
+        /*if (VERBOSE) */
+        Log.i(TAG, "Exiting audio encode loop. Draining Audio Encoder");
         if (TRACE) Trace.beginSection("sendAudio");
         sendAudioToEncoder(true);
         if (TRACE) Trace.endSection();
@@ -151,7 +159,9 @@ public class MicrophoneEncoder implements Runnable {
         mEncoderCore.drainEncoder(true);
         if (TRACE) Trace.endSection();
         mEncoderCore.release();
+
         mThreadRunning = false;
+        onMuxerFinishedEventListener.onMuxerFinishedEventAudio();
     }
 
     // Variables recycled between calls to sendAudioToEncoder

@@ -50,19 +50,21 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="@null"
-            android:layout_below="@+id/relativeLayoutRecordCameraOptions"
-            android:layout_alignStart="@+id/button_record" />
+            android:layout_alignTop="@+id/relativelayout_color_effect"
+            android:layout_alignEnd="@+id/button_camera_effect"
+            android:layout_marginEnd="23dp" />
 
         <ImageButton
             android:id="@+id/button_record"
             android:alpha=".7"
-            android:background="@drawable/activity_record_icon_rec_normal"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:gravity="center"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:src="@drawable/activity_record_icon_rec_normal"
+            android:background="@null" />
 
         <ImageView
             android:id="@+id/rotateDeviceHint"

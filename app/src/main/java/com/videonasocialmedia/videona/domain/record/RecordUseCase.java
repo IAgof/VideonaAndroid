@@ -10,14 +10,23 @@ package com.videonasocialmedia.videona.domain.record;
 import android.hardware.Camera;
 import android.os.SystemClock;
 
+import com.videonasocialmedia.videona.avrecorder.AndroidMuxer;
+import com.videonasocialmedia.videona.avrecorder.Muxer;
+import com.videonasocialmedia.videona.avrecorder.SessionConfig;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnColorEffectListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSessionConfigListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSettingsCameraListener;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectList;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
+import com.videonasocialmedia.videona.utils.Constants;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecordUseCase {
@@ -27,11 +36,52 @@ public class RecordUseCase {
      */
     private long timeColorEffect = 0;
 
+    private SessionConfig mConfig;
+
+    private String outputLocation = "";
+
+    private AndroidMuxer androidMuxer;
+
     public RecordUseCase(){
 
 
     }
 
+    public void initSessionConfig(OnSessionConfigListener listener){
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "VID_" + timeStamp + ".mp4";
+        outputLocation = new File(Constants.PATH_APP_MASTERS, fileName).getAbsolutePath();
+
+        androidMuxer = AndroidMuxer.create(outputLocation, Muxer.FORMAT.MPEG4);
+
+        //TODO get this data from Project
+        mConfig = new SessionConfig.Builder(outputLocation)
+                .withVideoBitrate(5 * 1000 * 1000)
+                .withVideoResolution(1280, 720)
+                .withAudioChannels(1)
+                .withAudioSamplerate(48000)
+                .withAudioBitrate(192 * 1000)
+                .withMuxer(androidMuxer)
+                .build();
+
+        listener.onInitSession(mConfig);
+    }
+
+    public String getOutputVideoPath(){
+        return outputLocation;
+    }
+
+    public void startRecording(OnRecordEventListener listener){
+
+        listener.onRecordStarted();
+    }
+
+    public void stopRecording(OnRecordEventListener listener){
+
+        listener.onRecordStopped();
+    }
 
     /**
      * Get available camera effects
@@ -200,5 +250,6 @@ public class RecordUseCase {
         camera.setParameters(parameters);
         listener.onFlashModeTorchRemoved();
     }
+
 
 }

@@ -54,17 +54,21 @@ public class AndroidMuxer extends Muxer {
     protected void start() {
         mMuxer.start();
         mStarted = true;
+        if (VERBOSE) Log.d(TAG, "AndroidMuxer start");
+
     }
 
     protected void stop() {
         mMuxer.stop();
         mStarted = false;
+        if (VERBOSE) Log.d(TAG, "AndroidMuxer stop");
     }
 
     @Override
     public void release() {
         super.release();
         mMuxer.release();
+        if (VERBOSE) Log.d(TAG, "AndroidMuxer release");
     }
 
     @Override

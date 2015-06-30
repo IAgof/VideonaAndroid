@@ -27,7 +27,6 @@ public abstract class Muxer {
     protected long mFirstPts;
     protected long mLastPts[];
 
-
     protected Muxer(String outputPath, FORMAT format){
         Log.i(TAG, "Created muxer for output: " + outputPath);
         mOutputPath = checkNotNull(outputPath);
@@ -39,6 +38,7 @@ public abstract class Muxer {
         for(int i=0; i< mLastPts.length; i++) {
             mLastPts[i] = 0;
         }
+
     }
 
 
@@ -77,6 +77,8 @@ public abstract class Muxer {
       //  if(mEventBus != null)
       //      mEventBus.post(new MuxerFinishedEvent());
         //TODO MuxerFinishedEvent
+        Log.d("Muxer", "release recorder");
+       // RecordPresenter.listenerReleaseRecorder.onReleaseRecord();
     }
 
     public boolean isStarted(){

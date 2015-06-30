@@ -39,6 +39,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private static final boolean TRACE = false;         // Systrace
     private static final boolean VERBOSE = true;       // Lots of logging
 
+    private boolean isEncoderReleased = false;
+
     private enum STATE {
         /* Stopped or pre-construction */
         UNINITIALIZED,
@@ -109,12 +111,17 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private int mThumbnailScaleFactor;
     private int mThumbnailRequestedOnFrame;
 
-    public CameraEncoder(SessionConfig config) {
+    private AndroidEncoder.OnMuxerFinishedEventListener onMuxerFinishedEventListener;
+
+    public CameraEncoder(SessionConfig config, AndroidEncoder.OnMuxerFinishedEventListener listener) {
         mState = STATE.INITIALIZING;
         init(config);
         mEglSaver = new EglStateSaver();
         startEncodingThread();
         mState = STATE.INITIALIZED;
+
+        this.onMuxerFinishedEventListener = listener;
+
     }
 
     /**
@@ -142,6 +149,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mThumbnailRequestedOnFrame = -1;
 
         mSessionConfig = checkNotNull(config);
+
+        isEncoderReleased = false;
+        Log.d(TAG, "isEncoderReleased " + isEncoderReleased);
     }
 
     /**
@@ -157,6 +167,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             throw new IllegalArgumentException("reset called in invalid state");
         mState = STATE.INITIALIZING;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_RESET, config));
+
     }
 
     private void handleReset(SessionConfig config) throws IOException {
@@ -363,6 +374,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         }
     }
 
+    public boolean isEncoderReleased(){
+        return isEncoderReleased;
+    }
+
     /**
      * Called from UI thread
      */
@@ -411,6 +426,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         synchronized (mReadyForFrameFence) {
             mEosRequested = true;
         }
+
+       // onMuxerFinishedEventListener.onMuxerFinishedEvent();
     }
 
 
@@ -442,6 +459,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         }
         mState = STATE.RELEASING;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE));
+
+
     }
 
     private void handleRelease() {
@@ -450,6 +469,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         Log.i(TAG, "handleRelease");
         shutdown();
         mState = STATE.RELEASED;
+
     }
 
     /**
@@ -704,6 +724,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private void prepareEncoder(EGLContext sharedContext, int width, int height, int bitRate,
                                 Muxer muxer) throws IOException {
         mVideoEncoder = new VideoEncoderCore(width, height, bitRate, muxer);
+        mVideoEncoder.setOnMuxerFinishedEventListenerVideo(onMuxerFinishedEventListener);
         if (mEglCore == null) {
             // This is the first prepare called for this CameraEncoder instance
             mEglCore = new EglCore(sharedContext, EglCore.FLAG_RECORDABLE);
@@ -721,6 +742,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     private void releaseEncoder() {
         mVideoEncoder.release();
+
+        isEncoderReleased = true;
+        Log.d(TAG, "isEncoderReleased " + isEncoderReleased);
     }
 
     /**
@@ -987,6 +1011,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                         break;
                     case MSG_RELEASE:
                         encoder.handleRelease();
+
                         break;
                     case MSG_RESET:
                         encoder.handleReset((SessionConfig) obj);

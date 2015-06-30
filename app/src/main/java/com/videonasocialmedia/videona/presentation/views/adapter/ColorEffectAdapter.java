@@ -53,7 +53,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
     */
 
     public ColorEffectAdapter(RecordFragment recordFragment, ArrayList<String> colorEffectItems) {
-        super(recordFragment.getActivity(), R.layout.item_color_effect, colorEffectItems);
+        super(recordFragment.getActivity(), R.layout.record_item_color_effect, colorEffectItems);
         this.colorEffectItems = colorEffectItems;
         this.recordFragment = recordFragment;
     }
@@ -83,7 +83,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         if (convertView == null) {
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_color_effect, null, false);
+            convertView = inflater.inflate(R.layout.record_item_color_effect, null, false);
 
             viewHolder = new ViewHolder();
 
