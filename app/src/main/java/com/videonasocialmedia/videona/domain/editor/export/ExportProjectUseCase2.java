@@ -9,16 +9,16 @@ package com.videonasocialmedia.videona.domain.editor.export;
 
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener2;
 
 
 public class ExportProjectUseCase2 implements OnExportEndedListener {
 
-    private OnExportFinishedListener onExportFinishedListener;
+    private OnExportFinishedListener2 onExportFinishedListener;
     private Exporter2 exporter;
     private Project project;
 
-    public ExportProjectUseCase2(OnExportFinishedListener onExportFinishedListener) {
+    public ExportProjectUseCase2(OnExportFinishedListener2 onExportFinishedListener) {
         this.onExportFinishedListener = onExportFinishedListener;
         project = Project.getInstance(null, null, null);
         exporter = new ExporterImpl2(project, this);
@@ -29,8 +29,8 @@ public class ExportProjectUseCase2 implements OnExportEndedListener {
     }
 
     @Override
-    public void onExportError() {
-        onExportFinishedListener.onExportError();
+    public void onExportError(String error) {
+        onExportFinishedListener.onExportError(error);
     }
 
     @Override

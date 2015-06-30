@@ -11,7 +11,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 
 public interface OnExportFinishedListener2 {
 
-    void onExportError();
+    void onExportError(String error);
 
     void onExportSuccess(Video video);
 
