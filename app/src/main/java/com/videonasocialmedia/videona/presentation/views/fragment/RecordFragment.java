@@ -26,11 +26,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -59,7 +63,7 @@ import butterknife.OnClick;
 
 
 public class RecordFragment extends Fragment implements RecordView, ColorEffectClickListener,
-        CameraEffectClickListener {
+        CameraEffectClickListener, AdapterView.OnItemSelectedListener {
 
     /**
      * LOG_TAG
@@ -367,6 +371,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
             recordPresenter.setPreviewDisplay(mCameraView);
 
+            setupFilterSpinner(root);
+
         } else
             root = new View(container.getContext());
 
@@ -383,6 +389,16 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         return root;
     }
 
+
+    private void setupFilterSpinner(View root) {
+        Spinner spinner = (Spinner) root.findViewById(R.id.filterSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.camera_filter_names, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner.
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
 
     protected void setupRecordPresenter() {
         // By making the recorder static we can allow
@@ -824,4 +840,21 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        // hide selection text
+        ((TextView)view).setText(null);
+// if you want you can change background here
+
+        if (((String) parent.getTag()).compareTo("filter") == 0) {
+            recordPresenter.applyFilter(position);
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

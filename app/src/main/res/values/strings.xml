@@ -402,4 +402,6 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
 
     <string name="recordError">Something bad happened. Impossible to record video</string>
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
+
+    <string name="effects_chooser_title">Effects</string>
 </resources>

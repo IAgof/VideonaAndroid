@@ -107,7 +107,7 @@ public class CameraEffectAdapter extends ArrayAdapter<String> {
             resourceTextView = cameraEffectName; //"None";
         }
 
-        viewHolder.textView.setText(resourceTextView);
+     // remove if change to spinner   viewHolder.textView.setText(resourceTextView);
 
 
 

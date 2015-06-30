@@ -34,7 +34,7 @@
             android:layout_marginRight="10dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_alignBottom="@+id/button_record"
             android:layout_toStartOf="@+id/relativelayout_camera_effect" />
 
@@ -222,6 +222,19 @@
             </LinearLayout>
 
         </RelativeLayout>
+
+        <Spinner
+            android:id="@+id/filterSpinner"
+            android:background="@drawable/effects_bg"
+            android:alpha=".7"
+            android:tag="filter"
+            android:spinnerMode="dialog"
+            android:prompt="@string/effects_chooser_title"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignTop="@+id/button_camera_effect"
+            android:layout_toStartOf="@+id/relativelayout_camera_effect"
+            android:visibility="visible" />
 
     </RelativeLayout>
 
