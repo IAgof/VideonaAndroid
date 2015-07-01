@@ -781,7 +781,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "onColorEffectClicked() RecordActivity");
         positionCameraEffectPressed = position;
         adapter.notifyDataSetChanged();
-        recordPresenter.setCameraEffect(position);
+        recordPresenter.setColorEffect(effectName);
 
     }
 

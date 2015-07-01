@@ -35,7 +35,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:visibility="invisible"
-            android:layout_alignBottom="@+id/button_record"
+            android:layout_alignTop="@+id/relativelayout_camera_effect"
             android:layout_toStartOf="@+id/relativelayout_camera_effect" />
 
 
@@ -44,27 +44,41 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:focusableInTouchMode="false"
-            android:padding="15dp"
+            android:padding="10dp"
             android:scaleType="fitXY"
             android:src="@drawable/common_icon_filters_normal"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="@null"
-            android:layout_alignTop="@+id/relativelayout_color_effect"
-            android:layout_alignEnd="@+id/button_camera_effect"
-            android:layout_marginEnd="23dp" />
+            android:layout_toStartOf="@+id/relativelayout_color_effect"
 
-        <ImageButton
-            android:id="@+id/button_record"
-            android:alpha=".7"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/activity_record_icon_rec_normal"
-            android:background="@null" />
+
+            android:layout_alignParentRight="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="false"
+            android:layout_marginBottom="20dp" />
+
+        <RelativeLayout
+            android:id="@+id/rec_1"
+            android:layout_width="120dp"
+            android:layout_height="450dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="false">
+
+            <ImageButton
+                android:id="@+id/button_record"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal|end"
+                android:background="@null"
+                android:paddingEnd="16dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/activity_record_icon_rec_normal"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/rotateDeviceHint"
@@ -79,8 +93,8 @@
             android:id="@+id/relativelayout_camera_effect"
             android:layout_width="400dp"
             android:layout_height="100dp"
-            android:layout_alignTop="@+id/button_record"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
 
             <org.lucasr.twowayview.TwoWayView xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/listview_items_camera_effect"
@@ -247,4 +261,3 @@
         tools:layout="@layout/common_fragment_navigator" />
 
 </android.support.v4.widget.DrawerLayout>
-
