@@ -134,18 +134,23 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         @Override
         public VideoGalleryFragment getItem(int position) {
             VideoGalleryFragment result;
+            int selectionMode= VideoGalleryFragment.SELECTION_MODE_MULTIPLE;
+            if (sharing){
+                selectionMode= VideoGalleryFragment.SELECTION_MODE_SINGLE;
+            }
             switch (position) {
                 case 0: // Fragment # 0 - This will show FirstFragment
                     if (mastersFragment == null) {
-                        mastersFragment =
-                                VideoGalleryFragment.newInstance(VideoGalleryPresenter.MASTERS_FOLDER);
+
+                        mastersFragment =VideoGalleryFragment.newInstance
+                                (VideoGalleryPresenter.MASTERS_FOLDER, selectionMode);
                     }
                     result = mastersFragment;
                     break;
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     if (editedFragment == null) {
-                        editedFragment =
-                                VideoGalleryFragment.newInstance(VideoGalleryPresenter.EDITED_FOLDER);
+                        editedFragment =VideoGalleryFragment.newInstance
+                                (VideoGalleryPresenter.EDITED_FOLDER,selectionMode);
                     }
                     result = editedFragment;
                     break;
