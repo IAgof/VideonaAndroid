@@ -15,27 +15,9 @@ import java.util.LinkedList;
 
 public class GetMediaListFromProjectUseCase {
 
-    /**
-     * Project of app
-     */
-    Project project;
-
-    /**
-     * Track
-     */
-    Track track;
-
-    public GetMediaListFromProjectUseCase() {
-
-        this.project = Project.getInstance(null, null, null);
-        this.track = project.getMediaTrack();
-
-    }
-
     public LinkedList<Media> getMediaListFromProject() {
-
+        Project project=Project.getInstance(null, null, null);;
+        Track track=project.getMediaTrack();
         return track.getItems();
     }
-
-
 }

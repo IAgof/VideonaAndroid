@@ -17,6 +17,8 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
 import java.util.List;
 
@@ -91,7 +93,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
     }
 
 
-    class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
+    class VideoViewHolder extends RecyclerView.ViewHolder{ //implements View.OnTouchListener {
 
         RecyclerViewClickListener onClickListener;
 
@@ -112,12 +114,12 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         public VideoViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
-            thumb.setOnTouchListener(this);
+            //thumb.setOnTouchListener(this);
             this.onClickListener = onClickListener;
 
         }
 
-        @Override
+      /*  @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 notifyItemChanged(selectedVideoPosition);
@@ -126,7 +128,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 onClickListener.onClick(selectedVideoPosition);
             }
             return true;
-        }
+        }*/
 
         @OnClick(R.id.gallery_preview_button)
         public void startVideoPreview(View v) {

@@ -786,7 +786,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 break;
             case R.id.edit_button_fx:
                 label = "Show video fx menu";
-                Toast.makeText(getApplicationContext(), getString(R.string.edit_text_fx), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_button_audio:
                 label = "Show audio fx menu";
@@ -796,7 +795,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 break;
             case R.id.edit_button_look:
                 label = "Show look fx menu";
-                Toast.makeText(getApplicationContext(), getString(R.string.edit_text_look), Toast.LENGTH_SHORT).show();
                 break;
             case R.drawable.activity_music_icon_ambiental_normal:
                 label = "DJ music icon selected";

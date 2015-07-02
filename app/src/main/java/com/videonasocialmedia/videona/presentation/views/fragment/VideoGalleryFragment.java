@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPr
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -30,6 +34,9 @@ import butterknife.InjectView;
  */
 public class VideoGalleryFragment extends Fragment implements VideoGalleryView, RecyclerViewClickListener {
 
+    public static final int SELECTION_MODE_SINGLE = 0;
+    public static final int SELECTION_MODE_MULTIPLE = 1;
+
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;
     private TimeChangesHandler timeChangesHandler = new TimeChangesHandler();
@@ -38,10 +45,16 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     private Video selectedVideo;
     private int folder;
 
-    public static VideoGalleryFragment newInstance(int folder) {
+    private ItemClickSupport clickSupport;
+    private ItemSelectionSupport selectionSupport;
+
+    private int selectionMode;
+
+    public static VideoGalleryFragment newInstance(int folder, int selectionMode) {
         VideoGalleryFragment videoGalleryFragment = new VideoGalleryFragment();
         Bundle args = new Bundle();
         args.putInt("FOLDER", folder);
+        args.putInt("SELECTION_MODE", selectionMode);
         videoGalleryFragment.setArguments(args);
         return videoGalleryFragment;
     }
@@ -51,6 +64,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         folder = this.getArguments().getInt("FOLDER", VideoGalleryPresenter.EDITED_FOLDER);
+        selectionMode = this.getArguments().getInt("SELECTION_MODE", SELECTION_MODE_SINGLE);
     }
 
     @Nullable
@@ -64,6 +78,36 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
                 GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        clickSupport = ItemClickSupport.addTo(recyclerView);
+        clickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView parent, View view, int position, long id) {
+                if (selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.MULTIPLE)
+                    if (selectionSupport.isItemChecked(position)) {
+                        selectionSupport.setItemChecked(position, true);
+                    } else {
+                        selectionSupport.setItemChecked(position, false);
+                    }
+            }
+        });
+        clickSupport.setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(RecyclerView parent, View view, int position, long id) {
+                if (selectionMode == SELECTION_MODE_MULTIPLE)
+                    selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.MULTIPLE);
+                else
+                    selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+
+                selectionSupport.setItemChecked(position, true);
+                return true;
+            }
+        });
+        selectionSupport = ItemSelectionSupport.addTo(recyclerView);
     }
 
     @Override
@@ -131,6 +175,17 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
 
     public Video getSelectedVideo() {
         return selectedVideo;
+    }
+
+    public List<Video> getSelectedVideoList() {
+        List<Video> result=new ArrayList<>();
+        SparseBooleanArray selectedElements=selectionSupport.getCheckedItemPositions();
+        for (int i=0; selectedElements!=null&&i<videoGalleryAdapter.getItemCount();i++){
+            if (selectedElements.get(i)){
+                result.add(videoGalleryAdapter.getVideo(i));
+            }
+        }
+        return result;
     }
 
     private void showTimeTag(final List<Video> videoList) {
