@@ -225,24 +225,12 @@ public class ExporterImpl implements Exporter {
             }
         }
 
-    @Override
-    public Video mergeVideos(List<Video> videoList) {
-        return null;
-    }
-
-    @Override
-    public Video addMusicToVideo(Video video, Music music, String outputPath) throws IOException {
-        File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
-        if (musicFile != null) {
-            Movie videoMovie = MovieCreator.build(video.getMediaPath());
-            videoMovie.getTracks().remove(1);
-            CroppedTrack musicTrack = trimMusicTrack(musicFile.getPath(), video.getDuration());
-            videoMovie.addTrack(new AppendTrack(musicTrack));
-            {
-                Container out = new DefaultMp4Builder().build(videoMovie);
-                FileOutputStream fos = new FileOutputStream(new File(outputPath));
-                out.writeContainer(fos.getChannel());
-                fos.close();
+        if (audioTracks.size() > 0) {
+            try {
+                movie.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
+            } catch (IOException e) {
+                onExportEndedListener.onExportError(String.valueOf(e));
+                // TODO se debe continuar sin música o lo paro??
             }
         }
 

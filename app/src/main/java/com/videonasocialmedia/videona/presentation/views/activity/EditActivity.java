@@ -784,17 +784,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
     /**
-     * OnClick buttons, tracking Google Analytics
-     */
-    @OnClick
-            ({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity, R.id.edit_button_fx,
-                    R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look,
-            })
-    public void clickListener(View view) {
-        sendButtonTracked(view.getId());
-    }
-
-    /**
      * Sends button clicks to Google Analytics
      *
      * @param id the identifier of the clicked button
