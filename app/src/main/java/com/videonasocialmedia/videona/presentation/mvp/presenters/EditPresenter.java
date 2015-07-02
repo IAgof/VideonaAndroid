@@ -26,7 +26,8 @@ import java.util.LinkedList;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurationlistener, OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
+public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurationlistener,
+        OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
 
     /**
      * LOG_TAG

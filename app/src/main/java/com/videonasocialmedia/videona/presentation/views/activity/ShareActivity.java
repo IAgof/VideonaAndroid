@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -243,6 +242,7 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
      * @param id the identifier of the clicked button
      */
     private void sendButtonTracked(int id) {
+        Log.d(LOG_TAG, "sendButtonTracked");
         String label;
         switch (id) {
             case R.id.share_button_share:

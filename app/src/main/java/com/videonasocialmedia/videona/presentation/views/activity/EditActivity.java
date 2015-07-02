@@ -142,6 +142,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
         ButterKnife.inject(this);
 
         VideonaApplication app = (VideonaApplication) getApplication();
@@ -393,6 +394,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (buttonBackPressed) {
             editPresenter.cancel();
             finish();
+
+            // Go to RecordActivity
+            Intent record = new Intent(this, RecordActivity.class);
+            startActivity(record);
+
             return;
         }
         buttonBackPressed = true;
@@ -404,18 +410,23 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         if (keyCode == KeyEvent.KEYCODE_BACK && buttonBackPressed) {
             // do something on back.
-            buttonBackPressed = false;
-            // Log.d(LOG_TAG, "onKeyDown");
 
-            setResult(Activity.RESULT_OK);
+            editPresenter.cancel();
             finish();
+
+            // Go to RecordActivity
+            Intent record = new Intent(this, RecordActivity.class);
+            startActivity(record);
 
             return true;
         }
 
-        buttonBackPressed = false;
 
-        return super.onKeyDown(keyCode, event);
+        buttonBackPressed = true;
+        Toast.makeText(getApplicationContext(), getString(R.string.toast_exit_edit), Toast.LENGTH_SHORT).show();
+
+       // return super.onKeyDown(keyCode, event);
+        return true;
 
     }
 
@@ -759,6 +770,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     }
 
+
+    /**
+     * OnClick buttons, tracking Google Analytics
+     */
+    @OnClick
+            ({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity, R.id.edit_button_fx,
+            R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look,
+
+    })
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
     /**
      * OnClick buttons, tracking Google Analytics
      */
@@ -776,6 +800,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
      * @param id the identifier of the clicked button
      */
     private void sendButtonTracked(int id) {
+        Log.d(LOG_TAG, "sendButtonTracked");
         String label;
         switch (id) {
             case R.id.buttonCancelEditActivity:

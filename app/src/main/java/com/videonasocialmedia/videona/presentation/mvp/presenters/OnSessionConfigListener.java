@@ -7,11 +7,10 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-public interface OnChangeCameraListener {
+import com.videonasocialmedia.videona.avrecorder.SessionConfig;
 
-    void onChangeCameraSuccess( boolean isFlashSupported, boolean isAutoFocusSupported);
+public interface OnSessionConfigListener {
 
-    void onChangeCameraError();
-
+    void onInitSession(SessionConfig mConfig);
 
 }

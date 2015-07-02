@@ -1,7 +1,13 @@
+/*
+ * Copyright (c) 2015. Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
+
 package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,34 +15,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
+import com.videonasocialmedia.videona.presentation.views.fragment.RecordFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.UserPreferences;
 
 import java.util.ArrayList;
 
-/*
- * Copyright (C) 2015 Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- *
- * Authors:
- * Álvaro Martínez Marco
- *
- */
 public class ColorEffectAdapter extends ArrayAdapter<String> {
 
     private String LOG_TAG = this.getClass().getSimpleName();
 
-    private Activity activity;
+    private RecordFragment recordFragment;
 
     private LayoutInflater inflater;
 
     private ArrayList<String> colorEffectItems;
-
-    private UserPreferences appPrefs;
 
     private ColorEffectClickListener mColorEffectClickListener;
 
@@ -44,7 +37,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
     private Boolean isPressed = false;
 
 
-    public void setViewClickListener(RecordActivity viewClickListener) {
+    public void setViewClickColorEffectListener(RecordFragment viewClickListener) {
 
         mColorEffectClickListener = (ColorEffectClickListener) viewClickListener;
     }
@@ -59,10 +52,10 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
 
     */
 
-    public ColorEffectAdapter(Activity activity, ArrayList<String> colorEffectItems) {
-        super(activity, R.layout.item_color_effect, colorEffectItems);
+    public ColorEffectAdapter(RecordFragment recordFragment, ArrayList<String> colorEffectItems) {
+        super(recordFragment.getActivity(), R.layout.record_item_color_effect, colorEffectItems);
         this.colorEffectItems = colorEffectItems;
-        this.activity = activity;
+        this.recordFragment = recordFragment;
     }
 
     public int getCount() {
@@ -90,7 +83,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         if (convertView == null) {
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_color_effect, null, false);
+            convertView = inflater.inflate(R.layout.record_item_color_effect, null, false);
 
             viewHolder = new ViewHolder();
 
@@ -114,7 +107,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
         // int resourceId = activity.getResources().getIdentifier(colorEffectDrawableName, "drawable", activity.getPackageName());
         int resourceId = 0;
 
-        if (RecordActivity.positionColorEffectPressed == position) {
+        if (RecordFragment.positionColorEffectPressed == position) {
             isPressed = true;
             resourceId = getResourceDrawableColorEffect(colorEffectName, isPressed);
             isPressed = false;
@@ -152,7 +145,7 @@ public class ColorEffectAdapter extends ArrayAdapter<String> {
                 isPressed = true;
                 colorEffectName = colorEffectItems.get(position);
 
-                mColorEffectClickListener.onColorEffectClicked(new ColorEffectAdapter(activity, colorEffectItems), colorEffectName, position);
+                mColorEffectClickListener.onColorEffectClicked(new ColorEffectAdapter(recordFragment, colorEffectItems), colorEffectName, position);
 
                 int resourceIdPressed = getResourceDrawableColorEffect(colorEffectName, isPressed);
                 viewHolder.imageView.setImageResource(resourceIdPressed);
