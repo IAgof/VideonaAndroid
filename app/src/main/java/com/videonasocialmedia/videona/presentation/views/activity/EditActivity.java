@@ -421,9 +421,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             return true;
         }
 
-        buttonBackPressed = false;
 
-        return super.onKeyDown(keyCode, event);
+        buttonBackPressed = true;
+        Toast.makeText(getApplicationContext(), getString(R.string.toast_exit_edit), Toast.LENGTH_SHORT).show();
+
+       // return super.onKeyDown(keyCode, event);
+        return true;
 
     }
 

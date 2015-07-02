@@ -8,14 +8,15 @@
 
 <resources>
   <string-array name="camera_filter_names">
-    <item>Normal</item>
+<!--    <item>Normal</item>
     <item>Black &amp; white</item>
     <item>Night Mode</item>
     <item>Chroma Key</item>
     <item>Blur</item>
     <item>Sharpen</item>
     <item>Edge detect</item>
-    <item>Emboss</item>
+    <item>Emboss</item>-->
+    <item>Normal</item>
     <item>Squeeze</item>
     <item>Twirl</item>
     <item>Tunnel</item>

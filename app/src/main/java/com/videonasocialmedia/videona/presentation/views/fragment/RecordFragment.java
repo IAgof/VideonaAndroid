@@ -433,6 +433,10 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
         recordPresenter.requestOtherCamera();
 
+        // Check flashMode and return to normal
+        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        buttonSettinsCameraListener();
+
     }
 
     /**
@@ -585,11 +589,6 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         buttonRecord.setEnabled(true);
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
-
-
-        // Avoid problems
-        //recordPresenter.release();
-        //recordPresenter= null;
 
         onDestroy();
 

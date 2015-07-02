@@ -11,7 +11,6 @@ import android.hardware.Camera;
 import android.os.SystemClock;
 
 import com.videonasocialmedia.videona.avrecorder.AndroidMuxer;
-import com.videonasocialmedia.videona.avrecorder.Muxer;
 import com.videonasocialmedia.videona.avrecorder.SessionConfig;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnColorEffectListener;
@@ -54,7 +53,7 @@ public class RecordUseCase {
         String fileName = "VID_" + timeStamp + ".mp4";
         outputLocation = new File(Constants.PATH_APP_MASTERS, fileName).getAbsolutePath();
 
-        androidMuxer = AndroidMuxer.create(outputLocation, Muxer.FORMAT.MPEG4);
+        //androidMuxer = AndroidMuxer.create(outputLocation, Muxer.FORMAT.MPEG4);
 
         //TODO get this data from Project
         mConfig = new SessionConfig.Builder(outputLocation)
@@ -63,7 +62,7 @@ public class RecordUseCase {
                 .withAudioChannels(1)
                 .withAudioSamplerate(48000)
                 .withAudioBitrate(192 * 1000)
-                .withMuxer(androidMuxer)
+                //    .withMuxer(androidMuxer)
                 .build();
 
         listener.onInitSession(mConfig);

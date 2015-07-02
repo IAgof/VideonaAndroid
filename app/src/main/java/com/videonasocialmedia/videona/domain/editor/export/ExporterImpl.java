@@ -125,7 +125,7 @@ public class ExporterImpl implements Exporter {
         File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
         if (musicFile != null) {
             Movie videoMovie = MovieCreator.build(video.getMediaPath());
-            videoMovie.getTracks().remove(1);
+            videoMovie.getTracks().remove(0);
             CroppedTrack musicTrack = trimMusicTrack(musicFile.getPath(), video.getDuration());
             videoMovie.addTrack(new AppendTrack(musicTrack));
             {

@@ -18,7 +18,7 @@ public class Filters {
     private static final boolean VERBOSE = true;
 
     // Camera filters; must match up with camera_filter_names in strings.xml
-    static final int FILTER_NONE = 0;
+/*    static final int FILTER_NONE = 0;
     static final int FILTER_BLACK_WHITE = 1;
     static final int FILTER_NIGHT = 2;
     static final int FILTER_CHROMA_KEY = 3;
@@ -33,7 +33,19 @@ public class Filters {
     static final int FILTER_DENT = 12;
     static final int FILTER_FISHEYE = 13;
     static final int FILTER_STRETCH = 14;
-    static final int FILTER_MIRROR = 15;
+    static final int FILTER_MIRROR = 15;*/
+
+
+    // NEW ORDER, only effects filters
+    static final int FILTER_NONE = 0;
+    static final int FILTER_SQUEEZE = 1;
+    static final int FILTER_TWIRL = 2;
+    static final int FILTER_TUNNEL = 3;
+    static final int FILTER_BULGE = 4;
+    static final int FILTER_DENT = 5;
+    static final int FILTER_FISHEYE = 6;
+    static final int FILTER_STRETCH = 7;
+    static final int FILTER_MIRROR = 8;
 
     /**
      * Ensure a filter int code is valid. Update this function as
@@ -58,7 +70,7 @@ public class Filters {
             case FILTER_NONE:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT;
                 break;
-            case FILTER_BLACK_WHITE:
+/*            case FILTER_BLACK_WHITE:
                 // (In a previous version the TEXTURE_EXT_BW variant was enabled by a flag called
                 // ROSE_COLORED_GLASSES, because the shader set the red channel to the B&W color
                 // and green/blue to zero.)
@@ -69,7 +81,7 @@ public class Filters {
                 break;
             case FILTER_CHROMA_KEY:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT_CHROMA_KEY;
-                break;
+                break;*/
             case FILTER_SQUEEZE:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT_SQUEEZE;
                 break;
@@ -94,7 +106,7 @@ public class Filters {
             case FILTER_MIRROR:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT_MIRROR;
                 break;
-            case FILTER_BLUR:
+/*            case FILTER_BLUR:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT_FILT;
                 kernel = new float[] {
                         1f/16f, 2f/16f, 1f/16f,
@@ -122,7 +134,7 @@ public class Filters {
                         0f, -1f, 0f,
                         0f, 0f, -1f };
                 colorAdj = 0.5f;
-                break;
+                break;*/
             default:
                 throw new RuntimeException("Unknown filter mode " + newFilter);
         }

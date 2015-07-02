@@ -232,7 +232,8 @@
                     android:paddingRight="10dp"
                     android:textSize="18sp"
                     android:background="@color/transparent_palette_grey"
-                    android:paddingLeft="10dp" />
+                    android:paddingLeft="10dp"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -240,15 +241,19 @@
         <Spinner
             android:id="@+id/filterSpinner"
             android:background="@drawable/effects_bg"
-            android:alpha=".7"
             android:tag="filter"
             android:spinnerMode="dialog"
             android:prompt="@string/effects_chooser_title"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignTop="@+id/button_camera_effect"
-            android:layout_toStartOf="@+id/relativelayout_camera_effect"
-            android:visibility="visible" />
+            android:padding="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_above="@+id/button_color_effect"
+            android:layout_toStartOf="@+id/relativelayout_color_effect"
+            android:visibility="visible"
+            android:theme="@android:style/Holo.Light.ButtonBar.AlertDialog" />
 
     </RelativeLayout>
 
