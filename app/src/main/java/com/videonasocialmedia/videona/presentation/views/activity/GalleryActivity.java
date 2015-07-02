@@ -18,6 +18,9 @@ import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -34,7 +37,6 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     @InjectView(R.id.button_ok_gallery)
     ImageButton okButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,27 +78,39 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         return selectedFragment.getSelectedVideo();
     }
 
+    private List<Video> getSelectedVideos() {
+        List<Video> result = new ArrayList<>();
+        for (int i = 0; i < adapterViewPager.getCount(); i++) {
+            VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
+            List<Video> videosFromFragment = selectedFragment.getSelectedVideoList();
+            result.addAll(videosFromFragment);
+        }
+        return result;
+    }
+
     @OnClick(R.id.button_ok_gallery)
     public void onClick() {
-        Video selectedVideo = getSelectedVideoFromCurrentFragment();
-        if (selectedVideo != null) {
-            if (sharing)
-                shareVideo(selectedVideo);
-            else
-                galleryPagerPresenter.loadVideoToProject(selectedVideo);
+        List<Video> videoList = getSelectedVideos();
+
+        if (videoList.size() > 0) {
+            if (sharing) {
+                shareVideo(videoList.get(0));
+            } else {
+                galleryPagerPresenter.loadVideoListToProject(videoList);
+            }
         }
     }
 
     private void shareVideo(Video selectedVideo) {
         String videoPath = selectedVideo.getMediaPath();
         Uri uri = Utils.obtainUriToShare(this, videoPath);
-        if (uri!=null) {
+        if (uri != null) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("video/*");
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
-        }else{
-            Toast.makeText(this, R.string.shareError,Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.shareError, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -134,23 +148,23 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         @Override
         public VideoGalleryFragment getItem(int position) {
             VideoGalleryFragment result;
-            int selectionMode= VideoGalleryFragment.SELECTION_MODE_MULTIPLE;
-            if (sharing){
-                selectionMode= VideoGalleryFragment.SELECTION_MODE_SINGLE;
+            int selectionMode = VideoGalleryFragment.SELECTION_MODE_MULTIPLE;
+            if (sharing) {
+                selectionMode = VideoGalleryFragment.SELECTION_MODE_SINGLE;
             }
             switch (position) {
                 case 0: // Fragment # 0 - This will show FirstFragment
                     if (mastersFragment == null) {
 
-                        mastersFragment =VideoGalleryFragment.newInstance
+                        mastersFragment = VideoGalleryFragment.newInstance
                                 (VideoGalleryPresenter.MASTERS_FOLDER, selectionMode);
                     }
                     result = mastersFragment;
                     break;
                 case 1: // Fragment # 0 - This will show FirstFragment different title
                     if (editedFragment == null) {
-                        editedFragment =VideoGalleryFragment.newInstance
-                                (VideoGalleryPresenter.EDITED_FOLDER,selectionMode);
+                        editedFragment = VideoGalleryFragment.newInstance
+                                (VideoGalleryPresenter.EDITED_FOLDER, selectionMode);
                     }
                     result = editedFragment;
                     break;

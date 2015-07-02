@@ -21,6 +21,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class is used for adding new videos to the project.
@@ -51,6 +52,12 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
 
         resetProject();
         addVideoToProjectUseCase.addVideoToTrack(video, this);
+
+    }
+
+    public void loadVideoListToProject(List<Video> videoList){
+
+            addVideoToProjectUseCase.addVideoListToTrack(videoList,this);
 
     }
 

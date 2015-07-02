@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewCl
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -173,6 +175,17 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
 
     public Video getSelectedVideo() {
         return selectedVideo;
+    }
+
+    public List<Video> getSelectedVideoList() {
+        List<Video> result=new ArrayList<>();
+        SparseBooleanArray selectedElements=selectionSupport.getCheckedItemPositions();
+        for (int i=0; selectedElements!=null&&i<videoGalleryAdapter.getItemCount();i++){
+            if (selectedElements.get(i)){
+                result.add(videoGalleryAdapter.getVideo(i));
+            }
+        }
+        return result;
     }
 
     private void showTimeTag(final List<Video> videoList) {
