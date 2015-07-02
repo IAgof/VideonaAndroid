@@ -13,6 +13,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -26,12 +27,15 @@ import java.util.List;
 /**
  * This class is used for adding new videos to the project.
  */
-public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
+public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
+        OnRemoveMediaFinishedListener, OnExportFinishedListener {
 
     RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
     RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     AddVideoToProjectUseCase addVideoToProjectUseCase;
     GalleryPagerView galleryPagerView;
+    ExportProjectUseCase exportProjectUseCase;
+    private boolean exported = false;
 
     /**
      * Constructor.
@@ -49,16 +53,14 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
      * @param video the path of the new video which user wants to add to the project
      */
     public void loadVideoToProject(Video video) {
-
         resetProject();
         addVideoToProjectUseCase.addVideoToTrack(video, this);
-
     }
 
-    public void loadVideoListToProject(List<Video> videoList){
-
-            addVideoToProjectUseCase.addVideoListToTrack(videoList,this);
-
+    public void loadVideoListToProject(List<Video> videoList) {
+        resetProject();
+        exported= false;
+        addVideoToProjectUseCase.addVideoListToTrack(videoList, this);
     }
 
     private void resetProject() {
@@ -70,7 +72,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
             removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
         }
 
-        removeMusicFromProjectUseCase.removeAllMusic(0,this);
+        removeMusicFromProjectUseCase.removeAllMusic(0, this);
     }
 
     @Override
@@ -87,8 +89,30 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener, OnRemo
 
     }
 
+    /*
+
+    ÑAPA
+
+     */
+
     @Override
     public void onAddMediaItemToTrackSuccess(Media video) {
-        galleryPagerView.navigate();
+        if (exported)
+            galleryPagerView.navigate();
+        else {
+            exportProjectUseCase = new ExportProjectUseCase(this);
+            exportProjectUseCase.export();
+        }
+    }
+
+    @Override
+    public void onExportError(String error) {
+
+    }
+
+    @Override
+    public void onExportSuccess(Video video) {
+        exported=true;
+        loadVideoToProject(video);
     }
 }

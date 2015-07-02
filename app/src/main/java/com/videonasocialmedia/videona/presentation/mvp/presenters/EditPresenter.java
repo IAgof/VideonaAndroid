@@ -75,8 +75,6 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
 
     public void onResume(){
 
-
-
         LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
         videoToEdit = (Video) listMedia.getLast();
 
