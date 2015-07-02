@@ -118,7 +118,7 @@
     <string name="contactUsContent">Visita nuestra página web:</string>
     <string name="videonaWeb">http://www.videona.es\n</string>
     <string name="versionTitle"><u>Versión</u></string>
-    <string name="versionContent">beta v.0.2\n</string>
+    <string name="versionContent">beta </string>
     <string name="licenseTitle"><u>Licencias de Software libre</u></string>
     <string name="licenseContent">
         Copyright &#169; 2013 Jake Wharton\nLicensed under the Apache License, Version 2.0 (the

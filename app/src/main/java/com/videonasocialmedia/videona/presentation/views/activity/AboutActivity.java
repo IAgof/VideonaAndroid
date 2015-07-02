@@ -10,13 +10,17 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -33,6 +37,8 @@ public class AboutActivity extends Activity {
      */
     private VideonaApplication app;
     private Tracker tracker;
+    @InjectView(R.id.videona_version)
+    TextView versionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,8 @@ public class AboutActivity extends Activity {
         tracker = app.getTracker();
 
         setContentView(R.layout.activity_about);
+        ButterKnife.inject(this);
+        versionName.setText(this.getString(R.string.versionContent) + " " + BuildConfig.VERSION_NAME + "\n");
     }
 
     /**
