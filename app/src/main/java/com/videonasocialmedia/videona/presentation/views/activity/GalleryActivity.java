@@ -73,9 +73,10 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     }
 
-    private Video getSelectedVideoFromCurrentFragment() {
+    private List<Video> getSelectedVideosFromCurrentFragment() {
         VideoGalleryFragment selectedFragment = adapterViewPager.getItem(selectedPage);
-        return selectedFragment.getSelectedVideo();
+        return selectedFragment.getSelectedVideoList();
+
     }
 
     private List<Video> getSelectedVideos() {
@@ -90,14 +91,16 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     @OnClick(R.id.button_ok_gallery)
     public void onClick() {
-        List<Video> videoList = getSelectedVideos();
-
-        if (videoList.size() > 0) {
-            if (sharing) {
+        List<Video> videoList;
+        if (sharing) {
+            videoList = getSelectedVideosFromCurrentFragment();
+            if (videoList.size() > 0)
                 shareVideo(videoList.get(0));
-            } else {
+        } else {
+            videoList = getSelectedVideos();
+            if (videoList.size() > 0)
                 galleryPagerPresenter.loadVideoListToProject(videoList);
-            }
+
         }
     }
 
