@@ -1,6 +1,5 @@
 package net.ypresto.androidtranscoder;
 
-import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -34,6 +33,7 @@ public class Transcoder {
     private final int bitRate;
     private final int frameRate;
     private final int frameInterval;
+    private final String tempTranscodeDirectory;
     private int numFilesToTranscoder = 1;
     private int numFilesTranscoded = 0;
 
@@ -52,31 +52,35 @@ public class Transcoder {
     /**
      * Constructor.
      */
-    public Transcoder(Resolution resolution) {
+    public Transcoder(Resolution resolution, String tempTranscodeDirectory) {
         this.outResolution = resolution;
         this.bitRate = DEFAULT_BITRATE;
         this.frameRate = DEFAULT_FRAMERATE;
         this.frameInterval = DEFAULT_FRAMEINTERVAL;
+        this.tempTranscodeDirectory = tempTranscodeDirectory;
     }
 
     /**
      * Constructor.
      */
-    public Transcoder(Resolution resolution, int bitRate) {
+    public Transcoder(Resolution resolution, int bitRate, String tempTranscodeDirectory) {
         this.outResolution = resolution;
         this.bitRate = getBitRate(bitRate);
         this.frameRate = DEFAULT_FRAMERATE;
         this.frameInterval = DEFAULT_FRAMEINTERVAL;
+        this.tempTranscodeDirectory = tempTranscodeDirectory;
     }
 
     /**
      * Constructor.
      */
-    public Transcoder(Resolution resolution, int bitRate, int frameRate, int frameInterval) {
+    public Transcoder(Resolution resolution, int bitRate, int frameRate, int frameInterval,
+                      String tempTranscodeDirectory) {
         this.outResolution = resolution;
         this.bitRate = getBitRate(bitRate);
         this.frameRate = getFrameRate(frameRate);
         this.frameInterval = getFrameInterval(frameInterval);
+        this.tempTranscodeDirectory = tempTranscodeDirectory;
     }
 
     private int getBitRate(int bitRate) {
@@ -158,8 +162,7 @@ public class Transcoder {
 
     private void transcode(final File file, final Listener transcoderListener) throws IOException {
 
-        final File tempDir = new File (Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES), "Transcoder_temp");
+        final File tempDir = new File (tempTranscodeDirectory);
         if (!tempDir.exists())
             tempDir.mkdirs();
         final File tempFile = new File(tempDir, file.getName());

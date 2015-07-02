@@ -5,7 +5,6 @@ import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
@@ -17,9 +16,6 @@ import java.util.Arrays;
 public class Utils {
 
     public static void createFile(Movie movie, String outPath) throws IOException {
-        final File tempDir = new File (Constants.TEMP_TRIM_DIRECTORY);
-        if (!tempDir.exists())
-            tempDir.mkdirs();
         Container out = new DefaultMp4Builder().build(movie);
         FileChannel fc = new RandomAccessFile(outPath, "rw").getChannel();
         out.writeContainer(fc);

@@ -32,14 +32,19 @@ import java.util.List;
  * @author Juan Javier Cabanas
  */
 public class ExporterImpl2 implements Exporter2 {
-    private Video finalResult;
+
+    private static final String TAG = "Exporter implementation";
     private OnExportEndedListener onExportEndedListener;
     private Project project;
-    private static final String TAG = "Exporter implementation";
     private Transcoder transcoder;
+    private boolean trimCorrect = true;
     private boolean transcodeCorrect = true;
     private ArrayList<String> videoTranscoded;
-
+    private int numFilesToTranscoder = 1;
+    private int numFilesTranscoded = 0;
+    private String pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+    private String trimTempPath = Constants.PATH_APP_TEMP + File.separator + "trim";
+    private String tempTranscodeDirectory = Constants.PATH_APP_TEMP + File.separator + "transcode";
     public ExporterImpl2(Project project, OnExportEndedListener onExportEndedListener) {
         this.onExportEndedListener = onExportEndedListener;
         this.project = project;
@@ -49,22 +54,8 @@ public class ExporterImpl2 implements Exporter2 {
     public void export() {
         LinkedList<Media> medias = getMediasFromProject();
         ArrayList<String> videoTrimmedPaths = trimVideos(medias);
-        String pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
-
-        if(videoTrimmedPaths != null) {
-            ArrayList<String> videoTranscodedPaths = transcode(videoTrimmedPaths);
-            if(videoTranscodedPaths != null) {
-                Movie result = appendFiles(videoTranscodedPaths);
-                if(result != null) {
-                    try {
-                        com.example.android.androidmuxer.utils.Utils.createFile(result, pathVideoEdited);
-                        finalResult = new Video(pathVideoEdited);
-                        onExportEndedListener.onExportSuccess(finalResult);
-                    } catch (IOException e) {
-                        onExportEndedListener.onExportError(String.valueOf(e));
-                    }
-                }
-            }
+        if(trimCorrect) {
+            transcode(videoTrimmedPaths);
         }
     }
 
@@ -74,40 +65,41 @@ public class ExporterImpl2 implements Exporter2 {
     }
 
     private ArrayList<String> trimVideos(LinkedList<Media> medias) {
-        boolean failed = false;
-        ArrayList<String> videoTrimmedPaths = new ArrayList<String>();
+        final File tempDir = new File (trimTempPath);
+        if (!tempDir.exists())
+            tempDir.mkdirs();
+        ArrayList<String> videoTrimmedPaths = new ArrayList<>();
         Trimmer trimmer;
         Movie movie;
-        int i = 1;
-        for (Media video : medias) {
+        int index = 0;
+        do {
             try {
-                // TODO change this path
-                String outPath =  com.example.android.androidmuxer.utils.Constants.TEMP_TRIM_DIRECTORY + File.separator +
-                        "video_trimmed_"+i+".mp4";
-                int startTime = video.getFileStartTime();
-                int endTime = video.getFileStopTime();
-                if((endTime - startTime) != video.getDuration()) {
+                String videoTrimmedTempPath =  trimTempPath + File.separator + "video_trimmed_" +
+                        index + ".mp4";
+                int startTime = medias.get(index).getFileStartTime();
+                int endTime = medias.get(index).getFileStopTime();
+                int realDuration = endTime - startTime;
+                int originalFileDuration = ((Video)medias.get(index)).getFileDuration();
+                if(realDuration < originalFileDuration) {
                     trimmer = new VideoTrimmer();
-                    movie = trimmer.trim(video.getMediaPath(), startTime, endTime);
-                    com.example.android.androidmuxer.utils.Utils.createFile(movie, outPath);
-                    videoTrimmedPaths.add(outPath);
+                    movie = trimmer.trim(medias.get(index).getMediaPath(), startTime, endTime);
+                    com.example.android.androidmuxer.utils.Utils.createFile(movie, videoTrimmedTempPath);
+                    videoTrimmedPaths.add(videoTrimmedTempPath);
                 } else {
-                    videoTrimmedPaths.add(video.getMediaPath());
+                    videoTrimmedPaths.add(medias.get(index).getMediaPath());
                 }
-                i++;
             } catch (IOException e) {
-                failed = true;
+                trimCorrect = false;
+                videoTrimmedPaths = null;
                 onExportEndedListener.onExportError(String.valueOf(e));
             }
-        }
-        if(failed) {
-            videoTrimmedPaths = null;
-            Log.d(TAG, "ok");
-        }
+            index++;
+        } while(trimCorrect && medias.size() > index);
+
         return videoTrimmedPaths;
     }
 
-    private ArrayList<String> transcode(ArrayList<String> videoPaths) {
+    private void transcode(ArrayList<String> videoPaths) {
         final long startTime = SystemClock.uptimeMillis();
         videoTranscoded = new ArrayList<>();
         transcoder = createTranscoder();
@@ -124,12 +116,20 @@ public class ExporterImpl2 implements Exporter2 {
 
             @Override
             public void onTranscodeFinished() {
-                Log.d(TAG,"ya ha acabadoooooooooooooooooo");
+                numFilesTranscoded++;
+                if (numFilesTranscoded == numFilesToTranscoder) {
+                    Movie result = appendFiles(videoTranscoded);
+                    if(result != null) {
+                        saveFinalVideo(result);
+                    }
+                    numFilesTranscoded = 0;
+                }
             }
 
             @Override
             public void onTranscodeFailed(Exception exception) {
                 transcodeCorrect = false;
+                numFilesTranscoded = 0;
                 videoTranscoded = null;
                 onExportEndedListener.onExportError(String.valueOf(exception));
             }
@@ -144,21 +144,22 @@ public class ExporterImpl2 implements Exporter2 {
             }
             index++;
         } while(transcodeCorrect && videoPaths.size() > index);
-
-        return videoTranscoded;
     }
 
     private Transcoder createTranscoder() {
         Size.Resolution resolution = project.getProfile().getResolution();
+        final File tempDir = new File (tempTranscodeDirectory);
+        if (!tempDir.exists())
+            tempDir.mkdirs();
         switch (resolution) {
             case HD720:
-                return new Transcoder(Transcoder.Resolution.HD720);
+                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
             case HD1080:
-                return new Transcoder(Transcoder.Resolution.HD1080);
+                return new Transcoder(Transcoder.Resolution.HD1080, tempTranscodeDirectory);
             case HD4K:
-                return new Transcoder(Transcoder.Resolution.HD4K);
+                return new Transcoder(Transcoder.Resolution.HD4K, tempTranscodeDirectory);
             default:
-                return new Transcoder(Transcoder.Resolution.HD720);
+                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
         }
     }
 
@@ -227,5 +228,14 @@ public class ExporterImpl2 implements Exporter2 {
         }
 
         return movie;
+    }
+
+    private void saveFinalVideo(Movie result) {
+        try {
+            com.example.android.androidmuxer.utils.Utils.createFile(result, pathVideoEdited);
+            onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
+        } catch (IOException e) {
+            onExportEndedListener.onExportError(String.valueOf(e));
+        }
     }
 }
