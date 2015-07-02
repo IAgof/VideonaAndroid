@@ -402,5 +402,6 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
 
 
     <string name="recordError">Algo ha fallado. Imposible grabar el vídeo</string>
-    <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
+    <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
+    <string name="effects_chooser_title">Efectos</string>
 </resources>
