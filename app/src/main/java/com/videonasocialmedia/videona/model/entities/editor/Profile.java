@@ -31,7 +31,7 @@ public class Profile {
     /**
      * Resolution of the Video objects in a project
      */
-    private Size resolution;
+    private Size.Resolution resolution;
 
     /**
      * Maximum length of the project in millseconds;
@@ -56,7 +56,7 @@ public class Profile {
      * @param maxDuration - Maximum video duration allowed for the profile.
      * @param type        - Profile type.
      */
-    private Profile(Size resolution, long maxDuration, ProfileType type) {
+    private Profile(Size.Resolution resolution, long maxDuration, ProfileType type) {
         this.resolution = resolution;
         this.maxDuration = maxDuration;
         this.profileType = type;
@@ -71,20 +71,20 @@ public class Profile {
     public static Profile getInstance(ProfileType profileType) {
         if (INSTANCE == null) {
             if (profileType == ProfileType.free) {
-                INSTANCE = new Profile(new Size(Size.Resolution.hd720), 1000, profileType);
+                INSTANCE = new Profile(Size.Resolution.HD720, 1000, profileType);
             } else {
-                INSTANCE = new Profile(new Size(Size.Resolution.hd1080), -1, profileType);
+                INSTANCE = new Profile(Size.Resolution.HD1080, -1, profileType);
             }
         }
         return INSTANCE;
     }
 
     //getter and setter.
-    public Size getResolution() {
+    public Size.Resolution getResolution() {
         return resolution;
     }
 
-    public void setResolution(Size resolution) {
+    public void setResolution(Size.Resolution resolution) {
         if (profileType == ProfileType.pro)
             this.resolution = resolution;
     }

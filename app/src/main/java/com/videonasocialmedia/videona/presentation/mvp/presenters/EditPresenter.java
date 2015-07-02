@@ -171,7 +171,8 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     }
 
     @Override
-    public void onExportError() {
+    public void onExportError(String error) {
+        Log.d("error", error);
         editorView.hideProgressDialog();
         //TODO modify error message
         editorView.showError(R.string.addMediaItemToTrackError);

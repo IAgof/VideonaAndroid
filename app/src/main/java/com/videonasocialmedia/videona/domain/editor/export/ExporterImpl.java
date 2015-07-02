@@ -1,21 +1,30 @@
 package com.videonasocialmedia.videona.domain.editor.export;
 
-import com.coremedia.iso.boxes.Container;
+import android.os.SystemClock;
+import android.util.Log;
+
+import com.example.android.androidmuxer.Appender;
+import com.example.android.androidmuxer.AudioTrimmer;
+import com.example.android.androidmuxer.Trimmer;
+import com.example.android.androidmuxer.VideoTrimmer;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
-import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
-import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
-import com.googlecode.mp4parser.authoring.tracks.CroppedTrack;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import net.ypresto.androidtranscoder.Transcoder;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,136 +32,217 @@ import java.util.List;
  * @author Juan Javier Cabanas
  */
 public class ExporterImpl implements Exporter {
+
+    private static final String TAG = "Exporter implementation";
+    private OnExportEndedListener onExportEndedListener;
+    private Project project;
+    private Transcoder transcoder;
+    private boolean trimCorrect = true;
+    private boolean transcodeCorrect = true;
+    private ArrayList<String> videoTranscoded;
+    private int numFilesToTranscoder = 1;
+    private int numFilesTranscoded = 0;
+    private String trimTempPath = Constants.PATH_APP_TEMP + File.separator + "trim";
+    private String tempTranscodeDirectory = Constants.PATH_APP_TEMP + File.separator + "transcode";
+    private String pathVideoEdited;
+
+    public ExporterImpl(Project project, OnExportEndedListener onExportEndedListener) {
+        this.onExportEndedListener = onExportEndedListener;
+        this.project = project;
+    }
+
     @Override
-    public Video trimVideo(Video videoToTrim, String outputPath) throws IOException {
-        Movie movie = MovieCreator.build(videoToTrim.getMediaPath());
-        List<Track> tracks = movie.getTracks();
-        movie.setTracks(new LinkedList<Track>());
-
-        //MP4 parser usa segundos en vez de ms
-        double startTime = videoToTrim.getFileStartTime() / 1000;
-        double endTime = videoToTrim.getFileStopTime() / 1000;
-        boolean timeCorrected = false;
-        for (Track track : tracks) {
-            if (track.getSyncSamples() != null && track.getSyncSamples().length > 0) {
-                if (timeCorrected) {
-                    // This exception here could be a false positive in case we have multiple tracks
-                    // with sync samples at exactly the same positions. E.g. a single movie containing
-                    // multiple qualities of the same video (Microsoft Smooth Streaming file)
-                    throw new RuntimeException("The startTime has already been corrected by another track with SyncSample. Not Supported.");
-                }
-                startTime = correctTimeToSyncSample(track, startTime, false);
-                endTime = correctTimeToSyncSample(track, endTime, true);
-                timeCorrected = true;
+    public void export() {
+        pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+        LinkedList<Media> medias = getMediasFromProject();
+        ArrayList<String> videoTrimmedPaths = trimVideos(medias);
+        if(trimCorrect) {
+            //transcode(videoTrimmedPaths);
+            Movie result = appendFiles(videoTrimmedPaths);
+            if(result != null) {
+                saveFinalVideo(result);
+                Utils.cleanDirectory(new File(trimTempPath));
             }
         }
-
-        for (Track track : tracks) {
-            long samples[] = getStartAndStopSamples(track, startTime, endTime);
-            movie.addTrack(new AppendTrack(new CroppedTrack(track, samples[0], samples[1])));
-        }
-        Container out = new DefaultMp4Builder().build(movie);
-
-        FileOutputStream fos = new FileOutputStream(String.format(outputPath, startTime, endTime));
-        FileChannel fc = fos.getChannel();
-        out.writeContainer(fc);
-        fc.close();
-        fos.close();
-
-        return new Video(outputPath);
     }
 
-    private long[] getStartAndStopSamples(Track track, double startTime, double endTime) {
-        long currentSample = 0;
-        double currentTime = 0;
-        double lastTime = -1;
-        long startSample = -1;
-        long endSample = -1;
-
-        for (int i = 0; i < track.getSampleDurations().length; i++) {
-            long delta = track.getSampleDurations()[i];
-
-            if (currentTime > lastTime && currentTime <= startTime) {
-                // current sample is still before the new starttime
-                startSample = currentSample;
-            }
-            if (currentTime > lastTime && currentTime <= endTime) {
-                // current sample is after the new start time and still before the new endtime
-                endSample = currentSample;
-            }
-            lastTime = currentTime;
-            currentTime += (double) delta / (double) track.getTrackMetaData().getTimescale();
-            currentSample++;
-        }
-        return new long[]{startSample, endSample};
+    private LinkedList<Media> getMediasFromProject() {
+        LinkedList<Media> medias = project.getMediaTrack().getItems();
+        return medias;
     }
 
-    private double correctTimeToSyncSample(Track track, double cutHere, boolean next) {
-        double[] timeOfSyncSamples = new double[track.getSyncSamples().length];
-        long currentSample = 0;
-        double currentTime = 0;
-        for (int i = 0; i < track.getSampleDurations().length; i++) {
-            long delta = track.getSampleDurations()[i];
-
-            if (Arrays.binarySearch(track.getSyncSamples(), currentSample + 1) >= 0) {
-                // samples always start with 1 but we start with zero therefore +1
-                timeOfSyncSamples[Arrays.binarySearch(track.getSyncSamples(), currentSample + 1)] = currentTime;
-            }
-            currentTime += (double) delta / (double) track.getTrackMetaData().getTimescale();
-            currentSample++;
-        }
-        double previous = 0;
-        for (double timeOfSyncSample : timeOfSyncSamples) {
-            if (timeOfSyncSample > cutHere) {
-                if (next) {
-                    return timeOfSyncSample;
+    private ArrayList<String> trimVideos(LinkedList<Media> medias) {
+        final File tempDir = new File (trimTempPath);
+        if (!tempDir.exists())
+            tempDir.mkdirs();
+        ArrayList<String> videoTrimmedPaths = new ArrayList<>();
+        Trimmer trimmer;
+        Movie movie;
+        int index = 0;
+        do {
+            try {
+                String videoTrimmedTempPath =  trimTempPath + File.separator + "video_trimmed_" +
+                        index + ".mp4";
+                int startTime = medias.get(index).getFileStartTime();
+                int endTime = medias.get(index).getFileStopTime();
+                int editedFileDuration = medias.get(index).getFileStopTime() - medias.get(index).getFileStartTime();
+                int originalFileDuration = ((Video)medias.get(index)).getFileDuration();
+                if(editedFileDuration < originalFileDuration) {
+                    trimmer = new VideoTrimmer();
+                    movie = trimmer.trim(medias.get(index).getMediaPath(), startTime, endTime);
+                    com.example.android.androidmuxer.utils.Utils.createFile(movie, videoTrimmedTempPath);
+                    videoTrimmedPaths.add(videoTrimmedTempPath);
                 } else {
-                    return previous;
+                    videoTrimmedPaths.add(medias.get(index).getMediaPath());
+                }
+            } catch (IOException e) {
+                trimCorrect = false;
+                videoTrimmedPaths = null;
+                onExportEndedListener.onExportError(String.valueOf(e));
+            }
+            index++;
+        } while(trimCorrect && medias.size() > index);
+
+        return videoTrimmedPaths;
+    }
+
+    private void transcode(ArrayList<String> videoPaths) {
+        final long startTime = SystemClock.uptimeMillis();
+        videoTranscoded = new ArrayList<>();
+        transcoder = createTranscoder();
+        Transcoder.Listener listener = new Transcoder.Listener() {
+            @Override
+            public void onTranscodeProgress(double progress) {}
+
+            @Override
+            public void onTranscodeCompleted(String path) {
+                Log.d(TAG, "transcoding finished listener");
+                Log.d(TAG, "transcoding took " + (SystemClock.uptimeMillis() - startTime) + "ms");
+                videoTranscoded.add(path);
+            }
+
+            @Override
+            public void onTranscodeFinished() {
+                numFilesTranscoded++;
+                if (numFilesTranscoded == numFilesToTranscoder) {
+                    Movie result = appendFiles(videoTranscoded);
+                    if(result != null) {
+                        saveFinalVideo(result);
+                    }
+                    numFilesTranscoded = 0;
                 }
             }
-            previous = timeOfSyncSample;
+
+            @Override
+            public void onTranscodeFailed(Exception exception) {
+                transcodeCorrect = false;
+                numFilesTranscoded = 0;
+                videoTranscoded = null;
+                onExportEndedListener.onExportError(String.valueOf(exception));
+            }
+        };
+        int index = 0;
+        do {
+            String video = videoPaths.get(index);
+            try {
+                transcoder.transcodeFile(video, listener);
+            } catch (IOException e) {
+                Log.d(TAG, String.valueOf(e));
+            }
+            index++;
+        } while(transcodeCorrect && videoPaths.size() > index);
+    }
+
+    private Transcoder createTranscoder() {
+        Size.Resolution resolution = project.getProfile().getResolution();
+        final File tempDir = new File (tempTranscodeDirectory);
+        if (!tempDir.exists())
+            tempDir.mkdirs();
+        switch (resolution) {
+            case HD720:
+                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
+            case HD1080:
+                return new Transcoder(Transcoder.Resolution.HD1080, tempTranscodeDirectory);
+            case HD4K:
+                return new Transcoder(Transcoder.Resolution.HD4K, tempTranscodeDirectory);
+            default:
+                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
         }
-        return timeOfSyncSamples[timeOfSyncSamples.length - 1];
     }
 
-    @Override
-    public Video mergeVideos(List<Video> videoList) {
-        return null;
+    private Movie appendFiles(ArrayList<String> videoTranscoded) {
+        Movie result;
+        if (isMusicOnProject()) {
+            Movie merge = appendVideos(videoTranscoded, false);
+
+            Music music = (Music) project.getAudioTracks().get(0).getItems().getFirst();
+            File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
+            ArrayList<String> audio = new ArrayList<>();
+            audio.add(musicFile.getPath());
+
+            result = addAudio(merge, audio, project.getMediaTrack().getDuration());
+        } else {
+            result = appendVideos(videoTranscoded, true);
+        }
+        return result;
     }
 
-    @Override
-    public Video addMusicToVideo(Video video, Music music, String outputPath) throws IOException {
-        File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
-        if (musicFile != null) {
-            Movie videoMovie = MovieCreator.build(video.getMediaPath());
-            videoMovie.getTracks().remove(1);
-            CroppedTrack musicTrack = trimMusicTrack(musicFile.getPath(), video.getDuration());
-            videoMovie.addTrack(new AppendTrack(musicTrack));
-            {
-                Container out = new DefaultMp4Builder().build(videoMovie);
-                FileOutputStream fos = new FileOutputStream(new File(outputPath));
-                out.writeContainer(fos.getChannel());
-                fos.close();
+    private boolean isMusicOnProject() {
+        return project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size() > 0;
+    }
+
+    private Movie appendVideos(ArrayList<String> videoTranscodedPaths, boolean addOriginalAudio) {
+        Appender appender = new Appender();
+        Movie merge;
+        try {
+            merge = appender.appendVideos(videoTranscodedPaths, addOriginalAudio);
+        } catch (IOException e) {
+            merge = null;
+            onExportEndedListener.onExportError(String.valueOf(e));
+        }
+        return merge;
+    }
+
+    private Movie addAudio(Movie movie, ArrayList<String> audioPaths, double movieDuration) {
+        ArrayList<Movie> audioList = new ArrayList<>();
+        List<Track> audioTracks = new LinkedList<>();
+        Trimmer trimmer = new AudioTrimmer();
+
+        // TODO change this for do while
+        for (String audio : audioPaths) {
+            try {
+                audioList.add(trimmer.trim(audio, 0, movieDuration));
+            } catch (IOException e) {
+                onExportEndedListener.onExportError(String.valueOf(e));
             }
         }
-        return new Video(outputPath);
+
+        for (Movie m : audioList) {
+            for (Track t : m.getTracks()) {
+                if (t.getHandler().equals("soun")) {
+                    audioTracks.add(t);
+                }
+            }
+        }
+
+        if (audioTracks.size() > 0) {
+            try {
+                movie.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
+            } catch (IOException e) {
+                onExportEndedListener.onExportError(String.valueOf(e));
+                // TODO se debe continuar sin música o lo paro??
+            }
+        }
+
+        return movie;
     }
 
-    private CroppedTrack trimMusicTrack(String musicFilePath, double endTime) throws IOException {
-        Movie music = MovieCreator.build(musicFilePath);
-        Track musicTrack = music.getTracks().get(0);
-        //Mp4parser needs seconds instead of milliseconds
-        endTime = endTime / 1000;
-        if (musicTrack.getSyncSamples() != null && musicTrack.getSyncSamples().length > 0)
-            endTime = correctTimeToSyncSample(musicTrack, endTime, true);
-        long[] samples = getStartAndStopSamples(musicTrack, 0, endTime);
-        return new CroppedTrack(musicTrack, samples[0], samples[1]);
+    private void saveFinalVideo(Movie result) {
+        try {
+            com.example.android.androidmuxer.utils.Utils.createFile(result, pathVideoEdited);
+            onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
+        } catch (IOException e) {
+            onExportEndedListener.onExportError(String.valueOf(e));
+        }
     }
-
-    @Override
-    public Video transcodeVideo(Video video) {
-        return null;
-    }
-
-
 }
