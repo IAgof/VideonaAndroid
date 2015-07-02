@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * @author Juan Javier Cabanas
  */
-public class ExporterImpl2 implements Exporter2 {
+public class ExporterImpl implements Exporter {
 
     private static final String TAG = "Exporter implementation";
     private OnExportEndedListener onExportEndedListener;
@@ -42,20 +42,27 @@ public class ExporterImpl2 implements Exporter2 {
     private ArrayList<String> videoTranscoded;
     private int numFilesToTranscoder = 1;
     private int numFilesTranscoded = 0;
-    private String pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
     private String trimTempPath = Constants.PATH_APP_TEMP + File.separator + "trim";
     private String tempTranscodeDirectory = Constants.PATH_APP_TEMP + File.separator + "transcode";
-    public ExporterImpl2(Project project, OnExportEndedListener onExportEndedListener) {
+    private String pathVideoEdited;
+
+    public ExporterImpl(Project project, OnExportEndedListener onExportEndedListener) {
         this.onExportEndedListener = onExportEndedListener;
         this.project = project;
     }
 
     @Override
     public void export() {
+        pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
         LinkedList<Media> medias = getMediasFromProject();
         ArrayList<String> videoTrimmedPaths = trimVideos(medias);
         if(trimCorrect) {
-            transcode(videoTrimmedPaths);
+            //transcode(videoTrimmedPaths);
+            Movie result = appendFiles(videoTrimmedPaths);
+            if(result != null) {
+                saveFinalVideo(result);
+                Utils.cleanDirectory(new File(trimTempPath));
+            }
         }
     }
 
@@ -78,9 +85,9 @@ public class ExporterImpl2 implements Exporter2 {
                         index + ".mp4";
                 int startTime = medias.get(index).getFileStartTime();
                 int endTime = medias.get(index).getFileStopTime();
-                int realDuration = endTime - startTime;
+                int editedFileDuration = medias.get(index).getFileStopTime() - medias.get(index).getFileStartTime();
                 int originalFileDuration = ((Video)medias.get(index)).getFileDuration();
-                if(realDuration < originalFileDuration) {
+                if(editedFileDuration < originalFileDuration) {
                     trimmer = new VideoTrimmer();
                     movie = trimmer.trim(medias.get(index).getMediaPath(), startTime, endTime);
                     com.example.android.androidmuxer.utils.Utils.createFile(movie, videoTrimmedTempPath);

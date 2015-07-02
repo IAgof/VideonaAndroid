@@ -129,4 +129,19 @@ public class Utils {
         return uri;
     }
 
+    public static void cleanDirectory(File directory) {
+        if(directory.exists()) {
+            File[] files = directory.listFiles();
+            if(files!=null) { //some JVMs return null for empty dirs
+                for(File f: files) {
+                    if(f.isDirectory()) {
+                        cleanDirectory(f);
+                    } else {
+                        f.delete();
+                    }
+                }
+            }
+        }
+    }
+
 }

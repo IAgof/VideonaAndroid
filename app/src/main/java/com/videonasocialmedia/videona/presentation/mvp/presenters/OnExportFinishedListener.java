@@ -9,7 +9,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 
-public interface OnExportFinishedListener2 {
+public interface OnExportFinishedListener {
 
     void onExportError(String error);
 

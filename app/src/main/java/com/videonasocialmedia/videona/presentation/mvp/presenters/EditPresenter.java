@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.domain.editor.AddMusicToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
-import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase2;
+import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -26,7 +26,7 @@ import java.util.LinkedList;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditPresenter implements OnExportFinishedListener2, ModifyVideoDurationlistener, OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
+public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurationlistener, OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
 
     /**
      * LOG_TAG
@@ -36,7 +36,7 @@ public class EditPresenter implements OnExportFinishedListener2, ModifyVideoDura
     /**
      * Export project use case
      */
-    private ExportProjectUseCase2 exportProjectUseCase;
+    private ExportProjectUseCase exportProjectUseCase;
     private ModifyVideoDurationUseCase modifyVideoDurationUseCase;
     private AddMusicToProjectUseCase addMusicToProjectUseCase;
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
@@ -51,7 +51,7 @@ public class EditPresenter implements OnExportFinishedListener2, ModifyVideoDura
 
     public EditPresenter(EditorView editorView) {
         this.editorView = editorView;
-        exportProjectUseCase = new ExportProjectUseCase2(this);
+        exportProjectUseCase = new ExportProjectUseCase(this);
         modifyVideoDurationUseCase = new ModifyVideoDurationUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addMusicToProjectUseCase= new AddMusicToProjectUseCase();
