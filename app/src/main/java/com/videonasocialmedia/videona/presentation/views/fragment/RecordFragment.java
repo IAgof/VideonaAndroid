@@ -19,6 +19,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -191,6 +193,9 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
      */
     private Tracker tracker;
 
+    // CountDown timer to prevent bugs
+    private CountDownTimer countDownTimer;
+
 
     private SensorEventListener mOrientationListener = new SensorEventListener() {
         final int SENSOR_CONFIRMATION_THRESHOLD = 5;
@@ -339,10 +344,10 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
             recordPresenter.onHostActivityPaused();
         stopMonitoringOrientation();
 
-       /* if(recordPresenter.isRecording()){
+        if(recordPresenter.isRecording()){
             recordPresenter.stopRecording();
         }
-        */
+
     }
 
     @Override
@@ -395,6 +400,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.camera_filter_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         // Apply the adapter to the spinner.
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -483,10 +489,38 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         if (recordPresenter.isRecording()) {
             recordPresenter.stopRecording();
 
+            countDownTimer = new CountDownTimer(4000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
+
+                    restartRecordVideo();
+                }
+            }.start();
+
         } else {
             recordPresenter.startRecording();
             //stopMonitoringOrientation();
         }
+    }
+
+    private void restartRecordVideo() {
+
+        //Restart original buttonRecord view
+        buttonRecord.setEnabled(true);
+        buttonRecord.setImageAlpha(255); // (100%)
+        chronometerRecord.setText("00:00");
+
+        super.onDestroy();
+
+        recreateRecordFragment();
+        setupRecordPresenter();
+
     }
 
     /**
@@ -585,12 +619,12 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     @Override
     public void navigateEditActivity() {
 
+        countDownTimer.cancel();
+
         //Restart original buttonRecord view
         buttonRecord.setEnabled(true);
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
-
-        onDestroy();
 
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
         Intent edit = new Intent(getActivity(), EditActivity.class);

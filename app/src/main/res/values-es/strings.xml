@@ -401,6 +401,6 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="editedFolderTitle">Editados</string>
 
 
-    <string name="recordError">Algo ha fallado. Imposible grabar el vídeo</string>
+    <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
 </resources>

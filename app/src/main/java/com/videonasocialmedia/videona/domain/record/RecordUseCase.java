@@ -9,9 +9,12 @@ package com.videonasocialmedia.videona.domain.record;
 
 import android.hardware.Camera;
 import android.os.SystemClock;
+import android.util.Log;
 
-import com.videonasocialmedia.videona.avrecorder.AndroidMuxer;
 import com.videonasocialmedia.videona.avrecorder.SessionConfig;
+import com.videonasocialmedia.videona.model.entities.editor.Profile;
+import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnColorEffectListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
@@ -39,7 +42,10 @@ public class RecordUseCase {
 
     private String outputLocation = "";
 
-    private AndroidMuxer androidMuxer;
+    /**
+     * LOG_TAG
+     */
+    private final String LOG_TAG = getClass().getSimpleName();
 
     public RecordUseCase(){
 
@@ -48,21 +54,35 @@ public class RecordUseCase {
 
     public void initSessionConfig(OnSessionConfigListener listener){
 
-        // Create a media file name
+        // Create a temp media file name to record video
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "VID_" + timeStamp + ".mp4";
-        outputLocation = new File(Constants.PATH_APP_MASTERS, fileName).getAbsolutePath();
+        //String fileName = "VID_" + timeStamp + ".mp4";
+        String fileName = "VID_record_temp.mp4";
+        File fTempRecord = new File(Constants.PATH_APP_TEMP, fileName);
+        if(fTempRecord.exists()){
+            fTempRecord.delete();
+        }
+        outputLocation = new File(Constants.PATH_APP_TEMP, fileName).getAbsolutePath();
 
-        //androidMuxer = AndroidMuxer.create(outputLocation, Muxer.FORMAT.MPEG4);
+        //Get data from Project, Profile
+        Profile profile = Profile.getInstance(null);
 
-        //TODO get this data from Project
+        Size.Resolution resolution = profile.getResolution();
+        Size videoSize = new Size(resolution);
+
+        VideoQuality.Quality quality = profile.getVideoQuality();
+        VideoQuality videoQuality = new VideoQuality (quality);
+
+        Log.d(LOG_TAG, " Profile resolution " + resolution + " quality " + quality);
+
+
+        // TODO, get audio data from Profile
         mConfig = new SessionConfig.Builder(outputLocation)
-                .withVideoBitrate(5 * 1000 * 1000)
-                .withVideoResolution(1280, 720)
+                .withVideoBitrate(videoQuality.getVideoBitRate())
+                .withVideoResolution(videoSize.getWidth(), videoSize.getHeigth())
                 .withAudioChannels(1)
                 .withAudioSamplerate(48000)
                 .withAudioBitrate(192 * 1000)
-                //    .withMuxer(androidMuxer)
                 .build();
 
         listener.onInitSession(mConfig);
