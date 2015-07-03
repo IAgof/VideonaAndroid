@@ -12,6 +12,7 @@
 package com.videonasocialmedia.videona.model.entities.editor;
 
 import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
 
 /**
  * Project profile. Define some characteristics and limitations of the current video editing project
@@ -32,6 +33,11 @@ public class Profile {
      * Resolution of the Video objects in a project
      */
     private Size.Resolution resolution;
+
+    /**
+     * Video bit rate
+     */
+    private VideoQuality.Quality videoQuality;
 
     /**
      * Maximum length of the project in millseconds;
@@ -56,10 +62,11 @@ public class Profile {
      * @param maxDuration - Maximum video duration allowed for the profile.
      * @param type        - Profile type.
      */
-    private Profile(Size.Resolution resolution, long maxDuration, ProfileType type) {
+    private Profile(Size.Resolution resolution, VideoQuality.Quality videoQuality, long maxDuration, ProfileType type) {
         this.resolution = resolution;
         this.maxDuration = maxDuration;
         this.profileType = type;
+        this.videoQuality = videoQuality;
     }
 
     /**
@@ -71,9 +78,9 @@ public class Profile {
     public static Profile getInstance(ProfileType profileType) {
         if (INSTANCE == null) {
             if (profileType == ProfileType.free) {
-                INSTANCE = new Profile(Size.Resolution.HD720, 1000, profileType);
+                INSTANCE = new Profile(Size.Resolution.HD720, VideoQuality.Quality.VERY_GOOD, 1000, profileType);
             } else {
-                INSTANCE = new Profile(Size.Resolution.HD1080, -1, profileType);
+                INSTANCE = new Profile(Size.Resolution.HD1080,VideoQuality.Quality.EXCELLENT, -1, profileType);
             }
         }
         return INSTANCE;
@@ -87,6 +94,15 @@ public class Profile {
     public void setResolution(Size.Resolution resolution) {
         if (profileType == ProfileType.pro)
             this.resolution = resolution;
+    }
+
+    //getter and setter video quality
+    public VideoQuality.Quality getVideoQuality(){
+        return videoQuality;
+    }
+
+    public void setVideoQuality(VideoQuality.Quality quality) {
+        this.videoQuality = quality;
     }
 
     public long getMaxDuration() {

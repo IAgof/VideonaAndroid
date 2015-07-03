@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -24,10 +25,14 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraView;
+import com.videonasocialmedia.videona.utils.Constants;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RecordPresenter implements OnCameraEffectListener, OnColorEffectListener,
         OnFlashModeListener, OnSettingsCameraListener, OnRemoveMediaFinishedListener,
@@ -72,6 +77,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
     // Handler to control Android Muxer is finished, record file created correctly, audio and video
     private AVRecorderHandler mHandler = new AVRecorderHandler(this);
 
+
     public RecordPresenter(final RecordView recordView) throws IOException {
 
         this.recordView = recordView;
@@ -89,6 +95,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         mMicEncoder = new MicrophoneEncoder(config, this);
         mIsRecording = false;
         mConfig = config;
+
 
     }
 
@@ -139,6 +146,12 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         mIsRecording = true;
         mMicEncoder.startRecording();
         mCamEncoder.startRecording();
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "VID_" + timeStamp + ".mp4";
+        File outputLocation = new File(Constants.PATH_APP_MASTERS, fileName);
+        mConfig.setOutputDirectory(outputLocation);
 
         recordUseCase.startRecording(this);
 
@@ -429,8 +442,31 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
     public void setMsgAvrecorderFinish() {
 
-        clearProject();
-        addVideoToProjectUseCase.addVideoToTrack(recordUseCase.getOutputVideoPath(), this);
+
+        //renameFileRecorded();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "VID_" + timeStamp + ".mp4";
+        File fRecord = new File(Constants.PATH_APP_MASTERS, fileName);
+
+        File fTempRecord = new File((recordUseCase.getOutputVideoPath()));
+
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            try {
+                Log.d("SHOW TIME TAG", "" );
+                retriever.setDataSource(fTempRecord.getAbsolutePath());
+                //String duration = retriever.extractMetadata(
+                       // MediaMetadataRetriever.METADATA_KEY_DURATION);
+                //int durationInt = Integer.parseInt(duration);
+
+                fTempRecord.renameTo(fRecord);
+
+                clearProject();
+                addVideoToProjectUseCase.addVideoToTrack(fRecord.getAbsolutePath(), this);
+
+
+            } catch (Exception e) {
+
+            }
 
     }
 
