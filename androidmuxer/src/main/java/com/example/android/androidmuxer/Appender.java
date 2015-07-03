@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Veronica Lago Fominaya on 25/06/2015.
+ * @author Veronica Lago Fominaya
  */
 public class Appender {
 
