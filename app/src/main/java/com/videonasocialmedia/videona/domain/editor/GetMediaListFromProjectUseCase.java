@@ -10,8 +10,10 @@ package com.videonasocialmedia.videona.domain.editor;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.Track;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnVideosRetrieved;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class GetMediaListFromProjectUseCase {
 
@@ -19,5 +21,15 @@ public class GetMediaListFromProjectUseCase {
         Project project=Project.getInstance(null, null, null);;
         Track track=project.getMediaTrack();
         return track.getItems();
+    }
+
+    public void getMediaListFromProject(OnVideosRetrieved listener){
+        Project project=Project.getInstance(null, null, null);
+        Track track=project.getMediaTrack();
+        List items= track.getItems();
+        if (items.size()>0)
+            listener.onVideosRetrieved(items);
+        else
+            listener.onNoVideosRetrieved();
     }
 }

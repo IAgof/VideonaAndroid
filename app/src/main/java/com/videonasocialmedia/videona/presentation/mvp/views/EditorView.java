@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
  */
 public interface EditorView {
 
-    void initVideoPlayer(String videoPath);
+    //void initVideoPlayer(String videoPath);
 
     void initMusicPlayer(Music music);
 

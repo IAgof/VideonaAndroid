@@ -21,8 +21,6 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 
-import java.util.LinkedList;
-
 /**
  * @author Juan Javier Cabanas Abascal
  */
@@ -76,6 +74,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
 
     public void onResume(){
 
+        /*
         LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
         videoToEdit = (Video) listMedia.getLast();
 
@@ -90,6 +89,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
         } catch (Exception e) {
             //TODO Determine what to do when the thumbs cannot be drawn
         }
+        */
 
     }
 
