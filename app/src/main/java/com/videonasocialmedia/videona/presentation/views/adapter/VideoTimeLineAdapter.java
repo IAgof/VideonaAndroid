@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Created by jca on 6/7/15.
+ * @author Juan Javier Cabanas Abascal
  */
 public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdapter.VideoViewHolder>
         implements MovableItemsAdapter {
@@ -54,10 +54,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         this.videoList = videoList;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return videoList.get(position).getUniqueId();
-    }
 
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
