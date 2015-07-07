@@ -55,6 +55,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFrag
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Size;
@@ -121,7 +122,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
     private LookFxMenuFragment lookFxMenuFragment;
+
+
     private MusicGalleryFragment musicGalleryFragment;
+    private VideoTimeLineFragment videoTimeLineFragment;
     /*mvp*/
     private EditPresenter editPresenter;
     /**
@@ -355,10 +359,16 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
 
         relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
-        if (musicGalleryFragment != null)
-            this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+        //if (musicGalleryFragment != null)
+        //    this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+        if(videoTimeLineFragment==null){
+            videoTimeLineFragment= new VideoTimeLineFragment();
+        }
+        switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
 
     }
+
+
 
     @OnClick(R.id.edit_button_look)
     public void showLookFxMenu() {

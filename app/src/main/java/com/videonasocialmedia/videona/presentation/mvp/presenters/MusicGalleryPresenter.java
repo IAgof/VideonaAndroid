@@ -23,7 +23,7 @@ import java.util.List;
 public class MusicGalleryPresenter implements OnMusicRetrievedListener {
 
     private MusicGalleryView galleryView;
-    private ArrayList<Music> musicList = new ArrayList<>();
+    private List<Music> musicList = new ArrayList<>();
 
     /**
      * Constructor.

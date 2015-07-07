@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:id="@+id/container">
+
+    <ImageView
+        android:id="@+id/timelinevideo_thumb"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/black"
+        android:src="@drawable/fragment_gallery_no_image" />
+
+</RelativeLayout>

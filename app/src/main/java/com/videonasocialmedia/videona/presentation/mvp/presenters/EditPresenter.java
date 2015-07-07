@@ -22,6 +22,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Juan Javier Cabanas Abascal
@@ -76,8 +77,8 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
 
     public void onResume(){
 
-        LinkedList<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
-        videoToEdit = (Video) listMedia.getLast();
+        List<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
+        videoToEdit = (Video) listMedia.get(listMedia.size()-1);
 
         String videoPath = videoToEdit.getMediaPath();
         Log.d(LOG_TAG, "EditPresenter onCreate pathMedia " + videoPath);
