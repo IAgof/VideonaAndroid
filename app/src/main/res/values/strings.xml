@@ -405,5 +405,9 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
 
     <string name="effects_chooser_title">Effects</string>
 
+    <string name="add_videos_to_project">Please, add videos to project</string>
+    <string name="videos_removed">Clear videos from project, record or add new videos</string>
+
+
 
 </resources>

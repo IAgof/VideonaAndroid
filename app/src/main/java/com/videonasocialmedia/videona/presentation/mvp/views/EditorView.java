@@ -26,6 +26,8 @@ public interface EditorView {
 
     void showError(int causeTextResource);
 
+    void showMessage(int stringToast);
+
     void refreshStartTimeTag(int time);
 
     void refreshStopTimeTag(int time);

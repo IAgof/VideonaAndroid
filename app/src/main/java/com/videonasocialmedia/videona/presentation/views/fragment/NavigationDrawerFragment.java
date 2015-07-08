@@ -15,7 +15,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +24,11 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.ShareActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,8 +48,6 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private static final String LOG_TAG = "NavigationDrawerFragment";
 
-   //@InjectView(R.id.activity_record_drawer_layout)
-    DrawerLayout drawerRecordLayout;
 
     @Nullable
     @Override
@@ -59,8 +58,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
-
-        drawerRecordLayout = (DrawerLayout) view.findViewById(R.id.activity_record_drawer_layout);
 
         return view;
     }
@@ -88,9 +85,25 @@ public class NavigationDrawerFragment extends Fragment {
 
     @OnClick(R.id.fragment_navigator_edit_button)
     public void navigateToEdit() {
-        Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
-        gallery.putExtra("SHARE", false);
-        startActivity(gallery);
+
+        // In ShareActivity, Edit goBack to editActivity, not to GalleryActivity.
+        // In EditActivity go back to editActivity
+        if(this.getActivity().getClass() == ShareActivity.class ||
+                this.getActivity().getClass() == EditActivity.class){
+
+            this.getActivity().onBackPressed();
+
+        } else {
+            //Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
+            RecordActivity activity = (RecordActivity) this.getActivity();
+            activity.navigateToEdit();
+
+        /*
+            Intent edit = new Intent(this.getActivity(), EditActivity.class);
+            edit.putExtra("SHARE", false);
+            startActivity(edit);
+            */
+        }
     }
 
 

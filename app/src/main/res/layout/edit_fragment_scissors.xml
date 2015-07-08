@@ -38,8 +38,7 @@
         android:background="@color/pastel_palette_pink_2"
         android:padding="15dp"
         android:layout_marginBottom="2dp"
-        android:src="@drawable/edit_fragment_scissors_icon_add_clip_normal"
-        android:alpha="0.20" />
+        android:src="@drawable/edit_fragment_scissors_icon_add_clip_normal" />
 
     <ImageButton
         android:id="@+id/edit_fragment_scissors_button_duplicate"
@@ -47,6 +46,5 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_red"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_scissors_icon_duplicate_normal"
-        android:alpha="0.20" />
+        android:src="@drawable/edit_fragment_scissors_icon_duplicate_normal" />
 </LinearLayout>

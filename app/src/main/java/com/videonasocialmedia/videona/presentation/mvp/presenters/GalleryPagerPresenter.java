@@ -53,12 +53,12 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
      * @param video the path of the new video which user wants to add to the project
      */
     public void loadVideoToProject(Video video) {
-        resetProject();
+       // resetProject();
         addVideoToProjectUseCase.addVideoToTrack(video, this);
     }
 
     public void loadVideoListToProject(List<Video> videoList) {
-        resetProject();
+       // resetProject();
         //exported= false;
         addVideoToProjectUseCase.addVideoListToTrack(videoList, this);
     }

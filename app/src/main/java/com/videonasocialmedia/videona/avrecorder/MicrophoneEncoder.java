@@ -35,9 +35,11 @@ public class MicrophoneEncoder implements Runnable {
 
     private AndroidEncoder.OnMuxerFinishedEventListener onMuxerFinishedEventListener;
 
+    private SessionConfig mConfig;
+
     public MicrophoneEncoder(SessionConfig config, AndroidEncoder.OnMuxerFinishedEventListener listener) throws IOException {
         init(config);
-
+        this.mConfig = config;
         this.onMuxerFinishedEventListener = listener;
     }
 
@@ -189,6 +191,7 @@ public class MicrophoneEncoder implements Runnable {
 
                 if(audioInputLength == AudioRecord.ERROR_INVALID_OPERATION)
                     Log.e(TAG, "Audio read error: invalid operation");
+
                 if (audioInputLength == AudioRecord.ERROR_BAD_VALUE)
                     Log.e(TAG, "Audio read error: bad value");
 //                if (VERBOSE)
@@ -203,6 +206,8 @@ public class MicrophoneEncoder implements Runnable {
         } catch (Throwable t) {
             Log.e(TAG, "_offerAudioEncoder exception");
             t.printStackTrace();
+            onMuxerFinishedEventListener.onMuxerAudioError();
+            mAudioRecord.release();
         }
     }
 

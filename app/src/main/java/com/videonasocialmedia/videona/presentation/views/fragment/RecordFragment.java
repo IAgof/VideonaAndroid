@@ -31,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -45,6 +44,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectClickListener;
@@ -269,6 +269,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     private static RecordFragment recreateRecordFragment() {
         Log.i(LOG_TAG, "Recreating recreateRecordFragment");
+
         recordPresenter = null;
         return new RecordFragment();
     }
@@ -286,8 +287,11 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     @Override
     public void onResume() {
         super.onResume();
-        if (recordPresenter != null)
+        if (recordPresenter != null) {
             recordPresenter.onHostActivityResumed();
+        } else {
+            setupRecordPresenter();
+        }
         startMonitoringOrientation();
 
         if (colorEffectAdapter != null) {
@@ -301,11 +305,12 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void onPause() {
         super.onPause();
 
-        if(recordPresenter.isRecording()){
-            recordPresenter.stopRecording();
-        }
+        Log.d(LOG_TAG, "onPause() RecordFragment");
 
         if (recordPresenter != null) {
+            if(recordPresenter.isRecording()){
+                recordPresenter.stopRecording();
+            }
             recordPresenter.onHostActivityPaused();
         }
 
@@ -313,11 +318,18 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     }
 
+    public void release(){
+        recordPresenter.release();
+        recordPresenter = null;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (recordPresenter != null && !recordPresenter.isRecording()) {
             recordPresenter.release();
+            recordPresenter = null;
+            Log.d(LOG_TAG, "onDestroy() RecordFragment");
         }
     }
 
@@ -466,7 +478,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 public void onFinish() {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
 
-                    restartRecordVideo();
+                    //restartRecordVideo();
+                    getActivity().recreate();
                 }
             }.start();
 
@@ -795,6 +808,15 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         recordPresenter.setCameraEffect(position);
     }
 
+    // restart RecordPresenter
+    @Override
+    public void reStartFragment(){
+
+        RecordActivity activity = (RecordActivity) this.getActivity();
+        //activity.recreateActivity();
+
+       // restartRecordVideo();
+    }
 
     /**
      * OnClick buttons, tracking Google Analytics
@@ -846,7 +868,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         // hide selection text
-        ((TextView)view).setText(null);
+   //     ((TextView)view).setText(null);
 // if you want you can change background here
 
         if (((String) parent.getTag()).compareTo("filter") == 0) {

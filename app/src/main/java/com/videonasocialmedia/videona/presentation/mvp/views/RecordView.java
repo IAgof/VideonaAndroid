@@ -48,4 +48,6 @@ public interface RecordView extends MVPView {
 
     void showError();
 
+    void reStartFragment();
+
 }

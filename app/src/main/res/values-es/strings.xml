@@ -404,4 +404,8 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
     <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
     <string name="effects_chooser_title">Efectos</string>
+
+    <string name="add_videos_to_project">Por favor, añade vídeos al proyecto</string>
+    <string name="videos_removed">Videos borrados del proyecto, grabe o añada nuevos videos</string>
+
 </resources>

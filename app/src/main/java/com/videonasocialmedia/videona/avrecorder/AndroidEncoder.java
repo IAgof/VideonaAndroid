@@ -33,6 +33,8 @@ public abstract class AndroidEncoder {
     public interface OnMuxerFinishedEventListener {
         public void onMuxerFinishedEventVideo();
         public void onMuxerFinishedEventAudio();
+        public void onMuxerAudioError();
+        public void onMuxerVideoError();
 
     }
 

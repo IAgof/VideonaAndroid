@@ -25,8 +25,10 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenu
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Size;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -65,12 +68,15 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerViewClickListener, RangeSeekBar.OnRangeSeekBarChangeListener {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener,
+        RecyclerViewClickListener, RangeSeekBar.OnRangeSeekBarChangeListener,
+        OnRemoveAllProjectListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -140,6 +146,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
+
+    @InjectView(R.id.activity_edit_drawer_layout)
+    DrawerLayout drawerLayout;
+    @InjectView(R.id.activity_edit_navigation_drawer)
+    View navigatorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,6 +284,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void okEditActivity() {
         //pausePreview();
         previewVideoListFragment.pause();
+
+
+
         showProgressDialog();
         final Runnable r = new Runnable() {
             public void run() {
@@ -305,6 +319,17 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 .setPositiveButton(R.string.ok, null);
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void showMessage(final int message){
+
+        //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(),message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -341,6 +366,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
         if (musicGalleryFragment != null)
             this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+
     }
 
     @OnClick(R.id.edit_button_audio)
@@ -392,6 +418,25 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         if (musicGalleryFragment != null)
             this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+
+
+    }
+
+
+    @Optional
+    @OnClick(R.id.edit_fragment_scissors_button_add_clip)
+    public void addVideos(){
+        Log.d(LOG_TAG, "addVideos");
+        Intent gallery = new Intent(this, GalleryActivity.class);
+        gallery.putExtra("SHARE", false);
+        startActivity(gallery);
+    }
+
+    @Optional
+    @OnClick(R.id.edit_fragment_scissors_button_duplicate)
+    public void clearProject(){
+        Log.d(LOG_TAG, "clearProject");
+        editPresenter.resetProject();
     }
 
     /*
@@ -414,6 +459,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @Override
     public void onBackPressed() {
 
+        if(drawerLayout.isDrawerOpen(Gravity.LEFT)){
+            drawerLayout.closeDrawer(navigatorView);
+            return;
+        }
+
         if (buttonBackPressed) {
             editPresenter.cancel();
             finish();
@@ -431,7 +481,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if (keyCode == KeyEvent.KEYCODE_BACK && buttonBackPressed) {
+    /*    if (keyCode == KeyEvent.KEYCODE_BACK && buttonBackPressed) {
             // do something on back.
 
             editPresenter.cancel();
@@ -451,6 +501,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         return super.onKeyDown(keyCode, event);
        // return true;
+
+       */
+
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            this.onBackPressed();
+        }
+        //return super.onKeyDown(keyCode, event);
+        return true;
 
     }
 
@@ -878,4 +936,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
+
+
+    @Override
+    public void onRemoveAllProjectSelected() {
+        editPresenter.resetProject();
+        showMessage(R.string.videos_removed);
+
+        this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
+    }
+
 }
