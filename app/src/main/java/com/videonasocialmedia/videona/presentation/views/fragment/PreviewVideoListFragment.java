@@ -16,7 +16,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -142,7 +141,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         } else {
             play();
         }
-        updateSeekBarProgress();
     }
 
     @Override
@@ -169,14 +167,12 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     private void playMusicSyncWithVideo() {
         disableMusicPlayer();
         initMusicPlayer();
-        Log.d("prueba seekbar", String.valueOf(seekBar.getProgress()));
         if(musicPlayer.isPlaying()) {
             musicPlayer.seekTo(seekBar.getProgress());
         } else {
             musicPlayer.start();
             musicPlayer.seekTo(seekBar.getProgress());
         }
-
     }
 
     private void disableMusicPlayer() {
