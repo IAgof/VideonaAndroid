@@ -48,7 +48,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFra
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
-import com.videonasocialmedia.videona.presentation.views.listener.videoTimelineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.IOException;
@@ -62,7 +62,7 @@ import butterknife.OnClick;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, MusicRecyclerViewClickListener, videoTimelineRecyclerViewClickListener {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, MusicRecyclerViewClickListener, VideoTimeLineRecyclerViewClickListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();

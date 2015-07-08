@@ -17,7 +17,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoTimeLineP
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoTimeLineView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
-import com.videonasocialmedia.videona.presentation.views.listener.videoTimelineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
             callback = new ItemTouchHelperCallback(adapter);
             ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             touchHelper.attachToRecyclerView(recyclerView);
-            adapter.setClickListener((videoTimelineRecyclerViewClickListener) this.getActivity());
+            adapter.setClickListener((VideoTimeLineRecyclerViewClickListener) this.getActivity());
     }
 
     @Override

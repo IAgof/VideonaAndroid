@@ -13,7 +13,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoTimeLinePresenter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.videoTimelineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     private List<Video> videoList;
     private VideoTimeLinePresenter presenter;
 
-    private videoTimelineRecyclerViewClickListener clickListener;
+    private VideoTimeLineRecyclerViewClickListener clickListener;
 
     public VideoTimeLineAdapter(List<Video> videoList, VideoTimeLinePresenter presenter) {
         setHasStableIds(true);
@@ -40,7 +40,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         this.presenter = presenter;
     }
 
-    public void setClickListener(videoTimelineRecyclerViewClickListener clickListener) {
+    public void setClickListener(VideoTimeLineRecyclerViewClickListener clickListener) {
         this.clickListener = clickListener;
     }
 
