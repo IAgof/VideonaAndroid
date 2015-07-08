@@ -49,7 +49,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.RangeSeekBa
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
-import com.videonasocialmedia.videona.presentation.views.fragment.PreviewFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.PreviewVideoListFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
@@ -116,7 +116,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     */
     private MediaPlayer musicPlayer;
     /*Navigation*/
-    private PreviewFragment previewFragment;
+    private PreviewVideoListFragment previewVideoListFragment;
     private VideoFxMenuFragment videoFxMenuFragment;
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
@@ -150,12 +150,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         editPresenter = new EditPresenter(this);
 
-        previewFragment = new PreviewFragment();
+        previewVideoListFragment = new PreviewVideoListFragment();
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         audioFxMenuFragment = new AudioFxMenuFragment();
 
         FragmentTransaction previewTransaction = getFragmentManager().beginTransaction();
-        previewTransaction.add(R.id.edit_fragment_preview, previewFragment).commit();
+        previewTransaction.add(R.id.edit_fragment_preview, previewVideoListFragment).commit();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
@@ -268,7 +268,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @OnClick(R.id.buttonOkEditActivity)
     public void okEditActivity() {
         //pausePreview();
-        previewFragment.pause();
+        previewVideoListFragment.pause();
         showProgressDialog();
         final Runnable r = new Runnable() {
             public void run() {
@@ -543,7 +543,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         //updateSeekBarProgress();
         if (isAlreadySelected(position)) {
             //playPausePreview();
-            previewFragment.playPausePreview();
+            previewVideoListFragment.playPausePreview();
         } else {
             editPresenter.removeAllMusic();
             if (!isRemoveMusicPressed(position)) {

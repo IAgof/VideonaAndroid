@@ -16,7 +16,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,9 +33,8 @@ import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -46,7 +44,7 @@ import butterknife.OnTouch;
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class PreviewFragment extends Fragment implements PreviewView, SeekBar.OnSeekBarChangeListener {
+public class PreviewVideoListFragment extends Fragment implements PreviewView, SeekBar.OnSeekBarChangeListener {
 
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
@@ -72,7 +70,9 @@ public class PreviewFragment extends Fragment implements PreviewView, SeekBar.On
         }
     };
     private int projectDuration = 0;
-    private Queue<String> movieStack;
+    private ArrayList<String> movieList;
+    private ArrayList<Integer> videoTimeInProject;
+    private int videoToPlay = 0;
 
     @Nullable
     @Override
@@ -169,20 +169,17 @@ public class PreviewFragment extends Fragment implements PreviewView, SeekBar.On
     @Override
     public void showPreview(List<Video> videoList) {
         //movieStack = new MovieStack(videoList.size());
-        movieStack = new LinkedList<String>();
+        movieList = new ArrayList<>();
+        videoTimeInProject = new ArrayList<>();
         for (Video video : videoList) {
-            projectDuration = projectDuration + video.getFileDuration();
-            movieStack.add(video.getMediaPath());
+            videoTimeInProject.add(projectDuration);
+            projectDuration = projectDuration + video.getDuration();
+            movieList.add(video.getMediaPath());
         }
         showTimeTags(projectDuration);
         seekBar.setMax(projectDuration);
 
-
-        // TODO recorrer la lista y pasarle los paths al init, o usar el play
-
-        Log.d("prueba", movieStack.element());
-        initVideoPlayer(movieStack.element());
-        //initVideoPlayer(videoList.get(1).getMediaPath());
+        initVideoPlayer(movieList.get(videoToPlay));
     }
 
     private void showTimeTags(int duration) {
@@ -224,22 +221,18 @@ public class PreviewFragment extends Fragment implements PreviewView, SeekBar.On
             preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    movieStack.remove();
-                    if(! movieStack.isEmpty()) {
-                        Log.d("prueba2", movieStack.element());
-                        initVideoPlayer(movieStack.element());
-                        /*
-                        try {
-                            mp.setDataSource(movieStack.element());
-                        } catch (IOException e) {
-                            //e.printStackTrace();
-                        }
-                        */
+                    videoToPlay++;
+                    if(videoToPlay < movieList.size()) {
+                        initVideoPlayer(movieList.get(videoToPlay));
                     }
 
+                    if(videoToPlay == movieList.size()) {
+                        playButton.setVisibility(View.VISIBLE);
+                        releaseVideoView();
+                        videoToPlay = 0;
+                        initVideoPlayer(movieList.get(videoToPlay));
+                    }
 
-                    //playButton.setVisibility(View.VISIBLE);
-                    //nextVideo();
                     /*
                     if (musicPlayer != null && musicPlayer.isPlaying()) {
                         musicPlayer.pause();
@@ -284,9 +277,11 @@ public class PreviewFragment extends Fragment implements PreviewView, SeekBar.On
             }
 
             //updateSeekBarProgress();
-            //preview.setVideoPath(videoPath);
-            //videoPlayer.start();
         }
+    }
+
+    private void playNextVideo(int videoPosition, int instantToStart) {
+
     }
 
     @Override
