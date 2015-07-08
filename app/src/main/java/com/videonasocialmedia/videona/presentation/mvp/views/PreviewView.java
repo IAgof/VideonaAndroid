@@ -13,7 +13,7 @@ public interface PreviewView {
 
     void pause();
 
-    void seekTo(int timeInSec);
+    void seekTo(int timeInMsec);
 
     void updateVideoList();
 
