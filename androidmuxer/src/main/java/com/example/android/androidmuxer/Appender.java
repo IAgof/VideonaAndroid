@@ -1,5 +1,7 @@
 package com.example.android.androidmuxer;
 
+import android.util.Log;
+
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
@@ -15,18 +17,12 @@ import java.util.List;
  */
 public class Appender {
 
-    private Trimmer trimer;
+    public Movie appendVideos(List<String> videoPaths, boolean addOriginalAudio) throws IOException {
 
-    public Movie appendVideos(ArrayList<String> videoPaths, boolean addOriginalAudio) throws IOException {
+        List<Movie> movieList = getMovieList(videoPaths);
 
-        ArrayList<Movie> movieList = new ArrayList<>();
-
-        for (String video : videoPaths) {
-            movieList.add(MovieCreator.build(video));
-        }
-
-        List<Track> videoTracks = new LinkedList<Track>();
-        List<Track> audioTracks = new LinkedList<Track>();
+        List<Track> videoTracks = new LinkedList<>();
+        List<Track> audioTracks = new LinkedList<>();
 
         for (Movie m : movieList) {
             for (Track t : m.getTracks()) {
@@ -42,6 +38,19 @@ public class Appender {
         }
 
         return createMovie(audioTracks, videoTracks);
+    }
+
+    private List<Movie> getMovieList(List<String> videoPaths) throws IOException {
+        List<Movie> movieList = new ArrayList<>();
+
+        for (String videoPath : videoPaths) {
+           long start=System.currentTimeMillis();
+            Movie movie= MovieCreator.build(videoPath);
+            long spent=System.currentTimeMillis()-start;
+            Log.d("BUILDING MOVIE", "time spent in millis: " + spent);
+            movieList.add(movie);
+        }
+        return movieList;
     }
 
     private Movie createMovie(List<Track> audioTracks, List<Track> videoTracks) throws IOException {
@@ -61,7 +70,7 @@ public class Appender {
     public Movie addAudio(Movie movie, ArrayList<String> audioPaths, double movieDuration) throws IOException {
 
         ArrayList<Movie> audioList = new ArrayList<>();
-        trimer = new AudioTrimmer();
+        Trimmer trimer = new AudioTrimmer();
 
         for (String audio : audioPaths) {
             audioList.add(trimer.trim(audio, 0, movieDuration));
