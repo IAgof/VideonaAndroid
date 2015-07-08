@@ -14,18 +14,24 @@ import com.videonasocialmedia.videona.domain.editor.AddMusicToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Juan Javier Cabanas Abascal
  */
 public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurationlistener,
-        OnAddMediaFinishedListener, OnRemoveMediaFinishedListener {
+        OnAddMediaFinishedListener, OnRemoveMediaFinishedListener, OnVideosRetrieved {
 
     /**
      * LOG_TAG
@@ -38,6 +44,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     private ExportProjectUseCase exportProjectUseCase;
 
     private AddMusicToProjectUseCase addMusicToProjectUseCase;
+    private RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     /**
      * Get media list from project use case
@@ -54,7 +61,8 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
 
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addMusicToProjectUseCase= new AddMusicToProjectUseCase();
-        removeMusicFromProjectUseCase= new RemoveMusicFromProjectUseCase();
+        removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
+        removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
     }
 
     /**
@@ -114,7 +122,12 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
      */
     public void startExport() {
         //editorView.showProgressDialog();
-        exportProjectUseCase.export();
+
+        //check VideoList is not empty, if true exportProjectUseCase
+        getMediaListFromProjectUseCase.getMediaListFromProject(this);
+
+
+        //exportProjectUseCase.export();
     }
 
 
@@ -175,5 +188,33 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     public void onExportSuccess(Video exportedVideo) {
         editorView.hideProgressDialog();
         editorView.goToShare(exportedVideo.getMediaPath());
+    }
+
+    public void resetProject(){
+
+            Project project = Project.getInstance(null, null, null);
+            MediaTrack mediaTrack = project.getMediaTrack();
+            LinkedList<Media> listMedia = mediaTrack.getItems();
+            ArrayList<Media> items = new ArrayList<>(listMedia);
+            if (items.size() > 0) {
+                removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
+            }
+
+            removeMusicFromProjectUseCase.removeAllMusic(0, this);
+
+    }
+
+    @Override
+    public void onVideosRetrieved(List<Video> videoList) {
+        exportProjectUseCase.export();
+    }
+
+    @Override
+    public void onNoVideosRetrieved() {
+        // Toast no Video
+        editorView.hideProgressDialog();
+        editorView.showMessage(R.string.add_videos_to_project);
+       // Toast.makeText(this, R.string.add_videos_to_project, Toast.LENGTH_SHORT).show();
+
     }
 }

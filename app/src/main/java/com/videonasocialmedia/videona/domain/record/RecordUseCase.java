@@ -87,7 +87,9 @@ public class RecordUseCase {
                 .build();
 
         listener.onInitSession(mConfig);
+
     }
+
 
     public String getOutputVideoPath(){
         return outputLocation;

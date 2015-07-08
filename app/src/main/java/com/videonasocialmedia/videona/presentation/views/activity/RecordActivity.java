@@ -58,6 +58,7 @@ public class RecordActivity extends Activity {
 
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
@@ -82,7 +83,7 @@ public class RecordActivity extends Activity {
             public void run() {
                 drawerLayout.closeDrawer(navigatorView);
             }
-        }, 3000);
+        }, 2000);
         Log.d(LOG_TAG, "onStart() RecordActivity");
     }
 
@@ -125,5 +126,25 @@ public class RecordActivity extends Activity {
     }
 
 
+
+    public void navigateToEdit(){
+
+        if (recordFragment != null) {
+
+            //recordFragment.onDestroy();
+            recordFragment.onPause();
+            recordFragment.release();
+            finish();
+        }
+        Intent edit = new Intent(this, EditActivity.class);
+        edit.putExtra("SHARE", false);
+        startActivity(edit);
+    }
+
+    public void recreateActivity(){
+        Intent intent = this.getIntent();
+        finish();
+        startActivity(intent);
+    }
 
 }

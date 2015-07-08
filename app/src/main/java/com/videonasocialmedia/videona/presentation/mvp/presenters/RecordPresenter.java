@@ -204,6 +204,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
         if(mCamEncoder!= null) {
             mCamEncoder.release();
+            Log.d(LOG_TAG,"release mCamEncoder");
         }
         // MicrophoneEncoder releases all it's resources when stopRecording is called
         // because it doesn't have any meaningful state
@@ -212,6 +213,12 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         // Until then, we don't need to write MicrophoneEncoder.release()
 
         //Nexus4 release Mic! mMicEncoder.release();
+        if(mMicEncoder!= null){
+            mMicEncoder = null;
+            Log.d(LOG_TAG,"release mMicEncoder");
+        }
+
+        //recordUseCase.finishSessionConfig();
 
         // Release mHandler
         mHandler.removeCallbacksAndMessages(null);
@@ -438,6 +445,26 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
         checkFinishEncoder();
     }
 
+    @Override
+    public void onMuxerAudioError(){
+
+        Log.d(LOG_TAG, "onMuxerAudioError");
+
+      /*  if(isRecording()){
+            stopRecording();
+            mIsRecording = false;
+        }
+        */
+        //release();
+
+        recordView.reStartFragment();
+    }
+
+    @Override
+    public void onMuxerVideoError(){
+
+    }
+
     private boolean checkFinishEncoder(){
 
         if(isEncoderVideoFinished && isEncoderAudioFinished){
@@ -469,7 +496,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
                 fTempRecord.renameTo(fRecord);
 
-                clearProject();
+               // clearProject();
                 addVideoToProjectUseCase.addVideoToTrack(fRecord.getAbsolutePath(), this);
 
 
