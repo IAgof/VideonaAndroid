@@ -201,13 +201,20 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
      * this instance may no longer be used.
      */
     public void release() {
-        mCamEncoder.release();
+
+        if(mCamEncoder!= null) {
+            mCamEncoder.release();
+        }
         // MicrophoneEncoder releases all it's resources when stopRecording is called
         // because it doesn't have any meaningful state
         // between recordings. It might someday if we decide to present
         // persistent audio volume meters etc.
         // Until then, we don't need to write MicrophoneEncoder.release()
 
+        //Nexus4 release Mic! mMicEncoder.release();
+
+        // Release mHandler
+        mHandler.removeCallbacksAndMessages(null);
 
     }
 
@@ -399,6 +406,8 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
     @Override
     public void onRecordStopped() {
 
+        release();
+
         recordView.showRecordFinished();
         recordView.stopChronometer();
         recordView.unLockNavigator();
@@ -500,5 +509,65 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
             }
         }
     }
+
+   /* private int getCameraDisplayOrientation(int cameraId) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation ) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation + 360) % 360;
+        }
+
+        Log.d(LOG_TAG, "setCameraDisplayOrientation cameraId " + cameraId + " result " + result);
+
+        return result;
+    }
+
+    private void detectRotationView(Context context, int cameraId) {
+
+        int rotationView = 0;
+        rotationView = getWindowManager().getDefaultDisplay().getRotation();
+        boolean detectScreenOrientation90 = false;
+        boolean detectScreenOrientation270 = false;
+        int displayOrientation = 0;
+
+        int cameraOrientation = getCameraDisplayOrientation(cameraId);
+
+        if (rotationView == Surface.ROTATION_90) {
+            detectScreenOrientation90 = true;
+
+            if (cameraOrientation == 90) {
+                displayOrientation = 0;
+            }
+            if (cameraOrientation == 270) {
+                displayOrientation = 180;
+            }
+            Log.d(LOG_TAG, "detectRotationView rotation 90, cameraOrientation " + cameraOrientation);
+
+        }
+
+        if (rotationView == Surface.ROTATION_270) {
+            detectScreenOrientation270 = true;
+
+            if (cameraOrientation == 90) {
+                displayOrientation = 180;
+            }
+            if (cameraOrientation == 270) {
+                displayOrientation = 0;
+            }
+            Log.d(LOG_TAG, "detectRotationView rotation 270, cameraOrientation " + cameraOrientation);
+        }
+
+        Log.d(LOG_TAG, "detectRotationView rotationPreview " + rotationView +
+                " displayOrientation " + displayOrientation);
+
+    }
+
+    */
 
 }

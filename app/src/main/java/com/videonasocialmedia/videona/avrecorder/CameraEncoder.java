@@ -36,7 +36,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, Runnable {
     private static final String TAG = "CameraEncoder";
-    private static final boolean TRACE = false;         // Systrace
+    private static final boolean TRACE = true;         // Systrace
     private static final boolean VERBOSE = true;       // Lots of logging
 
     private boolean isEncoderReleased = false;
@@ -202,6 +202,28 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         if (mCurrentCamera == 0)
             otherCamera = 1;
         requestCamera(otherCamera);
+
+        // TODO displayOrientation movil Iago
+       // mCamera.setDisplayOrientation(getCameraDisplayOrientation(otherCamera));
+
+    }
+
+    private int getCameraDisplayOrientation(int cameraId) {
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation ) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation + 360) % 360;
+        }
+
+        Log.d(TAG, "setCameraDisplayOrientation cameraId " + cameraId + " result " + result);
+
+        return result;
     }
 
     /**
@@ -374,9 +396,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         }
     }
 
-    public boolean isEncoderReleased(){
-        return isEncoderReleased;
-    }
+
 
     /**
      * Called from UI thread
@@ -999,22 +1019,27 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 switch (what) {
                     case MSG_SET_SURFACE_TEXTURE:
                         encoder.handleSetSurfaceTexture((Integer) obj);
+                        Log.i(TAG, "MSG_SET_SURFACE_TEXTURE");
                         break;
                     case MSG_FRAME_AVAILABLE:
                         encoder.handleFrameAvailable((SurfaceTexture) obj);
+                       // Log.i(TAG, "MSG_FRAME_AVAILABLE");
                         break;
                     case MSG_REOPEN_CAMERA:
                         encoder.openAndAttachCameraToSurfaceTexture();
+                        Log.i(TAG, "MSG_REOPEN_CAMERA");
                         break;
                     case MSG_RELEASE_CAMERA:
                         encoder.releaseCamera();
+                        Log.i(TAG, "MSG_RELEASE_CAMERA");
                         break;
                     case MSG_RELEASE:
                         encoder.handleRelease();
-
+                        Log.i(TAG, "MSG_RELEASE");
                         break;
                     case MSG_RESET:
                         encoder.handleReset((SessionConfig) obj);
+                        Log.i(TAG, "MSG_RESET");
                         break;
                     default:
                         throw new RuntimeException("Unexpected msg what=" + what);
@@ -1115,4 +1140,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         //TODO postCameraOpen listener
     }
 
-}
+
+
+    }

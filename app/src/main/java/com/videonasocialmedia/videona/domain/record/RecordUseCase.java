@@ -81,7 +81,8 @@ public class RecordUseCase {
                 .withVideoBitrate(videoQuality.getVideoBitRate())
                 .withVideoResolution(videoSize.getWidth(), videoSize.getHeigth())
                 .withAudioChannels(1)
-                .withAudioSamplerate(48000)
+                //.withAudioSamplerate(48000)
+                .withAudioSamplerate(44100)
                 .withAudioBitrate(192 * 1000)
                 .build();
 
@@ -225,6 +226,8 @@ public class RecordUseCase {
      * Support change camera. Minimum quality 720p
      */
     private boolean supportChangeCamera(Camera camera) {
+
+        Log.d(LOG_TAG, "camera getNumberOfCameras " + camera.getNumberOfCameras());
 
         if(camera.getNumberOfCameras() > 1) {
 
