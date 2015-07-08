@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.InitAppPresenter;
@@ -41,6 +42,9 @@ public class InitAppActivity extends Activity implements InitAppView {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_init_app);
+
+        Log.d(LOG_TAG, "onCreate");
+
         SharedPreferences sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -57,6 +61,7 @@ public class InitAppActivity extends Activity implements InitAppView {
     protected void onResume() {
         super.onResume();
         initAppPresenter.start();
+        Log.d(LOG_TAG, "onResume, initAppPresenter start");
     }
 
     /*+++++++++*/

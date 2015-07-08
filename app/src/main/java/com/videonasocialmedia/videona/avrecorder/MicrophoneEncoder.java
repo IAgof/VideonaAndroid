@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
  * @hide
  */
 public class MicrophoneEncoder implements Runnable {
-    private static final boolean TRACE = false;
+    private static final boolean TRACE = true;
     private static final boolean VERBOSE = true;
     private static final String TAG = "MicrophoneEncoder";
 
@@ -46,12 +46,14 @@ public class MicrophoneEncoder implements Runnable {
                 config.getAudioBitrate(),
                 config.getAudioSamplerate(),
                 config.getMuxer());
-        mEncoderCore.setOnMuxerFinishedEventListenerAudio(onMuxerFinishedEventListener);
+
         mMediaCodec = null;
         mThreadReady = false;
         mThreadRunning = false;
         mRecordingRequested = false;
         startThread();
+        mEncoderCore.setOnMuxerFinishedEventListenerAudio(onMuxerFinishedEventListener);
+
         if (VERBOSE) Log.i(TAG, "Finished init. encoder : " + mEncoderCore.mEncoder);
     }
 
@@ -84,7 +86,6 @@ public class MicrophoneEncoder implements Runnable {
             mRecordingRequested = false;
         }
 
-       // onMuxerFinishedEventListener.onMuxerFinishedEvent();
     }
 
     public void reset(SessionConfig config) throws IOException {

@@ -15,6 +15,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,13 @@ public class NavigationDrawerFragment extends Fragment {
      * Tracker google analytics
      */
     private Tracker tracker;
+    /**
+     * LOG_TAG
+     */
+    private static final String LOG_TAG = "NavigationDrawerFragment";
+
+   //@InjectView(R.id.activity_record_drawer_layout)
+    DrawerLayout drawerRecordLayout;
 
     @Nullable
     @Override
@@ -52,6 +60,8 @@ public class NavigationDrawerFragment extends Fragment {
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
 
+        drawerRecordLayout = (DrawerLayout) view.findViewById(R.id.activity_record_drawer_layout);
+
         return view;
     }
 
@@ -61,10 +71,19 @@ public class NavigationDrawerFragment extends Fragment {
         ButterKnife.reset(this);
     }
 
+
     @OnClick(R.id.fragment_navigator_record_button)
     public void navigateToRecord() {
-        Intent record = new Intent(this.getActivity(), RecordActivity.class);
-        startActivity(record);
+
+        // Hide fragment if user came from Record screen.
+        if(this.getActivity().getClass() == RecordActivity.class ){
+
+            this.getActivity().onBackPressed();
+
+        } else {
+            Intent record = new Intent(this.getActivity(), RecordActivity.class);
+            startActivity(record);
+        }
     }
 
     @OnClick(R.id.fragment_navigator_edit_button)
