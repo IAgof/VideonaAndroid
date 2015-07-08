@@ -13,6 +13,7 @@
     <string name="edit_text_special">Special features</string>
     <string name="edit_text_insufficient_memory">Not enough memory</string>
     <string name="toast_exit_edit">Press back again to exit the edit room</string>
+    <string name="toast_add_videos">Please, add videos to project</string>
     <string name="not_ask_again">Not ask again</string>
     <string name="not_thanks">Not thanks</string>
     <string name="ok">Ok</string>

@@ -7,6 +7,7 @@
     <string name="toast_trim">Video Recorded trimmed in /sdcard/Movies/Videona</string>
     <string name="toast_exit">Pulsa otra vez para salir</string>
     <string name="toast_exit_edit">Pulsa para salir del editor</string>
+    <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
     <string name="edit_title_name">Sala de edición</string>
     <string name="edit_text_fx">Trabajando en los efectos</string>
     <string name="edit_text_look">Trabajando en la magia</string>

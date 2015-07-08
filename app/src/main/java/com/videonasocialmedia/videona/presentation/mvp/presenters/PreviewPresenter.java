@@ -48,21 +48,7 @@ public class PreviewPresenter implements OnVideosRetrieved {
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-
-        // TODO recorrer la lista y obtener los paths y las duraciones
-
-        String videoPath = videoList.get(0).getMediaPath();
-
         previewView.showPreview(videoList);
-
-        /*
-        editorView.showTrimBar(videoToEdit.getFileDuration(), videoToEdit.getFileStartTime(), videoToEdit.getFileStopTime());
-        try {
-            editorView.createAndPaintVideoThumbs(videoPath, videoToEdit.getFileDuration());
-        } catch (Exception e) {
-            //TODO Determine what to do when the thumbs cannot be drawn
-        }
-        */
     }
 
     @Override
