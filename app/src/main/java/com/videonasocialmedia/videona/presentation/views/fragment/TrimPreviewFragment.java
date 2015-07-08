@@ -12,15 +12,19 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,24 +32,28 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.PreviewPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
+import com.videonasocialmedia.videona.presentation.views.customviews.RangeSeekBar;
+import com.videonasocialmedia.videona.utils.Size;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.InjectViews;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBar.OnSeekBarChangeListener {
+public class TrimPreviewFragment extends Fragment implements PreviewView, TrimView, RangeSeekBar.OnRangeSeekBarChangeListener, SeekBar.OnSeekBarChangeListener {
 
+    protected Handler handler = new Handler();
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
     @InjectView(R.id.edit_button_play)
@@ -58,9 +66,14 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
     TextView stopTimeTag;
     @InjectView(R.id.edit_text_time_trim)
     TextView durationTag;
-
-    protected Handler handler = new Handler();
-    private PreviewPresenter previewPresenter;
+    @InjectView(R.id.linearLayoutRangeSeekBar)
+    ViewGroup layoutSeekBar;
+    @InjectViews({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
+            R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6})
+    List<ImageView> videoThumbs;
+    RangeSeekBar<Double> trimBar;
+    int videoIndexOnTrack;
+    private TrimPreviewPresenter presenter;
     private MediaController mediaController;
     private MediaPlayer videoPlayer;
     private final Runnable updateTimeTask = new Runnable() {
@@ -69,25 +82,18 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
             updateSeekBarProgress();
         }
     };
-    private int projectDuration = 0;
-    private ArrayList<String> movieList;
-    private ArrayList<Integer> videoTimeInProject;
-    private int videoToPlay = 0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_preview, container, false);
+        View view = inflater.inflate(R.layout.fragment_trim_preview, container, false);
         ButterKnife.inject(this, view);
-
-        previewPresenter = new PreviewPresenter(this);
-
+        presenter = new TrimPreviewPresenter(this, this);
         seekBar.setProgress(0);
-        seekBar.setOnSeekBarChangeListener(this);
-
         mediaController = new MediaController(getActivity());
         mediaController.setVisibility(View.INVISIBLE);
-
+        videoIndexOnTrack = this.getArguments().getInt("VIDEO_INDEX", 0);
+        presenter.init(videoIndexOnTrack);
         return view;
     }
 
@@ -101,7 +107,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
     @Override
     public void onResume() {
         super.onResume();
-        updateVideoList();
+        //updateVideoList();
     }
 
     @Override
@@ -136,11 +142,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
     public void play() {
         if (videoPlayer != null) {
             videoPlayer.start();
-            /*
-            if (musicPlayer != null) {
-                playMusicSyncedWithVideo();
-            }
-            */
             playButton.setVisibility(View.INVISIBLE);
         }
     }
@@ -149,10 +150,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
     public void pause() {
         if (videoPlayer != null && videoPlayer.isPlaying())
             videoPlayer.pause();
-        /*
-        if (musicPlayer != null && musicPlayer.isPlaying())
-            musicPlayer.pause();
-            */
         playButton.setVisibility(View.VISIBLE);
     }
 
@@ -163,29 +160,18 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
 
     @Override
     public void updateVideoList() {
-        previewPresenter.update();
+        presenter.update();
     }
 
     @Override
     public void showPreview(List<Video> videoList) {
-        //movieStack = new MovieStack(videoList.size());
-        movieList = new ArrayList<>();
-        videoTimeInProject = new ArrayList<>();
-        for (Video video : videoList) {
-            videoTimeInProject.add(projectDuration);
-            projectDuration = projectDuration + video.getDuration();
-            movieList.add(video.getMediaPath());
-        }
-        showTimeTags(projectDuration);
-        seekBar.setMax(projectDuration);
-
-        initVideoPlayer(movieList.get(videoToPlay));
+        //showTimeTags(projectDuration);
+        Video video = videoList.get(0);
+        seekBar.setMax(video.getFileDuration());
+        initVideoPlayer(videoList.get(0).getMediaPath());
     }
 
     private void showTimeTags(int duration) {
-        refreshStartTimeTag(0);
-        refreshDurationTag(duration / 2);
-        refreshStopTimeTag(duration);
     }
 
     private void initVideoPlayer(final String videoPath) {
@@ -212,8 +198,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
                         e.printStackTrace();
                     }
                     videoPlayer.pause();
-
-                    //editPresenter.prepareMusicPreview();
                     pause();
                     updateSeekBarProgress();
                 }
@@ -221,7 +205,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
             preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    videoToPlay++;
+                   /* videoToPlay++;
                     if(videoToPlay < movieList.size()) {
                         initVideoPlayer(movieList.get(videoToPlay));
                     }
@@ -231,14 +215,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
                         releaseVideoView();
                         videoToPlay = 0;
                         initVideoPlayer(movieList.get(videoToPlay));
-                    }
-
-                    /*
-                    if (musicPlayer != null && musicPlayer.isPlaying()) {
-                        musicPlayer.pause();
-                    }
-                    */
-                    //updateSeekBarProgress();
+                    }*/
                 }
             });
 
@@ -265,68 +242,16 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
                 videoPlayer.setDataSource(videoPath);
                 videoPlayer.prepare();
                 videoPlayer.start();
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (IllegalArgumentException | IllegalStateException | IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
-            //updateSeekBarProgress();
         }
     }
 
-    private void playNextVideo(int videoPosition, int instantToStart) {
-
-    }
 
     @Override
     public void showError(String message) {
-
-    }
-
-    /**
-     * Listener seekBar, videoPlayer
-     *
-     * @param seekBar  the seekBar of the event
-     * @param progress the new progress of the seekBar
-     * @param fromUser true if the event was caused by an action from the user. False otherwise
-     */
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (fromUser) {
-            // TODO calcular aquí el tiempo del proyecto y el vídeo correspondiente
-            videoPlayer.seekTo(progress);
-            /*
-            if (musicPlayer != null)
-                syncMusicWithVideo(progress);
-                */
-        } else {
-            /*
-            if (musicPlayer != null) {
-                if (isOnSelectedVideoSection()) {
-                    playMusicSyncedWithVideo();
-                    videoPlayer.setVolume(0.0f, 0.0f);
-                } else {
-                    videoPlayer.setVolume(0.5f, 0.5f);
-                    musicPlayer.pause();
-                }
-            }
-            */
-        }
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
 
@@ -348,19 +273,116 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, SeekBa
             videoPlayer.release();
             videoPlayer = null;
         }
-        //disableMusicPlayer();
     }
 
-    private void refreshStartTimeTag(int time) {
+    public void refreshStartTimeTag(int time) {
         startTimeTag.setText(TimeUtils.toFormattedTime(time));
     }
 
-    private void refreshStopTimeTag(int time) {
+    public void refreshStopTimeTag(int time) {
         stopTimeTag.setText(TimeUtils.toFormattedTime(time));
     }
 
-    private void refreshDurationTag(int duration) {
+    public void refreshDurationTag(int duration) {
         durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
+
+    @Override
+    public void createAndPaintVideoThumbs(final String videoPath, final int videoDuration) {
+        Handler h = new Handler();
+        h.post(new Runnable() {
+            @Override
+            public void run() {
+                Size thumbSize = determineThumbsSize();
+
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.setDataSource(videoPath);
+                for (int thumbOrder = 0; thumbOrder < videoThumbs.size(); thumbOrder++) {
+                    int frameTime = getFrameTime(videoDuration, thumbOrder, videoThumbs.size());
+                    try {
+                        Bitmap thumbImage = createVideoThumb(retriever, thumbSize, frameTime);
+                        ImageView currentThumb = videoThumbs.get(thumbOrder);
+                        currentThumb.setImageBitmap(thumbImage);
+                        currentThumb.setScaleType(ImageView.ScaleType.FIT_XY);
+                    } catch (Exception Exception) {
+                        //TODO treat exception properly. Probably do nothing is fine for the time being
+                    }
+                }
+            }
+        });
+    }
+
+    private Size determineThumbsSize() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int screnWidth = metrics.widthPixels;
+        int screenHeight = metrics.heightPixels;
+        int numberOfThumbs = videoThumbs.size();
+        int width_opt = screnWidth / numberOfThumbs;
+        return new Size(width_opt, screenHeight);
+    }
+
+    private Bitmap createVideoThumb(MediaMetadataRetriever retriever, Size size, int frameTime) throws Exception {
+        Bitmap bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        if (bitmap == null)
+            bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_CLOSEST);
+        if (bitmap == null)
+            bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_NEXT_SYNC);
+        if (bitmap == null)
+            bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
+        if (bitmap == null) {
+            throw new Exception();
+        }
+        return Bitmap.createScaledBitmap(bitmap, size.getWidth(), size.getHeight(), false);
+    }
+
+    private int getFrameTime(int videoDuration, int thumbOrder, int numberOfThumbs) {
+        return (videoDuration / numberOfThumbs) * thumbOrder * 1000;
+    }
+
+    @Override
+    public void showTrimBar(int videoFileDuration, int leftMarkerPosition, int RightMarkerPosition) {
+        trimBar = new RangeSeekBar<>(
+                (double) 0, (double) videoFileDuration, this.getActivity(), videoFileDuration);
+        trimBar.setSelectedMinValue((double) leftMarkerPosition);
+        trimBar.setSelectedMaxValue((double) RightMarkerPosition);
+        trimBar.setOnRangeSeekBarChangeListener(this);
+        layoutSeekBar.addView(trimBar);
+    }
+
+    /**
+     * Listens to trimBar events.
+     * <p/>
+     * modifies the video start time and the video finishTime
+     *
+     * @param trimBar
+     * @param minValue
+     * @param maxValue
+     */
+    @Override
+    public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue) {
+        int startTimeMs = (int) Math.round((double) minValue);
+        int finishTimeMs = (int) Math.round((double) maxValue);
+        presenter.modifyVideoStartTime(startTimeMs);
+        presenter.modifyVideoFinishTime(finishTimeMs);
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser) {
+            videoPlayer.seekTo(progress);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
 }

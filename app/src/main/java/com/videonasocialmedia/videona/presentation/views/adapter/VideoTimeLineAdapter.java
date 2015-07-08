@@ -13,12 +13,14 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoTimeLinePresenter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
+import com.videonasocialmedia.videona.presentation.views.listener.videoTimelineRecyclerViewClickListener;
 
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * @author Juan Javier Cabanas Abascal
@@ -30,11 +32,16 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     private List<Video> videoList;
     private VideoTimeLinePresenter presenter;
 
+    private videoTimelineRecyclerViewClickListener clickListener;
 
     public VideoTimeLineAdapter(List<Video> videoList, VideoTimeLinePresenter presenter) {
         setHasStableIds(true);
         this.videoList = videoList;
-        this.presenter=presenter;
+        this.presenter = presenter;
+    }
+
+    public void setClickListener(videoTimelineRecyclerViewClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     @Override
     public void finishMovement(int newPosition) {
-        presenter.moveItem(videoList.get(newPosition),newPosition);
+        presenter.moveItem(videoList.get(newPosition), newPosition);
     }
 
     public void setVideoList(List<Video> videoList) {
@@ -94,6 +101,13 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             super(itemView);
             ButterKnife.inject(this, itemView);
         }
+
+        @OnClick(R.id.timelinevideo_thumb)
+        public void videoClick() {
+            if (clickListener!=null)
+            clickListener.onVideoClicked(this.getAdapterPosition());
+        }
+
     }
 
 }

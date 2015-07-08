@@ -76,47 +76,47 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-             <!--   <LinearLayout
-                    android:id="@+id/edit_view_panel"
+                <FrameLayout
+                    android:id="@+id/edit_fragment_preview"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:orientation="vertical">-->
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_toEndOf="@+id/edit_left_panel"
+                    android:layout_toStartOf="@+id/edit_right_panel"
+                    android:minHeight="200dp" />
 
-                    <FrameLayout
-                        android:id="@+id/edit_fragment_preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_weight="0.5">
-                    </FrameLayout>
+                <!-- <LinearLayout
+                     android:id="@+id/edit_view_panel"
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_centerHorizontal="true"
+                     android:background="@android:color/holo_green_light"
+                     android:orientation="vertical">
 
 
-              <!--  </LinearLayout>-->
+                 </LinearLayout>-->
 
                 <FrameLayout
                     android:id="@+id/edit_bottom_panel"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_alignBottom="@id/edit_fragment_preview"
                     android:layout_alignParentBottom="true"
-                    android:layout_below="@+id/edit_view_panel"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_toEndOf="@+id/edit_left_panel"
-                    android:layout_toStartOf="@+id/edit_right_panel">
+                    android:layout_toStartOf="@+id/edit_right_panel" />
 
-                </FrameLayout>
 
                 <FrameLayout
                     android:id="@+id/edit_right_panel"
                     android:layout_width="75dp"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true">
-
-                </FrameLayout>
+                    android:layout_alignParentRight="true" />
 
                 <LinearLayout
                     android:id="@+id/edit_left_panel"

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,10 +14,8 @@ import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
-import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
-import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
 import java.util.List;
 
@@ -33,7 +30,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     private Context context;
     private List<Video> videoList;
-    private RecyclerViewClickListener recyclerViewClickListener;
+    private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
 
     private int selectedVideoPosition = -1;
 
@@ -48,7 +45,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .inflate(R.layout.fragment_gallery_video_item, viewGroup, false);
 
         this.context = viewGroup.getContext();
-        return new VideoViewHolder(rowView, recyclerViewClickListener);
+        return new VideoViewHolder(rowView, musicRecyclerViewClickListener);
     }
 
     @Override
@@ -80,8 +77,8 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         return videoList.get(position);
     }
 
-    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
-        this.recyclerViewClickListener = recyclerViewClickListener;
+    public void setMusicRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
+        this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
     }
 
     public void appendVideos(List<Video> videoList) {
@@ -95,7 +92,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     class VideoViewHolder extends RecyclerView.ViewHolder{ //implements View.OnTouchListener {
 
-        RecyclerViewClickListener onClickListener;
+        MusicRecyclerViewClickListener onClickListener;
 
         @InjectView(R.id.gallery_thumb)
         ImageView thumb;
@@ -111,7 +108,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
 
 
-        public VideoViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
+        public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             //thumb.setOnTouchListener(this);
