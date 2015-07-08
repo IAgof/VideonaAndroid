@@ -31,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -846,7 +845,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         // hide selection text
-        ((TextView)view).setText(null);
+        //((TextView)view).setText(null);
 // if you want you can change background here
 
         if (((String) parent.getTag()).compareTo("filter") == 0) {

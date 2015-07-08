@@ -12,7 +12,6 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.Track;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnVideosRetrieved;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class GetMediaListFromProjectUseCase {

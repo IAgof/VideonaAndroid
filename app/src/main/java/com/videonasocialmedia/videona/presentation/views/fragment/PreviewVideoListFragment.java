@@ -16,6 +16,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,7 +82,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     private List<Video> movieList;
     private List<Integer> videoStartTimeInProject;
     private List<Integer> videoStopTimeInProject;
-    private int videoSeek = 0;
     private int videoToPlay = 0;
 
     @Nullable
@@ -122,6 +122,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         videoStopTimeInProject = null;
         releaseVideoView();
         disableMusicPlayer();
+        projectDuration = 0;
     }
 
     @OnTouch(R.id.edit_preview_player)
@@ -352,9 +353,10 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         } else {
             for(int i=0; i<videoStopTimeInProject.size();i++) {
                 if(i<videoStopTimeInProject.size()-1) {
-                    boolean inRange = videoStartTimeInProject.get(videoSeek) <= progress && progress < videoStartTimeInProject.get(videoSeek+1);
+                    boolean inRange = videoStopTimeInProject.get(i) <= progress &&
+                            progress < videoStopTimeInProject.get(i+1);
                     if(inRange) {
-                        result = i;
+                        result = i+1;
                     }
                 }
             }
@@ -364,6 +366,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                 videoToPlay = result;
             }
         }
+        Log.d("video", String.valueOf(videoToPlay));
         return movieList.get(videoToPlay);
     }
 
@@ -375,13 +378,19 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
-            if (videoPlayer.isPlaying()) {
-                seekBar.setProgress(videoPlayer.getCurrentPosition() + videoStartTimeInProject.get(videoToPlay));
-                refreshDurationTag(seekBar.getProgress());
-                if(seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay)) {
-                    videoToPlay++;
-                    playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
+            try {
+                if (videoPlayer.isPlaying() && videoToPlay < movieList.size()) {
+                    seekBar.setProgress(videoPlayer.getCurrentPosition() + videoStartTimeInProject.get(videoToPlay));
+                    refreshDurationTag(seekBar.getProgress());
+                    if (seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay)) {
+                        videoToPlay++;
+                        if (videoToPlay < movieList.size()) {
+                            playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
+                        }
+                    }
                 }
+            } catch (Exception e){
+
             }
             handler.postDelayed(updateTimeTask, 20);
         }
