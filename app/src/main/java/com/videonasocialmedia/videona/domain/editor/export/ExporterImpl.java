@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * @author Juan Javier Cabanas
+ * @author Verónica Lago Fominaya
  */
 public class ExporterImpl implements Exporter {
 
@@ -239,7 +240,10 @@ public class ExporterImpl implements Exporter {
 
     private void saveFinalVideo(Movie result) {
         try {
+            long start=System.currentTimeMillis();
             com.example.android.androidmuxer.utils.Utils.createFile(result, pathVideoEdited);
+            long spent=System.currentTimeMillis()-start;
+            Log.d("WRITING VIDEO FILE", "time spent in millis: " + spent);
             onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
         } catch (IOException e) {
             onExportEndedListener.onExportError(String.valueOf(e));

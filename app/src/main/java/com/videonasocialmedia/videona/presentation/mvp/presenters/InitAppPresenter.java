@@ -25,10 +25,7 @@ import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +37,11 @@ import java.util.List;
  * Initialize all use cases needed to start the app.
  */
 public class InitAppPresenter implements OnInitAppEventListener {
+
+    /**
+     * LOG_TAG
+     */
+    private static final String LOG_TAG = "InitAppPresenter";
 
     private InitAppView initAppView;
     private Context context;
@@ -105,9 +107,12 @@ public class InitAppPresenter implements OnInitAppEventListener {
         }
 
         editor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, true).commit();
+        Log.d(LOG_TAG, "BACK_CAMERA_SUPPORTED");
+
         numSupportedCameras = Camera.getNumberOfCameras();
         if(numSupportedCameras > 1) {
             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
+            Log.d(LOG_TAG, "FRONT_CAMERA_SUPPORTED");
         }
         releaseCamera();
     }
@@ -154,14 +159,17 @@ public class InitAppPresenter implements OnInitAppEventListener {
                     if(size.width == 1280 && size.height == 720) {
                         editor.putBoolean(ConfigPreferences.FRONT_CAMERA_720P_SUPPORTED, true).commit();
                         frontCameraResolutionSupported = true;
+                        Log.d(LOG_TAG, "FRONT_CAMERA_720P_SUPPORTED");
                     }
                     if(size.width == 1920 && size.height == 1080) {
                         editor.putBoolean(ConfigPreferences.FRONT_CAMERA_1080P_SUPPORTED, true).commit();
                         frontCameraResolutionSupported = true;
+                        Log.d(LOG_TAG, "FRONT_CAMERA_1080P_SUPPORTED");
                     }
                     if(size.width == 3840 && size.height == 2160) {
                         editor.putBoolean(ConfigPreferences.FRONT_CAMERA_2160P_SUPPORTED, true).commit();
                         frontCameraResolutionSupported = true;
+                        Log.d(LOG_TAG, "FRONT_CAMERA_2160P_SUPPORTED");
                     }
                 }
             } else {
@@ -189,6 +197,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
             }
             if(!frontCameraResolutionSupported) {
                 editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, false).commit();
+                Log.d(LOG_TAG, "FRONT_CAMERA_SUPPORTED");
             }
             releaseCamera();
         }
@@ -234,8 +243,10 @@ public class InitAppPresenter implements OnInitAppEventListener {
      * Releases the camera object
      */
     private void releaseCamera() {
-        camera.release();
-        camera = null;
+        if(camera!=null) {
+            camera.release();
+            camera = null;
+        }
     }
 
     /**

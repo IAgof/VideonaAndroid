@@ -7,11 +7,9 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
@@ -20,9 +18,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +70,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     /**
      * Activate some log_tag
      */
-    private static final boolean VERBOSE = false;
+    private static final boolean VERBOSE = true;
     /**
      * Record Fragment
      */
@@ -182,11 +178,6 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
      */
     public static boolean lockRotation = false;
 
-    @InjectView(R.id.activity_record_drawer_layout)
-    DrawerLayout drawerLayout;
-
-    @InjectView(R.id.activity_record_navigation_drawer)
-    View navigatorView;
 
     /**
      * Tracker google analytics
@@ -288,39 +279,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         super.onCreate(savedInstanceState);
 
         setupRecordPresenter();
+
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        if (VERBOSE) Log.i(LOG_TAG, "onAttach");
-
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                drawerLayout.closeDrawer(navigatorView);
-            }
-        }, 1500);
-        Log.d(LOG_TAG, "onStart() RecordActivity");
-    }
-
-    /*@Override
-    public void onAttachedToWindow() {
-        super.onAttonAttachedToWindow();
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                drawerLayout.closeDrawer(navigatorView);
-            }
-        }, 1500);
-        Log.d(LOG_TAG, "onStart() RecordActivity");
-    }
-    */
 
 
     @Override
@@ -340,21 +300,25 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     @Override
     public void onPause() {
         super.onPause();
-        if (recordPresenter != null)
-            recordPresenter.onHostActivityPaused();
-        stopMonitoringOrientation();
 
         if(recordPresenter.isRecording()){
             recordPresenter.stopRecording();
         }
+
+        if (recordPresenter != null) {
+            recordPresenter.onHostActivityPaused();
+        }
+
+        stopMonitoringOrientation();
 
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (recordPresenter != null && !recordPresenter.isRecording())
+        if (recordPresenter != null && !recordPresenter.isRecording()) {
             recordPresenter.release();
+        }
     }
 
     @Override
@@ -378,18 +342,18 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
             setupFilterSpinner(root);
 
+
+
         } else
             root = new View(container.getContext());
 
-
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         // AutoFocusView
         customManualFocusView.onPreviewTouchEvent(getActivity().getApplicationContext());
 
         // Hide menu camera options
         linearLayoutRecordCameraOptions.setVisibility(View.GONE);
+
 
         return root;
     }
@@ -443,6 +407,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
         buttonSettinsCameraListener();
 
+      //  mCameraView.setRotation(Surface.ROTATION_90);
+
     }
 
     /**
@@ -460,6 +426,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     @OnClick(R.id.button_settings_camera)
     public void buttonSettinsCameraListener(){
 
+
         if(isSettingsCameraPressed){
             // Hide menu
             linearLayoutRecordCameraOptions.setVisibility(View.GONE);
@@ -472,7 +439,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
             buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_pressed);
             buttonSettingsCamera.setBackgroundResource(R.color.transparent_palette_grey);
             isSettingsCameraPressed = true;
-            recordPresenter.settingsCameraListener();
+           // recordPresenter.settingsCameraListener();
         }
     }
 
@@ -641,12 +608,14 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     @Override
     public void lockNavigator() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+
     }
 
     @Override
     public void unLockNavigator() {
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+       // this.unLockNavigator();
     }
 
     @Override

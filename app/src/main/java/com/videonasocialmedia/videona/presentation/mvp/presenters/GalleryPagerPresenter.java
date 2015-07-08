@@ -59,7 +59,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
 
     public void loadVideoListToProject(List<Video> videoList) {
         resetProject();
-        exported= false;
+        //exported= false;
         addVideoToProjectUseCase.addVideoListToTrack(videoList, this);
     }
 
@@ -97,12 +97,12 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
 
     @Override
     public void onAddMediaItemToTrackSuccess(Media video) {
-        if (exported)
+//        if (exported)
             galleryPagerView.navigate();
-        else {
-            exportProjectUseCase = new ExportProjectUseCase(this);
-            exportProjectUseCase.export();
-        }
+//        else {
+//            exportProjectUseCase = new ExportProjectUseCase(this);
+//            exportProjectUseCase.export();
+//        }
     }
 
     @Override

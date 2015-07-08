@@ -457,7 +457,7 @@
 
     </RelativeLayout>
 
-    <!-- Left Drawrer -->
+    <!-- Left Drawer -->
     <fragment
         android:id="@+id/activity_edit_navigation_drawer"
         android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
