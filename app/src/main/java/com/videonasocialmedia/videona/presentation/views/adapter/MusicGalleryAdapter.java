@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
 
     private Context context;
     private List<Music> musicList;
-    private RecyclerViewClickListener recyclerViewClickListener;
+    private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
     private int selectedMusicPosition = -1;
 
     /**
@@ -62,7 +62,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
         View rowView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.fragment_gallery_music_item, viewGroup, false);
         this.context = viewGroup.getContext();
-        return new MusicViewHolder(rowView, recyclerViewClickListener);
+        return new MusicViewHolder(rowView, musicRecyclerViewClickListener);
     }
 
     @Override
@@ -95,10 +95,10 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
     /**
      * Sets the listener of the recycler view
      *
-     * @param recyclerViewClickListener
+     * @param musicRecyclerViewClickListener
      */
-    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
-        this.recyclerViewClickListener = recyclerViewClickListener;
+    public void setMusicRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
+        this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
     }
 
     /**
@@ -125,7 +125,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
      */
     class MusicViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
 
-        RecyclerViewClickListener onClickListener;
+        MusicRecyclerViewClickListener onClickListener;
 
         @InjectView(R.id.gallery_thumb)
         ImageView thumb;
@@ -142,7 +142,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
          * @param itemView        the view of the music elements
          * @param onClickListener the listener which controls the actions over the music elements
          */
-        public MusicViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
+        public MusicViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             thumb.setOnTouchListener(this);
@@ -153,7 +153,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 notifyItemChanged(selectedMusicPosition);
-                selectedMusicPosition = getPosition();
+                selectedMusicPosition = getAdapterPosition();
                 notifyItemChanged(selectedMusicPosition);
                 onClickListener.onClick(selectedMusicPosition);
             }
