@@ -22,14 +22,11 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,12 +47,10 @@ import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenu
 import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
-import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
-import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
-import com.videonasocialmedia.videona.utils.Size;
+import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.IOException;
@@ -64,14 +59,13 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.Optional;
 
 
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, 
-        MusicRecyclerViewClickListener, VideoTimeLineRecyclerViewClickListener, 
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener,
+        MusicRecyclerViewClickListener, VideoTimeLineRecyclerViewClickListener,
         OnRemoveAllProjectListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
@@ -96,7 +90,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @InjectView(R.id.edit_text_time_trim)
     TextView durationTag;
     */
-
+    @InjectView(R.id.activity_edit_drawer_layout)
+    DrawerLayout drawerLayout;
+    @InjectView(R.id.activity_edit_navigation_drawer)
+    View navigatorView;
     /*Preview*/
     /*
     private MediaController mediaController;
@@ -115,8 +112,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     private AudioFxMenuFragment audioFxMenuFragment;
     private ScissorsFxMenuFragment scissorsFxMenuFragment;
     private LookFxMenuFragment lookFxMenuFragment;
-
-
     private MusicGalleryFragment musicGalleryFragment;
     private VideoTimeLineFragment videoTimeLineFragment;
     private TrimPreviewFragment trimFragment;
@@ -131,14 +126,22 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
      */
     private boolean buttonBackPressed = false;
     private ProgressDialog progressDialog;
-
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
 
-    @InjectView(R.id.activity_edit_drawer_layout)
-    DrawerLayout drawerLayout;
-    @InjectView(R.id.activity_edit_navigation_drawer)
-    View navigatorView;
+    public static Thread performOnBackgroundThread(final Runnable runnable) {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } finally {
+                }
+            }
+        };
+        t.start();
+        return t;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +265,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         playButton.setVisibility(View.VISIBLE);
     }
     */
-
     @OnClick(R.id.buttonCancelEditActivity)
     public void cancelEditActivity() {
         this.onBackPressed();
@@ -281,20 +283,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         performOnBackgroundThread(r);
     }
 
-    public static Thread performOnBackgroundThread(final Runnable runnable) {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } finally {
-                }
-            }
-        };
-        t.start();
-        return t;
-    }
-
     @Override
     public void showError(int causeTextResource) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,
@@ -307,12 +295,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
     @Override
-    public void showMessage(final int message){
+    public void showMessage(final int message) {
 
         //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         this.runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(getApplicationContext(),message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -381,13 +369,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
         switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
 
-        if(videoTimeLineFragment==null){
-            videoTimeLineFragment= new VideoTimeLineFragment();
+        if (videoTimeLineFragment == null) {
+            videoTimeLineFragment = new VideoTimeLineFragment();
         }
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
 
     }
-
 
 
     @OnClick(R.id.edit_button_look)
@@ -403,14 +390,14 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
     }
 
-    
+
     /**
      * Register back pressed to exit app
      */
     @Override
     public void onBackPressed() {
 
-        if(drawerLayout.isDrawerOpen(Gravity.LEFT)){
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(navigatorView);
             return;
         }
@@ -429,7 +416,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             this.onBackPressed();
         }
         return true;
@@ -461,10 +448,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public void onEffectTrimMenuSelected() {
-        
+
     }
 
-    
+
     /**
      * Method that receives events from Music recyclerview
      *
@@ -501,11 +488,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void onVideoClicked(int position) {
         //TODO Start trim fragment
         this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
-        trimFragment= new TrimPreviewFragment();
+        trimFragment = new TrimPreviewFragment();
         Bundle args = new Bundle();
         args.putInt("VIDEO_INDEX", position);
         trimFragment.setArguments(args);
-        switchFragment(trimFragment,R.id.edit_fragment_preview);
+        switchFragment(trimFragment, R.id.edit_fragment_preview);
     }
 
     private boolean isAlreadySelected(int musicPosition) {
@@ -558,7 +545,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     */
 
 
-
     @Override
     public void refreshStartTimeTag(int time) {
         //startTimeTag.setText(TimeUtils.toFormattedTime(time));
@@ -574,19 +560,15 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         //durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
-  
-
-
-
 
     /**
      * OnClick buttons, tracking Google Analytics
      */
     @OnClick
             ({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity, R.id.edit_button_fx,
-            R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look,
+                    R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look,
 
-    })
+            })
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
