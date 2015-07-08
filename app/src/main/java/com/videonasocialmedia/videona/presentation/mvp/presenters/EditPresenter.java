@@ -36,7 +36,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
      * Export project use case
      */
     private ExportProjectUseCase exportProjectUseCase;
-    private ModifyVideoDurationUseCase modifyVideoDurationUseCase;
+
     private AddMusicToProjectUseCase addMusicToProjectUseCase;
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     /**
@@ -51,7 +51,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     public EditPresenter(EditorView editorView) {
         this.editorView = editorView;
         exportProjectUseCase = new ExportProjectUseCase(this);
-        modifyVideoDurationUseCase = new ModifyVideoDurationUseCase();
+
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addMusicToProjectUseCase= new AddMusicToProjectUseCase();
         removeMusicFromProjectUseCase= new RemoveMusicFromProjectUseCase();
@@ -117,13 +117,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
         exportProjectUseCase.export();
     }
 
-    public void modifyVideoStartTime(int startTime) {
-        modifyVideoDurationUseCase.modifyVideoStartTime(videoToEdit, startTime, this);
-    }
 
-    public void modifyVideoFinishTime(int finishTime) {
-        modifyVideoDurationUseCase.modifyVideoFinishTime(videoToEdit, finishTime, this);
-    }
 
     @Override
     public void onVideoDurationModified(Video modifiedVideo) {

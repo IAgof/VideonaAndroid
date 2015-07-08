@@ -19,7 +19,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
@@ -32,7 +32,7 @@ import butterknife.InjectView;
 /**
  * Created by jca on 14/5/15.
  */
-public class VideoGalleryFragment extends Fragment implements VideoGalleryView, RecyclerViewClickListener {
+public class VideoGalleryFragment extends Fragment implements VideoGalleryView, MusicRecyclerViewClickListener {
 
     public static final int SELECTION_MODE_SINGLE = 0;
     public static final int SELECTION_MODE_MULTIPLE = 1;
@@ -152,7 +152,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     @Override
     public void showVideos(List<Video> videoList) {
         videoGalleryAdapter = new VideoGalleryAdapter(videoList);
-        videoGalleryAdapter.setRecyclerViewClickListener(this);
+        videoGalleryAdapter.setMusicRecyclerViewClickListener(this);
         recyclerView.setAdapter(videoGalleryAdapter);
         showTimeTag(videoList);
     }

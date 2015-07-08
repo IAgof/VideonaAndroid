@@ -19,21 +19,14 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,17 +38,17 @@ import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
-import com.videonasocialmedia.videona.presentation.views.customviews.RangeSeekBar;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.PreviewVideoListFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
-import com.videonasocialmedia.videona.utils.Size;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.IOException;
@@ -63,14 +56,13 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.InjectViews;
 import butterknife.OnClick;
 
 
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, RecyclerViewClickListener, RangeSeekBar.OnRangeSeekBarChangeListener {
+public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener, MusicRecyclerViewClickListener, VideoTimeLineRecyclerViewClickListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -80,6 +72,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
     ImageButton audioFxButton;
+    @InjectView(R.id.edit_bottom_panel)
+    FrameLayout edit_bottom_panel;
     /*
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
@@ -94,16 +88,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @InjectView(R.id.edit_text_time_trim)
     TextView durationTag;
     */
-    @InjectView(R.id.linearLayoutRangeSeekBar)
-    ViewGroup layoutSeekBar;
-    @InjectView(R.id.relativeLayoutPreviewVideo)
-    RelativeLayout relativeLayoutPreviewVideo;
-    @InjectView(R.id.edit_bottom_panel)
-    FrameLayout edit_bottom_panel;
-    @InjectViews({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
-            R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6})
-    List<ImageView> videoThumbs;
-    RangeSeekBar<Double> trimBar;
+
     /*Preview*/
     /*
     private MediaController mediaController;
@@ -126,6 +111,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     private MusicGalleryFragment musicGalleryFragment;
     private VideoTimeLineFragment videoTimeLineFragment;
+    private TrimPreviewFragment trimFragment;
     /*mvp*/
     private EditPresenter editPresenter;
     /**
@@ -158,9 +144,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         audioFxMenuFragment = new AudioFxMenuFragment();
 
-        FragmentTransaction previewTransaction = getFragmentManager().beginTransaction();
-        previewTransaction.add(R.id.edit_fragment_preview, previewVideoListFragment).commit();
-
+        //FragmentTransaction previewTransaction = getFragmentManager().beginTransaction();
+        //previewTransaction.add(R.id.edit_fragment_preview, previewVideoListFragment).commit();
+        switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
         audioFxButton.setActivated(true);
@@ -349,8 +335,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             if (audioFxMenuFragment == null) {
                 audioFxMenuFragment = new AudioFxMenuFragment();
             }
+            switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
             switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
-            onEffectMenuSelected();
+            switchFragment(musicGalleryFragment, R.id.edit_bottom_panel);
         }
         scissorButton.setActivated(false);
         audioFxButton.setActivated(true);
@@ -368,10 +355,8 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
 
         this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+        switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
 
-        relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
-        //if (musicGalleryFragment != null)
-        //    this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
         if(videoTimeLineFragment==null){
             videoTimeLineFragment= new VideoTimeLineFragment();
         }
@@ -417,11 +402,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (buttonBackPressed) {
             editPresenter.cancel();
             finish();
-
             // Go to RecordActivity
             Intent record = new Intent(this, RecordActivity.class);
             startActivity(record);
-
             return;
         }
         buttonBackPressed = true;
@@ -430,17 +413,13 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if (keyCode == KeyEvent.KEYCODE_BACK && buttonBackPressed) {
             // do something on back.
-
             editPresenter.cancel();
             finish();
-
             // Go to RecordActivity
             Intent record = new Intent(this, RecordActivity.class);
             startActivity(record);
-
             return true;
         }
 
@@ -481,11 +460,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @Override
     public void onEffectTrimMenuSelected() {
 
-        relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
-
-        if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
-            edit_bottom_panel.setVisibility(View.INVISIBLE);
-        }
+//        relativeLayoutPreviewVideo.setVisibility(View.VISIBLE);
+//
+//        if (edit_bottom_panel.getVisibility() == View.VISIBLE) {
+//            edit_bottom_panel.setVisibility(View.INVISIBLE);
+//        }
     }
 
 
@@ -575,6 +554,18 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         }
     }
 
+
+    @Override
+    public void onVideoClicked(int position) {
+        //TODO Start trim fragment
+        this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
+        trimFragment= new TrimPreviewFragment();
+        Bundle args = new Bundle();
+        args.putInt("VIDEO_INDEX", position);
+        trimFragment.setArguments(args);
+        switchFragment(trimFragment,R.id.edit_fragment_preview);
+    }
+
     private boolean isAlreadySelected(int musicPosition) {
         return selectedMusicIndex == musicPosition;
     }
@@ -646,70 +637,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
     */
 
-    @Override
-    public void createAndPaintVideoThumbs(final String videoPath, final int videoDuration) throws Exception {
-        Handler h = new Handler();
-        h.post(new Runnable() {
-            @Override
-            public void run() {
-                Size thumbSize = determineThumbsSize();
 
-                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                retriever.setDataSource(videoPath);
-                for (int thumbOrder = 0; thumbOrder < videoThumbs.size(); thumbOrder++) {
-                    int frameTime = getFrameTime(videoDuration, thumbOrder, videoThumbs.size());
-                    try {
-                        Bitmap thumbImage = createVideoThumb(retriever, thumbSize, frameTime);
-                        ImageView currentThumb = videoThumbs.get(thumbOrder);
-                        currentThumb.setImageBitmap(thumbImage);
-                        currentThumb.setScaleType(ImageView.ScaleType.FIT_XY);
-                    } catch (Exception Exception) {
-                        //TODO treat exception properly. Probably do nothing is fine for the time being
-                    }
-                }
-            }
-        });
-    }
-
-    private Size determineThumbsSize() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int screnWidth = metrics.widthPixels;
-        int screenHeight = metrics.heightPixels;
-        int numberOfThumbs = videoThumbs.size();
-        int width_opt = screnWidth / numberOfThumbs;
-        return new Size(width_opt, screenHeight);
-    }
-
-    private Bitmap createVideoThumb(MediaMetadataRetriever retriever, Size size, int frameTime) throws Exception {
-        Bitmap bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-        if (bitmap == null)
-            bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_CLOSEST);
-        if (bitmap == null)
-            bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_NEXT_SYNC);
-        if (bitmap == null)
-            bitmap = retriever.getFrameAtTime(frameTime, MediaMetadataRetriever.OPTION_PREVIOUS_SYNC);
-        if (bitmap == null) {
-            throw new Exception();
-        }
-        return Bitmap.createScaledBitmap(bitmap, size.getWidth(), size.getHeight(), false);
-    }
-
-    private int getFrameTime(int videoDuration, int thumbOrder, int numberOfThumbs) {
-        return (videoDuration / numberOfThumbs) * thumbOrder * 1000;
-    }
-
-    @Override
-    public void showTrimBar(int videoFileDuration, int min, int max) {
-        //seekBar.setMax(videoFileDuration);
-        trimBar = new RangeSeekBar<>(
-                (double) 0, (double) videoFileDuration, getBaseContext()
-                .getApplicationContext(), videoFileDuration);
-        trimBar.setSelectedMinValue((double) min);
-        trimBar.setSelectedMaxValue((double) max);
-        trimBar.setOnRangeSeekBarChangeListener(this);
-        layoutSeekBar.addView(trimBar);
-    }
 
     @Override
     public void refreshStartTimeTag(int time) {
@@ -747,19 +675,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
     */
 
-    private void syncMusicWithVideo(int videoProgress) {
-        int trimBarStart = (int) Math.round(trimBar.getSelectedMinValue());
-        musicPlayer.seekTo(videoProgress - trimBarStart);
-    }
-
-    private boolean isOnSelectedVideoSection() {
-        //int videoProgress = videoPlayer.getCurrentPosition();
-        int videoProgress = 1;
-
-        int trimBarStart = (int) Math.round(trimBar.getSelectedMinValue());
-        int trimBarEnd = (int) Math.round(trimBar.getSelectedMaxValue());
-        return videoProgress >= trimBarStart && videoProgress <= trimBarEnd;
-    }
+//    private void syncMusicWithVideo(int videoProgress) {
+//        int trimBarStart = (int) Math.round(trimBar.getSelectedMinValue());
+//        musicPlayer.seekTo(videoProgress - trimBarStart);
+//    }
+//
+//    private boolean isOnSelectedVideoSection() {
+//        //int videoProgress = videoPlayer.getCurrentPosition();
+//        int videoProgress = 1;
+//
+//        int trimBarStart = (int) Math.round(trimBar.getSelectedMinValue());
+//        int trimBarEnd = (int) Math.round(trimBar.getSelectedMaxValue());
+//        return videoProgress >= trimBarStart && videoProgress <= trimBarEnd;
+//    }
 
     private void playMusicSyncedWithVideo() {
         /*
@@ -772,31 +700,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
 
-    /**
-     * Listens to trimBar events.
-     * <p/>
-     * modifies the video start time and the video finishTime
-     *
-     * @param trimBar
-     * @param minValue
-     * @param maxValue
-     */
-    @Override
-    public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue) {
-        int startTimeMs = (int) Math.round((double) minValue);
-        int finishTimeMs = (int) Math.round((double) maxValue);
-        editPresenter.modifyVideoStartTime(startTimeMs);
-        editPresenter.modifyVideoFinishTime(finishTimeMs);
-
-        /*
-        if (videoPlayer.isPlaying()) {
-            playPreviewFromTrimmingStart();
-        } else {
-            seekToTrimmingStart();
-        }
-        */
-
-    }
 
 
     /**

@@ -62,6 +62,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     @InjectView(R.id.edit_text_time_trim)
     TextView durationTag;
 
+
+
     protected Handler handler = new Handler();
     private PreviewPresenter previewPresenter;
     private MediaController mediaController;
