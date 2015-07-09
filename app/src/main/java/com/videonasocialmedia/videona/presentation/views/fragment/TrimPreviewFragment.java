@@ -90,6 +90,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         ButterKnife.inject(this, view);
         presenter = new TrimPreviewPresenter(this, this);
         seekBar.setProgress(0);
+        seekBar.setOnSeekBarChangeListener(this);
         mediaController = new MediaController(getActivity());
         mediaController.setVisibility(View.INVISIBLE);
         videoIndexOnTrack = this.getArguments().getInt("VIDEO_INDEX", 0);
