@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 
@@ -40,6 +41,10 @@ public class PreviewPresenter implements OnVideosRetrieved {
 
     public void init() {
         getGetMediaListFromProjectUseCase.getMediaListFromProject(this);
+    }
+
+    public List<Media> checkVideosOnProject() {
+        return getGetMediaListFromProjectUseCase.getMediaListFromProject();
     }
 
     public void update() {
