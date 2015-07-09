@@ -60,10 +60,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     TextView startTimeTag;
     @InjectView(R.id.edit_text_end_trim)
     TextView stopTimeTag;
-    @InjectView(R.id.edit_text_time_trim)
-    TextView durationTag;
-
-
 
     protected Handler handler = new Handler();
     private PreviewPresenter previewPresenter;
@@ -233,7 +229,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     private void showTimeTags(int duration) {
         refreshStartTimeTag(0);
-        refreshDurationTag(0);
         refreshStopTimeTag(duration);
     }
 
@@ -376,7 +371,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             try {
                 if (videoPlayer.isPlaying() && videoToPlay < movieList.size()) {
                     seekBar.setProgress(videoPlayer.getCurrentPosition() + videoStartTimeInProject.get(videoToPlay));
-                    refreshDurationTag(seekBar.getProgress());
+                    refreshStartTimeTag(seekBar.getProgress());
                     if (seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay)) {
                         videoToPlay++;
                         if (videoToPlay < movieList.size()) {
@@ -425,10 +420,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     private void refreshStopTimeTag(int time) {
         stopTimeTag.setText(TimeUtils.toFormattedTime(time));
-    }
-
-    private void refreshDurationTag(int duration) {
-        durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
 }
