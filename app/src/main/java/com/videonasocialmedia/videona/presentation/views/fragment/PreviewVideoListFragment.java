@@ -290,16 +290,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                 }
 
                 if (videoToPlay == movieList.size()) {
-                    playButton.setVisibility(View.VISIBLE);
-                    releaseVideoView();
-                    videoToPlay = 0;
-                    initVideoPlayer(movieList.get(videoToPlay),
-                            movieList.get(videoToPlay).getFileStartTime() + 100);
-                    seekBar.setProgress(0);
-
-                    if (musicPlayer != null && musicPlayer.isPlaying()) {
-                        musicPlayer.pause();
-                    }
+                    releaseView();
                 }
             }
         });
@@ -390,6 +381,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                         videoToPlay++;
                         if (videoToPlay < movieList.size()) {
                             playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
+                        } else {
+                            releaseView();
                         }
                     }
                 }
@@ -397,6 +390,20 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
             }
             handler.postDelayed(updateTimeTask, 20);
+        }
+    }
+
+    private void releaseView() {
+        playButton.setVisibility(View.VISIBLE);
+        releaseVideoView();
+        videoToPlay = 0;
+        initVideoPlayer(movieList.get(videoToPlay),
+                movieList.get(videoToPlay).getFileStartTime() + 100);
+        seekBar.setProgress(0);
+
+        if (musicPlayer != null && musicPlayer.isPlaying()) {
+            musicPlayer.pause();
+            releaseMusicPlayer();
         }
     }
 
