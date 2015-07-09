@@ -121,7 +121,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         videoStartTimeInProject = null;
         videoStopTimeInProject = null;
         releaseVideoView();
-        disableMusicPlayer();
+        releaseMusicPlayer();
         projectDuration = 0;
     }
 
@@ -139,10 +139,12 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-        if (videoPlayer.isPlaying()) {
-            pause();
-        } else {
-            play();
+        if(videoPlayer != null) {
+            if (videoPlayer.isPlaying()) {
+                pause();
+            } else {
+                play();
+            }
         }
     }
 
@@ -168,7 +170,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     }
 
     private void playMusicSyncWithVideo() {
-        disableMusicPlayer();
+        releaseMusicPlayer();
         initMusicPlayer();
         if(musicPlayer.isPlaying()) {
             musicPlayer.seekTo(seekBar.getProgress());
@@ -178,7 +180,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         }
     }
 
-    private void disableMusicPlayer() {
+    private void releaseMusicPlayer() {
         if (musicPlayer != null) {
             musicPlayer.stop();
             musicPlayer.release();
@@ -322,6 +324,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     @Override
     public void showError(String message) {
+        releaseVideoView();
+        releaseMusicPlayer();
         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_add_videos), Toast.LENGTH_SHORT).show();
     }
 
