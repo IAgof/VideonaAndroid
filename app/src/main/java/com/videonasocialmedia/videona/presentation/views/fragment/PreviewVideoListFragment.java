@@ -146,6 +146,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             } else {
                 play();
             }
+        } else {
+
         }
     }
 
@@ -292,6 +294,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             public void onCompletion(MediaPlayer mp) {
                 videoToPlay++;
                 if (videoToPlay < movieList.size()) {
+                    Log.d("seekbar", String.valueOf(seekBar.getProgress()));
+                    Log.d("video", String.valueOf(movieList.get(videoToPlay).getFileStartTime()));
                     playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
                 }
             }
@@ -306,18 +310,17 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                 videoPlayer.setVolume(0.5f, 0.5f);
                 videoPlayer.setLooping(false);
                 videoPlayer.start();
-                //playVideo();
                 videoPlayer.seekTo(instantToStart);
             }
         });
         preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
+                Log.d("prueba", "probandoooooooooooooo");
                 videoToPlay++;
                 if (videoToPlay < movieList.size()) {
                     playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
                 }
-
                 if (videoToPlay == movieList.size()) {
                     releaseView();
                 }
@@ -391,7 +394,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                 videoToPlay = result;
             }
         }
-        Log.d("video", String.valueOf(videoToPlay));
         return movieList.get(videoToPlay);
     }
 
@@ -405,11 +407,13 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         if (videoPlayer != null) {
             try {
                 if (videoPlayer.isPlaying() && videoToPlay < movieList.size()) {
-                    seekBar.setProgress(videoPlayer.getCurrentPosition() + videoStartTimeInProject.get(videoToPlay));
+                    seekBar.setProgress(videoPlayer.getCurrentPosition() +
+                            videoStartTimeInProject.get(videoToPlay) -
+                            movieList.get(videoToPlay).getFileStartTime());
                     refreshStartTimeTag(seekBar.getProgress());
-                    if (seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay)) {
+                    if(isEndOfVideo()) {
                         videoToPlay++;
-                        if (videoToPlay < movieList.size()) {
+                        if(hasNextVideoToPlay()) {
                             playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
                         } else {
                             releaseView();
@@ -421,6 +425,26 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             }
             handler.postDelayed(updateTimeTask, 20);
         }
+    }
+
+    private boolean isEndOfVideo() {
+        boolean result;
+        if (seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay)) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    private boolean hasNextVideoToPlay() {
+        boolean result;
+        if (videoToPlay < movieList.size()) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
     }
 
     private void releaseView() {
