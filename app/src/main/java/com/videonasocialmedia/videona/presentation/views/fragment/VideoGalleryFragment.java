@@ -152,8 +152,10 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     @Override
     public void showVideos(List<Video> videoList) {
         videoGalleryAdapter = new VideoGalleryAdapter(videoList);
+        videoGalleryAdapter.setSelectionSupport(selectionSupport);
         videoGalleryAdapter.setMusicRecyclerViewClickListener(this);
         recyclerView.setAdapter(videoGalleryAdapter);
+
         showTimeTag(videoList);
     }
 

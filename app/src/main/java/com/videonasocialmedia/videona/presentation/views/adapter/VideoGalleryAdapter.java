@@ -16,6 +16,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
 import java.util.List;
 
@@ -31,11 +32,11 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
     private Context context;
     private List<Video> videoList;
     private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
+    private ItemSelectionSupport selectionSupport;
 
     private int selectedVideoPosition = -1;
 
     public VideoGalleryAdapter(List<Video> videoList) {
-
         this.videoList = videoList;
     }
 
@@ -58,9 +59,11 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
-        holder.overlay.setSelected(position == selectedVideoPosition);
-        holder.overlayIcon.setSelected(position == selectedVideoPosition);
-        String duration= TimeUtils.toFormattedTime(selectedVideo.getDuration());
+        if(selectionSupport!=null) {
+            holder.overlay.setActivated(selectionSupport.isItemChecked(position));
+            holder.overlayIcon.setActivated(selectionSupport.isItemChecked(position));
+        }
+        String duration = TimeUtils.toFormattedTime(selectedVideo.getDuration());
         holder.duration.setText(duration);
     }
 
@@ -79,6 +82,10 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     public void setMusicRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
         this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
+    }
+
+    public void setSelectionSupport(ItemSelectionSupport selectionSupport) {
+        this.selectionSupport = selectionSupport;
     }
 
     public void appendVideos(List<Video> videoList) {
