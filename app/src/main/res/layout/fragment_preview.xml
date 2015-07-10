@@ -28,7 +28,7 @@
         android:layout_marginTop="2dp"
         android:background="@null"
         android:scaleType="fitCenter"
-        android:src="@drawable/gatito_rules" />
+        android:src="@android:drawable/ic_menu_set_as" />
 
     <ImageButton
         android:id="@+id/edit_button_play"
