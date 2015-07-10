@@ -16,7 +16,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -147,7 +146,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                 play();
             }
         } else {
-
+            seekBar.setProgress(0);
         }
     }
 
@@ -293,9 +292,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             @Override
             public void onCompletion(MediaPlayer mp) {
                 videoToPlay++;
-                if (videoToPlay < movieList.size()) {
-                    Log.d("seekbar", String.valueOf(seekBar.getProgress()));
-                    Log.d("video", String.valueOf(movieList.get(videoToPlay).getFileStartTime()));
+                if (hasNextVideoToPlay()) {
                     playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
                 }
             }
@@ -316,12 +313,10 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                Log.d("prueba", "probandoooooooooooooo");
                 videoToPlay++;
-                if (videoToPlay < movieList.size()) {
+                if (hasNextVideoToPlay()) {
                     playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
-                }
-                if (videoToPlay == movieList.size()) {
+                } else {
                     releaseView();
                 }
             }
@@ -332,16 +327,12 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             videoPlayer.setDataSource(video.getMediaPath());
             videoPlayer.prepare();
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         preview.requestFocus();
     }
 
