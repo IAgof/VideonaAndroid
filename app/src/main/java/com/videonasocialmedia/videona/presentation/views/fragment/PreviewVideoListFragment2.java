@@ -137,15 +137,15 @@ public class PreviewVideoListFragment2 extends Fragment implements PreviewView, 
     public void playPausePreview() {
         if(videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
-                pause();
+                pausePreview();
             } else {
-                play();
+                playPreview();
             }
         }
     }
 
     @Override
-    public void play() {
+    public void playPreview() {
         if (videoPlayer != null) {
             videoPlayer.start();
             if(isMusicOnProject()){
@@ -193,7 +193,7 @@ public class PreviewVideoListFragment2 extends Fragment implements PreviewView, 
     }
 
     @Override
-    public void pause() {
+    public void pausePreview() {
         if (videoPlayer != null && videoPlayer.isPlaying())
             videoPlayer.pause();
         if (musicPlayer != null && musicPlayer.isPlaying())
@@ -272,7 +272,7 @@ public class PreviewVideoListFragment2 extends Fragment implements PreviewView, 
             public void onPrepared(MediaPlayer mp) {
                 videoPlayer.setVolume(0.5f, 0.5f);
                 videoPlayer.setLooping(false);
-                play();
+                playPreview();
                 videoPlayer.seekTo(instantToStart);
             }
         });
