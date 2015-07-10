@@ -27,7 +27,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -81,11 +85,18 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     private int videoToPlay = 0;
     private int instantTime = 0;
 
+    /**
+     * Tracker google analytics
+     */
+    private Tracker tracker;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_preview, container, false);
         ButterKnife.inject(this, view);
+        VideonaApplication app = (VideonaApplication) getActivity().getApplication();
+        tracker = app.getTracker();
 
         previewPresenter = new PreviewPresenter(this);
 
@@ -353,15 +364,19 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            Video video = seekVideo(progress);
-            int timeInMsec = progress - videoStartTimeInProject.get(videoToPlay) +
-                    movieList.get(videoToPlay).getFileStartTime();
-            if(videoPlayer != null) {
-                playNextVideo(video, timeInMsec);
+            if(isVideosOnProject()) {
+                Video video = seekVideo(progress);
+                int timeInMsec = progress - videoStartTimeInProject.get(videoToPlay) +
+                        movieList.get(videoToPlay).getFileStartTime();
+                if(videoPlayer != null) {
+                    playNextVideo(video, timeInMsec);
+                } else {
+                    initVideoPlayer(video, timeInMsec);
+                }
+                playButton.setVisibility(View.INVISIBLE);
             } else {
-                initVideoPlayer(video, timeInMsec);
+                seekBar.setProgress(0);
             }
-            playButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -402,16 +417,16 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                             videoStartTimeInProject.get(videoToPlay) -
                             movieList.get(videoToPlay).getFileStartTime());
                     refreshStartTimeTag(seekBar.getProgress());
-                    if(isEndOfVideo()) {
+                    if (isEndOfVideo()) {
                         videoToPlay++;
-                        if(hasNextVideoToPlay()) {
+                        if (hasNextVideoToPlay()) {
                             playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
                         } else {
                             releaseView();
                         }
                     }
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
 
             }
             handler.postDelayed(updateTimeTask, 20);
@@ -470,6 +485,34 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     private void refreshStopTimeTag(int time) {
         stopTimeTag.setText(TimeUtils.toFormattedTime(time));
+    }
+
+    @OnClick({R.id.edit_button_full_screen})
+    public void trackClicks(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id the identifier of the clicked button
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.fragment_navigator_record_button:
+                label = "Go to full screen";
+                break;
+            default:
+                label = "Other";
+        }
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Full Screen")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();
     }
 
 }

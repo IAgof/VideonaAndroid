@@ -30,7 +30,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -83,11 +87,18 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         }
     };
 
+    /**
+     * Tracker google analytics
+     */
+    private Tracker tracker;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trim_preview, container, false);
         ButterKnife.inject(this, view);
+        VideonaApplication app = (VideonaApplication) getActivity().getApplication();
+        tracker = app.getTracker();
         presenter = new TrimPreviewPresenter(this, this);
         seekBar.setProgress(0);
         mediaController = new MediaController(getActivity());
@@ -377,12 +388,36 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
+    public void onStartTrackingTouch(SeekBar seekBar) {}
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
+    public void onStopTrackingTouch(SeekBar seekBar) {}
 
+    @OnClick({R.id.edit_button_full_screen})
+    public void trackClicks(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id the identifier of the clicked button
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.fragment_navigator_record_button:
+                label = "Go to full screen";
+                break;
+            default:
+                label = "Other";
+        }
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Full Screen")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();
     }
 }

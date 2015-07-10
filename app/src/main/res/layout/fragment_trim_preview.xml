@@ -26,6 +26,18 @@
         android:layout_marginBottom="5dp"/>
 
     <ImageButton
+        android:id="@+id/edit_button_full_screen"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/edit_preview_player"
+        android:layout_alignLeft="@+id/edit_preview_player"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@android:drawable/ic_menu_set_as" />
+
+    <ImageButton
         android:id="@+id/edit_button_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,6 +53,7 @@
         android:layout_alignBottom="@+id/edit_preview_player"
         android:layout_alignLeft="@+id/edit_preview_player"
         android:text="00:00"
+        android:layout_marginLeft="50dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/white"
         android:visibility="visible" />
@@ -52,6 +65,7 @@
         android:layout_alignBottom="@+id/edit_preview_player"
         android:layout_alignRight="@+id/edit_preview_player"
         android:text="00:00"
+        android:layout_marginRight="50dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/white"
         android:visibility="visible" />
@@ -69,21 +83,21 @@
 
     <SeekBar
         android:id="@+id/edit_seek_bar"
-        android:layout_width="300dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"
         android:focusable="false"
         android:focusableInTouchMode="true"
         android:indeterminate="false"
         android:longClickable="true"
         android:maxHeight="2dp"
         android:progressDrawable="@color/videona_blue_5"
-        android:layout_alignBottom="@+id/edit_text_start_trim"
-        android:layout_alignLeft="@+id/edit_preview_player"/>
+        android:layout_alignBottom="@+id/edit_text_start_trim" />
 
 </RelativeLayout>
 

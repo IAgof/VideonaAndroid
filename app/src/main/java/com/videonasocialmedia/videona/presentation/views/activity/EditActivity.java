@@ -158,7 +158,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         previewVideoListFragment = new PreviewVideoListFragment();
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
-        audioFxMenuFragment = new AudioFxMenuFragment();
         videoTimeLineFragment = new VideoTimeLineFragment();
 
         switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
@@ -336,6 +335,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         if (!audioFxButton.isActivated()) {
             if (audioFxMenuFragment == null) {
                 audioFxMenuFragment = new AudioFxMenuFragment();
+            }
+            if (musicGalleryFragment == null) {
+                musicGalleryFragment = new MusicGalleryFragment();
             }
             switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
             switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
@@ -557,7 +559,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     @OnClick
             ({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity, R.id.edit_button_fx,
                     R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look,
-
             })
     public void clickListener(View view) {
         sendButtonTracked(view.getId());

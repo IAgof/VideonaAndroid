@@ -19,7 +19,7 @@
         android:background="@color/pastel_palette_green"
         android:padding="15dp"
         android:src="@drawable/edit_fragment_sound_icon_fx_normal"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="0.5dp"
         android:alpha="0.20" />
 
     <ImageButton
@@ -29,7 +29,7 @@
         android:background="@color/pastel_palette_purple_dark"
         android:padding="15dp"
         android:src="@drawable/edit_fragment_sound_icon_music_normal"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="0.5dp"
         android:alpha="0.20" />
 
     <ImageButton
@@ -38,8 +38,8 @@
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_pink_2"
         android:padding="15dp"
-        android:layout_marginBottom="2dp"
         android:src="@drawable/edit_fragment_sound_icon_audio_normal"
+        android:layout_marginBottom="0.5dp"
         android:alpha="0.20" />
 
     <ImageButton

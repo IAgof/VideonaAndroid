@@ -14,15 +14,15 @@
 
     <ImageView
         android:id="@+id/gallery_thumb"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_margin="1dp"
         android:padding="3dp" />
 
     <RelativeLayout
         android:id="@+id/gallery_overlay"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignBottom="@id/gallery_thumb"
         android:layout_alignEnd="@id/gallery_thumb"
         android:layout_alignStart="@id/gallery_thumb"
