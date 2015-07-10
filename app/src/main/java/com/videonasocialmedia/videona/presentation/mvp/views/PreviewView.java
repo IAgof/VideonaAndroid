@@ -9,9 +9,9 @@ import java.util.List;
  */
 public interface PreviewView {
 
-    void play();
+    void playPreview();
 
-    void pause();
+    void pausePreview();
 
     void seekTo(int timeInMsec);
 
