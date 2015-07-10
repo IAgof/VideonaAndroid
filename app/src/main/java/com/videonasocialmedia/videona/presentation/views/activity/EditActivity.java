@@ -159,22 +159,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         previewVideoListFragment = new PreviewVideoListFragment();
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         audioFxMenuFragment = new AudioFxMenuFragment();
+        videoTimeLineFragment = new VideoTimeLineFragment();
 
-        //FragmentTransaction previewTransaction = getFragmentManager().beginTransaction();
-        //previewTransaction.add(R.id.edit_fragment_preview, previewVideoListFragment).commit();
         switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.edit_right_panel, audioFxMenuFragment).commit();
-        audioFxButton.setActivated(true);
-        this.onEffectMenuSelected();
-
-        /*
-        seekBar.setProgress(0);
-        seekBar.setOnSeekBarChangeListener(this);
-
-        mediaController = new MediaController(this);
-        mediaController.setVisibility(View.INVISIBLE);
-        */
+        switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+        switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+        scissorButton.setActivated(true);
 
         editPresenter.onCreate();
         createProgressDialog();

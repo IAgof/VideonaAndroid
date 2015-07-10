@@ -16,6 +16,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,7 +30,6 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreviewPresenter;
@@ -48,7 +48,7 @@ import butterknife.OnTouch;
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class PreviewVideoListFragment extends Fragment implements PreviewView, SeekBar.OnSeekBarChangeListener {
+public class PreviewVideoListFragment2 extends Fragment implements PreviewView, SeekBar.OnSeekBarChangeListener {
 
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
@@ -79,7 +79,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     private List<Integer> videoStartTimeInProject;
     private List<Integer> videoStopTimeInProject;
     private int videoToPlay = 0;
-    private int instantTime = 0;
 
     @Nullable
     @Override
@@ -114,10 +113,12 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     @Override
     public void onPause() {
         super.onPause();
+        movieList = null;
+        videoStartTimeInProject = null;
+        videoStopTimeInProject = null;
         releaseVideoView();
         releaseMusicPlayer();
         projectDuration = 0;
-        instantTime = 0;
     }
 
     @OnTouch(R.id.edit_preview_player)
@@ -134,37 +135,25 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-        if(isVideosOnProject()) {
-            if(videoPlayer != null) {
-                if (videoPlayer.isPlaying()) {
-                    pause();
-                    instantTime = seekBar.getProgress();
-                } else {
-                    play();
-                }
+        if(videoPlayer != null) {
+            if (videoPlayer.isPlaying()) {
+                pause();
             } else {
                 play();
             }
-        } else {
-            seekBar.setProgress(0);
         }
-    }
-
-    private boolean isVideosOnProject() {
-        boolean result;
-        List<Media> list = previewPresenter.checkVideosOnProject();
-        if(list.size() > 0) {
-            result = true;
-        } else {
-            result = false;
-        }
-        return result;
     }
 
     @Override
     public void play() {
-        updateVideoList();
-        playButton.setVisibility(View.INVISIBLE);
+        if (videoPlayer != null) {
+            videoPlayer.start();
+            if(isMusicOnProject()){
+                muteVideo();
+                playMusicSyncWithVideo();
+            }
+            playButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     private boolean isMusicOnProject() {
@@ -224,7 +213,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     @Override
     public void showPreview(List<Video> videoList) {
-        projectDuration = 0;
         movieList = videoList;
         videoStartTimeInProject = new ArrayList<>();
         videoStopTimeInProject = new ArrayList<>();
@@ -235,30 +223,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         }
         showTimeTags(projectDuration);
         seekBar.setMax(projectDuration);
-        Video video = seekVideo(instantTime);
-        videoToPlay = getPosition(video);
-        int timeInMsec = instantTime - videoStartTimeInProject.get(videoToPlay) +
-                movieList.get(videoToPlay).getFileStartTime();
-
-        if (videoPlayer == null) {
-            initVideoPlayer(video, timeInMsec);
-        } else {
-            playNextVideo(video, timeInMsec);
-        }
-        if(isMusicOnProject()){
-            muteVideo();
-            playMusicSyncWithVideo();
-        }
-    }
-
-    private int getPosition(Video seekVideo) {
-        int position = 0;
-        for (Video video : movieList) {
-            if (video == seekVideo){
-                position = movieList.indexOf(video);
-            }
-        }
-        return position;
+        initVideoPlayer(movieList.get(videoToPlay),
+                movieList.get(videoToPlay).getFileStartTime() + 100);
     }
 
     private void showTimeTags(int duration) {
@@ -292,7 +258,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             @Override
             public void onCompletion(MediaPlayer mp) {
                 videoToPlay++;
-                if (hasNextVideoToPlay()) {
+                if (videoToPlay < movieList.size()) {
                     playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
                 }
             }
@@ -306,7 +272,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             public void onPrepared(MediaPlayer mp) {
                 videoPlayer.setVolume(0.5f, 0.5f);
                 videoPlayer.setLooping(false);
-                videoPlayer.start();
+                play();
                 videoPlayer.seekTo(instantToStart);
             }
         });
@@ -314,9 +280,11 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             @Override
             public void onCompletion(MediaPlayer mp) {
                 videoToPlay++;
-                if (hasNextVideoToPlay()) {
+                if (videoToPlay < movieList.size()) {
                     playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
-                } else {
+                }
+
+                if (videoToPlay == movieList.size()) {
                     releaseView();
                 }
             }
@@ -327,12 +295,16 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             videoPlayer.setDataSource(video.getMediaPath());
             videoPlayer.prepare();
         } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         preview.requestFocus();
     }
 
@@ -361,7 +333,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             } else {
                 initVideoPlayer(video, timeInMsec);
             }
-            playButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -385,6 +356,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
                 videoToPlay = result;
             }
         }
+        Log.d("video", String.valueOf(videoToPlay));
         return movieList.get(videoToPlay);
     }
 
@@ -398,13 +370,11 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         if (videoPlayer != null) {
             try {
                 if (videoPlayer.isPlaying() && videoToPlay < movieList.size()) {
-                    seekBar.setProgress(videoPlayer.getCurrentPosition() +
-                            videoStartTimeInProject.get(videoToPlay) -
-                            movieList.get(videoToPlay).getFileStartTime());
+                    seekBar.setProgress(videoPlayer.getCurrentPosition() + videoStartTimeInProject.get(videoToPlay));
                     refreshStartTimeTag(seekBar.getProgress());
-                    if(isEndOfVideo()) {
+                    if (seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay)) {
                         videoToPlay++;
-                        if(hasNextVideoToPlay()) {
+                        if (videoToPlay < movieList.size()) {
                             playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
                         } else {
                             releaseView();
@@ -418,26 +388,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         }
     }
 
-    private boolean isEndOfVideo() {
-        boolean result;
-        if (seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay)) {
-            result = true;
-        } else {
-            result = false;
-        }
-        return result;
-    }
-
-    private boolean hasNextVideoToPlay() {
-        boolean result;
-        if (videoToPlay < movieList.size()) {
-            result = true;
-        } else {
-            result = false;
-        }
-        return result;
-    }
-
     private void releaseView() {
         playButton.setVisibility(View.VISIBLE);
         releaseVideoView();
@@ -445,7 +395,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         initVideoPlayer(movieList.get(videoToPlay),
                 movieList.get(videoToPlay).getFileStartTime() + 100);
         seekBar.setProgress(0);
-        instantTime = 0;
+
         if (musicPlayer != null && musicPlayer.isPlaying()) {
             musicPlayer.pause();
             releaseMusicPlayer();
