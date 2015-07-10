@@ -132,15 +132,15 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
         if (videoPlayer.isPlaying()) {
-            pause();
+            pausePreview();
         } else {
-            play();
+            playPreview();
         }
         updateSeekBarProgress();
     }
 
     @Override
-    public void play() {
+    public void playPreview() {
         if (videoPlayer != null) {
             videoPlayer.start();
             playButton.setVisibility(View.INVISIBLE);
@@ -148,7 +148,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     }
 
     @Override
-    public void pause() {
+    public void pausePreview() {
         if (videoPlayer != null && videoPlayer.isPlaying())
             videoPlayer.pause();
         playButton.setVisibility(View.VISIBLE);
@@ -199,7 +199,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                         e.printStackTrace();
                     }
                     videoPlayer.pause();
-                    pause();
+                    pausePreview();
                     updateSeekBarProgress();
                 }
             });

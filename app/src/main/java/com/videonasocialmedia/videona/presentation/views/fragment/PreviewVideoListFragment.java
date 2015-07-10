@@ -137,13 +137,13 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         if(isVideosOnProject()) {
             if(videoPlayer != null) {
                 if (videoPlayer.isPlaying()) {
-                    pause();
+                    pausePreview();
                     instantTime = seekBar.getProgress();
                 } else {
-                    play();
+                    playPreview();
                 }
             } else {
-                play();
+                playPreview();
             }
         } else {
             seekBar.setProgress(0);
@@ -162,7 +162,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     }
 
     @Override
-    public void play() {
+    public void playPreview() {
         updateVideoList();
         playButton.setVisibility(View.INVISIBLE);
     }
@@ -204,7 +204,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
     }
 
     @Override
-    public void pause() {
+    public void pausePreview() {
         if (videoPlayer != null && videoPlayer.isPlaying())
             videoPlayer.pause();
         if (musicPlayer != null && musicPlayer.isPlaying())
@@ -326,11 +326,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
             videoPlayer.reset();
             videoPlayer.setDataSource(video.getMediaPath());
             videoPlayer.prepare();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
             e.printStackTrace();
         }
         preview.requestFocus();

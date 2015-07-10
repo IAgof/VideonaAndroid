@@ -262,8 +262,9 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @OnClick(R.id.buttonOkEditActivity)
     public void okEditActivity() {
-        //pausePreview();
-        previewVideoListFragment.pause();
+        pausePreview();
+
+
         showProgressDialog();
         final Runnable r = new Runnable() {
             public void run() {
@@ -271,6 +272,15 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             }
         };
         performOnBackgroundThread(r);
+    }
+
+
+    void pausePreview(){
+        if (previewVideoListFragment.isVisible())
+        previewVideoListFragment.pausePreview();
+        else if (trimFragment.isVisible()){
+            trimFragment.pausePreview();
+        }
     }
 
     @Override
@@ -314,7 +324,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
         progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
                 "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
-
     }
 
 
