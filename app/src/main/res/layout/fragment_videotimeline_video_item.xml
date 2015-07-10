@@ -13,9 +13,11 @@
 
     <ImageView
         android:id="@+id/timelinevideo_thumb"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@android:color/black"
-        android:src="@drawable/fragment_gallery_no_image" />
+        android:src="@drawable/fragment_gallery_no_image"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp" />
 
 </RelativeLayout>
