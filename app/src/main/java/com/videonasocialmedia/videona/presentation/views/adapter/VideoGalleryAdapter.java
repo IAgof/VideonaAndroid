@@ -89,7 +89,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
     }
 
     public void appendVideos(List<Video> videoList) {
-        videoList.addAll(videoList);
+        this.videoList.addAll(videoList);
     }
 
     public boolean isVideoListEmpty() {

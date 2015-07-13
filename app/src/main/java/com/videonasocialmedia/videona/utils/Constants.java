@@ -61,7 +61,4 @@ public class Constants {
     //TODO define this values
     final public static String PROJECT_TITLE = "model";
     final public static String FOLDER_VIDEONA_PRIVATE_MODEL = "model";
-
-
-
 }

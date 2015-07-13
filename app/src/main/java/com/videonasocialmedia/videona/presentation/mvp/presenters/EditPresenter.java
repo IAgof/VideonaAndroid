@@ -12,7 +12,6 @@ import android.util.Log;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddMusicToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
-import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
@@ -60,7 +59,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
         exportProjectUseCase = new ExportProjectUseCase(this);
 
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-        addMusicToProjectUseCase= new AddMusicToProjectUseCase();
+        addMusicToProjectUseCase = new AddMusicToProjectUseCase();
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
     }
@@ -72,7 +71,6 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     }
 
 
-
     /**
      * on Start Presenter
      */
@@ -80,7 +78,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
         // TODO edit use case onStart
     }
 
-    public void onResume(){
+    public void onResume() {
         
         /*
         List<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
@@ -101,12 +99,12 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
 
     }
 
-    public void prepareMusicPreview(){
+    public void prepareMusicPreview() {
         try {
-            Project project= Project.getInstance(null,null,null);
+            Project project = Project.getInstance(null, null, null);
             Music music = (Music) project.getAudioTracks().get(0).getItems().get(0);
             editorView.initMusicPlayer(music);
-        }catch (Exception e){
+        } catch (Exception e) {
             //do nothing
         }
     }
@@ -129,7 +127,6 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
 
         //exportProjectUseCase.export();
     }
-
 
 
     @Override
@@ -190,17 +187,17 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
         editorView.goToShare(exportedVideo.getMediaPath());
     }
 
-    public void resetProject(){
+    public void resetProject() {
 
-            Project project = Project.getInstance(null, null, null);
-            MediaTrack mediaTrack = project.getMediaTrack();
-            LinkedList<Media> listMedia = mediaTrack.getItems();
-            ArrayList<Media> items = new ArrayList<>(listMedia);
-            if (items.size() > 0) {
-                removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
-            }
+        Project project = Project.getInstance(null, null, null);
+        MediaTrack mediaTrack = project.getMediaTrack();
+        LinkedList<Media> listMedia = mediaTrack.getItems();
+        ArrayList<Media> items = new ArrayList<>(listMedia);
+        if (items.size() > 0) {
+            removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
+        }
 
-            removeMusicFromProjectUseCase.removeAllMusic(0, this);
+        removeMusicFromProjectUseCase.removeAllMusic(0, this);
 
     }
 
@@ -214,7 +211,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
         // Toast no Video
         editorView.hideProgressDialog();
         editorView.showMessage(R.string.add_videos_to_project);
-       // Toast.makeText(this, R.string.add_videos_to_project, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, R.string.add_videos_to_project, Toast.LENGTH_SHORT).show();
 
     }
 }

@@ -107,7 +107,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
      * @param musicList
      */
     public void appendMusic(List<Music> musicList) {
-        musicList.addAll(musicList);
+        this.musicList.addAll(musicList);
     }
 
     /**

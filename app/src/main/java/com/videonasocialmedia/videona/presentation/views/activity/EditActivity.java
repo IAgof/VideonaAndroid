@@ -48,7 +48,6 @@ import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFra
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
-import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -64,9 +63,8 @@ import butterknife.OnClick;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, OnEffectMenuSelectedListener,
-        MusicRecyclerViewClickListener, VideoTimeLineRecyclerViewClickListener,
-        OnRemoveAllProjectListener {
+public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
+        , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -76,35 +74,12 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
     ImageButton audioFxButton;
-    /*
-    @InjectView(R.id.edit_preview_player)
-    VideoView preview;
-    @InjectView(R.id.edit_button_play)
-    ImageButton playButton;
-    @InjectView(R.id.edit_seek_bar)
-    SeekBar seekBar;
-    @InjectView(R.id.edit_text_start_trim)
-    TextView startTimeTag;
-    @InjectView(R.id.edit_text_end_trim)
-    TextView stopTimeTag;
-    @InjectView(R.id.edit_text_time_trim)
-    TextView durationTag;
-    */
+
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
-    /*Preview*/
-    /*
-    private MediaController mediaController;
-    private MediaPlayer videoPlayer;
-    private final Runnable updateTimeTask = new Runnable() {
-        @Override
-        public void run() {
-            updateSeekBarProgress();
-        }
-    };
-    */
+
     private MediaPlayer musicPlayer;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
@@ -274,10 +249,10 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     }
 
 
-    void pausePreview(){
+    void pausePreview() {
         if (previewVideoListFragment.isVisible())
-        previewVideoListFragment.pausePreview();
-        else if (trimFragment.isVisible()){
+            previewVideoListFragment.pausePreview();
+        else if (trimFragment.isVisible()) {
             trimFragment.pausePreview();
         }
     }
@@ -362,19 +337,19 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
     public void showScissorsFxMenu() {
         audioFxButton.setActivated(false);
         scissorButton.setActivated(true);
+        videoFxButton.setActivated(false);
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         }
 
-        this.switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+        switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
         switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
 
         if (videoTimeLineFragment == null) {
             videoTimeLineFragment = new VideoTimeLineFragment();
         }
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
-
     }
 
 
@@ -427,7 +402,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         getFragmentManager().executePendingTransactions();
         if (!f.isAdded()) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+            ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).commit();
         }
     }
 
@@ -438,18 +413,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         share.putExtra("VIDEO_EDITED", videoToSharePath);
         share.setClass(this, ShareActivity.class);
         this.startActivity(share);
-    }
-
-    @Override
-    public void onEffectMenuSelected() {
-        if (musicGalleryFragment == null)
-            musicGalleryFragment = new MusicGalleryFragment();
-        switchFragment(musicGalleryFragment, R.id.edit_bottom_panel);
-    }
-
-    @Override
-    public void onEffectTrimMenuSelected() {
-
     }
 
 
@@ -487,7 +450,6 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
 
     @Override
     public void onVideoClicked(int position) {
-        //TODO Start trim fragment
         this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
         trimFragment = new TrimPreviewFragment();
         Bundle args = new Bundle();
@@ -528,23 +490,11 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         //syncMusicWithVideo(videoPlayer.getCurrentPosition());
     }
 
-
     @Override
     public void hideProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
     }
-
-    /*
-    private void updateSeekBarProgress() {
-        if (videoPlayer != null) {
-            if (videoPlayer.isPlaying())
-                seekBar.setProgress(videoPlayer.getCurrentPosition());
-            handler.postDelayed(updateTimeTask, 20);
-        }
-    }
-    */
-
 
     @Override
     public void refreshStartTimeTag(int time) {

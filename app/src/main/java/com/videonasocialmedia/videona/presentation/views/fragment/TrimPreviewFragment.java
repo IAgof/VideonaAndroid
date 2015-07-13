@@ -97,8 +97,10 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trim_preview, container, false);
         ButterKnife.inject(this, view);
+
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
+
         presenter = new TrimPreviewPresenter(this, this);
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
@@ -106,6 +108,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         mediaController.setVisibility(View.INVISIBLE);
         videoIndexOnTrack = this.getArguments().getInt("VIDEO_INDEX", 0);
         presenter.init(videoIndexOnTrack);
+
         return view;
     }
 
@@ -389,10 +392,12 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
 
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
 
     @OnClick({R.id.edit_button_full_screen})
     public void trackClicks(View view) {
