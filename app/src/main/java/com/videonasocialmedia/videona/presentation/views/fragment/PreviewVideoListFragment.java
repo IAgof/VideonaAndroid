@@ -246,19 +246,26 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         }
         showTimeTags(projectDuration);
         seekBar.setMax(projectDuration);
-        Video video = seekVideo(instantTime);
-        videoToPlay = getPosition(video);
-        int timeInMsec = instantTime - videoStartTimeInProject.get(videoToPlay) +
-                movieList.get(videoToPlay).getFileStartTime();
+        if(movieList.size() > 0) {
+            Video video = seekVideo(instantTime);
+            videoToPlay = getPosition(video);
+            int timeInMsec = instantTime - videoStartTimeInProject.get(videoToPlay) +
+                    movieList.get(videoToPlay).getFileStartTime();
 
-        if (videoPlayer == null) {
-            initVideoPlayer(video, timeInMsec);
+            if (videoPlayer == null) {
+                initVideoPlayer(video, timeInMsec);
+            } else {
+                playNextVideo(video, timeInMsec);
+            }
+            if (isMusicOnProject()) {
+                muteVideo();
+                playMusicSyncWithVideo();
+            }
         } else {
-            playNextVideo(video, timeInMsec);
-        }
-        if(isMusicOnProject()){
-            muteVideo();
-            playMusicSyncWithVideo();
+            seekBar.setProgress(0);
+            playButton.setVisibility(View.VISIBLE);
+            videoToPlay = 0;
+            instantTime = 0;
         }
     }
 
@@ -453,7 +460,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         playButton.setVisibility(View.VISIBLE);
         releaseVideoView();
         videoToPlay = 0;
-        initVideoPlayer(movieList.get(videoToPlay),
+        if(movieList.size() > 0)
+            initVideoPlayer(movieList.get(videoToPlay),
                 movieList.get(videoToPlay).getFileStartTime() + 100);
         seekBar.setProgress(0);
         instantTime = 0;
