@@ -24,13 +24,15 @@ import com.videonasocialmedia.videona.presentation.views.fragment.RecordFragment
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * @author Álvaro Martínez Marco
+ */
 
 /**
  * RecordActivity manages a single live record.
  */
 //public class RecordActivity extends ImmersiveActivity {
-
-    // Not immersive mode. Home buttons visibles
+// Not immersive mode. Home buttons visibles
 public class RecordActivity extends Activity {
 
     /**
@@ -38,6 +40,9 @@ public class RecordActivity extends Activity {
      */
     private final String LOG_TAG = getClass().getSimpleName();
 
+    /**
+     * Record fragment
+     */
     private RecordFragment recordFragment;
 
     /**
@@ -55,6 +60,8 @@ public class RecordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
+
+        Log.d(LOG_TAG, "onCreate");
 
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -84,31 +91,50 @@ public class RecordActivity extends Activity {
                 drawerLayout.closeDrawer(navigatorView);
             }
         }, 2000);
-        Log.d(LOG_TAG, "onStart() RecordActivity");
+        Log.d(LOG_TAG, "onAttachedToWindow");
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.d(LOG_TAG, "onRestart");
+
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
     }
 
 
-   // @Override
     public void lockNavigator() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    //@Override
     public void unLockNavigator() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
     public void onBackPressed() {
-        if (recordFragment != null) {
-            recordFragment.stopRecording();
-        }
 
         if(drawerLayout.isDrawerOpen(Gravity.LEFT)){
             drawerLayout.closeDrawer(navigatorView);
             return;
         }
-        //super.onBackPressed();
+
+
+        if (recordFragment != null) {
+            recordFragment.stopRecording();
+        }
 
         if (buttonBackPressed) {
             buttonBackPressed = false;
@@ -129,22 +155,13 @@ public class RecordActivity extends Activity {
 
     public void navigateToEdit(){
 
-        if (recordFragment != null) {
+        Log.d(LOG_TAG, "navigateToEdit");
 
-            //recordFragment.onDestroy();
-            recordFragment.onPause();
-            recordFragment.release();
-            finish();
-        }
         Intent edit = new Intent(this, EditActivity.class);
         edit.putExtra("SHARE", false);
         startActivity(edit);
     }
 
-    public void recreateActivity(){
-        Intent intent = this.getIntent();
-        finish();
-        startActivity(intent);
-    }
+
 
 }

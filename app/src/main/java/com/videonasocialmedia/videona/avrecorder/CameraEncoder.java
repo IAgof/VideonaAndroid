@@ -131,6 +131,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * @param config the desired parameters for the next recording.
      */
     private void init(SessionConfig config) {
+
         mEncodedFirstFrame = false;
         mReadyForFrames = false;
         mRecording = false;
@@ -163,16 +164,20 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      *               overwriting a previous recording.
      */
     public void reset(SessionConfig config) {
-        if (mState != STATE.UNINITIALIZED)
-            throw new IllegalArgumentException("reset called in invalid state");
+        if (mState != STATE.UNINITIALIZED) {
+            onMuxerFinishedEventListener.onMuxerVideoError("reset called in invalid state");
+          //  throw new IllegalArgumentException("reset called in invalid state");
+        }
         mState = STATE.INITIALIZING;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_RESET, config));
 
     }
 
     private void handleReset(SessionConfig config) throws IOException {
-        if (mState != STATE.INITIALIZING)
-            throw new IllegalArgumentException("handleRelease called in invalid state");
+        if (mState != STATE.INITIALIZING) {
+            //throw new IllegalArgumentException("handleRelease called in invalid state");
+            onMuxerFinishedEventListener.onMuxerVideoError("handleRelease called in invalid state");
+        }
         Log.i(TAG, "handleReset");
         init(config);
         // Make display EGLContext current
@@ -203,7 +208,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             otherCamera = 1;
         requestCamera(otherCamera);
 
-        // TODO displayOrientation movil Iago
+        // TODO displayOrientation movil Iago, first steps
        // mCamera.setDisplayOrientation(getCameraDisplayOrientation(otherCamera));
 
     }
@@ -439,15 +444,17 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * Called from UI thread
      */
     public void stopRecording() {
-        if (mState != STATE.RECORDING)
-            throw new IllegalArgumentException("StopRecording called in invalid state");
+        if (mState != STATE.RECORDING) {
+            //throw new IllegalArgumentException("StopRecording called in invalid state");
+            onMuxerFinishedEventListener.onMuxerVideoError("StopRecording called in invalid state");
+        }
         mState = STATE.STOPPING;
         Log.i(TAG, "stopRecording");
         synchronized (mReadyForFrameFence) {
             mEosRequested = true;
         }
 
-       // onMuxerFinishedEventListener.onMuxerFinishedEvent();
+
     }
 
 
@@ -484,12 +491,14 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     private void handleRelease() {
-        if (mState != STATE.RELEASING)
-            throw new IllegalArgumentException("handleRelease called in invalid state");
+        if (mState != STATE.RELEASING) {
+            onMuxerFinishedEventListener.onMuxerVideoError("handleRelease called in invalid state");
+           // throw new IllegalArgumentException("handleRelease called in invalid state");
+        }
         Log.i(TAG, "handleRelease");
         shutdown();
         mState = STATE.RELEASED;
-
+        onMuxerFinishedEventListener.onMuxerReleased();
     }
 
     /**
@@ -529,7 +538,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 return;
             }
             mFrameNum++;
-            if (VERBOSE && (mFrameNum % 30 == 0)) Log.i(TAG, "handleFrameAvailable");
+            if (VERBOSE && (mFrameNum % 30 == 0)) //Log.i(TAG, "handleFrameAvailable");
             if (!surfaceTexture.equals(mSurfaceTexture))
                 Log.w(TAG, "SurfaceTexture from OnFrameAvailable does not match saved SurfaceTexture!");
 
@@ -1036,6 +1045,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                     case MSG_RELEASE:
                         encoder.handleRelease();
                         Log.i(TAG, "MSG_RELEASE");
+
                         break;
                     case MSG_RESET:
                         encoder.handleReset((SessionConfig) obj);

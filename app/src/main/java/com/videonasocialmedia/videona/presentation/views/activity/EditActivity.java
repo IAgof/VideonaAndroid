@@ -290,6 +290,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
         builder.setMessage(causeTextResource)
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok, null);
+
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -408,6 +409,7 @@ public class EditActivity extends Activity implements EditorView, OnEffectMenuSe
             // Go to RecordActivity
             Intent record = new Intent(this, RecordActivity.class);
             startActivity(record);
+
             return;
         }
         buttonBackPressed = true;

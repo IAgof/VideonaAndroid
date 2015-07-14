@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -44,7 +45,6 @@ import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
-import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectClickListener;
@@ -59,6 +59,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+
+/**
+ * @author Álvaro Martínez Marco
+ */
 
 public class RecordFragment extends Fragment implements RecordView, ColorEffectClickListener,
         CameraEffectClickListener, AdapterView.OnItemSelectedListener {
@@ -202,7 +206,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 } else if (event.values[1] < 5.5 && event.values[1] > -5.5) {
                     // Landscape
                     if (orientation != 1 && readingConfirmed(1)) {
-                        if (recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
+                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
                             if (event.values[0] > 0) {
                                 recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.LANDSCAPE);
                             } else {
@@ -216,7 +220,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 } else if (event.values[1] > 7.5 || event.values[1] < -7.5) {
                     // Portrait
                     if (orientation != 0 && readingConfirmed(0)) {
-                        if (recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
+                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
                             if (event.values[1] > 0) {
                                 recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.VERTICAL);
                             } else {
@@ -286,12 +290,19 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     @Override
     public void onResume() {
+
+        if (VERBOSE) Log.i(LOG_TAG, "onResume");
         super.onResume();
+
         if (recordPresenter != null) {
+
             recordPresenter.onHostActivityResumed();
+            if (VERBOSE) Log.i(LOG_TAG, "onHostActivityResumed");
+
         } else {
             setupRecordPresenter();
         }
+
         startMonitoringOrientation();
 
         if (colorEffectAdapter != null) {
@@ -308,15 +319,39 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         Log.d(LOG_TAG, "onPause() RecordFragment");
 
         if (recordPresenter != null) {
+
             if(recordPresenter.isRecording()){
-                recordPresenter.stopRecording();
+
+                recordPresenter.pauseRecording();
+
+                showRecordFinished();
+                stopChronometer();
+                unLockNavigator();
+
+                buttonRecord.setEnabled(true);
+                buttonRecord.setImageAlpha(255); // (100%)
+                chronometerRecord.setText("00:00");
+
+                recordPresenter.onHostActivityPaused();
+
+                return;
+
             }
+
             recordPresenter.onHostActivityPaused();
         }
 
         stopMonitoringOrientation();
 
     }
+
+
+
+    @Override
+    public void onStop(){
+        super.onStop();
+    }
+
 
     public void release(){
         recordPresenter.release();
@@ -328,7 +363,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         super.onDestroy();
         if (recordPresenter != null && !recordPresenter.isRecording()) {
             recordPresenter.release();
-            recordPresenter = null;
+
             Log.d(LOG_TAG, "onDestroy() RecordFragment");
         }
     }
@@ -350,6 +385,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
             mCameraView = (GLCameraEncoderView) root.findViewById(R.id.cameraPreview);
             mCameraView.setKeepScreenOn(true);
 
+            recordPresenter.initSessionConfig();
+
             recordPresenter.setPreviewDisplay(mCameraView);
 
             setupFilterSpinner(root);
@@ -366,8 +403,18 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         // Hide menu camera options
         linearLayoutRecordCameraOptions.setVisibility(View.GONE);
 
+        //TODO String text chronometer default
+        chronometerRecord.setText("00:00");
+
 
         return root;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 
 
@@ -383,6 +430,9 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     }
 
     protected void setupRecordPresenter() {
+
+        Log.d(LOG_TAG, "setupRecordPresenter");
+
         // By making the recorder static we can allow
         // recording to continue beyond this fragment's
         // lifecycle! That means the user can minimize the app
@@ -395,6 +445,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 try {
 
                     recordPresenter = new RecordPresenter(this);
+
 
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Unable to create RecordPresenter. Could be trouble creating MediaCodec encoder.");
@@ -477,9 +528,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 @Override
                 public void onFinish() {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
+                    reStartFragment();
 
-                    //restartRecordVideo();
-                    getActivity().recreate();
                 }
             }.start();
 
@@ -495,8 +545,6 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         buttonRecord.setEnabled(true);
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
-
-        super.onDestroy();
 
         recreateRecordFragment();
         setupRecordPresenter();
@@ -599,6 +647,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     @Override
     public void navigateEditActivity() {
 
+        Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
+
         countDownTimer.cancel();
 
         //Restart original buttonRecord view
@@ -606,12 +656,26 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
-        Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
         Intent edit = new Intent(getActivity(), EditActivity.class);
         startActivity(edit);
 
+      //  reStartFragment();
 
     }
+
+    @Override
+    public void reStartFragment(){
+
+        Fragment fg = this.getActivity().getFragmentManager().findFragmentById(R.id.record_fragment);
+
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(fg);
+        ft.attach(fg);
+        ft.commit();
+
+
+    }
+
 
     @Override
     public void lockScreenRotation() {
@@ -702,7 +766,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void stopRecording() {
         if (recordPresenter.isRecording()) {
             recordPresenter.stopRecording();
-            recordPresenter.release();
+            //amm recordPresenter.release();
         }
     }
 
@@ -808,15 +872,6 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         recordPresenter.setCameraEffect(position);
     }
 
-    // restart RecordPresenter
-    @Override
-    public void reStartFragment(){
-
-        RecordActivity activity = (RecordActivity) this.getActivity();
-        //activity.recreateActivity();
-
-       // restartRecordVideo();
-    }
 
     /**
      * OnClick buttons, tracking Google Analytics
@@ -868,11 +923,13 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         // hide selection text
-   //     ((TextView)view).setText(null);
-// if you want you can change background here
+        //     ((TextView)view).setText(null);
+        // if you want you can change background here
 
         if (((String) parent.getTag()).compareTo("filter") == 0) {
-            recordPresenter.applyFilter(position);
+            if(recordPresenter!= null) {
+                recordPresenter.applyFilter(position);
+            }
         }
 
     }

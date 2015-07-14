@@ -228,7 +228,8 @@
                 android:textSize="18sp"
                 android:background="@color/transparent_palette_grey"
                 android:paddingLeft="10dp"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:text="00:00" />
         </LinearLayout>
 
     </RelativeLayout>

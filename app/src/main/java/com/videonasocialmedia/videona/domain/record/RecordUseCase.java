@@ -31,6 +31,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Álvaro Martínez Marco
+ */
+
 public class RecordUseCase {
 
     /**
@@ -38,8 +42,14 @@ public class RecordUseCase {
      */
     private long timeColorEffect = 0;
 
+    /**
+     * Session config
+     */
     private SessionConfig mConfig;
 
+    /**
+     * String outputLocation, save final video file.
+     */
     private String outputLocation = "";
 
     /**
@@ -52,6 +62,12 @@ public class RecordUseCase {
 
     }
 
+    /**
+     * Init sessiong config.
+     * Set video settings recording from Profile, project
+     * //TODO * Set audio settings recording from Profile, project. Not implemented yet.
+     * @param listener
+     */
     public void initSessionConfig(OnSessionConfigListener listener){
 
         // Create a temp media file name to record video
@@ -81,8 +97,7 @@ public class RecordUseCase {
                 .withVideoBitrate(videoQuality.getVideoBitRate())
                 .withVideoResolution(videoSize.getWidth(), videoSize.getHeigth())
                 .withAudioChannels(1)
-                //.withAudioSamplerate(48000)
-                .withAudioSamplerate(44100)
+                .withAudioSamplerate(48000)
                 .withAudioBitrate(192 * 1000)
                 .build();
 
@@ -90,16 +105,30 @@ public class RecordUseCase {
 
     }
 
-
+    /**
+     * Get absolute output video path
+     * @return
+     */
     public String getOutputVideoPath(){
         return outputLocation;
     }
 
+    /**
+     * Start recording use case.
+     * //TODO Do something.
+     * @param listener
+     */
     public void startRecording(OnRecordEventListener listener){
+
 
         listener.onRecordStarted();
     }
 
+    /**
+     * Stop recording use case.
+     * //TODO Do something.
+     * @param listener
+     */
     public void stopRecording(OnRecordEventListener listener){
 
         listener.onRecordStopped();
@@ -117,6 +146,13 @@ public class RecordUseCase {
         listener.onCameraEffectListRetrieved(cameraEffectList);
     }
 
+    /**
+     * Add camera effect
+     * //TODO addCameraEffect to project. Use Effect class.
+     *
+     * @param cameraEffect
+     * @param listener
+     */
     public void addCameraEffect(String cameraEffect, OnCameraEffectListener listener) {
 
         listener.onCameraEffectAdded(cameraEffect, getTimeColorEffect());
@@ -137,7 +173,8 @@ public class RecordUseCase {
     }
 
     /**
-     * Add effect
+     * Add Android camera color effect
+     * //TODO use openGL color effect instead of camera color effect
      *
      * @param colorEffect
      * @param listener
@@ -174,10 +211,17 @@ public class RecordUseCase {
     }
    */
 
+    /**
+     * Se timer, to register color effect duration
+     */
     private void setTimer() {
         timeColorEffect = SystemClock.uptimeMillis();
     }
 
+    /**
+     * Get time color effect applied
+     * @return
+     */
     private long getTimeColorEffect() {
         if (timeColorEffect == 0) {
             return 0;
@@ -226,6 +270,7 @@ public class RecordUseCase {
 
     /**
      * Support change camera. Minimum quality 720p
+     * //TODO, study force 720p record to front camera, minimum quality
      */
     private boolean supportChangeCamera(Camera camera) {
 
