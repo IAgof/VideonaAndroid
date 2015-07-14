@@ -100,6 +100,35 @@ public class MicrophoneEncoder implements Runnable {
         return mRecordingRequested;
     }
 
+    // New method to release Mic. Similar to CameraEncoder
+    private void release(){
+
+        if(mAudioRecord != null) {
+            mAudioRecord.release();
+            mAudioRecord = null;
+        }
+
+    }
+
+    /**
+     * Hook for Host Activity's onPause()
+     * Called on UI thread
+     */
+    public void onHostActivityPaused() {
+
+        release();
+
+    }
+
+    /**
+     * Hook for Host Activity's onResume()
+     * Called on UI thread
+     */
+    public void onHostActivityResumed() {
+
+
+
+    }
 
     private void startThread() {
         synchronized (mReadyFence) {
@@ -206,8 +235,8 @@ public class MicrophoneEncoder implements Runnable {
         } catch (Throwable t) {
             Log.e(TAG, "_offerAudioEncoder exception");
             t.printStackTrace();
-            onMuxerFinishedEventListener.onMuxerAudioError();
-            mAudioRecord.release();
+            onMuxerFinishedEventListener.onMuxerAudioError("offerAudioEncoder exception");
+            //release();
         }
     }
 

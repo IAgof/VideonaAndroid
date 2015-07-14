@@ -43,7 +43,8 @@ public class AudioEncoderCore extends AndroidEncoder {
 
         // Set some properties.  Failing to specify some of these can cause the MediaCodec
         // configure() call to throw an unhelpful exception.
-        format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC);
+        // https://github.com/google/ExoPlayer/issues/178 change to AACObjectLTP
+        format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectERLC); // AACObjectLC);
         format.setInteger(MediaFormat.KEY_SAMPLE_RATE, mSampleRate);
         format.setInteger(MediaFormat.KEY_CHANNEL_COUNT, numChannels);
         format.setInteger(MediaFormat.KEY_BIT_RATE, bitRate);

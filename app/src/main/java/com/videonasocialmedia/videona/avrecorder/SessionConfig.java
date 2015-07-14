@@ -205,10 +205,10 @@ public class SessionConfig {
         private void setAVDefaults() {
             mWidth = 1280;
             mHeight = 720;
-            mVideoBitrate = 2 * 1000 * 1000;
+            mVideoBitrate = 5 * 1000 * 1000;
 
-            mAudioSamplerate = 44100;
-            mAudioBitrate = 96 * 1000;
+            mAudioSamplerate = 48000;
+            mAudioBitrate = 192 * 1000;
             mNumAudioChannels = 1;
         }
 
@@ -249,7 +249,7 @@ public class SessionConfig {
         }
 
         public Builder withAudioChannels(int numChannels) {
-            checkArgument(numChannels == 0 || numChannels == 1 || numChannels == 2); // added numChannels == 2
+            checkArgument(numChannels == 0 || numChannels == 1 ); //|| numChannels == 2); // added numChannels == 2
             mNumAudioChannels = numChannels;
             return this;
         }
