@@ -34,6 +34,17 @@
             android:scaleType="fitXY"
             android:src="@drawable/edit_activity_button_ok_selector" />
 
+        <ImageButton
+            android:id="@+id/button_trash"
+            android:layout_width="38dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="60dp"
+            android:background="@android:color/background_dark"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            android:src="@drawable/edit_activity_button_trash_selector" />
 
         <TextView
             android:id="@+id/gallery_title_text_view"

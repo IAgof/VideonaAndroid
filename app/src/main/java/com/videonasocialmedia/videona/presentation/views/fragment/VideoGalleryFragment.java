@@ -218,6 +218,15 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         thread.start();
     }
 
+    public void prueba() {
+        SparseBooleanArray selectedElements=selectionSupport.getCheckedItemPositions();
+        for (int i=0; selectedElements!=null&&i<videoGalleryAdapter.getItemCount();i++){
+            if (selectedElements.get(i)){
+                videoGalleryAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     private class TimeChangesHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {

@@ -1,7 +1,9 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,6 +123,32 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     @OnClick(R.id.button_cancel_gallery)
     public void goBack() {
         this.finish();
+    }
+
+    @OnClick(R.id.button_trash)
+    public void deleteFiles() {
+        final List<Video> videoList = getSelectedVideos();
+        if (videoList.size() > 0) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("probando")
+                    .setMessage("really quit? "+videoList.size())
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (Video video : videoList) {
+                                File file = new File(video.getMediaPath());
+                                boolean deleted = file.delete();
+                            }
+                            for (int i = 0; i < adapterViewPager.getCount(); i++) {
+                                VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
+                                selectedFragment.prueba();
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+        }
     }
 
     @Override
