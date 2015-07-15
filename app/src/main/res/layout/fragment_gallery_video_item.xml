@@ -39,8 +39,8 @@
 
         <ImageView
             android:id="@+id/gallery_overlay_icon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="4dp"
@@ -52,12 +52,9 @@
 
     <ImageButton
         android:id="@+id/gallery_preview_button"
-        android:layout_marginBottom="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignEnd="@id/gallery_thumb"
-        android:layout_alignBottom="@id/gallery_thumb"
+        android:layout_centerInParent="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/activity_gallery_icon_play_normal" />
 
 </RelativeLayout>
