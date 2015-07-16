@@ -99,8 +99,10 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
                 if (selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.MULTIPLE)
                     if (selectionSupport.isItemChecked(position)) {
                         selectionSupport.setItemChecked(position, true);
+                        onSelectionModeListener.onItemUnchecked();
                     } else {
                         selectionSupport.setItemChecked(position, false);
+                        onSelectionModeListener.onItemChecked();
                     }
             }
         });
@@ -114,6 +116,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
 
                 onSelectionModeListener.onItemSelected();
                 selectionSupport.setItemChecked(position, true);
+                onSelectionModeListener.onItemChecked();
                 return true;
             }
         });

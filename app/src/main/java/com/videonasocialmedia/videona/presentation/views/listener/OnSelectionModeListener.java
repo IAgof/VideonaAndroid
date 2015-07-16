@@ -15,4 +15,8 @@ public interface OnSelectionModeListener {
     void onItemSelected();
 
     void onNoItemSelected();
+
+    void onItemChecked();
+
+    void onItemUnchecked();
 }
