@@ -142,7 +142,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
                             }
                             for (int i = 0; i < adapterViewPager.getCount(); i++) {
                                 VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
-                                selectedFragment.prueba();
+                                selectedFragment.updateView();
+                                //todo actualizar el videotimeline por si he borrado uno que ya había cargado!!!
                             }
                         }
                     })

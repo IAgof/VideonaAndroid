@@ -153,7 +153,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     public void showVideos(List<Video> videoList) {
         videoGalleryAdapter = new VideoGalleryAdapter(videoList);
         videoGalleryAdapter.setSelectionSupport(selectionSupport);
-        videoGalleryAdapter.setMusicRecyclerViewClickListener(this);
+        videoGalleryAdapter.setRecyclerViewClickListener(this);
         recyclerView.setAdapter(videoGalleryAdapter);
 
         showTimeTag(videoList);
@@ -218,13 +218,15 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         thread.start();
     }
 
-    public void prueba() {
+    public void updateView() {
         SparseBooleanArray selectedElements=selectionSupport.getCheckedItemPositions();
         for (int i=0; selectedElements!=null&&i<videoGalleryAdapter.getItemCount();i++){
             if (selectedElements.get(i)){
-                videoGalleryAdapter.notifyDataSetChanged();
+                videoGalleryAdapter.removeVideo(i);
             }
         }
+        if (selectedElements != null)
+            videoGalleryAdapter.clearView();
     }
 
     private class TimeChangesHandler extends Handler {
