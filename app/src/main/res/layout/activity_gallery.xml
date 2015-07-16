@@ -12,7 +12,7 @@
         android:layout_height="35dp">
 
 
-        <ImageButton
+         <ImageButton
             android:id="@+id/button_cancel_gallery"
             android:layout_width="25dp"
             android:layout_height="25dp"
@@ -32,18 +32,19 @@
             android:layout_marginRight="25dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
+            android:visibility="gone"
             android:src="@drawable/edit_activity_button_ok_selector" />
 
         <ImageButton
             android:id="@+id/button_trash"
-            android:layout_width="38dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="27dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="60dp"
-            android:background="@android:color/background_dark"
+            android:layout_marginRight="80dp"
+            android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            android:visibility="visible"
+            android:visibility="gone"
             android:src="@drawable/edit_activity_button_trash_selector" />
 
         <TextView

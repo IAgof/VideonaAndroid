@@ -1,5 +1,6 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPr
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
@@ -44,6 +46,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     private VideoGalleryPresenter videoGalleryPresenter;
     private Video selectedVideo;
     private int folder;
+    private OnSelectionModeListener onSelectionModeListener;
 
     private ItemClickSupport clickSupport;
     private ItemSelectionSupport selectionSupport;
@@ -81,6 +84,12 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     }
 
     @Override
+    public void onAttach(Activity a) {
+        super.onAttach(a);
+        onSelectionModeListener = (OnSelectionModeListener) a;
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clickSupport = ItemClickSupport.addTo(recyclerView);
@@ -103,12 +112,28 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
                 else
                     selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
 
+                onSelectionModeListener.onItemSelected();
                 selectionSupport.setItemChecked(position, true);
                 return true;
             }
         });
         selectionSupport = ItemSelectionSupport.addTo(recyclerView);
     }
+
+    /*
+    private boolean hasItemsChecked() {
+        boolean result;
+        SparseBooleanArray selectedElements = selectionSupport.getCheckedItemPositions();
+        if(selectedElements != null) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+    if(!hasItemsChecked())
+            onSelectionModeListener.onNoItemSelected();
+    */
 
     @Override
     public void onStart() {

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.GalleryPagerPr
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.File;
@@ -31,7 +33,8 @@ import butterknife.OnClick;
 /**
  * Created by jca on 20/5/15.
  */
-public class GalleryActivity extends Activity implements ViewPager.OnPageChangeListener, GalleryPagerView {
+public class GalleryActivity extends Activity implements ViewPager.OnPageChangeListener,
+        GalleryPagerView, OnSelectionModeListener {
 
     MyPagerAdapter adapterViewPager;
     boolean sharing;
@@ -40,6 +43,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     @InjectView(R.id.button_ok_gallery)
     ImageButton okButton;
+    @InjectView(R.id.button_trash)
+    ImageButton trashButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +148,6 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
                             for (int i = 0; i < adapterViewPager.getCount(); i++) {
                                 VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
                                 selectedFragment.updateView();
-                                //todo actualizar el videotimeline por si he borrado uno que ya había cargado!!!
                             }
                         }
                     })
@@ -159,6 +163,18 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
             intent = new Intent(this, EditActivity.class);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onItemSelected() {
+        okButton.setVisibility(View.VISIBLE);
+        trashButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onNoItemSelected() {
+        okButton.setVisibility(View.GONE);
+        trashButton.setVisibility(View.GONE);
     }
 
     class MyPagerAdapter extends FragmentPagerAdapter {
