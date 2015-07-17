@@ -18,6 +18,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerV
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -80,7 +81,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         return videoList.get(position);
     }
 
-    public void setMusicRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
+    public void setRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
         this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
     }
 
@@ -89,11 +90,21 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
     }
 
     public void appendVideos(List<Video> videoList) {
+        this.videoList = new ArrayList<>();
         this.videoList.addAll(videoList);
     }
 
     public boolean isVideoListEmpty() {
         return videoList.isEmpty();
+    }
+
+    public void removeVideo(int itemPosition) {
+        videoList.remove(itemPosition);
+        notifyItemRemoved(itemPosition);
+    }
+
+    public void clearView() {
+        selectionSupport.clearChoices();
     }
 
 
@@ -113,14 +124,11 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         @InjectView(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
-
-
         public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             //thumb.setOnTouchListener(this);
             this.onClickListener = onClickListener;
-
         }
 
       /*  @Override

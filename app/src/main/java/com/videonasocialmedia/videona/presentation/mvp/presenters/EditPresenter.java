@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddMusicToProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.CheckIfVideoFilesExistUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
@@ -45,6 +46,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     private AddMusicToProjectUseCase addMusicToProjectUseCase;
     private RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
+    private CheckIfVideoFilesExistUseCase checkIfVideoFilesExistUseCase;
     /**
      * Get media list from project use case
      */
@@ -62,6 +64,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
         addMusicToProjectUseCase = new AddMusicToProjectUseCase();
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
+        checkIfVideoFilesExistUseCase = new CheckIfVideoFilesExistUseCase();
     }
 
     /**
@@ -79,6 +82,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     }
 
     public void onResume() {
+        checkIfVideoFilesExistUseCase.check();
         
         /*
         List<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
