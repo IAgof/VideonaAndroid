@@ -49,6 +49,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFra
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -64,12 +65,11 @@ import butterknife.OnClick;
  * @author Juan Javier Cabanas Abascal
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
-        , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener {
+        , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
+        OnTrimConfirmListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
-    @InjectView(R.id.edit_button_fx)
-    ImageButton videoFxButton;
     @InjectView(R.id.edit_button_scissor)
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
@@ -305,7 +305,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @OnClick(R.id.edit_button_fx)
     public void showVideoFxMenu() {
         audioFxButton.setActivated(false);
-        videoFxButton.setActivated(true);
         scissorButton.setActivated(false);
 
         if (videoFxMenuFragment == null)
@@ -330,7 +329,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         }
         scissorButton.setActivated(false);
         audioFxButton.setActivated(true);
-        videoFxButton.setActivated(false);
     }
 
 
@@ -338,7 +336,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     public void showScissorsFxMenu() {
         audioFxButton.setActivated(false);
         scissorButton.setActivated(true);
-        videoFxButton.setActivated(false);
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
@@ -513,6 +510,34 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         //durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
+    @Override
+    public void onRemoveAllProjectSelected() {
+        editPresenter.resetProject();
+        showMessage(R.string.videos_removed);
+
+        this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
+    }
+
+    @Override
+    public void onTrimConfirmed() {
+        this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+
+        if (!scissorButton.isActivated()) {
+            scissorButton.setActivated(true);
+            audioFxButton.setActivated(false);
+        }
+
+        if (scissorsFxMenuFragment == null) {
+            scissorsFxMenuFragment = new ScissorsFxMenuFragment();
+        }
+        if (videoTimeLineFragment == null) {
+            videoTimeLineFragment = new VideoTimeLineFragment();
+        }
+
+        switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
+        switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+        switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+    }
 
     /**
      * OnClick buttons, tracking Google Analytics
@@ -591,15 +616,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                 .setLabel(label)
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-    }
-
-
-    @Override
-    public void onRemoveAllProjectSelected() {
-        editPresenter.resetProject();
-        showMessage(R.string.videos_removed);
-
-        this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
     }
 
 }

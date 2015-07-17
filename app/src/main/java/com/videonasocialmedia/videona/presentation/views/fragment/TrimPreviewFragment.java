@@ -11,6 +11,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -40,6 +41,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPre
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 import com.videonasocialmedia.videona.presentation.views.customviews.RangeSeekBar;
+import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.utils.Size;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
@@ -55,7 +57,8 @@ import butterknife.OnTouch;
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class TrimPreviewFragment extends Fragment implements PreviewView, TrimView, RangeSeekBar.OnRangeSeekBarChangeListener, SeekBar.OnSeekBarChangeListener {
+public class TrimPreviewFragment extends Fragment implements PreviewView, TrimView,
+        RangeSeekBar.OnRangeSeekBarChangeListener, SeekBar.OnSeekBarChangeListener {
 
     protected Handler handler = new Handler();
     @InjectView(R.id.edit_preview_player)
@@ -86,11 +89,22 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
             updateSeekBarProgress();
         }
     };
+    private OnTrimConfirmListener onTrimConfirmListener;
 
     /**
      * Tracker google analytics
      */
     private Tracker tracker;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            onTrimConfirmListener = (OnTrimConfirmListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onTrimConfirmListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -141,6 +155,11 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
             result = false;
         }
         return result;
+    }
+
+    @OnClick(R.id.validate_trim)
+    public void validateTrim() {
+        onTrimConfirmListener.onTrimConfirmed();
     }
 
     @OnClick(R.id.edit_button_play)

@@ -38,6 +38,9 @@
     <string name="confirmDeleteTitle2"><u>vídeos</u></string>
     <string name="confirmDeleteMessage">¿Desea eliminar estos elementos?</string>
 
+    <!-- Trim fragment -->
+    <string name="confirmTrim">Hecho</string>
+
     <!-- Music genres -->
     <string name="music_genre_rock">Rock</string>
     <string name="music_genre_reggae">Reggae</string>
