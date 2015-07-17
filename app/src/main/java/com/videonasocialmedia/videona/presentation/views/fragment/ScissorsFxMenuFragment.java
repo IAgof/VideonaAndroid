@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -28,10 +29,10 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
-import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -40,6 +41,9 @@ import butterknife.OnClick;
 public class ScissorsFxMenuFragment extends Fragment {
 
     private final String LOG_TAG = "ScissorsFxMenuFragment";
+
+    @InjectView(R.id.edit_fragment_scissors_button_duplicate)
+    ImageButton trashButton;
 
     /*CONFIG*/
     private OnRemoveAllProjectListener callbackRemoveAllProject;
@@ -70,6 +74,18 @@ public class ScissorsFxMenuFragment extends Fragment {
     public void showLog() {
         Log.d("Fragment Audio", "He pulsado un botón");
         //imgButton.setImageResource(R.drawable.activity_edit_icon_transition_normal);
+    }
+
+    public void habilitateTrashButton() {
+        trashButton.setAlpha((float) 1);
+        if(!trashButton.isClickable())
+            trashButton.setClickable(true);
+    }
+
+    public void inhabilitateTrashButton() {
+        trashButton.setAlpha((float) 0.2);
+        if(trashButton.isClickable())
+            trashButton.setClickable(false);
     }
 
     @OnClick(R.id.edit_fragment_scissors_button_crop)

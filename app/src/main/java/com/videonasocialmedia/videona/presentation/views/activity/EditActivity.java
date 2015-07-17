@@ -339,6 +339,8 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
+        } else {
+            scissorsFxMenuFragment.habilitateTrashButton();
         }
 
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
@@ -455,6 +457,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         args.putInt("VIDEO_INDEX", position);
         trimFragment.setArguments(args);
         switchFragment(trimFragment, R.id.edit_fragment_preview);
+        scissorsFxMenuFragment.inhabilitateTrashButton();
     }
 
     private boolean isAlreadySelected(int musicPosition) {
@@ -537,6 +540,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+        scissorsFxMenuFragment.habilitateTrashButton();
     }
 
     /**
