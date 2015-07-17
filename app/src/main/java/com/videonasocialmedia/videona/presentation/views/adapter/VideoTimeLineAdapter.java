@@ -35,9 +35,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     private VideoTimeLineRecyclerViewClickListener clickListener;
 
     public VideoTimeLineAdapter(List<Video> videoList, VideoTimeLinePresenter presenter) {
-        setHasStableIds(true);
         this.videoList = videoList;
-        this.presenter = presenter;
+        //this.presenter = presenter;
     }
 
     public void setClickListener(VideoTimeLineRecyclerViewClickListener clickListener) {

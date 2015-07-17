@@ -170,6 +170,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
                                         VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
                                         selectedFragment.updateView();
                                     }
+                                    countVideosSelected = 0;
+                                    updateCounter();
                                 }
                             })
                     .setNegativeButton(R.string.no, null)
@@ -187,13 +189,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     }
 
     @Override
-    public void onItemSelected() {
-        //selectionMode.setVisibility(View.VISIBLE);
-    }
-
-    @Override
     public void onNoItemSelected() {
-        //selectionMode.setVisibility(View.GONE);
+        // todo: out of selection mode
     }
 
     @Override

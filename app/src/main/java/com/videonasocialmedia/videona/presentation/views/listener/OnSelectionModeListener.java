@@ -12,8 +12,6 @@ package com.videonasocialmedia.videona.presentation.views.listener;
 
 public interface OnSelectionModeListener {
 
-    void onItemSelected();
-
     void onNoItemSelected();
 
     void onItemChecked();

@@ -114,7 +114,6 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
                 else
                     selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
 
-                onSelectionModeListener.onItemSelected();
                 selectionSupport.setItemChecked(position, true);
                 onSelectionModeListener.onItemChecked();
                 return true;
