@@ -12,7 +12,10 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import java.util.ArrayList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+
+import java.util.List;
 
 public interface RecordView extends MVPView {
 
@@ -24,13 +27,13 @@ public interface RecordView extends MVPView {
 
     void stopChronometer();
 
-    void showEffects(ArrayList<String> effects);
+    void showCameraEffectFx(List<CameraEffectFxList> effects);
 
-    void showEffectSelected(String colorEffect);
+    void showCameraEffectFxSelected(String colorEffect);
 
-    void showCameraEffects(ArrayList<String> effects);
+    void showCameraEffectColor(List<CameraEffectColorList> effects);
 
-    void showCameraEffectSelected(String colorEffect);
+    void showCameraEffectColorSelected(String colorEffect);
 
     void navigateEditActivity();
 

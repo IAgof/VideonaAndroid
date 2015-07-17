@@ -15,19 +15,18 @@ import com.videonasocialmedia.videona.avrecorder.SessionConfig;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectListener;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnColorEffectListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectColorListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectFxListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSessionConfigListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSettingsCameraListener;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectList;
-import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +55,11 @@ public class RecordUseCase {
      * LOG_TAG
      */
     private final String LOG_TAG = getClass().getSimpleName();
+
+    /**
+     *
+     */
+     List<CameraEffectColorList> cameraEffectColorListAux;
 
     public RecordUseCase(){
 
@@ -135,64 +139,50 @@ public class RecordUseCase {
     }
 
     /**
-     * Get available camera effects
+     * Get available camera effects fx
      *
      * @param listener
      */
-    public void getAvailableCameraEffects(OnCameraEffectListener listener) {
+    public void getAvailableCameraEffectFx(OnCameraEffectFxListener listener) {
         /// TODO getAvailableColorEffects from model
-        ArrayList<String> cameraEffectList = CameraEffectList.getCameraEffectList();
+        List<CameraEffectFxList> cameraEffectFxList = CameraEffectFxList.getCameraEffectList();
         //ArrayList<String> effectList = ColorEffectList.getColorEffectList(getCameraInstance());
-        listener.onCameraEffectListRetrieved(cameraEffectList);
+        listener.onCameraEffectFxListRetrieved(cameraEffectFxList);
     }
 
     /**
-     * Add camera effect
-     * //TODO addCameraEffect to project. Use Effect class.
-     *
-     * @param cameraEffect
-     * @param listener
-     */
-    public void addCameraEffect(String cameraEffect, OnCameraEffectListener listener) {
-
-        listener.onCameraEffectAdded(cameraEffect, getTimeColorEffect());
-
-    }
-
-
-    /**
-     * Get available color effects
+     * Get available camera effects color
      *
      * @param listener
      */
-    public void getAvailableColorEffects(OnColorEffectListener listener, Camera camera) {
+    public void getAvailableCameraEffectColor(OnCameraEffectColorListener listener, Camera camera) {
         /// TODO getAvailableColorEffects from model
-        ArrayList<String> effectList = ColorEffectList.getColorEffectList(camera);
-        //ArrayList<String> effectList = ColorEffectList.getColorEffectList(getCameraInstance());
-        listener.onColorEffectListRetrieved(effectList);
+
+            List<CameraEffectColorList> cameraEffectColorList = CameraEffectColorList.getCameraEffectColorListSorted(camera);
+
+            cameraEffectColorListAux = cameraEffectColorList;
+
+            listener.onCameraEffectColorListRetrieved(cameraEffectColorList);
     }
+
 
     /**
      * Add Android camera color effect
      * //TODO use openGL color effect instead of camera color effect
      *
-     * @param colorEffect
-     * @param listener
+     * @param position
      */
         //TODO add CameraEffect, add Effect, add time and add effect to Project
-    public void addAndroidCameraEffect(String colorEffect, Camera camera, OnColorEffectListener listener) {
-      /*  Camera.Parameters parameters = camera.getParameters();
-        parameters.setColorEffect(colorEffect);
-        //camera.setDisplayOrientation(180);
-        camera.setParameters(parameters);
-        listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
-        Log.d(LOG_TAG, " addAndroidCameraEffect " + colorEffect + " time " + getTimeColorEffect());
-       */
+    public void addAndroidCameraEffect(int position, Camera camera) {
+
+        String colorEffect =  cameraEffectColorListAux.get(position).getNameResourceId();
 
         Camera.Parameters parameters = camera.getParameters();
         parameters.setColorEffect(colorEffect);
         camera.setParameters(parameters);
-        listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
+
+        //TODO, make listener and register event, send tracking
+        //listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
 
     }
 

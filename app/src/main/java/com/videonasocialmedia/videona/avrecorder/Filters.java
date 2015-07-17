@@ -38,14 +38,16 @@ public class Filters {
 
     // NEW ORDER, only effects filters
     static final int FILTER_NONE = 0;
-    static final int FILTER_SQUEEZE = 1;
-    static final int FILTER_TWIRL = 2;
-    static final int FILTER_TUNNEL = 3;
-    static final int FILTER_BULGE = 4;
-    static final int FILTER_DENT = 5;
-    static final int FILTER_FISHEYE = 6;
-    static final int FILTER_STRETCH = 7;
-    static final int FILTER_MIRROR = 8;
+    static final int FILTER_FISHEYE = 1;
+    static final int FILTER_STRETCH = 2;
+    static final int FILTER_DENT = 3;
+    static final int FILTER_MIRROR = 4;
+    static final int FILTER_SQUEEZE = 5;
+    static final int FILTER_TUNNEL = 6;
+    static final int FILTER_TWIRL = 7;
+    static final int FILTER_BULGE = 8;
+
+    
 
     /**
      * Ensure a filter int code is valid. Update this function as

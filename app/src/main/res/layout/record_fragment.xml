@@ -22,38 +22,7 @@
         />
 
 
-    <ImageButton
-        android:id="@+id/button_camera_effect"
-        android:background="@drawable/effects_bg"
-        android:alpha=".7"
-        android:layout_marginRight="10dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:visibility="invisible"
-        android:layout_alignTop="@+id/relativelayout_camera_effect"
-        android:layout_toStartOf="@+id/relativelayout_camera_effect" />
 
-
-    <ImageButton
-        android:id="@+id/button_color_effect"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:focusableInTouchMode="false"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/common_icon_filters_normal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@null"
-        android:layout_toStartOf="@+id/relativelayout_color_effect"
-
-
-        android:layout_alignParentRight="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="false"
-        android:layout_marginBottom="20dp" />
 
     <RelativeLayout
         android:id="@+id/rec_1"
@@ -61,6 +30,20 @@
         android:layout_height="450dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="false">
+
+        <ImageButton
+            android:id="@+id/button_navigate_edit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal|end"
+            android:background="@null"
+            android:paddingEnd="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/common_icon_edit_normal"
+            android:layout_above="@+id/button_record"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible" />
 
         <ImageButton
             android:id="@+id/button_record"
@@ -73,6 +56,40 @@
             android:src="@drawable/activity_record_icon_rec_normal"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:id="@+id/button_camera_effect_fx"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal|end"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/activity_edit_icon_fx_normal"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="false"
+            android:layout_above="@+id/button_camera_effect_color"
+            android:padding="10dp" />
+
+        <ImageButton
+            android:id="@+id/button_camera_effect_color"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal|end"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/common_icon_filters_normal"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp" />
+
+
     </RelativeLayout>
 
     <ImageView
@@ -80,46 +97,43 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:alpha=".7"
         android:visibility="gone"
         android:src="@drawable/rotate_device"/>
 
     <RelativeLayout
-        android:id="@+id/relativelayout_camera_effect"
+        android:id="@+id/relativelayout_camera_effect_fx"
         android:layout_width="400dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible">
 
-        <org.lucasr.twowayview.TwoWayView xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/listview_items_camera_effect"
-            style="@style/TwoWayView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:drawSelectorOnTop="false"
-            tools:context=".RecordFragment" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/record_catalog_recycler_fx"
+            android:scrollbars="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
     </RelativeLayout>
-
 
     <RelativeLayout
-        android:id="@+id/relativelayout_color_effect"
+        android:id="@+id/relativelayout_camera_effect_color"
         android:layout_width="400dp"
         android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/relativelayout_camera_effect">
+        android:visibility="invisible">
 
-        <org.lucasr.twowayview.TwoWayView xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/listview_items_color_effect"
-            style="@style/TwoWayView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:drawSelectorOnTop="false"
-            tools:context=".RecordFragment" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/record_catalog_recycler_color"
+            android:scrollbars="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
     </RelativeLayout>
+
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -233,23 +247,6 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <Spinner
-        android:id="@+id/filterSpinner"
-        android:background="@drawable/effects_bg"
-        android:tag="filter"
-        android:spinnerMode="dialog"
-        android:prompt="@string/effects_chooser_title"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="10dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_above="@+id/button_color_effect"
-        android:layout_toStartOf="@+id/relativelayout_color_effect"
-        android:visibility="visible"
-        android:theme="@android:style/Holo.Light.ButtonBar.AlertDialog" />
 
 </RelativeLayout>
 

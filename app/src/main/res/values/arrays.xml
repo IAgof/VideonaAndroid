@@ -17,13 +17,14 @@
     <item>Edge detect</item>
     <item>Emboss</item>-->
     <item>Normal</item>
-    <item>Squeeze</item>
-    <item>Twirl</item>
-    <item>Tunnel</item>
-    <item>Bulge</item>
-    <item>Dent</item>
     <item>Fisheye</item>
     <item>Stretch</item>
+    <item>Dent</item>
     <item>Mirror</item>
+    <item>Squeeze</item>
+    <item>Tunnel</item>
+    <item>Twirl</item>
+    <item>Bulge</item>
+
   </string-array>
 </resources>
