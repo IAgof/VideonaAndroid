@@ -52,7 +52,8 @@ import butterknife.OnTouch;
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class PreviewVideoListFragment extends Fragment implements PreviewView, SeekBar.OnSeekBarChangeListener {
+public class PreviewVideoListFragment extends Fragment implements PreviewView,
+        SeekBar.OnSeekBarChangeListener {
     
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
@@ -350,6 +351,11 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_add_videos), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void updateVideoSize() {
+
+    }
+
     /**
      * Listener seekBar, videoPlayer
      *
@@ -433,7 +439,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView, S
 
     private boolean isEndOfVideo() {
         return seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay);
-}
+    }
 
     private boolean hasNextVideoToPlay() {
         return videoToPlay < movieList.size();

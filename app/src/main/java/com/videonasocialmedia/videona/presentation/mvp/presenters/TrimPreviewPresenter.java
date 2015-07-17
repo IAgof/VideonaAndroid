@@ -98,6 +98,7 @@ public class TrimPreviewPresenter implements OnVideosRetrieved, ModifyVideoDurat
 
     @Override
     public void onVideoDurationModified(Video modifiedVideo) {
+        previewView.updateVideoSize();
         showTimeTags();
     }
 }

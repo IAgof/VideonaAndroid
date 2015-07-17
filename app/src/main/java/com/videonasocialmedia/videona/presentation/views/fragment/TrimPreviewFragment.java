@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -90,6 +91,9 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         }
     };
     private OnTrimConfirmListener onTrimConfirmListener;
+    private Video video;
+    private  int startTimeMs = 0;
+    private int finishTimeMs = 0;
 
     /**
      * Tracker google analytics
@@ -200,9 +204,9 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void showPreview(List<Video> videoList) {
         //showTimeTags(projectDuration);
-        Video video = videoList.get(0);
+        video = videoList.get(0);
         seekBar.setMax(video.getFileDuration());
-        initVideoPlayer(videoList.get(0).getMediaPath());
+        initVideoPlayer(video.getMediaPath());
     }
 
     private void showTimeTags(int duration) {
@@ -289,12 +293,31 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
 
     }
 
+    @Override
+    public void updateVideoSize() {
+        videoPlayer.start();
+        videoPlayer.seekTo(video.getFileStartTime());
+        Log.d("seek", String.valueOf(video.getFileStartTime()));
+        Log.d("trim", String.valueOf(trimBar.getSelectedMinValue()));
+        videoPlayer.pause();
+        seekBar.setProgress(0);
+        seekBar.setMax(video.getDuration());
+    }
+
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
-            if (videoPlayer.isPlaying())
+            if (videoPlayer.isPlaying()) {
                 seekBar.setProgress(videoPlayer.getCurrentPosition());
+                if (isEndOfVideo()) {
+                    videoPlayer.pause();
+                }
+            }
             handler.postDelayed(updateTimeTask, 20);
         }
+    }
+
+    private boolean isEndOfVideo() {
+        return seekBar.getProgress() >= video.getFileDuration();
     }
 
     /**
@@ -376,11 +399,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     }
 
     @Override
-    public void showTrimBar(int videoFileDuration, int leftMarkerPosition, int RightMarkerPosition) {
+    public void showTrimBar(int videoFileDuration, int leftMarkerPosition, int rightMarkerPosition) {
         trimBar = new RangeSeekBar<>(
                 (double) 0, (double) videoFileDuration, this.getActivity(), videoFileDuration);
         trimBar.setSelectedMinValue((double) leftMarkerPosition);
-        trimBar.setSelectedMaxValue((double) RightMarkerPosition);
+        startTimeMs = leftMarkerPosition;
+        trimBar.setSelectedMaxValue((double) rightMarkerPosition);
+        finishTimeMs = rightMarkerPosition;
         trimBar.setOnRangeSeekBarChangeListener(this);
         layoutSeekBar.addView(trimBar);
     }
@@ -396,11 +421,14 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
      */
     @Override
     public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue) {
-        int startTimeMs = (int) Math.round((double) minValue);
-        int finishTimeMs = (int) Math.round((double) maxValue);
-        presenter.modifyVideoStartTime(startTimeMs);
-        presenter.modifyVideoFinishTime(finishTimeMs);
-
+        if(startTimeMs != (int) Math.round((double) minValue)) {
+            startTimeMs = (int) Math.round((double) minValue);
+            presenter.modifyVideoStartTime(startTimeMs);
+        }
+        if(finishTimeMs != (int) Math.round((double) maxValue)) {
+            finishTimeMs = (int) Math.round((double) maxValue);
+            presenter.modifyVideoFinishTime(finishTimeMs);
+        }
     }
 
     @Override
