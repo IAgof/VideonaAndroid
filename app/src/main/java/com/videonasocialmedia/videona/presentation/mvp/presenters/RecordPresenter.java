@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.os.Message;
@@ -25,20 +26,22 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraView;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Álvaro Martínez Marco
  */
 
-public class RecordPresenter implements OnCameraEffectListener, OnColorEffectListener,
+public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffectColorListener,
         OnFlashModeListener, OnSettingsCameraListener, OnRemoveMediaFinishedListener,
         OnAddMediaFinishedListener, OnSessionConfigListener,
         AndroidEncoder.OnMuxerFinishedEventListener, OnRecordEventListener {
@@ -125,10 +128,14 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
      */
     private boolean onMuxerAudioError;
 
+    private Context context;
 
-    public RecordPresenter(final RecordView recordView) throws IOException {
+
+
+    public RecordPresenter(final RecordView recordView, Context context) throws IOException {
 
         this.recordView = recordView;
+        this.context = context;
         recordUseCase = new RecordUseCase();
 
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
@@ -146,7 +153,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
      * @throws IOException
      */
     private void init(SessionConfig config) throws IOException {
-        mCamEncoder = new CameraEncoder(config, this);
+        mCamEncoder = new CameraEncoder(config, this, context);
         mMicEncoder = new MicrophoneEncoder(config, this);
         mIsRecording = false;
         mConfig = config;
@@ -181,7 +188,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
      * Apply video filter to CamEncoder
      * @param filter
      */
-    public void applyFilter(int filter){
+    public void setCameraEffectFx(int filter){
         mCamEncoder.applyFilter(filter);
     }
 
@@ -195,7 +202,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
     /**
      * Request a specific camera, front or back
-     * @param camera
+     * @param cameraId
      */
     public void requestCamera(int cameraId){
         mCamEncoder.requestCamera(cameraId);
@@ -397,13 +404,6 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
 
     /**
-     * Effect, fx effects button pressed
-     */
-    public void colorEffectClickListener() {
-        recordUseCase.getAvailableColorEffects(this, mCamEncoder.getCamera());
-    }
-
-    /**
      * Settings camera button listener
      */
     public void settingsCameraListener() {
@@ -413,10 +413,20 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
     }
 
     /**
-     * Effect, camera effects button pressed
+     * Effect, camera effects fx button pressed
      */
-    public void cameraEffectClickListener() {
-        recordUseCase.getAvailableCameraEffects(this);
+    public void cameraEffectFxClickListener() {
+
+            recordUseCase.getAvailableCameraEffectFx(this);
+
+    }
+
+    /**
+     * Effect, camera effects color button pressed
+     */
+    public void cameraEffectColorClickListener() {
+
+            recordUseCase.getAvailableCameraEffectColor(this, mCamEncoder.getCamera());
     }
 
     /**
@@ -442,61 +452,48 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
 
 
     /**
-     * Color effect selected
-     *
-     * @param effect
+     * Camera Effect color selected
+     * @param position
      */
     //TODO Add effect use case
-    public void setColorEffect(String effect) {
-        recordUseCase.addAndroidCameraEffect(effect, mCamEncoder.getCamera(), this);
-
-    }
-
-    /**
-     * Camera Effect selected
-     *
-     * @param filter
-     */
-    //TODO Add effect use case
-    public void setCameraEffect(int filter) {
-        mCamEncoder.applyFilter(filter);
+    public void setCameraEffectColor(int position) {
+        recordUseCase.addAndroidCameraEffect(position, mCamEncoder.getCamera());
     }
 
     @Override
-    public void onColorEffectAdded(String colorEffect, long time) {
-       // sendButtonTracked(colorEffect, time);
-        recordView.showEffectSelected(colorEffect);
-        Log.d(LOG_TAG, "onColorEffectAdded");
-    }
-
-    @Override
-    public void onColorEffectRemoved(String colorEffect, long time) {
-        recordView.showEffectSelected(colorEffect);
-        Log.d(LOG_TAG, "onColorEffectRemoved");
-    }
-
-    @Override
-    public void onColorEffectListRetrieved(ArrayList<String> effects) {
-        recordView.showEffects(effects);
-        Log.d(LOG_TAG, "onColorEffectListRetrieved");
-    }
-
-    @Override
-    public void onCameraEffectAdded(String cameraEffect, long time) {
-        recordView.showCameraEffectSelected(cameraEffect);
-      //  mCamEncoder.applyFilter(filter);
+    public void onCameraEffectFxAdded(String cameraEffect, long time) {
+        recordView.showCameraEffectFxSelected(cameraEffect);
+      //  mCamEncoder.setCameraEffectFx(filter);
 
     }
 
     @Override
-    public void onCameraEffectRemoved(String cameraEffect, long time) {
-        recordView.showCameraEffectSelected(cameraEffect);
+    public void onCameraEffectFxRemoved(String cameraEffect, long time) {
+        //recordView.showCameraEffectFxSelected(cameraEffect);
 
     }
 
     @Override
-    public void onCameraEffectListRetrieved(ArrayList<String> effect) {
-        recordView.showCameraEffects(effect);
+    public void onCameraEffectFxListRetrieved(List<CameraEffectFxList> effects) {
+
+        recordView.showCameraEffectFx(effects);
+    }
+
+    @Override
+    public void onCameraEffectColorAdded(String cameraEffectColor, long time) {
+        recordView.showCameraEffectColorSelected(cameraEffectColor);
+    }
+
+    @Override
+    public void onCameraEffectColorRemoved(String cameraEffectColor, long time) {
+
+    }
+
+    @Override
+    public void onCameraEffectColorListRetrieved(List<CameraEffectColorList> effects) {
+        Log.d(LOG_TAG, "onCameraEffectColorListRetrieved()");
+
+        recordView.showCameraEffectColor(effects);
     }
 
     @Override
@@ -699,6 +696,7 @@ public class RecordPresenter implements OnCameraEffectListener, OnColorEffectLis
             }
 
     }
+
 
     /**
      * AVRecorderHandler

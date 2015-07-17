@@ -425,7 +425,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //    }
 //
 //    @Override
-//    public void onClick(View view) {
+//    public void onClickCameraEffectFx(View view) {
 //        switch (view.getId()) {
 //            case R.id.button_record: {
 //                if (mIsRecordingVideo) {
@@ -943,7 +943,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //                    .setMessage("This device doesn't support Camera2 API.")
 //                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 //                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                        public void onClickCameraEffectFx(DialogInterface dialogInterface, int i) {
 //                            activity.finish();
 //                        }
 //                    })

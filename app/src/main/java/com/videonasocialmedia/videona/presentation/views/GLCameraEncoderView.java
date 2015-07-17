@@ -50,20 +50,23 @@ public class GLCameraEncoderView extends GLCameraView {
     public void setCameraEncoder(CameraEncoder encoder){
         mCameraEncoder = encoder;
         setCamera(mCameraEncoder.getCamera());
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-       // Log.d("Focus", "onTouchEvent");
+        Log.d("Focus", "onTouchEvent");
 
         if(mScaleGestureDetector != null){
             mScaleGestureDetector.onTouchEvent(ev);
 
         }
         if(mCameraEncoder != null && ev.getPointerCount() == 1 && (ev.getAction() == MotionEvent.ACTION_MOVE)){
-            mCameraEncoder.handleCameraPreviewTouchEvent(ev);
+           // Activate manual filter control
+           // mCameraEncoder.handleCameraPreviewTouchEvent(ev);
         }else if(mCameraEncoder != null && ev.getPointerCount() == 1 && (ev.getAction() == MotionEvent.ACTION_DOWN)){
-            mCameraEncoder.handleCameraPreviewTouchEvent(ev);
+            // Activate manual filter control
+           // mCameraEncoder.handleCameraPreviewTouchEvent(ev);
 
                 Log.d("Focus", "onTouchEvent doTouchFocus");
 

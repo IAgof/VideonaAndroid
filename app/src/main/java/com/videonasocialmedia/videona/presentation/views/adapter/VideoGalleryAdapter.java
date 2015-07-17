@@ -137,7 +137,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 notifyItemChanged(selectedVideoPosition);
                 selectedVideoPosition = getPosition();
                 notifyItemChanged(selectedVideoPosition);
-                onClickListener.onClick(selectedVideoPosition);
+                onClickListener.onClickCameraEffectFx(selectedVideoPosition);
             }
             return true;
         }*/
