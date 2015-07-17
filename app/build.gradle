@@ -15,7 +15,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 21
         versionCode 29 // 17/07/2015
-        versionName "0.3.1"
+        versionName "0.3.2"
         // Enabling multidex support.
         //multiDexEnabled true
     }
