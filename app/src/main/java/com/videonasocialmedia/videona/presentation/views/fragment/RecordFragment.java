@@ -193,6 +193,11 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.button_navigate_edit)
     ImageButton buttonNavigateEdit;
 
+    //TRACKING Values,
+    private final int START_RECORDING = 1000;
+    private final int STOP_RECORDING = 1001;
+    private final int TIME_RECORDING = 1002;
+
 
     private SensorEventListener mOrientationListener = new SensorEventListener() {
         final int SENSOR_CONFIRMATION_THRESHOLD = 5;
@@ -525,6 +530,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         if (recordPresenter.isRecording()) {
             recordPresenter.stopRecording();
+            sendButtonTracked(STOP_RECORDING);
 
             countDownTimer = new CountDownTimer(4000, 1000) {
                 @Override
@@ -542,6 +548,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         } else {
             recordPresenter.startRecording();
+            sendButtonTracked(START_RECORDING);
             //stopMonitoringOrientation();
         }
     }
@@ -667,7 +674,7 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
     @Override
-    public void navigateEditActivity() {
+    public void navigateEditActivity(String durationVideoRecorded) {
 
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
 
@@ -678,8 +685,10 @@ public class RecordFragment extends Fragment implements RecordView,
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
+        sendTrackDurationVideoRecorded(durationVideoRecorded);
+
         Intent edit = new Intent(getActivity(), EditActivity.class);
-       startActivity(edit);
+        startActivity(edit);
 
 
       // ReStartFragment, mode recording continuous
@@ -903,6 +912,12 @@ public class RecordFragment extends Fragment implements RecordView,
             case R.id.button_record:
                 label = "Capture ";
                 break;
+            case START_RECORDING:
+                label = "Start recording";
+                break;
+            case STOP_RECORDING:
+                label = "Stop recording";
+                break;
             case R.id.button_change_camera:
                 label = "Change camera";
                 break;
@@ -995,6 +1010,15 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
 
+    private void sendTrackDurationVideoRecorded (String durationVideoRecorded){
+
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("video recorded time")
+                .setLabel(durationVideoRecorded)
+                .build());
+        GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();
+    }
 
     /**
      * OnClick CameraEffectFxRecyclerViewClickListener
