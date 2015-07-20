@@ -12,7 +12,7 @@
             android:background="@null"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/common_filter_none_ad0_normal"
+            android:src="@drawable/common_filter_ad0_none_normal"
             android:text="Color Effect" />
 
 </RelativeLayout>

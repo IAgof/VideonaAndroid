@@ -64,18 +64,18 @@ public class CameraEffectColorList {
         LinkedList<CameraEffectColorList> cameraEffectColor = new LinkedList<>();
 
 
-        cameraEffectColor.add(new CameraEffectColorList("none", R.drawable.common_filter_none_ad0_normal, R.drawable.common_filter_none_ad0_pressed, 0));
-        cameraEffectColor.add(new CameraEffectColorList("aqua",  R.drawable.common_filter_aqua_ad1_normal,  R.drawable.common_filter_aqua_ad1_pressed, 1));
-        cameraEffectColor.add(new CameraEffectColorList("blackboard",  R.drawable.common_filter_blackboard_ad2_normal,  R.drawable.common_filter_blackboard_ad2_pressed, 2));
-        cameraEffectColor.add(new CameraEffectColorList("emboss",  R.drawable.common_filter_emboss_ad3_normal,  R.drawable.common_filter_emboss_ad3_pressed, 3));
-        cameraEffectColor.add(new CameraEffectColorList("mono",  R.drawable.common_filter_mono_ad4_normal,  R.drawable.common_filter_mono_ad4_pressed, 4));
-        cameraEffectColor.add(new CameraEffectColorList("negative",  R.drawable.common_filter_negative_ad5_normal,  R.drawable.common_filter_negative_ad5_pressed, 5));
-        cameraEffectColor.add(new CameraEffectColorList("neon",  R.drawable.common_filter_neon_ad6_normal,  R.drawable.common_filter_neon_ad6_pressed, 6));
-        cameraEffectColor.add(new CameraEffectColorList("posterize",  R.drawable.common_filter_posterize_ad7_normal,  R.drawable.common_filter_posterize_ad7_pressed, 7));
-        cameraEffectColor.add(new CameraEffectColorList("sepia",  R.drawable.common_filter_sepia_ad8_normal,  R.drawable.common_filter_sepia_ad8_pressed, 8));
-        cameraEffectColor.add(new CameraEffectColorList("sketch",  R.drawable.common_filter_sketch_ad9_normal,  R.drawable.common_filter_sketch_ad9_pressed, 9));
-        cameraEffectColor.add(new CameraEffectColorList("solarize",  R.drawable.common_filter_solarize_ad10_normal,  R.drawable.common_filter_solarize_ad10_pressed, 10));
-        cameraEffectColor.add(new CameraEffectColorList("whiteboard", R.drawable.common_filter_whiteboard_ad11_normal, R.drawable.common_filter_whiteboard_ad11_pressed, 11));
+        cameraEffectColor.add(new CameraEffectColorList("none", R.drawable.common_filter_ad0_none_normal, R.drawable.common_filter_ad0_none_pressed, 0));
+        cameraEffectColor.add(new CameraEffectColorList("aqua",  R.drawable.common_filter_ad1_aqua_normal,  R.drawable.common_filter_ad1_aqua_pressed, 1));
+        cameraEffectColor.add(new CameraEffectColorList("blackboard",  R.drawable.common_filter_ad2_blackboard_normal,  R.drawable.common_filter_ad2_blackboard_pressed, 2));
+        cameraEffectColor.add(new CameraEffectColorList("emboss",  R.drawable.common_filter_ad3_emboss_normal,  R.drawable.common_filter_ad3_emboss_pressed, 3));
+        cameraEffectColor.add(new CameraEffectColorList("mono",  R.drawable.common_filter_ad4_mono_normal,  R.drawable.common_filter_ad4_mono_pressed, 4));
+        cameraEffectColor.add(new CameraEffectColorList("negative",  R.drawable.common_filter_ad5_negative_normal,  R.drawable.common_filter_ad5_negative_pressed, 5));
+        cameraEffectColor.add(new CameraEffectColorList("neon",  R.drawable.common_filter_ad6_neon_normal,  R.drawable.common_filter_ad6_neon_pressed, 6));
+        cameraEffectColor.add(new CameraEffectColorList("posterize",  R.drawable.common_filter_ad7_posterize_normal,  R.drawable.common_filter_ad7_posterize_pressed, 7));
+        cameraEffectColor.add(new CameraEffectColorList("sepia",  R.drawable.common_filter_ad8_sepia_normal,  R.drawable.common_filter_ad8_sepia_pressed, 8));
+        cameraEffectColor.add(new CameraEffectColorList("sketch",  R.drawable.common_filter_ad9_sketch_normal,  R.drawable.common_filter_ad9_sketch_pressed, 9));
+        cameraEffectColor.add(new CameraEffectColorList("solarize",  R.drawable.common_filter_ad10_solarize_normal,  R.drawable.common_filter_ad10_solarize_pressed, 10));
+        cameraEffectColor.add(new CameraEffectColorList("whiteboard", R.drawable.common_filter_ad11_whiteboard_normal, R.drawable.common_filter_ad11_whiteboard_pressed, 11));
 
         return cameraEffectColor;
     }
@@ -116,107 +116,107 @@ public class CameraEffectColorList {
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_AQUA) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_aqua_ad1_normal;
+                return R.drawable.common_filter_ad1_aqua_normal;
             } else {
-                return R.drawable.common_filter_aqua_ad1_pressed;
+                return R.drawable.common_filter_ad1_aqua_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_BLACKBOARD) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_blackboard_ad2_normal;
+                return R.drawable.common_filter_ad2_blackboard_normal;
             } else {
-                return R.drawable.common_filter_blackboard_ad2_pressed;
+                return R.drawable.common_filter_ad2_blackboard_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_MONO) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_mono_ad4_normal;
+                return R.drawable.common_filter_ad4_mono_normal;
             } else {
-                return R.drawable.common_filter_mono_ad4_pressed;
+                return R.drawable.common_filter_ad4_mono_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEGATIVE) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_negative_ad5_normal;
+                return R.drawable.common_filter_ad5_negative_normal;
             } else {
-                return R.drawable.common_filter_negative_ad5_pressed;
+                return R.drawable.common_filter_ad5_negative_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NONE) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_none_ad0_normal;
+                return R.drawable.common_filter_ad0_none_normal;
             } else {
-                return R.drawable.common_filter_none_ad0_pressed;
+                return R.drawable.common_filter_ad0_none_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_POSTERIZE) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_posterize_ad7_normal;
+                return R.drawable.common_filter_ad7_posterize_normal;
             } else {
-                return R.drawable.common_filter_posterize_ad7_pressed;
+                return R.drawable.common_filter_ad7_posterize_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SEPIA) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_sepia_ad8_normal;
+                return R.drawable.common_filter_ad8_sepia_normal;
             } else {
-                return R.drawable.common_filter_sepia_ad8_pressed;
+                return R.drawable.common_filter_ad8_sepia_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_WHITEBOARD) == 0) {
             if (!isPressed) {
-                return R.drawable.common_filter_whiteboard_ad11_normal;
+                return R.drawable.common_filter_ad11_whiteboard_normal;
             } else {
-                return R.drawable.common_filter_whiteboard_ad11_pressed;
+                return R.drawable.common_filter_ad11_whiteboard_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SOLARIZE) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_solarize_ad10_normal;
+                return R.drawable.common_filter_ad10_solarize_normal;
             } else {
-                return R.drawable.common_filter_solarize_ad10_pressed;
+                return R.drawable.common_filter_ad10_solarize_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_EMBOSS) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_emboss_ad3_normal;
+                return R.drawable.common_filter_ad3_emboss_normal;
             } else {
-                return R.drawable.common_filter_emboss_ad3_pressed;
+                return R.drawable.common_filter_ad3_emboss_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_SKETCH) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_sketch_ad9_normal;
+                return R.drawable.common_filter_ad9_sketch_normal;
             } else {
-                return R.drawable.common_filter_sketch_ad9_pressed;
+                return R.drawable.common_filter_ad9_sketch_pressed;
             }
         }
 
         if (colorEffectName.compareTo(Constants.COLOR_EFFECT_NEON) == 0) {
 
             if (!isPressed) {
-                return R.drawable.common_filter_neon_ad6_normal;
+                return R.drawable.common_filter_ad6_neon_normal;
             } else {
-                return R.drawable.common_filter_neon_ad6_pressed;
+                return R.drawable.common_filter_ad6_neon_pressed;
             }
         }
 
