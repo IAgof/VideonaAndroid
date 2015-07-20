@@ -55,15 +55,15 @@ public class CameraEffectFxList {
 
         LinkedList<CameraEffectFxList> cameraEffects = new LinkedList<>();
 
-        cameraEffects.add(new CameraEffectFxList("Normal", R.drawable.common_filter_fx_normal_fx1, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Fisheye", R.drawable.common_filter_fx_fisheye_fx2, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Stretch", R.drawable.common_filter_fx_stretch_fx3, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Dent", R.drawable.common_filter_fx_dent_fx4, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Mirror", R.drawable.common_filter_fx_mirror_fx5, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Squeeze", R.drawable.common_filter_fx_squeeze_fx6, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Tunnel", R.drawable.common_filter_fx_tunnel_fx7, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Twirl", R.drawable.common_filter_fx_twirl_fx8, R.drawable.gatito_rules_pressed));
-        cameraEffects.add(new CameraEffectFxList("Bulge", R.drawable.common_filter_fx_bulge_fx9, R.drawable.gatito_rules_pressed));
+        cameraEffects.add(new CameraEffectFxList("Normal", R.drawable.common_filter_fx_fx0_none_normal, R.drawable.common_filter_fx_fx0_none_pressed));
+        cameraEffects.add(new CameraEffectFxList("Fisheye", R.drawable.common_filter_fx_fx1_fisheye_normal, R.drawable.common_filter_fx_fx1_fisheye_pressed));
+        cameraEffects.add(new CameraEffectFxList("Stretch", R.drawable.common_filter_fx_fx2_stretch_normal, R.drawable.common_filter_fx_fx2_stretch_pressed));
+        cameraEffects.add(new CameraEffectFxList("Dent", R.drawable.common_filter_fx_fx3_dent_normal, R.drawable.common_filter_fx_fx3_dent_pressed));
+        cameraEffects.add(new CameraEffectFxList("Mirror", R.drawable.common_filter_fx_fx4_mirror_normal, R.drawable.common_filter_fx_fx4_mirror_pressed));
+        cameraEffects.add(new CameraEffectFxList("Squeeze", R.drawable.common_filter_fx_fx5_squeeze_normal, R.drawable.common_filter_fx_fx5_squeeze_pressed));
+        cameraEffects.add(new CameraEffectFxList("Tunnel", R.drawable.common_filter_fx_fx6_tunnel_normal, R.drawable.common_filter_fx_fx6_tunnel_pressed));
+        cameraEffects.add(new CameraEffectFxList("Twirl", R.drawable.common_filter_fx_fx7_twirl_normal, R.drawable.common_filter_fx_fx7_twirl_pressed));
+        cameraEffects.add(new CameraEffectFxList("Bulge", R.drawable.common_filter_fx_fx8_bulge_normal, R.drawable.common_filter_fx_fx8_bulge_pressed));
 
 
         return cameraEffects;

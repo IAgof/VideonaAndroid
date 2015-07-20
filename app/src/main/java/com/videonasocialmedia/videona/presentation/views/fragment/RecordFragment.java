@@ -193,6 +193,11 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.button_navigate_edit)
     ImageButton buttonNavigateEdit;
 
+    //TRACKING Values,
+    private final int START_RECORDING = 1000;
+    private final int STOP_RECORDING = 1001;
+    private final int TIME_RECORDING = 1002;
+
 
     private SensorEventListener mOrientationListener = new SensorEventListener() {
         final int SENSOR_CONFIRMATION_THRESHOLD = 5;
@@ -461,13 +466,17 @@ public class RecordFragment extends Fragment implements RecordView,
     @OnClick (R.id.button_change_camera)
     public void buttonChangeCameraListener(){
 
-        recordPresenter.requestOtherCamera();
-
         // Check flashMode and return to normal
         buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
         buttonSettinsCameraListener();
 
       //  mCameraView.setRotation(Surface.ROTATION_90);
+
+
+        int rotation = this.getActivity().getWindowManager().getDefaultDisplay()
+                .getRotation();
+
+        recordPresenter.requestOtherCamera(rotation);
 
     }
 
@@ -521,6 +530,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         if (recordPresenter.isRecording()) {
             recordPresenter.stopRecording();
+            sendButtonTracked(STOP_RECORDING);
 
             countDownTimer = new CountDownTimer(4000, 1000) {
                 @Override
@@ -531,13 +541,14 @@ public class RecordFragment extends Fragment implements RecordView,
                 @Override
                 public void onFinish() {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
-                    reStartFragment();
+                   // reStartFragment();
 
                 }
             }.start();
 
         } else {
             recordPresenter.startRecording();
+            sendButtonTracked(START_RECORDING);
             //stopMonitoringOrientation();
         }
     }
@@ -663,7 +674,7 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
     @Override
-    public void navigateEditActivity() {
+    public void navigateEditActivity(String durationVideoRecorded) {
 
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
 
@@ -674,8 +685,10 @@ public class RecordFragment extends Fragment implements RecordView,
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
+        sendTrackDurationVideoRecorded(durationVideoRecorded);
+
         Intent edit = new Intent(getActivity(), EditActivity.class);
-       startActivity(edit);
+        startActivity(edit);
 
 
       // ReStartFragment, mode recording continuous
@@ -899,6 +912,12 @@ public class RecordFragment extends Fragment implements RecordView,
             case R.id.button_record:
                 label = "Capture ";
                 break;
+            case START_RECORDING:
+                label = "Start recording";
+                break;
+            case STOP_RECORDING:
+                label = "Stop recording";
+                break;
             case R.id.button_change_camera:
                 label = "Change camera";
                 break;
@@ -914,67 +933,67 @@ public class RecordFragment extends Fragment implements RecordView,
             case R.id.button_camera_effect_color:
                 label = "Color filters";
                 break;
-            case R.drawable.common_filter_none_ad0_normal:
+            case R.drawable.common_filter_ad0_none_normal:
                 label = "None color filter";
                 break;
-            case R.drawable.common_filter_aqua_ad1_normal:
+            case R.drawable.common_filter_ad1_aqua_normal:
                 label = "Aqua color filter";
                 break;
-            case R.drawable.common_filter_blackboard_ad2_normal:
+            case R.drawable.common_filter_ad2_blackboard_normal:
                 label = "Blackboard color filter";
                 break;
-            case R.drawable.common_filter_emboss_ad3_normal:
+            case R.drawable.common_filter_ad3_emboss_normal:
                 label = "Emboss color filter";
                 break;
-            case R.drawable.common_filter_mono_ad4_normal:
+            case R.drawable.common_filter_ad4_mono_normal:
                 label = "Mono color filter";
                 break;
-            case R.drawable.common_filter_negative_ad5_normal:
+            case R.drawable.common_filter_ad5_negative_normal:
                 label = "Negative color filter";
                 break;
-            case R.drawable.common_filter_neon_ad6_normal:
+            case R.drawable.common_filter_ad6_neon_normal:
                 label = "Neon color filter";
                 break;
-            case R.drawable.common_filter_posterize_ad7_normal:
+            case R.drawable.common_filter_ad7_posterize_normal:
                 label = "Posterize color filter";
                 break;
-            case R.drawable.common_filter_sepia_ad8_normal:
+            case R.drawable.common_filter_ad8_sepia_normal:
                 label = "Sepia color filter";
                 break;
-            case R.drawable.common_filter_sketch_ad9_normal:
+            case R.drawable.common_filter_ad9_sketch_normal:
                 label = "Sketch color filter";
                 break;
-            case R.drawable.common_filter_solarize_ad10_normal:
+            case R.drawable.common_filter_ad10_solarize_normal:
                 label = "Solarize color filter";
                 break;
-            case R.drawable.common_filter_whiteboard_ad11_normal:
+            case R.drawable.common_filter_ad11_whiteboard_normal:
                 label = "Whiteboard color filter";
                 break;
-            case R.drawable.common_filter_fx_normal_fx1:
+            case R.drawable.common_filter_fx_fx0_none_normal:
                 label = "None fx filter";
                 break;
-            case R.drawable.common_filter_fx_fisheye_fx2:
+            case R.drawable.common_filter_fx_fx1_fisheye_normal:
                 label = "Fisheye fx filter";
                 break;
-            case R.drawable.common_filter_fx_stretch_fx3:
+            case R.drawable.common_filter_fx_fx2_stretch_normal:
                 label = "Stretch fx filter";
                 break;
-            case R.drawable.common_filter_fx_dent_fx4:
+            case R.drawable.common_filter_fx_fx3_dent_normal:
                 label = "Dent fx filter";
                 break;
-            case R.drawable.common_filter_fx_mirror_fx5:
+            case R.drawable.common_filter_fx_fx4_mirror_normal:
                 label = "Mirror fx filter";
                 break;
-            case R.drawable.common_filter_fx_squeeze_fx6:
+            case R.drawable.common_filter_fx_fx5_squeeze_normal:
                 label = "Squeeze fx filter";
                 break;
-            case R.drawable.common_filter_fx_tunnel_fx7:
+            case R.drawable.common_filter_fx_fx6_tunnel_normal:
                 label = "Tunnel fx filter";
                 break;
-            case R.drawable.common_filter_fx_twirl_fx8:
+            case R.drawable.common_filter_fx_fx7_twirl_normal:
                 label = "Twirl fx filter";
                 break;
-            case R.drawable.common_filter_fx_bulge_fx9:
+            case R.drawable.common_filter_fx_fx8_bulge_normal:
                 label = "Bulge filter";
                 break;
             default:
@@ -991,6 +1010,15 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
 
+    private void sendTrackDurationVideoRecorded (String durationVideoRecorded){
+
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("video recorded time")
+                .setLabel(durationVideoRecorded)
+                .build());
+        GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();
+    }
 
     /**
      * OnClick CameraEffectFxRecyclerViewClickListener

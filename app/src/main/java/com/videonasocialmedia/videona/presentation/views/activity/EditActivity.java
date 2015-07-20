@@ -17,6 +17,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -80,6 +81,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
 
+    private static EditActivity parent;
     private MediaPlayer musicPlayer;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
@@ -104,7 +106,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
 
-    public static Thread performOnBackgroundThread(final Runnable runnable) {
+    public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
+    //public Thread performOnBackgroundThread(final Runnable runnable) {
+        this.parent = parent;
         final Thread t = new Thread() {
             @Override
             public void run() {
@@ -237,15 +241,13 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @OnClick(R.id.buttonOkEditActivity)
     public void okEditActivity() {
         pausePreview();
-
-
         showProgressDialog();
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
             }
         };
-        performOnBackgroundThread(r);
+        performOnBackgroundThread(this, r);
     }
 
 
@@ -258,15 +260,19 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     }
 
     @Override
-    public void showError(int causeTextResource) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,
-                AlertDialog.THEME_HOLO_LIGHT);
-        builder.setMessage(causeTextResource)
-                .setCancelable(false)
-                .setPositiveButton(R.string.ok, null);
+    public void showError(final int causeTextResource) {
+        parent.runOnUiThread(new Runnable() {
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(parent,
+                        AlertDialog.THEME_HOLO_LIGHT);
+                builder.setMessage(causeTextResource)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok, null);
 
-        AlertDialog alert = builder.create();
-        alert.show();
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
     }
 
     @Override
@@ -339,8 +345,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
-        } else {
-            scissorsFxMenuFragment.habilitateTrashButton();
         }
 
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
@@ -350,6 +354,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             videoTimeLineFragment = new VideoTimeLineFragment();
         }
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+        scissorsFxMenuFragment.habilitateTrashButton();
     }
 
 
@@ -494,6 +499,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void hideProgressDialog() {
+//        handler.sendEmptyMessage(0);
         if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
     }
@@ -515,9 +521,23 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void onRemoveAllProjectSelected() {
-        editPresenter.resetProject();
-        showMessage(R.string.videos_removed);
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.confirmDeleteVideosFromProjectTitle)
+                .setMessage(R.string.confirmDeleteVideosFromProjectMessage)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        editPresenter.resetProject();
+                        showMessage(R.string.deletedVideosFromProject);
+                        removeVideoTimelineFragment();
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
 
+    private void removeVideoTimelineFragment() {
         this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
     }
 

@@ -352,7 +352,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     }
 
     @Override
-    public void updateVideoSize() {
+    public void updateSeekBarSize() {
 
     }
 
