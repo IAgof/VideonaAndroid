@@ -53,12 +53,12 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
      * @param video the path of the new video which user wants to add to the project
      */
     public void loadVideoToProject(Video video) {
-        resetProject();
+       // resetProject();
         addVideoToProjectUseCase.addVideoToTrack(video, this);
     }
 
     public void loadVideoListToProject(List<Video> videoList) {
-        resetProject();
+       // resetProject();
         //exported= false;
         addVideoToProjectUseCase.addVideoListToTrack(videoList, this);
     }
@@ -97,12 +97,15 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
 
     @Override
     public void onAddMediaItemToTrackSuccess(Media video) {
-//        if (exported)
+        galleryPagerView.navigate();
+        /*
+        if (exported)
             galleryPagerView.navigate();
-//        else {
-//            exportProjectUseCase = new ExportProjectUseCase(this);
-//            exportProjectUseCase.export();
-//        }
+        else {
+            exportProjectUseCase = new ExportProjectUseCase(this);
+            exportProjectUseCase.export();
+        }
+        */
     }
 
     @Override
@@ -112,7 +115,7 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
 
     @Override
     public void onExportSuccess(Video video) {
-        exported=true;
+        //exported=true;
         loadVideoToProject(video);
     }
 }

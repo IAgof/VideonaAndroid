@@ -14,9 +14,6 @@ import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 public class ExportProjectUseCaseTest extends ActivityInstrumentationTestCase2<EditActivity> {
 
 
@@ -43,10 +40,10 @@ public class ExportProjectUseCaseTest extends ActivityInstrumentationTestCase2<E
 
     public void testExportProjectUseCase() {
 
-       // assertNotNull(activity);
+        // assertNotNull(activity);
         //assertNotNull(context);
 
-       // useCase = new ExportProjectUseCase2(context);
+        // useCase = new ExportProjectUseCase2(context);
 
         //listener = mock(OnExportFinishedListener.class);
 

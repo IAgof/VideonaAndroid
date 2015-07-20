@@ -10,7 +10,7 @@ package com.videonasocialmedia.videona.presentation.views.listener;
 /**
  * Created by jca on 25/3/15.
  */
-public interface RecyclerViewClickListener {
+public interface MusicRecyclerViewClickListener {
 
     void onClick(int position);
 }

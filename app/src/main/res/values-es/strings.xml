@@ -7,6 +7,7 @@
     <string name="toast_trim">Video Recorded trimmed in /sdcard/Movies/Videona</string>
     <string name="toast_exit">Pulsa otra vez para salir</string>
     <string name="toast_exit_edit">Pulsa para salir del editor</string>
+    <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
     <string name="edit_title_name">Sala de edición</string>
     <string name="edit_text_fx">Trabajando en los efectos</string>
     <string name="edit_text_look">Trabajando en la magia</string>
@@ -15,6 +16,8 @@
     <string name="not_ask_again">Not ask again</string>
     <string name="not_thanks">Not thanks</string>
     <string name="ok">Ok</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
     <string name="indiegogo">Indiegogo</string>
     <string name="welcome">"Esta es la versión beta de la nueva Plataforma Social de Vídeo, puedes ayudarnos a desarrollarla dándonos tu opinión sobre ella, o puedes acceder a nuestra campaña de crowdfunding en Indiegogo para obtener alguna mejora en la app. También te estaremos muy agradecidos si difundes la campaña en tus redes sociales."</string>
     <string name="videona_web">http://www.videona.es</string>
@@ -28,6 +31,15 @@
     <string name="getit">"Entendido"</string>
     <string name="action_finish">"Finish"</string>
     <string name="action_next">"Next"</string>
+
+    <!-- Gallery activity -->
+    <string name="confirmDeleteTitle"><u>Eliminar</u></string>
+    <string name="confirmDeleteTitle1"><u>vídeo</u></string>
+    <string name="confirmDeleteTitle2"><u>vídeos</u></string>
+    <string name="confirmDeleteMessage">¿Desea eliminar estos elementos?</string>
+
+    <!-- Trim fragment -->
+    <string name="confirmTrim">Hecho</string>
 
     <!-- Music genres -->
     <string name="music_genre_rock">Rock</string>
@@ -402,6 +414,10 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
 
 
     <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
-    <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
+    <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
     <string name="effects_chooser_title">Efectos</string>
+
+    <string name="add_videos_to_project">Por favor, añade vídeos al proyecto</string>
+    <string name="videos_removed">Videos borrados del proyecto, grabe o añada nuevos videos</string>
+
 </resources>

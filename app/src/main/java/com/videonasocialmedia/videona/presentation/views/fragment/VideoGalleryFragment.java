@@ -1,5 +1,6 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
@@ -19,7 +20,8 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
@@ -32,7 +34,7 @@ import butterknife.InjectView;
 /**
  * Created by jca on 14/5/15.
  */
-public class VideoGalleryFragment extends Fragment implements VideoGalleryView, RecyclerViewClickListener {
+public class VideoGalleryFragment extends Fragment implements VideoGalleryView, MusicRecyclerViewClickListener {
 
     public static final int SELECTION_MODE_SINGLE = 0;
     public static final int SELECTION_MODE_MULTIPLE = 1;
@@ -44,6 +46,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     private VideoGalleryPresenter videoGalleryPresenter;
     private Video selectedVideo;
     private int folder;
+    private OnSelectionModeListener onSelectionModeListener;
 
     private ItemClickSupport clickSupport;
     private ItemSelectionSupport selectionSupport;
@@ -81,6 +84,12 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     }
 
     @Override
+    public void onAttach(Activity a) {
+        super.onAttach(a);
+        onSelectionModeListener = (OnSelectionModeListener) a;
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clickSupport = ItemClickSupport.addTo(recyclerView);
@@ -90,8 +99,10 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
                 if (selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.MULTIPLE)
                     if (selectionSupport.isItemChecked(position)) {
                         selectionSupport.setItemChecked(position, true);
+                        onSelectionModeListener.onItemUnchecked();
                     } else {
                         selectionSupport.setItemChecked(position, false);
+                        onSelectionModeListener.onItemChecked();
                     }
             }
         });
@@ -104,11 +115,27 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
                     selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
 
                 selectionSupport.setItemChecked(position, true);
+                onSelectionModeListener.onItemChecked();
                 return true;
             }
         });
         selectionSupport = ItemSelectionSupport.addTo(recyclerView);
     }
+
+    /*
+    private boolean hasItemsChecked() {
+        boolean result;
+        SparseBooleanArray selectedElements = selectionSupport.getCheckedItemPositions();
+        if(selectedElements != null) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+    if(!hasItemsChecked())
+            onSelectionModeListener.onNoItemSelected();
+    */
 
     @Override
     public void onStart() {
@@ -152,8 +179,10 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
     @Override
     public void showVideos(List<Video> videoList) {
         videoGalleryAdapter = new VideoGalleryAdapter(videoList);
+        videoGalleryAdapter.setSelectionSupport(selectionSupport);
         videoGalleryAdapter.setRecyclerViewClickListener(this);
         recyclerView.setAdapter(videoGalleryAdapter);
+
         showTimeTag(videoList);
     }
 
@@ -214,6 +243,17 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         };
         Thread thread = new Thread(updateVideoTime);
         thread.start();
+    }
+
+    public void updateView() {
+        SparseBooleanArray selectedElements=selectionSupport.getCheckedItemPositions();
+        for (int i=0; selectedElements!=null&&i<videoGalleryAdapter.getItemCount();i++){
+            if (selectedElements.get(i)){
+                videoGalleryAdapter.removeVideo(i);
+            }
+        }
+        if (selectedElements != null)
+            videoGalleryAdapter.clearView();
     }
 
     private class TimeChangesHandler extends Handler {

@@ -15,21 +15,24 @@ import com.videonasocialmedia.videona.avrecorder.SessionConfig;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectListener;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnColorEffectListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectColorListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectFxListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSessionConfigListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSettingsCameraListener;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectList;
-import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+/**
+ * @author Álvaro Martínez Marco
+ */
 
 public class RecordUseCase {
 
@@ -38,8 +41,14 @@ public class RecordUseCase {
      */
     private long timeColorEffect = 0;
 
+    /**
+     * Session config
+     */
     private SessionConfig mConfig;
 
+    /**
+     * String outputLocation, save final video file.
+     */
     private String outputLocation = "";
 
     /**
@@ -47,11 +56,22 @@ public class RecordUseCase {
      */
     private final String LOG_TAG = getClass().getSimpleName();
 
+    /**
+     *
+     */
+     List<CameraEffectColorList> cameraEffectColorListAux;
+
     public RecordUseCase(){
 
 
     }
 
+    /**
+     * Init sessiong config.
+     * Set video settings recording from Profile, project
+     * //TODO * Set audio settings recording from Profile, project. Not implemented yet.
+     * @param listener
+     */
     public void initSessionConfig(OnSessionConfigListener listener){
 
         // Create a temp media file name to record video
@@ -81,79 +101,88 @@ public class RecordUseCase {
                 .withVideoBitrate(videoQuality.getVideoBitRate())
                 .withVideoResolution(videoSize.getWidth(), videoSize.getHeigth())
                 .withAudioChannels(1)
-                //.withAudioSamplerate(48000)
-                .withAudioSamplerate(44100)
+                .withAudioSamplerate(48000)
                 .withAudioBitrate(192 * 1000)
                 .build();
 
         listener.onInitSession(mConfig);
+
     }
 
+    /**
+     * Get absolute output video path
+     * @return
+     */
     public String getOutputVideoPath(){
         return outputLocation;
     }
 
+    /**
+     * Start recording use case.
+     * //TODO Do something.
+     * @param listener
+     */
     public void startRecording(OnRecordEventListener listener){
+
 
         listener.onRecordStarted();
     }
 
+    /**
+     * Stop recording use case.
+     * //TODO Do something.
+     * @param listener
+     */
     public void stopRecording(OnRecordEventListener listener){
 
         listener.onRecordStopped();
     }
 
     /**
-     * Get available camera effects
+     * Get available camera effects fx
      *
      * @param listener
      */
-    public void getAvailableCameraEffects(OnCameraEffectListener listener) {
+    public void getAvailableCameraEffectFx(OnCameraEffectFxListener listener) {
         /// TODO getAvailableColorEffects from model
-        ArrayList<String> cameraEffectList = CameraEffectList.getCameraEffectList();
+        List<CameraEffectFxList> cameraEffectFxList = CameraEffectFxList.getCameraEffectList();
         //ArrayList<String> effectList = ColorEffectList.getColorEffectList(getCameraInstance());
-        listener.onCameraEffectListRetrieved(cameraEffectList);
+        listener.onCameraEffectFxListRetrieved(cameraEffectFxList);
     }
 
-    public void addCameraEffect(String cameraEffect, OnCameraEffectListener listener) {
+    /**
+     * Get available camera effects color
+     *
+     * @param listener
+     */
+    public void getAvailableCameraEffectColor(OnCameraEffectColorListener listener, Camera camera) {
+        /// TODO getAvailableColorEffects from model
 
-        listener.onCameraEffectAdded(cameraEffect, getTimeColorEffect());
+            List<CameraEffectColorList> cameraEffectColorList = CameraEffectColorList.getCameraEffectColorListSorted(camera);
 
+            cameraEffectColorListAux = cameraEffectColorList;
+
+            listener.onCameraEffectColorListRetrieved(cameraEffectColorList);
     }
 
 
     /**
-     * Get available color effects
+     * Add Android camera color effect
+     * //TODO use openGL color effect instead of camera color effect
      *
-     * @param listener
-     */
-    public void getAvailableColorEffects(OnColorEffectListener listener, Camera camera) {
-        /// TODO getAvailableColorEffects from model
-        ArrayList<String> effectList = ColorEffectList.getColorEffectList(camera);
-        //ArrayList<String> effectList = ColorEffectList.getColorEffectList(getCameraInstance());
-        listener.onColorEffectListRetrieved(effectList);
-    }
-
-    /**
-     * Add effect
-     *
-     * @param colorEffect
-     * @param listener
+     * @param position
      */
         //TODO add CameraEffect, add Effect, add time and add effect to Project
-    public void addAndroidCameraEffect(String colorEffect, Camera camera, OnColorEffectListener listener) {
-      /*  Camera.Parameters parameters = camera.getParameters();
-        parameters.setColorEffect(colorEffect);
-        //camera.setDisplayOrientation(180);
-        camera.setParameters(parameters);
-        listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
-        Log.d(LOG_TAG, " addAndroidCameraEffect " + colorEffect + " time " + getTimeColorEffect());
-       */
+    public void addAndroidCameraEffect(int position, Camera camera) {
+
+        String colorEffect =  cameraEffectColorListAux.get(position).getNameResourceId();
 
         Camera.Parameters parameters = camera.getParameters();
         parameters.setColorEffect(colorEffect);
         camera.setParameters(parameters);
-        listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
+
+        //TODO, make listener and register event, send tracking
+        //listener.onColorEffectAdded(colorEffect, getTimeColorEffect());
 
     }
 
@@ -172,10 +201,17 @@ public class RecordUseCase {
     }
    */
 
+    /**
+     * Se timer, to register color effect duration
+     */
     private void setTimer() {
         timeColorEffect = SystemClock.uptimeMillis();
     }
 
+    /**
+     * Get time color effect applied
+     * @return
+     */
     private long getTimeColorEffect() {
         if (timeColorEffect == 0) {
             return 0;
@@ -224,6 +260,7 @@ public class RecordUseCase {
 
     /**
      * Support change camera. Minimum quality 720p
+     * //TODO, study force 720p record to front camera, minimum quality
      */
     private boolean supportChangeCamera(Camera camera) {
 

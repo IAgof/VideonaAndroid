@@ -1,11 +1,18 @@
 package com.videonasocialmedia.videona.avrecorder;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.opengl.EGLContext;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -13,9 +20,11 @@ import android.os.Trace;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.avrecorder.gles.EglCore;
 import com.videonasocialmedia.videona.avrecorder.gles.EglStateSaver;
 import com.videonasocialmedia.videona.avrecorder.gles.FullFrameRect;
+import com.videonasocialmedia.videona.avrecorder.gles.GlUtil;
 import com.videonasocialmedia.videona.avrecorder.gles.Texture2dProgram;
 import com.videonasocialmedia.videona.avrecorder.gles.WindowSurface;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
@@ -89,7 +98,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private final Object mSurfaceTextureFence = new Object();   // guards mSurfaceTexture shared with GLSurfaceView.Renderer
     private SurfaceTexture mSurfaceTexture;
     private final Object mReadyForFrameFence = new Object();    // guards mReadyForFrames/mRecording
-    private boolean mReadyForFrames;                            // Is the SurfaceTexture et all created
+    private boolean mReadyForFrames;
+                // Is the SurfaceTexture et all created
     private boolean mRecording;                                 // Are frames being recorded
     private boolean mEosRequested;                              // Should an EOS be sent on next frame. Used to stop encoder
     private final Object mReadyFence = new Object();            // guards ready/running
@@ -113,7 +123,12 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     private AndroidEncoder.OnMuxerFinishedEventListener onMuxerFinishedEventListener;
 
-    public CameraEncoder(SessionConfig config, AndroidEncoder.OnMuxerFinishedEventListener listener) {
+    private Context context;
+
+    public CameraEncoder(SessionConfig config, AndroidEncoder.OnMuxerFinishedEventListener listener, Context context) {
+
+        this.context = context;
+
         mState = STATE.INITIALIZING;
         init(config);
         mEglSaver = new EglStateSaver();
@@ -131,6 +146,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * @param config the desired parameters for the next recording.
      */
     private void init(SessionConfig config) {
+
         mEncodedFirstFrame = false;
         mReadyForFrames = false;
         mRecording = false;
@@ -163,16 +179,20 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      *               overwriting a previous recording.
      */
     public void reset(SessionConfig config) {
-        if (mState != STATE.UNINITIALIZED)
-            throw new IllegalArgumentException("reset called in invalid state");
+        if (mState != STATE.UNINITIALIZED) {
+            onMuxerFinishedEventListener.onMuxerVideoError("reset called in invalid state");
+          //  throw new IllegalArgumentException("reset called in invalid state");
+        }
         mState = STATE.INITIALIZING;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_RESET, config));
 
     }
 
     private void handleReset(SessionConfig config) throws IOException {
-        if (mState != STATE.INITIALIZING)
-            throw new IllegalArgumentException("handleRelease called in invalid state");
+        if (mState != STATE.INITIALIZING) {
+            //throw new IllegalArgumentException("handleRelease called in invalid state");
+            onMuxerFinishedEventListener.onMuxerVideoError("handleRelease called in invalid state");
+        }
         Log.i(TAG, "handleReset");
         init(config);
         // Make display EGLContext current
@@ -203,7 +223,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             otherCamera = 1;
         requestCamera(otherCamera);
 
-        // TODO displayOrientation movil Iago
+        // TODO displayOrientation movil Iago, first steps
        // mCamera.setDisplayOrientation(getCameraDisplayOrientation(otherCamera));
 
     }
@@ -439,15 +459,17 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * Called from UI thread
      */
     public void stopRecording() {
-        if (mState != STATE.RECORDING)
-            throw new IllegalArgumentException("StopRecording called in invalid state");
+        if (mState != STATE.RECORDING) {
+            //throw new IllegalArgumentException("StopRecording called in invalid state");
+            onMuxerFinishedEventListener.onMuxerVideoError("StopRecording called in invalid state");
+        }
         mState = STATE.STOPPING;
         Log.i(TAG, "stopRecording");
         synchronized (mReadyForFrameFence) {
             mEosRequested = true;
         }
 
-       // onMuxerFinishedEventListener.onMuxerFinishedEvent();
+
     }
 
 
@@ -484,12 +506,14 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     private void handleRelease() {
-        if (mState != STATE.RELEASING)
-            throw new IllegalArgumentException("handleRelease called in invalid state");
+        if (mState != STATE.RELEASING) {
+            onMuxerFinishedEventListener.onMuxerVideoError("handleRelease called in invalid state");
+           // throw new IllegalArgumentException("handleRelease called in invalid state");
+        }
         Log.i(TAG, "handleRelease");
         shutdown();
         mState = STATE.RELEASED;
-
+        onMuxerFinishedEventListener.onMuxerReleased();
     }
 
     /**
@@ -529,7 +553,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 return;
             }
             mFrameNum++;
-            if (VERBOSE && (mFrameNum % 30 == 0)) Log.i(TAG, "handleFrameAvailable");
+            if (VERBOSE && (mFrameNum % 30 == 0)) //Log.i(TAG, "handleFrameAvailable");
             if (!surfaceTexture.equals(mSurfaceTexture))
                 Log.w(TAG, "SurfaceTexture from OnFrameAvailable does not match saved SurfaceTexture!");
 
@@ -566,6 +590,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                     mThumbnailRequested = false;
                 }
 
+                //drawBox();
+               // drawText();
+               // drawImage();
+
                 mInputWindowSurface.setPresentationTime(mSurfaceTexture.getTimestamp());
                 mInputWindowSurface.swapBuffers();
 
@@ -589,6 +617,101 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mDisplayView.requestRender();
 
         if (TRACE) Trace.endSection();
+    }
+
+    /**
+     * Draws a red box in the corner.
+     */
+    private void drawBox() {
+        GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
+        GLES20.glScissor(0, 0, 100, 100);
+        GlUtil.createTextureWithTextContent("Videona");
+        GLES20.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
+
+    }
+
+    private void drawText(){
+
+        // Create an empty, mutable bitmap
+        Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+        // get a canvas to paint over the bitmap
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawARGB(0,0,255,0);
+
+        // get a background image from resources
+        // note the image format must match the bitmap format
+//        Drawable background = context.getResources().getDrawable(R.drawable.background);
+//        background.setBounds(0, 0, 256, 256);
+//        background.draw(canvas); // draw the background to our bitmap
+
+        // Draw the text
+        Paint textPaint = new Paint();
+        textPaint.setTextSize(32);
+        textPaint.setAntiAlias(true);
+        textPaint.setARGB(0xff, 0xff, 0xff, 0xff);
+        // draw the text centered
+        canvas.drawText("Videona", 16,112, textPaint);
+
+        int[] textures = new int[1];
+
+        //Generate one texture pointer...
+        GLES20.glGenTextures(1, textures, 0);
+        //...and bind it to our array
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+
+        //Create Nearest Filtered Texture
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        //Different possible texture parameters, e.g. GLES20.GL_CLAMP_TO_EDGE
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+
+        //Alpha blending
+        //GLES20.glEnable(GLES20.GL_BLEND);
+        //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+        //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        //Clean up
+        bitmap.recycle();
+    }
+
+    public void drawImage(){
+        // Create an empty, mutable bitmap
+        Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+        // get a canvas to paint over the bitmap
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawARGB(0,0,255,0);
+
+        // get a background image from resources
+        // note the image format must match the bitmap format
+        //Drawable background = context.getResources().getDrawable(resId);
+        Drawable background = context.getResources().getDrawable(R.drawable.gatito_rules);
+        background.setBounds(0, 0, 256, 256);
+        background.draw(canvas); // draw the background to our bitmap
+
+        int[] textures = new int[1];
+
+        //Generate one texture pointer...
+        GLES20.glGenTextures(1, textures, 0);
+        //...and bind it to our array
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
+
+        //Create Nearest Filtered Texture
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        //Different possible texture parameters, e.g. GLES20.GL_CLAMP_TO_EDGE
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+
+        //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        //Clean up
+        bitmap.recycle();
     }
 
     private void saveFrameAsImage() {
@@ -1036,6 +1159,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                     case MSG_RELEASE:
                         encoder.handleRelease();
                         Log.i(TAG, "MSG_RELEASE");
+
                         break;
                     case MSG_RESET:
                         encoder.handleReset((SessionConfig) obj);

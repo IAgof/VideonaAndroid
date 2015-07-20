@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,19 +20,17 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -45,23 +44,27 @@ import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectAdapter;
-import com.videonasocialmedia.videona.presentation.views.adapter.ColorEffectAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectClickListener;
-import com.videonasocialmedia.videona.presentation.views.listener.ColorEffectClickListener;
-
-import org.lucasr.twowayview.TwoWayView;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorAdapter;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxAdapter;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectColorViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectFxViewClickListener;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class RecordFragment extends Fragment implements RecordView, ColorEffectClickListener,
-        CameraEffectClickListener, AdapterView.OnItemSelectedListener {
+/**
+ * @author Álvaro Martínez Marco
+ */
+
+public class RecordFragment extends Fragment implements RecordView,
+        CameraEffectFxViewClickListener, CameraEffectColorViewClickListener {
 
     /**
      * LOG_TAG
@@ -99,16 +102,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
      */
     @InjectView(R.id.imageRecPoint)
     ImageView imageRecPoint;
-    /**
-     * Button to apply color effects
-     */
-    @InjectView(R.id.button_color_effect)
-    ImageButton buttonColorEffect;
-    /**
-     * Button to apply camera effects
-     */
-    @InjectView(R.id.button_camera_effect)
-    ImageButton buttonCameraEffect;
+
     /**
      * Button change camera
      */
@@ -119,42 +113,45 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
      */
     @InjectView(R.id.button_flash_mode)
     ImageButton buttonFlashMode;
+
     /**
      * Adapter to add images color effect
      */
-    private ColorEffectAdapter colorEffectAdapter;
+    private CameraEffectFxAdapter cameraEffectFxAdapter;
     /**
-     * Position color effect pressed
+     *  Recycler view catalog fx
      */
-    public static int positionColorEffectPressed = 0;
+    @InjectView(R.id.record_catalog_recycler_fx)
+    RecyclerView recyclerViewFx;
+
     /**
      * Adapter to add images color effect
      */
-    private CameraEffectAdapter cameraEffectAdapter;
+    private CameraEffectColorAdapter cameraEffectColorAdapter;
     /**
-     * Position camera effect pressed
+     *  Recycler view catalog color filter
      */
-    public static int positionCameraEffectPressed = 0;
+    @InjectView(R.id.record_catalog_recycler_color)
+    RecyclerView recyclerViewColor;
+
     /**
-     * RelativeLayout to show and hide color effects
+     * RelativeLayout to show and hide camera effects fx
      */
-    @InjectView(R.id.relativelayout_color_effect)
-    RelativeLayout relativeLayoutColorEffect;
+    @InjectView(R.id.relativelayout_camera_effect_fx)
+    RelativeLayout relativeLayoutCameraEffectFx;
+
+    @InjectView(R.id.button_camera_effect_fx)
+    ImageButton buttonCameraEffectFx;
+
     /**
-     * ListView to use horizontal adapter
+     * RelativeLayout to show and hide camera effects color
      */
-    @InjectView(R.id.listview_items_color_effect)
-    TwoWayView listViewItemsColorEffect;
-    /**
-     * RelativeLayout to show and hide camera effects
-     */
-    @InjectView(R.id.relativelayout_camera_effect)
-    RelativeLayout relativeLayoutCameraEffect;
-    /**
-     * ListView to use horizontal adapter
-     */
-    @InjectView(R.id.listview_items_camera_effect)
-    TwoWayView listViewItemsCameraEffect;
+    @InjectView(R.id.relativelayout_camera_effect_color)
+    RelativeLayout relativeLayoutCameraEffectColor;
+
+    @InjectView(R.id.button_camera_effect_color)
+    ImageButton buttonCameraEffectColor;
+
     /**
      * CustomManualFocusView
      */
@@ -187,6 +184,15 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     // CountDown timer to prevent bugs
     private CountDownTimer countDownTimer;
 
+    //TODO refactor to get rid of the global variable
+    private int selectedCameraEffectFxIndex = 0;
+    private int selectedCameraEffectColorIndex = 0;
+
+
+    //Para Pablo
+    @InjectView(R.id.button_navigate_edit)
+    ImageButton buttonNavigateEdit;
+
 
     private SensorEventListener mOrientationListener = new SensorEventListener() {
         final int SENSOR_CONFIRMATION_THRESHOLD = 5;
@@ -202,7 +208,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 } else if (event.values[1] < 5.5 && event.values[1] > -5.5) {
                     // Landscape
                     if (orientation != 1 && readingConfirmed(1)) {
-                        if (recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
+                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
                             if (event.values[0] > 0) {
                                 recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.LANDSCAPE);
                             } else {
@@ -216,7 +222,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 } else if (event.values[1] > 7.5 || event.values[1] < -7.5) {
                     // Portrait
                     if (orientation != 0 && readingConfirmed(0)) {
-                        if (recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
+                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
                             if (event.values[1] > 0) {
                                 recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.VERTICAL);
                             } else {
@@ -269,6 +275,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     private static RecordFragment recreateRecordFragment() {
         Log.i(LOG_TAG, "Recreating recreateRecordFragment");
+
         recordPresenter = null;
         return new RecordFragment();
     }
@@ -285,15 +292,20 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     @Override
     public void onResume() {
-        super.onResume();
-        if (recordPresenter != null)
-            recordPresenter.onHostActivityResumed();
-        startMonitoringOrientation();
 
-        if (colorEffectAdapter != null) {
-            colorEffectAdapter = null;
-            recordPresenter.colorEffectClickListener();
+        if (VERBOSE) Log.i(LOG_TAG, "onResume");
+        super.onResume();
+
+        if (recordPresenter != null) {
+
+            recordPresenter.onHostActivityResumed();
+            if (VERBOSE) Log.i(LOG_TAG, "onHostActivityResumed");
+
+        } else {
+            setupRecordPresenter();
         }
+
+        startMonitoringOrientation();
 
     }
 
@@ -301,11 +313,28 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void onPause() {
         super.onPause();
 
-        if(recordPresenter.isRecording()){
-            recordPresenter.stopRecording();
-        }
+        Log.d(LOG_TAG, "onPause() RecordFragment");
 
         if (recordPresenter != null) {
+
+            if(recordPresenter.isRecording()){
+
+                recordPresenter.pauseRecording();
+
+                showRecordFinished();
+                stopChronometer();
+                unLockNavigator();
+
+                buttonRecord.setEnabled(true);
+                buttonRecord.setImageAlpha(255); // (100%)
+                chronometerRecord.setText("00:00");
+
+                recordPresenter.onHostActivityPaused();
+
+                return;
+
+            }
+
             recordPresenter.onHostActivityPaused();
         }
 
@@ -313,11 +342,27 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     }
 
+
+
+    @Override
+    public void onStop(){
+        super.onStop();
+    }
+
+
+    public void release(){
+        recordPresenter.release();
+        recordPresenter = null;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         if (recordPresenter != null && !recordPresenter.isRecording()) {
             recordPresenter.release();
+
+            Log.d(LOG_TAG, "onDestroy() RecordFragment");
         }
     }
 
@@ -338,9 +383,11 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
             mCameraView = (GLCameraEncoderView) root.findViewById(R.id.cameraPreview);
             mCameraView.setKeepScreenOn(true);
 
+
+            recordPresenter.initSessionConfig();
+
             recordPresenter.setPreviewDisplay(mCameraView);
 
-            setupFilterSpinner(root);
 
 
 
@@ -354,23 +401,35 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         // Hide menu camera options
         linearLayoutRecordCameraOptions.setVisibility(View.GONE);
 
+        //TODO String text chronometer default
+        chronometerRecord.setText("00:00");
+
+       // RecyclerView.LayoutManager layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
+        //StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL); // (int spanCount, int orientation)
+        LinearLayoutManager layoutManagerFx = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewFx.setHasFixedSize(true);
+        recyclerViewFx.setLayoutManager(layoutManagerFx);
+
+        LinearLayoutManager layoutManagerColor = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewColor.setHasFixedSize(true);
+        recyclerViewColor.setLayoutManager(layoutManagerColor);
+
 
         return root;
     }
 
 
-    private void setupFilterSpinner(View root) {
-        Spinner spinner = (Spinner) root.findViewById(R.id.filterSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.camera_filter_names, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner.
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
 
+
     protected void setupRecordPresenter() {
+
+        Log.d(LOG_TAG, "setupRecordPresenter");
+
         // By making the recorder static we can allow
         // recording to continue beyond this fragment's
         // lifecycle! That means the user can minimize the app
@@ -382,7 +441,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
                 try {
 
-                    recordPresenter = new RecordPresenter(this);
+                    recordPresenter = new RecordPresenter(this, this.getActivity().getApplicationContext());
+
 
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Unable to create RecordPresenter. Could be trouble creating MediaCodec encoder.");
@@ -409,6 +469,12 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
       //  mCameraView.setRotation(Surface.ROTATION_90);
 
+    }
+
+    @OnClick (R.id.button_navigate_edit)
+    public void buttonNavigateToEdit(){
+        Intent edit = new Intent(getActivity(), EditActivity.class);
+        startActivity(edit);
     }
 
     /**
@@ -465,8 +531,8 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 @Override
                 public void onFinish() {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
+                    reStartFragment();
 
-                    restartRecordVideo();
                 }
             }.start();
 
@@ -483,27 +549,68 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
-        super.onDestroy();
-
         recreateRecordFragment();
         setupRecordPresenter();
 
     }
 
     /**
-     * Color effect on click listener
-     */
-    @OnClick(R.id.button_color_effect)
-    public void colorEffectButtonListener() {
-        recordPresenter.colorEffectClickListener();
-    }
-
-    /**
      * Camera effect on click listener
      */
-    @OnClick(R.id.button_camera_effect)
-    public void cameraEffectButtonListener() {
-        recordPresenter.cameraEffectClickListener();
+    @OnClick(R.id.button_camera_effect_fx)
+    public void cameraEffectFxButtonListener() {
+
+        if(relativeLayoutCameraEffectColor.isShown()){
+
+            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
+
+            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
+
+        }
+
+        if(relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
+
+            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+
+        } else {
+
+            relativeLayoutCameraEffectFx.setVisibility(View.VISIBLE);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_pressed);
+
+            if (cameraEffectFxAdapter == null) {
+                recordPresenter.cameraEffectFxClickListener();
+            }
+        }
+    }
+
+    /**
+     * Camera effect color on click listener
+     */
+    @OnClick(R.id.button_camera_effect_color)
+    public void cameraEffectColorButtonListener() {
+
+        if(relativeLayoutCameraEffectFx.isShown()){
+
+            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+
+        }
+
+        if(relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
+
+            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
+            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
+
+        } else {
+
+            relativeLayoutCameraEffectColor.setVisibility(View.VISIBLE);
+            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_pressed);
+
+            if (cameraEffectColorAdapter == null) {
+                recordPresenter.cameraEffectColorClickListener();
+            }
+        }
     }
 
     /**
@@ -512,63 +619,13 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
      * @param effects
      */
     @Override
-    public void showEffects(ArrayList<String> effects) {
+    public void showCameraEffectFx(List<CameraEffectFxList> effects) {
         Log.d(LOG_TAG, "showEffects() RecordActivity");
 
-        colorEffectAdapter = new ColorEffectAdapter(RecordFragment.this, effects);
+        cameraEffectFxAdapter = new CameraEffectFxAdapter(effects);
+        cameraEffectFxAdapter.setCameraEffectFxRecyclerViewClickListener(RecordFragment.this);
+        recyclerViewFx.setAdapter(cameraEffectFxAdapter);
 
-        if (relativeLayoutColorEffect.isShown()) {
-
-            relativeLayoutColorEffect.setVisibility(View.INVISIBLE);
-
-            buttonColorEffect.setImageResource(R.drawable.common_icon_filters_normal);
-
-            return;
-
-        }
-        relativeLayoutColorEffect.setVisibility(View.VISIBLE);
-        buttonColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
-        colorEffectAdapter.setViewClickColorEffectListener(RecordFragment.this);
-        listViewItemsColorEffect.setAdapter(colorEffectAdapter);
-    }
-
-    /**
-     * Update view with effect selected
-     *
-     * @param colorEffect
-     */
-    @Override
-    public void showEffectSelected(String colorEffect) {
-        Log.d(LOG_TAG, "showEffectSelected() RecordActivity");
-        /// TODO apply animation effect
-        colorEffectAdapter.notifyDataSetChanged();
-    }
-
-
-    /**
-     * Show list of effects
-     *
-     * @param effects
-     */
-    @Override
-    public void showCameraEffects(ArrayList<String> effects) {
-        Log.d(LOG_TAG, "showEffects() RecordActivity");
-
-        cameraEffectAdapter = new CameraEffectAdapter(this, effects);
-
-        if (relativeLayoutCameraEffect.isShown()) {
-
-            relativeLayoutCameraEffect.setVisibility(View.INVISIBLE);
-
-            buttonCameraEffect.setImageResource(R.drawable.activity_record_effects_bg);
-
-            return;
-
-        }
-        relativeLayoutCameraEffect.setVisibility(View.VISIBLE);
-        //buttonCameraEffect.setImageResource(R.drawable.common_icon_filters_pressed);
-        cameraEffectAdapter.setViewClickCameraEffectListener(RecordFragment.this);
-        listViewItemsCameraEffect.setAdapter(cameraEffectAdapter);
     }
 
     /**
@@ -577,14 +634,38 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
      * @param cameraEffect
      */
     @Override
-    public void showCameraEffectSelected(String cameraEffect) {
+    public void showCameraEffectFxSelected(String cameraEffect) {
         Log.d(LOG_TAG, "showEffectSelected() RecordActivity");
         /// TODO apply animation effect
-        cameraEffectAdapter.notifyDataSetChanged();
+       // cameraEffectFxAdapter.notifyDataSetChanged();
+        cameraEffectFxAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Show list of effects color
+     *
+     * @param effects
+     */
+    @Override
+    public void showCameraEffectColor(List<CameraEffectColorList> effects) {
+        Log.d(LOG_TAG, "showCameraEffectColor()");
+
+        cameraEffectColorAdapter = new CameraEffectColorAdapter(effects);
+        cameraEffectColorAdapter.setCameraEffectColorViewClickListener(RecordFragment.this);
+        recyclerViewColor.setAdapter(cameraEffectColorAdapter);
+
+    }
+
+    @Override
+    public void showCameraEffectColorSelected(String colorEffect) {
+        Log.d(LOG_TAG, "showCameraEffectColorSelected()");
+        cameraEffectColorAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void navigateEditActivity() {
+
+        Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
 
         countDownTimer.cancel();
 
@@ -593,12 +674,32 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
         buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
-        Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
         Intent edit = new Intent(getActivity(), EditActivity.class);
-        startActivity(edit);
+       startActivity(edit);
+
+
+      // ReStartFragment, mode recording continuous
+      // New button to navigate to Edit
+     //   reStartFragment();
+
+    }
+
+    @Override
+    public void reStartFragment(){
+
+        cameraEffectColorAdapter = null;
+        cameraEffectFxAdapter = null;
+
+        Fragment fg = this.getActivity().getFragmentManager().findFragmentById(R.id.record_fragment);
+
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(fg);
+        ft.attach(fg);
+        ft.commit();
 
 
     }
+
 
     @Override
     public void lockScreenRotation() {
@@ -689,7 +790,7 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     public void stopRecording() {
         if (recordPresenter.isRecording()) {
             recordPresenter.stopRecording();
-            recordPresenter.release();
+            //amm recordPresenter.release();
         }
     }
 
@@ -777,30 +878,11 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
     }
 
 
-    @Override
-    public void onColorEffectClicked(ColorEffectAdapter adapter, String effectName, int position) {
-
-        Log.d(LOG_TAG, "onColorEffectClicked() RecordActivity");
-        positionCameraEffectPressed = position;
-        adapter.notifyDataSetChanged();
-        recordPresenter.setColorEffect(effectName);
-
-    }
-
-    @Override
-    public void onCameraEffectClicked(CameraEffectAdapter adapter, String effectName, int position) {
-        Log.d(LOG_TAG, "onCameraEffectClicked() RecordActivity");
-        positionCameraEffectPressed = position;
-        adapter.notifyDataSetChanged();
-        recordPresenter.setCameraEffect(position);
-    }
-
-
-    /**
+     /**
      * OnClick buttons, tracking Google Analytics
      */
-    @OnClick({R.id.button_record, R.id.button_color_effect, R.id.button_flash_mode,
-            R.id.button_settings_camera, R.id.button_change_camera})
+    @OnClick({R.id.button_record, R.id.button_flash_mode, R.id.button_camera_effect_color,
+            R.id.button_camera_effect_fx, R.id.button_settings_camera, R.id.button_change_camera})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -817,9 +899,6 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
             case R.id.button_record:
                 label = "Capture ";
                 break;
-            case R.id.button_color_effect:
-                label = "Show available effects";
-                break;
             case R.id.button_change_camera:
                 label = "Change camera";
                 break;
@@ -828,6 +907,75 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
                 break;
             case R.id.button_settings_camera:
                 label = "Settings camera";
+                break;
+            case R.id.button_camera_effect_fx:
+                label = "Fx filters";
+                break;
+            case R.id.button_camera_effect_color:
+                label = "Color filters";
+                break;
+            case R.drawable.common_filter_none_ad0_normal:
+                label = "None color filter";
+                break;
+            case R.drawable.common_filter_aqua_ad1_normal:
+                label = "Aqua color filter";
+                break;
+            case R.drawable.common_filter_blackboard_ad2_normal:
+                label = "Blackboard color filter";
+                break;
+            case R.drawable.common_filter_emboss_ad3_normal:
+                label = "Emboss color filter";
+                break;
+            case R.drawable.common_filter_mono_ad4_normal:
+                label = "Mono color filter";
+                break;
+            case R.drawable.common_filter_negative_ad5_normal:
+                label = "Negative color filter";
+                break;
+            case R.drawable.common_filter_neon_ad6_normal:
+                label = "Neon color filter";
+                break;
+            case R.drawable.common_filter_posterize_ad7_normal:
+                label = "Posterize color filter";
+                break;
+            case R.drawable.common_filter_sepia_ad8_normal:
+                label = "Sepia color filter";
+                break;
+            case R.drawable.common_filter_sketch_ad9_normal:
+                label = "Sketch color filter";
+                break;
+            case R.drawable.common_filter_solarize_ad10_normal:
+                label = "Solarize color filter";
+                break;
+            case R.drawable.common_filter_whiteboard_ad11_normal:
+                label = "Whiteboard color filter";
+                break;
+            case R.drawable.common_filter_fx_normal_fx1:
+                label = "None fx filter";
+                break;
+            case R.drawable.common_filter_fx_fisheye_fx2:
+                label = "Fisheye fx filter";
+                break;
+            case R.drawable.common_filter_fx_stretch_fx3:
+                label = "Stretch fx filter";
+                break;
+            case R.drawable.common_filter_fx_dent_fx4:
+                label = "Dent fx filter";
+                break;
+            case R.drawable.common_filter_fx_mirror_fx5:
+                label = "Mirror fx filter";
+                break;
+            case R.drawable.common_filter_fx_squeeze_fx6:
+                label = "Squeeze fx filter";
+                break;
+            case R.drawable.common_filter_fx_tunnel_fx7:
+                label = "Tunnel fx filter";
+                break;
+            case R.drawable.common_filter_fx_twirl_fx8:
+                label = "Twirl fx filter";
+                break;
+            case R.drawable.common_filter_fx_bulge_fx9:
+                label = "Bulge filter";
                 break;
             default:
                 label = "Other";
@@ -842,21 +990,48 @@ public class RecordFragment extends Fragment implements RecordView, ColorEffectC
 
     }
 
+
+
+    /**
+     * OnClick CameraEffectFxRecyclerViewClickListener
+     * @param position
+     */
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    public void onClickCameraEffectFx(int position) {
 
-        // hide selection text
-        ((TextView)view).setText(null);
-// if you want you can change background here
+        Log.d(LOG_TAG, "onClickCameraEffectFx " + position);
 
-        if (((String) parent.getTag()).compareTo("filter") == 0) {
-            recordPresenter.applyFilter(position);
+        if (isAlreadySelectedCameraEffectFx(position)) {
+            return;
         }
 
+        selectedCameraEffectFxIndex = position;
+        sendButtonTracked(cameraEffectFxAdapter.getCameraEffectFx(position).getIconCameraFxId());
+        recordPresenter.setCameraEffectFx(position);
+    }
+
+    private boolean isAlreadySelectedCameraEffectFx(int cameraEffecFxPosition) {
+        return selectedCameraEffectFxIndex == cameraEffecFxPosition;
+    }
+
+    private boolean isAlreadySelectedCameraEffectColor(int cameraEffectColorPosition) {
+        return selectedCameraEffectColorIndex == cameraEffectColorPosition;
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onClickCameraEffectColor(int position) {
+
+        Log.d(LOG_TAG, "onClickCameraEffectColor position " + position );
+
+        if (isAlreadySelectedCameraEffectColor(position)) {
+            return;
+        }
+
+
+
+        selectedCameraEffectColorIndex = position;
+        sendButtonTracked(cameraEffectColorAdapter.getCameraEffectColor(position).getIconCameraEffectColorId());
+        recordPresenter.setCameraEffectColor(position);
 
     }
 }
