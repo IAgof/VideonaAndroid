@@ -188,8 +188,7 @@ public class EditPresenter implements OnExportFinishedListener, ModifyVideoDurat
     @Override
     public void onExportSuccess(Video exportedVideo) {
         editorView.hideProgressDialog();
-        //editorView.goToShare(exportedVideo.getMediaPath());
-        editorView.showError(R.string.addMediaItemToTrackError);
+        editorView.goToShare(exportedVideo.getMediaPath());
     }
 
     public void resetProject() {
