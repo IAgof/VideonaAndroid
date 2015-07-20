@@ -914,67 +914,67 @@ public class RecordFragment extends Fragment implements RecordView,
             case R.id.button_camera_effect_color:
                 label = "Color filters";
                 break;
-            case R.drawable.common_filter_none_ad0_normal:
+            case R.drawable.common_filter_ad0_none_normal:
                 label = "None color filter";
                 break;
-            case R.drawable.common_filter_aqua_ad1_normal:
+            case R.drawable.common_filter_ad1_aqua_normal:
                 label = "Aqua color filter";
                 break;
-            case R.drawable.common_filter_blackboard_ad2_normal:
+            case R.drawable.common_filter_ad2_blackboard_normal:
                 label = "Blackboard color filter";
                 break;
-            case R.drawable.common_filter_emboss_ad3_normal:
+            case R.drawable.common_filter_ad3_emboss_normal:
                 label = "Emboss color filter";
                 break;
-            case R.drawable.common_filter_mono_ad4_normal:
+            case R.drawable.common_filter_ad4_mono_normal:
                 label = "Mono color filter";
                 break;
-            case R.drawable.common_filter_negative_ad5_normal:
+            case R.drawable.common_filter_ad5_negative_normal:
                 label = "Negative color filter";
                 break;
-            case R.drawable.common_filter_neon_ad6_normal:
+            case R.drawable.common_filter_ad6_neon_normal:
                 label = "Neon color filter";
                 break;
-            case R.drawable.common_filter_posterize_ad7_normal:
+            case R.drawable.common_filter_ad7_posterize_normal:
                 label = "Posterize color filter";
                 break;
-            case R.drawable.common_filter_sepia_ad8_normal:
+            case R.drawable.common_filter_ad8_sepia_normal:
                 label = "Sepia color filter";
                 break;
-            case R.drawable.common_filter_sketch_ad9_normal:
+            case R.drawable.common_filter_ad9_sketch_normal:
                 label = "Sketch color filter";
                 break;
-            case R.drawable.common_filter_solarize_ad10_normal:
+            case R.drawable.common_filter_ad10_solarize_normal:
                 label = "Solarize color filter";
                 break;
-            case R.drawable.common_filter_whiteboard_ad11_normal:
+            case R.drawable.common_filter_ad11_whiteboard_normal:
                 label = "Whiteboard color filter";
                 break;
-            case R.drawable.common_filter_fx_normal_fx1:
+            case R.drawable.common_filter_fx_fx0_none_normal:
                 label = "None fx filter";
                 break;
-            case R.drawable.common_filter_fx_fisheye_fx2:
+            case R.drawable.common_filter_fx_fx1_fisheye_normal:
                 label = "Fisheye fx filter";
                 break;
-            case R.drawable.common_filter_fx_stretch_fx3:
+            case R.drawable.common_filter_fx_fx2_stretch_normal:
                 label = "Stretch fx filter";
                 break;
-            case R.drawable.common_filter_fx_dent_fx4:
+            case R.drawable.common_filter_fx_fx3_dent_normal:
                 label = "Dent fx filter";
                 break;
-            case R.drawable.common_filter_fx_mirror_fx5:
+            case R.drawable.common_filter_fx_fx4_mirror_normal:
                 label = "Mirror fx filter";
                 break;
-            case R.drawable.common_filter_fx_squeeze_fx6:
+            case R.drawable.common_filter_fx_fx5_squeeze_normal:
                 label = "Squeeze fx filter";
                 break;
-            case R.drawable.common_filter_fx_tunnel_fx7:
+            case R.drawable.common_filter_fx_fx6_tunnel_normal:
                 label = "Tunnel fx filter";
                 break;
-            case R.drawable.common_filter_fx_twirl_fx8:
+            case R.drawable.common_filter_fx_fx7_twirl_normal:
                 label = "Twirl fx filter";
                 break;
-            case R.drawable.common_filter_fx_bulge_fx9:
+            case R.drawable.common_filter_fx_fx8_bulge_normal:
                 label = "Bulge filter";
                 break;
             default:
