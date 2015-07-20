@@ -134,7 +134,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     /**
      * Video duration int, needed for tracking
      */
-    private int durationVideoRecorded = 0;
+    private String durationVideoRecorded = "";
 
     public RecordPresenter(final RecordView recordView, Context context) throws IOException {
 
@@ -544,7 +544,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     @Override
     public void onAddMediaItemToTrackSuccess(Media media) {
 
-        recordView.navigateEditActivity();
+        recordView.navigateEditActivity(durationVideoRecorded);
 
     }
 
@@ -689,8 +689,9 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
                 String duration = retriever.extractMetadata(
                         MediaMetadataRetriever.METADATA_KEY_DURATION);
                 //int durationInt = Integer.parseInt(duration);
+                Log.d(LOG_TAG, "duration video recorded " + duration);
 
-                durationVideoRecorded = Integer.parseInt(duration);
+                durationVideoRecorded = duration;
 
                 fTempRecord.renameTo(fRecord);
 
