@@ -17,6 +17,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -515,9 +516,23 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void onRemoveAllProjectSelected() {
-        editPresenter.resetProject();
-        showMessage(R.string.videos_removed);
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.confirmDeleteVideosFromProjectTitle)
+                .setMessage(R.string.confirmDeleteVideosFromProjectMessage)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        editPresenter.resetProject();
+                        showMessage(R.string.deletedVideosFromProject);
+                        removeVideoTimelineFragment();
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
 
+    private void removeVideoTimelineFragment() {
         this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
     }
 
