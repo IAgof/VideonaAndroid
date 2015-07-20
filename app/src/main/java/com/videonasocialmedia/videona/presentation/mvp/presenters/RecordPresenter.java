@@ -131,6 +131,10 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     private Context context;
 
 
+    /**
+     * Video duration int, needed for tracking
+     */
+    private int durationVideoRecorded = 0;
 
     public RecordPresenter(final RecordView recordView, Context context) throws IOException {
 
@@ -195,8 +199,8 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     /**
      * Request other camera, change front/back camera
      */
-    public void requestOtherCamera(){
-        mCamEncoder.requestOtherCamera();
+    public void requestOtherCamera(int rotation){
+        mCamEncoder.requestOtherCamera(rotation);
 
     }
 
@@ -682,9 +686,11 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
             try {
                 Log.d("SHOW TIME TAG", "" );
                 retriever.setDataSource(fTempRecord.getAbsolutePath());
-                //String duration = retriever.extractMetadata(
-                       // MediaMetadataRetriever.METADATA_KEY_DURATION);
+                String duration = retriever.extractMetadata(
+                        MediaMetadataRetriever.METADATA_KEY_DURATION);
                 //int durationInt = Integer.parseInt(duration);
+
+                durationVideoRecorded = Integer.parseInt(duration);
 
                 fTempRecord.renameTo(fRecord);
 
@@ -692,7 +698,8 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
 
             } catch (Exception e) {
-
+                e.printStackTrace();
+                Log.d(LOG_TAG, "Video has not been recorded properly");
             }
 
     }
@@ -740,66 +747,5 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
         }
     }
 
-   /*  First tries to fix cameraDisplayOrientation
-
-   private int getCameraDisplayOrientation(int cameraId) {
-        android.hardware.Camera.CameraInfo info =
-                new android.hardware.Camera.CameraInfo();
-        android.hardware.Camera.getCameraInfo(cameraId, info);
-
-        int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation ) % 360;
-            result = (360 - result) % 360;  // compensate the mirror
-        } else {  // back-facing
-            result = (info.orientation + 360) % 360;
-        }
-
-        Log.d(LOG_TAG, "setCameraDisplayOrientation cameraId " + cameraId + " result " + result);
-
-        return result;
-    }
-
-    private void detectRotationView(Context context, int cameraId) {
-
-        int rotationView = 0;
-        rotationView = getWindowManager().getDefaultDisplay().getRotation();
-        boolean detectScreenOrientation90 = false;
-        boolean detectScreenOrientation270 = false;
-        int displayOrientation = 0;
-
-        int cameraOrientation = getCameraDisplayOrientation(cameraId);
-
-        if (rotationView == Surface.ROTATION_90) {
-            detectScreenOrientation90 = true;
-
-            if (cameraOrientation == 90) {
-                displayOrientation = 0;
-            }
-            if (cameraOrientation == 270) {
-                displayOrientation = 180;
-            }
-            Log.d(LOG_TAG, "detectRotationView rotation 90, cameraOrientation " + cameraOrientation);
-
-        }
-
-        if (rotationView == Surface.ROTATION_270) {
-            detectScreenOrientation270 = true;
-
-            if (cameraOrientation == 90) {
-                displayOrientation = 180;
-            }
-            if (cameraOrientation == 270) {
-                displayOrientation = 0;
-            }
-            Log.d(LOG_TAG, "detectRotationView rotation 270, cameraOrientation " + cameraOrientation);
-        }
-
-        Log.d(LOG_TAG, "detectRotationView rotationPreview " + rotationView +
-                " displayOrientation " + displayOrientation);
-
-    }
-
-    */
 
 }
