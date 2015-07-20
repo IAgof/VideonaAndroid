@@ -340,8 +340,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
-        } else {
-            scissorsFxMenuFragment.habilitateTrashButton();
         }
 
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
@@ -351,6 +349,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             videoTimeLineFragment = new VideoTimeLineFragment();
         }
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+        scissorsFxMenuFragment.habilitateTrashButton();
     }
 
 
