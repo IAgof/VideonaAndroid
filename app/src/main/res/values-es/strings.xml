@@ -116,7 +116,7 @@
     <string name="preferences_quality_not_supported">Su dispositivo no es compatible</string>
 
     <!-- Activity Editor -->
-    <string name="addMediaItemToTrackError">Something bad happened. Try to add again</string>
+    <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
     <string name="confirmDeleteVideosFromProjectTitle">Borrar vídeos del proyecto</string>
     <string name="confirmDeleteVideosFromProjectMessage">¿Desea eliminar estos elementos?</string>
     <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
