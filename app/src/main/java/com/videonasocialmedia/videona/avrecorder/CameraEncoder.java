@@ -19,6 +19,7 @@ import android.os.Message;
 import android.os.Trace;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Surface;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.avrecorder.gles.EglCore;
@@ -113,6 +114,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     private int mCurrentCamera;
     private int mDesiredCamera;
+
+    private int mCurrentCameraRotation;
 
     private String mCurrentFlash;
     private String mDesiredFlash;
@@ -217,14 +220,15 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * <p/>
      * Called from UI thread
      */
-    public void requestOtherCamera() {
+    public void requestOtherCamera(int rotation) {
         int otherCamera = 0;
         if (mCurrentCamera == 0)
             otherCamera = 1;
         requestCamera(otherCamera);
 
+        mCurrentCameraRotation = rotation;
         // TODO displayOrientation movil Iago, first steps
-       // mCamera.setDisplayOrientation(getCameraDisplayOrientation(otherCamera));
+      //  mCamera.setDisplayOrientation(getCameraDisplayOrientation(otherCamera));
 
     }
 
@@ -967,6 +971,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             throw new RuntimeException("Unable to open camera");
         }
 
+        setCameraDisplayOrientation(targetCameraType);
+
         Parameters parms = mCamera.getParameters();
 
         postCameraOpenedEvent(parms);
@@ -1015,6 +1021,32 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             previewFacts += " @" + (fpsRange[0] / 1000.0) + " - " + (fpsRange[1] / 1000.0) + "fps";
         }
         if (VERBOSE) Log.i(TAG, "Camera preview set: " + previewFacts);
+    }
+
+    private void setCameraDisplayOrientation(int cameraIndex) {
+        //Sets the camera right Orientation.
+
+
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraIndex, info);
+        int rotation = mCurrentCameraRotation;
+        int degrees = 90;
+        switch (rotation) {
+           // case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+           // case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        mCamera.setDisplayOrientation(result);
     }
 
     public Camera getCamera() {

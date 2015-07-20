@@ -461,13 +461,17 @@ public class RecordFragment extends Fragment implements RecordView,
     @OnClick (R.id.button_change_camera)
     public void buttonChangeCameraListener(){
 
-        recordPresenter.requestOtherCamera();
-
         // Check flashMode and return to normal
         buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
         buttonSettinsCameraListener();
 
       //  mCameraView.setRotation(Surface.ROTATION_90);
+
+
+        int rotation = this.getActivity().getWindowManager().getDefaultDisplay()
+                .getRotation();
+
+        recordPresenter.requestOtherCamera(rotation);
 
     }
 
@@ -531,7 +535,7 @@ public class RecordFragment extends Fragment implements RecordView,
                 @Override
                 public void onFinish() {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
-                    reStartFragment();
+                   // reStartFragment();
 
                 }
             }.start();
