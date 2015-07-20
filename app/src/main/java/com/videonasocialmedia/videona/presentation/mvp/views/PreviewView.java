@@ -21,6 +21,6 @@ public interface PreviewView {
 
     void showError(String message);
 
-    void updateVideoSize();
+    void updateSeekBarSize();
 
 }
