@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
  */
 public interface EditorView {
 
-    void initVideoPlayer(String videoPath);
+    //void initVideoPlayer(String videoPath);
 
     void initMusicPlayer(Music music);
 
@@ -26,18 +26,16 @@ public interface EditorView {
 
     void showError(int causeTextResource);
 
+    void showMessage(int stringToast);
+
     void refreshStartTimeTag(int time);
 
     void refreshStopTimeTag(int time);
 
     void refreshDurationTag(int duration);
 
-    void showTrimBar(int videoDuration, int min, int max);
-
     void enableMusicPlayer(Music music);
 
     void disableMusicPlayer();
-
-    void createAndPaintVideoThumbs(String videoPath, int videoDuration) throws Exception;
 
 }

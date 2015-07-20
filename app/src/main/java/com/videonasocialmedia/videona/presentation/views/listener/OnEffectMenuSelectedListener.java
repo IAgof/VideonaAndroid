@@ -12,7 +12,7 @@ package com.videonasocialmedia.videona.presentation.views.listener;
  */
 public interface OnEffectMenuSelectedListener {
 
-    public void onEffectMenuSelected();
+    void onEffectMenuSelected();
 
-    public void onEffectTrimMenuSelected();
+    void onEffectTrimMenuSelected();
 }

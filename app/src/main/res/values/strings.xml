@@ -13,9 +13,12 @@
     <string name="edit_text_special">Special features</string>
     <string name="edit_text_insufficient_memory">Not enough memory</string>
     <string name="toast_exit_edit">Press back again to exit the edit room</string>
+    <string name="toast_add_videos">Please, add videos to project</string>
     <string name="not_ask_again">Not ask again</string>
     <string name="not_thanks">Not thanks</string>
     <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="indiegogo">Indiegogo</string>
     <string name="welcome">This is a beta version of the new Social Video Platform, you can help us
 to develop it just giving feedback or you can go to our crowdfunding
@@ -33,6 +36,15 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="getit">"Get it"</string>
     <string name="action_finish">"Finish"</string>
     <string name="action_next">"Next"</string>
+
+    <!-- Gallery activity -->
+    <string name="confirmDeleteTitle"><u>Delete</u></string>
+    <string name="confirmDeleteTitle1"><u>video</u></string>
+    <string name="confirmDeleteTitle2"><u>videos</u></string>
+    <string name="confirmDeleteMessage">¿Do you want to delete this elements?</string>
+
+    <!-- Trim fragment -->
+    <string name="confirmTrim">Done</string>
 
     <!-- Music genres -->
     <string name="music_genre_rock">Rock</string>
@@ -404,6 +416,10 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
 
     <string name="effects_chooser_title">Effects</string>
+
+    <string name="add_videos_to_project">Please, add videos to project</string>
+    <string name="videos_removed">Clear videos from project, record or add new videos</string>
+
 
 
 </resources>

@@ -10,8 +10,8 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private MovableItemsAdapter adapter;
 
-    public ItemTouchHelperCallback(MovableItemsAdapter adapter){
-        this.adapter=adapter;
+    public ItemTouchHelperCallback(MovableItemsAdapter adapter) {
+        this.adapter = adapter;
     }
 
     @Override
@@ -20,10 +20,18 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
+    public boolean isItemViewSwipeEnabled() {
+        return true;
+    }
+
+    @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.END
                 | ItemTouchHelper.START;
-        return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, dragFlags);
+        final int swypeFlags = ItemTouchHelper.UP;
+
+        return makeMovementFlags(dragFlags, swypeFlags);
+        //return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, dragFlags);
     }
 
     @Override
@@ -40,12 +48,12 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        // Notify the adapter of the dismissal
+        adapter.remove(viewHolder.getAdapterPosition());
     }
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-        adapter.finishMovement(viewHolder.getAdapterPosition());
+        //adapter.finishMovement(viewHolder.getAdapterPosition());
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,11 +14,11 @@ import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
-import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -33,12 +32,12 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     private Context context;
     private List<Video> videoList;
-    private RecyclerViewClickListener recyclerViewClickListener;
+    private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
+    private ItemSelectionSupport selectionSupport;
 
     private int selectedVideoPosition = -1;
 
     public VideoGalleryAdapter(List<Video> videoList) {
-
         this.videoList = videoList;
     }
 
@@ -48,7 +47,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .inflate(R.layout.fragment_gallery_video_item, viewGroup, false);
 
         this.context = viewGroup.getContext();
-        return new VideoViewHolder(rowView, recyclerViewClickListener);
+        return new VideoViewHolder(rowView, musicRecyclerViewClickListener);
     }
 
     @Override
@@ -61,9 +60,11 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
-        holder.overlay.setSelected(position == selectedVideoPosition);
-        holder.overlayIcon.setSelected(position == selectedVideoPosition);
-        String duration= TimeUtils.toFormattedTime(selectedVideo.getDuration());
+        if(selectionSupport!=null) {
+            holder.overlay.setActivated(selectionSupport.isItemChecked(position));
+            holder.overlayIcon.setActivated(selectionSupport.isItemChecked(position));
+        }
+        String duration = TimeUtils.toFormattedTime(selectedVideo.getDuration());
         holder.duration.setText(duration);
     }
 
@@ -80,22 +81,36 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         return videoList.get(position);
     }
 
-    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
-        this.recyclerViewClickListener = recyclerViewClickListener;
+    public void setRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
+        this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
+    }
+
+    public void setSelectionSupport(ItemSelectionSupport selectionSupport) {
+        this.selectionSupport = selectionSupport;
     }
 
     public void appendVideos(List<Video> videoList) {
-        videoList.addAll(videoList);
+        this.videoList = new ArrayList<>();
+        this.videoList.addAll(videoList);
     }
 
     public boolean isVideoListEmpty() {
         return videoList.isEmpty();
     }
 
+    public void removeVideo(int itemPosition) {
+        videoList.remove(itemPosition);
+        notifyItemRemoved(itemPosition);
+    }
+
+    public void clearView() {
+        selectionSupport.clearChoices();
+    }
+
 
     class VideoViewHolder extends RecyclerView.ViewHolder{ //implements View.OnTouchListener {
 
-        RecyclerViewClickListener onClickListener;
+        MusicRecyclerViewClickListener onClickListener;
 
         @InjectView(R.id.gallery_thumb)
         ImageView thumb;
@@ -109,14 +124,11 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         @InjectView(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
-
-
-        public VideoViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
+        public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             //thumb.setOnTouchListener(this);
             this.onClickListener = onClickListener;
-
         }
 
       /*  @Override
@@ -125,7 +137,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 notifyItemChanged(selectedVideoPosition);
                 selectedVideoPosition = getPosition();
                 notifyItemChanged(selectedVideoPosition);
-                onClickListener.onClick(selectedVideoPosition);
+                onClickListener.onClickCameraEffectFx(selectedVideoPosition);
             }
             return true;
         }*/

@@ -6,8 +6,8 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
     android:layout_margin="3dp">
 
     <ImageView
@@ -19,10 +19,11 @@
     <TextView
         android:id="@+id/gallery_duration"
         android:layout_width="45dp"
-        android:layout_height="20dp"
-        android:layout_margin="2dp"
+        android:layout_height="18dp"
         android:text="00:00"
         android:gravity="center"
+        android:layout_margin="2dp"
+        android:layout_alignStart="@+id/gallery_thumb"
         android:layout_alignBottom="@+id/gallery_thumb"
         android:background="#aa333333"/>
 
@@ -30,17 +31,17 @@
         android:id="@+id/gallery_overlay"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignBottom="@id/gallery_thumb"
-        android:layout_alignEnd="@id/gallery_thumb"
-        android:layout_alignStart="@id/gallery_thumb"
-        android:layout_alignTop="@id/gallery_thumb"
+        android:layout_alignStart="@+id/gallery_thumb"
+        android:layout_alignEnd="@+id/gallery_thumb"
+        android:layout_alignBottom="@+id/gallery_thumb"
+        android:layout_alignTop="@+id/gallery_thumb"
         android:background="@drawable/fragment_gallery_overlay_selector_background"
         android:clickable="false">
 
         <ImageView
             android:id="@+id/gallery_overlay_icon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="4dp"
@@ -52,12 +53,9 @@
 
     <ImageButton
         android:id="@+id/gallery_preview_button"
-        android:layout_marginBottom="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignEnd="@id/gallery_thumb"
-        android:layout_alignBottom="@id/gallery_thumb"
+        android:layout_centerInParent="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/activity_gallery_icon_play_normal" />
 
 </RelativeLayout>

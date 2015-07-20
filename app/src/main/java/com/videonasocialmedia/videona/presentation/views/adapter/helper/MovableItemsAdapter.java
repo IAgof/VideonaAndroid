@@ -8,4 +8,6 @@ public interface MovableItemsAdapter {
     void moveItem(int fromPositon, int toPosition);
 
     void finishMovement(int newPosition);
+
+    void remove(int itemPosition);
 }

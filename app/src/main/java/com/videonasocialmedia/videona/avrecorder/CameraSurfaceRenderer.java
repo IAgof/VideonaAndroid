@@ -1,10 +1,12 @@
 package com.videonasocialmedia.videona.avrecorder;
 
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import com.videonasocialmedia.videona.avrecorder.gles.FullFrameRect;
+import com.videonasocialmedia.videona.avrecorder.gles.GlUtil;
 import com.videonasocialmedia.videona.avrecorder.gles.Texture2dProgram;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -79,12 +81,13 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         mFullScreenCamera = new FullFrameRect(
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_EXT));
         // For texture overlay:
-        //GLES20.glEnable(GLES20.GL_BLEND);
-        //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         mFullScreenOverlay = new FullFrameRect(
                   new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
-        //mOverlayTextureId = GlUtil.createTextureWithTextContent("hello!");
-        //mOverlayTextureId = GlUtil.createTextureFromImage(mCameraView.getContext(), R.drawable.red_dot);
+        mOverlayTextureId = GlUtil.createTextureWithTextContent("HolaMundo");
+        //mOverlayTextureId = GlUtil.createTextureWithTextContent();
+        //mOverlayTextureId = GlUtil.createTextureFromImage(mCameraView.getContext(), R.drawable.gatito_rules);
         mCameraTextureId = mFullScreenCamera.createTextureObject();
 
         mCameraEncoder.onSurfaceCreated(mCameraTextureId);
@@ -118,16 +121,20 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
             Log.i(TAG, "setTexSize on display Texture");
         }
 
+
         // Draw the video frame.
         if(mCameraEncoder.isSurfaceTextureReadyForDisplay()){
+
             mCameraEncoder.getSurfaceTextureForDisplay().updateTexImage();
             mCameraEncoder.getSurfaceTextureForDisplay().getTransformMatrix(mSTMatrix);
             //Drawing texture overlay:
             mFullScreenOverlay.drawFrame(mOverlayTextureId, mSTMatrix);
             mFullScreenCamera.drawFrame(mCameraTextureId, mSTMatrix);
         }
+
         mFrameCount++;
     }
+
 
     public void signalVertialVideo(FullFrameRect.SCREEN_ROTATION isVertical) {
         if (mFullScreenCamera != null) mFullScreenCamera.adjustForVerticalVideo(isVertical, false);

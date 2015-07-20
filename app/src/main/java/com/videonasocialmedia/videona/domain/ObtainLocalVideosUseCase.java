@@ -1,7 +1,5 @@
 package com.videonasocialmedia.videona.domain;
 
-import android.media.MediaMetadataRetriever;
-
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnVideosRetrieved;
 import com.videonasocialmedia.videona.utils.Constants;

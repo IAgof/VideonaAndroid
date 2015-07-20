@@ -28,11 +28,14 @@ public abstract class AndroidEncoder {
 
 
     /**
-     * Callback listener interface to notify about changed range values.
+     * Callback listener interface to notify about muxer events.
      */
     public interface OnMuxerFinishedEventListener {
         public void onMuxerFinishedEventVideo();
         public void onMuxerFinishedEventAudio();
+        public void onMuxerAudioError(String message);
+        public void onMuxerVideoError(String message);
+        public void onMuxerReleased();
 
     }
 

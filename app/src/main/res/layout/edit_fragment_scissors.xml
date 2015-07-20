@@ -11,42 +11,40 @@
     android:orientation="vertical">
 
     <ImageButton
-        android:id="@+id/edit_fragment_scissors_button_razor"
+        android:id="@+id/edit_fragment_scissors_button_add_clip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_green"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_scissors_icon_razor_normal"
+        android:src="@drawable/edit_fragment_scissors_icon_add_clip_normal"
         android:adjustViewBounds="false"
-        android:layout_marginBottom="2dp"
-        android:alpha="0.20" />
+        android:layout_marginBottom="0.5dp" />
 
     <ImageButton
-        android:id="@+id/edit_fragment_scissors_button_crop"
+        android:id="@+id/edit_fragment_scissors_button_razor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/pastel_palette_purple"
         android:padding="15dp"
-        android:layout_marginBottom="2dp"
-        android:src="@drawable/edit_fragment_scissors_icon_crop_normal"
-        android:alpha="0.20" />
-
-    <ImageButton
-        android:id="@+id/edit_fragment_scissors_button_add_clip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_pink_2"
-        android:padding="15dp"
-        android:layout_marginBottom="2dp"
-        android:src="@drawable/edit_fragment_scissors_icon_add_clip_normal"
+        android:src="@drawable/edit_fragment_scissors_icon_razor_normal"
+        android:layout_marginBottom="0.5dp"
         android:alpha="0.20" />
 
     <ImageButton
         android:id="@+id/edit_fragment_scissors_button_duplicate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/pastel_palette_pink_2"
+        android:padding="15dp"
+        android:layout_marginBottom="0.5dp"
+        android:src="@drawable/edit_fragment_scissors_icon_duplicate_normal" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_scissors_button_crop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@color/pastel_palette_red"
         android:padding="15dp"
-        android:src="@drawable/edit_fragment_scissors_icon_duplicate_normal"
+        android:src="@drawable/edit_fragment_scissors_icon_crop_normal"
         android:alpha="0.20" />
 </LinearLayout>

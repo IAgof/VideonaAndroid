@@ -40,24 +40,10 @@ import butterknife.OnClick;
  */
 public class AudioFxMenuFragment extends Fragment implements FxMenuView {
 
-    /*CONFIG*/
-    private OnEffectMenuSelectedListener callback;
     /**
      * Tracker google analytics
      */
     private Tracker tracker;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        try {
-            callback = (OnEffectMenuSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
 
     @Nullable
     @Override
@@ -86,7 +72,6 @@ public class AudioFxMenuFragment extends Fragment implements FxMenuView {
     @OnClick(R.id.edit_fragment_sound_button_music_catalog)
     public void showCatalog() {
         showLog();
-        // callback.onEffectMenuSelected();
     }
 
     @Override

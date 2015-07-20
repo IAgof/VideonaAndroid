@@ -42,11 +42,7 @@ public class Utils {
         long bytesAvailable = stat.getAvailableBytes();
         float megabytesAvailable = bytesAvailable / (1024.f * 1024.f);
 
-        if (size <= megabytesAvailable) {
-            return true;
-        } else {
-            return false;
-        }
+        return size <= megabytesAvailable;
     }
 
     public static void copyResourceToTemp(Context ctx, int rawResourceId, String fileTypeExtensionConstant) throws IOException {

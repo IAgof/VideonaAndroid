@@ -345,6 +345,7 @@ public class Texture2dProgram {
             case TEXTURE_EXT_TUNNEL:
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
                 mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_TUNNEL);
+
                 break;
             case TEXTURE_EXT_BULGE:
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;

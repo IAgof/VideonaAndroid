@@ -13,12 +13,14 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -26,9 +28,11 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.listener.OnEffectMenuSelectedListener;
+import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
+import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -36,12 +40,13 @@ import butterknife.OnClick;
  */
 public class ScissorsFxMenuFragment extends Fragment {
 
+    private final String LOG_TAG = "ScissorsFxMenuFragment";
+
+    @InjectView(R.id.edit_fragment_scissors_button_duplicate)
+    ImageButton trashButton;
+
     /*CONFIG*/
-    private OnEffectMenuSelectedListener callback;
-    /**
-     * Tracker google analytics
-     */
-    private VideonaApplication app;
+    private OnRemoveAllProjectListener callbackRemoveAllProject;
     private Tracker tracker;
 
     @Override
@@ -49,35 +54,58 @@ public class ScissorsFxMenuFragment extends Fragment {
         super.onAttach(activity);
 
         try {
-            callback = (OnEffectMenuSelectedListener) activity;
+            callbackRemoveAllProject = (OnRemoveAllProjectListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " must implement OnRemoveAllProjectListener");
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.edit_fragment_scissors, container, false);
         ButterKnife.inject(this, view);
-
-        app = (VideonaApplication) getActivity().getApplication();
+        VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
-
         return view;
     }
 
     public void showLog() {
-        Log.d("Fragment Audio", "He pulsado el primer botón");
+        Log.d("Fragment Audio", "He pulsado un botón");
         //imgButton.setImageResource(R.drawable.activity_edit_icon_transition_normal);
+    }
+
+    public void habilitateTrashButton() {
+        trashButton.setAlpha((float) 1);
+        if(!trashButton.isClickable())
+            trashButton.setClickable(true);
+    }
+
+    public void inhabilitateTrashButton() {
+        trashButton.setAlpha((float) 0.2);
+        if(trashButton.isClickable())
+            trashButton.setClickable(false);
     }
 
     @OnClick(R.id.edit_fragment_scissors_button_crop)
     public void showTrimView() {
-        showLog();
-        callback.onEffectTrimMenuSelected();
+        //showLog();
+    }
+
+    @OnClick(R.id.edit_fragment_scissors_button_add_clip)
+    public void addVideos() {
+        Log.d(LOG_TAG, "addVideos");
+        Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
+        gallery.putExtra("SHARE", false);
+        startActivity(gallery);
+    }
+
+    @OnClick(R.id.edit_fragment_scissors_button_duplicate)
+    public void clearProject() {
+        Log.d(LOG_TAG, "clearProject");
+        callbackRemoveAllProject.onRemoveAllProjectSelected();
+
     }
 
 
@@ -88,7 +116,8 @@ public class ScissorsFxMenuFragment extends Fragment {
     }
 
     @OnClick({R.id.edit_fragment_scissors_button_razor, R.id.edit_fragment_scissors_button_crop,
-            R.id.edit_fragment_scissors_button_add_clip, R.id.edit_fragment_scissors_button_duplicate})
+            R.id.edit_fragment_scissors_button_add_clip,
+            R.id.edit_fragment_scissors_button_duplicate})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -111,11 +140,9 @@ public class ScissorsFxMenuFragment extends Fragment {
                 break;
             case R.id.edit_fragment_scissors_button_add_clip:
                 label = "Go to add clip of edit fragment scissor";
-                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_scissors_button_duplicate:
                 label = "Go to duplicate of edit fragment scissor";
-                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 label = "Other";

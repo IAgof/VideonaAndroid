@@ -1,13 +1,18 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
@@ -16,8 +21,10 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.GalleryPagerPr
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,15 +35,21 @@ import butterknife.OnClick;
 /**
  * Created by jca on 20/5/15.
  */
-public class GalleryActivity extends Activity implements ViewPager.OnPageChangeListener, GalleryPagerView {
+public class GalleryActivity extends Activity implements ViewPager.OnPageChangeListener,
+        GalleryPagerView, OnSelectionModeListener {
 
     MyPagerAdapter adapterViewPager;
     boolean sharing;
     int selectedPage = 0;
+    private int countVideosSelected = 0;
     GalleryPagerPresenter galleryPagerPresenter;
 
     @InjectView(R.id.button_ok_gallery)
     ImageButton okButton;
+    @InjectView(R.id.gallery_count_selected_videos)
+    TextView videoCounter;
+    @InjectView(R.id.selection_mode)
+    LinearLayout selectionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,11 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         vpPager.setOnPageChangeListener(this);
 
         galleryPagerPresenter = new GalleryPagerPresenter(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        countVideosSelected = getSelectedVideos().size();
     }
 
     @Override
@@ -122,12 +140,85 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         this.finish();
     }
 
+    @OnClick(R.id.button_trash)
+    public void deleteFiles() {
+        final List<Video> videoList = getSelectedVideos();
+        int numVideosSelected = videoList.size();
+        if (numVideosSelected > 0) {
+            String title;
+            if(numVideosSelected == 1) {
+                title = getResources().getString(R.string.confirmDeleteTitle) + " " +
+                        String.valueOf(videoList.size()) + " " +
+                        getResources().getString(R.string.confirmDeleteTitle1);
+            } else {
+                title = getResources().getString(R.string.confirmDeleteTitle) + " " +
+                        String.valueOf(videoList.size()) + " " +
+                        getResources().getString(R.string.confirmDeleteTitle2);
+            }
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(title)
+                            .setMessage(R.string.confirmDeleteMessage)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    for (Video video : videoList) {
+                                        File file = new File(video.getMediaPath());
+                                        file.delete();
+                                    }
+                                    for (int i = 0; i < adapterViewPager.getCount(); i++) {
+                                        VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
+                                        selectedFragment.updateView();
+                                    }
+                                    countVideosSelected = 0;
+                                    updateCounter();
+                                }
+                            })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+        }
+    }
+
     @Override
     public void navigate() {
         if (!sharing) {
             Intent intent;
             intent = new Intent(this, EditActivity.class);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onNoItemSelected() {
+        // todo: out of selection mode
+    }
+
+    @Override
+    public void onItemChecked() {
+        if(sharing) {
+            countVideosSelected = 1;
+            videoCounter.setVisibility(View.GONE);
+        } else {
+            countVideosSelected++;
+        }
+        updateCounter();
+    }
+
+    @Override
+    public void onItemUnchecked() {
+        if(!sharing) {
+            countVideosSelected--;
+            updateCounter();
+        }
+    }
+
+    private void updateCounter() {
+        if(selectionMode.getVisibility() != View.VISIBLE)
+            selectionMode.setVisibility(View.VISIBLE);
+        if(!sharing) {
+            videoCounter.setText(Integer.toString(countVideosSelected));
+            if(countVideosSelected == 0)
+                selectionMode.setVisibility(View.GONE);
         }
     }
 

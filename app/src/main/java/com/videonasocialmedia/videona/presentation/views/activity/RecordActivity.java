@@ -24,13 +24,15 @@ import com.videonasocialmedia.videona.presentation.views.fragment.RecordFragment
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * @author Álvaro Martínez Marco
+ */
 
 /**
  * RecordActivity manages a single live record.
  */
 //public class RecordActivity extends ImmersiveActivity {
-
-    // Not immersive mode. Home buttons visibles
+// Not immersive mode. Home buttons visibles
 public class RecordActivity extends Activity {
 
     /**
@@ -38,6 +40,9 @@ public class RecordActivity extends Activity {
      */
     private final String LOG_TAG = getClass().getSimpleName();
 
+    /**
+     * Record fragment
+     */
     private RecordFragment recordFragment;
 
     /**
@@ -56,8 +61,11 @@ public class RecordActivity extends Activity {
         setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
 
+        Log.d(LOG_TAG, "onCreate");
+
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
@@ -82,32 +90,51 @@ public class RecordActivity extends Activity {
             public void run() {
                 drawerLayout.closeDrawer(navigatorView);
             }
-        }, 3000);
-        Log.d(LOG_TAG, "onStart() RecordActivity");
+        }, 2000);
+        Log.d(LOG_TAG, "onAttachedToWindow");
+    }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.d(LOG_TAG, "onRestart");
+
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        Log.d(LOG_TAG, "onStop");
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
     }
 
 
-   // @Override
     public void lockNavigator() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    //@Override
     public void unLockNavigator() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
     public void onBackPressed() {
-        if (recordFragment != null) {
-            recordFragment.stopRecording();
-        }
 
         if(drawerLayout.isDrawerOpen(Gravity.LEFT)){
             drawerLayout.closeDrawer(navigatorView);
             return;
         }
-        //super.onBackPressed();
+
+
+        if (recordFragment != null) {
+            recordFragment.stopRecording();
+        }
 
         if (buttonBackPressed) {
             buttonBackPressed = false;
@@ -122,6 +149,17 @@ public class RecordActivity extends Activity {
             buttonBackPressed = true;
             Toast.makeText(getApplicationContext(), getString(R.string.toast_exit), Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+
+    public void navigateToEdit(){
+
+        Log.d(LOG_TAG, "navigateToEdit");
+
+        Intent edit = new Intent(this, EditActivity.class);
+        edit.putExtra("SHARE", false);
+        startActivity(edit);
     }
 
 
