@@ -148,11 +148,11 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
             String title;
             if(numVideosSelected == 1) {
                 title = getResources().getString(R.string.confirmDeleteTitle) + " " +
-                        String.valueOf(videoList.size()) + " " +
+                        String.valueOf(numVideosSelected) + " " +
                         getResources().getString(R.string.confirmDeleteTitle1);
             } else {
                 title = getResources().getString(R.string.confirmDeleteTitle) + " " +
-                        String.valueOf(videoList.size()) + " " +
+                        String.valueOf(numVideosSelected) + " " +
                         getResources().getString(R.string.confirmDeleteTitle2);
             }
             new AlertDialog.Builder(this)
