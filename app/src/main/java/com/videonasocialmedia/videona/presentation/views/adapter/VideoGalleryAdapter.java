@@ -144,10 +144,12 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
         @OnClick(R.id.gallery_preview_button)
         public void startVideoPreview(View v) {
-            String videoPath = videoList.get(getPosition()).getMediaPath();
-            Intent i = new Intent(v.getContext(), VideoPreviewActivity.class);
-            i.putExtra("VIDEO_PATH", videoPath);
-            v.getContext().startActivity(i);
+            if(selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.NONE) {
+                String videoPath = videoList.get(getPosition()).getMediaPath();
+                Intent i = new Intent(v.getContext(), VideoPreviewActivity.class);
+                i.putExtra("VIDEO_PATH", videoPath);
+                v.getContext().startActivity(i);
+            }
         }
 
     }
