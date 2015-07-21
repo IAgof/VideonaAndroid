@@ -436,13 +436,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
      */
     @Override
     public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue) {
-        if (videoPlayer.isPlaying()) {
+        if (videoPlayer != null && videoPlayer.isPlaying()) {
             videoPlayer.pause();
         }
-        if(startTimeMs != (int) Math.round((double) minValue)) {
+        if(startTimeMs != (int) Math.round((double) minValue) && videoPlayer != null) {
             videoPlayer.seekTo((int) Math.round((double) minValue));
         }
-        if(finishTimeMs != (int) Math.round((double) maxValue)) {
+        if(finishTimeMs != (int) Math.round((double) maxValue) && videoPlayer != null) {
             videoPlayer.seekTo((int) Math.round((double) maxValue));
         }
     }
