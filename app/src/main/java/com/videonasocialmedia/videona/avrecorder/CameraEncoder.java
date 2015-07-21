@@ -420,7 +420,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
 
-
     /**
      * Called from UI thread
      */
@@ -584,7 +583,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 if (TRACE) Trace.beginSection("drawVEncoderFrame");
                 GLES20.glViewport(0,0,1280,720);
                 mFullScreen.drawFrame(mTextureId, mTransform);
-                GLES20.glViewport(0, 0, 150, 150);
+                GLES20.glViewport(10, 10, 136, 28);
                 mFullScreenOverlay.drawFrame(mOverlayTextureId, mTransform);
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {
@@ -634,88 +633,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         GLES20.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
-    }
-
-    private void drawText(){
-
-        // Create an empty, mutable bitmap
-        Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
-        // get a canvas to paint over the bitmap
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawARGB(0,0,255,0);
-
-        // get a background image from resources
-        // note the image format must match the bitmap format
-//        Drawable background = context.getResources().getDrawable(R.drawable.background);
-//        background.setBounds(0, 0, 256, 256);
-//        background.draw(canvas); // draw the background to our bitmap
-
-        // Draw the text
-        Paint textPaint = new Paint();
-        textPaint.setTextSize(32);
-        textPaint.setAntiAlias(true);
-        textPaint.setARGB(0xff, 0xff, 0xff, 0xff);
-        // draw the text centered
-        canvas.drawText("Videona", 16,112, textPaint);
-
-        int[] textures = new int[1];
-
-        //Generate one texture pointer...
-        GLES20.glGenTextures(1, textures, 0);
-        //...and bind it to our array
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
-
-        //Create Nearest Filtered Texture
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-        //Different possible texture parameters, e.g. GLES20.GL_CLAMP_TO_EDGE
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
-
-        //Alpha blending
-//        GLES20.glEnable(GLES20.GL_BLEND);
-//        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
-        //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-        //Clean up
-        bitmap.recycle();
-    }
-
-    public void drawImage(){
-        // Create an empty, mutable bitmap
-        Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
-        // get a canvas to paint over the bitmap
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawARGB(0,0,255,0);
-
-        // get a background image from resources
-        // note the image format must match the bitmap format
-        //Drawable background = context.getResources().getDrawable(resId);
-        Drawable background = context.getResources().getDrawable(R.drawable.gatito_rules);
-        background.setBounds(0, 0, 256, 256);
-        background.draw(canvas); // draw the background to our bitmap
-
-        int[] textures = new int[1];
-
-        //Generate one texture pointer...
-        GLES20.glGenTextures(1, textures, 0);
-        //...and bind it to our array
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0]);
-
-        //Create Nearest Filtered Texture
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-        //Different possible texture parameters, e.g. GLES20.GL_CLAMP_TO_EDGE
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
-
-        //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-        //Clean up
-        bitmap.recycle();
     }
 
     private void saveFrameAsImage() {
