@@ -1,7 +1,6 @@
 package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
@@ -33,12 +32,18 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
     private Context context;
     private List<Video> videoList;
     private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
+    private OnTransitionClickListener onTransitionClickListener;
     private ItemSelectionSupport selectionSupport;
 
     private int selectedVideoPosition = -1;
 
+    public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
+        this.onTransitionClickListener = onTransitionClickListener;
+    }
+
     public VideoGalleryAdapter(List<Video> videoList) {
         this.videoList = videoList;
+
     }
 
     @Override
@@ -47,7 +52,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .inflate(R.layout.fragment_gallery_video_item, viewGroup, false);
 
         this.context = viewGroup.getContext();
-        return new VideoViewHolder(rowView, musicRecyclerViewClickListener);
+        return new VideoViewHolder(rowView, musicRecyclerViewClickListener, onTransitionClickListener);
     }
 
     @Override
@@ -111,6 +116,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
     class VideoViewHolder extends RecyclerView.ViewHolder{ //implements View.OnTouchListener {
 
         MusicRecyclerViewClickListener onClickListener;
+        OnTransitionClickListener onTransitionClickListener;
 
         @InjectView(R.id.gallery_thumb)
         ImageView thumb;
@@ -124,31 +130,24 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         @InjectView(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
-        public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener) {
-            super(itemView);
-            ButterKnife.inject(this, itemView);
-            //thumb.setOnTouchListener(this);
-            this.onClickListener = onClickListener;
+        public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
+            this.onTransitionClickListener = onTransitionClickListener;
         }
 
-      /*  @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                notifyItemChanged(selectedVideoPosition);
-                selectedVideoPosition = getPosition();
-                notifyItemChanged(selectedVideoPosition);
-                onClickListener.onClickCameraEffectFx(selectedVideoPosition);
-            }
-            return true;
-        }*/
+        public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener,
+                               OnTransitionClickListener onTransitionClickListener) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
+            this.onClickListener = onClickListener;
+            this.onTransitionClickListener = onTransitionClickListener;
+
+        }
 
         @OnClick(R.id.gallery_preview_button)
         public void startVideoPreview(View v) {
             if(selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.NONE) {
-                String videoPath = videoList.get(getPosition()).getMediaPath();
-                Intent i = new Intent(v.getContext(), VideoPreviewActivity.class);
-                i.putExtra("VIDEO_PATH", videoPath);
-                v.getContext().startActivity(i);
+                if(onTransitionClickListener != null)
+                    onTransitionClickListener.onClick(itemView, getPosition());
             }
         }
 

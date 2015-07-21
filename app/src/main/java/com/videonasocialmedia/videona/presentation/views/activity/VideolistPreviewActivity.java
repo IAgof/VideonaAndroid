@@ -11,129 +11,491 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnErrorListener;
-import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.util.Log;
+import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.MediaController;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.PreviewPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.utils.TimeUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * This class is used to show a preview of the selected video.
  */
-public class VideolistPreviewActivity extends Activity implements OnPreparedListener, OnErrorListener {
+public class VideolistPreviewActivity extends Activity implements PreviewView,
+        SeekBar.OnSeekBarChangeListener {
 
-    @InjectView(R.id.videoView)
-    VideoView videoView;
+    @InjectView(R.id.edit_preview_player)
+    VideoView preview;
+    @InjectView(R.id.edit_button_play)
+    ImageButton playButton;
+    @InjectView(R.id.edit_seek_bar)
+    SeekBar seekBar;
+    @InjectView(R.id.edit_text_start_trim)
+    TextView startTimeTag;
+    @InjectView(R.id.edit_text_end_trim)
+    TextView stopTimeTag;
 
-    private final String LOG_TAG = "VIDEO PREVIEW ACTIVITY";
-    private MediaPlayer mediaPlayer = null;
-    MediaController mediaController;
-    String videoPath;
+    private final String LOG_TAG = "VIDEO LIST PREVIEW ACTIVITY";
+    protected Handler handler = new Handler();
+    private PreviewPresenter previewPresenter;
+    private MediaController mediaController;
+    private MediaPlayer videoPlayer;
+    private MediaPlayer musicPlayer;
+    private Music music;
+    private Project project;
+    private int projectDuration = 0;
+    private List<Video> movieList;
+    private List<Integer> videoStartTimeInProject;
+    private List<Integer> videoStopTimeInProject;
+    private int videoToPlay = 0;
+    private int instantTime = 0;
+    private final Runnable updateTimeTask = new Runnable() {
+        @Override
+        public void run() {
+            updateSeekBarProgress();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_preview);
+        setContentView(R.layout.activity_videolist_preview);
         ButterKnife.inject(this);
 
         Bundle bundle = getIntent().getExtras();
-        videoPath = bundle.getString("VIDEO_PATH");
+        instantTime = bundle.getInt("TIME");
+
+        previewPresenter = new PreviewPresenter(this);
+
+        seekBar.setProgress(0);
+        seekBar.setOnSeekBarChangeListener(this);
+
+        mediaController = new MediaController(this);
+        mediaController.setVisibility(View.INVISIBLE);
+
+        /*
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setExitTransition(new Explode());
+            */
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(LOG_TAG, "onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume");
-
-        if (videoPath == null || videoPath.isEmpty()) {
-            showError();
-        } else {
-            mediaController = new MediaController(this);
-            mediaController.setVisibility(View.VISIBLE);
-            mediaController.setAnchorView(videoView);
-
-            videoView.setVideoPath(videoPath);
-            videoView.setMediaController(mediaController);
-            videoView.requestFocus();
-            videoView.setOnPreparedListener(this);
-            videoView.setOnErrorListener(this);
-        }
+        updateVideoList();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         releaseVideoView();
-        Log.d(LOG_TAG, "onPause");
+        releaseMusicPlayer();
+        projectDuration = 0;
+        instantTime = 0;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+        ButterKnife.reset(this);
+    }
+
+    @OnTouch(R.id.edit_preview_player)
+    public boolean onTouchPreview(MotionEvent event) {
+        boolean result;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            playPausePreview();
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @OnClick(R.id.edit_button_play)
+    public void playPausePreview() {
+        if (isVideosOnProject()) {
+            if (videoPlayer != null) {
+                if (videoPlayer.isPlaying()) {
+                    pausePreview();
+                    instantTime = seekBar.getProgress();
+                } else {
+                    playPreview();
+                }
+            } else {
+                playPreview();
+            }
+        } else {
+            seekBar.setProgress(0);
+        }
+    }
+
+    private boolean isVideosOnProject() {
+        List<Media> list = previewPresenter.checkVideosOnProject();
+        return list.size() > 0;
+    }
+
+
+    @Override
+    public void playPreview() {
+        updateVideoList();
+        playButton.setVisibility(View.INVISIBLE);
+    }
+
+    private boolean isMusicOnProject() {
+        project = Project.getInstance(null, null, null);
+        return project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size() > 0;
+    }
+
+    private void muteVideo() {
+        videoPlayer.setVolume(0, 0);
+    }
+
+    private void playMusicSyncWithVideo() {
+        releaseMusicPlayer();
+        initMusicPlayer();
+        if (musicPlayer.isPlaying()) {
+            musicPlayer.seekTo(seekBar.getProgress());
+        } else {
+            musicPlayer.start();
+            musicPlayer.seekTo(seekBar.getProgress());
+        }
+    }
+
+    private void releaseMusicPlayer() {
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer.release();
+            musicPlayer = null;
+        }
+    }
+
+    private void initMusicPlayer() {
+        if (musicPlayer == null) {
+            music = (Music) project.getAudioTracks().get(0).getItems().get(0);
+            musicPlayer = MediaPlayer.create(this, music.getMusicResourceId());
+            musicPlayer.setVolume(0.5f, 0.5f);
+        }
+    }
+
+    @Override
+    public void pausePreview() {
+        if (videoPlayer != null && videoPlayer.isPlaying())
+            videoPlayer.pause();
+        if (musicPlayer != null && musicPlayer.isPlaying())
+            musicPlayer.pause();
+        playButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void seekTo(int timeInMsec) {
+        videoPlayer.seekTo(timeInMsec);
+    }
+
+    @Override
+    public void updateVideoList() {
+        previewPresenter.update();
+    }
+
+    @Override
+    public void showPreview(List<Video> videoList) {
+        projectDuration = 0;
+        movieList = videoList;
+        videoStartTimeInProject = new ArrayList<>();
+        videoStopTimeInProject = new ArrayList<>();
+        for (Video video : movieList) {
+            videoStartTimeInProject.add(projectDuration);
+            projectDuration = projectDuration + video.getDuration();
+            videoStopTimeInProject.add(projectDuration);
+        }
+        showTimeTags(projectDuration);
+        seekBar.setMax(projectDuration);
+        if(movieList.size() > 0) {
+            Video video = seekVideo(instantTime);
+            videoToPlay = getPosition(video);
+            int timeInMsec = instantTime - videoStartTimeInProject.get(videoToPlay) +
+                    movieList.get(videoToPlay).getFileStartTime();
+
+            if (videoPlayer == null) {
+                initVideoPlayer(video, timeInMsec);
+            } else {
+                playNextVideo(video, timeInMsec);
+            }
+            if (videoPlayer != null && isMusicOnProject()) {
+                muteVideo();
+                playMusicSyncWithVideo();
+            }
+        } else {
+            seekBar.setProgress(0);
+            playButton.setVisibility(View.VISIBLE);
+            videoToPlay = 0;
+            instantTime = 0;
+        }
+    }
+
+    private int getPosition(Video seekVideo) {
+        int position = 0;
+        for (Video video : movieList) {
+            if (video == seekVideo) {
+                position = movieList.indexOf(video);
+            }
+        }
+        return position;
+    }
+
+    private void showTimeTags(int duration) {
+        refreshStartTimeTag(0);
+        refreshStopTimeTag(duration);
+    }
+
+    private void initVideoPlayer(final Video video, final int startTime) {
+        preview.setVideoPath(video.getMediaPath());
+        preview.setMediaController(mediaController);
+        preview.canSeekBackward();
+        preview.canSeekForward();
+        preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                videoPlayer = mp;
+                videoPlayer.setVolume(0.5f, 0.5f);
+                videoPlayer.setLooping(false);
+                videoPlayer.start();
+                videoPlayer.seekTo(startTime);
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                videoPlayer.pause();
+                updateSeekBarProgress();
+            }
+        });
+        preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoToPlay++;
+                if (hasNextVideoToPlay()) {
+                    playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
+                }
+            }
+        });
+        preview.requestFocus();
+    }
+
+    private void playNextVideo(final Video video, final int instantToStart) {
+        preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                videoPlayer.setVolume(0.5f, 0.5f);
+                videoPlayer.setLooping(false);
+                videoPlayer.start();
+                videoPlayer.seekTo(instantToStart);
+            }
+        });
+        preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoToPlay++;
+                if (hasNextVideoToPlay()) {
+                    playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
+                } else {
+                    releaseView();
+                }
+            }
+        });
+
+        try {
+            videoPlayer.reset();
+            videoPlayer.setDataSource(video.getMediaPath());
+            videoPlayer.prepare();
+        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+            e.printStackTrace();
+        }
+        preview.requestFocus();
+    }
+
+    @Override
+    public void showError(String message) {
         releaseVideoView();
+        releaseMusicPlayer();
+        Toast.makeText(this.getApplicationContext(), getString(R.string.toast_add_videos), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onPrepared(MediaPlayer mp) {
-        Log.d(LOG_TAG, "onPrepared");
-        mediaPlayer = mp;
-        mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-        mediaPlayer.start();
-    }
+    public void updateSeekBarSize() {
 
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.d(LOG_TAG, "onRecordError");
-        showError();
-        return true;
     }
 
     /**
-     * Shows an alert dialog if an error occurs and returns to the previous activity
+     * Listener seekBar, videoPlayer
+     *
+     * @param seekBar  the seekBar of the event
+     * @param progress the new progress of the seekBar
+     * @param fromUser true if the event was caused by an action from the user. False otherwise
      */
-    private void showError() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(VideolistPreviewActivity.this,
-                AlertDialog.THEME_HOLO_LIGHT);
-        builder.setMessage(R.string.invalid_video)
-                .setCancelable(false)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        (VideolistPreviewActivity.this).finish();
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser) {
+            if (isVideosOnProject()) {
+                Video video = seekVideo(progress);
+                int timeInMsec = progress - videoStartTimeInProject.get(videoToPlay) +
+                        movieList.get(videoToPlay).getFileStartTime();
+                if (videoPlayer != null) {
+                    playNextVideo(video, timeInMsec);
+                } else {
+                    initVideoPlayer(video, timeInMsec);
+                }
+                playButton.setVisibility(View.INVISIBLE);
+            } else {
+                seekBar.setProgress(0);
+            }
+        }
+    }
+
+    private Video seekVideo(int progress) {
+        int result = -1;
+        if (0 <= progress && progress < videoStopTimeInProject.get(0)) {
+            videoToPlay = 0;
+        } else {
+            for (int i = 0; i < videoStopTimeInProject.size(); i++) {
+                if (i < videoStopTimeInProject.size() - 1) {
+                    boolean inRange = videoStopTimeInProject.get(i) <= progress &&
+                            progress < videoStopTimeInProject.get(i + 1);
+                    if (inRange) {
+                        result = i + 1;
                     }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+                }
+            }
+            if (result == -1) {
+                videoToPlay = videoStopTimeInProject.size() - 1;
+            } else {
+                videoToPlay = result;
+            }
+        }
+        return movieList.get(videoToPlay);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
+
+    private void updateSeekBarProgress() {
+        if (videoPlayer != null) {
+            try {
+                if (videoPlayer.isPlaying() && videoToPlay < movieList.size()) {
+                    seekBar.setProgress(videoPlayer.getCurrentPosition() +
+                            videoStartTimeInProject.get(videoToPlay) -
+                            movieList.get(videoToPlay).getFileStartTime());
+                    refreshStartTimeTag(seekBar.getProgress());
+                    if (isEndOfVideo()) {
+                        videoToPlay++;
+                        if (hasNextVideoToPlay()) {
+                            playNextVideo(movieList.get(videoToPlay), movieList.get(videoToPlay).getFileStartTime());
+                        } else {
+                            releaseView();
+                        }
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+            handler.postDelayed(updateTimeTask, 20);
+        }
+    }
+
+    private boolean isEndOfVideo() {
+        return seekBar.getProgress() >= videoStopTimeInProject.get(videoToPlay);
+    }
+
+    private boolean hasNextVideoToPlay() {
+        return videoToPlay < movieList.size();
+    }
+
+    private void releaseView() {
+        playButton.setVisibility(View.VISIBLE);
+        releaseVideoView();
+        videoToPlay = 0;
+        if(movieList.size() > 0)
+            initVideoPlayer(movieList.get(videoToPlay),
+                    movieList.get(videoToPlay).getFileStartTime() + 100);
+        seekBar.setProgress(0);
+        instantTime = 0;
+        if (musicPlayer != null && musicPlayer.isPlaying()) {
+            musicPlayer.pause();
+            releaseMusicPlayer();
+        }
     }
 
     /**
      * Releases the media player and the video view
      */
     private void releaseVideoView() {
-        videoView.stopPlayback();
-        videoView.clearFocus();
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
+        preview.stopPlayback();
+        preview.clearFocus();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            videoPlayer = null;
         }
     }
 
+    private void refreshStartTimeTag(int time) {
+        startTimeTag.setText(TimeUtils.toFormattedTime(time));
+    }
 
+    private void refreshStopTimeTag(int time) {
+        stopTimeTag.setText(TimeUtils.toFormattedTime(time));
+    }
+
+    @OnClick({R.id.edit_button_fullscreen_out})
+    public void onClickFullScreenOutMode() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            releaseVideoView();
+            releaseMusicPlayer();
+            projectDuration = 0;
+            instantTime = 0;
+            finishAfterTransition();
+        } else {
+            finish();
+        }
+        //overridePendingTransition(0,0);
+    }
 }

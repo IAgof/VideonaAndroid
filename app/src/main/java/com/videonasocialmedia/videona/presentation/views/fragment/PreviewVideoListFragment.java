@@ -485,23 +485,23 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         stopTimeTag.setText(TimeUtils.toFormattedTime(time));
     }
 
-    @OnClick({R.id.edit_button_full_screen})
-    public void onClickFullScreenMode() {
-        String videoPath = movieList.get(videoToPlay).getMediaPath();
-        Intent i = new Intent(this.getActivity(), VideolistPreviewActivity.class);
-        i.putExtra("VIDEO_PATH", videoPath);
-        // Setup the transition to the detail activity
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation(this.getActivity(),
-                            new Pair<View, String>(preview, "preview of video"));
-            startActivity(i, options.toBundle());
-        } else {
-            startActivity(i);
+    @OnClick({R.id.edit_button_fullscreen_in})
+    public void onClickFullScreenInMode() {
+        if(movieList.size() > 0) {
+            Intent i = new Intent(this.getActivity(), VideolistPreviewActivity.class);
+            i.putExtra("TIME", seekBar.getProgress());
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options = ActivityOptions
+                        .makeSceneTransitionAnimation(this.getActivity(),
+                                new Pair<View, String>(preview, "preview of video"));
+                startActivity(i, options.toBundle());
+            } else {
+                startActivity(i);
+            }
         }
     }
 
-    @OnClick({R.id.edit_button_full_screen})
+    @OnClick({R.id.edit_button_fullscreen_in})
     public void trackClicks(View view) {
         sendButtonTracked(view.getId());
     }
