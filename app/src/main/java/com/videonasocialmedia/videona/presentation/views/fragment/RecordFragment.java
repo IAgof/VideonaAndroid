@@ -193,11 +193,6 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.button_navigate_edit)
     ImageButton buttonNavigateEdit;
 
-    //TRACKING Values,
-    private final int START_RECORDING = 1000;
-    private final int STOP_RECORDING = 1001;
-    private final int TIME_RECORDING = 1002;
-
 
     private SensorEventListener mOrientationListener = new SensorEventListener() {
         final int SENSOR_CONFIRMATION_THRESHOLD = 5;
@@ -461,23 +456,17 @@ public class RecordFragment extends Fragment implements RecordView,
 
 
     /**
-     *  Change camera listener
+     * Change camera listener
      */
-    @OnClick (R.id.button_change_camera)
-    public void buttonChangeCameraListener(){
+    @OnClick(R.id.button_change_camera)
+    public void buttonChangeCameraListener() {
 
         // Check flashMode and return to normal
         buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
         buttonSettinsCameraListener();
-
-      //  mCameraView.setRotation(Surface.ROTATION_90);
-
-
         int rotation = this.getActivity().getWindowManager().getDefaultDisplay()
                 .getRotation();
-
         recordPresenter.requestOtherCamera(rotation);
-
     }
 
     @OnClick (R.id.button_navigate_edit)
@@ -571,24 +560,16 @@ public class RecordFragment extends Fragment implements RecordView,
     @OnClick(R.id.button_camera_effect_fx)
     public void cameraEffectFxButtonListener() {
 
-        if(relativeLayoutCameraEffectColor.isShown()){
-
+        if (relativeLayoutCameraEffectColor.isShown()) {
             relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-
             buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
-
         }
-
-        if(relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
-
+        if (relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
             relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
             buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
-
         } else {
-
             relativeLayoutCameraEffectFx.setVisibility(View.VISIBLE);
             buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_pressed);
-
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
             }
@@ -601,23 +582,18 @@ public class RecordFragment extends Fragment implements RecordView,
     @OnClick(R.id.button_camera_effect_color)
     public void cameraEffectColorButtonListener() {
 
-        if(relativeLayoutCameraEffectFx.isShown()){
-
+        if (relativeLayoutCameraEffectFx.isShown()) {
             relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
             buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
-
         }
 
-        if(relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
-
+        if (relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
             relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
             buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
 
         } else {
-
             relativeLayoutCameraEffectColor.setVisibility(View.VISIBLE);
             buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_pressed);
-
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
             }
@@ -648,7 +624,7 @@ public class RecordFragment extends Fragment implements RecordView,
     public void showCameraEffectFxSelected(String cameraEffect) {
         Log.d(LOG_TAG, "showEffectSelected() RecordActivity");
         /// TODO apply animation effect
-       // cameraEffectFxAdapter.notifyDataSetChanged();
+        // cameraEffectFxAdapter.notifyDataSetChanged();
         cameraEffectFxAdapter.notifyDataSetChanged();
     }
 
@@ -690,15 +666,13 @@ public class RecordFragment extends Fragment implements RecordView,
         Intent edit = new Intent(getActivity(), EditActivity.class);
         startActivity(edit);
 
-
-      // ReStartFragment, mode recording continuous
-      // New button to navigate to Edit
-     //   reStartFragment();
-
+        // ReStartFragment, mode recording continuous
+        // New button to navigate to Edit
+        //   reStartFragment();
     }
 
     @Override
-    public void reStartFragment(){
+    public void reStartFragment() {
 
         cameraEffectColorAdapter = null;
         cameraEffectFxAdapter = null;
@@ -716,20 +690,16 @@ public class RecordFragment extends Fragment implements RecordView,
 
     @Override
     public void lockScreenRotation() {
-
         this.lockRotation = true;
     }
 
     @Override
     public void lockNavigator() {
-
-
     }
 
     @Override
     public void unLockNavigator() {
-
-       // this.unLockNavigator();
+        // this.unLockNavigator();
     }
 
     @Override
@@ -740,7 +710,7 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
     private void showFlash(boolean isFlashSupported) {
-        if(isFlashSupported){
+        if (isFlashSupported) {
             buttonFlashMode.setVisibility(View.VISIBLE);
         } else {
             // ¿View.GONE or View.INVISIBLE? Double check
@@ -753,32 +723,27 @@ public class RecordFragment extends Fragment implements RecordView,
 
         Log.d(LOG_TAG, "showChangeCamera boolean " + isChangeCameraSupported);
 
-        if(isChangeCameraSupported){
+        if (isChangeCameraSupported) {
             buttonChangeCamera.setVisibility(View.VISIBLE);
         } else {
             // ¿View.GONE or View.INVISIBLE?
             buttonChangeCamera.setVisibility(View.GONE);
         }
-
     }
 
 
     @Override
     public void showFlashModeTorch(boolean mode) {
-
-        if(mode){
+        if (mode) {
             buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_pressed);
         } else {
             buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
         }
-
     }
 
     @Override
     public void showCamera(int cameraMode) {
-
-        switch(cameraMode) {
-
+        switch (cameraMode) {
             case 0:
                 // Back camera
                 buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
@@ -790,8 +755,6 @@ public class RecordFragment extends Fragment implements RecordView,
             default:
                 buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
         }
-
-
     }
 
 
@@ -846,18 +809,15 @@ public class RecordFragment extends Fragment implements RecordView,
         chronometerRecord.start();
         // Activate animation rec
         imageRecPoint.setVisibility(View.VISIBLE);
-        AnimationDrawable frameAnimation = (AnimationDrawable)imageRecPoint.getDrawable();
+        AnimationDrawable frameAnimation = (AnimationDrawable) imageRecPoint.getDrawable();
         frameAnimation.setCallback(imageRecPoint);
         frameAnimation.setVisible(true, true);
-
     }
 
     @Override
     public void stopChronometer() {
-
         chronometerRecord.stop();
         imageRecPoint.setVisibility(View.INVISIBLE);
-
     }
 
     /**
@@ -880,7 +840,6 @@ public class RecordFragment extends Fragment implements RecordView,
                 String ss = s < 10 ? "0" + s : s + "";
                 chronometerRecord.setText(mm + ":" + ss);
                 RecordFragment.this.chronometerRecord.setText(mm + ":" + ss);
-
             }
         });
     }
@@ -891,7 +850,7 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
 
-     /**
+    /**
      * OnClick buttons, tracking Google Analytics
      */
     @OnClick({R.id.button_record, R.id.button_flash_mode, R.id.button_camera_effect_color,
@@ -1049,17 +1008,14 @@ public class RecordFragment extends Fragment implements RecordView,
     @Override
     public void onClickCameraEffectColor(int position) {
 
-        Log.d(LOG_TAG, "onClickCameraEffectColor position " + position );
+        Log.d(LOG_TAG, "onClickCameraEffectColor position " + position);
 
         if (isAlreadySelectedCameraEffectColor(position)) {
             return;
         }
 
-
-
         selectedCameraEffectColorIndex = position;
         sendButtonTracked(cameraEffectColorAdapter.getCameraEffectColor(position).getIconCameraEffectColorId());
         recordPresenter.setCameraEffectColor(position);
-
     }
 }

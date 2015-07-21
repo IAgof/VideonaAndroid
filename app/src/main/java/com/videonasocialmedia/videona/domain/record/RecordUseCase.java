@@ -85,7 +85,7 @@ public class RecordUseCase {
         outputLocation = new File(Constants.PATH_APP_TEMP, fileName).getAbsolutePath();
 
         //Get data from Project, Profile
-        Profile profile = Profile.getInstance(null);
+        Profile profile = Profile.getInstance(Profile.ProfileType.free);
 
         Size.Resolution resolution = profile.getResolution();
         Size videoSize = new Size(resolution);
@@ -97,9 +97,18 @@ public class RecordUseCase {
 
 
         // TODO, get audio data from Profile
+        /*
         mConfig = new SessionConfig.Builder(outputLocation)
                 .withVideoBitrate(videoQuality.getVideoBitRate())
                 .withVideoResolution(videoSize.getWidth(), videoSize.getHeigth())
+                .withAudioChannels(1)
+                .withAudioSamplerate(48000)
+                .withAudioBitrate(192 * 1000)
+                .build(); */
+
+        mConfig = new SessionConfig.Builder(outputLocation)
+                .withVideoBitrate(5000000)
+                .withVideoResolution(1280, 720)
                 .withAudioChannels(1)
                 .withAudioSamplerate(48000)
                 .withAudioBitrate(192 * 1000)
