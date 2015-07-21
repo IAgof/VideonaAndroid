@@ -252,8 +252,8 @@ public class GlUtil {
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
 
         //Alpha blending
-        //GLES20.glEnable(GLES20.GL_BLEND);
-        //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
         //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);

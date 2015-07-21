@@ -1,10 +1,12 @@
 package com.videonasocialmedia.videona.avrecorder;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.avrecorder.gles.FullFrameRect;
 import com.videonasocialmedia.videona.avrecorder.gles.GlUtil;
 import com.videonasocialmedia.videona.avrecorder.gles.Texture2dProgram;
@@ -41,13 +43,15 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
 
     boolean showBox = false;
 
+    Context context;
+
 
     /**
      * Constructs CameraSurfaceRenderer.
      * <p>
      * @param recorder video encoder object
      */
-    public CameraSurfaceRenderer(CameraEncoder recorder) {
+    public CameraSurfaceRenderer(CameraEncoder recorder, Context context) {
         mCameraEncoder = recorder;
 
         mCameraTextureId = -1;
@@ -62,6 +66,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         mNewFilter = Filters.FILTER_NONE;
 
         mRecordingEnabled = false;
+        this.context=context;
     }
 
 
@@ -85,12 +90,11 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         mFullScreenOverlay = new FullFrameRect(
                   new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
-        mOverlayTextureId = GlUtil.createTextureWithTextContent("HolaMundo");
-        //mOverlayTextureId = GlUtil.createTextureWithTextContent();
-        //mOverlayTextureId = GlUtil.createTextureFromImage(mCameraView.getContext(), R.drawable.gatito_rules);
-        mCameraTextureId = mFullScreenCamera.createTextureObject();
 
-        mCameraEncoder.onSurfaceCreated(mCameraTextureId);
+        mOverlayTextureId = GlUtil.createTextureFromImage(context, R.drawable.gatito_rules);
+        //mOverlayTextureId = GlUtil.createTextureWithTextContent("HolaMundo");
+        mCameraTextureId = mFullScreenCamera.createTextureObject();
+        mCameraEncoder.onSurfaceCreated(mCameraTextureId, mOverlayTextureId);
         mFrameCount = 0;
     }
 
@@ -128,8 +132,11 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
             mCameraEncoder.getSurfaceTextureForDisplay().updateTexImage();
             mCameraEncoder.getSurfaceTextureForDisplay().getTransformMatrix(mSTMatrix);
             //Drawing texture overlay:
-            mFullScreenOverlay.drawFrame(mOverlayTextureId, mSTMatrix);
+            GLES20.glViewport(0, 0, 1920, 1080);
             mFullScreenCamera.drawFrame(mCameraTextureId, mSTMatrix);
+            GLES20.glViewport(0, 0, 150, 150);
+
+            mFullScreenOverlay.drawFrame(mOverlayTextureId, mSTMatrix);
         }
 
         mFrameCount++;

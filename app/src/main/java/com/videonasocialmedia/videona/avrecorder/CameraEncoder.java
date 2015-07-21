@@ -50,6 +50,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     private boolean isEncoderReleased = false;
 
+
     private enum STATE {
         /* Stopped or pre-construction */
         UNINITIALIZED,
@@ -81,7 +82,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private WindowSurface mInputWindowSurface;
     private EglCore mEglCore;
     private FullFrameRect mFullScreen;
+    private FullFrameRect mFullScreenOverlay;
     private int mTextureId;
+    private int mOverlayTextureId;
     private int mFrameNum;
     private VideoEncoderCore mVideoEncoder;
     private Camera mCamera;
@@ -347,7 +350,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     public void setPreviewDisplay(GLCameraView display) {
         checkNotNull(display);
-        mDisplayRenderer = new CameraSurfaceRenderer(this);
+        mDisplayRenderer = new CameraSurfaceRenderer(this, this.context);
         // Prep GLSurfaceView and attach Renderer
         display.setEGLContextClientVersion(2);
         display.setRenderer(mDisplayRenderer);
@@ -570,12 +573,19 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 if (mIncomingSizeUpdated) {
                     mFullScreen.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
+                    mFullScreenOverlay.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
                     mIncomingSizeUpdated = false;
                 }
 
+                GLES20.glEnable(GLES20.GL_BLEND);
+                GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
                 surfaceTexture.getTransformMatrix(mTransform);
                 if (TRACE) Trace.beginSection("drawVEncoderFrame");
+                GLES20.glViewport(0,0,1280,720);
                 mFullScreen.drawFrame(mTextureId, mTransform);
+                GLES20.glViewport(0, 0, 150, 150);
+                mFullScreenOverlay.drawFrame(mOverlayTextureId, mTransform);
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {
                     mEncodedFirstFrame = true;
@@ -589,10 +599,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                    // saveFrameAsImage();
                     mThumbnailRequested = false;
                 }
-
-                //drawBox();
-               // drawText();
-               // drawImage();
 
                 mInputWindowSurface.setPresentationTime(mSurfaceTexture.getTimestamp());
                 mInputWindowSurface.swapBuffers();
@@ -625,11 +631,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private void drawBox() {
         GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
         GLES20.glScissor(0, 0, 100, 100);
-        GlUtil.createTextureWithTextContent("Videona");
         GLES20.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
-
     }
 
     private void drawText(){
@@ -670,8 +674,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
 
         //Alpha blending
-        //GLES20.glEnable(GLES20.GL_BLEND);
-        //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+//        GLES20.glEnable(GLES20.GL_BLEND);
+//        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
         //Use the Android GLUtils to specify a two-dimensional texture image from our bitmap
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
@@ -779,13 +783,15 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      *
      * @param textureId the id of the texture bound to the new display surface
      */
-    public void onSurfaceCreated(int textureId) {
+    public void onSurfaceCreated(int textureId, int overlayTextureId) {
         if (VERBOSE) Log.i(TAG, "onSurfaceCreated. Saving EGL State");
         synchronized (mReadyFence) {
             // The Host Activity lifecycle may go through a OnDestroy ... OnCreate ... OnSurfaceCreated ... OnPause ... OnStop...
             // on it's way out, so our real sense of bearing should come from whether the EncoderThread is running
             if (mReady) {
                 mEglSaver.saveEGLState();
+                //TODO si funciona mover al handler
+                mOverlayTextureId = overlayTextureId;
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_SURFACE_TEXTURE, textureId));
             }
         }
@@ -813,9 +819,17 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 // Create new programs and such for the new context.
                 mTextureId = textureId;
+
                 mFullScreen = new FullFrameRect(
                         new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_EXT));
-                mFullScreen.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
+                mFullScreen.getProgram().setTexSize(mSessionConfig.getVideoWidth(),
+                        mSessionConfig.getVideoHeight());
+
+                mFullScreenOverlay= new FullFrameRect(
+                        new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
+                mFullScreenOverlay.getProgram().setTexSize(mSessionConfig.getVideoWidth(),
+                        mSessionConfig.getVideoHeight());
+
                 mIncomingSizeUpdated = true;
                 mSurfaceTexture.attachToGLContext(mTextureId);
                 //mEglSaver.makeNothingCurrent();
@@ -828,6 +842,11 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                         mSessionConfig.getMuxer());
                 mTextureId = textureId;
                 mSurfaceTexture = new SurfaceTexture(mTextureId);
+
+                mFullScreenOverlay= new FullFrameRect(
+                        new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
+                mFullScreenOverlay.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
+
                 if (VERBOSE)
                     Log.i(TAG + "-SurfaceTexture", " SurfaceTexture created. pre setOnFrameAvailableListener");
                 mSurfaceTexture.setOnFrameAvailableListener(this);
