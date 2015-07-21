@@ -33,7 +33,7 @@ public class SessionConfig {
 
         // videona config
         mVideoConfig = new VideoEncoderConfig(1280, 720, 5 * 1000 * 1000);
-        mAudioConfig = new AudioEncoderConfig(2, 48000, 192 * 1000);
+        mAudioConfig = new AudioEncoderConfig(1, 48000, 192 * 1000);
 
 
         // Create a media file name
