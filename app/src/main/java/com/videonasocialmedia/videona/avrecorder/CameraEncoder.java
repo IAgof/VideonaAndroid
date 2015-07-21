@@ -583,7 +583,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 if (TRACE) Trace.beginSection("drawVEncoderFrame");
                 GLES20.glViewport(0,0,1280,720);
                 mFullScreen.drawFrame(mTextureId, mTransform);
-                GLES20.glViewport(10, 10, 136, 28);
+                GLES20.glViewport(15, 15, 178, 36);
                 mFullScreenOverlay.drawFrame(mOverlayTextureId, mTransform);
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {

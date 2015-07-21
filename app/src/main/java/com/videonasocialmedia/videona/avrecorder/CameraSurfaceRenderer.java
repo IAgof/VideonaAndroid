@@ -83,7 +83,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
         mFullScreenOverlay = new FullFrameRect(
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
-        mOverlayTextureId = GlUtil.createTextureFromImage(context, R.drawable.watermark);
+        mOverlayTextureId = GlUtil.createTextureFromImage(context, R.drawable.watermark720);
         //mOverlayTextureId = GlUtil.createTextureWithTextContent("HolaMundo");
         mCameraTextureId = mFullScreenCamera.createTextureObject();
         mCameraEncoder.onSurfaceCreated(mCameraTextureId, mOverlayTextureId);
