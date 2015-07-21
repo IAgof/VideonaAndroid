@@ -35,11 +35,8 @@ public class MicrophoneEncoder implements Runnable {
 
     private AndroidEncoder.OnMuxerFinishedEventListener onMuxerFinishedEventListener;
 
-    private SessionConfig mConfig;
-
     public MicrophoneEncoder(SessionConfig config, AndroidEncoder.OnMuxerFinishedEventListener listener) throws IOException {
         init(config);
-        this.mConfig = config;
         this.onMuxerFinishedEventListener = listener;
     }
 

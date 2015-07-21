@@ -730,7 +730,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
                     Log.d(LOG_TAG, "MSG_AVRECORDER_REFRESH");
                     break;
                 default:
-                    //recordPresenter.reStartFragment();
+                    recordPresenter.reStartFragment();
                     throw new RuntimeException("Unexpected msg what=" + what);
 
             }

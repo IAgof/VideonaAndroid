@@ -74,6 +74,8 @@ public class RecordFragment extends Fragment implements RecordView,
      * Activate some log_tag
      */
     private static final boolean VERBOSE = true;
+    private static final int START_RECORDING = 1000 ;
+    private static final int STOP_RECORDING = 1001 ;
     /**
      * Record Fragment
      */
@@ -410,6 +412,7 @@ public class RecordFragment extends Fragment implements RecordView,
         recyclerViewFx.setHasFixedSize(true);
         recyclerViewFx.setLayoutManager(layoutManagerFx);
 
+
         LinearLayoutManager layoutManagerColor = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewColor.setHasFixedSize(true);
         recyclerViewColor.setLayoutManager(layoutManagerColor);
@@ -530,7 +533,7 @@ public class RecordFragment extends Fragment implements RecordView,
                 @Override
                 public void onFinish() {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
-                   // reStartFragment();
+                    reStartFragment();
 
                 }
             }.start();
@@ -572,6 +575,7 @@ public class RecordFragment extends Fragment implements RecordView,
             buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_pressed);
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
+
             }
         }
     }
@@ -596,6 +600,7 @@ public class RecordFragment extends Fragment implements RecordView,
             buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_pressed);
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
+
             }
         }
     }
@@ -622,10 +627,11 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @Override
     public void showCameraEffectFxSelected(String cameraEffect) {
-        Log.d(LOG_TAG, "showEffectSelected() RecordActivity");
+        Log.d(LOG_TAG, "showCameraEffectFxSelected() " + cameraEffect);
         /// TODO apply animation effect
         // cameraEffectFxAdapter.notifyDataSetChanged();
         cameraEffectFxAdapter.notifyDataSetChanged();
+
     }
 
     /**
@@ -645,7 +651,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
     @Override
     public void showCameraEffectColorSelected(String colorEffect) {
-        Log.d(LOG_TAG, "showCameraEffectColorSelected()");
+        Log.d(LOG_TAG, "showCameraEffectColorSelected() " +  colorEffect);
         cameraEffectColorAdapter.notifyDataSetChanged();
     }
 
