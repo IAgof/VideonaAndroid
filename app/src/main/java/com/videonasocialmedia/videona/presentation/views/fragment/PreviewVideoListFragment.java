@@ -11,11 +11,15 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.app.ActivityOptions;
 import android.app.Fragment;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +42,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.presentation.views.activity.VideolistPreviewActivity;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.IOException;
@@ -478,6 +483,22 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
 
     private void refreshStopTimeTag(int time) {
         stopTimeTag.setText(TimeUtils.toFormattedTime(time));
+    }
+
+    @OnClick({R.id.edit_button_full_screen})
+    public void onClickFullScreenMode() {
+        String videoPath = movieList.get(videoToPlay).getMediaPath();
+        Intent i = new Intent(this.getActivity(), VideolistPreviewActivity.class);
+        i.putExtra("VIDEO_PATH", videoPath);
+        // Setup the transition to the detail activity
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(this.getActivity(),
+                            new Pair<View, String>(preview, "preview of video"));
+            startActivity(i, options.toBundle());
+        } else {
+            startActivity(i);
+        }
     }
 
     @OnClick({R.id.edit_button_full_screen})
