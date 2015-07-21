@@ -197,7 +197,7 @@ public class ExporterImpl implements Exporter {
         Movie merge;
         try {
             merge = appender.appendVideos(videoTranscodedPaths, addOriginalAudio);
-        } catch (IOException e) {
+        } catch (Exception e) {
             merge = null;
             onExportEndedListener.onExportError(String.valueOf(e));
         }
