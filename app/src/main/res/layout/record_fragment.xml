@@ -29,7 +29,8 @@
         android:layout_width="120dp"
         android:layout_height="450dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="false">
+        android:layout_alignParentStart="false"
+        android:paddingEnd="8dp">
 
         <ImageButton
             android:id="@+id/button_navigate_edit"
@@ -37,7 +38,6 @@
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal|end"
             android:background="@null"
-            android:paddingEnd="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/common_icon_edit_normal"
             android:layout_above="@+id/button_record"
@@ -47,11 +47,10 @@
 
         <ImageButton
             android:id="@+id/button_record"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_gravity="center_horizontal|end"
             android:background="@null"
-            android:paddingEnd="16dp"
             android:scaleType="fitCenter"
             android:src="@drawable/activity_record_icon_rec_normal"
             android:layout_centerVertical="true"
@@ -104,9 +103,10 @@
         android:id="@+id/relativelayout_camera_effect_fx"
         android:layout_width="400dp"
         android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/rec_1"
         android:visibility="invisible">
 
         <android.support.v7.widget.RecyclerView
@@ -121,9 +121,10 @@
         android:id="@+id/relativelayout_camera_effect_color"
         android:layout_width="400dp"
         android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/rec_1"
         android:visibility="invisible">
 
         <android.support.v7.widget.RecyclerView
@@ -145,16 +146,16 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/linearLayout"
-            android:gravity="center_horizontal"
-            android:layout_alignParentStart="false"
+            android:gravity="right"
             android:layout_alignParentEnd="true"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:measureWithLargestChild="false"
-            android:layout_margin="16dp">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_alignParentStart="true"
+            >
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -209,18 +210,17 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/linearLayoutRecTimer"
             android:gravity="center_horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:measureWithLargestChild="false"
-            android:layout_marginLeft="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="16dp"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="50dp">
+            >
 
             <ImageView
                 android:id="@+id/imageRecPoint"
