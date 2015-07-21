@@ -16,7 +16,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public abstract class Muxer {
     private static final String TAG = "Muxer";
 
-    public static enum FORMAT { MPEG4 }
+    public enum FORMAT { MPEG4 }
 
     private final int mExpectedNumTracks = 2;           // TODO: Make this configurable?
 
@@ -38,9 +38,7 @@ public abstract class Muxer {
         for(int i=0; i< mLastPts.length; i++) {
             mLastPts[i] = 0;
         }
-
     }
-
 
     /**
      * Returns the absolute output path.

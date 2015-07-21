@@ -135,17 +135,13 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
      * Video duration int, needed for tracking
      */
     private String durationVideoRecorded = "";
-
+    
     public RecordPresenter(final RecordView recordView, Context context) throws IOException {
-
         this.recordView = recordView;
         this.context = context;
         recordUseCase = new RecordUseCase();
-
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         removeMusicFromProjectUseCase= new RemoveMusicFromProjectUseCase();
-
-
     }
 
 
@@ -399,7 +395,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
     }
 
-    private void reStartFragment(){
+    private void reStartFragment() {
 
         Log.d(LOG_TAG, "reStartFragment MSG_AVRECORDER_REFRESH");
 
@@ -679,10 +675,9 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String fileName = "VID_" + timeStamp + ".mp4";
         File fRecord = new File(Constants.PATH_APP_MASTERS, fileName);
-
         File fTempRecord = new File((recordUseCase.getOutputVideoPath()));
-
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        
             try {
                 Log.d("SHOW TIME TAG", "" );
                 retriever.setDataSource(fTempRecord.getAbsolutePath());
@@ -690,14 +685,9 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
                         MediaMetadataRetriever.METADATA_KEY_DURATION);
                 //int durationInt = Integer.parseInt(duration);
                 Log.d(LOG_TAG, "duration video recorded " + duration);
-
                 durationVideoRecorded = duration;
-
                 fTempRecord.renameTo(fRecord);
-
                 addVideoToProjectUseCase.addVideoToTrack(fRecord.getAbsolutePath(), this);
-
-
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d(LOG_TAG, "Video has not been recorded properly");
@@ -714,7 +704,6 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     static class AVRecorderHandler extends Handler {
 
         private WeakReference<RecordPresenter> mWeakAVRecorder;
-
         public AVRecorderHandler(RecordPresenter recordPresenter) {
             mWeakAVRecorder = new WeakReference<RecordPresenter>(recordPresenter);
         }

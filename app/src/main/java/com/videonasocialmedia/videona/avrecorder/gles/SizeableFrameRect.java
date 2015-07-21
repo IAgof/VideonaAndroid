@@ -39,8 +39,8 @@ public class SizeableFrameRect{
     private static float TEX_COORDS[] = {
             0.0f, 0.0f,     // 0 bottom left
             1.0f, 0.0f,     // 1 bottom right
-            0.0f, 1.0f,     // 2 top left
-            1.0f, 1.0f      // 3 top right
+            0.0f, 0.5f,     // 2 top left
+            0.5f, 0.5f      // 3 top right
     };
     private static final FloatBuffer TEX_COORDS_BUF = GlUtil.createFloatBuffer(TEX_COORDS);
     private static final int TEX_COORDS_STRIDE = 2 * SIZEOF_FLOAT;
@@ -55,6 +55,18 @@ public class SizeableFrameRect{
     public SizeableFrameRect(Texture2dProgram program, float[] texCoords) {
         mProgram = program;
         TEX_COORDS = texCoords;
+
+        Matrix.setIdentityM(IDENTITY_MATRIX, 0);
+    }
+
+    /**
+     * Prepares the object.
+     *
+     * @param program The program to use.  FullFrameRect takes ownership, and will release
+     *     the program when no longer needed.
+     */
+    public SizeableFrameRect(Texture2dProgram program) {
+        mProgram = program;
 
         Matrix.setIdentityM(IDENTITY_MATRIX, 0);
     }

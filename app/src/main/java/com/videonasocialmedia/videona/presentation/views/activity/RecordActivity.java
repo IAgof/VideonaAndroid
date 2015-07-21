@@ -31,29 +31,25 @@ import butterknife.InjectView;
 /**
  * RecordActivity manages a single live record.
  */
-//public class RecordActivity extends ImmersiveActivity {
-// Not immersive mode. Home buttons visibles
+
 public class RecordActivity extends Activity {
 
     /**
      * LOG_TAG
      */
     private final String LOG_TAG = getClass().getSimpleName();
-
-    /**
-     * Record fragment
-     */
-    private RecordFragment recordFragment;
-
-    /**
-     * Boolean, register button back pressed to exit from app
-     */
-    private boolean buttonBackPressed = false;
-
     @InjectView(R.id.activity_record_drawer_layout)
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_record_navigation_drawer)
     View navigatorView;
+    /**
+     * Record fragment
+     */
+    private RecordFragment recordFragment;
+    /**
+     * Boolean, register button back pressed to exit from app
+     */
+    private boolean buttonBackPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +64,12 @@ public class RecordActivity extends Activity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-
         if (savedInstanceState == null) {
-
             recordFragment = RecordFragment.getInstance();
             getFragmentManager().beginTransaction()
                     .add(R.id.record_fragment, recordFragment)
                     .commit();
-
         }
-
     }
 
     @Override
@@ -95,21 +87,20 @@ public class RecordActivity extends Activity {
     }
 
     @Override
-    protected void onRestart(){
+    protected void onRestart() {
         super.onRestart();
         Log.d(LOG_TAG, "onRestart");
-
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "onStop");
 
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
         Log.d(LOG_TAG, "onDestroy");
     }
@@ -126,7 +117,7 @@ public class RecordActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-        if(drawerLayout.isDrawerOpen(Gravity.LEFT)){
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(navigatorView);
             return;
         }
@@ -152,8 +143,7 @@ public class RecordActivity extends Activity {
     }
 
 
-
-    public void navigateToEdit(){
+    public void navigateToEdit() {
 
         Log.d(LOG_TAG, "navigateToEdit");
 
@@ -161,7 +151,6 @@ public class RecordActivity extends Activity {
         edit.putExtra("SHARE", false);
         startActivity(edit);
     }
-
 
 
 }
