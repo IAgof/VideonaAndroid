@@ -124,8 +124,14 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
+        /*
+        if(videoPlayer != null) {
+            videoPlayer.release();
+            videoPlayer = null;
+        }
+        */
     }
 
     @Override
@@ -296,11 +302,13 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
                 videoPlayer.setLooping(false);
                 videoPlayer.start();
                 videoPlayer.seekTo(startTime);
+                /*
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                */
                 videoPlayer.pause();
                 updateSeekBarProgress();
             }
@@ -340,6 +348,7 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         });
 
         try {
+            videoPlayer.stop();
             videoPlayer.reset();
             videoPlayer.setDataSource(video.getMediaPath());
             videoPlayer.prepare();
@@ -472,6 +481,15 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         preview.stopPlayback();
         preview.clearFocus();
         if (videoPlayer != null) {
+            /*
+            if(videoPlayer.isPlaying()) {
+                videoPlayer.pause();
+                videoPlayer.stop();
+            }
+            */
+            //videoPlayer.reset();
+            //videoPlayer.stop();
+            //videoPlayer.setNextMediaPlayer(null);
             videoPlayer.release();
             videoPlayer = null;
         }
@@ -488,14 +506,16 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
     @OnClick({R.id.edit_button_fullscreen_out})
     public void onClickFullScreenOutMode() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            releaseVideoView();
-            releaseMusicPlayer();
-            projectDuration = 0;
-            instantTime = 0;
             finishAfterTransition();
         } else {
             finish();
         }
+        videoPlayer.stop();
+        videoPlayer.reset();
+        releaseVideoView();
+        releaseMusicPlayer();
+        projectDuration = 0;
+        instantTime = 0;
         //overridePendingTransition(0,0);
     }
 }
