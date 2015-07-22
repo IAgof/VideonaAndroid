@@ -507,4 +507,18 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         instantTime = 0;
         //overridePendingTransition(0,0);
     }
+
+    @OnClick({R.id.share_button_share})
+    public void shareVideo() {
+        /*
+        pausePreview();
+        showProgressDialog();
+        final Runnable r = new Runnable() {
+            public void run() {
+                editPresenter.startExport();
+            }
+        };
+        performOnBackgroundThread(this, r);
+        */
+    }
 }
