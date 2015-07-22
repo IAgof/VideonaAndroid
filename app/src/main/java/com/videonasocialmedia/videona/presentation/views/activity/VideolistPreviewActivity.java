@@ -91,16 +91,11 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
 
         previewPresenter = new PreviewPresenter(this);
 
-        seekBar.setProgress(0);
+        seekBar.setProgress(instantTime);
         seekBar.setOnSeekBarChangeListener(this);
 
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
-
-        /*
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            getWindow().setExitTransition(new Explode());
-            */
     }
 
     @Override
@@ -126,12 +121,6 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
     @Override
     public void onStop() {
         super.onStop();
-        /*
-        if(videoPlayer != null) {
-            videoPlayer.release();
-            videoPlayer = null;
-        }
-        */
     }
 
     @Override

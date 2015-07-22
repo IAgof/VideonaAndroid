@@ -14,8 +14,8 @@
 
         <ImageButton
             android:id="@+id/edit_button_fullscreen_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignTop="@+id/edit_preview_player"
             android:layout_alignLeft="@+id/edit_preview_player"
             android:layout_marginLeft="8dp"

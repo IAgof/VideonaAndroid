@@ -53,7 +53,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     @Override
     public void remove(int itemPosition) {
-        videoList.remove(itemPosition);
+         videoList.remove(itemPosition);
         notifyItemRemoved(itemPosition);
     }
 

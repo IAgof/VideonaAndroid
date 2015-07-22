@@ -90,7 +90,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             updateSeekBarProgress();
         }
     };
-    //private boolean isFullScreenBack = false;
+    private boolean isFullScreenBack = false;
     /**
      * Tracker google analytics
      */
@@ -140,12 +140,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @Override
     public void onStop() {
         super.onStop();
-        /*
-        if(videoPlayer != null) {
-            videoPlayer.release();
-            videoPlayer = null;
-        }
-        */
     }
 
     @OnTouch(R.id.edit_preview_player)
@@ -262,7 +256,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             videoToPlay = getPosition(video);
             int timeInMsec = instantTime - videoStartTimeInProject.get(videoToPlay) +
                     movieList.get(videoToPlay).getFileStartTime();
-            /*
+
             if(isFullScreenBack) {
                 isFullScreenBack = false;
                 initVideoPlayer(video, timeInMsec);
@@ -272,12 +266,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 } else {
                     playNextVideo(video, timeInMsec);
                 }
-            }
-            */
-            if (videoPlayer == null) {
-                initVideoPlayer(video, timeInMsec);
-            } else {
-                playNextVideo(video, timeInMsec);
             }
             if (videoPlayer != null && isMusicOnProject()) {
                 muteVideo();
@@ -319,15 +307,16 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 videoPlayer.setLooping(false);
                 videoPlayer.start();
                 videoPlayer.seekTo(startTime);
-                /*
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                */
                 videoPlayer.pause();
                 updateSeekBarProgress();
+            }
+        });
+        preview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                videoPlayer.reset();
+                initVideoPlayer(video, instantTime);
+                return false;
             }
         });
         preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -347,13 +336,26 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                videoPlayer.setVolume(0.5f, 0.5f);
-                videoPlayer.setLooping(false);
-                videoPlayer.start();
-                videoPlayer.seekTo(instantToStart);
+                try {
+                    videoPlayer.setVolume(0.5f, 0.5f);
+                    videoPlayer.setLooping(false);
+                    videoPlayer.start();
+                    videoPlayer.seekTo(instantToStart);
+                } catch(Exception e) {
+                    // TODO don't force media player. Media player must be null here
+                    seekBar.setProgress(0);
+                    playButton.setVisibility(View.VISIBLE);
+                }
             }
         });
-
+        preview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                videoPlayer.reset();
+                initVideoPlayer(video, instantTime);
+                return false;
+            }
+        });
         preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -365,7 +367,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 }
             }
         });
-
         try {
             videoPlayer.reset();
             videoPlayer.setDataSource(video.getMediaPath());
@@ -515,9 +516,10 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @OnClick({R.id.edit_button_fullscreen_in})
     public void onClickFullScreenInMode() {
         if(movieList.size() > 0) {
-            //isFullScreenBack = true;
+            isFullScreenBack = true;
             Intent i = new Intent(this.getActivity(), VideolistPreviewActivity.class);
-            i.putExtra("TIME", seekBar.getProgress());
+            //i.putExtra("TIME", seekBar.getProgress());
+            i.putExtra("TIME", 0);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ActivityOptions options = ActivityOptions
                         .makeSceneTransitionAnimation(this.getActivity(),
