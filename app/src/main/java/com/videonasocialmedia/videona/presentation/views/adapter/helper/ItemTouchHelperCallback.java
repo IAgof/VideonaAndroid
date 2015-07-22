@@ -1,7 +1,12 @@
 package com.videonasocialmedia.videona.presentation.views.adapter.helper;
 
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
+
+import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 
 /**
  * Created by jca on 7/7/15.
@@ -9,6 +14,12 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private MovableItemsAdapter adapter;
+    private Drawable underSwipeIcon;
+
+    public ItemTouchHelperCallback(MovableItemsAdapter adapter, Drawable underSwipeIcon) {
+        this.adapter = adapter;
+        this.underSwipeIcon=underSwipeIcon;
+    }
 
     public ItemTouchHelperCallback(MovableItemsAdapter adapter) {
         this.adapter = adapter;
@@ -32,6 +43,27 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
         return makeMovementFlags(dragFlags, swypeFlags);
         //return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, dragFlags);
+    }
+
+    @Override
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        if (underSwipeIcon!=null && actionState==ItemTouchHelper.ACTION_STATE_SWIPE){
+            View item= viewHolder.itemView;
+            int left= item.getLeft();
+            int right= item.getRight();
+            int top= item.getTop();
+            int bottom= item.getBottom();
+
+            int height= top-bottom;
+            int width= right-left;
+
+            //TODO remove hardcoded values
+            //underSwipeIcon.setBounds(left+50,top+100,right-50,bottom-5);
+            underSwipeIcon.setBounds(left+(width/4),top-height/2,right-width/4,bottom);
+            //underSwipeIcon.setBounds(left,top,right,bottom);
+            underSwipeIcon.draw(c);
+        }
     }
 
     @Override

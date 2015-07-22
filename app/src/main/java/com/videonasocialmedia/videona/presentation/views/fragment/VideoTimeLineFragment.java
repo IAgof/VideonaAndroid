@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,6 +33,7 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;
 
+    private ItemTouchHelper touchHelper;
     private VideoTimeLineAdapter adapter;
     private VideoTimeLinePresenter presenter;
     private ItemTouchHelper.Callback callback;
@@ -44,12 +46,24 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
         ButterKnife.inject(this, v);
         if (presenter == null)
             presenter = new VideoTimeLinePresenter(this);
-        //RecyclerView.LayoutManager layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
+        initRecycler();
+        return v;
+    }
+
+    private void initRecycler() {
+        adapter = new VideoTimeLineAdapter();
+        adapter.setClickListener((VideoTimeLineRecyclerViewClickListener) this.getActivity());
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity(),
                 GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
-        return v;
+        Drawable trashIcon = getActivity().getResources()
+                .getDrawable(R.drawable.common_icon_delete_grey);
+        callback = new ItemTouchHelperCallback(adapter, trashIcon);
+        touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -59,13 +73,16 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void showVideoList(List<Video> videoList) {
-            adapter = new VideoTimeLineAdapter(videoList, presenter);
-            recyclerView.setAdapter(adapter);
-            callback = new ItemTouchHelperCallback(adapter);
-            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-            touchHelper.attachToRecyclerView(recyclerView);
-            adapter.setClickListener((VideoTimeLineRecyclerViewClickListener) this.getActivity());
+        if (adapter == null || touchHelper == null || callback == null || recyclerView == null)
+            initRecycler();
+        adapter.setVideoList(videoList);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

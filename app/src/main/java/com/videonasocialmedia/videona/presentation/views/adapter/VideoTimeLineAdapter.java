@@ -15,6 +15,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoTimeLineP
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,13 +31,16 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     private Context context;
     private List<Video> videoList;
-    private VideoTimeLinePresenter presenter;
 
     private VideoTimeLineRecyclerViewClickListener clickListener;
 
-    public VideoTimeLineAdapter(List<Video> videoList, VideoTimeLinePresenter presenter) {
+    public VideoTimeLineAdapter(List<Video> videoList) {
         this.videoList = videoList;
-        //this.presenter = presenter;
+
+    }
+
+    public VideoTimeLineAdapter() {
+        this.videoList= new ArrayList<>();
     }
 
     public void setClickListener(VideoTimeLineRecyclerViewClickListener clickListener) {
@@ -112,7 +116,5 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             if (clickListener!=null)
             clickListener.onVideoClicked(this.getAdapterPosition());
         }
-
     }
-
 }
