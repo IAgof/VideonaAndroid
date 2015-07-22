@@ -291,13 +291,11 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
                 videoPlayer.setLooping(false);
                 videoPlayer.start();
                 videoPlayer.seekTo(startTime);
-                /*
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                */
                 videoPlayer.pause();
                 updateSeekBarProgress();
             }
