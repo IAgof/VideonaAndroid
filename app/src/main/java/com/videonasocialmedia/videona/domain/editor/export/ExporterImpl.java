@@ -147,7 +147,7 @@ public class ExporterImpl implements Exporter {
             String video = videoPaths.get(index);
             try {
                 transcoder.transcodeFile(video, listener);
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 Log.d(TAG, String.valueOf(e));
             }
             index++;
@@ -213,7 +213,7 @@ public class ExporterImpl implements Exporter {
         for (String audio : audioPaths) {
             try {
                 audioList.add(trimmer.trim(audio, 0, movieDuration));
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 onExportEndedListener.onExportError(String.valueOf(e));
             }
         }
@@ -229,7 +229,7 @@ public class ExporterImpl implements Exporter {
         if (audioTracks.size() > 0) {
             try {
                 movie.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 onExportEndedListener.onExportError(String.valueOf(e));
                 // TODO se debe continuar sin música o lo paro??
             }
@@ -245,7 +245,7 @@ public class ExporterImpl implements Exporter {
             long spent=System.currentTimeMillis()-start;
             Log.d("WRITING VIDEO FILE", "time spent in millis: " + spent);
             onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             onExportEndedListener.onExportError(String.valueOf(e));
         }
     }
