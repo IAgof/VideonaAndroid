@@ -54,10 +54,15 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
             int right= item.getRight();
             int top= item.getTop();
             int bottom= item.getBottom();
-            //TODO remove hardcoded values
-            underSwipeIcon.setBounds(left+50,top+100,right-50,bottom-5);
-            underSwipeIcon.draw(c);
 
+            int height= top-bottom;
+            int width= right-left;
+
+            //TODO remove hardcoded values
+            //underSwipeIcon.setBounds(left+50,top+100,right-50,bottom-5);
+            underSwipeIcon.setBounds(left+(width/4),top-height/2,right-width/4,bottom);
+            //underSwipeIcon.setBounds(left,top,right,bottom);
+            underSwipeIcon.draw(c);
         }
     }
 
