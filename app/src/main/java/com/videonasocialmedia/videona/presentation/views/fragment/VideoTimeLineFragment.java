@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -60,12 +61,14 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
 
     @Override
     public void showVideoList(List<Video> videoList) {
-            adapter = new VideoTimeLineAdapter(videoList, presenter);
-            recyclerView.setAdapter(adapter);
-            callback = new ItemTouchHelperCallback(adapter);
-            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-            touchHelper.attachToRecyclerView(recyclerView);
-            adapter.setClickListener((VideoTimeLineRecyclerViewClickListener) this.getActivity());
+        adapter = new VideoTimeLineAdapter(videoList, presenter);
+        recyclerView.setAdapter(adapter);
+        Drawable trashIcon = getActivity().getResources()
+                .getDrawable(R.drawable.common_icon_delete_normal);
+        callback = new ItemTouchHelperCallback(adapter, trashIcon);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
+        adapter.setClickListener((VideoTimeLineRecyclerViewClickListener) this.getActivity());
     }
 
     @Override
