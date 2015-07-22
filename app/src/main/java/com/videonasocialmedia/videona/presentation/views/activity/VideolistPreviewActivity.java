@@ -4,26 +4,19 @@
  * info@videona.com
  * All rights reserved
  *
- * Authors:
- * Juan Javier Cabanas Abascal
- * Verónica Lago Fominaya
+ * Author:
+ * Veronica Lago Fominaya
  */
 
-package com.videonasocialmedia.videona.presentation.views.fragment;
+package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.ActivityOptions;
-import android.app.Fragment;
-import android.content.Intent;
+import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.SeekBar;
@@ -31,18 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
-import com.videonasocialmedia.videona.presentation.views.activity.VideolistPreviewActivity;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.IOException;
@@ -55,11 +43,11 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 
 /**
- * This class is used to show the right panel of the audio fx menu
+ * This class is used to show a preview of the selected video.
  */
-public class PreviewVideoListFragment extends Fragment implements PreviewView,
+public class VideolistPreviewActivity extends Activity implements PreviewView,
         SeekBar.OnSeekBarChangeListener {
-    
+
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
     @InjectView(R.id.edit_button_play)
@@ -70,7 +58,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     TextView startTimeTag;
     @InjectView(R.id.edit_text_end_trim)
     TextView stopTimeTag;
-    
+
+    private final String LOG_TAG = "VIDEO LIST PREVIEW ACTIVITY";
     protected Handler handler = new Handler();
     private PreviewPresenter previewPresenter;
     private MediaController mediaController;
@@ -90,46 +79,43 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             updateSeekBarProgress();
         }
     };
-    //private boolean isFullScreenBack = false;
-    /**
-     * Tracker google analytics
-     */
-    private Tracker tracker;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_preview, container, false);
-        ButterKnife.inject(this, view);
-        VideonaApplication app = (VideonaApplication) getActivity().getApplication();
-        tracker = app.getTracker();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_videolist_preview);
+        ButterKnife.inject(this);
+
+        Bundle bundle = getIntent().getExtras();
+        instantTime = bundle.getInt("TIME");
 
         previewPresenter = new PreviewPresenter(this);
 
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
 
-        mediaController = new MediaController(getActivity());
+        mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
 
-        return view;
+        /*
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setExitTransition(new Explode());
+            */
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        handler.removeCallbacksAndMessages(null);
-        ButterKnife.reset(this);
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         updateVideoList();
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         super.onPause();
         releaseVideoView();
         releaseMusicPlayer();
@@ -146,6 +132,13 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             videoPlayer = null;
         }
         */
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+        ButterKnife.reset(this);
     }
 
     @OnTouch(R.id.edit_preview_player)
@@ -182,6 +175,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         List<Media> list = previewPresenter.checkVideosOnProject();
         return list.size() > 0;
     }
+
 
     @Override
     public void playPreview() {
@@ -220,7 +214,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     private void initMusicPlayer() {
         if (musicPlayer == null) {
             music = (Music) project.getAudioTracks().get(0).getItems().get(0);
-            musicPlayer = MediaPlayer.create(getActivity(), music.getMusicResourceId());
+            musicPlayer = MediaPlayer.create(this, music.getMusicResourceId());
             musicPlayer.setVolume(0.5f, 0.5f);
         }
     }
@@ -262,18 +256,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             videoToPlay = getPosition(video);
             int timeInMsec = instantTime - videoStartTimeInProject.get(videoToPlay) +
                     movieList.get(videoToPlay).getFileStartTime();
-            /*
-            if(isFullScreenBack) {
-                isFullScreenBack = false;
-                initVideoPlayer(video, timeInMsec);
-            } else {
-                if (videoPlayer == null) {
-                    initVideoPlayer(video, timeInMsec);
-                } else {
-                    playNextVideo(video, timeInMsec);
-                }
-            }
-            */
+
             if (videoPlayer == null) {
                 initVideoPlayer(video, timeInMsec);
             } else {
@@ -343,7 +326,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     }
 
     private void playNextVideo(final Video video, final int instantToStart) {
-
         preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -353,7 +335,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 videoPlayer.seekTo(instantToStart);
             }
         });
-
         preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -367,6 +348,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         });
 
         try {
+            videoPlayer.stop();
             videoPlayer.reset();
             videoPlayer.setDataSource(video.getMediaPath());
             videoPlayer.prepare();
@@ -380,7 +362,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     public void showError(String message) {
         releaseVideoView();
         releaseMusicPlayer();
-        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.toast_add_videos), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getApplicationContext(), getString(R.string.toast_add_videos), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -483,7 +465,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         videoToPlay = 0;
         if(movieList.size() > 0)
             initVideoPlayer(movieList.get(videoToPlay),
-                movieList.get(videoToPlay).getFileStartTime() + 100);
+                    movieList.get(videoToPlay).getFileStartTime() + 100);
         seekBar.setProgress(0);
         instantTime = 0;
         if (musicPlayer != null && musicPlayer.isPlaying()) {
@@ -499,6 +481,15 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         preview.stopPlayback();
         preview.clearFocus();
         if (videoPlayer != null) {
+            /*
+            if(videoPlayer.isPlaying()) {
+                videoPlayer.pause();
+                videoPlayer.stop();
+            }
+            */
+            //videoPlayer.reset();
+            //videoPlayer.stop();
+            //videoPlayer.setNextMediaPlayer(null);
             videoPlayer.release();
             videoPlayer = null;
         }
@@ -512,49 +503,19 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         stopTimeTag.setText(TimeUtils.toFormattedTime(time));
     }
 
-    @OnClick({R.id.edit_button_fullscreen_in})
-    public void onClickFullScreenInMode() {
-        if(movieList.size() > 0) {
-            //isFullScreenBack = true;
-            Intent i = new Intent(this.getActivity(), VideolistPreviewActivity.class);
-            i.putExtra("TIME", seekBar.getProgress());
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions
-                        .makeSceneTransitionAnimation(this.getActivity(),
-                                new Pair<View, String>(preview, "preview of video"));
-                startActivity(i, options.toBundle());
-            } else {
-                startActivity(i);
-            }
+    @OnClick({R.id.edit_button_fullscreen_out})
+    public void onClickFullScreenOutMode() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        } else {
+            finish();
         }
+        videoPlayer.stop();
+        videoPlayer.reset();
+        releaseVideoView();
+        releaseMusicPlayer();
+        projectDuration = 0;
+        instantTime = 0;
+        //overridePendingTransition(0,0);
     }
-
-    @OnClick({R.id.edit_button_fullscreen_in})
-    public void trackClicks(View view) {
-        sendButtonTracked(view.getId());
-    }
-
-
-    /**
-     * Sends button clicks to Google Analytics
-     *
-     * @param id the identifier of the clicked button
-     */
-    private void sendButtonTracked(int id) {
-        String label;
-        switch (id) {
-            case R.id.fragment_navigator_record_button:
-                label = "Go to full screen";
-                break;
-            default:
-                label = "Other";
-        }
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Full Screen")
-                .setAction("button clicked")
-                .setLabel(label)
-                .build());
-        GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext()).dispatchLocalHits();
-    }
-
 }

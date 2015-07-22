@@ -1,8 +1,11 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Fragment;
+import android.content.Intent;
 import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +23,11 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
+import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
@@ -34,7 +40,8 @@ import butterknife.InjectView;
 /**
  * Created by jca on 14/5/15.
  */
-public class VideoGalleryFragment extends Fragment implements VideoGalleryView, MusicRecyclerViewClickListener {
+public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
+        MusicRecyclerViewClickListener, OnTransitionClickListener {
 
     public static final int SELECTION_MODE_SINGLE = 0;
     public static final int SELECTION_MODE_MULTIPLE = 1;
@@ -182,6 +189,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         videoGalleryAdapter.setSelectionSupport(selectionSupport);
         videoGalleryAdapter.setRecyclerViewClickListener(this);
         recyclerView.setAdapter(videoGalleryAdapter);
+        videoGalleryAdapter.setOnTransitionClickListener(this);
 
         showTimeTag(videoList);
     }
@@ -255,6 +263,22 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView, 
         }
         if (selectedElements != null)
             videoGalleryAdapter.clearView();
+    }
+
+    @Override
+    public void onClick(View transitionOrigin, int positionOnAdapter) {
+        selectedVideo = videoGalleryAdapter.getVideo(positionOnAdapter);
+        String videoPath = selectedVideo.getMediaPath();
+        Intent i = new Intent(getActivity(), VideoPreviewActivity.class);
+        i.putExtra("VIDEO_PATH", videoPath);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(getActivity(),
+                            new Pair<View, String>(transitionOrigin, "preview of one video"));
+            startActivity(i, options.toBundle());
+        } else {
+            startActivity(i);
+        }
     }
 
     private class TimeChangesHandler extends Handler {
