@@ -96,7 +96,7 @@ public class ExporterImpl implements Exporter {
                 } else {
                     videoTrimmedPaths.add(medias.get(index).getMediaPath());
                 }
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 trimCorrect = false;
                 videoTrimmedPaths = null;
                 onExportEndedListener.onExportError(String.valueOf(e));
