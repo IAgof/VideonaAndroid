@@ -522,7 +522,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
 
     @OnClick({R.id.edit_button_fullscreen_in})
     public void onClickFullScreenInMode() {
-        if(movieList.size() > 0) {
+        if(isVideosOnProject()) {
             isFullScreenBack = true;
             Intent i = new Intent(this.getActivity(), VideolistPreviewActivity.class);
             //i.putExtra("TIME", seekBar.getProgress());
