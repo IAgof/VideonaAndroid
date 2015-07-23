@@ -61,7 +61,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
      * @param editor
      */
     public InitAppPresenter(InitAppView initAppView, Context context,
-                            SharedPreferences sharedPreferences, SharedPreferences.Editor editor){
+                            SharedPreferences sharedPreferences, SharedPreferences.Editor editor) {
 
         this.initAppView = initAppView;
         this.context = context;
@@ -82,7 +82,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
      * Checks the available settings of the camera (back/front) and checks the principal directories
      * of the app
      */
-    public void start(){
+    public void start() {
         checkCameraSettings();
         checkPathsApp(this);
     }
@@ -101,7 +101,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
      * Checks the available cameras on the device (back/front)
      */
     private void checkAvailableCameras() {
-        if(camera == null) {
+        if (camera == null) {
             camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
                     ConfigPreferences.BACK_CAMERA));
         }
@@ -110,7 +110,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
         Log.d(LOG_TAG, "BACK_CAMERA_SUPPORTED");
 
         numSupportedCameras = Camera.getNumberOfCameras();
-        if(numSupportedCameras > 1) {
+        if (numSupportedCameras > 1) {
             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
             Log.d(LOG_TAG, "FRONT_CAMERA_SUPPORTED");
         }
@@ -121,12 +121,12 @@ public class InitAppPresenter implements OnInitAppEventListener {
      * Checks if the device supports the flash mode
      */
     private void checkFlashMode() {
-        if(camera != null){
+        if (camera != null) {
             releaseCamera();
         }
-        if(numSupportedCameras > 1) {
+        if (numSupportedCameras > 1) {
             camera = getCameraInstance(ConfigPreferences.FRONT_CAMERA);
-            if(camera.getParameters().getSupportedFlashModes() != null) {
+            if (camera.getParameters().getSupportedFlashModes() != null) {
                 editor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, true).commit();
             } else {
                 editor.putBoolean(ConfigPreferences.FRONT_CAMERA_FLASH_SUPPORTED, false).commit();
@@ -134,7 +134,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
             releaseCamera();
         }
         camera = getCameraInstance(ConfigPreferences.BACK_CAMERA);
-        if(camera.getParameters().getSupportedFlashModes() != null) {
+        if (camera.getParameters().getSupportedFlashModes() != null) {
             editor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, true).commit();
         } else {
             editor.putBoolean(ConfigPreferences.BACK_CAMERA_FLASH_SUPPORTED, false).commit();
@@ -147,26 +147,26 @@ public class InitAppPresenter implements OnInitAppEventListener {
      */
     private void checkCameraVideoSize() {
         List<Camera.Size> supportedVideoSizes;
-        if(camera != null){
+        if (camera != null) {
             releaseCamera();
         }
-        if(numSupportedCameras > 1) {
+        if (numSupportedCameras > 1) {
             camera = getCameraInstance(ConfigPreferences.FRONT_CAMERA);
             supportedVideoSizes = camera.getParameters().getSupportedVideoSizes();
             boolean frontCameraResolutionSupported = false;
             if (supportedVideoSizes != null) {
-                for(Camera.Size size: supportedVideoSizes) {
-                    if(size.width == 1280 && size.height == 720) {
+                for (Camera.Size size : supportedVideoSizes) {
+                    if (size.width == 1280 && size.height == 720) {
                         editor.putBoolean(ConfigPreferences.FRONT_CAMERA_720P_SUPPORTED, true).commit();
                         frontCameraResolutionSupported = true;
                         Log.d(LOG_TAG, "FRONT_CAMERA_720P_SUPPORTED");
                     }
-                    if(size.width == 1920 && size.height == 1080) {
+                    if (size.width == 1920 && size.height == 1080) {
                         editor.putBoolean(ConfigPreferences.FRONT_CAMERA_1080P_SUPPORTED, true).commit();
                         frontCameraResolutionSupported = true;
                         Log.d(LOG_TAG, "FRONT_CAMERA_1080P_SUPPORTED");
                     }
-                    if(size.width == 3840 && size.height == 2160) {
+                    if (size.width == 3840 && size.height == 2160) {
                         editor.putBoolean(ConfigPreferences.FRONT_CAMERA_2160P_SUPPORTED, true).commit();
                         frontCameraResolutionSupported = true;
                         Log.d(LOG_TAG, "FRONT_CAMERA_2160P_SUPPORTED");
@@ -175,16 +175,16 @@ public class InitAppPresenter implements OnInitAppEventListener {
             } else {
                 supportedVideoSizes = camera.getParameters().getSupportedPreviewSizes();
                 if (supportedVideoSizes != null) {
-                    for(Camera.Size size: supportedVideoSizes) {
-                        if(size.width == 1280 && size.height == 720) {
+                    for (Camera.Size size : supportedVideoSizes) {
+                        if (size.width == 1280 && size.height == 720) {
                             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_720P_SUPPORTED, true).commit();
                             frontCameraResolutionSupported = true;
                         }
-                        if(size.width == 1920 && size.height == 1080) {
+                        if (size.width == 1920 && size.height == 1080) {
                             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_1080P_SUPPORTED, true).commit();
                             frontCameraResolutionSupported = true;
                         }
-                        if(size.width == 3840 && size.height == 2160) {
+                        if (size.width == 3840 && size.height == 2160) {
                             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_2160P_SUPPORTED, true).commit();
                             frontCameraResolutionSupported = true;
                         }
@@ -195,7 +195,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
                     editor.putBoolean(ConfigPreferences.FRONT_CAMERA_2160P_SUPPORTED, false).commit();
                 }
             }
-            if(!frontCameraResolutionSupported) {
+            if (!frontCameraResolutionSupported) {
                 editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, false).commit();
                 Log.d(LOG_TAG, "FRONT_CAMERA_SUPPORTED");
             }
@@ -204,28 +204,28 @@ public class InitAppPresenter implements OnInitAppEventListener {
         camera = getCameraInstance(ConfigPreferences.BACK_CAMERA);
         supportedVideoSizes = camera.getParameters().getSupportedVideoSizes();
         if (supportedVideoSizes != null) {
-            for(Camera.Size size: camera.getParameters().getSupportedVideoSizes()) {
-                if(size.width == 1280 && size.height == 720) {
+            for (Camera.Size size : camera.getParameters().getSupportedVideoSizes()) {
+                if (size.width == 1280 && size.height == 720) {
                     editor.putBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, true).commit();
                 }
-                if(size.width == 1920 && size.height == 1080) {
+                if (size.width == 1920 && size.height == 1080) {
                     editor.putBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, true).commit();
                 }
-                if(size.width == 3840 && size.height == 2160) {
+                if (size.width == 3840 && size.height == 2160) {
                     editor.putBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, true).commit();
                 }
             }
         } else {
             supportedVideoSizes = camera.getParameters().getSupportedPreviewSizes();
-            if(supportedVideoSizes != null) {
-                for(Camera.Size size: camera.getParameters().getSupportedPreviewSizes()) {
-                    if(size.width == 1280 && size.height == 720) {
+            if (supportedVideoSizes != null) {
+                for (Camera.Size size : camera.getParameters().getSupportedPreviewSizes()) {
+                    if (size.width == 1280 && size.height == 720) {
                         editor.putBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, true).commit();
                     }
-                    if(size.width == 1920 && size.height == 1080) {
+                    if (size.width == 1920 && size.height == 1080) {
                         editor.putBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, true).commit();
                     }
-                    if(size.width == 3840 && size.height == 2160) {
+                    if (size.width == 3840 && size.height == 2160) {
                         editor.putBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, true).commit();
                     }
                 }
@@ -243,7 +243,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
      * Releases the camera object
      */
     private void releaseCamera() {
-        if(camera!=null) {
+        if (camera != null) {
             camera.release();
             camera = null;
         }
@@ -251,6 +251,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
 
     /**
      * Gets an instance of the camera object
+     *
      * @param cameraId
      * @return
      */
@@ -264,7 +265,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
         return c;
     }
 
-    private void startLoadingProject(){
+    private void startLoadingProject() {
         loadingProjectUseCase.checkProjectState(this);
     }
 
@@ -352,7 +353,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
         return musicList;
     }
 
-    private void startLoadingProject(OnInitAppEventListener listener){
+    private void startLoadingProject(OnInitAppEventListener listener) {
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
         Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
@@ -360,7 +361,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
     }
 
     //TODO Check user profile, by default 720p free
-    private Profile checkProfile(){
+    private Profile checkProfile() {
         return Profile.getInstance(Profile.ProfileType.free);
     }
 
@@ -370,7 +371,8 @@ public class InitAppPresenter implements OnInitAppEventListener {
     }
 
     @Override
-    public void onCheckPathsAppError() {}
+    public void onCheckPathsAppError() {
+    }
 
     @Override
     public void onLoadingProjectSuccess() {
@@ -382,7 +384,8 @@ public class InitAppPresenter implements OnInitAppEventListener {
     }
 
     @Override
-    public void onLoadingProjectError() {}
+    public void onLoadingProjectError() {
+    }
 
     /**
      * Shows the splash screen
