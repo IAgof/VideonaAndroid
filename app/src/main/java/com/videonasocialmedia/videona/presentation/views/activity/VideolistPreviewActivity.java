@@ -251,10 +251,6 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
             } else {
                 playNextVideo(video, timeInMsec);
             }
-            if (videoPlayer != null && isMusicOnProject()) {
-                muteVideo();
-                playMusicSyncWithVideo();
-            }
         } else {
             seekBar.setProgress(0);
             playButton.setVisibility(View.VISIBLE);
@@ -316,10 +312,15 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                videoPlayer.setVolume(0.5f, 0.5f);
                 videoPlayer.setLooping(false);
                 videoPlayer.start();
                 videoPlayer.seekTo(instantToStart);
+                if (isMusicOnProject()) {
+                    muteVideo();
+                    playMusicSyncWithVideo();
+                } else {
+                    videoPlayer.setVolume(0.5f, 0.5f);
+                }
             }
         });
         preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
