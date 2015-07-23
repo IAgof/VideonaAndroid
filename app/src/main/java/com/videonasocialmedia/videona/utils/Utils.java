@@ -55,42 +55,45 @@ public class Utils {
 
         File file = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + fileTypeExtensionConstant);
 
-        if (!file.exists()) {
-            try {
-                FileOutputStream out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + fileTypeExtensionConstant);
-                byte[] buff = new byte[1024];
-                int read = 0;
-                while ((read = in.read(buff)) > 0) {
-                    out.write(buff, 0, read);
-                }
-                out.close();
-            } catch (FileNotFoundException e) {
-                //TODO show error message
-            } finally {
-                in.close();
+        if (file.exists() && file.isFile()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + fileTypeExtensionConstant);
+            byte[] buff = new byte[1024];
+            int read = 0;
+            while ((read = in.read(buff)) > 0) {
+                out.write(buff, 0, read);
             }
+            out.close();
+        } catch (FileNotFoundException e) {
+            //TODO show error message
+        } finally {
+            in.close();
         }
     }
+
+
 
     public static void copyMusicResourceToTemp(Context ctx, int rawResourceId) throws IOException {
         copyResourceToTemp(ctx, rawResourceId, Constants.AUDIO_MUSIC_FILE_EXTENSION);
     }
 
 
-    public static File getMusicFileById(int rawResourceId){
-        File f= new  File(Constants.PATH_APP_TEMP + File.separator + rawResourceId + Constants.AUDIO_MUSIC_FILE_EXTENSION);
+    public static File getMusicFileById(int rawResourceId) {
+        File f = new File(Constants.PATH_APP_TEMP + File.separator + rawResourceId + Constants.AUDIO_MUSIC_FILE_EXTENSION);
         if (!f.exists())
-            f=null;
+            f = null;
         return f;
     }
 
-    public static Uri obtainUriToShare(Context context,String videoPath) {
+    public static Uri obtainUriToShare(Context context, String videoPath) {
         Uri uri;
         if (videoPath != null) {
             ContentResolver resolver = context.getContentResolver();
-            uri = getUriFromContentProvider(resolver,videoPath);
+            uri = getUriFromContentProvider(resolver, videoPath);
             if (uri == null) {
-                uri = createUriToShare(resolver,videoPath);
+                uri = createUriToShare(resolver, videoPath);
             }
         } else {
             uri = null;
@@ -128,18 +131,17 @@ public class Utils {
 
     /**
      * Returns whether the current device is running Android 4.4, KitKat, or newer
-     *
      */
     public static boolean isKitKat() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 
     public static void cleanDirectory(File directory) {
-        if(directory.exists()) {
+        if (directory.exists()) {
             File[] files = directory.listFiles();
-            if(files!=null) { //some JVMs return null for empty dirs
-                for(File f: files) {
-                    if(f.isDirectory()) {
+            if (files != null) { //some JVMs return null for empty dirs
+                for (File f : files) {
+                    if (f.isDirectory()) {
                         cleanDirectory(f);
                     } else {
                         f.delete();
