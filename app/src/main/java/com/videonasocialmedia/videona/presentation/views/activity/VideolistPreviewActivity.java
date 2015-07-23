@@ -498,8 +498,10 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         } else {
             finish();
         }
-        videoPlayer.stop();
-        videoPlayer.reset();
+        if(videoPlayer != null) {
+            videoPlayer.stop();
+            videoPlayer.reset();
+        }
         releaseVideoView();
         releaseMusicPlayer();
         projectDuration = 0;
