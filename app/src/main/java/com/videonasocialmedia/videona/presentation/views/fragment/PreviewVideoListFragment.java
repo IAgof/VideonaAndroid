@@ -125,6 +125,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @Override
     public void onResume() {
         super.onResume();
+        seekBar.setProgress(0);
         updateVideoList();
     }
 
@@ -267,10 +268,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                     playNextVideo(video, timeInMsec);
                 }
             }
-            if (videoPlayer != null && isMusicOnProject()) {
-                muteVideo();
-                playMusicSyncWithVideo();
-            }
         } else {
             seekBar.setProgress(0);
             playButton.setVisibility(View.VISIBLE);
@@ -342,10 +339,15 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             @Override
             public void onPrepared(MediaPlayer mp) {
                 try {
-                    videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
                     videoPlayer.start();
                     videoPlayer.seekTo(instantToStart);
+                    if (isMusicOnProject()) {
+                        muteVideo();
+                        playMusicSyncWithVideo();
+                    } else {
+                        videoPlayer.setVolume(0.5f, 0.5f);
+                    }
                 } catch(Exception e) {
                     // TODO don't force media player. Media player must be null here
                     seekBar.setProgress(0);
