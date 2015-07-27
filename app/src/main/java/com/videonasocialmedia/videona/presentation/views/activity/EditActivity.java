@@ -173,7 +173,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         Log.d(LOG_TAG, "onPause");
         super.onPause();
         //releaseVideoView();
-        disableMusicPlayer();
+        //disableMusicPlayer();
     }
 
     @Override
@@ -398,10 +398,19 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            this.onBackPressed();
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                this.onBackPressed();
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                previewVideoListFragment.onKeyDown(keyCode, event);
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                previewVideoListFragment.onKeyDown(keyCode, event);
+                return true;
+            default:
+                return false;
         }
-        return true;
     }
 
     private void switchFragment(Fragment f, int panel) {
@@ -484,7 +493,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void enableMusicPlayer(Music music) {
-        initMusicPlayer(music);
+        //initMusicPlayer(music);
         //playPreviewFromTrimmingStart();
     }
 
