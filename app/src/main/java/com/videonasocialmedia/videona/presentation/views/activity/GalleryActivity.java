@@ -97,6 +97,12 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
     }
 
+    private List<Video> getSelectedVideosFromFragment(int selectedFragmentId) {
+        VideoGalleryFragment selectedFragment = adapterViewPager.getItem(selectedFragmentId);
+        return selectedFragment.getSelectedVideoList();
+
+    }
+
     private List<Video> getSelectedVideos() {
         List<Video> result = new ArrayList<>();
         for (int i = 0; i < adapterViewPager.getCount(); i++) {

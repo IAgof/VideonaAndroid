@@ -254,15 +254,13 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
     }
 
     public void updateView() {
-        SparseBooleanArray selectedElements=selectionSupport.getCheckedItemPositions();
-        for (int i=0; selectedElements!=null&&i<selectedElements.size();i++){
-            int position = selectedElements.keyAt(i);
-            if (selectedElements.get(position)){
-                videoGalleryAdapter.removeVideo(position);
+        List<Video> selectedVideos = getSelectedVideoList();
+        if(selectedVideos.size() > 0) {
+            for (Video video:selectedVideos) {
+                videoGalleryAdapter.removeVideo(video);
             }
-        }
-        if (selectedElements != null)
             videoGalleryAdapter.clearView();
+        }
     }
 
     @Override

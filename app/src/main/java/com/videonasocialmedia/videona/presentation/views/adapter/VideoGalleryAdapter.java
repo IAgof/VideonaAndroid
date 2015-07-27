@@ -103,9 +103,10 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         return videoList.isEmpty();
     }
 
-    public void removeVideo(int itemPosition) {
-        videoList.remove(itemPosition);
-        notifyItemRemoved(itemPosition);
+    public void removeVideo(Video videoToRemove) {
+        int indexOfVideoToRemove = videoList.indexOf(videoToRemove);
+        videoList.remove(videoToRemove);
+        notifyItemRemoved(indexOfVideoToRemove);
     }
 
     public void clearView() {
