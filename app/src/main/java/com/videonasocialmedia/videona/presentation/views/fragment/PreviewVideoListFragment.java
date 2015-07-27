@@ -13,13 +13,16 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.ActivityOptions;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -91,6 +94,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         }
     };
     private boolean isFullScreenBack = false;
+    private AudioManager audio;
     /**
      * Tracker google analytics
      */
@@ -111,6 +115,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
 
         mediaController = new MediaController(getActivity());
         mediaController.setVisibility(View.INVISIBLE);
+        audio = (AudioManager) getActivity().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
         return view;
     }
@@ -153,6 +158,21 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             result = false;
         }
         return result;
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                        AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                        AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+                return true;
+            default:
+                return false;
+        }
     }
 
     @OnClick(R.id.edit_button_play)
