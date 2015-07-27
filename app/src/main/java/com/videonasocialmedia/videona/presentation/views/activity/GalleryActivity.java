@@ -170,7 +170,7 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
                                 public void onClick(DialogInterface dialog, int which) {
                                     for (Video video : videoList) {
                                         File file = new File(video.getMediaPath());
-                                        //file.delete();
+                                        file.delete();
                                     }
                                     for (int i = 0; i < adapterViewPager.getCount(); i++) {
                                         VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
