@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -38,6 +39,9 @@ import butterknife.OnClick;
 public class GalleryActivity extends Activity implements ViewPager.OnPageChangeListener,
         GalleryPagerView, OnSelectionModeListener {
 
+    private final String MASTERS_FRAGMENT_TAG="MASTERS";
+    private final String EDITED_FRAGMENT_TAG="EDITED";
+
     MyPagerAdapter adapterViewPager;
     boolean sharing;
     int selectedPage = 0;
@@ -57,24 +61,33 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         setContentView(R.layout.activity_gallery);
         ButterKnife.inject(this);
 
+        Log.d("GALLERY ACTIVITY", "Creating Activity");
         sharing = this.getIntent().getBooleanExtra("SHARE", true);
 
         if (sharing)
             okButton.setImageResource(R.drawable.share_activity_button_share_selector);
 
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
-        adapterViewPager = new MyPagerAdapter(getFragmentManager());
+        adapterViewPager = new MyPagerAdapter(getFragmentManager(), savedInstanceState);
         vpPager.setAdapter(adapterViewPager);
 
         vpPager.setOnPageChangeListener(this);
-
         galleryPagerPresenter = new GalleryPagerPresenter(this);
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getFragmentManager().putFragment(outState, MASTERS_FRAGMENT_TAG, adapterViewPager.getItem(0));
+        getFragmentManager().putFragment(outState, EDITED_FRAGMENT_TAG,adapterViewPager.getItem(1));
+    }
+
     @Override
     public void onPause() {
         super.onPause();
         countVideosSelected = getSelectedVideos().size();
     }
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -101,6 +114,7 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         List<Video> result = new ArrayList<>();
         for (int i = 0; i < adapterViewPager.getCount(); i++) {
             VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
+            Log.d("GALLERY ACTIVITY", selectedFragment.toString());
             List<Video> videosFromFragment = selectedFragment.getSelectedVideoList();
             result.addAll(videosFromFragment);
         }
@@ -223,14 +237,37 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     }
 
     class MyPagerAdapter extends FragmentPagerAdapter {
-        private int NUM_ITEMS = 2;
+        private final int NUM_ITEMS = 2;
 
         private VideoGalleryFragment mastersFragment;
         private VideoGalleryFragment editedFragment;
 
-        public MyPagerAdapter(FragmentManager fragmentManager) {
+        public MyPagerAdapter(FragmentManager fragmentManager, Bundle savedStateInstance) {
             super(fragmentManager);
+            if (savedStateInstance==null) {
+                createFragments();
+            }else{
+                restoreFragments(fragmentManager, savedStateInstance);
+            }
         }
+
+        private void createFragments(){
+            int selectionMode = sharing ? VideoGalleryFragment.SELECTION_MODE_SINGLE
+                    :VideoGalleryFragment.SELECTION_MODE_MULTIPLE;
+
+            mastersFragment = VideoGalleryFragment.newInstance
+                    (VideoGalleryPresenter.MASTERS_FOLDER, selectionMode);
+            editedFragment = VideoGalleryFragment.newInstance
+                    (VideoGalleryPresenter.EDITED_FOLDER, selectionMode);
+        }
+
+        private void restoreFragments(FragmentManager fragmentManager, Bundle savedStateInstance) {
+            mastersFragment=(VideoGalleryFragment)
+                    fragmentManager.getFragment(savedStateInstance, MASTERS_FRAGMENT_TAG);
+            editedFragment=(VideoGalleryFragment)
+                    fragmentManager.getFragment(savedStateInstance, EDITED_FRAGMENT_TAG);
+        }
+
 
         // Returns total number of pages
         @Override
@@ -242,29 +279,15 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         @Override
         public VideoGalleryFragment getItem(int position) {
             VideoGalleryFragment result;
-            int selectionMode = VideoGalleryFragment.SELECTION_MODE_MULTIPLE;
-            if (sharing) {
-                selectionMode = VideoGalleryFragment.SELECTION_MODE_SINGLE;
-            }
             switch (position) {
                 case 0: // Fragment # 0 - This will show FirstFragment
-                    if (mastersFragment == null) {
-
-                        mastersFragment = VideoGalleryFragment.newInstance
-                                (VideoGalleryPresenter.MASTERS_FOLDER, selectionMode);
-                    }
                     result = mastersFragment;
                     break;
                 case 1: // Fragment # 0 - This will show FirstFragment different title
-                    if (editedFragment == null) {
-                        editedFragment = VideoGalleryFragment.newInstance
-                                (VideoGalleryPresenter.EDITED_FOLDER, selectionMode);
-                    }
                     result = editedFragment;
                     break;
                 default:
                     result = null;
-
             }
             return result;
         }
