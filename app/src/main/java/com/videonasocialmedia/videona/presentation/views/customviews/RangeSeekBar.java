@@ -36,7 +36,6 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.utils.ConfigUtils;
 
 import java.math.BigDecimal;
 
@@ -599,7 +598,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         normalizedMinValue = Math.max(0d, Math.min(1d, Math.min(value, normalizedMaxValue)));
 
         // test try to move MaxValue if touches in MinValue
-        normalizedMaxValue = Math.min(normalizedMaxValue, normalizedMinValue + (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)));
+        //normalizedMaxValue = Math.min(normalizedMaxValue, normalizedMinValue + (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)));
+        //normalizedMaxValue = Math.min(normalizedMaxValue, normalizedMinValue);
 
         //normalizedMinValue = Math.max(normalizedMaxValue - (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)), Math.min(value, normalizedMaxValue));
         // Log.d(LOG_TAG, "setNormalizedMinValue " + value + " normalizedMinValue " + normalizedMinValue);
@@ -620,7 +620,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         //normalizedMaxValue = Math.max(normalizedMinValue, Math.min(normalizedMinValue + (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)), Math.max(value, normalizedMinValue)));
 
         // test try to move MinValue if touches in MaxValue
-        normalizedMinValue = Math.max(normalizedMinValue, normalizedMaxValue - (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)));
+        //normalizedMinValue = Math.max(normalizedMinValue, normalizedMaxValue - (ConfigUtils.MAX_VIDEO_DURATION_MILLIS * (1 / numIncrement)));
 
         //normalizedMaxValue = Math.max(0d, Math.min(1d, Math.max(value, normalizedMinValue)));
         // // Log.d(LOG_TAG, "setNormalizedMaxValue " + value + " normalizedMaxValue " + normalizedMaxValue);

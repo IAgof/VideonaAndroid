@@ -7,8 +7,6 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import android.util.Log;
-
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
@@ -68,7 +66,6 @@ public class TrimPreviewPresenter implements OnVideosRetrieved, ModifyVideoDurat
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        Log.d("RECOGIDOS VIDEOS", "ACABO DE ENTRAR, JOPUTA");
         previewView.showPreview(videoList);
         Video video = videoList.get(0);
         trimView.showTrimBar(video.getFileDuration(), video.getFileStartTime(), video.getFileStopTime());
