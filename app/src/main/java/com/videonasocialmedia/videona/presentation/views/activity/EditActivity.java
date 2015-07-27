@@ -21,7 +21,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -82,7 +81,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     View navigatorView;
 
     private static EditActivity parent;
-    private MediaPlayer musicPlayer;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
     private VideoFxMenuFragment videoFxMenuFragment;
@@ -107,7 +105,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     private int selectedMusicIndex = 0;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
-    //public Thread performOnBackgroundThread(final Runnable runnable) {
         this.parent = parent;
         final Thread t = new Thread() {
             @Override
@@ -157,82 +154,31 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     protected void onStart() {
-        Log.d(LOG_TAG, "onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        Log.d(LOG_TAG, "onResume");
         super.onResume();
         editPresenter.onResume();
     }
 
     @Override
     protected void onPause() {
-        Log.d(LOG_TAG, "onPause");
         super.onPause();
-        //releaseVideoView();
-        //disableMusicPlayer();
     }
 
     @Override
     protected void onStop() {
-        Log.d(LOG_TAG, "onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(LOG_TAG, "onDestroy");
         //handler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 
-    /**
-     * Releases the media player and the video view
-     */
-    /*
-    private void releaseVideoView() {
-        preview.stopPlayback();
-        preview.clearFocus();
-        if (videoPlayer != null) {
-            videoPlayer.release();
-            videoPlayer = null;
-        }
-        disableMusicPlayer();
-    }
-    */
-    /*
-    @OnClick(R.id.edit_button_play)
-    public void playPausePreview() {
-
-        if (videoPlayer.isPlaying()) {
-            pausePreview();
-        } else {
-            playPreview();
-        }
-        updateSeekBarProgress();
-    }
-
-    private void playPreview() {
-        if (videoPlayer != null) {
-            videoPlayer.start();
-            if (musicPlayer != null) {
-                playMusicSyncedWithVideo();
-            }
-            playButton.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void pausePreview() {
-        if (videoPlayer != null && videoPlayer.isPlaying())
-            videoPlayer.pause();
-        if (musicPlayer != null && musicPlayer.isPlaying())
-            musicPlayer.pause();
-        playButton.setVisibility(View.VISIBLE);
-    }
-    */
     @OnClick(R.id.buttonCancelEditActivity)
     public void cancelEditActivity() {
         this.onBackPressed();
@@ -277,8 +223,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void showMessage(final int message) {
-
-        //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         this.runOnUiThread(new Runnable() {
             public void run() {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -289,7 +233,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     public void showProgressDialog() {
         progressDialog.show();
-        // Custom progress dialog
         progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
 
         ((TextView) progressDialog.findViewById(Resources.getSystem()
@@ -377,19 +320,15 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
      */
     @Override
     public void onBackPressed() {
-
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(navigatorView);
             return;
         }
-
         if (buttonBackPressed) {
             editPresenter.cancel();
             finish();
-            // Go to RecordActivity
             Intent record = new Intent(this, RecordActivity.class);
             startActivity(record);
-
             return;
         }
         buttonBackPressed = true;
@@ -438,9 +377,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
      */
     @Override
     public void onClick(int position) {
-        //updateSeekBarProgress();
         if (isAlreadySelected(position)) {
-            //playPausePreview();
             previewVideoListFragment.playPausePreview();
         } else {
             editPresenter.removeAllMusic();
@@ -483,49 +420,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     }
 
     @Override
-    public void disableMusicPlayer() {
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer.release();
-            musicPlayer = null;
-        }
-    }
-
-    @Override
-    public void enableMusicPlayer(Music music) {
-        //initMusicPlayer(music);
-        //playPreviewFromTrimmingStart();
-    }
-
-
-    @Override
-    public void initMusicPlayer(Music music) {
-        disableMusicPlayer();
-        musicPlayer = MediaPlayer.create(this, music.getMusicResourceId());
-        musicPlayer.setVolume(0.5f, 0.5f);
-        //syncMusicWithVideo(videoPlayer.getCurrentPosition());
-    }
-
-    @Override
     public void hideProgressDialog() {
-//        handler.sendEmptyMessage(0);
         if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
-    }
-
-    @Override
-    public void refreshStartTimeTag(int time) {
-        //startTimeTag.setText(TimeUtils.toFormattedTime(time));
-    }
-
-    @Override
-    public void refreshStopTimeTag(int time) {
-        //stopTimeTag.setText(TimeUtils.toFormattedTime(time));
-    }
-
-    @Override
-    public void refreshDurationTag(int duration) {
-        //durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
     @Override
