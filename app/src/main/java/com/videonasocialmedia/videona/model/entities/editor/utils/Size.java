@@ -18,7 +18,7 @@ package com.videonasocialmedia.videona.model.entities.editor.utils;
 public class Size {
 
     public static enum Resolution {
-        hd1080, hd720, sd480
+        HD720, HD1080, HD4K
     }
 
     private int heigth;
@@ -33,17 +33,17 @@ public class Size {
 
     public Size(Resolution resolution) {
         switch (resolution) {
-            case hd1080:
-                this.width = 1920;
-                this.heigth = 1080;
-                break;
-            case hd720:
+            case HD720:
                 this.width = 1280;
                 this.heigth = 720;
                 break;
-            case sd480:
-                this.width = 854;
-                this.heigth = 480;
+            case HD1080:
+                this.width = 1920;
+                this.heigth = 1080;
+                break;
+            case HD4K:
+                this.width = 3840;
+                this.heigth = 2160;
                 break;
             default:
                 this.width = 1280;

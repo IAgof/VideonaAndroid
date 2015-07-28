@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_weight="0.5">
+
+    <VideoView
+        android:id="@+id/edit_preview_player"
+        android:layout_width="320dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center_horizontal" />
+
+    <ImageButton
+        android:id="@+id/edit_button_fullscreen_in"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/edit_preview_player"
+        android:layout_alignLeft="@+id/edit_preview_player"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_icon_fullscreen_in_selector" />
+
+    <ImageButton
+        android:id="@+id/edit_button_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_icon_play_on_normal" />
+
+    <TextView
+        android:id="@+id/edit_text_start_trim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/edit_preview_player"
+        android:layout_alignLeft="@+id/edit_preview_player"
+        android:text="00:00"
+        android:layout_marginLeft="50dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/edit_text_end_trim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/edit_preview_player"
+        android:layout_alignRight="@+id/edit_preview_player"
+        android:text="00:00"
+        android:layout_marginRight="50dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/white"
+        android:visibility="visible" />
+
+    <SeekBar
+        android:id="@+id/edit_seek_bar"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        android:indeterminate="false"
+        android:longClickable="true"
+        android:maxHeight="2dp"
+        android:progressDrawable="@color/videona_blue_5"
+        android:layout_alignBottom="@+id/edit_text_start_trim" />
+
+</RelativeLayout>

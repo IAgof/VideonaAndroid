@@ -24,7 +24,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicGalleryView;
 import com.videonasocialmedia.videona.presentation.views.adapter.MusicGalleryAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 
 import java.util.List;
 
@@ -41,7 +41,6 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
 
     private MusicGalleryAdapter musicGalleryAdapter;
     private MusicGalleryPresenter musicGalleryPresenter;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Nullable
     @Override
@@ -50,7 +49,7 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
         ButterKnife.inject(this, v);
         if (musicGalleryPresenter == null)
             musicGalleryPresenter = new MusicGalleryPresenter(this);
-        layoutManager = new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
     }
@@ -93,13 +92,13 @@ public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
     @Override
     public void showMusic(List<Music> musicList) {
         musicGalleryAdapter = new MusicGalleryAdapter(musicList);
-        musicGalleryAdapter.setRecyclerViewClickListener((RecyclerViewClickListener) this.getActivity());
+        musicGalleryAdapter.setMusicRecyclerViewClickListener((MusicRecyclerViewClickListener) this.getActivity());
         recyclerView.setAdapter(musicGalleryAdapter);
     }
 
     @Override
     public void reloadMusic(List<Music> musicList) {
-        musicGalleryAdapter.setRecyclerViewClickListener((RecyclerViewClickListener) this.getActivity());
+        musicGalleryAdapter.setMusicRecyclerViewClickListener((MusicRecyclerViewClickListener) this.getActivity());
         recyclerView.setAdapter(musicGalleryAdapter);
     }
 

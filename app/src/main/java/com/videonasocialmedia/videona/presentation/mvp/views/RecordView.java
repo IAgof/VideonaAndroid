@@ -12,18 +12,12 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface RecordView extends MVPView {
-
-    void startPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView,
-                      boolean supportAutoFocus);
-
-    void stopPreview(CameraPreview cameraPreview, CustomManualFocusView customManualFocusView,
-                     boolean supportAutoFocus);
 
     void showRecordStarted();
 
@@ -33,11 +27,15 @@ public interface RecordView extends MVPView {
 
     void stopChronometer();
 
-    void showEffects(ArrayList<String> effects);
+    void showCameraEffectFx(List<CameraEffectFxList> effects);
 
-    void showEffectSelected(String colorEffect);
+    void showCameraEffectFxSelected(String colorEffect);
 
-    void navigateEditActivity();
+    void showCameraEffectColor(List<CameraEffectColorList> effects);
+
+    void showCameraEffectColorSelected(String colorEffect);
+
+    void navigateEditActivity(String durationVideoRecorded);
 
     void lockScreenRotation();
 
@@ -51,6 +49,10 @@ public interface RecordView extends MVPView {
 
     void showCamera(int cameraMode);
 
+    void changeCamera();
+
     void showError();
+
+    void reStartFragment();
 
 }

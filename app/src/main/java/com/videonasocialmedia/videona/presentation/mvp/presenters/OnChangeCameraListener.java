@@ -7,16 +7,12 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.presentation.views.CameraPreview;
-import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
-
 public interface OnChangeCameraListener {
 
-    void onChangeCameraSuccess(int cameraMode);
-
-    void onReleaseChangeCameraPreview(CameraPreview cameraPreview,
-                                      CustomManualFocusView customManualFocusView,
-                                      boolean autoFocus);
+    //void onChangeCameraSuccess( boolean isFlashSupported, boolean isAutoFocusSupported);
+    void onChangeCameraSuccess( );
 
     void onChangeCameraError();
+
+
 }

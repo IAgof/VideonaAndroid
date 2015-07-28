@@ -1,10 +1,8 @@
 package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,10 +12,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
-import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -31,13 +31,19 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     private Context context;
     private List<Video> videoList;
-    private RecyclerViewClickListener recyclerViewClickListener;
+    private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
+    private OnTransitionClickListener onTransitionClickListener;
+    private ItemSelectionSupport selectionSupport;
 
     private int selectedVideoPosition = -1;
 
-    public VideoGalleryAdapter(List<Video> videoList) {
+    public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
+        this.onTransitionClickListener = onTransitionClickListener;
+    }
 
+    public VideoGalleryAdapter(List<Video> videoList) {
         this.videoList = videoList;
+
     }
 
     @Override
@@ -46,7 +52,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .inflate(R.layout.fragment_gallery_video_item, viewGroup, false);
 
         this.context = viewGroup.getContext();
-        return new VideoViewHolder(rowView, recyclerViewClickListener);
+        return new VideoViewHolder(rowView, musicRecyclerViewClickListener, onTransitionClickListener);
     }
 
     @Override
@@ -59,9 +65,11 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
-        holder.overlay.setSelected(position == selectedVideoPosition);
-        holder.overlayIcon.setSelected(position == selectedVideoPosition);
-        String duration= TimeUtils.toFormattedTime(selectedVideo.getDuration());
+        if(selectionSupport!=null) {
+            holder.overlay.setActivated(selectionSupport.isItemChecked(position));
+            holder.overlayIcon.setActivated(selectionSupport.isItemChecked(position));
+        }
+        String duration = TimeUtils.toFormattedTime(selectedVideo.getDuration());
         holder.duration.setText(duration);
     }
 
@@ -78,22 +86,38 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         return videoList.get(position);
     }
 
-    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
-        this.recyclerViewClickListener = recyclerViewClickListener;
+    public void setRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
+        this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
+    }
+
+    public void setSelectionSupport(ItemSelectionSupport selectionSupport) {
+        this.selectionSupport = selectionSupport;
     }
 
     public void appendVideos(List<Video> videoList) {
-        videoList.addAll(videoList);
+        this.videoList = new ArrayList<>();
+        this.videoList.addAll(videoList);
     }
 
     public boolean isVideoListEmpty() {
         return videoList.isEmpty();
     }
 
+    public void removeVideo(Video videoToRemove) {
+        int indexOfVideoToRemove = videoList.indexOf(videoToRemove);
+        videoList.remove(videoToRemove);
+        notifyItemRemoved(indexOfVideoToRemove);
+    }
 
-    class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
+    public void clearView() {
+        selectionSupport.clearChoices();
+    }
 
-        RecyclerViewClickListener onClickListener;
+
+    class VideoViewHolder extends RecyclerView.ViewHolder{ //implements View.OnTouchListener {
+
+        MusicRecyclerViewClickListener onClickListener;
+        OnTransitionClickListener onTransitionClickListener;
 
         @InjectView(R.id.gallery_thumb)
         ImageView thumb;
@@ -107,33 +131,25 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         @InjectView(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
-
-
-        public VideoViewHolder(View itemView, RecyclerViewClickListener onClickListener) {
-            super(itemView);
-            ButterKnife.inject(this, itemView);
-            thumb.setOnTouchListener(this);
-            this.onClickListener = onClickListener;
-
+        public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
+            this.onTransitionClickListener = onTransitionClickListener;
         }
 
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                notifyItemChanged(selectedVideoPosition);
-                selectedVideoPosition = getPosition();
-                notifyItemChanged(selectedVideoPosition);
-                onClickListener.onClick(selectedVideoPosition);
-            }
-            return true;
+        public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener,
+                               OnTransitionClickListener onTransitionClickListener) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
+            this.onClickListener = onClickListener;
+            this.onTransitionClickListener = onTransitionClickListener;
+
         }
 
         @OnClick(R.id.gallery_preview_button)
         public void startVideoPreview(View v) {
-            String videoPath = videoList.get(getPosition()).getMediaPath();
-            Intent i = new Intent(v.getContext(), VideoPreviewActivity.class);
-            i.putExtra("VIDEO_PATH", videoPath);
-            v.getContext().startActivity(i);
+            if(selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.NONE) {
+                if(onTransitionClickListener != null)
+                    onTransitionClickListener.onClick(itemView, getPosition());
+            }
         }
 
     }

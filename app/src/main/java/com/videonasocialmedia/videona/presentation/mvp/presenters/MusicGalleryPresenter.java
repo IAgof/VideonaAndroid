@@ -23,7 +23,7 @@ import java.util.List;
 public class MusicGalleryPresenter implements OnMusicRetrievedListener {
 
     private MusicGalleryView galleryView;
-    private ArrayList<Music> musicList = new ArrayList<>();
+    private List<Music> musicList = new ArrayList<>();
 
     /**
      * Constructor.
@@ -71,6 +71,7 @@ public class MusicGalleryPresenter implements OnMusicRetrievedListener {
      */
     private void createMusicList() {
         musicList.add(new Music(R.drawable.activity_music_icon_remove_normal, "Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
+        musicList.add(new Music(R.drawable.activity_music_icon_birthday_normal, "birthday", R.raw.audio_birthday, R.color.pastel_palette_green_dark));
         musicList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
         musicList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental, R.color.pastel_palette_red));
         musicList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta, R.color.pastel_palette_blue));

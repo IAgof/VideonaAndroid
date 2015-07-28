@@ -10,32 +10,30 @@ package com.videonasocialmedia.videona.domain.editor;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.Track;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnVideosRetrieved;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public class GetMediaListFromProjectUseCase {
 
     /**
-     * Project of app
+     * @deprecated use the asynchronous version instead
+     * @return
      */
-    Project project;
-
-    /**
-     * Track
-     */
-    Track track;
-
-    public GetMediaListFromProjectUseCase() {
-
-        this.project = Project.getInstance(null, null, null);
-        this.track = project.getMediaTrack();
-
-    }
-
-    public LinkedList<Media> getMediaListFromProject() {
-
+    @Deprecated
+    public List<Media> getMediaListFromProject() {
+        Project project=Project.getInstance(null, null, null);
+        Track track=project.getMediaTrack();
         return track.getItems();
     }
 
-
+    public void getMediaListFromProject(OnVideosRetrieved listener){
+        Project project=Project.getInstance(null, null, null);
+        Track track=project.getMediaTrack();
+        List items= track.getItems();
+        if (items.size()>0)
+            listener.onVideosRetrieved(items);
+        else
+            listener.onNoVideosRetrieved();
+    }
 }
