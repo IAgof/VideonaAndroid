@@ -14,8 +14,8 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 32 // 22/07/2015
-        versionName "0.3.5"
+        versionCode 33 // 28/07/2015
+        versionName "0.3.6"
         // Enabling multidex support.
         //multiDexEnabled true
     }
