@@ -49,6 +49,8 @@ public interface RecordView extends MVPView {
 
     void showCamera(int cameraMode);
 
+    void changeCamera();
+
     void showError();
 
     void reStartFragment();

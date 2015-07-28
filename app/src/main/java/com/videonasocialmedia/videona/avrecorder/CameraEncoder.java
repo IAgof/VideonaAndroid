@@ -1,18 +1,13 @@
 package com.videonasocialmedia.videona.avrecorder;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
-import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.opengl.EGLContext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLUtils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -21,13 +16,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
 
-import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.avrecorder.gles.EglCore;
 import com.videonasocialmedia.videona.avrecorder.gles.EglStateSaver;
 import com.videonasocialmedia.videona.avrecorder.gles.FullFrameRect;
-import com.videonasocialmedia.videona.avrecorder.gles.GlUtil;
 import com.videonasocialmedia.videona.avrecorder.gles.Texture2dProgram;
 import com.videonasocialmedia.videona.avrecorder.gles.WindowSurface;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnChangeCameraListener;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraView;
 
@@ -119,6 +113,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private int mDesiredCamera;
 
     private int mCurrentCameraRotation;
+
+    // Camera info orientation, needed to rotate display
+    private int cameraInfoOrientation;
 
     private String mCurrentFlash;
     private String mDesiredFlash;
@@ -223,35 +220,18 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * <p/>
      * Called from UI thread
      */
-    public void requestOtherCamera(int rotation) {
+    public void requestOtherCamera(int rotation, OnChangeCameraListener listener) {
         int otherCamera = 0;
         if (mCurrentCamera == 0)
             otherCamera = 1;
         requestCamera(otherCamera);
 
         mCurrentCameraRotation = rotation;
-        // TODO displayOrientation movil Iago, first steps
-      //  mCamera.setDisplayOrientation(getCameraDisplayOrientation(otherCamera));
+
+        listener.onChangeCameraSuccess();
 
     }
 
-    private int getCameraDisplayOrientation(int cameraId) {
-        android.hardware.Camera.CameraInfo info =
-                new android.hardware.Camera.CameraInfo();
-        android.hardware.Camera.getCameraInfo(cameraId, info);
-
-        int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation ) % 360;
-            result = (360 - result) % 360;  // compensate the mirror
-        } else {  // back-facing
-            result = (info.orientation + 360) % 360;
-        }
-
-        Log.d(TAG, "setCameraDisplayOrientation cameraId " + cameraId + " result " + result);
-
-        return result;
-    }
 
     /**
      * Request a Camera by cameraId. This will take effect immediately
@@ -363,6 +343,55 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         display.setPreserveEGLContextOnPause(true);
 
         mDisplayView = display;
+    }
+
+    public void updatePreviewDisplay(int rotationView){
+        //mDisplayView.setRotation(rotation);
+        mCamera.setDisplayOrientation(getDisplayOrientation(rotationView));
+        configureDisplayView();
+    }
+
+    private int getDisplayOrientation(int rotationView){
+
+        int displayOrientation = 0;
+        if (rotationView == Surface.ROTATION_90) {
+            if (cameraInfoOrientation == 0) {
+                displayOrientation = 0;
+            }
+            if (cameraInfoOrientation == 180) {
+                displayOrientation = 180;
+            }
+            Log.d(TAG, "setRotationView rotation 90, cameraOrientation " + cameraInfoOrientation);
+        } else
+        if (rotationView == Surface.ROTATION_270) {
+            if (cameraInfoOrientation == 0) {
+                displayOrientation = 180;
+            }
+            if (cameraInfoOrientation == 180) {
+                displayOrientation = 0;
+            }
+            Log.d(TAG, "setRotationView rotation 270, cameraOrientation " + cameraInfoOrientation);
+        } else
+        if(rotationView == Surface.ROTATION_0) {
+            if (cameraInfoOrientation == 90) {
+                displayOrientation = 90;
+            }
+            if (cameraInfoOrientation == 270) {
+                displayOrientation = 270;
+            }
+            Log.d(TAG, "setRotationView rotation 0, cameraOrientation " + cameraInfoOrientation);
+        } else
+        if(rotationView == Surface.ROTATION_180) {
+                if (cameraInfoOrientation == 90) {
+                    displayOrientation = 270;
+                }
+                if (cameraInfoOrientation == 270) {
+                    displayOrientation = 90;
+                }
+                Log.d(TAG, "setRotationView rotation 180, cameraOrientation " + cameraInfoOrientation);
+        }
+
+        return displayOrientation;
     }
 
     /**
@@ -588,7 +617,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 GLES20.glViewport(0,0,1280,720);
                 mFullScreen.drawFrame(mTextureId, mTransform);
                 GLES20.glViewport(15, 15, 178, 36);
-                mFullScreenOverlay.drawFrame(mOverlayTextureId, mTransform);
+                mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId, mTransform);
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {
                     mEncodedFirstFrame = true;
@@ -628,16 +657,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         if (TRACE) Trace.endSection();
     }
 
-    /**
-     * Draws a red box in the corner.
-     */
-    private void drawBox() {
-        GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
-        GLES20.glScissor(0, 0, 100, 100);
-        GLES20.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
-    }
 
     private void saveFrameAsImage() {
         try {
@@ -961,8 +980,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     private void setCameraDisplayOrientation(int cameraIndex) {
         //Sets the camera right Orientation.
-
-
         android.hardware.Camera.CameraInfo info =
                 new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraIndex, info);
@@ -971,7 +988,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         switch (rotation) {
            // case Surface.ROTATION_0: degrees = 0; break;
             case Surface.ROTATION_90: degrees = 90; break;
-           // case Surface.ROTATION_180: degrees = 180; break;
+            // case Surface.ROTATION_180: degrees = 180; break;
             case Surface.ROTATION_270: degrees = 270; break;
         }
 
@@ -983,6 +1000,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             result = (info.orientation - degrees + 360) % 360;
         }
         mCamera.setDisplayOrientation(result);
+
+        cameraInfoOrientation = result;
+        Log.d(TAG, "cameraInfoOrientation " + result + " cameraId " + cameraIndex);
+
     }
 
     public Camera getCamera() {

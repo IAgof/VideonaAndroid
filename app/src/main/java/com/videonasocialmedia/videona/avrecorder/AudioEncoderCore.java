@@ -4,6 +4,7 @@ import android.media.AudioFormat;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -43,8 +44,8 @@ public class AudioEncoderCore extends AndroidEncoder {
 
         // Set some properties.  Failing to specify some of these can cause the MediaCodec
         // configure() call to throw an unhelpful exception.
-        // https://github.com/google/ExoPlayer/issues/178 change to AACObjectLTP
-        format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectERLC); // AACObjectLC);
+        // https://github.com/google/ExoPlayer/issues/178 change to AACObjectLTP, // AACObjectERLC
+        format.setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectELD); // AACObjectLC);
         format.setInteger(MediaFormat.KEY_SAMPLE_RATE, mSampleRate);
         format.setInteger(MediaFormat.KEY_CHANNEL_COUNT, numChannels);
         format.setInteger(MediaFormat.KEY_BIT_RATE, bitRate);
@@ -54,6 +55,7 @@ public class AudioEncoderCore extends AndroidEncoder {
         // we can use for input and wrap it with a class that handles the EGL work.
         mEncoder = MediaCodec.createEncoderByType(MIME_TYPE);
         mEncoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
+        Log.d(TAG, "mEncoder info " + mEncoder.getCodecInfo().getName());
         mEncoder.start();
 
         mTrackIndex = -1;

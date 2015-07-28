@@ -81,6 +81,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         // For texture overlay:
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
         mFullScreenOverlay = new FullFrameRect(
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
         mOverlayTextureId = GlUtil.createTextureFromImage(context, R.drawable.watermark720);

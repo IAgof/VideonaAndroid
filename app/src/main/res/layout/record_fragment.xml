@@ -93,11 +93,11 @@
 
     <ImageView
         android:id="@+id/rotateDeviceHint"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:src="@drawable/rotate_device"/>
+        android:src="@drawable/common_icon_rotate_device" />
 
     <RelativeLayout
         android:id="@+id/relativelayout_camera_effect_fx"

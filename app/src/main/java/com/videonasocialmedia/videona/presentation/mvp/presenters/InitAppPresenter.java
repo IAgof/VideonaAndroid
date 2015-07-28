@@ -61,7 +61,7 @@ public class InitAppPresenter implements OnInitAppEventListener {
      * @param editor
      */
     public InitAppPresenter(InitAppView initAppView, Context context,
-                            SharedPreferences sharedPreferences, SharedPreferences.Editor editor) {
+                            SharedPreferences sharedPreferences, SharedPreferences.Editor editor){
 
         this.initAppView = initAppView;
         this.context = context;
