@@ -9,7 +9,8 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 public interface OnChangeCameraListener {
 
-    void onChangeCameraSuccess( boolean isFlashSupported, boolean isAutoFocusSupported);
+    //void onChangeCameraSuccess( boolean isFlashSupported, boolean isAutoFocusSupported);
+    void onChangeCameraSuccess( );
 
     void onChangeCameraError();
 

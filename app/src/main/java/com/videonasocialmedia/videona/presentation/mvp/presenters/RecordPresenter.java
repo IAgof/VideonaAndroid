@@ -43,7 +43,7 @@ import java.util.List;
 
 public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffectColorListener,
         OnFlashModeListener, OnSettingsCameraListener, OnRemoveMediaFinishedListener,
-        OnAddMediaFinishedListener, OnSessionConfigListener,
+        OnAddMediaFinishedListener, OnSessionConfigListener, OnChangeCameraListener,
         AndroidEncoder.OnMuxerFinishedEventListener, OnRecordEventListener {
 
     /**
@@ -185,6 +185,13 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     }
 
     /**
+     * Update, rotate preview display
+     */
+    public void updatePreviewDisplay(int rotation) {
+        mCamEncoder.updatePreviewDisplay(rotation);
+    }
+
+    /**
      * Apply video filter to CamEncoder
      * @param filter
      */
@@ -196,7 +203,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
      * Request other camera, change front/back camera
      */
     public void requestOtherCamera(int rotation){
-        mCamEncoder.requestOtherCamera(rotation);
+        mCamEncoder.requestOtherCamera(rotation, this);
 
     }
 
@@ -392,6 +399,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
                 e.printStackTrace();
             }
         }
+
 
     }
 
@@ -692,6 +700,16 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
                 e.printStackTrace();
                 Log.d(LOG_TAG, "Video has not been recorded properly");
             }
+
+    }
+
+    @Override
+    public void onChangeCameraSuccess() {
+        recordView.changeCamera();
+    }
+
+    @Override
+    public void onChangeCameraError() {
 
     }
 

@@ -68,6 +68,7 @@ public class VideoEncoderCore extends AndroidEncoder{
         // we can use for input and wrap it with a class that handles the EGL work.
         mEncoder = MediaCodec.createEncoderByType(MIME_TYPE);
         mEncoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
+        Log.d(TAG, "mEncoder info " + mEncoder.getCodecInfo().getName());
         mInputSurface = mEncoder.createInputSurface();
         mEncoder.start();
 

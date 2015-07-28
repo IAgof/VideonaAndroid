@@ -24,6 +24,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
@@ -74,8 +76,8 @@ public class RecordFragment extends Fragment implements RecordView,
      * Activate some log_tag
      */
     private static final boolean VERBOSE = true;
-    private static final int START_RECORDING = 1000 ;
-    private static final int STOP_RECORDING = 1001 ;
+    private static final int START_RECORDING = 1000;
+    private static final int STOP_RECORDING = 1001;
     /**
      * Record Fragment
      */
@@ -121,7 +123,7 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     private CameraEffectFxAdapter cameraEffectFxAdapter;
     /**
-     *  Recycler view catalog fx
+     * Recycler view catalog fx
      */
     @InjectView(R.id.record_catalog_recycler_fx)
     RecyclerView recyclerViewFx;
@@ -131,7 +133,7 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     private CameraEffectColorAdapter cameraEffectColorAdapter;
     /**
-     *  Recycler view catalog color filter
+     * Recycler view catalog color filter
      */
     @InjectView(R.id.record_catalog_recycler_color)
     RecyclerView recyclerViewColor;
@@ -177,6 +179,22 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     public static boolean lockRotation = false;
 
+    private int rotationView;
+
+    /**
+     * OrientationEventListener
+     */
+    OrientationEventListener myOrientationEventListener;
+
+    /**
+     * Boolean, control screenOrientation
+     */
+    private boolean detectScreenOrientation90 = false;
+    /**
+     * Boolean, control screenOrientation
+     */
+    private boolean detectScreenOrientation270 = false;
+
 
     /**
      * Tracker google analytics
@@ -195,64 +213,8 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.button_navigate_edit)
     ImageButton buttonNavigateEdit;
 
-
-    private SensorEventListener mOrientationListener = new SensorEventListener() {
-        final int SENSOR_CONFIRMATION_THRESHOLD = 5;
-        int[] confirmations = new int[2];
-        int orientation = -1;
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if (getActivity() != null && getActivity().findViewById(R.id.rotateDeviceHint) != null) {
-                //Log.i(LOG_TAG, "Sensor " + event.values[1]);
-                if (event.values[1] > 10 || event.values[1] < -10) {
-                    // Sensor noise. Ignore.
-                } else if (event.values[1] < 5.5 && event.values[1] > -5.5) {
-                    // Landscape
-                    if (orientation != 1 && readingConfirmed(1)) {
-                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
-                            if (event.values[0] > 0) {
-                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.LANDSCAPE);
-                            } else {
-                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.UPSIDEDOWN_LANDSCAPE);
-                            }
-                        } else {
-                            getActivity().findViewById(R.id.rotateDeviceHint).setVisibility(View.GONE);
-                        }
-                        orientation = 1;
-                    }
-                } else if (event.values[1] > 7.5 || event.values[1] < -7.5) {
-                    // Portrait
-                    if (orientation != 0 && readingConfirmed(0)) {
-                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
-                            if (event.values[1] > 0) {
-                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.VERTICAL);
-                            } else {
-                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.UPSIDEDOWN_VERTICAL);
-                            }
-                        } else {
-                            getActivity().findViewById(R.id.rotateDeviceHint).setVisibility(View.VISIBLE);
-                        }
-                        orientation = 0;
-                    }
-                }
-            }
-        }
-
-        /**
-         * Determine if a sensor reading is trustworthy
-         * based on a series of consistent readings
-         */
-        private boolean readingConfirmed(int orientation) {
-            confirmations[orientation]++;
-            confirmations[orientation == 0 ? 1 : 0] = 0;
-            return confirmations[orientation] > SENSOR_CONFIRMATION_THRESHOLD;
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        }
-    };
+    @InjectView(R.id.rotateDeviceHint)
+    ImageView rotateDeviceHint;
 
 
     public RecordFragment() {
@@ -319,7 +281,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         if (recordPresenter != null) {
 
-            if(recordPresenter.isRecording()){
+            if (recordPresenter.isRecording()) {
 
                 recordPresenter.pauseRecording();
 
@@ -345,14 +307,13 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
 
-
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
     }
 
 
-    public void release(){
+    public void release() {
         recordPresenter.release();
         recordPresenter = null;
     }
@@ -385,12 +346,9 @@ public class RecordFragment extends Fragment implements RecordView,
             mCameraView = (GLCameraEncoderView) root.findViewById(R.id.cameraPreview);
             mCameraView.setKeepScreenOn(true);
 
-
             recordPresenter.initSessionConfig();
 
             recordPresenter.setPreviewDisplay(mCameraView);
-
-
 
 
         } else
@@ -406,7 +364,7 @@ public class RecordFragment extends Fragment implements RecordView,
         //TODO String text chronometer default
         chronometerRecord.setText("00:00");
 
-       // RecyclerView.LayoutManager layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
+        // RecyclerView.LayoutManager layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
         //StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL); // (int spanCount, int orientation)
         LinearLayoutManager layoutManagerFx = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewFx.setHasFixedSize(true);
@@ -457,7 +415,6 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
 
-
     /**
      * Change camera listener
      */
@@ -472,8 +429,8 @@ public class RecordFragment extends Fragment implements RecordView,
         recordPresenter.requestOtherCamera(rotation);
     }
 
-    @OnClick (R.id.button_navigate_edit)
-    public void buttonNavigateToEdit(){
+    @OnClick(R.id.button_navigate_edit)
+    public void buttonNavigateToEdit() {
         Intent edit = new Intent(getActivity(), EditActivity.class);
         startActivity(edit);
     }
@@ -482,7 +439,7 @@ public class RecordFragment extends Fragment implements RecordView,
      * Camera flash mode listener
      */
     @OnClick(R.id.button_flash_mode)
-    public void buttonFlashModeListener(){
+    public void buttonFlashModeListener() {
         recordPresenter.onFlashModeTorchListener();
     }
 
@@ -491,10 +448,10 @@ public class RecordFragment extends Fragment implements RecordView,
      * Camera settings listener
      */
     @OnClick(R.id.button_settings_camera)
-    public void buttonSettinsCameraListener(){
+    public void buttonSettinsCameraListener() {
 
 
-        if(isSettingsCameraPressed){
+        if (isSettingsCameraPressed) {
             // Hide menu
             linearLayoutRecordCameraOptions.setVisibility(View.GONE);
             buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_normal);
@@ -506,7 +463,7 @@ public class RecordFragment extends Fragment implements RecordView,
             buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_pressed);
             buttonSettingsCamera.setBackgroundResource(R.color.transparent_palette_grey);
             isSettingsCameraPressed = true;
-           // recordPresenter.settingsCameraListener();
+            // recordPresenter.settingsCameraListener();
         }
     }
 
@@ -651,7 +608,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
     @Override
     public void showCameraEffectColorSelected(String colorEffect) {
-        Log.d(LOG_TAG, "showCameraEffectColorSelected() " +  colorEffect);
+        Log.d(LOG_TAG, "showCameraEffectColorSelected() " + colorEffect);
         cameraEffectColorAdapter.notifyDataSetChanged();
     }
 
@@ -763,6 +720,12 @@ public class RecordFragment extends Fragment implements RecordView,
         }
     }
 
+    @Override
+    public void changeCamera() {
+        Log.d(LOG_TAG, "changeCamera");
+
+    }
+
 
     /**
      * Force this fragment to stop recording.
@@ -779,8 +742,34 @@ public class RecordFragment extends Fragment implements RecordView,
 
     protected void startMonitoringOrientation() {
         if (getActivity() != null) {
+            // Sensor event listener
             SensorManager sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
             sensorManager.registerListener(mOrientationListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+            //Orientation eventListener
+
+            rotationView = getActivity().getWindowManager().getDefaultDisplay().getRotation();
+
+            if (rotationView == Surface.ROTATION_90) {
+                detectScreenOrientation90 = true;
+
+            } else
+            if (rotationView == Surface.ROTATION_270) {
+                detectScreenOrientation270 = true;
+            }
+
+            //recordPresenter.updatePreviewDisplay(rotationView);
+
+            myOrientationEventListener = getOrientationEventListener(getActivity().getApplicationContext());
+
+            if (myOrientationEventListener.canDetectOrientation() == true) {
+                Log.d(LOG_TAG, " rotationPreview Can detect orientation");
+                myOrientationEventListener.enable();
+            } else {
+                Log.d(LOG_TAG, " rotationPreview Cannot detect orientation");
+                myOrientationEventListener.disable();
+            }
+
         }
     }
 
@@ -790,6 +779,11 @@ public class RecordFragment extends Fragment implements RecordView,
             if (deviceHint != null) deviceHint.setVisibility(View.GONE);
             SensorManager sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
             sensorManager.unregisterListener(mOrientationListener);
+
+            myOrientationEventListener.disable();
+            detectScreenOrientation90 = true;
+            detectScreenOrientation270 = false;
+
         }
     }
 
@@ -806,6 +800,8 @@ public class RecordFragment extends Fragment implements RecordView,
         buttonRecord.setEnabled(false);
         lockRotation = false;
         buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+
+        stopMonitoringOrientation();
     }
 
     @Override
@@ -975,7 +971,7 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
 
-    private void sendTrackDurationVideoRecorded (String durationVideoRecorded){
+    private void sendTrackDurationVideoRecorded(String durationVideoRecorded) {
 
         tracker.send(new HitBuilders.EventBuilder()
                 .setCategory("RecordActivity")
@@ -987,6 +983,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
     /**
      * OnClick CameraEffectFxRecyclerViewClickListener
+     *
      * @param position
      */
     @Override
@@ -1024,4 +1021,171 @@ public class RecordFragment extends Fragment implements RecordView,
         sendButtonTracked(cameraEffectColorAdapter.getCameraEffectColor(position).getIconCameraEffectColorId());
         recordPresenter.setCameraEffectColor(position);
     }
+
+
+    private OrientationEventListener getOrientationEventListener(Context context) {
+
+        myOrientationEventListener = new OrientationEventListener(context) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                //  Log.d(LOG_TAG, "onOrientationChanged " + orientation);
+                if (lockRotation) { // || recordPresenter == null){
+                    return;
+                } else {
+
+                    if (orientation > 85 && orientation < 95) {
+                       //  Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
+                        rotateDeviceHint.setVisibility(View.GONE);
+                        if (detectScreenOrientation90) {
+                            if (rotationView == Surface.ROTATION_90 && detectScreenOrientation270) {
+                                return;
+                            }
+                                Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 90");
+                            if (rotationView == Surface.ROTATION_270) {
+                                rotationView = Surface.ROTATION_90;
+                                if (recordPresenter != null) {
+                                    if (recordPresenter != null) {
+                                        recordPresenter.updatePreviewDisplay(rotationView);
+                                        //amm recordPresenter.onOrientationChanged(rotationView);
+                                    }
+                                }
+                                   Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 90 rotation Preview 3");
+                            } else {
+                                if (rotationView == Surface.ROTATION_90) {
+                                    rotationView = Surface.ROTATION_270;
+                                    if (recordPresenter != null) {
+                                        recordPresenter.updatePreviewDisplay(rotationView);
+                                        //amm recordPresenter.onOrientationChanged(rotationView);
+                                    }
+                                    Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 90 rotation Preview 1");
+                                }
+                            }
+                            detectScreenOrientation90 = false;
+                            detectScreenOrientation270 = true;
+                        }
+                    } else
+                    if (orientation > 265 && orientation < 275) {
+                        rotateDeviceHint.setVisibility(View.GONE);
+                           Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
+                        if (detectScreenOrientation270) {
+                            //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
+                            if (rotationView == Surface.ROTATION_270 && detectScreenOrientation90) {
+                                return;
+                            }
+                            Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
+                            if (rotationView == Surface.ROTATION_270) {
+                                rotationView = Surface.ROTATION_90;
+                                if (recordPresenter != null) {
+                                    recordPresenter.updatePreviewDisplay(rotationView);
+                                    //amm recordPresenter.onOrientationChanged(rotationView);
+                                }
+                                  Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 270 rotation Preview 3");
+                            } else {
+                                if (rotationView == Surface.ROTATION_90) {
+                                    rotationView = Surface.ROTATION_270;
+                                    if (recordPresenter != null) {
+                                        recordPresenter.updatePreviewDisplay(rotationView);
+                                        //amm recordPresenter.onOrientationChanged(rotationView);
+                                    }
+                                     Log.d(LOG_TAG, "rotationPreview onOrientationChanged .*.*.*.*.*.* 270 rotation Preview 1");
+                                }
+                            }
+                            detectScreenOrientation90 = true;
+                            detectScreenOrientation270 = false;
+                        }
+                    } else
+                    //if(orientation == SCREEN_ORIENTATION_0){
+                    // Security angle of 30º to detect portrait mode
+                     if((orientation > 345 || orientation < 15) && orientation!= -1){
+                        Log.d(LOG_TAG, "rotationPreview onOrientationChanged portrait " + orientation);
+                        rotateDeviceHint.setRotation(270);
+                        rotateDeviceHint.setRotationX(0);
+                        rotateDeviceHint.setVisibility(View.VISIBLE);
+                    } else
+                   // if(orientation == SCREEN_ORIENTATION_180){
+                   // Security angle of 30º to detect portrait mode
+                   if(orientation > 165 && orientation < 195){
+                        Log.d(LOG_TAG, "rotationPreview onOrientationChanged the other portrait " + orientation);
+                        rotateDeviceHint.setRotation(-270);
+                        rotateDeviceHint.setRotationX(180);
+                        rotateDeviceHint.setVisibility(View.VISIBLE);
+
+                    }
+                    else {
+                       //default
+                       rotateDeviceHint.setVisibility(View.GONE);
+                   }
+                }
+            }
+        };
+        return myOrientationEventListener;
+    }
+
+
+    private SensorEventListener mOrientationListener = new SensorEventListener() {
+        final int SENSOR_CONFIRMATION_THRESHOLD = 5;
+        int[] confirmations = new int[2];
+        int orientation = -1;
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (getActivity() != null && getActivity().findViewById(R.id.rotateDeviceHint) != null) {
+                //Log.i(LOG_TAG, "Sensor " + event.values[1]);
+                if (event.values[1] > 10 || event.values[1] < -10) {
+                    // Sensor noise. Ignore.
+                } else if (event.values[1] < 5.5 && event.values[1] > -5.5) {
+                    // Landscape
+                    if (orientation != 1 && readingConfirmed(1)) {
+                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
+                            if (event.values[0] > 0) {
+                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.LANDSCAPE);
+                            } else {
+                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.UPSIDEDOWN_LANDSCAPE);
+                            }
+                        } else {
+                            rotateDeviceHint.setVisibility(View.GONE);
+                            //getActivity().findViewById(R.id.rotateDeviceHint).setVisibility(View.GONE);
+                        }
+                        orientation = 1;
+                    }
+                } else if (event.values[1] > 7.5 || event.values[1] < -7.5) {
+                    // Portrait
+                    if (orientation != 0 && readingConfirmed(0)) {
+                        if (recordPresenter != null && recordPresenter.getSessionConfig().isConvertingVerticalVideo()) {
+                            if (event.values[1] > 0) {
+                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.VERTICAL);
+                            } else {
+                                recordPresenter.signalVerticalVideo(FullFrameRect.SCREEN_ROTATION.UPSIDEDOWN_VERTICAL);
+                            }
+                        } else {
+                            //getActivity().findViewById(R.id.rotateDeviceHint).setVisibility(View.VISIBLE);
+                           // rotateDeviceHint.setVisibility(View.VISIBLE);
+                            Log.d(LOG_TAG, "orientation portrait " + orientation);
+
+
+                        }
+                        orientation = 0;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Determine if a sensor reading is trustworthy
+         * based on a series of consistent readings
+         */
+        private boolean readingConfirmed(int orientation) {
+            confirmations[orientation]++;
+            confirmations[orientation == 0 ? 1 : 0] = 0;
+            return confirmations[orientation] > SENSOR_CONFIRMATION_THRESHOLD;
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+
+
+
+
 }
