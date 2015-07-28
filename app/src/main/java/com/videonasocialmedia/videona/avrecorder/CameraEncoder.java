@@ -605,7 +605,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 if (mIncomingSizeUpdated) {
                     mFullScreen.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
-                    mFullScreenOverlay.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
+                    mFullScreenOverlay.getProgram().setTexSize(178, 36);
                     mIncomingSizeUpdated = false;
                 }
 
@@ -614,10 +614,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 surfaceTexture.getTransformMatrix(mTransform);
                 if (TRACE) Trace.beginSection("drawVEncoderFrame");
-                GLES20.glViewport(0,0,1280,720);
+                GLES20.glViewport(0,0,mSessionConfig.getVideoWidth(),mSessionConfig.getVideoHeight());
                 mFullScreen.drawFrame(mTextureId, mTransform);
                 GLES20.glViewport(15, 15, 178, 36);
-                mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId, mTransform);
+                mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {
                     mEncodedFirstFrame = true;
