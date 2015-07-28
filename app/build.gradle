@@ -27,7 +27,10 @@ android {
     }
 }
 
-repositories { jcenter() }
+repositories {
+    jcenter()
+    mavenCentral()
+}
 
 dependencies {
     //compile 'com.android.support:multidex:1.0.0'
@@ -43,6 +46,7 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.github.paolorotolo:appintro:3.1.0'
 
     compile project(':androidtranscoder')
     compile project(':androidmuxer')
