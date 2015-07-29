@@ -10,19 +10,19 @@ import android.view.ViewGroup;
 /**
  * Created by Veronica Lago Fominaya on 28/07/2015.
  */
-public class IntroFragment extends Fragment {
+public class AppIntroFragment extends Fragment {
 
     private int layoutId;
 
-    public static IntroFragment newInstance(int layoutId) {
-        IntroFragment sampleSlide = new IntroFragment();
+    public static AppIntroFragment newInstance(int layoutId) {
+        AppIntroFragment sampleSlide = new AppIntroFragment();
         Bundle args = new Bundle();
         args.putInt("layoutId", layoutId);
         sampleSlide.setArguments(args);
         return sampleSlide;
     }
 
-    public IntroFragment() {}
+    public AppIntroFragment() {}
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

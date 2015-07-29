@@ -46,10 +46,10 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
-    compile 'com.github.paolorotolo:appintro:3.1.0'
 
     compile project(':androidtranscoder')
     compile project(':androidmuxer')
+    compile project(':appintro')
 
     debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     debugCompile 'com.google.dexmaker:dexmaker:1.0'

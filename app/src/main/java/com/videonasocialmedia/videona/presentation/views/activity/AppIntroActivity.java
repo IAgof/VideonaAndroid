@@ -5,23 +5,24 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.github.paolorotolo.appintro.AppIntro2;
+import com.github.paolorotolo.appintro.AppIntro3;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.fragment.IntroFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.AppIntroFragment;
 
 /**
  * Created by Veronica Lago Fominaya on 28/07/2015.
  */
-public class IntroActivity extends AppIntro2 {
+public class AppIntroActivity extends AppIntro3 {
+
     // Please DO NOT override onCreate. Use init
     @Override
     public void init(Bundle savedInstanceState) {
 
-        addSlide(IntroFragment.newInstance(R.layout.activity_intro_app_1));
-        addSlide(IntroFragment.newInstance(R.layout.activity_intro_app_2));
-        addSlide(IntroFragment.newInstance(R.layout.activity_intro_app_3));
-        addSlide(IntroFragment.newInstance(R.layout.activity_intro_app_4));
-        addSlide(IntroFragment.newInstance(R.layout.activity_intro_app_5));
+        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_1));
+        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_2));
+        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_3));
+        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_4));
+        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_5));
 
         // OPTIONAL METHODS
         // Override bar/separator color
@@ -31,7 +32,7 @@ public class IntroActivity extends AppIntro2 {
         */
 
         // Hide Skip/Done button
-        //showSkipButton(false);
+        showSkipButton(true);
         showDoneButton(true);
 
         // Turn vibration on and set intensity
@@ -43,12 +44,11 @@ public class IntroActivity extends AppIntro2 {
         setCustomTransformer(new ZoomOutPageTransformer());
     }
 
-    /*
+
     @Override
     public void onSkipPressed() {
         startActivity(new Intent(getApplicationContext(), RecordActivity.class));
     }
-    */
 
     @Override
     public void onDonePressed() {
