@@ -94,7 +94,7 @@
     <string name="signUpError">Something bad happend. Try to register again</string>
 
     <!-- Activity Settings -->
-    <string name="title_first_section">Cámara</string>
+    <string name="title_camera_section">Cámara</string>
     <string name="resolution">Resolución</string>
     <string name="low_resolution_name">Buena (720p)</string>
     <string name="low_resolution_value">Buena</string>
@@ -109,9 +109,11 @@
     <string name="good_quality_value">Muy buena</string>
     <string name="high_quality_name">Excelente (10 Mbps)</string>
     <string name="high_quality_value">Excelente</string>
-    <string name="title_second_section">Sobre nosotros</string>
-    <string name="title_third_section">Vota</string>
-    <string name="content_third_section">Vota nuestra aplicación</string>
+    <string name="title_about_section">Sobre nosotros</string>
+    <string name="title_vote_section">Vota</string>
+    <string name="content_vote_section">Vota nuestra aplicación</string>
+    <string name="title_tutorial_section">Tutorial</string>
+    <string name="content_tutorial_section">Mira nuestro tutorial</string>
     <string name="preferences_resolution_not_supported">Su dispositivo no es compatible</string>
     <string name="preferences_quality_not_supported">Su dispositivo no es compatible</string>
 

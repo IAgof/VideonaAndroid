@@ -20,6 +20,7 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.presentation.views.activity.AppIntroActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -407,7 +408,11 @@ public class InitAppPresenter implements OnInitAppEventListener {
 
         @Override
         protected void onPostExecute(Boolean loggedIn) {
-            initAppView.navigate(AppIntroActivity.class);
+            if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
+                initAppView.navigate(AppIntroActivity.class);
+            } else {
+                initAppView.navigate(RecordActivity.class);
+            }
         }
     }
 }

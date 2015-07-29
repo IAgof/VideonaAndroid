@@ -1,6 +1,8 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -8,15 +10,23 @@ import android.view.View;
 import com.github.paolorotolo.appintro.AppIntro3;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.fragment.AppIntroFragment;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
  * Created by Veronica Lago Fominaya on 28/07/2015.
  */
 public class AppIntroActivity extends AppIntro3 {
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
     // Please DO NOT override onCreate. Use init
     @Override
     public void init(Bundle savedInstanceState) {
+
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_1));
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_2));
@@ -47,11 +57,13 @@ public class AppIntroActivity extends AppIntro3 {
 
     @Override
     public void onSkipPressed() {
+        editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
         startActivity(new Intent(getApplicationContext(), RecordActivity.class));
     }
 
     @Override
     public void onDonePressed() {
+        editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
         startActivity(new Intent(getApplicationContext(), RecordActivity.class));
     }
 
