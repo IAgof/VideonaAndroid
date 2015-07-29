@@ -141,7 +141,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
         scissorButton.setActivated(true);
 
-        editPresenter.onCreate();
         createProgressDialog();
     }
 
@@ -166,6 +165,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onPause() {
         super.onPause();
+        editPresenter.onPause();
     }
 
     @Override

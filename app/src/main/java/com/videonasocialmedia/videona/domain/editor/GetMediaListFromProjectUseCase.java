@@ -41,10 +41,10 @@ public class GetMediaListFromProjectUseCase {
             listener.onNoVideosRetrieved();
     }
 
-    public void getMediaListFromProjet(){
+    /*public void getMediaListFromProjet(){
         Project project=Project.getInstance(null, null, null);
         Track track=project.getMediaTrack();
         List videoList= track.getItems();
         EventBus.getDefault().post(new VideosRetrievedFromProjectEvent(videoList));
-    }
+    }*/
 }

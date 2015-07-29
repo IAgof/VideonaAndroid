@@ -85,4 +85,9 @@
   public static *** aspectOf();
 }
 
+# EventBus
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
+
 
