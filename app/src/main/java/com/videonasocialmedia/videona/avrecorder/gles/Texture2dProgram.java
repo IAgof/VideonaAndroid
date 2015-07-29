@@ -236,16 +236,30 @@ public class Texture2dProgram {
 
     private static final String FRAGMENT_SHADER_MIRROR =
             "#extension GL_OES_EGL_image_external : require\n" +
-                    "precision mediump float;\n" +
-                    "varying vec2 vTextureCoord;\n" +
-                    "uniform samplerExternalOES sTexture;\n" +
-                    "void main() {\n" +
-                    "vec3 texel = texture2D(sTexture, vTextureCoord.xy).rgb;\n"+
-                    "gl_FragColor = vec4(texel.x,texel.y,texel.z, 1.0);\n"+
-                    "gl_FragColor.r = dot(texel, vec3(.393, .769, .189));\n"+
-                    "gl_FragColor.g = dot(texel, vec3(.349, .686, .168));\n"+
-                    "gl_FragColor.b = dot(texel, vec3(.272, .534, .131));\n"+
-                "}\n";
+            "precision mediump float;\n" +
+            "varying vec2 vTextureCoord;\n" +
+            "uniform samplerExternalOES sTexture;\n" +
+            "uniform sampler2D src_tex_unit0;\n" +
+            "uniform vec2 src_tex_offset0;\n" +
+            "uniform vec2 dest_tex_size;\n" +
+
+            "uniform float pixel_size;\n" +
+
+            "void main(void) {\n" +
+                "float d = 1.0 / pixel_size;\n" +
+                "vec2 tex_coords = vTextureCoord.st;\n" +
+
+                "int fx = int(tex_coords.s * dest_tex_size.x / pixel_size);\n" +
+                "int fy = int(tex_coords.t * dest_tex_size.y / pixel_size);\n" +
+
+                "float s = pixel_size * (float(fx) + d) / dest_tex_size.x;\n" +
+                "float t = pixel_size * (float(fy) + d) / dest_tex_size.y;\n" +
+
+                "gl_FragColor = texture2D(sTexture, vec2(s, t)).rgba;\n" +
+            "}\n";
+
+    // #declare LightBlue = color red 0.74902 green 0.847059 blue 0.847059 "" +
+
           /*  "#extension GL_OES_EGL_image_external : require\n" +
                     "precision mediump float;\n" +
                     "varying vec2 vTextureCoord;\n" +
@@ -308,6 +322,52 @@ public class Texture2dProgram {
                     "gl_FragColor.g = dot(texel, vec3(.349, .686, .168));\n"+
                     "gl_FragColor.b = dot(texel, vec3(.272, .534, .131));\n"+
                     "}\n";
+
+    //https://github.com/BradLarson/GPUImage/blob/master/framework/Source/GPUImageSketchFilter.m
+    //http://stackoverflow.com/questions/5830139/where-can-i-find-sample-opengl-es-2-0-shaders-that-perform-image-processing-task
+    //private static final String FRAGMENT_SHADER_SKETCH =
+
+    // deepskyblue 	#00BFFF 	rgb(0,191,255)
+    private static final String FRAGMENT_SHADER_AQUA =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "vec3 irgb = texture2D(sTexture, vTextureCoord).rgb;\n"+
+                    "float gray = dot(irgb, vec3(0.299, 0.587, 0.114));\n" +
+                    "gl_FragColor = vec4(gray * vec3(0, 0.749, 1.0), 1.0);\n" +
+                    "}\n";
+
+    //https://github.com/technicolorenvy/Processing-Libraries/blob/master/GLGraphics/examples/Integration/MovieFilters/data/Posterize.glsl
+    private static final String FRAGMENT_SHADER_POSTERICE_BW =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "vec4 color = texture2D(sTexture, vTextureCoord.st);\n" +
+                    "float luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;\n" +
+                    "if (luminance < 0.5) gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n" +
+                    "else gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+                    "}\n";
+
+    //http://www.filewatcher.com/p/gluon-0.70.0.tar.gz.8234641/gluon-gluon/graphics/shaders/GLSL/posterize.frag.html
+    private static final String FRAGMENT_SHADER_POSTERICE =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main()\n" +
+                    "{\n" +
+                    "vec4 outColor = texture2D(sTexture, vTextureCoord.st);\n" +
+                    "float level = 5.0;\n" +
+                    "outColor.r = floor(outColor.r * level) / level;\n" +
+                    "outColor.g = floor(outColor.g * level) / level;\n" +
+                    "outColor.b = floor(outColor.b * level) / level;\n" +
+                    "gl_FragColor = outColor;\n" +
+                    "}";
+
 
     // Fragment shader with a convolution filter.  The upper-left half will be drawn normally,
     // the lower-right half will have the filter applied, and a thin red line will be drawn

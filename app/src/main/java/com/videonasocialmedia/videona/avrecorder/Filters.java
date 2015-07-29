@@ -114,7 +114,7 @@ public class Filters {
                         1f/16f, 2f/16f, 1f/16f,
                         2f/16f, 4f/16f, 2f/16f,
                         1f/16f, 2f/16f, 1f/16f };
-                break;
+                break;a
             case FILTER_SHARPEN:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT_FILT;
                 kernel = new float[] {
