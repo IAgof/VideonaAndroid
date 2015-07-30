@@ -12,8 +12,8 @@
         android:layout_centerHorizontal="true"
         android:text="Slide 3"
         android:textColor="@android:color/white"
-        android:textSize="35sp"
-        android:layout_margin="25dp"
+        android:textSize="30sp"
+        android:layout_margin="10dp"
         />
 
     <ImageView
