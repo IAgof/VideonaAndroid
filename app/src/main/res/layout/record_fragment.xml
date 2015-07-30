@@ -106,8 +106,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/rec_1"
-        android:visibility="invisible">
+        android:layout_toStartOf="@+id/rec_1" >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/record_catalog_recycler_fx"
@@ -124,8 +123,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/rec_1"
-        android:visibility="invisible">
+        android:layout_toStartOf="@+id/rec_1" >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/record_catalog_recycler_color"

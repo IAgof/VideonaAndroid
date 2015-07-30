@@ -7,11 +7,14 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Path;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -28,6 +31,9 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -54,6 +60,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectCo
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectFxViewClickListener;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -208,6 +215,10 @@ public class RecordFragment extends Fragment implements RecordView,
     private int selectedCameraEffectFxIndex = 0;
     private int selectedCameraEffectColorIndex = 0;
 
+    private HashMap<View, Path.Direction> viewsToHide = new HashMap<>();
+    private boolean hidden =  true;
+    private boolean relativeEffectsColorHidden = true;
+    private boolean relativeEffectsFxHidden = true;
 
     //Para Pablo
     @InjectView(R.id.button_navigate_edit)
@@ -216,6 +227,7 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
 
+    public enum Direction {UP, DOWN}
 
     public RecordFragment() {
         // Required empty public constructor
@@ -242,6 +254,10 @@ public class RecordFragment extends Fragment implements RecordView,
 
         recordPresenter = null;
         return new RecordFragment();
+    }
+
+    public void addView(View view, Path.Direction direction) {
+        viewsToHide.put(view, direction);
     }
 
     @Override
@@ -519,20 +535,21 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @OnClick(R.id.button_camera_effect_fx)
     public void cameraEffectFxButtonListener() {
-
         if (relativeLayoutCameraEffectColor.isShown()) {
-            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
+            hideView(relativeLayoutCameraEffectColor, Direction.DOWN);
+            relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
         }
-        if (relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
-            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
+        if (!relativeEffectsFxHidden) {
+            hideView(relativeLayoutCameraEffectFx, Direction.DOWN);
+            relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
         } else {
-            relativeLayoutCameraEffectFx.setVisibility(View.VISIBLE);
+            showView(relativeLayoutCameraEffectFx);
+            relativeEffectsFxHidden = false;
             buttonCameraEffectFx.setActivated(true);
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
-
             }
         }
     }
@@ -542,24 +559,101 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @OnClick(R.id.button_camera_effect_color)
     public void cameraEffectColorButtonListener() {
-
         if (relativeLayoutCameraEffectFx.isShown()) {
-            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
+            hideView(relativeLayoutCameraEffectFx, Direction.DOWN);
+            relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
         }
-
-        if (relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
-            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
+        if (!relativeEffectsColorHidden) {
+            hideView(relativeLayoutCameraEffectColor, Direction.DOWN);
+            relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
-
         } else {
-            relativeLayoutCameraEffectColor.setVisibility(View.VISIBLE);
+            showView(relativeLayoutCameraEffectColor);
+            relativeEffectsColorHidden = false;
             buttonCameraEffectColor.setActivated(true);
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
 
             }
         }
+    }
+
+    /*
+    private void hideViews() {
+        if (!hidden) {
+            hidden = true;
+            for (View view : viewsToHide.keySet()) {
+                hideView(view, viewsToHide.get(view));
+            }
+        }
+    }
+
+    private void showViews() {
+        if (hidden) {
+            hidden = false;
+            for (View view : viewsToHide.keySet()) {
+                showView(view);
+            }
+        }
+    }
+    */
+
+    private void hideView(View view, Direction direction) {
+        int height = calculateTranslation(view);
+        int translateY = direction == Direction.UP ? -height : height;
+        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
+    }
+
+    /**
+     * Takes height + margins
+     * @param view View to translate
+     * @return translation in pixels
+     */
+    private int calculateTranslation(View view) {
+        int height = view.getHeight();
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        int margins = params.topMargin + params.bottomMargin;
+
+        return height + margins;
+    }
+
+    private void showView(View view) {
+        runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
+    }
+
+    private ObjectAnimator createSlideUpAnimation(View view, int position, final int height) {
+        ObjectAnimator anim = ObjectAnimator.ofInt(view, "top", position);
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                //modifySize(height);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //setArrowDown();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+        });
+        anim.setDuration(300);
+        anim.setInterpolator(new DecelerateInterpolator());
+        return anim;
+    }
+
+    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
+        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
+        slideInAnimation.setDuration(view.getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        slideInAnimation.setInterpolator(interpolator);
+        slideInAnimation.start();
     }
 
     /**
