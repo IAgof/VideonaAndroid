@@ -37,13 +37,14 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal|end"
+            android:paddingBottom="10dp"
             android:background="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/common_icon_edit_normal"
             android:layout_above="@+id/button_record"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:visibility="invisible" />
+            android:visibility="visible" />
 
         <ImageButton
             android:id="@+id/button_record"
@@ -87,6 +88,20 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentBottom="true"
             android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/text_view_num_videos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text=""
+            android:textSize="27sp"
+            android:textColor="@color/pastel_palette_grey_dark"
+            android:layout_alignBottom="@+id/button_navigate_edit"
+            android:layout_alignParentStart="@+id/button_navigate_edit"
+            android:layout_alignParentLeft="false"
+            android:layout_toStartOf="@+id/button_navigate_edit" />
 
 
     </RelativeLayout>

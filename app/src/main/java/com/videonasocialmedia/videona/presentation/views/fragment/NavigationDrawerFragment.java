@@ -95,6 +95,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         } else {
             //Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
+            RecordActivity.numVideosRecorded = 0;
+
             RecordActivity activity = (RecordActivity) this.getActivity();
             activity.navigateToEdit();
 

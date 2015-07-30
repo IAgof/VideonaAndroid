@@ -51,6 +51,11 @@ public class RecordActivity extends Activity {
      */
     private boolean buttonBackPressed = false;
 
+    /**
+     *
+     */
+    public static int numVideosRecorded = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
