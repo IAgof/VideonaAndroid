@@ -167,7 +167,8 @@ public class RecordUseCase {
     public void getAvailableCameraEffectColor(OnCameraEffectColorListener listener, Camera camera) {
         /// TODO getAvailableColorEffects from model
 
-            List<CameraEffectColorList> cameraEffectColorList = CameraEffectColorList.getCameraEffectColorListSorted(camera);
+           // List<CameraEffectColorList> cameraEffectColorList = CameraEffectColorList.getCameraEffectColorListSorted(camera);
+            List<CameraEffectColorList> cameraEffectColorList = CameraEffectColorList.getCameraEffectColorList();
 
             cameraEffectColorListAux = cameraEffectColorList;
 

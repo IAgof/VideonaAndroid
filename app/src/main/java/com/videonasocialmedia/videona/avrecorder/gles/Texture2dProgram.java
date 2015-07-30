@@ -31,10 +31,12 @@ public class Texture2dProgram {
     private static final String TAG = "Texture2dProgram";
 
     public enum ProgramType {
-        TEXTURE_2D, TEXTURE_EXT, TEXTURE_EXT_BW, TEXTURE_EXT_NIGHT, TEXTURE_EXT_CHROMA_KEY,
+        TEXTURE_2D, TEXTURE_EXT,TEXTURE_EXT_CHROMA_KEY,
         TEXTURE_EXT_SQUEEZE, TEXTURE_EXT_TWIRL, TEXTURE_EXT_TUNNEL, TEXTURE_EXT_BULGE,
         TEXTURE_EXT_DENT, TEXTURE_EXT_FISHEYE, TEXTURE_EXT_STRETCH, TEXTURE_EXT_MIRROR,
-        TEXTURE_EXT_FILT
+        TEXTURE_EXT_FILT,TEXTURE_EXT_MONO,TEXTURE_EXT_NEGATIVE,TEXTURE_EXT_SEPIA,TEXTURE_EXT_POSTERIZE,
+        TEXTURE_EXT_AQUA,TEXTURE_EXT_EMBOSS,TEXTURE_EXT_POSTERIZE_BW,TEXTURE_EXT_NIGHT,
+        TEXTURE_EXT_NEON
     }
 
     // Simple vertex shader, used for all programs.
@@ -236,31 +238,6 @@ public class Texture2dProgram {
 
     private static final String FRAGMENT_SHADER_MIRROR =
             "#extension GL_OES_EGL_image_external : require\n" +
-            "precision mediump float;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "uniform samplerExternalOES sTexture;\n" +
-            "uniform sampler2D src_tex_unit0;\n" +
-            "uniform vec2 src_tex_offset0;\n" +
-            "uniform vec2 dest_tex_size;\n" +
-
-            "uniform float pixel_size;\n" +
-
-            "void main(void) {\n" +
-                "float d = 1.0 / pixel_size;\n" +
-                "vec2 tex_coords = vTextureCoord.st;\n" +
-
-                "int fx = int(tex_coords.s * dest_tex_size.x / pixel_size);\n" +
-                "int fy = int(tex_coords.t * dest_tex_size.y / pixel_size);\n" +
-
-                "float s = pixel_size * (float(fx) + d) / dest_tex_size.x;\n" +
-                "float t = pixel_size * (float(fy) + d) / dest_tex_size.y;\n" +
-
-                "gl_FragColor = texture2D(sTexture, vec2(s, t)).rgba;\n" +
-            "}\n";
-
-    // #declare LightBlue = color red 0.74902 green 0.847059 blue 0.847059 "" +
-
-          /*  "#extension GL_OES_EGL_image_external : require\n" +
                     "precision mediump float;\n" +
                     "varying vec2 vTextureCoord;\n" +
                     "uniform samplerExternalOES sTexture;\n" +
@@ -271,7 +248,7 @@ public class Texture2dProgram {
                     "    normCoord.x = normCoord.x * sign(normCoord.x + uPosition.x);\n"+
                     "    texCoord = normCoord / 2.0 + 0.5;\n"+
                     "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
-                    "}\n"; */
+                    "}\n";
 
     //https://github.com/yulu/GLtext/blob/master/res/raw/negative_fragment_shader.glsl
     private static final String FRAGMENT_SHADER_NEGATIVE =
@@ -340,7 +317,7 @@ public class Texture2dProgram {
                     "}\n";
 
     //https://github.com/technicolorenvy/Processing-Libraries/blob/master/GLGraphics/examples/Integration/MovieFilters/data/Posterize.glsl
-    private static final String FRAGMENT_SHADER_POSTERICE_BW =
+    private static final String FRAGMENT_SHADER_POSTERIZE_BW =
             "#extension GL_OES_EGL_image_external : require\n" +
                     "precision mediump float;\n" +
                     "varying vec2 vTextureCoord;\n" +
@@ -353,7 +330,7 @@ public class Texture2dProgram {
                     "}\n";
 
     //http://www.filewatcher.com/p/gluon-0.70.0.tar.gz.8234641/gluon-gluon/graphics/shaders/GLSL/posterize.frag.html
-    private static final String FRAGMENT_SHADER_POSTERICE =
+    private static final String FRAGMENT_SHADER_POSTERIZE =
             "#extension GL_OES_EGL_image_external : require\n" +
                     "precision mediump float;\n" +
                     "varying vec2 vTextureCoord;\n" +
@@ -368,6 +345,27 @@ public class Texture2dProgram {
                     "gl_FragColor = outColor;\n" +
                     "}";
 
+    public static final int KERNEL_SIZE = 9;
+    private static final String FRAGMENT_SHADER_EXT_NEON =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "#define KERNEL_SIZE " + KERNEL_SIZE + "\n" +
+                    "precision highp float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "uniform float uKernel[KERNEL_SIZE];\n" +
+                    "uniform vec2 uTexOffset[KERNEL_SIZE];\n" +
+                    "uniform float uColorAdjust;\n" +
+                    "void main() {\n" +
+                    "    int i = 0;\n" +
+                    "    vec4 sum = vec4(0.0);\n" +
+                    "    for (i = 0; i < KERNEL_SIZE; i++) {\n"+
+                    "            vec4 texc = texture2D(sTexture, vTextureCoord + uTexOffset[i]);\n" +
+                    "            sum += texc * uKernel[i];\n" +
+                    "    }\n" +
+                    "    sum += uColorAdjust;\n" +
+                    "    gl_FragColor = sum;\n" +
+                    "}\n";
+
 
     // Fragment shader with a convolution filter.  The upper-left half will be drawn normally,
     // the lower-right half will have the filter applied, and a thin red line will be drawn
@@ -379,7 +377,7 @@ public class Texture2dProgram {
     // - Unroll the loop.  Ideally the compiler does this for you when it's beneficial.
     // - Bake the filter kernel into the shader, instead of passing it through a uniform
     //   array.  That, combined with loop unrolling, should reduce memory accesses.
-    public static final int KERNEL_SIZE = 9;
+    //public static final int KERNEL_SIZE = 9;
     private static final String FRAGMENT_SHADER_EXT_FILT =
             "#extension GL_OES_EGL_image_external : require\n" +
                     "#define KERNEL_SIZE " + KERNEL_SIZE + "\n" +
@@ -440,14 +438,6 @@ public class Texture2dProgram {
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
                 mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT);
                 break;
-            case TEXTURE_EXT_BW:
-                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
-                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_BW);
-                break;
-            case TEXTURE_EXT_NIGHT:
-                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
-                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_NIGHT);
-                break;
             case TEXTURE_EXT_CHROMA_KEY:
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
                 mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_CHROMA_KEY);
@@ -489,6 +479,46 @@ public class Texture2dProgram {
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
                 mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_FILT);
                 break;
+
+            //COLOR Filters
+            case TEXTURE_EXT_MONO:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_BW);
+                break;
+            case TEXTURE_EXT_NEGATIVE:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_NEGATIVE);
+                break;
+            case TEXTURE_EXT_SEPIA:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_SEPIA);
+                break;
+            case TEXTURE_EXT_POSTERIZE:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_POSTERIZE);
+                break;
+            case TEXTURE_EXT_AQUA:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_AQUA);
+                break;
+            case TEXTURE_EXT_EMBOSS:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EMBOSS);
+                break;
+            case TEXTURE_EXT_POSTERIZE_BW:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_POSTERIZE_BW);
+                break;
+            case TEXTURE_EXT_NIGHT:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_NIGHT);
+                break;
+            case TEXTURE_EXT_NEON:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_FILT);
+                break;
+
+
             default:
                 throw new RuntimeException("Unhandled type " + programType);
         }

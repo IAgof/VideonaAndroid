@@ -14,27 +14,10 @@ import static com.google.gson.internal.$Gson$Preconditions.checkArgument;
  * @hide
  */
 public class Filters {
-    private static final String TAG = "Filters";
+    private static final String TAG = "FiltersFx";
     private static final boolean VERBOSE = true;
 
     // Camera filters; must match up with camera_filter_names in strings.xml
-/*    static final int FILTER_NONE = 0;
-    static final int FILTER_BLACK_WHITE = 1;
-    static final int FILTER_NIGHT = 2;
-    static final int FILTER_CHROMA_KEY = 3;
-    static final int FILTER_BLUR = 4;
-    static final int FILTER_SHARPEN = 5;
-    static final int FILTER_EDGE_DETECT = 6;
-    static final int FILTER_EMBOSS = 7;
-    static final int FILTER_SQUEEZE = 8;
-    static final int FILTER_TWIRL = 9;
-    static final int FILTER_TUNNEL = 10;
-    static final int FILTER_BULGE = 11;
-    static final int FILTER_DENT = 12;
-    static final int FILTER_FISHEYE = 13;
-    static final int FILTER_STRETCH = 14;
-    static final int FILTER_MIRROR = 15;*/
-
 
     // NEW ORDER, only effects filters
     static final int FILTER_NONE = 0;
@@ -46,8 +29,17 @@ public class Filters {
     static final int FILTER_TUNNEL = 6;
     static final int FILTER_TWIRL = 7;
     static final int FILTER_BULGE = 8;
+    // Filters color
+    static final int FILTER_NONE_COLOR = 9;
+    static final int FILTER_AQUA = 10;
+    static final int FILTER_POSTERIZE_BW = 11;
+    static final int FILTER_EMBOSS = 12;
+    static final int FILTER_MONO = 13;
+    static final int FILTER_NEGATIVE = 14;
+    static final int FILTER_NIGHT = 15;
+    static final int FILTER_POSTERIZE = 16;
+    static final int FILTER_SEPIA = 17;
 
-    
 
     /**
      * Ensure a filter int code is valid. Update this function as
@@ -55,7 +47,7 @@ public class Filters {
      * @param filter
      */
     public static void checkFilterArgument(int filter){
-        checkArgument(filter >= 0 && filter <= 15);
+        checkArgument(filter >= 0 && filter <= 17);
     }
 
     /**
@@ -72,18 +64,6 @@ public class Filters {
             case FILTER_NONE:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT;
                 break;
-/*            case FILTER_BLACK_WHITE:
-                // (In a previous version the TEXTURE_EXT_BW variant was enabled by a flag called
-                // ROSE_COLORED_GLASSES, because the shader set the red channel to the B&W color
-                // and green/blue to zero.)
-                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_BW;
-                break;
-            case FILTER_NIGHT:
-                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_NIGHT;
-                break;
-            case FILTER_CHROMA_KEY:
-                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_CHROMA_KEY;
-                break;*/
             case FILTER_SQUEEZE:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT_SQUEEZE;
                 break;
@@ -108,33 +88,39 @@ public class Filters {
             case FILTER_MIRROR:
                 programType = Texture2dProgram.ProgramType.TEXTURE_EXT_MIRROR;
                 break;
-/*            case FILTER_BLUR:
-                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_FILT;
-                kernel = new float[] {
-                        1f/16f, 2f/16f, 1f/16f,
-                        2f/16f, 4f/16f, 2f/16f,
-                        1f/16f, 2f/16f, 1f/16f };
-                break;a
-            case FILTER_SHARPEN:
-                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_FILT;
-                kernel = new float[] {
-                        0f, -1f, 0f,
-                        -1f, 5f, -1f,
-                        0f, -1f, 0f };
+            case FILTER_NONE_COLOR:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT;
                 break;
-            case FILTER_EDGE_DETECT:
-                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_FILT;
+            case FILTER_MONO:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_MONO;
+                break;
+            case FILTER_NEGATIVE:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_NEGATIVE;
+                break;
+            case FILTER_SEPIA:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_SEPIA;
+                break;
+            case FILTER_POSTERIZE:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_POSTERIZE;
+                break;
+            case FILTER_AQUA:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_AQUA;
+                break;
+            case FILTER_EMBOSS:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_EMBOSS;
+                break;
+            case FILTER_POSTERIZE_BW:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_POSTERIZE_BW;
+                break;
+            case FILTER_NIGHT:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_NIGHT;
+                break;
+            /*case FILTER_NEON:
+                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_NEON;
                 kernel = new float[] {
                         -1f, -1f, -1f,
                         -1f, 8f, -1f,
                         -1f, -1f, -1f };
-                break;
-            case FILTER_EMBOSS:
-                programType = Texture2dProgram.ProgramType.TEXTURE_EXT_FILT;
-                kernel = new float[] {
-                        2f, 0f, 0f,
-                        0f, -1f, 0f,
-                        0f, 0f, -1f };
                 colorAdj = 0.5f;
                 break;*/
             default:
