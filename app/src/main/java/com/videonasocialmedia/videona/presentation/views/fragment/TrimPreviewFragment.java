@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -429,4 +430,5 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
+
 }

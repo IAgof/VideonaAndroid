@@ -240,7 +240,7 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         }
         showTimeTags(projectDuration);
         seekBar.setMax(projectDuration);
-        if(movieList.size() > 0) {
+        if (movieList.size() > 0) {
             Video video = seekVideo(instantTime);
             videoToPlay = getPosition(video);
             int timeInMsec = instantTime - videoStartTimeInProject.get(videoToPlay) +
@@ -451,7 +451,7 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         playButton.setVisibility(View.VISIBLE);
         releaseVideoView();
         videoToPlay = 0;
-        if(movieList.size() > 0)
+        if (movieList.size() > 0)
             initVideoPlayer(movieList.get(videoToPlay),
                     movieList.get(videoToPlay).getFileStartTime() + 100);
         seekBar.setProgress(0);
@@ -498,7 +498,7 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         } else {
             finish();
         }
-        if(videoPlayer != null) {
+        if (videoPlayer != null) {
             videoPlayer.stop();
             videoPlayer.reset();
         }
@@ -522,4 +522,5 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
         performOnBackgroundThread(this, r);
         */
     }
+
 }

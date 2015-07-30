@@ -2,7 +2,7 @@ package com.videonasocialmedia.videona.domain.editor;
 
 import com.videonasocialmedia.videona.eventbus.events.VideoDurationModifiedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.ModifyVideoDurationlistener;
+
 
 import de.greenrobot.event.EventBus;
 
