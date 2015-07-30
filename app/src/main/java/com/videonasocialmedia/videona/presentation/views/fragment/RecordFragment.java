@@ -422,7 +422,7 @@ public class RecordFragment extends Fragment implements RecordView,
     public void buttonChangeCameraListener() {
 
         // Check flashMode and return to normal
-        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        buttonFlashMode.setActivated(false);
         buttonSettinsCameraListener();
         int rotation = this.getActivity().getWindowManager().getDefaultDisplay()
                 .getRotation();
@@ -454,13 +454,13 @@ public class RecordFragment extends Fragment implements RecordView,
         if (isSettingsCameraPressed) {
             // Hide menu
             linearLayoutRecordCameraOptions.setVisibility(View.GONE);
-            buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_normal);
+            buttonSettingsCamera.setActivated(false);
             buttonSettingsCamera.setBackground(null);
             isSettingsCameraPressed = false;
         } else {
             // Show menu
             linearLayoutRecordCameraOptions.setVisibility(View.VISIBLE);
-            buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_pressed);
+            buttonSettingsCamera.setActivated(true);
             buttonSettingsCamera.setBackgroundResource(R.color.transparent_palette_grey);
             isSettingsCameraPressed = true;
             // recordPresenter.settingsCameraListener();
@@ -522,14 +522,14 @@ public class RecordFragment extends Fragment implements RecordView,
 
         if (relativeLayoutCameraEffectColor.isShown()) {
             relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
+            buttonCameraEffectColor.setActivated(false);
         }
         if (relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
             relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+            buttonCameraEffectFx.setActivated(false);
         } else {
             relativeLayoutCameraEffectFx.setVisibility(View.VISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_pressed);
+            buttonCameraEffectFx.setActivated(true);
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
 
@@ -545,16 +545,16 @@ public class RecordFragment extends Fragment implements RecordView,
 
         if (relativeLayoutCameraEffectFx.isShown()) {
             relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+            buttonCameraEffectFx.setActivated(false);
         }
 
         if (relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
             relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
+            buttonCameraEffectColor.setActivated(false);
 
         } else {
             relativeLayoutCameraEffectColor.setVisibility(View.VISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_pressed);
+            buttonCameraEffectColor.setActivated(true);
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
 
@@ -698,9 +698,9 @@ public class RecordFragment extends Fragment implements RecordView,
     @Override
     public void showFlashModeTorch(boolean mode) {
         if (mode) {
-            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_pressed);
+            buttonFlashMode.setActivated(true);
         } else {
-            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+            buttonFlashMode.setActivated(false);
         }
     }
 
@@ -799,7 +799,7 @@ public class RecordFragment extends Fragment implements RecordView,
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
         buttonRecord.setEnabled(false);
         lockRotation = false;
-        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        buttonFlashMode.setActivated(false);
 
         stopMonitoringOrientation();
     }
