@@ -13,11 +13,13 @@ import android.util.Log;
 
 import com.videonasocialmedia.videona.avrecorder.SessionConfig;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectColorListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffectFxListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.OnGetLastVideoRecordedListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSessionConfigListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSettingsCameraListener;
@@ -317,6 +319,12 @@ public class RecordUseCase {
         parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
         camera.setParameters(parameters);
         listener.onFlashModeTorchRemoved();
+    }
+
+    public void getLastVideoRecorded(OnGetLastVideoRecordedListener listener){
+        String path = Project.getInstance(null, null, null).getMediaTrack().getItems().getLast().getMediaPath();
+        listener.showThumb(path);
+
     }
 
 

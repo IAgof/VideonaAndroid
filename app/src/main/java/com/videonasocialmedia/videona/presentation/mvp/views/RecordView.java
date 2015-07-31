@@ -49,6 +49,8 @@ public interface RecordView extends MVPView {
 
     void showCamera(int cameraMode);
 
+    void showThumbVideoRecorded(String videoPath);
+
     void changeCamera();
 
     void showError();

@@ -22,8 +22,6 @@
         />
 
 
-
-
     <RelativeLayout
         android:id="@+id/rec_1"
         android:layout_width="120dp"
@@ -32,19 +30,32 @@
         android:layout_alignParentStart="false"
         android:paddingEnd="8dp">
 
-        <ImageButton
+        <com.videonasocialmedia.videona.utils.CircleImageView
             android:id="@+id/button_navigate_edit"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal|end"
             android:paddingBottom="10dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/common_icon_edit_normal"
+            android:src="@drawable/activity_record_edit_normal"
             android:layout_above="@+id/button_record"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:id="@+id/text_view_num_videos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text=""
+            android:textSize="27sp"
+            android:layout_above="@+id/button_record"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="15dp" />
 
         <ImageButton
             android:id="@+id/button_record"
@@ -65,7 +76,7 @@
             android:layout_gravity="center_horizontal|end"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/activity_edit_icon_fx_normal"
+            android:src="@drawable/activity_record_fx_normal"
             android:background="@null"
             android:scaleType="fitCenter"
             android:layout_alignParentEnd="false"
@@ -81,27 +92,13 @@
             android:layout_gravity="center_horizontal|end"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/common_icon_filters_normal"
+            android:src="@drawable/activity_record_icon_filters_normal"
             android:background="@null"
             android:scaleType="fitCenter"
             android:layout_alignParentStart="false"
             android:layout_alignParentEnd="false"
             android:layout_alignParentBottom="true"
             android:padding="10dp" />
-
-        <TextView
-            android:id="@+id/text_view_num_videos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text=""
-            android:textSize="27sp"
-            android:textColor="@color/pastel_palette_grey_dark"
-            android:layout_alignBottom="@+id/button_navigate_edit"
-            android:layout_alignParentStart="@+id/button_navigate_edit"
-            android:layout_alignParentLeft="false"
-            android:layout_toStartOf="@+id/button_navigate_edit" />
 
 
     </RelativeLayout>
@@ -155,7 +152,9 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/button_record"
+        android:layout_gravity="center_horizontal|end"
+        android:layout_centerHorizontal="true"
         android:id="@+id/relativeLayoutRecordCameraOptions"
         android:visibility="visible">
 
@@ -165,7 +164,7 @@
             android:gravity="right"
             android:layout_alignParentEnd="true"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
+            android:paddingRight="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
