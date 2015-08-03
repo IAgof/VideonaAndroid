@@ -14,7 +14,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Path;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -60,7 +59,6 @@ import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectCo
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectFxViewClickListener;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -215,8 +213,6 @@ public class RecordFragment extends Fragment implements RecordView,
     private int selectedCameraEffectFxIndex = 0;
     private int selectedCameraEffectColorIndex = 0;
 
-    private HashMap<View, Path.Direction> viewsToHide = new HashMap<>();
-    private boolean hidden =  true;
     private boolean relativeEffectsColorHidden = true;
     private boolean relativeEffectsFxHidden = true;
 
@@ -254,10 +250,6 @@ public class RecordFragment extends Fragment implements RecordView,
 
         recordPresenter = null;
         return new RecordFragment();
-    }
-
-    public void addView(View view, Path.Direction direction) {
-        viewsToHide.put(view, direction);
     }
 
     @Override
@@ -386,11 +378,9 @@ public class RecordFragment extends Fragment implements RecordView,
         recyclerViewFx.setHasFixedSize(true);
         recyclerViewFx.setLayoutManager(layoutManagerFx);
 
-
         LinearLayoutManager layoutManagerColor = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewColor.setHasFixedSize(true);
         recyclerViewColor.setLayoutManager(layoutManagerColor);
-
 
         return root;
     }
@@ -535,22 +525,22 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @OnClick(R.id.button_camera_effect_fx)
     public void cameraEffectFxButtonListener() {
-        if (relativeLayoutCameraEffectColor.isShown()) {
-            hideView(relativeLayoutCameraEffectColor, Direction.DOWN);
+        if (!relativeEffectsColorHidden) {
+            hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
         }
         if (!relativeEffectsFxHidden) {
-            hideView(relativeLayoutCameraEffectFx, Direction.DOWN);
+            hideView(relativeLayoutCameraEffectFx);
             relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
         } else {
-            showView(relativeLayoutCameraEffectFx);
-            relativeEffectsFxHidden = false;
-            buttonCameraEffectFx.setActivated(true);
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
             }
+            showView(relativeLayoutCameraEffectFx, Direction.UP);
+            relativeEffectsFxHidden = false;
+            buttonCameraEffectFx.setActivated(true);
         }
     }
 
@@ -559,47 +549,26 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @OnClick(R.id.button_camera_effect_color)
     public void cameraEffectColorButtonListener() {
-        if (relativeLayoutCameraEffectFx.isShown()) {
-            hideView(relativeLayoutCameraEffectFx, Direction.DOWN);
+        if (!relativeEffectsFxHidden) {
+            hideView(relativeLayoutCameraEffectFx);
             relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
         }
         if (!relativeEffectsColorHidden) {
-            hideView(relativeLayoutCameraEffectColor, Direction.DOWN);
+            hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
         } else {
-            showView(relativeLayoutCameraEffectColor);
-            relativeEffectsColorHidden = false;
-            buttonCameraEffectColor.setActivated(true);
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
-
             }
+            showView(relativeLayoutCameraEffectColor, Direction.UP);
+            relativeEffectsColorHidden = false;
+            buttonCameraEffectColor.setActivated(true);
         }
     }
 
-    /*
-    private void hideViews() {
-        if (!hidden) {
-            hidden = true;
-            for (View view : viewsToHide.keySet()) {
-                hideView(view, viewsToHide.get(view));
-            }
-        }
-    }
-
-    private void showViews() {
-        if (hidden) {
-            hidden = false;
-            for (View view : viewsToHide.keySet()) {
-                showView(view);
-            }
-        }
-    }
-    */
-
-    private void hideView(View view, Direction direction) {
+    private void showView(View view, Direction direction) {
         int height = calculateTranslation(view);
         int translateY = direction == Direction.UP ? -height : height;
         runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
@@ -614,39 +583,14 @@ public class RecordFragment extends Fragment implements RecordView,
         int height = view.getHeight();
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        int margins = params.topMargin + params.bottomMargin;
+        //int margins = params.topMargin + params.bottomMargin;
+        int margins = 0;
 
         return height + margins;
     }
 
-    private void showView(View view) {
+    private void hideView(View view) {
         runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
-    }
-
-    private ObjectAnimator createSlideUpAnimation(View view, int position, final int height) {
-        ObjectAnimator anim = ObjectAnimator.ofInt(view, "top", position);
-        anim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                //modifySize(height);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //setArrowDown();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-        });
-        anim.setDuration(300);
-        anim.setInterpolator(new DecelerateInterpolator());
-        return anim;
     }
 
     private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
@@ -680,9 +624,7 @@ public class RecordFragment extends Fragment implements RecordView,
     public void showCameraEffectFxSelected(String cameraEffect) {
         Log.d(LOG_TAG, "showCameraEffectFxSelected() " + cameraEffect);
         /// TODO apply animation effect
-        // cameraEffectFxAdapter.notifyDataSetChanged();
         cameraEffectFxAdapter.notifyDataSetChanged();
-
     }
 
     /**
@@ -697,7 +639,6 @@ public class RecordFragment extends Fragment implements RecordView,
         cameraEffectColorAdapter = new CameraEffectColorAdapter(effects);
         cameraEffectColorAdapter.setCameraEffectColorViewClickListener(RecordFragment.this);
         recyclerViewColor.setAdapter(cameraEffectColorAdapter);
-
     }
 
     @Override

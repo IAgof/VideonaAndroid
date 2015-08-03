@@ -106,6 +106,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-100dp"
         android:layout_toStartOf="@+id/rec_1" >
 
         <android.support.v7.widget.RecyclerView
@@ -123,6 +124,7 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-100dp"
         android:layout_toStartOf="@+id/rec_1" >
 
         <android.support.v7.widget.RecyclerView
