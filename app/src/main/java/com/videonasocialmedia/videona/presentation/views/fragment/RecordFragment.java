@@ -400,6 +400,10 @@ public class RecordFragment extends Fragment implements RecordView,
         recyclerViewColor.setHasFixedSize(true);
         recyclerViewColor.setLayoutManager(layoutManagerColor);
 
+        if (cameraEffectFxAdapter == null) {
+            recordPresenter.cameraEffectFxClickListener();
+        }
+
         return root;
     }
 
@@ -578,6 +582,7 @@ public class RecordFragment extends Fragment implements RecordView,
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
         } else {
+            // TODO copy to onCreateView after use OpenGL to generate this effects
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
             }
