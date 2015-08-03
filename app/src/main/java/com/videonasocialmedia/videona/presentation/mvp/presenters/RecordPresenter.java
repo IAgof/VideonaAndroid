@@ -44,7 +44,7 @@ import java.util.List;
 public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffectColorListener,
         OnFlashModeListener, OnSettingsCameraListener, OnRemoveMediaFinishedListener,
         OnAddMediaFinishedListener, OnSessionConfigListener, OnChangeCameraListener,
-        AndroidEncoder.OnMuxerFinishedEventListener, OnRecordEventListener {
+        AndroidEncoder.OnMuxerFinishedEventListener, OnRecordEventListener, OnGetLastVideoRecordedListener {
 
     /**
      * LOG_TAG
@@ -459,6 +459,10 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     }
 
 
+    public void getThumbLastVideoRecorded(){
+        recordUseCase.getLastVideoRecorded(this);
+    }
+
     /**
      * Camera Effect color selected
      * @param position
@@ -711,6 +715,11 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     @Override
     public void onChangeCameraError() {
 
+    }
+
+    @Override
+    public void showThumb(String videoPath) {
+        recordView.showThumbVideoRecorded(videoPath);
     }
 
 

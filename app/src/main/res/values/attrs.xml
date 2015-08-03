@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+    <resources>
+        <declare-styleable name="CircleImageView">
+            <attr name="border_width" format="dimension" />
+            <attr name="border_color" format="color" />
+            <attr name="border_overlay" format="boolean" />
+        </declare-styleable>
+    </resources>

@@ -12,6 +12,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -33,8 +34,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -46,12 +49,14 @@ import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectColorViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.CameraEffectFxViewClickListener;
+import com.videonasocialmedia.videona.utils.CircleImageView;
 
 import java.io.IOException;
 import java.util.List;
@@ -59,6 +64,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+
 
 
 /**
@@ -208,10 +214,12 @@ public class RecordFragment extends Fragment implements RecordView,
     private int selectedCameraEffectFxIndex = 0;
     private int selectedCameraEffectColorIndex = 0;
 
-
-    //Para Pablo
+    //TODO add library to about https://github.com/hdodenhof/CircleImageView
     @InjectView(R.id.button_navigate_edit)
-    ImageButton buttonNavigateEdit;
+    CircleImageView buttonNavigateEdit;
+
+    @InjectView(R.id.text_view_num_videos)
+    TextView textViewNumVideosRecorded;
 
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
@@ -350,6 +358,14 @@ public class RecordFragment extends Fragment implements RecordView,
 
             recordPresenter.setPreviewDisplay(mCameraView);
 
+            int  videosRecorded = RecordActivity.numVideosRecorded;
+            if( videosRecorded == 0){
+
+            } else {
+                textViewNumVideosRecorded.setText(String.valueOf(videosRecorded));
+                recordPresenter.getThumbLastVideoRecorded();
+            }
+
 
         } else
             root = new View(container.getContext());
@@ -357,6 +373,9 @@ public class RecordFragment extends Fragment implements RecordView,
 
         // AutoFocusView
         customManualFocusView.onPreviewTouchEvent(getActivity().getApplicationContext());
+
+        buttonNavigateEdit.setBorderWidth(5);
+        buttonNavigateEdit.setBorderColor(Color.WHITE);
 
         // Hide menu camera options
         linearLayoutRecordCameraOptions.setVisibility(View.GONE);
@@ -431,6 +450,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
     @OnClick(R.id.button_navigate_edit)
     public void buttonNavigateToEdit() {
+        RecordActivity.numVideosRecorded = 0;
         Intent edit = new Intent(getActivity(), EditActivity.class);
         startActivity(edit);
     }
@@ -522,14 +542,14 @@ public class RecordFragment extends Fragment implements RecordView,
 
         if (relativeLayoutCameraEffectColor.isShown()) {
             relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_normal);
         }
         if (relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
             relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_normal);
         } else {
             relativeLayoutCameraEffectFx.setVisibility(View.VISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_pressed);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_pressed);
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
 
@@ -545,16 +565,16 @@ public class RecordFragment extends Fragment implements RecordView,
 
         if (relativeLayoutCameraEffectFx.isShown()) {
             relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_normal);
         }
 
         if (relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
             relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_normal);
 
         } else {
             relativeLayoutCameraEffectColor.setVisibility(View.VISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_pressed);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_pressed);
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
 
@@ -626,12 +646,16 @@ public class RecordFragment extends Fragment implements RecordView,
 
         sendTrackDurationVideoRecorded(durationVideoRecorded);
 
-        Intent edit = new Intent(getActivity(), EditActivity.class);
-        startActivity(edit);
+        // Old behaviour, navigate to EditActivity
+        //Intent edit = new Intent(getActivity(), EditActivity.class);
+        //startActivity(edit);
 
         // ReStartFragment, mode recording continuous
-        // New button to navigate to Edit
-        //   reStartFragment();
+        // New button to navigate to Edit added
+
+        RecordActivity.numVideosRecorded++;
+
+        reStartFragment();
     }
 
     @Override
@@ -646,7 +670,6 @@ public class RecordFragment extends Fragment implements RecordView,
         ft.detach(fg);
         ft.attach(fg);
         ft.commit();
-
 
     }
 
@@ -718,6 +741,14 @@ public class RecordFragment extends Fragment implements RecordView,
             default:
                 buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
         }
+    }
+
+    @Override
+    public void showThumbVideoRecorded(String videoPath) {
+        Glide.with(this)
+                .load(videoPath)
+                //.transform(new CircleTransform(getActivity().getApplication()))
+                .into(buttonNavigateEdit);
     }
 
     @Override
