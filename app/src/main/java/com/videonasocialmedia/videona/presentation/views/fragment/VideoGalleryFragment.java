@@ -48,17 +48,17 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
 
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;
-    private TimeChangesHandler timeChangesHandler = new TimeChangesHandler();
-    private VideoGalleryAdapter videoGalleryAdapter;
-    private VideoGalleryPresenter videoGalleryPresenter;
-    private Video selectedVideo;
-    private int folder;
-    private OnSelectionModeListener onSelectionModeListener;
+    protected TimeChangesHandler timeChangesHandler = new TimeChangesHandler();
+    protected VideoGalleryAdapter videoGalleryAdapter;
+    protected VideoGalleryPresenter videoGalleryPresenter;
+    protected Video selectedVideo;
+    protected int folder;
+    protected OnSelectionModeListener onSelectionModeListener;
 
-    private ItemClickSupport clickSupport;
-    private ItemSelectionSupport selectionSupport;
+    protected ItemClickSupport clickSupport;
+    protected ItemSelectionSupport selectionSupport;
 
-    private int selectionMode;
+    protected int selectionMode;
 
     public static VideoGalleryFragment newInstance(int folder, int selectionMode) {
         VideoGalleryFragment videoGalleryFragment = new VideoGalleryFragment();

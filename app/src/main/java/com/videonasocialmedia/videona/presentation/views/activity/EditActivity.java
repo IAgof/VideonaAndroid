@@ -38,7 +38,9 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
@@ -46,9 +48,13 @@ import com.videonasocialmedia.videona.presentation.views.fragment.PreviewVideoLi
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.VideoGallerySlideFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnGalleryListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -66,7 +72,7 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener {
+        OnTrimConfirmListener, OnGalleryListener, GalleryPagerView, OnSelectionModeListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -103,6 +109,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     private ProgressDialog progressDialog;
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
+    private VideoGallerySlideFragment mastersFragment;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         this.parent = parent;
@@ -469,6 +476,13 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         scissorsFxMenuFragment.habilitateTrashButton();
     }
 
+    @Override
+    public void onGalleryCalled() {
+        mastersFragment = VideoGallerySlideFragment.newInstance
+                (VideoGalleryPresenter.MASTERS_FOLDER, VideoGalleryFragment.SELECTION_MODE_MULTIPLE);
+        switchFragment(mastersFragment, R.id.edit_bottom_panel);
+    }
+
     /**
      * OnClick buttons, tracking Google Analytics
      */
@@ -548,4 +562,23 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
+    @Override
+    public void navigate() {
+
+    }
+
+    @Override
+    public void onNoItemSelected() {
+
+    }
+
+    @Override
+    public void onItemChecked() {
+
+    }
+
+    @Override
+    public void onItemUnchecked() {
+
+    }
 }

@@ -13,7 +13,6 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -28,7 +27,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
+import com.videonasocialmedia.videona.presentation.views.listener.OnGalleryListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 
 import butterknife.ButterKnife;
@@ -47,6 +46,7 @@ public class ScissorsFxMenuFragment extends Fragment {
 
     /*CONFIG*/
     private OnRemoveAllProjectListener callbackRemoveAllProject;
+    private OnGalleryListener galleryCalled;
     private Tracker tracker;
 
     @Override
@@ -55,6 +55,7 @@ public class ScissorsFxMenuFragment extends Fragment {
 
         try {
             callbackRemoveAllProject = (OnRemoveAllProjectListener) activity;
+            galleryCalled = (OnGalleryListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnRemoveAllProjectListener");
@@ -96,9 +97,12 @@ public class ScissorsFxMenuFragment extends Fragment {
     @OnClick(R.id.edit_fragment_scissors_button_add_clip)
     public void addVideos() {
         Log.d(LOG_TAG, "addVideos");
+        /*
         Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
         gallery.putExtra("SHARE", false);
         startActivity(gallery);
+        */
+        galleryCalled.onGalleryCalled();
     }
 
     @OnClick(R.id.edit_fragment_scissors_button_duplicate)
