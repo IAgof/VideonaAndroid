@@ -40,11 +40,12 @@ public class InitAppActivity extends Activity implements InitAppView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_init_app);
+    }
 
-        Log.d(LOG_TAG, "onCreate");
-
+    @Override
+    protected void onStart() {
+        super.onStart();
         SharedPreferences sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -53,13 +54,9 @@ public class InitAppActivity extends Activity implements InitAppView {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+        Log.d(LOG_TAG, "antes del start");
         initAppPresenter.start();
         Log.d(LOG_TAG, "onResume, initAppPresenter start");
     }
