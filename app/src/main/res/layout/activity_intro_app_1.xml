@@ -2,18 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="#00000000"
     tools:context=".mainActivity">
-
-
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="533dp"
-        android:layout_height="300dp"
-        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/tutorialsacarmenulateral" />
+        android:src="@drawable/tutorial_rec_menu_lateral" />
 
 </RelativeLayout>
