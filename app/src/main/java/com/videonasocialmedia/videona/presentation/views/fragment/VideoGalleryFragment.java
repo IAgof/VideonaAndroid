@@ -205,6 +205,11 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
     }
 
     @Override
+    public void showVideoTimeline() {
+
+    }
+
+    @Override
     public void onClick(int position) {
         selectedVideo = videoGalleryAdapter.getVideo(position);
         //videoGalleryAdapter.notifyDataSetChanged();

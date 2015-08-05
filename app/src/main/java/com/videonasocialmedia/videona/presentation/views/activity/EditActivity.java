@@ -76,7 +76,7 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener, OnGalleryListener, GalleryPagerView, OnSelectionModeListener {
+        OnTrimConfirmListener, OnGalleryListener, OnSelectionModeListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -587,11 +587,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     }
 
     @Override
-    public void navigate() {
-
-    }
-
-    @Override
     public void onNoItemSelected() {
         // todo: out of selection mode
     }
@@ -617,6 +612,14 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             saveProjectButton.setVisibility(View.VISIBLE);
         }
         countVideosSelected = 0;
+    }
+
+    @Override
+    public void onConfirmSelection() {
+        if (videoTimeLineFragment == null) {
+            videoTimeLineFragment = new VideoTimeLineFragment();
+        }
+        switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
     }
 
     private void updateCounter() {
@@ -670,7 +673,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @OnClick(R.id.button_ok_gallery)
     public void onClick() {
         List<Video> videoList = getSelectedVideos();
-        //if (videoList.size() > 0)
-            //galleryPagerPresenter.loadVideoListToProject(videoList);
+        if (videoList.size() > 0)
+            mastersFragment.loadVideoListToProject(videoList);
     }
 }

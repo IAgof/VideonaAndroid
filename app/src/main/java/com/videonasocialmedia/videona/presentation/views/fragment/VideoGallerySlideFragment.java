@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.GalleryMastersPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -17,6 +21,8 @@ import butterknife.ButterKnife;
  * Created by jca on 14/5/15.
  */
 public class VideoGallerySlideFragment extends VideoGalleryFragment {
+
+    GalleryMastersPresenter galleryMastersPresenter;
 
     public static VideoGallerySlideFragment newInstance(int folder, int selectionMode) {
         VideoGallerySlideFragment videoGalleryFragment = new VideoGallerySlideFragment();
@@ -35,6 +41,8 @@ public class VideoGallerySlideFragment extends VideoGalleryFragment {
         ButterKnife.inject(this, v);
         if (videoGalleryPresenter == null)
             videoGalleryPresenter = new VideoGalleryPresenter(this);
+        if (galleryMastersPresenter == null)
+            galleryMastersPresenter = new GalleryMastersPresenter(this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 6,
                 GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -49,4 +57,12 @@ public class VideoGallerySlideFragment extends VideoGalleryFragment {
         onSelectionModeListener.onExitSelection();
     }
 
+    public void loadVideoListToProject(List<Video> videoList) {
+        galleryMastersPresenter.loadVideoListToProject(videoList);
+    }
+
+    @Override
+    public void showVideoTimeline() {
+        onSelectionModeListener.onConfirmSelection();
+    }
 }
