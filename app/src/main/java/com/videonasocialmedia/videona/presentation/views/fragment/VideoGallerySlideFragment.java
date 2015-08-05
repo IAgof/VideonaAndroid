@@ -41,4 +41,12 @@ public class VideoGallerySlideFragment extends VideoGalleryFragment {
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+        timeChangesHandler.removeCallbacksAndMessages(null);
+        onSelectionModeListener.onExitSelection();
+    }
+
 }

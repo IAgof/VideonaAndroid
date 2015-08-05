@@ -28,6 +28,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
@@ -59,7 +61,9 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmL
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -86,6 +90,16 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
 
+    @InjectView(R.id.button_ok_gallery)
+    ImageButton okButton;
+    @InjectView(R.id.gallery_count_selected_videos)
+    TextView videoCounter;
+    @InjectView(R.id.selection_mode)
+    LinearLayout selectionMode;
+    @InjectView(R.id.buttonOkEditActivity)
+    ImageButton saveProjectButton;
+
+
     private static EditActivity parent;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
@@ -110,6 +124,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
     private VideoGallerySlideFragment mastersFragment;
+    private int countVideosSelected = 0;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         this.parent = parent;
@@ -173,6 +188,15 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onPause() {
         super.onPause();
+        countVideosSelected = getSelectedVideos().size();
+    }
+
+    private List<Video> getSelectedVideos() {
+        List<Video> result = new ArrayList<>();
+        List<Video> videosFromFragment = mastersFragment.getSelectedVideoList();
+        result.addAll(videosFromFragment);
+
+        return result;
     }
 
     @Override
@@ -569,16 +593,84 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void onNoItemSelected() {
-
+        // todo: out of selection mode
     }
 
     @Override
     public void onItemChecked() {
-
+        countVideosSelected++;
+        updateCounter();
     }
 
     @Override
     public void onItemUnchecked() {
+        countVideosSelected--;
+        updateCounter();
+    }
 
+    @Override
+    public void onExitSelection() {
+        if(selectionMode.getVisibility() == View.VISIBLE) {
+            selectionMode.setVisibility(View.GONE);
+        }
+        if(saveProjectButton.getVisibility() != View.VISIBLE) {
+            saveProjectButton.setVisibility(View.VISIBLE);
+        }
+        countVideosSelected = 0;
+    }
+
+    private void updateCounter() {
+        if(selectionMode.getVisibility() != View.VISIBLE) {
+            saveProjectButton.setVisibility(View.GONE);
+            selectionMode.setVisibility(View.VISIBLE);
+        }
+        videoCounter.setText(Integer.toString(countVideosSelected));
+        if(countVideosSelected == 0) {
+            saveProjectButton.setVisibility(View.VISIBLE);
+            selectionMode.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.button_trash)
+    public void deleteFiles() {
+        final List<Video> videoList = getSelectedVideos();
+        int numVideosSelected = videoList.size();
+        if (numVideosSelected > 0) {
+            String title;
+            if(numVideosSelected == 1) {
+                title = getResources().getString(R.string.confirmDeleteTitle) + " " +
+                        String.valueOf(numVideosSelected) + " " +
+                        getResources().getString(R.string.confirmDeleteTitle1);
+            } else {
+                title = getResources().getString(R.string.confirmDeleteTitle) + " " +
+                        String.valueOf(numVideosSelected) + " " +
+                        getResources().getString(R.string.confirmDeleteTitle2);
+            }
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(title)
+                    .setMessage(R.string.confirmDeleteMessage)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (Video video : videoList) {
+                                File file = new File(video.getMediaPath());
+                                file.delete();
+                            }
+                            mastersFragment.updateView();
+                            countVideosSelected = 0;
+                            updateCounter();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+        }
+    }
+
+    @OnClick(R.id.button_ok_gallery)
+    public void onClick() {
+        List<Video> videoList = getSelectedVideos();
+        //if (videoList.size() > 0)
+            //galleryPagerPresenter.loadVideoListToProject(videoList);
     }
 }

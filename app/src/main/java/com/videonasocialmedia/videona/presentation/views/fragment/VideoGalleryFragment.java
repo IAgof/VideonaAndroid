@@ -279,7 +279,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
         }
     }
 
-    private class TimeChangesHandler extends Handler {
+    protected class TimeChangesHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             videoGalleryAdapter.notifyItemChanged(msg.what);

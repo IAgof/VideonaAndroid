@@ -8,6 +8,5 @@
 package com.videonasocialmedia.videona.presentation.views.listener;
 
 public interface OnGalleryListener {
-
     public void onGalleryCalled();
 }

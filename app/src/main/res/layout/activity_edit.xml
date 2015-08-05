@@ -62,6 +62,50 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/edit_activity_icon_save_selector" />
 
+                    <LinearLayout
+                        android:id="@+id/selection_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:visibility="gone">
+                        <TextView
+                            android:id="@+id/gallery_count_selected_videos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="20dp"
+                            android:text="0"
+                            android:textSize="27sp"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/videona_blue_5" />
+
+                        <ImageButton
+                            android:id="@+id/button_trash"
+                            android:layout_width="30dp"
+                            android:layout_height="27dp"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="20dp"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitCenter"
+                            android:visibility="visible"
+                            android:src="@drawable/edit_activity_button_trash_selector" />
+
+                        <ImageButton
+                            android:id="@+id/button_ok_gallery"
+                            android:layout_width="38dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="20dp"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitXY"
+                            android:visibility="visible"
+                            android:src="@drawable/edit_activity_button_ok_selector" />
+
+                    </LinearLayout>
+
 
                     <TextView
                         android:id="@+id/edit_title_text_view"
