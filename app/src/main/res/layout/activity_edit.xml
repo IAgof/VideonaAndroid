@@ -124,38 +124,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:id="@+id/edit_fragment_preview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_toEndOf="@+id/edit_left_panel"
-                    android:layout_toStartOf="@+id/edit_right_panel"
-                    android:minHeight="200dp" />
-
-                <!-- <LinearLayout
-                     android:id="@+id/edit_view_panel"
-                     android:layout_width="wrap_content"
-                     android:layout_height="match_parent"
-                     android:layout_centerHorizontal="true"
-                     android:background="@android:color/holo_green_light"
-                     android:orientation="vertical">
-
-
-                 </LinearLayout>-->
-
-                <FrameLayout
-                    android:id="@+id/edit_bottom_panel"
+                <RelativeLayout
+                    android:id="@+id/edit_central_panel"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_alignBottom="@id/edit_fragment_preview"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_height="match_parent"
                     android:layout_toEndOf="@+id/edit_left_panel"
-                    android:layout_toStartOf="@+id/edit_right_panel" />
+                    android:layout_toStartOf="@+id/edit_right_panel" >
+                    <FrameLayout
+                        android:id="@+id/edit_fragment_preview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentTop="true"
+                        android:minHeight="200dp" />
 
+                    <!-- <LinearLayout
+                         android:id="@+id/edit_view_panel"
+                         android:layout_width="wrap_content"
+                         android:layout_height="match_parent"
+                         android:layout_centerHorizontal="true"
+                         android:background="@android:color/holo_green_light"
+                         android:orientation="vertical">
+
+
+                     </LinearLayout>-->
+
+                    <FrameLayout
+                        android:id="@+id/edit_bottom_panel"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_alignBottom="@id/edit_fragment_preview"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/pastel_palette_blue"/>
+
+                </RelativeLayout>
 
                 <FrameLayout
                     android:id="@+id/edit_right_panel"

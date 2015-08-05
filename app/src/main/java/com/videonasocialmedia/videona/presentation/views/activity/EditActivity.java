@@ -27,8 +27,10 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +44,6 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
-import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
@@ -57,6 +58,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerV
 import com.videonasocialmedia.videona.presentation.views.listener.OnGalleryListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSlideListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -76,7 +78,8 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener, OnGalleryListener, OnSelectionModeListener {
+        OnTrimConfirmListener, OnGalleryListener, OnSelectionModeListener,
+        OnSlideListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -98,6 +101,10 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     LinearLayout selectionMode;
     @InjectView(R.id.buttonOkEditActivity)
     ImageButton saveProjectButton;
+    @InjectView(R.id.edit_bottom_panel)
+    FrameLayout bottomPanel;
+    @InjectView(R.id.edit_central_panel)
+    RelativeLayout centralPanel;
 
 
     private static EditActivity parent;
@@ -125,6 +132,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     private int selectedMusicIndex = 0;
     private VideoGallerySlideFragment mastersFragment;
     private int countVideosSelected = 0;
+    private boolean isInOriginalPosition = true;
+    private int originalEditBottomPanelHeight = 0;
+    private int centralPanelHeight = 0;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         this.parent = parent;
@@ -675,5 +685,25 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         List<Video> videoList = getSelectedVideos();
         if (videoList.size() > 0)
             mastersFragment.loadVideoListToProject(videoList);
+    }
+
+    @Override
+    public void onSlide() {
+        animateBottomPanel();
+    }
+
+    /**
+     * Animate the bottom panel of the app if something changes
+     */
+    private void animateBottomPanel() {
+        if (isInOriginalPosition) {
+            centralPanelHeight = centralPanel.getHeight();
+            originalEditBottomPanelHeight = bottomPanel.getHeight();
+            mastersFragment.slideUp(centralPanel, bottomPanel, centralPanelHeight, originalEditBottomPanelHeight, VideoGallerySlideFragment.Direction.UP);
+            isInOriginalPosition = false;
+        } else {
+            mastersFragment.slideDown(bottomPanel, originalEditBottomPanelHeight, VideoGallerySlideFragment.Direction.DOWN);
+            isInOriginalPosition = true;
+        }
     }
 }

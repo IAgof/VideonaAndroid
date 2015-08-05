@@ -5,16 +5,43 @@
   ~ All rights reserved
   -->
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal">
+    android:id="@+id/edit_recycler_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/container_button_slide_bottom_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pastel_palette_red_dark">
+        <ImageButton
+            android:id="@+id/button_slide_bottom_panel"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitXY"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/common_icon_arrow_up_selector"
+            android:background="@null" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/container_button_slide_bottom_panel"
+        android:gravity="center"
+        android:text="Originals"
+        android:background="@color/pastel_palette_red" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/catalog_recycler"
         android:scrollbars="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_below="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pastel_palette_green"/>
 
 </RelativeLayout>
