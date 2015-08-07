@@ -17,4 +17,8 @@ public interface OnSelectionModeListener {
     void onItemChecked();
 
     void onItemUnchecked();
+
+    void onExitSelection();
+
+    void onConfirmSelection();
 }

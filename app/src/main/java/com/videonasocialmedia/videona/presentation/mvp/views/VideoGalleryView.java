@@ -20,4 +20,6 @@ public interface VideoGalleryView {
 
     void appendVideos(List<Video> movieList);
 
+    void showVideoTimeline();
+
 }
