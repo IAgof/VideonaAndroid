@@ -83,7 +83,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         OnTrimConfirmListener, OnGalleryListener, OnSelectionModeListener,
         OnSlideListener {
 
-    //TODO ojo a este parent
     private static EditActivity parent;
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -165,7 +164,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
 
         editPresenter = new EditPresenter(this);
-        editPresenter.onCreate();
 
         createProgressDialog();
     }
@@ -630,6 +628,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
+
     @Override
     public void onNoItemSelected() {
         // todo: out of selection mode
@@ -714,6 +713,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         }
     }
 
+
     @OnClick(R.id.button_ok_gallery)
     public void onClick() {
         List<Video> videoList = getSelectedVideos();
@@ -736,6 +736,4 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             bottomPanel.startAnimation(enlargeBottomPanel);
         }
     }
-
-
 }
