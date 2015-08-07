@@ -631,7 +631,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         // ReStartFragment, mode recording continuous
         // New button to navigate to Edit
-        //   reStartFragment();
+        //reStartFragment();
     }
 
     @Override
@@ -900,8 +900,8 @@ public class RecordFragment extends Fragment implements RecordView,
             case R.drawable.common_filter_ad1_aqua_normal:
                 label = "Aqua color filter";
                 break;
-            case R.drawable.common_filter_ad2_blackboard_normal:
-                label = "Blackboard color filter";
+            case R.drawable.common_filter_ad2_postericebw_normal:
+                label = "Posterize bw color filter";
                 break;
             case R.drawable.common_filter_ad3_emboss_normal:
                 label = "Emboss color filter";
@@ -912,8 +912,8 @@ public class RecordFragment extends Fragment implements RecordView,
             case R.drawable.common_filter_ad5_negative_normal:
                 label = "Negative color filter";
                 break;
-            case R.drawable.common_filter_ad6_neon_normal:
-                label = "Neon color filter";
+            case R.drawable.common_filter_ad6_green_normal:
+                label = "Green color filter";
                 break;
             case R.drawable.common_filter_ad7_posterize_normal:
                 label = "Posterize color filter";
