@@ -109,7 +109,6 @@ public class ScissorsFxMenuFragment extends Fragment {
     public void clearProject() {
         Log.d(LOG_TAG, "clearProject");
         callbackRemoveAllProject.onRemoveAllProjectSelected();
-
     }
 
 

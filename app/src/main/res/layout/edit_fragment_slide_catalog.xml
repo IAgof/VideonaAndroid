@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/container_button_slide_bottom_panel"
         android:gravity="center"
-        android:text="Originals"
+        android:text="@string/mastersFolderTitle"
         android:background="@color/pastel_palette_red" />
 
     <android.support.v7.widget.RecyclerView
@@ -42,6 +42,6 @@
         android:layout_below="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_green"/>
+        android:background="#fff"/>
 
 </RelativeLayout>

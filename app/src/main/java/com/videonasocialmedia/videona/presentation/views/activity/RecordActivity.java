@@ -78,8 +78,8 @@ public class RecordActivity extends Activity {
     }
 
     @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
+    protected void onResume() {
+        super.onResume();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
 
@@ -89,6 +89,11 @@ public class RecordActivity extends Activity {
             }
         }, 2000);
         Log.d(LOG_TAG, "onAttachedToWindow");
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
     }
 
     @Override

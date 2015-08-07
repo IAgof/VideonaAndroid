@@ -157,8 +157,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@color/pastel_palette_blue"/>
+                        android:layout_marginRight="10dp"/>
 
                 </RelativeLayout>
 

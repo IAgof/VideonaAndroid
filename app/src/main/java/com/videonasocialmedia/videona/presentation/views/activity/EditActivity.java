@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -44,6 +45,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.views.animations.ResizeAnimation;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
@@ -81,18 +83,17 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         OnTrimConfirmListener, OnGalleryListener, OnSelectionModeListener,
         OnSlideListener {
 
+    private static EditActivity parent;
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
     @InjectView(R.id.edit_button_scissor)
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
     ImageButton audioFxButton;
-
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
-
     @InjectView(R.id.button_ok_gallery)
     ImageButton okButton;
     @InjectView(R.id.gallery_count_selected_videos)
@@ -105,9 +106,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     FrameLayout bottomPanel;
     @InjectView(R.id.edit_central_panel)
     RelativeLayout centralPanel;
-
-
-    private static EditActivity parent;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
     private VideoFxMenuFragment videoFxMenuFragment;
@@ -133,8 +131,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     private VideoGallerySlideFragment mastersFragment;
     private int countVideosSelected = 0;
     private boolean isInOriginalPosition = true;
-    private int originalEditBottomPanelHeight = 0;
-    private int centralPanelHeight = 0;
+    private ResizeAnimation enlargeBottomPanel;
+    private ResizeAnimation shrinkBottomPanel;
+
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         this.parent = parent;
@@ -153,17 +152,24 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-
         ButterKnife.inject(this);
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
-        editPresenter = new EditPresenter(this);
+        createAnimations();
+        initPanels();
 
+
+        editPresenter = new EditPresenter(this);
+        editPresenter.onCreate();
+
+        createProgressDialog();
+    }
+
+    private void initPanels() {
         previewVideoListFragment = new PreviewVideoListFragment();
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         videoTimeLineFragment = new VideoTimeLineFragment();
@@ -173,8 +179,24 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
         scissorButton.setActivated(true);
 
-        editPresenter.onCreate();
-        createProgressDialog();
+    }
+
+    private void createAnimations() {
+        bottomPanel.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        bottomPanel.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        int enlargedHeight = centralPanel.getHeight();
+                        enlargeBottomPanel = new ResizeAnimation(bottomPanel, enlargedHeight,
+                                ResizeAnimation.Type.HEIGHT, 200);
+                        int originalHeight = bottomPanel.getHeight();
+                        shrinkBottomPanel = new ResizeAnimation(bottomPanel, enlargedHeight,
+                                originalHeight, ResizeAnimation.Type.HEIGHT, 200);
+
+                    }
+                });
     }
 
     private void createProgressDialog() {
@@ -187,6 +209,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
     @Override
@@ -198,7 +221,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onPause() {
         super.onPause();
-        countVideosSelected = getSelectedVideos().size();
+
     }
 
     private List<Video> getSelectedVideos() {
@@ -397,8 +420,16 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         getFragmentManager().executePendingTransactions();
         if (!f.isAdded()) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (shrinkBottomPanel != null && panel == R.id.edit_bottom_panel
+                    && isBottomPanelEnlarged()) {
+                bottomPanel.startAnimation(shrinkBottomPanel);
+            }
             ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).commit();
         }
+    }
+
+    private boolean isBottomPanelEnlarged() {
+        return bottomPanel.getHeight() == centralPanel.getHeight();
     }
 
     @Override
@@ -514,6 +545,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     public void onGalleryCalled() {
         mastersFragment = VideoGallerySlideFragment.newInstance
                 (VideoGalleryPresenter.MASTERS_FOLDER, VideoGalleryFragment.SELECTION_MODE_MULTIPLE);
+        if (previewVideoListFragment!=null && !previewVideoListFragment.isAdded()){
+            switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
+        }
         switchFragment(mastersFragment, R.id.edit_bottom_panel);
     }
 
@@ -615,10 +649,10 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void onExitSelection() {
-        if(selectionMode.getVisibility() == View.VISIBLE) {
+        if (selectionMode.getVisibility() == View.VISIBLE) {
             selectionMode.setVisibility(View.GONE);
         }
-        if(saveProjectButton.getVisibility() != View.VISIBLE) {
+        if (saveProjectButton.getVisibility() != View.VISIBLE) {
             saveProjectButton.setVisibility(View.VISIBLE);
         }
         countVideosSelected = 0;
@@ -633,12 +667,12 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     }
 
     private void updateCounter() {
-        if(selectionMode.getVisibility() != View.VISIBLE) {
+        if (selectionMode.getVisibility() != View.VISIBLE) {
             saveProjectButton.setVisibility(View.GONE);
             selectionMode.setVisibility(View.VISIBLE);
         }
         videoCounter.setText(Integer.toString(countVideosSelected));
-        if(countVideosSelected == 0) {
+        if (countVideosSelected == 0) {
             saveProjectButton.setVisibility(View.VISIBLE);
             selectionMode.setVisibility(View.GONE);
         }
@@ -650,7 +684,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         int numVideosSelected = videoList.size();
         if (numVideosSelected > 0) {
             String title;
-            if(numVideosSelected == 1) {
+            if (numVideosSelected == 1) {
                 title = getResources().getString(R.string.confirmDeleteTitle) + " " +
                         String.valueOf(numVideosSelected) + " " +
                         getResources().getString(R.string.confirmDeleteTitle1);
@@ -696,14 +730,12 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
      * Animate the bottom panel of the app if something changes
      */
     private void animateBottomPanel() {
-        if (isInOriginalPosition) {
-            centralPanelHeight = centralPanel.getHeight();
-            originalEditBottomPanelHeight = bottomPanel.getHeight();
-            mastersFragment.slideUp(centralPanel, bottomPanel, centralPanelHeight, originalEditBottomPanelHeight, VideoGallerySlideFragment.Direction.UP);
-            isInOriginalPosition = false;
+        if (isBottomPanelEnlarged()) {
+            bottomPanel.startAnimation(shrinkBottomPanel);
         } else {
-            mastersFragment.slideDown(bottomPanel, originalEditBottomPanelHeight, VideoGallerySlideFragment.Direction.DOWN);
-            isInOriginalPosition = true;
+            bottomPanel.startAnimation(enlargeBottomPanel);
         }
     }
+
+
 }
