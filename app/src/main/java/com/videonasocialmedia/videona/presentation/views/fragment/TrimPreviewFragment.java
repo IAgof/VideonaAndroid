@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -79,15 +80,15 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     private TrimPreviewPresenter presenter;
     private MediaController mediaController;
     private MediaPlayer videoPlayer;
+    private OnTrimConfirmListener onTrimConfirmListener;
+    private Video video;
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekBarProgress();
         }
     };
-    private OnTrimConfirmListener onTrimConfirmListener;
-    private Video video;
-    private  int startTimeMs = 0;
+    private int startTimeMs = 0;
     private int finishTimeMs = 0;
     private boolean afterTrimming = false;
 
@@ -128,12 +129,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void onResume() {
         super.onResume();
-        //updateVideoList();
+        presenter.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        presenter.onPause();
         releaseVideoView();
     }
 
@@ -167,7 +169,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void playPreview() {
         if (videoPlayer != null) {
-            if(afterTrimming) {
+            if (afterTrimming) {
                 videoPlayer.seekTo((int) Math.round(trimBar.getSelectedMinValue()));
                 afterTrimming = false;
             }
@@ -190,7 +192,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
 
     @Override
     public void updateVideoList() {
-        presenter.update();
     }
 
     @Override
@@ -205,9 +206,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     }
 
     private void initVideoPlayer(final String videoPath) {
-
         if (videoPlayer == null) {
-
             preview.setVideoPath(videoPath);
             preview.setMediaController(mediaController);
             preview.canSeekBackward();
@@ -217,11 +216,11 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     videoPlayer = mp;
-                    seekBar.setProgress(videoPlayer.getCurrentPosition()-video.getFileStartTime());
+                    seekBar.setProgress(videoPlayer.getCurrentPosition() - video.getFileStartTime());
                     videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
                     videoPlayer.start();
-                    videoPlayer.seekTo(100+video.getFileStartTime());
+                    videoPlayer.seekTo(100 + video.getFileStartTime());
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
@@ -232,37 +231,16 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                     updateSeekBarProgress();
                 }
             });
-            preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                   /* videoToPlay++;
-                    if(videoToPlay < movieList.size()) {
-                        initVideoPlayer(movieList.get(videoToPlay));
-                    }
-
-                    if(videoToPlay == movieList.size()) {
-                        playButton.setVisibility(View.VISIBLE);
-                        releaseVideoView();
-                        videoToPlay = 0;
-                        initVideoPlayer(movieList.get(videoToPlay));
-                    }*/
-                }
-            });
-
             preview.requestFocus();
 
         } else {
-
             preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    seekBar.setProgress(videoPlayer.getCurrentPosition()-video.getFileStartTime());
+                    seekBar.setProgress(videoPlayer.getCurrentPosition() - video.getFileStartTime());
                     videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
-
-                    //editPresenter.prepareMusicPreview();
-
                     updateSeekBarProgress();
                 }
             });
@@ -303,7 +281,9 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         }
     }
 
-    private boolean isEndOfVideo() { return seekBar.getProgress() >= video.getDuration(); }
+    private boolean isEndOfVideo() {
+        return seekBar.getProgress() >= video.getDuration();
+    }
 
     /**
      * Releases the media player and the video view
@@ -396,11 +376,11 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if(startTimeMs != (int) Math.round(trimBar.getSelectedMinValue())) {
+                    if (startTimeMs != (int) Math.round(trimBar.getSelectedMinValue())) {
                         startTimeMs = (int) Math.round(trimBar.getSelectedMinValue());
                         presenter.modifyVideoStartTime(startTimeMs);
                     }
-                    if(finishTimeMs != (int) Math.round(trimBar.getSelectedMaxValue())) {
+                    if (finishTimeMs != (int) Math.round(trimBar.getSelectedMaxValue())) {
                         finishTimeMs = (int) Math.round(trimBar.getSelectedMaxValue());
                         presenter.modifyVideoFinishTime(finishTimeMs);
                     }
@@ -427,10 +407,10 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         if (videoPlayer != null && videoPlayer.isPlaying()) {
             videoPlayer.pause();
         }
-        if(startTimeMs != (int) Math.round((double) minValue) && videoPlayer != null) {
+        if (startTimeMs != (int) Math.round((double) minValue) && videoPlayer != null) {
             videoPlayer.seekTo((int) Math.round((double) minValue));
         }
-        if(finishTimeMs != (int) Math.round((double) maxValue) && videoPlayer != null) {
+        if (finishTimeMs != (int) Math.round((double) maxValue) && videoPlayer != null) {
             videoPlayer.seekTo((int) Math.round((double) maxValue));
         }
     }
@@ -438,7 +418,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            videoPlayer.seekTo(progress+video.getFileStartTime());
+            videoPlayer.seekTo(progress + video.getFileStartTime());
             afterTrimming = false;
         }
     }
@@ -450,4 +430,5 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
+
 }

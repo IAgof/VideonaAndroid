@@ -7,12 +7,15 @@
 
 package com.videonasocialmedia.videona.domain.editor;
 
+import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRetrievedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.Track;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnVideosRetrieved;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 public class GetMediaListFromProjectUseCase {
 
@@ -27,6 +30,7 @@ public class GetMediaListFromProjectUseCase {
         return track.getItems();
     }
 
+    @Deprecated
     public void getMediaListFromProject(OnVideosRetrieved listener){
         Project project=Project.getInstance(null, null, null);
         Track track=project.getMediaTrack();
@@ -36,4 +40,11 @@ public class GetMediaListFromProjectUseCase {
         else
             listener.onNoVideosRetrieved();
     }
+
+    /*public void getMediaListFromProjet(){
+        Project project=Project.getInstance(null, null, null);
+        Track track=project.getMediaTrack();
+        List videoList= track.getItems();
+        EventBus.getDefault().post(new VideosRetrievedFromProjectEvent(videoList));
+    }*/
 }

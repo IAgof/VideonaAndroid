@@ -18,6 +18,8 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
+import com.videonasocialmedia.videona.eventbus.events.music.ErrorAddingMusicToProjectEvent;
+import com.videonasocialmedia.videona.eventbus.events.music.MusicRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -28,6 +30,8 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinishedListener,
         OnRemoveMediaFinishedListener, OnVideosRetrieved {
@@ -64,37 +68,16 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         checkIfVideoFilesExistUseCase = new CheckIfVideoFilesExistUseCase();
     }
 
-    /**
-     * on Create Presenter
-     */
-    public void onCreate() {}
-
-    /**
-     * on Start Presenter
-     */
-    public void onStart() {
-        // TODO edit use case onStart
-    }
 
     public void onResume() {
+        EventBus.getDefault().register(this);
         checkIfVideoFilesExistUseCase.check();
-        /*
-        List<Media> listMedia = getMediaListFromProjectUseCase.getMediaListFromProject();
-        videoToEdit = (Video) listMedia.get(listMedia.size()-1);
-
-        String videoPath = videoToEdit.getMediaPath();
-        Log.d(LOG_TAG, "EditPresenter onCreate pathMedia " + videoPath);
-
-        editorView.initVideoPlayer(videoPath);
-        editorView.showTrimBar(videoToEdit.getFileDuration(), videoToEdit.getFileStartTime(), videoToEdit.getFileStopTime());
-        showTimeTags();
-        try {
-            editorView.createAndPaintVideoThumbs(videoPath, videoToEdit.getFileDuration());
-        } catch (Exception e) {
-            //TODO Determine what to do when the thumbs cannot be drawn
-        }
-        */
     }
+
+    public void onPause(){
+        EventBus.getDefault().unregister(this);
+    }
+
 
     /**
      * Ok edit button click listener
@@ -107,15 +90,19 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     }
 
     public void addMusic(Music music) {
-        addMusicToProjectUseCase.addMusicToTrack(music, 0, this);
+        addMusicToProjectUseCase.addMusicToTrack(music, 0);
+    }
+
+    public void onEvent(ErrorAddingMusicToProjectEvent event){
+        editorView.showError(R.string.addMediaItemToTrackError);
     }
 
     public void removeMusic(Music music) {
-        removeMusicFromProjectUseCase.removeMusicFromProject(music, 0, this);
+        removeMusicFromProjectUseCase.removeMusicFromProject(music, 0);
     }
 
     public void removeAllMusic() {
-        removeMusicFromProjectUseCase.removeAllMusic(0, this);
+        removeMusicFromProjectUseCase.removeAllMusic(0);
     }
 
     @Override

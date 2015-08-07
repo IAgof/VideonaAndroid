@@ -56,6 +56,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to show the right panel of the audio fx menu
@@ -130,6 +131,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @Override
     public void onResume() {
         super.onResume();
+        previewPresenter.onResume();
         seekBar.setProgress(0);
         updateVideoList();
     }
@@ -137,6 +139,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @Override
     public void onPause() {
         super.onPause();
+        previewPresenter.onPause();
         releaseVideoView();
         releaseMusicPlayer();
         projectDuration = 0;

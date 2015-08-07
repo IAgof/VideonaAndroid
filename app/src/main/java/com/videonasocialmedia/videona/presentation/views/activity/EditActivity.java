@@ -83,6 +83,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         OnTrimConfirmListener, OnGalleryListener, OnSelectionModeListener,
         OnSlideListener {
 
+    //TODO ojo a este parent
     private static EditActivity parent;
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -209,7 +210,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -221,7 +221,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onPause() {
         super.onPause();
-
+        editPresenter.onPause();
     }
 
     private List<Video> getSelectedVideos() {
