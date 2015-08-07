@@ -327,15 +327,6 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
     }
 
-    /**
-     * Clear project
-     */
-    private void clearProject() {
-        Project project=Project.getInstance(null, null, null);
-        project.setMediaTrack(new MediaTrack());
-        removeMusicFromProjectUseCase.removeAllMusic(0, this);
-    }
-
 
     /**
      * Prepare for a subsequent recording. Must be called after {@link #stopRecording()}

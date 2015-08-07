@@ -369,6 +369,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                         muteVideo();
                         playMusicSyncWithVideo();
                     } else {
+                        releaseMusicPlayer();
                         videoPlayer.setVolume(0.5f, 0.5f);
                     }
                 } catch(Exception e) {

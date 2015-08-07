@@ -90,7 +90,7 @@ public class RecordFragment extends Fragment implements RecordView,
     /**
      * Record Presenter
      */
-    private static RecordPresenter recordPresenter;        // Make static to survive Fragment re-creation
+    private static RecordPresenter recordPresenter;// Make static to survive Fragment re-creation
     /**
      * GLCameraEncoderView, openGL surfaceView
      */

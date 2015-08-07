@@ -63,17 +63,6 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
         addVideoToProjectUseCase.addVideoListToTrack(videoList, this);
     }
 
-    private void resetProject() {
-        Project project = Project.getInstance(null, null, null);
-        MediaTrack mediaTrack = project.getMediaTrack();
-        LinkedList<Media> listMedia = mediaTrack.getItems();
-        ArrayList<Media> items = new ArrayList<>(listMedia);
-        if (items.size() > 0) {
-            removeVideoFromProjectUseCase.removeMediaItemsFromProject(items, this);
-        }
-
-        removeMusicFromProjectUseCase.removeAllMusic(0, this);
-    }
 
     @Override
     public void onRemoveMediaItemFromTrackError() {
