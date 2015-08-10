@@ -261,14 +261,11 @@ public class InitAppPresenter implements OnInitAppEventListener {
         try {
             c = Camera.open(cameraId);
         } catch (Exception e) {
-            Log.d("DEBUG", "Camera did not open");
+            Log.e("DEBUG", "Camera did not open", e);
         }
         return c;
     }
 
-    private void startLoadingProject() {
-        loadingProjectUseCase.checkProjectState(this);
-    }
 
     /**
      * Check Videona app paths, PATH_APP, pathVideoTrim, pathVideoMusic, ...
