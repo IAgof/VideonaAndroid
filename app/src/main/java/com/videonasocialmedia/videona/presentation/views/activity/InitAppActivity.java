@@ -97,7 +97,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
             try {
                 setup();
             } catch (Exception e) {
-                Log.e(LOG_TAG, "setup failed", e);
+                Log.e("SETUP", "setup failed", e);
             }
             return true;
         }
@@ -116,6 +116,10 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         initSettings();
         setupCameraSettings();
         setupPathsApp(this);
+        // TODO: change this variable of 30MB (size of the raw folder)
+        if (Utils.isAvailableSpace(30)) {
+            downloadingMusicResources();
+        }
     }
 
     /**
@@ -297,7 +301,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      */
     private void setupPathsApp(OnInitAppEventListener listener) {
         try {
-            checkPath();
+            initPaths();
             listener.onCheckPathsAppSuccess();
         } catch (IOException e) {
             Log.e("CHECK PATH", "error", e);
@@ -309,30 +313,20 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      *
      * @throws IOException
      */
-    private void checkPath() throws IOException {
-        File fEdited = new File(Constants.PATH_APP);
-        if (!fEdited.exists()) {
-            fEdited.mkdir();
-        }
-        File fTemp = new File(Constants.PATH_APP_TEMP);
-        if (!fTemp.exists()) {
-            fTemp.mkdir();
-        }
-        File fMaster = new File(Constants.PATH_APP_MASTERS);
-        if (!fMaster.exists()) {
-            fMaster.mkdir();
-        }
-        File fTempAV = new File(Constants.VIDEO_MUSIC_TEMP_FILE);
-        if (fTempAV.exists()) {
-            fTempAV.delete();
-        }
+    private void initPaths() throws IOException {
+        checkAndInitPath(Constants.PATH_APP);
+        checkAndInitPath(Constants.PATH_APP_TEMP);
+        checkAndInitPath(Constants.PATH_APP_MASTERS);
+        checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
         editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
+    }
 
-        // TODO: change this variable of 30MB (size of the raw folder)
-        if (Utils.isAvailableSpace(30)) {
-            downloadingMusicResources();
+    private void checkAndInitPath(String pathApp) {
+        File fEdited = new File(pathApp);
+        if (!fEdited.exists()) {
+            fEdited.mkdir();
         }
     }
 
@@ -378,7 +372,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
         Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
-        listener.onLoadingProjectSuccess();
+        //listener.onLoadingProjectSuccess();
     }
 
     //TODO Check user profile, by default 720p free
