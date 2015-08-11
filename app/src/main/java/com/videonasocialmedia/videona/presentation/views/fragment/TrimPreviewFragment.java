@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -158,12 +157,14 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-        if (videoPlayer.isPlaying()) {
-            pausePreview();
-        } else {
-            playPreview();
+        if(videoPlayer != null) {
+            if (videoPlayer.isPlaying()) {
+                pausePreview();
+            } else {
+                playPreview();
+            }
+            updateSeekBarProgress();
         }
-        updateSeekBarProgress();
     }
 
     @Override

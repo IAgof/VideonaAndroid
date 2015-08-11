@@ -14,7 +14,6 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.InitAppPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
@@ -49,11 +48,6 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     private Camera camera;
     private int numSupportedCameras;
 
-    /**
-     * Init app presenter. Needed to expand app context between model layers.
-     */
-    private InitAppPresenter initAppPresenter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +81,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      */
     private void releaseCamera() {
         if (camera != null) {
+            camera.stopPreview();
             camera.release();
             camera = null;
         }
@@ -102,7 +97,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
             try {
                 setup();
             } catch (Exception e) {
-                Log.d(LOG_TAG, String.valueOf(e));
+                Log.e(LOG_TAG, "setup failed", e);
             }
             return true;
         }
@@ -144,18 +139,15 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      * Checks the available cameras on the device (back/front)
      */
     private void checkAvailableCameras() {
-        if (camera == null) {
-            camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
-                    ConfigPreferences.BACK_CAMERA));
+        if (camera != null) {
+            releaseCamera();
         }
-
+        camera = getCameraInstance(sharedPreferences.getInt(ConfigPreferences.CAMERA_ID,
+                ConfigPreferences.BACK_CAMERA));
         editor.putBoolean(ConfigPreferences.BACK_CAMERA_SUPPORTED, true).commit();
-        Log.d(LOG_TAG, "BACK_CAMERA_SUPPORTED");
-
         numSupportedCameras = Camera.getNumberOfCameras();
         if (numSupportedCameras > 1) {
             editor.putBoolean(ConfigPreferences.FRONT_CAMERA_SUPPORTED, true).commit();
-            Log.d(LOG_TAG, "FRONT_CAMERA_SUPPORTED");
         }
         releaseCamera();
     }
