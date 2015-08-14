@@ -516,8 +516,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         synchronized (mReadyForFrameFence) {
             mEosRequested = true;
         }
-
-
     }
 
 

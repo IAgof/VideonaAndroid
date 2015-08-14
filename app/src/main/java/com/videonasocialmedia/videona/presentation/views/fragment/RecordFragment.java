@@ -228,7 +228,6 @@ public class RecordFragment extends Fragment implements RecordView,
     public RecordFragment() {
         // Required empty public constructor
         if (VERBOSE) Log.i(LOG_TAG, "construct");
-
     }
 
     public static RecordFragment getInstance() {
@@ -239,8 +238,6 @@ public class RecordFragment extends Fragment implements RecordView,
             // We have a leftover RecordFragment but it is not recording
             // Treat it as finished, and recreate
             mFragment = recreateRecordFragment();
-        } else {
-            Log.i(LOG_TAG, "Recycling recreateRecordFragment");
         }
         return mFragment;
     }
@@ -258,60 +255,41 @@ public class RecordFragment extends Fragment implements RecordView,
         super.onCreate(savedInstanceState);
 
         setupRecordPresenter();
-
     }
 
 
     @Override
     public void onResume() {
-
         if (VERBOSE) Log.i(LOG_TAG, "onResume");
         super.onResume();
-
         if (recordPresenter != null) {
-
             recordPresenter.onHostActivityResumed();
             if (VERBOSE) Log.i(LOG_TAG, "onHostActivityResumed");
-
         } else {
             setupRecordPresenter();
         }
-
         startMonitoringOrientation();
-
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
         Log.d(LOG_TAG, "onPause() RecordFragment");
-
         if (recordPresenter != null) {
-
             if (recordPresenter.isRecording()) {
-
                 recordPresenter.pauseRecording();
-
                 showRecordFinished();
                 stopChronometer();
                 unLockNavigator();
-
                 buttonRecord.setEnabled(true);
                 buttonRecord.setImageAlpha(255); // (100%)
                 chronometerRecord.setText("00:00");
-
                 recordPresenter.onHostActivityPaused();
-
                 return;
-
             }
-
             recordPresenter.onHostActivityPaused();
         }
-
         stopMonitoringOrientation();
-
     }
 
 
@@ -341,26 +319,22 @@ public class RecordFragment extends Fragment implements RecordView,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (VERBOSE) Log.i(LOG_TAG, "onCreateView");
+        final View root = inflater.inflate(R.layout.record_fragment, container, false);
+        ButterKnife.inject(this, root);
 
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
 
-        final View root;
-        if (recordPresenter != null && getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            root = inflater.inflate(R.layout.record_fragment, container, false);
-
-            ButterKnife.inject(this, root);
-
+        if (recordPresenter != null && getActivity().getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE) {
             mCameraView = (GLCameraEncoderView) root.findViewById(R.id.cameraPreview);
             mCameraView.setKeepScreenOn(true);
 
             recordPresenter.initSessionConfig();
-
             recordPresenter.setPreviewDisplay(mCameraView);
-
-
-        } else
-            root = new View(container.getContext());
+        }
+//        else
+//            root = new View(container.getContext());
 
 
         // AutoFocusView
@@ -405,17 +379,12 @@ public class RecordFragment extends Fragment implements RecordView,
         // on your Fragment/Activity's onStop()
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (recordPresenter == null) {
-
                 try {
-
                     recordPresenter = new RecordPresenter(this, this.getActivity().getApplicationContext());
-
-
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Unable to create RecordPresenter. Could be trouble creating MediaCodec encoder.");
                     e.printStackTrace();
                 }
-
             }
         }
     }
