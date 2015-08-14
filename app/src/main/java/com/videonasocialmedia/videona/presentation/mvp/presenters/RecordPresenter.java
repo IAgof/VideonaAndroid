@@ -21,9 +21,7 @@ import com.videonasocialmedia.videona.avrecorder.gles.FullFrameRect;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.record.RecordUseCase;
-import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
-import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraView;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
@@ -61,7 +59,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     private final RecordUseCase recordUseCase;
 
     /**
-     * SessionConfig, configure muxer and audio and video settings
+     * EncodingConfig, configure muxer and audio and video settings
      */
     private SessionConfig mConfig;
 
@@ -170,7 +168,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     }
 
     /**
-     *  Get SessionConfig
+     *  Get EncodingConfig
      */
     public SessionConfig getSessionConfig() {
         return mConfig;
@@ -205,7 +203,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
      */
     public void setCameraEffectColor(int filter){
         //Color and fx are in the same list, add size to adjust number with color list.
-        mCamEncoder.applyFilterColor(filter +  CameraEffectFxList.getCameraEffectList().size());
+        mCamEncoder.applyFilterColor(filter + CameraEffectFxList.getCameraEffectList().size());
     }
 
     /**
@@ -244,7 +242,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
      * incoming video frames as Vertical Video, rotating
      * and cropping them for proper display.
      *
-     * This method only has effect if {SessionConfig#setConvertVerticalVideo(boolean)}
+     * This method only has effect if {EncodingConfig#setConvertVerticalVideo(boolean)}
      * has been set true for the current recording session.
      *
      */

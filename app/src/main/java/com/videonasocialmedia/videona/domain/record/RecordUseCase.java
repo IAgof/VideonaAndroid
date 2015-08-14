@@ -98,7 +98,7 @@ public class RecordUseCase {
 
         // TODO, get audio data from Profile
         /*
-        mConfig = new SessionConfig.Builder(outputLocation)
+        mConfig = new EncodingConfig.Builder(outputLocation)
                 .withVideoBitrate(videoQuality.getVideoBitRate())
                 .withVideoResolution(videoSize.getWidth(), videoSize.getHeigth())
                 .withAudioChannels(1)

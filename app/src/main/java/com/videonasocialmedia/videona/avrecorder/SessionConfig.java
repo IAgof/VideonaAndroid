@@ -136,7 +136,7 @@ public class SessionConfig {
 
 
         /**
-         * Configure a SessionConfig quickly with intelligent path interpretation.
+         * Configure a EncodingConfig quickly with intelligent path interpretation.
          * Valid inputs are "/path/to/name.m3u8", "/path/to/name.mp4"
          * <p/>
          * For file-based outputs (.m3u8, .mp4) the file structure is managed
@@ -154,7 +154,7 @@ public class SessionConfig {
          * ...
          * <p/>
          * You can query the final outputLocation after building with
-         * SessionConfig.getOutputPath()
+         * EncodingConfig.getOutputPath()
          *
          * @param outputLocation desired output location. For file based recording,
          *                       recordings will be stored at <outputLocationParent>/<UUID>/<outputLocationFileName>
