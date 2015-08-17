@@ -4,11 +4,14 @@ import android.util.Log;
 
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ReorderMediaItemUseCase;
+import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRetrievedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoTimeLineView;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by jca on 6/7/15.
@@ -25,23 +28,34 @@ public class VideoTimeLinePresenter implements OnVideosRetrieved, OnReorderMedia
         reorderMediaItemUseCase= new ReorderMediaItemUseCase();
     }
 
+
+    @Deprecated
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
         timelineView.showVideoList(videoList);
     }
 
+    @Deprecated
     @Override
     public void onNoVideosRetrieved() {
         //TODO show error in view??
         Log.d("VIDEOTIMELINEPRESENTER", "No videos retrieved from project");
     }
 
+    public void onEvent(VideosRetrievedFromProjectEvent event){
+        if (event.videoList!=null)
+            timelineView.showVideoList(event.videoList);
+        //TODO if there is no list notify the user
+    }
+
 
     public void start() {
+        EventBus.getDefault().register(this);
         obtainVideos();
     }
 
-    public void stop() {
+    public void pause() {
+        EventBus.getDefault().unregister(this);
     }
 
     public void moveItem(Media videoToMove, int toPositon){

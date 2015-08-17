@@ -7,6 +7,8 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -28,6 +30,9 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -85,7 +90,7 @@ public class RecordFragment extends Fragment implements RecordView,
     /**
      * Record Presenter
      */
-    private static RecordPresenter recordPresenter;        // Make static to survive Fragment re-creation
+    private static RecordPresenter recordPresenter;// Make static to survive Fragment re-creation
     /**
      * GLCameraEncoderView, openGL surfaceView
      */
@@ -208,6 +213,8 @@ public class RecordFragment extends Fragment implements RecordView,
     private int selectedCameraEffectFxIndex = 0;
     private int selectedCameraEffectColorIndex = 0;
 
+    private boolean relativeEffectsColorHidden = true;
+    private boolean relativeEffectsFxHidden = true;
 
     //Para Pablo
     @InjectView(R.id.button_navigate_edit)
@@ -216,6 +223,7 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
 
+    public enum Direction {UP, DOWN}
 
     public RecordFragment() {
         // Required empty public constructor
@@ -370,11 +378,9 @@ public class RecordFragment extends Fragment implements RecordView,
         recyclerViewFx.setHasFixedSize(true);
         recyclerViewFx.setLayoutManager(layoutManagerFx);
 
-
         LinearLayoutManager layoutManagerColor = new LinearLayoutManager(this.getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewColor.setHasFixedSize(true);
         recyclerViewColor.setLayoutManager(layoutManagerColor);
-
 
         return root;
     }
@@ -422,7 +428,7 @@ public class RecordFragment extends Fragment implements RecordView,
     public void buttonChangeCameraListener() {
 
         // Check flashMode and return to normal
-        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        buttonFlashMode.setActivated(false);
         buttonSettinsCameraListener();
         int rotation = this.getActivity().getWindowManager().getDefaultDisplay()
                 .getRotation();
@@ -454,13 +460,13 @@ public class RecordFragment extends Fragment implements RecordView,
         if (isSettingsCameraPressed) {
             // Hide menu
             linearLayoutRecordCameraOptions.setVisibility(View.GONE);
-            buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_normal);
+            buttonSettingsCamera.setActivated(false);
             buttonSettingsCamera.setBackground(null);
             isSettingsCameraPressed = false;
         } else {
             // Show menu
             linearLayoutRecordCameraOptions.setVisibility(View.VISIBLE);
-            buttonSettingsCamera.setImageResource(R.drawable.activity_record_settings_camera_pressed);
+            buttonSettingsCamera.setActivated(true);
             buttonSettingsCamera.setBackgroundResource(R.color.transparent_palette_grey);
             isSettingsCameraPressed = true;
             // recordPresenter.settingsCameraListener();
@@ -519,21 +525,22 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @OnClick(R.id.button_camera_effect_fx)
     public void cameraEffectFxButtonListener() {
-
-        if (relativeLayoutCameraEffectColor.isShown()) {
-            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
+        if (!relativeEffectsColorHidden) {
+            hideView(relativeLayoutCameraEffectColor);
+            relativeEffectsColorHidden = true;
+            buttonCameraEffectColor.setActivated(false);
         }
-        if (relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
-            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+        if (!relativeEffectsFxHidden) {
+            hideView(relativeLayoutCameraEffectFx);
+            relativeEffectsFxHidden = true;
+            buttonCameraEffectFx.setActivated(false);
         } else {
-            relativeLayoutCameraEffectFx.setVisibility(View.VISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_pressed);
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
-
             }
+            showView(relativeLayoutCameraEffectFx, Direction.UP);
+            relativeEffectsFxHidden = false;
+            buttonCameraEffectFx.setActivated(true);
         }
     }
 
@@ -542,24 +549,55 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @OnClick(R.id.button_camera_effect_color)
     public void cameraEffectColorButtonListener() {
-
-        if (relativeLayoutCameraEffectFx.isShown()) {
-            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_edit_icon_fx_normal);
+        if (!relativeEffectsFxHidden) {
+            hideView(relativeLayoutCameraEffectFx);
+            relativeEffectsFxHidden = true;
+            buttonCameraEffectFx.setActivated(false);
         }
-
-        if (relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
-            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_normal);
-
+        if (!relativeEffectsColorHidden) {
+            hideView(relativeLayoutCameraEffectColor);
+            relativeEffectsColorHidden = true;
+            buttonCameraEffectColor.setActivated(false);
         } else {
-            relativeLayoutCameraEffectColor.setVisibility(View.VISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.common_icon_filters_pressed);
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
-
             }
+            showView(relativeLayoutCameraEffectColor, Direction.UP);
+            relativeEffectsColorHidden = false;
+            buttonCameraEffectColor.setActivated(true);
         }
+    }
+
+    private void showView(View view, Direction direction) {
+        int height = calculateTranslation(view);
+        int translateY = direction == Direction.UP ? -height : height;
+        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
+    }
+
+    /**
+     * Takes height + margins
+     * @param view View to translate
+     * @return translation in pixels
+     */
+    private int calculateTranslation(View view) {
+        int height = view.getHeight();
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        //int margins = params.topMargin + params.bottomMargin;
+        int margins = 0;
+
+        return height + margins;
+    }
+
+    private void hideView(View view) {
+        runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
+    }
+
+    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
+        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
+        slideInAnimation.setDuration(view.getContext().getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        slideInAnimation.setInterpolator(interpolator);
+        slideInAnimation.start();
     }
 
     /**
@@ -586,9 +624,7 @@ public class RecordFragment extends Fragment implements RecordView,
     public void showCameraEffectFxSelected(String cameraEffect) {
         Log.d(LOG_TAG, "showCameraEffectFxSelected() " + cameraEffect);
         /// TODO apply animation effect
-        // cameraEffectFxAdapter.notifyDataSetChanged();
         cameraEffectFxAdapter.notifyDataSetChanged();
-
     }
 
     /**
@@ -603,7 +639,6 @@ public class RecordFragment extends Fragment implements RecordView,
         cameraEffectColorAdapter = new CameraEffectColorAdapter(effects);
         cameraEffectColorAdapter.setCameraEffectColorViewClickListener(RecordFragment.this);
         recyclerViewColor.setAdapter(cameraEffectColorAdapter);
-
     }
 
     @Override
@@ -698,9 +733,9 @@ public class RecordFragment extends Fragment implements RecordView,
     @Override
     public void showFlashModeTorch(boolean mode) {
         if (mode) {
-            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_pressed);
+            buttonFlashMode.setActivated(true);
         } else {
-            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+            buttonFlashMode.setActivated(false);
         }
     }
 
@@ -799,7 +834,7 @@ public class RecordFragment extends Fragment implements RecordView,
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
         buttonRecord.setEnabled(false);
         lockRotation = false;
-        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        buttonFlashMode.setActivated(false);
 
         stopMonitoringOrientation();
     }

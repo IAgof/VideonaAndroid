@@ -27,7 +27,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +41,11 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.views.animations.ResizeAnimation;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
@@ -46,14 +53,21 @@ import com.videonasocialmedia.videona.presentation.views.fragment.PreviewVideoLi
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.VideoGallerySlideFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnGalleryListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSlideListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -66,21 +80,32 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener {
+        OnTrimConfirmListener, OnGalleryListener, OnSelectionModeListener,
+        OnSlideListener {
 
+    private static EditActivity parent;
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
     @InjectView(R.id.edit_button_scissor)
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
     ImageButton audioFxButton;
-
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
-
-    private static EditActivity parent;
+    @InjectView(R.id.button_ok_gallery)
+    ImageButton okButton;
+    @InjectView(R.id.gallery_count_selected_videos)
+    TextView videoCounter;
+    @InjectView(R.id.selection_mode)
+    LinearLayout selectionMode;
+    @InjectView(R.id.buttonOkEditActivity)
+    ImageButton saveProjectButton;
+    @InjectView(R.id.edit_bottom_panel)
+    FrameLayout bottomPanel;
+    @InjectView(R.id.edit_central_panel)
+    RelativeLayout centralPanel;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
     private VideoFxMenuFragment videoFxMenuFragment;
@@ -103,6 +128,12 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     private ProgressDialog progressDialog;
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
+    private VideoGallerySlideFragment mastersFragment;
+    private int countVideosSelected = 0;
+    private boolean isInOriginalPosition = true;
+    private ResizeAnimation enlargeBottomPanel;
+    private ResizeAnimation shrinkBottomPanel;
+
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         this.parent = parent;
@@ -121,17 +152,23 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-
         ButterKnife.inject(this);
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
 
+        createAnimations();
+        initPanels();
+
+
         editPresenter = new EditPresenter(this);
 
+        createProgressDialog();
+    }
+
+    private void initPanels() {
         previewVideoListFragment = new PreviewVideoListFragment();
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         videoTimeLineFragment = new VideoTimeLineFragment();
@@ -141,8 +178,24 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
         scissorButton.setActivated(true);
 
-        editPresenter.onCreate();
-        createProgressDialog();
+    }
+
+    private void createAnimations() {
+        bottomPanel.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        bottomPanel.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        int enlargedHeight = centralPanel.getHeight();
+                        enlargeBottomPanel = new ResizeAnimation(bottomPanel, enlargedHeight,
+                                ResizeAnimation.Type.HEIGHT, 200);
+                        int originalHeight = bottomPanel.getHeight();
+                        shrinkBottomPanel = new ResizeAnimation(bottomPanel, enlargedHeight,
+                                originalHeight, ResizeAnimation.Type.HEIGHT, 200);
+
+                    }
+                });
     }
 
     private void createProgressDialog() {
@@ -166,6 +219,15 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onPause() {
         super.onPause();
+        editPresenter.onPause();
+    }
+
+    private List<Video> getSelectedVideos() {
+        List<Video> result = new ArrayList<>();
+        List<Video> videosFromFragment = mastersFragment.getSelectedVideoList();
+        result.addAll(videosFromFragment);
+
+        return result;
     }
 
     @Override
@@ -356,8 +418,16 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         getFragmentManager().executePendingTransactions();
         if (!f.isAdded()) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (shrinkBottomPanel != null && panel == R.id.edit_bottom_panel
+                    && isBottomPanelEnlarged()) {
+                bottomPanel.startAnimation(shrinkBottomPanel);
+            }
             ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).commit();
         }
+    }
+
+    private boolean isBottomPanelEnlarged() {
+        return bottomPanel.getHeight() == centralPanel.getHeight();
     }
 
     @Override
@@ -469,6 +539,16 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         scissorsFxMenuFragment.habilitateTrashButton();
     }
 
+    @Override
+    public void onGalleryCalled() {
+        mastersFragment = VideoGallerySlideFragment.newInstance
+                (VideoGalleryPresenter.MASTERS_FOLDER, VideoGalleryFragment.SELECTION_MODE_MULTIPLE);
+        if (previewVideoListFragment!=null && !previewVideoListFragment.isAdded()){
+            switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
+        }
+        switchFragment(mastersFragment, R.id.edit_bottom_panel);
+    }
+
     /**
      * OnClick buttons, tracking Google Analytics
      */
@@ -548,4 +628,112 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
+
+    @Override
+    public void onNoItemSelected() {
+        // todo: out of selection mode
+    }
+
+    @Override
+    public void onItemChecked() {
+        countVideosSelected++;
+        updateCounter();
+    }
+
+    @Override
+    public void onItemUnchecked() {
+        countVideosSelected--;
+        updateCounter();
+    }
+
+    @Override
+    public void onExitSelection() {
+        if (selectionMode.getVisibility() == View.VISIBLE) {
+            selectionMode.setVisibility(View.GONE);
+        }
+        if (saveProjectButton.getVisibility() != View.VISIBLE) {
+            saveProjectButton.setVisibility(View.VISIBLE);
+        }
+        countVideosSelected = 0;
+    }
+
+    @Override
+    public void onConfirmSelection() {
+        if (videoTimeLineFragment == null) {
+            videoTimeLineFragment = new VideoTimeLineFragment();
+        }
+        switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+    }
+
+    private void updateCounter() {
+        if (selectionMode.getVisibility() != View.VISIBLE) {
+            saveProjectButton.setVisibility(View.GONE);
+            selectionMode.setVisibility(View.VISIBLE);
+        }
+        videoCounter.setText(Integer.toString(countVideosSelected));
+        if (countVideosSelected == 0) {
+            saveProjectButton.setVisibility(View.VISIBLE);
+            selectionMode.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.button_trash)
+    public void deleteFiles() {
+        final List<Video> videoList = getSelectedVideos();
+        int numVideosSelected = videoList.size();
+        if (numVideosSelected > 0) {
+            String title;
+            if (numVideosSelected == 1) {
+                title = getResources().getString(R.string.confirmDeleteTitle) + " " +
+                        String.valueOf(numVideosSelected) + " " +
+                        getResources().getString(R.string.confirmDeleteTitle1);
+            } else {
+                title = getResources().getString(R.string.confirmDeleteTitle) + " " +
+                        String.valueOf(numVideosSelected) + " " +
+                        getResources().getString(R.string.confirmDeleteTitle2);
+            }
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(title)
+                    .setMessage(R.string.confirmDeleteMessage)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (Video video : videoList) {
+                                File file = new File(video.getMediaPath());
+                                file.delete();
+                            }
+                            mastersFragment.updateView();
+                            countVideosSelected = 0;
+                            updateCounter();
+                        }
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+        }
+    }
+
+
+    @OnClick(R.id.button_ok_gallery)
+    public void onClick() {
+        List<Video> videoList = getSelectedVideos();
+        if (videoList.size() > 0)
+            mastersFragment.loadVideoListToProject(videoList);
+    }
+
+    @Override
+    public void onSlide() {
+        animateBottomPanel();
+    }
+
+    /**
+     * Animate the bottom panel of the app if something changes
+     */
+    private void animateBottomPanel() {
+        if (isBottomPanelEnlarged()) {
+            bottomPanel.startAnimation(shrinkBottomPanel);
+        } else {
+            bottomPanel.startAnimation(enlargeBottomPanel);
+        }
+    }
 }

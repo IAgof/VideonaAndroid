@@ -232,6 +232,16 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         }
     }
 
+    @Override
+    public void onExitSelection() {
+
+    }
+
+    @Override
+    public void onConfirmSelection() {
+
+    }
+
     private void updateCounter() {
         if(selectionMode.getVisibility() != View.VISIBLE)
             selectionMode.setVisibility(View.VISIBLE);

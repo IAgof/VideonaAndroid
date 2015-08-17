@@ -1,5 +1,6 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 
 import java.util.List;
@@ -22,5 +23,9 @@ public interface PreviewView {
     void showError(String message);
 
     void updateSeekBarSize();
+
+    //void changeMusicSource(Music music);
+
+    //void removeMusic();
 
 }
