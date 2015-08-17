@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/title_first_section">
+        android:title="@string/title_camera_section">
 
         <ListPreference
             android:key="list_preference_resolution"
@@ -19,7 +19,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_second_section">
+        android:title="@string/title_about_section">
         <Preference
             android:title="@string/aboutUsTitle">
             <intent android:action=".presentation.views.activity.AboutActivity"/>
@@ -27,11 +27,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_third_section">
+        android:title="@string/title_vote_section">
         <Preference
-            android:title="@string/content_third_section">
+            android:title="@string/content_vote_section">
             <intent android:action="android.intent.action.VIEW"
                 android:data="market://details?id=com.videonasocialmedia.videona" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_tutorial_section">
+        <Preference
+            android:title="@string/content_tutorial_section">
+            <intent android:action=".presentation.views.activity.AppIntroActivity"/>
         </Preference>
     </PreferenceCategory>
 
