@@ -8,14 +8,6 @@
 
 <resources>
   <string-array name="camera_filter_names">
-<!--    <item>Normal</item>
-    <item>Black &amp; white</item>
-    <item>Night Mode</item>
-    <item>Chroma Key</item>
-    <item>Blur</item>
-    <item>Sharpen</item>
-    <item>Edge detect</item>
-    <item>Emboss</item>-->
     <item>Normal</item>
     <item>Fisheye</item>
     <item>Stretch</item>
@@ -25,6 +17,16 @@
     <item>Tunnel</item>
     <item>Twirl</item>
     <item>Bulge</item>
-
+    <item>Normal</item>
+    <item>Aqua</item>
+    <item>PosterizeBW</item>
+    <item>Emboss</item>
+    <item>Mono</item>
+    <item>Negative</item>
+    <item>Night</item>
+    <item>Posterize</item>
+    <item>Sepia</item>
   </string-array>
+
+
 </resources>

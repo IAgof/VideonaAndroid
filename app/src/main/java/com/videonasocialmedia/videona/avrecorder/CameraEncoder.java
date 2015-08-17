@@ -416,11 +416,24 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     /**
-     * Apply a filter to the camera input
+     * Apply a filter fx to the camera input
      *
      * @param filter
      */
-    public void applyFilter(int filter) {
+    public void applyFilterFx(int filter) {
+        Filters.checkFilterArgument(filter);
+        mDisplayRenderer.changeFilterMode(filter);
+        synchronized (mReadyForFrameFence) {
+            mNewFilter = filter;
+        }
+    }
+
+    /**
+     * Apply a filter color to the camera input
+     *
+     * @param filter
+     */
+    public void applyFilterColor(int filter) {
         Filters.checkFilterArgument(filter);
         mDisplayRenderer.changeFilterMode(filter);
         synchronized (mReadyForFrameFence) {

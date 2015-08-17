@@ -28,13 +28,15 @@ import java.nio.FloatBuffer;
  * @hide
  */
 public class Texture2dProgram {
-    private static final String TAG ="Texture2dProgram";
+    private static final String TAG = "Texture2dProgram";
 
     public enum ProgramType {
-        TEXTURE_2D, TEXTURE_EXT, TEXTURE_EXT_BW, TEXTURE_EXT_NIGHT, TEXTURE_EXT_CHROMA_KEY,
+        TEXTURE_2D, TEXTURE_EXT,TEXTURE_EXT_CHROMA_KEY,
         TEXTURE_EXT_SQUEEZE, TEXTURE_EXT_TWIRL, TEXTURE_EXT_TUNNEL, TEXTURE_EXT_BULGE,
         TEXTURE_EXT_DENT, TEXTURE_EXT_FISHEYE, TEXTURE_EXT_STRETCH, TEXTURE_EXT_MIRROR,
-        TEXTURE_EXT_FILT
+        TEXTURE_EXT_FILT,TEXTURE_EXT_MONO,TEXTURE_EXT_NEGATIVE,TEXTURE_EXT_SEPIA,TEXTURE_EXT_POSTERIZE,
+        TEXTURE_EXT_AQUA,TEXTURE_EXT_EMBOSS,TEXTURE_EXT_POSTERIZE_BW,TEXTURE_EXT_NIGHT,
+        TEXTURE_EXT_NEON
     }
 
     // Simple vertex shader, used for all programs.
@@ -117,14 +119,14 @@ public class Texture2dProgram {
                     "uniform vec2 uPosition;\n" +
                     "void main() {\n" +
                     "    vec2 texCoord = vTextureCoord.xy;\n" +
-                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n"+
+                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n" +
                     "    float r = length(normCoord); // to polar coords \n" +
-                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n"+
-                    "    r = pow(r, 1.0/1.8) * 0.8;\n"+  // Squeeze it
+                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n" +
+                    "    r = pow(r, 1.0/1.8) * 0.8;\n" +  // Squeeze it
                     "    normCoord.x = r * cos(phi); \n" +
                     "    normCoord.y = r * sin(phi); \n" +
-                    "    texCoord = normCoord / 2.0 + 0.5;\n"+
-                    "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
+                    "    texCoord = normCoord / 2.0 + 0.5;\n" +
+                    "    gl_FragColor = texture2D(sTexture, texCoord);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SHADER_TWIRL =
@@ -135,14 +137,14 @@ public class Texture2dProgram {
                     "uniform vec2 uPosition;\n" +
                     "void main() {\n" +
                     "    vec2 texCoord = vTextureCoord.xy;\n" +
-                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n"+
+                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n" +
                     "    float r = length(normCoord); // to polar coords \n" +
-                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n"+
-                    "    phi = phi + (1.0 - smoothstep(-0.5, 0.5, r)) * 4.0;\n"+ // Twirl it
+                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n" +
+                    "    phi = phi + (1.0 - smoothstep(-0.5, 0.5, r)) * 4.0;\n" + // Twirl it
                     "    normCoord.x = r * cos(phi); \n" +
                     "    normCoord.y = r * sin(phi); \n" +
-                    "    texCoord = normCoord / 2.0 + 0.5;\n"+
-                    "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
+                    "    texCoord = normCoord / 2.0 + 0.5;\n" +
+                    "    gl_FragColor = texture2D(sTexture, texCoord);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SHADER_TUNNEL =
@@ -153,14 +155,14 @@ public class Texture2dProgram {
                     "uniform vec2 uPosition;\n" +
                     "void main() {\n" +
                     "    vec2 texCoord = vTextureCoord.xy;\n" +
-                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n"+
+                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n" +
                     "    float r = length(normCoord); // to polar coords \n" +
-                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n"+
-                    "    if (r > 0.5) r = 0.5;\n"+ // Tunnel
+                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n" +
+                    "    if (r > 0.5) r = 0.5;\n" + // Tunnel
                     "    normCoord.x = r * cos(phi); \n" +
                     "    normCoord.y = r * sin(phi); \n" +
-                    "    texCoord = normCoord / 2.0 + 0.5;\n"+
-                    "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
+                    "    texCoord = normCoord / 2.0 + 0.5;\n" +
+                    "    gl_FragColor = texture2D(sTexture, texCoord);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SHADER_BULGE =
@@ -171,14 +173,14 @@ public class Texture2dProgram {
                     "uniform vec2 uPosition;\n" +
                     "void main() {\n" +
                     "    vec2 texCoord = vTextureCoord.xy;\n" +
-                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n"+
+                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n" +
                     "    float r = length(normCoord); // to polar coords \n" +
-                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n"+
-                    "    r = r * smoothstep(-0.1, 0.5, r);\n"+ // Bulge
+                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n" +
+                    "    r = r * smoothstep(-0.1, 0.5, r);\n" + // Bulge
                     "    normCoord.x = r * cos(phi); \n" +
                     "    normCoord.y = r * sin(phi); \n" +
-                    "    texCoord = normCoord / 2.0 + 0.5;\n"+
-                    "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
+                    "    texCoord = normCoord / 2.0 + 0.5;\n" +
+                    "    gl_FragColor = texture2D(sTexture, texCoord);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SHADER_DENT =
@@ -189,14 +191,14 @@ public class Texture2dProgram {
                     "uniform vec2 uPosition;\n" +
                     "void main() {\n" +
                     "    vec2 texCoord = vTextureCoord.xy;\n" +
-                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n"+
+                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n" +
                     "    float r = length(normCoord); // to polar coords \n" +
-                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n"+
-                    "    r = 2.0 * r - r * smoothstep(0.0, 0.7, r);\n"+ // Dent
+                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n" +
+                    "    r = 2.0 * r - r * smoothstep(0.0, 0.7, r);\n" + // Dent
                     "    normCoord.x = r * cos(phi); \n" +
                     "    normCoord.y = r * sin(phi); \n" +
-                    "    texCoord = normCoord / 2.0 + 0.5;\n"+
-                    "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
+                    "    texCoord = normCoord / 2.0 + 0.5;\n" +
+                    "    gl_FragColor = texture2D(sTexture, texCoord);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SHADER_FISHEYE =
@@ -207,14 +209,14 @@ public class Texture2dProgram {
                     "uniform vec2 uPosition;\n" +
                     "void main() {\n" +
                     "    vec2 texCoord = vTextureCoord.xy;\n" +
-                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n"+
+                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n" +
                     "    float r = length(normCoord); // to polar coords \n" +
-                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n"+
-                    "    r = r * r / sqrt(2.0);\n"+ // Fisheye
+                    "    float phi = atan(normCoord.y + uPosition.y, normCoord.x + uPosition.x); // to polar coords \n" +
+                    "    r = r * r / sqrt(2.0);\n" + // Fisheye
                     "    normCoord.x = r * cos(phi); \n" +
                     "    normCoord.y = r * sin(phi); \n" +
-                    "    texCoord = normCoord / 2.0 + 0.5;\n"+
-                    "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
+                    "    texCoord = normCoord / 2.0 + 0.5;\n" +
+                    "    gl_FragColor = texture2D(sTexture, texCoord);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SHADER_STRETCH =
@@ -225,13 +227,13 @@ public class Texture2dProgram {
                     "uniform vec2 uPosition;\n" +
                     "void main() {\n" +
                     "    vec2 texCoord = vTextureCoord.xy;\n" +
-                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n"+
-                    "    vec2 s = sign(normCoord + uPosition);\n"+
-                    "    normCoord = abs(normCoord);\n"+
-                    "    normCoord = 0.5 * normCoord + 0.5 * smoothstep(0.25, 0.5, normCoord) * normCoord;\n"+
-                    "    normCoord = s * normCoord;\n"+
-                    "    texCoord = normCoord / 2.0 + 0.5;\n"+
-                    "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
+                    "    vec2 normCoord = 2.0 * texCoord - 1.0;\n" +
+                    "    vec2 s = sign(normCoord + uPosition);\n" +
+                    "    normCoord = abs(normCoord);\n" +
+                    "    normCoord = 0.5 * normCoord + 0.5 * smoothstep(0.25, 0.5, normCoord) * normCoord;\n" +
+                    "    normCoord = s * normCoord;\n" +
+                    "    texCoord = normCoord / 2.0 + 0.5;\n" +
+                    "    gl_FragColor = texture2D(sTexture, texCoord);\n" +
                     "}\n";
 
     private static final String FRAGMENT_SHADER_MIRROR =
@@ -248,7 +250,121 @@ public class Texture2dProgram {
                     "    gl_FragColor = texture2D(sTexture, texCoord);\n"+
                     "}\n";
 
+    //https://github.com/yulu/GLtext/blob/master/res/raw/negative_fragment_shader.glsl
+    private static final String FRAGMENT_SHADER_NEGATIVE =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "vec3 irgb = texture2D(sTexture, vTextureCoord).rgb;\n" +
+                    "vec3 neg = vec3(1., 1., 1.)-irgb;\n" +
+                    "float T = 1.0;\n"+
+                    "gl_FragColor = vec4(mix(irgb,neg, T), 1.);\n"+
+                    "}\n";
 
+    //https://github.com/yulu/GLtext/blob/master/res/raw/emboss_fragment_shader.glsl
+    private static final String FRAGMENT_SHADER_EMBOSS =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "vec3 irgb = texture2D(sTexture, vTextureCoord).rgb;\n" +
+                    "float ResS = 720.;\n" +
+                    "float ResT = 720.;\n" +
+                    "vec2 stp0 = vec2(1./ResS, 0.);\n" +
+                    "vec2 stpp = vec2(1./ResS, 1./ResT);\n" +
+                    "vec3 c00 = texture2D(sTexture, vTextureCoord).rgb;\n" +
+                    "vec3 cp1p1 = texture2D(sTexture, vTextureCoord + stpp).rgb;\n" +
+                    "vec3 diffs = c00 - cp1p1;\n" +
+                    "float max = diffs.r;\n" +
+                    "if(abs(diffs.g)>abs(max)) max = diffs.g;\n" +
+                    "if(abs(diffs.b)>abs(max)) max = diffs.b;\n" +
+                    "float gray = clamp(max + .5, 0., 1.);\n" +
+                    "vec3 color = vec3(gray, gray, gray);\n" +
+                    "gl_FragColor = vec4(mix(color,c00, 0.1), 1.);\n" +
+                    "}\n";
+
+    //http://www.glbasic.com/forum/index.php?topic=8025.0
+    private static final String FRAGMENT_SHADER_SEPIA =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "vec3 texel = texture2D(sTexture, vTextureCoord.xy).rgb;\n"+
+                    "gl_FragColor = vec4(texel.x,texel.y,texel.z, 1.0);\n"+
+                    "gl_FragColor.r = dot(texel, vec3(.393, .769, .189));\n"+
+                    "gl_FragColor.g = dot(texel, vec3(.349, .686, .168));\n"+
+                    "gl_FragColor.b = dot(texel, vec3(.272, .534, .131));\n"+
+                    "}\n";
+
+    //https://github.com/BradLarson/GPUImage/blob/master/framework/Source/GPUImageSketchFilter.m
+    //http://stackoverflow.com/questions/5830139/where-can-i-find-sample-opengl-es-2-0-shaders-that-perform-image-processing-task
+    //private static final String FRAGMENT_SHADER_SKETCH =
+
+    // deepskyblue 	#00BFFF 	rgb(0,191,255)
+    private static final String FRAGMENT_SHADER_AQUA =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "vec3 irgb = texture2D(sTexture, vTextureCoord).rgb;\n"+
+                    "float gray = dot(irgb, vec3(0.299, 0.587, 0.114));\n" +
+                    "gl_FragColor = vec4(gray * vec3(0, 0.749, 1.0), 1.0);\n" +
+                    "}\n";
+
+    //https://github.com/technicolorenvy/Processing-Libraries/blob/master/GLGraphics/examples/Integration/MovieFilters/data/Posterize.glsl
+    private static final String FRAGMENT_SHADER_POSTERIZE_BW =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "vec4 color = texture2D(sTexture, vTextureCoord.st);\n" +
+                    "float luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;\n" +
+                    "if (luminance < 0.5) gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);\n" +
+                    "else gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+                    "}\n";
+
+    //http://www.filewatcher.com/p/gluon-0.70.0.tar.gz.8234641/gluon-gluon/graphics/shaders/GLSL/posterize.frag.html
+    private static final String FRAGMENT_SHADER_POSTERIZE =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main()\n" +
+                    "{\n" +
+                    "vec4 outColor = texture2D(sTexture, vTextureCoord.st);\n" +
+                    "float level = 5.0;\n" +
+                    "outColor.r = floor(outColor.r * level) / level;\n" +
+                    "outColor.g = floor(outColor.g * level) / level;\n" +
+                    "outColor.b = floor(outColor.b * level) / level;\n" +
+                    "gl_FragColor = outColor;\n" +
+                    "}";
+
+    public static final int KERNEL_SIZE = 9;
+    private static final String FRAGMENT_SHADER_EXT_NEON =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "#define KERNEL_SIZE " + KERNEL_SIZE + "\n" +
+                    "precision highp float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "uniform float uKernel[KERNEL_SIZE];\n" +
+                    "uniform vec2 uTexOffset[KERNEL_SIZE];\n" +
+                    "uniform float uColorAdjust;\n" +
+                    "void main() {\n" +
+                    "    int i = 0;\n" +
+                    "    vec4 sum = vec4(0.0);\n" +
+                    "    for (i = 0; i < KERNEL_SIZE; i++) {\n"+
+                    "            vec4 texc = texture2D(sTexture, vTextureCoord + uTexOffset[i]);\n" +
+                    "            sum += texc * uKernel[i];\n" +
+                    "    }\n" +
+                    "    sum += uColorAdjust;\n" +
+                    "    gl_FragColor = sum;\n" +
+                    "}\n";
 
 
     // Fragment shader with a convolution filter.  The upper-left half will be drawn normally,
@@ -261,7 +377,7 @@ public class Texture2dProgram {
     // - Unroll the loop.  Ideally the compiler does this for you when it's beneficial.
     // - Bake the filter kernel into the shader, instead of passing it through a uniform
     //   array.  That, combined with loop unrolling, should reduce memory accesses.
-    public static final int KERNEL_SIZE = 9;
+    //public static final int KERNEL_SIZE = 9;
     private static final String FRAGMENT_SHADER_EXT_FILT =
             "#extension GL_OES_EGL_image_external : require\n" +
                     "#define KERNEL_SIZE " + KERNEL_SIZE + "\n" +
@@ -322,14 +438,6 @@ public class Texture2dProgram {
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
                 mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT);
                 break;
-            case TEXTURE_EXT_BW:
-                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
-                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_BW);
-                break;
-            case TEXTURE_EXT_NIGHT:
-                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
-                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_NIGHT);
-                break;
             case TEXTURE_EXT_CHROMA_KEY:
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
                 mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_CHROMA_KEY);
@@ -371,6 +479,46 @@ public class Texture2dProgram {
                 mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
                 mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_FILT);
                 break;
+
+            //COLOR Filters
+            case TEXTURE_EXT_MONO:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_BW);
+                break;
+            case TEXTURE_EXT_NEGATIVE:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_NEGATIVE);
+                break;
+            case TEXTURE_EXT_SEPIA:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_SEPIA);
+                break;
+            case TEXTURE_EXT_POSTERIZE:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_POSTERIZE);
+                break;
+            case TEXTURE_EXT_AQUA:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_AQUA);
+                break;
+            case TEXTURE_EXT_EMBOSS:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EMBOSS);
+                break;
+            case TEXTURE_EXT_POSTERIZE_BW:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_POSTERIZE_BW);
+                break;
+            case TEXTURE_EXT_NIGHT:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_NIGHT);
+                break;
+            case TEXTURE_EXT_NEON:
+                mTextureTarget = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+                mProgramHandle = GlUtil.createProgram(VERTEX_SHADER, FRAGMENT_SHADER_EXT_FILT);
+                break;
+
+
             default:
                 throw new RuntimeException("Unhandled type " + programType);
         }
