@@ -68,6 +68,11 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         checkIfVideoFilesExistUseCase = new CheckIfVideoFilesExistUseCase();
     }
 
+    /**
+     * on Create Presenter
+     */
+    public void onCreate() {}
+
 
     public void onResume() {
         EventBus.getDefault().register(this);
