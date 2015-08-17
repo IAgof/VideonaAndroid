@@ -19,7 +19,6 @@ import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCas
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.music.ErrorAddingMusicToProjectEvent;
-import com.videonasocialmedia.videona.eventbus.events.music.MusicRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;

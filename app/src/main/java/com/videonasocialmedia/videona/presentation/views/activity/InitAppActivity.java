@@ -81,7 +81,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      */
     private void releaseCamera() {
         if (camera != null) {
-            camera.stopPreview();
+            //camera.stopPreview();
             camera.release();
             camera = null;
         }
