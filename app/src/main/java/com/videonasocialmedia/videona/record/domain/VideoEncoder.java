@@ -10,6 +10,8 @@ import com.videonasocialmedia.videona.avrecorder.gles.FullFrameRect;
 import com.videonasocialmedia.videona.avrecorder.gles.WindowSurface;
 import com.videonasocialmedia.videona.record.events.FrameAvailableEvent;
 
+import javax.microedition.khronos.egl.EGLContext;
+
 
 /**
  * Created by jca on 13/8/15.
@@ -59,7 +61,7 @@ public class VideoEncoder {
 
     private void prepareEncoderForNewFrame() {
         inputWindowSurface.makeCurrent();
-        videoEncoderCore.drainEncoder(false);
+        videoEncoderCore.drainEncoder(); //sutituir por sendToMuxer o similar??????
     }
 
     private void render(SurfaceTexture surfaceTexture){
