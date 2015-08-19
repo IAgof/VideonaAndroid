@@ -13,6 +13,14 @@ import java.util.List;
  * Created by Veronica Lago Fominaya on 25/06/2015.
  */
 public abstract class Trimmer {
+    /**
+     *
+     * @param filePath the path of media file to trim
+     * @param startTime the initial time in milliseconds
+     * @param endTime the finish time in milliseconds
+     * @return a Movie object with the new duration
+     * @throws IOException
+     */
     public Movie trim(String filePath, double startTime, double endTime) throws IOException {
         Movie originalMovie;
         Movie result;
