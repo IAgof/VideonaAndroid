@@ -428,7 +428,7 @@ public class RecordFragment extends Fragment implements RecordView,
     public void buttonChangeCameraListener() {
 
         // Check flashMode and return to normal
-        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        buttonFlashMode.setActivated(false);
         buttonSettinsCameraListener();
         int rotation = this.getActivity().getWindowManager().getDefaultDisplay()
                 .getRotation();
@@ -529,21 +529,12 @@ public class RecordFragment extends Fragment implements RecordView,
             hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
-
-        if (relativeLayoutCameraEffectColor.isShown()) {
-            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_normal);
         }
-        if (relativeLayoutCameraEffectFx.getVisibility() == View.VISIBLE) {
-            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_normal);
         if (!relativeEffectsFxHidden) {
             hideView(relativeLayoutCameraEffectFx);
             relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
         } else {
-            relativeLayoutCameraEffectFx.setVisibility(View.VISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_pressed);
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
             }
@@ -558,27 +549,16 @@ public class RecordFragment extends Fragment implements RecordView,
      */
     @OnClick(R.id.button_camera_effect_color)
     public void cameraEffectColorButtonListener() {
-
-        if (relativeLayoutCameraEffectFx.isShown()) {
-            relativeLayoutCameraEffectFx.setVisibility(View.INVISIBLE);
-            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_normal);
         if (!relativeEffectsFxHidden) {
             hideView(relativeLayoutCameraEffectFx);
             relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
         }
-
-        if (relativeLayoutCameraEffectColor.getVisibility() == View.VISIBLE) {
-            relativeLayoutCameraEffectColor.setVisibility(View.INVISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_normal);
-
         if (!relativeEffectsColorHidden) {
             hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
         } else {
-            relativeLayoutCameraEffectColor.setVisibility(View.VISIBLE);
-            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_pressed);
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
             }
@@ -608,6 +588,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         return height + margins;
     }
+
 
     private void hideView(View view) {
         runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
@@ -753,9 +734,9 @@ public class RecordFragment extends Fragment implements RecordView,
     @Override
     public void showFlashModeTorch(boolean mode) {
         if (mode) {
-            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_pressed);
+            buttonFlashMode.setActivated(true);
         } else {
-            buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+            buttonFlashMode.setActivated(false);
         }
     }
 
@@ -854,7 +835,7 @@ public class RecordFragment extends Fragment implements RecordView,
         buttonRecord.setImageResource(R.drawable.activity_record_icon_rec_normal);
         buttonRecord.setEnabled(false);
         lockRotation = false;
-        buttonFlashMode.setImageResource(R.drawable.activity_record_icon_flash_camera_normal);
+        buttonFlashMode.setActivated(false);
 
         stopMonitoringOrientation();
     }

@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -75,13 +74,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @InjectViews({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
             R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6, R.id.imageViewFrame7, R.id.imageViewFrame8})
     List<ImageView> videoThumbs;
-
-
-    //Hide relativeLayout, needed to show trimming bar
-    //TODO change with EventBus
-    @InjectView(R.id.relativeLayoutPreviewVideo)
-    RelativeLayout relativeLayoutPreviewVideoTrim;
-
     RangeSeekBar<Double> trimBar;
     int videoIndexOnTrack;
     private TrimPreviewPresenter presenter;
@@ -123,8 +115,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         videoIndexOnTrack = this.getArguments().getInt("VIDEO_INDEX", 0);
         presenter.init(videoIndexOnTrack);
 
-        view.setVisibility(View.VISIBLE);
-
         return view;
     }
 
@@ -138,10 +128,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void onResume() {
         super.onResume();
-        //updateVideoList();
-
-
-        relativeLayoutPreviewVideoTrim.setVisibility(View.VISIBLE);
         presenter.onResume();
     }
 
@@ -164,7 +150,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         return result;
     }
 
-  //  @OnClick(R.id.validate_trim)
+
     public void validateTrim() {
         onTrimConfirmListener.onTrimConfirmed();
     }
@@ -405,8 +391,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
             }
         });
         trimBar.setNotifyWhileDragging(true);
-
-        trimBar.setMaxWidth(layoutSeekBar.getWidth());
         layoutSeekBar.addView(trimBar);
     }
 

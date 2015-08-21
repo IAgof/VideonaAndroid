@@ -80,7 +80,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
 
-
     private static EditActivity parent;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;

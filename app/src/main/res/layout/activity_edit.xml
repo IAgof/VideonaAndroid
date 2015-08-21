@@ -71,66 +71,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="36">
-                    <LinearLayout
-                        android:id="@+id/selection_mode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:visibility="gone">
-                        <TextView
-                            android:id="@+id/gallery_count_selected_videos"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="20dp"
-                            android:text="0"
-                            android:textSize="27sp"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/videona_blue_5" />
 
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:id="@+id/edit_left_panel">
-                        <ImageButton
-                            android:id="@+id/button_trash"
-                            android:layout_width="30dp"
-                            android:layout_height="27dp"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="20dp"
-                            android:background="@android:color/transparent"
-                            android:scaleType="fitCenter"
-                            android:visibility="visible"
-                            android:src="@drawable/edit_activity_button_trash_selector" />
-
-                        <ImageButton
-                            android:id="@+id/button_ok_gallery"
-                            android:layout_width="38dp"
-                            android:layout_height="35dp"
-                            android:layout_alignParentEnd="true"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="20dp"
-                            android:background="@android:color/transparent"
-                            android:scaleType="fitXY"
-                            android:visibility="visible"
-                            android:src="@drawable/edit_activity_button_ok_selector" />
-
-                    </LinearLayout>
-
-
-                    <TextView
-                        android:id="@+id/edit_title_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="@string/edit_title_name"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/videona_blue_5" />
-                </RelativeLayout>
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -206,31 +152,11 @@
                 android:layout_weight="62"
                 android:id="@+id/edit_middle_layout">
 
-                <RelativeLayout
-                    android:id="@+id/edit_central_panel"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toEndOf="@+id/edit_left_panel"
-                    android:layout_toStartOf="@+id/edit_right_panel" >
-                    <FrameLayout
-                        android:id="@+id/edit_fragment_preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:layout_alignParentTop="true"
-                        android:minHeight="200dp" />
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                    <!-- <LinearLayout
-                         android:id="@+id/edit_view_panel"
-                         android:layout_width="wrap_content"
-                         android:layout_height="match_parent"
-                         android:layout_centerHorizontal="true"
-                         android:background="@android:color/holo_green_light"
-                         android:orientation="vertical">
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -242,28 +168,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                     </LinearLayout>-->
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="9"></RelativeLayout>
 
-                    <FrameLayout
-                        android:id="@+id/edit_bottom_panel"
-                        android:layout_width="match_parent"
-                        android:layout_height="70dp"
-                        android:layout_alignBottom="@id/edit_fragment_preview"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"/>
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="44"
                                 android:id="@+id/edit_top_layout_text" >
 
-                </RelativeLayout>
                                 <TextView
                                     android:id="@+id/edit_title_text_view"
                                     android:layout_width="wrap_content"
