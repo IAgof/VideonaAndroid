@@ -80,6 +80,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
 
+
     private static EditActivity parent;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
@@ -136,7 +137,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         videoTimeLineFragment = new VideoTimeLineFragment();
 
-        switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
+        switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
         scissorButton.setActivated(true);
@@ -272,12 +273,17 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             if (musicGalleryFragment == null) {
                 musicGalleryFragment = new MusicGalleryFragment();
             }
-            switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
+            switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
             switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
             switchFragment(musicGalleryFragment, R.id.edit_bottom_panel);
+            if(trimFragment != null) {
+                this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+            }
         }
         scissorButton.setActivated(false);
         audioFxButton.setActivated(true);
+
+       // onTrimConfirmed();
     }
 
 
@@ -291,13 +297,18 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         }
 
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
-        switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
+        switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
 
         if (videoTimeLineFragment == null) {
             videoTimeLineFragment = new VideoTimeLineFragment();
         }
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
         scissorsFxMenuFragment.habilitateTrashButton();
+
+        if(trimFragment != null) {
+            this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+        }
+
     }
 
 
@@ -402,12 +413,16 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void onVideoClicked(int position) {
-        this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
+       // this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
         trimFragment = new TrimPreviewFragment();
         Bundle args = new Bundle();
         args.putInt("VIDEO_INDEX", position);
         trimFragment.setArguments(args);
-        switchFragment(trimFragment, R.id.edit_fragment_preview);
+
+        switchFragment(trimFragment, R.id.edit_fragment_trim_preview);
+
+        this.getFragmentManager().beginTransaction().remove(previewVideoListFragment).commit();
+
         scissorsFxMenuFragment.inhabilitateTrashButton();
     }
 
@@ -463,11 +478,12 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             videoTimeLineFragment = new VideoTimeLineFragment();
         }
 
-        switchFragment(previewVideoListFragment, R.id.edit_fragment_preview);
+        switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
         scissorsFxMenuFragment.habilitateTrashButton();
     }
+
 
     /**
      * OnClick buttons, tracking Google Analytics

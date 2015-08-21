@@ -56,14 +56,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final float lineHeightHalf = 0.5f * lineleft.getHeight();
     private final float lineWidthHalf = 0.5f * lineleft.getWidth();
 
-    // private final float thumbHalfWidth = 0.5f *  thumbImageRight.getWidth();
+
     private final float thumbHalfWidth = thumbImageRight.getWidth();
     private final float thumbHalfHeight = 0.5f * thumbImageRight.getHeight();
 
-    //  private final float lineHeight = 0.53f * thumbHalfHeight;
+
     private final float lineHeight = thumbHalfHeight;
-    //private final float padding = thumbHalfWidth / 2;
-    //private final float padding = thumbHalfWidth*2;
+
     private final float padding = thumbImageRight.getWidth();
     private final T absoluteMinValue, absoluteMaxValue;
     private final NumberType numberType;

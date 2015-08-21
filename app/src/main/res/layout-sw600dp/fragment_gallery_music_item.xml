@@ -3,9 +3,6 @@
   ~ http://www.videona.com
   ~ info@videona.com
   ~ All rights reserved
-  ~
-  ~ Authors:
-  ~ Veronica Lago Fominaya
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,8 +15,8 @@
 
     <ImageView
         android:id="@+id/gallery_thumb"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
         android:layout_centerVertical="true"
         android:src="@drawable/fragment_gallery_no_image"
@@ -27,8 +24,8 @@
 
     <RelativeLayout
         android:id="@+id/gallery_overlay"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="72dp"
+        android:layout_height="match_parent"
         android:layout_alignBottom="@+id/gallery_thumb"
         android:layout_alignEnd="@id/gallery_thumb"
         android:layout_alignStart="@id/gallery_thumb"
@@ -38,12 +35,12 @@
 
         <ImageView
             android:id="@+id/gallery_overlay_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
             android:background="@drawable/common_gallery_overlay_icon_selector_background"
             android:clickable="false"
             android:src="@drawable/fragment_gallery_music_overlay_icon_selector_icon"

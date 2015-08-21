@@ -19,7 +19,7 @@
     <LinearLayout
 
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
@@ -34,7 +34,9 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:background="@null"
-            android:src="@drawable/common_icon_film_normal" />
+            android:src="@drawable/common_icon_film_normal"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
 
         <ImageButton
             android:id="@+id/fragment_navigator_edit_button"
@@ -45,7 +47,9 @@
             android:layout_marginStart="0dp"
             android:layout_marginTop="8dp"
             android:background="@null"
-            android:src="@drawable/common_icon_edit_normal" />
+            android:src="@drawable/common_icon_edit_normal"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
 
         <ImageButton
             android:id="@+id/fragment_navigator_share_button"
@@ -55,7 +59,9 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:background="@null"
-            android:src="@drawable/common_icon_redsocial_normal" />
+            android:src="@drawable/common_icon_redsocial_normal"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
 
         <ImageButton
             android:id="@+id/fragment_navigator_game_button"
@@ -67,7 +73,9 @@
             android:layout_marginTop="8dp"
             android:background="@null"
             android:src="@drawable/common_icon_gamification_normal"
-            android:alpha="0.60" />
+            android:alpha="0.60"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
     </LinearLayout>
 
 </RelativeLayout>
