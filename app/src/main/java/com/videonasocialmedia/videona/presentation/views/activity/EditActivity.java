@@ -167,6 +167,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onPause() {
         super.onPause();
+        editPresenter.onPause();
     }
 
     @Override
