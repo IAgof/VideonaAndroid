@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,11 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     TextView startTimeTag;
     @InjectView(R.id.edit_text_end_trim)
     TextView stopTimeTag;
+
+    //Hide relativeLayout, needed to show trimming bar
+    //TODO change with EventBus
+    @InjectView(R.id.relativeLayoutPreviewVideo)
+    RelativeLayout relativeLayoutPreviewVideoTrim;
     
     protected Handler handler = new Handler();
     private PreviewPresenter previewPresenter;
@@ -104,7 +110,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_preview, container, false);
+        View view = inflater.inflate(R.layout.edit_fragment_all_preview, container, false);
         ButterKnife.inject(this, view);
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
@@ -134,6 +140,9 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         previewPresenter.onResume();
         seekBar.setProgress(0);
         updateVideoList();
+
+        relativeLayoutPreviewVideoTrim.setVisibility(View.INVISIBLE);
+
     }
 
     @Override

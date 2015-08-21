@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_view_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="25">
+
+        <VideoView
+            android:id="@+id/edit_preview_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal" />
+
+        <ImageButton
+            android:id="@+id/edit_button_fullscreen_in"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignTop="@+id/edit_preview_player"
+            android:layout_alignLeft="@+id/edit_preview_player"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/common_icon_fullscreen_in_selector"
+            android:visibility="visible"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp" />
+
+        <ImageButton
+            android:id="@+id/edit_button_play"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/common_icon_play_on_normal" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@id/edit_text_start_trim"
+            android:layout_marginBottom="48dp">
+
+            <TextView
+                android:id="@+id/edit_text_start_trim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@android:color/white"
+                android:elegantTextHeight="false"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:gravity="center" />
+
+            <SeekBar
+                android:id="@+id/edit_seek_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:indeterminate="false"
+                android:longClickable="true"
+                android:progressDrawable="@color/videona_blue_5"
+                android:maxHeight="4dp"
+                android:layout_weight="36" />
+
+            <TextView
+                android:id="@+id/edit_text_end_trim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:gravity="center" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutPreviewVideo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:layout_weight="7">
+
+    </RelativeLayout>
+
+    ImageButton
+        android:id="@+id/validate_trim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/edit_activity_button_ok_selector"/>
+
+</LinearLayout>

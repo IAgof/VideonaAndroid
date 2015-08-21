@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
-
 /**
  * Created by jca on 7/7/15.
  */
@@ -60,7 +58,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
             //TODO remove hardcoded values
             //underSwipeIcon.setBounds(left+50,top+100,right-50,bottom-5);
-            underSwipeIcon.setBounds(left+(width/4),top-height/2,right-width/4,bottom);
+            underSwipeIcon.setBounds(left+(width/4),top-height/3,right-width/4,bottom+height/8);
             //underSwipeIcon.setBounds(left,top,right,bottom);
             underSwipeIcon.draw(c);
         }
