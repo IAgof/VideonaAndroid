@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to show the right panel of the audio fx menu
@@ -73,6 +75,11 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     TextView startTimeTag;
     @InjectView(R.id.edit_text_end_trim)
     TextView stopTimeTag;
+
+    //Hide relativeLayout, needed to show trimming bar
+    //TODO change with EventBus
+    @InjectView(R.id.relativeLayoutPreviewVideo)
+    RelativeLayout relativeLayoutPreviewVideoTrim;
     
     protected Handler handler = new Handler();
     private PreviewPresenter previewPresenter;
@@ -103,7 +110,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_preview, container, false);
+        View view = inflater.inflate(R.layout.edit_fragment_all_preview, container, false);
         ButterKnife.inject(this, view);
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
@@ -130,13 +137,18 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     @Override
     public void onResume() {
         super.onResume();
+        previewPresenter.onResume();
         seekBar.setProgress(0);
         updateVideoList();
+
+        relativeLayoutPreviewVideoTrim.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        previewPresenter.onPause();
         releaseVideoView();
         releaseMusicPlayer();
         projectDuration = 0;
@@ -366,6 +378,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                         muteVideo();
                         playMusicSyncWithVideo();
                     } else {
+                        releaseMusicPlayer();
                         videoPlayer.setVolume(0.5f, 0.5f);
                     }
                 } catch(Exception e) {

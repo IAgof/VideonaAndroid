@@ -446,7 +446,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //                    relativeLayoutColorEffects.setVisibility(View.INVISIBLE);
 //
 //
-//                    buttonColorEffect.setImageResource(R.drawable.common_icon_filters_normal);
+//                    buttonColorEffect.setImageResource(R.drawable.activity_record_icon_filters_normal);
 //
 //                    break;
 //
@@ -461,7 +461,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //
 //                listViewItemsColorEffect.setAdapter(colorEffectAdapter);
 //
-//                buttonColorEffect.setImageResource(R.drawable.common_icon_filters_pressed);
+//                buttonColorEffect.setImageResource(R.drawable.activity_record_icon_filters_pressed);
 //
 //                break;
 //            }

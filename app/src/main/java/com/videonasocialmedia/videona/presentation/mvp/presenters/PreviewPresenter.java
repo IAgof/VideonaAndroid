@@ -8,11 +8,15 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.eventbus.events.music.MusicAddedToProjectEvent;
+import com.videonasocialmedia.videona.eventbus.events.music.MusicRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by vlf on 7/7/15.
@@ -34,9 +38,25 @@ public class PreviewPresenter implements OnVideosRetrieved {
      */
     private PreviewView previewView;
 
-    public PreviewPresenter(PreviewView previewView) {
+     public PreviewPresenter(PreviewView previewView) {
         this.previewView = previewView;
         getGetMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+    }
+
+    public void onResume(){
+        EventBus.getDefault().register(this);
+    }
+
+    public void onPause(){
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEvent(MusicAddedToProjectEvent event){
+        update();
+    }
+
+    public void onEvent(MusicRemovedFromProjectEvent event){
+        update();
     }
 
     public void init() {

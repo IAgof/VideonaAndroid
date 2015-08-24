@@ -192,11 +192,20 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     }
 
     /**
-     * Apply video filter to CamEncoder
+     * Apply video filter fx to CamEncoder
      * @param filter
      */
     public void setCameraEffectFx(int filter){
-        mCamEncoder.applyFilter(filter);
+        mCamEncoder.applyFilterFx(filter);
+    }
+
+    /**
+     * Apply video filter color to CamEncoder
+     * @param filter
+     */
+    public void setCameraEffectColor(int filter){
+        //Color and fx are in the same list, add size to adjust number with color list.
+        mCamEncoder.applyFilterColor(filter +  CameraEffectFxList.getCameraEffectList().size());
     }
 
     /**
@@ -316,15 +325,6 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
         recordView.reStartFragment();
 
-    }
-
-    /**
-     * Clear project
-     */
-    private void clearProject() {
-        Project project=Project.getInstance(null, null, null);
-        project.setMediaTrack(new MediaTrack());
-        removeMusicFromProjectUseCase.removeAllMusic(0, this);
     }
 
 
@@ -462,11 +462,11 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     /**
      * Camera Effect color selected
      * @param position
+
+   // public void setCameraEffectColor(int position) {
+  //      recordUseCase.addAndroidCameraEffect(position, mCamEncoder.getCamera());
+  //  }
      */
-    //TODO Add effect use case
-    public void setCameraEffectColor(int position) {
-        recordUseCase.addAndroidCameraEffect(position, mCamEncoder.getCamera());
-    }
 
     @Override
     public void onCameraEffectFxAdded(String cameraEffect, long time) {

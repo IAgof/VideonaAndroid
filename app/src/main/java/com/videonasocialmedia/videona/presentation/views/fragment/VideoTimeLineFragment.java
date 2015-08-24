@@ -69,12 +69,18 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
     @Override
     public void onStart() {
         super.onStart();
-        presenter.start();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        presenter.pause();
+}
 
     @Override
     public void onResume() {
         super.onResume();
+        presenter.start();
     }
 
     @Override

@@ -19,156 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:orientation="vertical"
-        android:paddingTop="2dp">
+        android:orientation="horizontal"
+        >
 
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:id="@+id/relativeLayoutTop"
-                    android:layout_width="fill_parent"
-                    android:layout_height="41dp"
-                    android:layout_weight="1">
-
-
-                    <ImageButton
-                        android:id="@+id/buttonCancelEditActivity"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@android:color/transparent"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/edit_activity_button_cancel_selector" />
-
-                    <ImageButton
-                        android:id="@+id/buttonOkEditActivity"
-                        android:layout_width="38dp"
-                        android:layout_height="35dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="20dp"
-                        android:background="@android:color/transparent"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/edit_activity_icon_save_selector" />
-
-
-                    <TextView
-                        android:id="@+id/edit_title_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="@string/edit_title_name"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/videona_blue_5" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <FrameLayout
-                    android:id="@+id/edit_fragment_preview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_toEndOf="@+id/edit_left_panel"
-                    android:layout_toStartOf="@+id/edit_right_panel"
-                    android:minHeight="200dp" />
-
-                <!-- <LinearLayout
-                     android:id="@+id/edit_view_panel"
-                     android:layout_width="wrap_content"
-                     android:layout_height="match_parent"
-                     android:layout_centerHorizontal="true"
-                     android:background="@android:color/holo_green_light"
-                     android:orientation="vertical">
-
-
-                 </LinearLayout>-->
-
-                <FrameLayout
-                    android:id="@+id/edit_bottom_panel"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_alignBottom="@id/edit_fragment_preview"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toEndOf="@+id/edit_left_panel"
-                    android:layout_toStartOf="@+id/edit_right_panel" />
-
-
-                <FrameLayout
-                    android:id="@+id/edit_right_panel"
-                    android:layout_width="75dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true" />
-
-                <LinearLayout
-                    android:id="@+id/edit_left_panel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="false"
-                    android:orientation="vertical">
-
-
-                    <ImageButton
-                        android:id="@+id/edit_button_scissor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0.5dp"
-                        android:background="@color/pastel_palette_yellow"
-                        android:padding="15dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/edit_activity_button_scissor_selector" />
-
-                    <ImageButton
-                        android:id="@+id/edit_button_audio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0.5dp"
-                        android:background="@color/pastel_palette_grey"
-                        android:padding="15dp"
-                        android:src="@drawable/edit_activity_button_audio_selector" />
-
-                    <ImageButton
-                        android:id="@+id/edit_button_fx"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0.5dp"
-                        android:alpha="0.20"
-                        android:background="@drawable/common_button_selector_blue_pastel"
-                        android:padding="15dp"
-                        android:src="@drawable/activity_edit_icon_fx_normal" />
-
-                    <ImageButton
-                        android:id="@+id/edit_button_look"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.20"
-                        android:background="@drawable/common_button_selector_orange_pastel"
-                        android:padding="15dp"
-                        android:src="@drawable/activity_edit_icon_look_normal" />
-
-                </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
 
         <ImageView
             android:id="@+id/imageBetaLabel"
@@ -180,6 +33,322 @@
             android:layout_gravity="center"
             android:contentDescription="Beta Label"
             android:src="@drawable/beta_label" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/edit_left_layout"
+                android:layout_weight="9">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9" >
+
+                        <ImageButton
+                            android:id="@+id/buttonCancelEditActivity"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitCenter"
+                            android:padding="15dp"
+                            android:src="@drawable/edit_activity_button_cancel_selector" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="36">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/edit_left_panel">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="9" >
+
+                                <ImageButton
+                                    android:id="@+id/edit_button_scissor"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/pastel_palette_green"
+                                    android:scaleType="fitCenter"
+                                    android:padding="15dp"
+                                    android:src="@drawable/edit_activity_button_scissor_selector" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="9" >
+
+                                <ImageButton
+                                    android:id="@+id/edit_button_audio"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/pastel_palette_blue"
+                                    android:scaleType="fitCenter"
+                                    android:padding="15dp"
+                                    android:src="@drawable/edit_activity_button_audio_selector"
+                                    android:layout_weight="1" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="9" >
+
+                                <ImageButton
+                                    android:id="@+id/edit_button_fx"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/pastel_palette_red"
+                                    android:scaleType="fitCenter"
+                                    android:padding="15dp"
+                                    android:src="@drawable/activity_edit_icon_fx_normal"
+                                    android:layout_weight="1"
+                                    android:alpha="0.2" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="9" >
+
+                                <ImageButton
+                                    android:id="@+id/edit_button_look"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/pastel_palette_yellow"
+                                    android:scaleType="fitCenter"
+                                    android:padding="15dp"
+                                    android:src="@drawable/activity_edit_icon_look_normal"
+                                    android:alpha="0.2" />
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="62"
+                android:id="@+id/edit_middle_layout">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:id="@+id/edit_top_layout"
+                        android:layout_weight="4">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="9"></RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="44"
+                                android:id="@+id/edit_top_layout_text" >
+
+                                <TextView
+                                    android:id="@+id/edit_title_text_view"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/edit_title_name"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textColor="@color/videona_blue_5" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="9" >
+
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:id="@+id/edit_center_layout"
+                        android:layout_weight="41">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:id="@+id/edit_center_left"
+                                android:layout_weight="9" >
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:id="@+id/relativeLayout"
+                                android:layout_weight="44" >
+
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" >
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="32"
+                                        android:id="@+id/edit_center_center_layout" >
+
+                                        <LinearLayout
+                                            android:orientation="vertical"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+
+                                            <FrameLayout
+                                                android:id="@+id/edit_fragment_trim_preview"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_gravity="center_horizontal"
+                                                android:visibility="visible" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:orientation="vertical"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent">
+
+                                            <FrameLayout
+                                                android:id="@+id/edit_fragment_all_preview"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_gravity="center_horizontal"
+                                                android:visibility="visible" />
+                                        </LinearLayout>
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="9"
+                                        android:id="@+id/edit_center_bottom_layout"
+                                        android:layout_marginBottom="8dp">
+
+                                        <LinearLayout
+                                            android:orientation="vertical"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent" >
+
+                                            <FrameLayout
+                                                android:id="@+id/edit_bottom_panel"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_toEndOf="@+id/edit_left_panel"
+                                                android:layout_toStartOf="@+id/edit_right_panel" />
+
+                                        </LinearLayout>
+                                    </RelativeLayout>
+                                </LinearLayout>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:id="@+id/edit_center_right"
+                                android:layout_weight="9" >
+
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/edit_right_layout"
+                android:layout_weight="9">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9" >
+
+                        <ImageButton
+                            android:id="@+id/buttonOkEditActivity"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitCenter"
+                            android:padding="15dp"
+                            android:src="@drawable/edit_activity_icon_save_selector" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="36">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="28"
+                            android:visibility="visible">
+
+                            <FrameLayout
+                                android:id="@+id/edit_right_panel"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

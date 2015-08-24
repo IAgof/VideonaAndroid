@@ -14,8 +14,8 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 36 // 14/08/2015
-        versionName "0.3.8"
+        versionCode 38 // 21/08/2015
+        versionName "0.3.10"
         // Enabling multidex support.
         //multiDexEnabled true
     }
@@ -27,7 +27,10 @@ android {
     }
 }
 
-repositories { jcenter() }
+repositories {
+    jcenter()
+    mavenCentral()
+}
 
 dependencies {
     //compile 'com.android.support:multidex:1.0.0'
@@ -39,13 +42,15 @@ dependencies {
     compile 'com.google.android.gms:play-services-analytics:7.5.0'
     compile 'com.googlecode.mp4parser:isoparser:1.0.5.4'
     compile 'com.jakewharton:butterknife:6.0.0'
-    compile 'org.lucasr.twowayview:twowayview:0.1.4'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'org.lucasr.twowayview:twowayview:0.1.4'
 
     compile project(':androidtranscoder')
     compile project(':androidmuxer')
+    compile project(':appintro')
 
     debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     debugCompile 'com.google.dexmaker:dexmaker:1.0'

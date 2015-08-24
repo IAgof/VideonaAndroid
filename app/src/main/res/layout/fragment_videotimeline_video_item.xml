@@ -6,18 +6,23 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="72dp"
+    android:layout_height="72dp"
     android:layout_margin="3dp"
-    android:id="@+id/container">
+    android:id="@+id/container"
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/timelinevideo_thumb"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@android:color/black"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@null"
         android:src="@drawable/fragment_gallery_no_image"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp" />
+        android:layout_alignParentBottom="false"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:paddingTop="4dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="4dp" />
 
 </RelativeLayout>
