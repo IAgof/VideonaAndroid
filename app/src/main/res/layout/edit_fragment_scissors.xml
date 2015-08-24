@@ -40,7 +40,6 @@
         android:background="@color/pastel_palette_red"
         android:padding="15dp"
         android:src="@drawable/edit_fragment_scissors_button_duplicate_selector"
-        android:alpha="0.20"
         android:layout_weight="9"
         android:scaleType="fitCenter" />
 
