@@ -42,7 +42,7 @@ public class ScissorsFxMenuFragment extends Fragment {
 
     private final String LOG_TAG = "ScissorsFxMenuFragment";
 
-    @InjectView(R.id.edit_fragment_scissors_button_duplicate)
+    @InjectView(R.id.edit_fragment_scissors_button_trash)
     ImageButton trashButton;
 
     /*CONFIG*/
@@ -88,7 +88,7 @@ public class ScissorsFxMenuFragment extends Fragment {
             trashButton.setClickable(false);
     }
 
-    @OnClick(R.id.edit_fragment_scissors_button_crop)
+    @OnClick(R.id.edit_fragment_scissors_button_duplicate)
     public void showTrimView() {
         //showLog();
     }
@@ -101,7 +101,7 @@ public class ScissorsFxMenuFragment extends Fragment {
         startActivity(gallery);
     }
 
-    @OnClick(R.id.edit_fragment_scissors_button_duplicate)
+    @OnClick(R.id.edit_fragment_scissors_button_trash)
     public void clearProject() {
         Log.d(LOG_TAG, "clearProject");
         callbackRemoveAllProject.onRemoveAllProjectSelected();
@@ -114,9 +114,9 @@ public class ScissorsFxMenuFragment extends Fragment {
         ButterKnife.reset(this);
     }
 
-    @OnClick({R.id.edit_fragment_scissors_button_razor, R.id.edit_fragment_scissors_button_crop,
+    @OnClick({R.id.edit_fragment_scissors_button_razor, R.id.edit_fragment_scissors_button_duplicate,
             R.id.edit_fragment_scissors_button_add_clip,
-            R.id.edit_fragment_scissors_button_duplicate})
+            R.id.edit_fragment_scissors_button_trash})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -133,14 +133,14 @@ public class ScissorsFxMenuFragment extends Fragment {
                 label = "Go to razor of edit fragment scissor";
                 Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.edit_fragment_scissors_button_crop:
+            case R.id.edit_fragment_scissors_button_duplicate:
                 label = "Go to crop of edit fragment scissor";
                 Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_scissors_button_add_clip:
                 label = "Go to add clip of edit fragment scissor";
                 break;
-            case R.id.edit_fragment_scissors_button_duplicate:
+            case R.id.edit_fragment_scissors_button_trash:
                 label = "Go to duplicate of edit fragment scissor";
                 break;
             default:
