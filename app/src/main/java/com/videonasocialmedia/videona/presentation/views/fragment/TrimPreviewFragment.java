@@ -18,6 +18,8 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -72,8 +74,19 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @InjectView(R.id.linearLayoutRangeSeekBar)
     ViewGroup layoutSeekBar;
     @InjectViews({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
-            R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6, R.id.imageViewFrame7, R.id.imageViewFrame8})
+            R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6, R.id.imageViewFrame7,
+            R.id.imageViewFrame8})
     List<ImageView> videoThumbs;
+
+    private final Handler thumbCreationHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            ImageView currentThumb = videoThumbs.get(msg.what);
+            currentThumb.setImageBitmap((Bitmap) msg.obj);
+            currentThumb.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
+    };
+
     RangeSeekBar<Double> trimBar;
     int videoIndexOnTrack;
     private TrimPreviewPresenter presenter;
@@ -114,7 +127,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         mediaController.setVisibility(View.INVISIBLE);
         videoIndexOnTrack = this.getArguments().getInt("VIDEO_INDEX", 0);
         presenter.init(videoIndexOnTrack);
-
         return view;
     }
 
@@ -122,6 +134,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     public void onDestroyView() {
         super.onDestroyView();
         handler.removeCallbacksAndMessages(null);
+        thumbCreationHandler.removeCallbacksAndMessages(null);
         ButterKnife.reset(this);
     }
 
@@ -150,14 +163,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         return result;
     }
 
-
     public void validateTrim() {
         onTrimConfirmListener.onTrimConfirmed();
     }
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-        if(videoPlayer != null) {
+        if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
                 pausePreview();
             } else {
@@ -258,7 +270,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         }
     }
 
-
     @Override
     public void showError(String message) {
 
@@ -310,30 +321,27 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
-
     @Override
     public void createAndPaintVideoThumbs(final String videoPath, final int videoDuration) {
-        Handler h = new Handler();
-        h.post(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 Size thumbSize = determineThumbsSize();
-
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 retriever.setDataSource(videoPath);
                 for (int thumbOrder = 0; thumbOrder < videoThumbs.size(); thumbOrder++) {
                     int frameTime = getFrameTime(videoDuration, thumbOrder, videoThumbs.size());
                     try {
                         Bitmap thumbImage = createVideoThumb(retriever, thumbSize, frameTime);
-                        ImageView currentThumb = videoThumbs.get(thumbOrder);
-                        currentThumb.setImageBitmap(thumbImage);
-                        currentThumb.setScaleType(ImageView.ScaleType.FIT_XY);
+                        Message msg = thumbCreationHandler.obtainMessage(thumbOrder, thumbImage);
+                        msg.sendToTarget();
                     } catch (Exception Exception) {
                         //TODO treat exception properly. Probably do nothing is fine for the time being
                     }
                 }
             }
         });
+        t.start();
     }
 
     private Size determineThumbsSize() {
