@@ -81,6 +81,11 @@ public class Video extends Media {
         super(null, null, mediaPath, fileStartTime, duration, null, null);
     }
 
+    public Video(Video video) {
+        super(null, video.getIconPath(), video.getMediaPath(), video.getFileStartTime(),
+                video.getDuration(), null, null);
+    }
+
     public int getFileDuration() {
         return fileDuration;
     }

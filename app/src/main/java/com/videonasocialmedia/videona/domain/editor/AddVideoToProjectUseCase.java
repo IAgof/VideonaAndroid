@@ -44,6 +44,17 @@ public class AddVideoToProjectUseCase {
         }
     }
 
+    public void addVideoToProjectAtPosition(Video video, int position) {
+        try {
+            MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
+            mediaTrack.insertItemAt(position, video);
+            //EventBus.getDefault().post();
+            //listener.onAddMediaItemToTrackSuccess(video);
+        } catch (IllegalItemOnTrack illegalItemOnTrack) {
+            //listener.onAddMediaItemToTrackError();
+        }
+    }
+
     public void addVideoListToTrack(List<Video> videoList, OnAddMediaFinishedListener listener){
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();

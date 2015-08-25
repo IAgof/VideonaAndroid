@@ -52,6 +52,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.DuplicateClipL
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -68,7 +69,7 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener, DuplicateClipListener {
+        OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -488,6 +489,19 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void duplicateSelectedClip() {
+        editPresenter.duplicateClip(getCurrentVideo(), getCurrentPosition());
+    }
+
+    private Video getCurrentVideo() {
+        return previewVideoListFragment.getCurrentVideo();
+    }
+
+    private int getCurrentPosition() {
+        return previewVideoListFragment.getCurrentPosition();
+    }
+
+    @Override
+    public void razorSelectedClip() {
         Log.d(LOG_TAG, "duplicateVideo");
         // TODO: get selected video
         Video video;
