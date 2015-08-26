@@ -37,6 +37,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
@@ -47,9 +48,11 @@ import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenu
 import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.DuplicateClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -66,7 +69,7 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener {
+        OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -484,6 +487,31 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         scissorsFxMenuFragment.habilitateTrashButton();
     }
 
+    @Override
+    public void duplicateSelectedClip() {
+        //int position = getCurrentPosition();
+        int position = -1;
+        if(position < 0) {
+            Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
+        } else {
+            editPresenter.duplicateClip(getCurrentVideo(), position);
+        }
+    }
+
+    private Video getCurrentVideo() {
+        // TODO change this code to videotimeline fragment
+        return previewVideoListFragment.getCurrentVideo();
+    }
+
+    private int getCurrentPosition() {
+        // TODO change this code to videotimeline fragment
+        return previewVideoListFragment.getCurrentPosition();
+    }
+
+    @Override
+    public void razorSelectedClip() {
+        Log.d(LOG_TAG, "duplicateVideo");
+    }
 
     /**
      * OnClick buttons, tracking Google Analytics

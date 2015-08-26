@@ -13,6 +13,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddMusicToProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.CheckIfVideoFilesExistUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
@@ -47,6 +48,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     private RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     private CheckIfVideoFilesExistUseCase checkIfVideoFilesExistUseCase;
+    private AddVideoToProjectUseCase addVideoToProjectUseCase;
     /**
      * Get media list from project use case
      */
@@ -91,6 +93,12 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         //check VideoList is not empty, if true exportProjectUseCase
         getMediaListFromProjectUseCase.getMediaListFromProject(this);
         //exportProjectUseCase.export();
+    }
+
+    public void duplicateClip(Video video, int position) {
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        Video copyVideo = new Video(video);
+        addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, position+1);
     }
 
     public void addMusic(Music music) {

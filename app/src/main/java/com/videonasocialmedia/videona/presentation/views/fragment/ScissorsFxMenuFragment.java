@@ -29,7 +29,9 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
+import com.videonasocialmedia.videona.presentation.views.listener.DuplicateClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,6 +49,8 @@ public class ScissorsFxMenuFragment extends Fragment {
 
     /*CONFIG*/
     private OnRemoveAllProjectListener callbackRemoveAllProject;
+    private DuplicateClipListener duplicateClipListener;
+    private RazorClipListener razorClipListener;
     private Tracker tracker;
 
     @Override
@@ -55,6 +59,8 @@ public class ScissorsFxMenuFragment extends Fragment {
 
         try {
             callbackRemoveAllProject = (OnRemoveAllProjectListener) activity;
+            duplicateClipListener = (DuplicateClipListener) activity;
+            razorClipListener = (RazorClipListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnRemoveAllProjectListener");
@@ -88,17 +94,22 @@ public class ScissorsFxMenuFragment extends Fragment {
             trashButton.setClickable(false);
     }
 
-    @OnClick(R.id.edit_fragment_scissors_button_duplicate)
-    public void showTrimView() {
-        //showLog();
-    }
-
     @OnClick(R.id.edit_fragment_scissors_button_add_clip)
     public void addVideos() {
         Log.d(LOG_TAG, "addVideos");
         Intent gallery = new Intent(this.getActivity(), GalleryActivity.class);
         gallery.putExtra("SHARE", false);
         startActivity(gallery);
+    }
+
+    @OnClick(R.id.edit_fragment_scissors_button_razor)
+    public void razorVideo() {
+        razorClipListener.razorSelectedClip();
+    }
+
+    @OnClick(R.id.edit_fragment_scissors_button_duplicate)
+    public void duplicateVideo() {
+        duplicateClipListener.duplicateSelectedClip();
     }
 
     @OnClick(R.id.edit_fragment_scissors_button_trash)
@@ -129,19 +140,18 @@ public class ScissorsFxMenuFragment extends Fragment {
     private void sendButtonTracked(int id) {
         String label;
         switch (id) {
+            case R.id.edit_fragment_scissors_button_add_clip:
+                label = "Go to add clip of edit fragment scissor";
+                break;
             case R.id.edit_fragment_scissors_button_razor:
                 label = "Go to razor of edit fragment scissor";
                 Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.edit_fragment_scissors_button_duplicate:
-                label = "Go to crop of edit fragment scissor";
-                Toast.makeText(this.getActivity().getApplicationContext(), getString(R.string.edit_text_special), Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.edit_fragment_scissors_button_add_clip:
-                label = "Go to add clip of edit fragment scissor";
+                label = "Go to duplicate of edit fragment scissor";
                 break;
             case R.id.edit_fragment_scissors_button_trash:
-                label = "Go to duplicate of edit fragment scissor";
+                label = "Go to delete project of edit fragment scissor";
                 break;
             default:
                 label = "Other";
