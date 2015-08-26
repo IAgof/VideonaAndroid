@@ -160,7 +160,11 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     }
 
     public Video getCurrentVideo() {
-        return movieList.get(videoToPlay);
+        if(!movieList.isEmpty()) {
+            return movieList.get(videoToPlay);
+        } else {
+            return null;
+        }
     }
 
     public int getCurrentPosition() {

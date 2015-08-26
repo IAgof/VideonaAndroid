@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Juan Javier Cabanas Abascal
@@ -75,12 +76,15 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
     public void onPause() {
         super.onPause();
         presenter.pause();
+        EventBus.getDefault().unregister(adapter);
 }
 
     @Override
     public void onResume() {
         super.onResume();
         presenter.start();
+        if(!EventBus.getDefault().isRegistered(adapter))
+            EventBus.getDefault().register(adapter);
     }
 
     @Override

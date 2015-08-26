@@ -99,7 +99,6 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         Video copyVideo = new Video(video);
         addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, position+1);
-        // TODO update view
     }
 
     public void addMusic(Music music) {

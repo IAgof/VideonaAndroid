@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.eventbus.events.video.VideoInsertedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
@@ -44,6 +45,10 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     public void setClickListener(VideoTimeLineRecyclerViewClickListener clickListener) {
         this.clickListener = clickListener;
+    }
+
+    public void onEvent(VideoInsertedEvent event){
+        notifyItemInserted(event.position);
     }
 
     @Override
