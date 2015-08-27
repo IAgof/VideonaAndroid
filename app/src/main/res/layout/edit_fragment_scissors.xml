@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:padding="16dp"
-        android:src="@drawable/edit_fragment_scissors_icon_crop_normal"
+        android:src="@drawable/common_icon_delete_normal"
         android:alpha="0.20"
         android:layout_weight="9"
         android:scaleType="fitCenter" />
