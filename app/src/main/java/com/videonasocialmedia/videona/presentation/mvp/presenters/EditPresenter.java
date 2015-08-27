@@ -20,6 +20,8 @@ import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCas
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.music.ErrorAddingMusicToProjectEvent;
+import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -78,15 +80,20 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     public void onResume() {
         EventBus.getDefault().register(this);
         checkIfVideoFilesExistUseCase.check();
-        EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
+        EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
+        EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
     }
 
     public void onPause(){
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(UpdateProjectDuration event){
+    public void onEvent(UpdateProjectDurationEvent event){
         editorView.updateProjectDuration(event.projectDuration);
+    }
+
+    public void onEvent(NumVideosChangedEvent event){
+        editorView.updateNumVideosInProject(event.numVideos);
     }
 
     /**

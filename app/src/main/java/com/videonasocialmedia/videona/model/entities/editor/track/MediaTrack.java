@@ -64,6 +64,10 @@ public class MediaTrack extends Track {
         }
     }
 
+    public int getNumVideosInProject() {
+        return this.getItems().size();
+    }
+
     /**
      * Insert a new Media item in the media track. Get sure it is not an Audio media item.
      *
@@ -136,6 +140,5 @@ public class MediaTrack extends Track {
         super.setItems(items);
         this.checkItems();
     }
-
 
 }

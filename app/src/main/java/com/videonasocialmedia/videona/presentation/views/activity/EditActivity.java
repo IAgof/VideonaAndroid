@@ -80,6 +80,8 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     ImageButton audioFxButton;
     @InjectView(R.id.project_duration)
     TextView projectDuration;
+    @InjectView(R.id.num_videos)
+    TextView numVideos;
 
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
@@ -240,6 +242,11 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     public void updateProjectDuration(int time) {
         projectDuration.setText(TimeUtils.toFormattedTime(time));
+    }
+
+    @Override
+    public void updateNumVideosInProject(int num) {
+        numVideos.setText(String.valueOf(num));
     }
 
     @Override
