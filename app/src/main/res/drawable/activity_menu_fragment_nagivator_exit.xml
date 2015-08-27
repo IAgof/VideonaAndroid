@@ -8,9 +8,9 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:state_pressed="true">
-    <bitmap android:src="@drawable/activity_menu_fragment_navigator_exit_pressed"/>
+    <bitmap android:src="@drawable/fragment_navigator_share_exit_pressed"/>
   </item>
   <item>
-    <bitmap android:src="@drawable/activity_menu_fragment_navigator_exit_normal"/>
+    <bitmap android:src="@drawable/fragment_navigator_share_exit_normal"/>
   </item>
 </selector>
