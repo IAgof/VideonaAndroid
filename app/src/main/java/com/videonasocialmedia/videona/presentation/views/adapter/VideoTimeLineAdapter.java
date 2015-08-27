@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.video.VideoInsertedEvent;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Juan Javier Cabanas Abascal
@@ -61,8 +63,9 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     @Override
     public void remove(int itemPosition) {
-         videoList.remove(itemPosition);
+        videoList.remove(itemPosition);
         notifyItemRemoved(itemPosition);
+        EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
     }
 
     @Override

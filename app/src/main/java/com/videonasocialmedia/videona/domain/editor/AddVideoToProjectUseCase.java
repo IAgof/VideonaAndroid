@@ -43,6 +43,7 @@ public class AddVideoToProjectUseCase {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItem(video);
             listener.onAddMediaItemToTrackSuccess(video);
+            EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             listener.onAddMediaItemToTrackError();
         }
@@ -53,6 +54,7 @@ public class AddVideoToProjectUseCase {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItemAt(position, video);
             EventBus.getDefault().post(new VideoInsertedEvent(video, position));
+            EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             EventBus.getDefault().post(new VideoInsertedErrorEvent(illegalItemOnTrack, "Fail to insert video"));
         }
@@ -65,6 +67,7 @@ public class AddVideoToProjectUseCase {
                 mediaTrack.insertItem(video);
             }
             listener.onAddMediaItemToTrackSuccess(null);
+            EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             listener.onAddMediaItemToTrackError();
         }

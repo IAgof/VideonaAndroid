@@ -19,6 +19,8 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRemoveMediaF
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * This class is used to removed videos from the project.
  */
@@ -39,12 +41,12 @@ public class RemoveVideoFromProjectUseCase implements RemoveMediaFromProjectUseC
             correct = removeVideoItemFromTrack(media, mediaTrack);
             if (!correct) break;
         }
-
         if (correct) {
             listener.onRemoveMediaItemFromTrackSuccess();
         } else {
             listener.onRemoveMediaItemFromTrackError();
         }
+        EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
     }
 
     /**
@@ -57,6 +59,7 @@ public class RemoveVideoFromProjectUseCase implements RemoveMediaFromProjectUseC
         boolean result;
         try {
             mediaTrack.deleteItem(video);
+            EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
             result = true;
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             result = false;

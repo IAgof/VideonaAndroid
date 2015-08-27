@@ -78,12 +78,16 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     public void onResume() {
         EventBus.getDefault().register(this);
         checkIfVideoFilesExistUseCase.check();
+        EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
     }
 
     public void onPause(){
         EventBus.getDefault().unregister(this);
     }
 
+    public void onEvent(UpdateProjectDuration event){
+        editorView.updateProjectDuration(event.projectDuration);
+    }
 
     /**
      * Ok edit button click listener
