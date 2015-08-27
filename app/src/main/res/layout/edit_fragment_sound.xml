@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:padding="16dp"
-        android:src="@drawable/activity_edit_icon_audio_normal"
+        android:src="@drawable/edit_fragment_sound_icon_equalizer_normal"
         android:alpha="0.20"
         android:layout_weight="9"
         android:scaleType="fitCenter" />

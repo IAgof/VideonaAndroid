@@ -64,7 +64,7 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:scaleType="fitCenter"
-                            android:padding="16dp"
+                            android:padding="20dp"
                             android:src="@drawable/common_icon_drawer_normal" />
                     </RelativeLayout>
 
@@ -323,7 +323,7 @@
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
                             android:scaleType="fitCenter"
-                            android:padding="16dp"
+                            android:padding="20dp"
                             android:src="@drawable/edit_activity_icon_save_selector" />
                     </RelativeLayout>
 
