@@ -144,7 +144,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
         }
 
-        @OnClick(R.id.gallery_preview_button)
+        @OnClick(R.id.video_item)
         public void startVideoPreview(View v) {
             if(selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.NONE) {
                 if(onTransitionClickListener != null)
