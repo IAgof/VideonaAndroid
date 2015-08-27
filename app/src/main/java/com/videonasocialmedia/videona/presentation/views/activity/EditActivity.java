@@ -489,12 +489,11 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void duplicateSelectedClip() {
-        //int position = getCurrentPosition();
-        int position = -1;
-        if(position < 0) {
+        int positionInAdapter = getCurrentPosition();
+        if(positionInAdapter < 0) {
             Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
         } else {
-            editPresenter.duplicateClip(getCurrentVideo(), position);
+            editPresenter.duplicateClip(getCurrentVideo(), positionInAdapter);
         }
     }
 
@@ -510,7 +509,17 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void razorSelectedClip() {
-        Log.d(LOG_TAG, "duplicateVideo");
+        int positionInAdapter = getCurrentPosition();
+        if(positionInAdapter < 0) {
+            Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
+        } else {
+            int timeVideoInSeekBarInMsec = previewVideoListFragment.getCurrentVideoTimeInMsec(positionInAdapter);
+            if(timeVideoInSeekBarInMsec > 0) {
+                editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.invalidRazorTime, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**

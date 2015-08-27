@@ -171,6 +171,15 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         return videoToPlay;
     }
 
+    public int getCurrentTimeInMsec() {
+        return seekBar.getProgress();
+    }
+
+    public int getCurrentVideoTimeInMsec(int positionInAdapter) {
+        return seekBar.getProgress() - videoStartTimeInProject.get(positionInAdapter);
+    }
+
+
     @OnTouch(R.id.edit_preview_player)
     public boolean onTouchPreview(MotionEvent event) {
         boolean result;

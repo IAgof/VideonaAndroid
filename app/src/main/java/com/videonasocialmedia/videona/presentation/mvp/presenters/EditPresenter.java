@@ -61,12 +61,12 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     public EditPresenter(EditorView editorView) {
         this.editorView = editorView;
         exportProjectUseCase = new ExportProjectUseCase(this);
-
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addMusicToProjectUseCase = new AddMusicToProjectUseCase();
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
         checkIfVideoFilesExistUseCase = new CheckIfVideoFilesExistUseCase();
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
     }
 
     /**
@@ -95,10 +95,17 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         //exportProjectUseCase.export();
     }
 
-    public void duplicateClip(Video video, int position) {
-        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+    public void duplicateClip(Video video, int positionInAdapter) {
         Video copyVideo = new Video(video);
-        addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, position+1);
+        addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);
+    }
+
+    public void razorClip(Video video, int positionInAdapter, int timeMs) {
+        int timeToRazorInMsec = timeMs + video.getFileStartTime();
+        Video copyVideo = new Video(video);
+        video.setFileStopTime(timeToRazorInMsec);
+        copyVideo.setFileStartTime(timeToRazorInMsec);
+        addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);
     }
 
     public void addMusic(Music music) {

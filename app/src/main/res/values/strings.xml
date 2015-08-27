@@ -122,6 +122,7 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="confirmDeleteVideosFromProjectMessage">¿Do you want to delete this elements?</string>
     <string name="deletedVideosFromProject">Deleted videos from project. Record or add new videos</string>
     <string name="addVideosToProject">Please, record or add new videos</string>
+    <string name="invalidRazorTime">Please, select an instant time to razor this video</string>
 
     <!-- Activity About -->
     <string name="aboutUsTitle"><u>About us</u></string>
