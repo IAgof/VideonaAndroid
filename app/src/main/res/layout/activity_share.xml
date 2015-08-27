@@ -76,7 +76,7 @@
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
                             android:scaleType="fitCenter"
-                            android:padding="15dp"
+                            android:padding="16dp"
                             android:src="@drawable/common_icon_drawer_normal" />
                     </RelativeLayout>
 

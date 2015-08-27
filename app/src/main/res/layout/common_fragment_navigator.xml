@@ -50,7 +50,8 @@
                         android:src="@drawable/common_icon_drawer_pressed_red"
                         android:layout_centerInParent="true"
                         android:padding="16dp"
-                        android:layout_weight="9" />
+                        android:layout_weight="9"
+                        android:scaleType="fitCenter" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -73,7 +74,8 @@
                         android:src="@drawable/activity_menu_fragment_nagivator_rate"
                         android:layout_centerInParent="true"
                         android:padding="16dp"
-                        android:layout_weight="9" />
+                        android:layout_weight="9"
+                        android:scaleType="fitCenter" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -97,7 +99,8 @@
                         android:src="@drawable/activity_menu_fragment_nagivator_settings"
                         android:layout_centerInParent="true"
                         android:padding="16dp"
-                        android:layout_weight="9" />
+                        android:layout_weight="9"
+                        android:scaleType="fitCenter" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
@@ -229,7 +232,8 @@
                 android:src="@drawable/activity_menu_fragment_nagivator_exit"
                 android:layout_centerInParent="true"
                 android:padding="16dp"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:scaleType="fitCenter" />
         </LinearLayout>
     </LinearLayout>
 

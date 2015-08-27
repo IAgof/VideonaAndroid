@@ -132,7 +132,8 @@
                                     android:src="@drawable/common_icon_drawer_normal"
                                     android:background="@null"
                                     android:padding="16dp"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"
+                                    android:scaleType="fitCenter" />
                             </RelativeLayout>
 
                             <RelativeLayout

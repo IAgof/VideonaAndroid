@@ -60,11 +60,11 @@
 
                         <ImageButton
                             android:id="@+id/button_navigate_drawer"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:scaleType="fitCenter"
-                            android:padding="15dp"
+                            android:padding="16dp"
                             android:src="@drawable/common_icon_drawer_normal" />
                     </RelativeLayout>
 
@@ -86,10 +86,10 @@
 
                                 <ImageButton
                                     android:id="@+id/edit_button_scissor"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
                                     android:scaleType="fitCenter"
-                                    android:padding="15dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/edit_activity_button_scissor_selector"
                                     android:background="@null" />
                             </RelativeLayout>
@@ -105,7 +105,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@null"
                                     android:scaleType="fitCenter"
-                                    android:padding="15dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/edit_activity_button_audio_selector"
                                     android:layout_weight="1" />
                             </RelativeLayout>
@@ -121,7 +121,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@null"
                                     android:scaleType="fitCenter"
-                                    android:padding="15dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/activity_edit_icon_fx_normal"
                                     android:layout_weight="1"
                                     android:alpha="0.2" />
@@ -138,7 +138,7 @@
                                     android:layout_height="match_parent"
                                     android:background="@null"
                                     android:scaleType="fitCenter"
-                                    android:padding="15dp"
+                                    android:padding="16dp"
                                     android:src="@drawable/activity_edit_icon_look_normal"
                                     android:alpha="0.2" />
                             </RelativeLayout>
@@ -323,7 +323,7 @@
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
                             android:scaleType="fitCenter"
-                            android:padding="15dp"
+                            android:padding="16dp"
                             android:src="@drawable/edit_activity_icon_save_selector" />
                     </RelativeLayout>
 
