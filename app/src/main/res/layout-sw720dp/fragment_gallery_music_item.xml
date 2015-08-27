@@ -30,7 +30,7 @@
         android:layout_alignEnd="@id/gallery_thumb"
         android:layout_alignStart="@id/gallery_thumb"
         android:layout_alignTop="@id/gallery_thumb"
-        android:background="@drawable/fragment_gallery_music_overlay_selector_background"
+        android:background="@null"
         android:clickable="false">
 
         <ImageView

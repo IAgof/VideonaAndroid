@@ -24,6 +24,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:contentDescription="Beta Label"
-        android:layout_alignParentLeft="false" />
+        android:layout_alignParentLeft="false"
+        android:visibility="invisible" />
 
 </RelativeLayout>
