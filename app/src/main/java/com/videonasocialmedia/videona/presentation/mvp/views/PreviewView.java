@@ -15,6 +15,7 @@ public interface PreviewView {
     void pausePreview();
 
     void seekTo(int timeInMsec);
+    void seekToStartOfVideo(int videoIndex);
 
     void updateVideoList();
 

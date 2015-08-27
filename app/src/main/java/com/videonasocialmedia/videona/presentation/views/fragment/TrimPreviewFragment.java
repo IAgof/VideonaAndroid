@@ -119,7 +119,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_fragment_trim_preview, container, false);
         ButterKnife.inject(this, view);
-
         presenter = new TrimPreviewPresenter(this, this);
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
@@ -201,6 +200,11 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void seekTo(int timeInSec) {
         videoPlayer.seekTo(timeInSec);
+    }
+
+    @Override
+    public void seekToStartOfVideo(int videoIndex) {
+
     }
 
     @Override

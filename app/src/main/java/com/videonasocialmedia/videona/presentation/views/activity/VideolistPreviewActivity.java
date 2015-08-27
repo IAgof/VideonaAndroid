@@ -223,6 +223,11 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
     }
 
     @Override
+    public void seekToStartOfVideo(int videoIndex) {
+
+    }
+
+    @Override
     public void updateVideoList() {
         previewPresenter.update();
     }
