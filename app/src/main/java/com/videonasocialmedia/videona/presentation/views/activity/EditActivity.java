@@ -54,6 +54,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllPro
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.IOException;
@@ -77,6 +78,8 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
     ImageButton audioFxButton;
+    @InjectView(R.id.project_duration)
+    TextView projectDuration;
 
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
@@ -232,6 +235,11 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void updateProjectDuration(int time) {
+        projectDuration.setText(TimeUtils.toFormattedTime(time));
     }
 
     @Override
