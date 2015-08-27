@@ -18,9 +18,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
 
         <ImageView
@@ -35,35 +33,35 @@
             android:src="@drawable/beta_label" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:orientation="horizontal">
 
 
             <RelativeLayout
+                android:id="@+id/edit_left_layout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/edit_left_layout"
                 android:layout_weight="9">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:orientation="vertical"
                     android:visibility="visible">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="9" >
+                        android:layout_weight="9">
 
                         <ImageButton
                             android:id="@+id/buttonCancelEditActivity"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
-                            android:scaleType="fitCenter"
                             android:padding="15dp"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/edit_activity_button_cancel_selector" />
                     </RelativeLayout>
 
@@ -73,73 +71,73 @@
                         android:layout_weight="36">
 
                         <LinearLayout
-                            android:orientation="vertical"
+                            android:id="@+id/edit_left_panel"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:id="@+id/edit_left_panel">
+                            android:orientation="vertical">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="9" >
+                                android:layout_weight="9">
 
                                 <ImageButton
                                     android:id="@+id/edit_button_scissor"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:background="@color/pastel_palette_green"
-                                    android:scaleType="fitCenter"
                                     android:padding="15dp"
+                                    android:scaleType="fitCenter"
                                     android:src="@drawable/edit_activity_button_scissor_selector" />
                             </RelativeLayout>
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="9" >
+                                android:layout_weight="9">
 
                                 <ImageButton
                                     android:id="@+id/edit_button_audio"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:layout_weight="1"
                                     android:background="@color/pastel_palette_blue"
-                                    android:scaleType="fitCenter"
                                     android:padding="15dp"
-                                    android:src="@drawable/edit_activity_button_audio_selector"
-                                    android:layout_weight="1" />
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/edit_activity_button_audio_selector" />
                             </RelativeLayout>
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="9" >
+                                android:layout_weight="9">
 
                                 <ImageButton
                                     android:id="@+id/edit_button_fx"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@color/pastel_palette_red"
-                                    android:scaleType="fitCenter"
-                                    android:padding="15dp"
-                                    android:src="@drawable/activity_edit_icon_fx_normal"
                                     android:layout_weight="1"
-                                    android:alpha="0.2" />
+                                    android:alpha="0.2"
+                                    android:background="@color/pastel_palette_red"
+                                    android:padding="15dp"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/activity_edit_icon_fx_normal" />
                             </RelativeLayout>
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="9" >
+                                android:layout_weight="9">
 
                                 <ImageButton
                                     android:id="@+id/edit_button_look"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:alpha="0.2"
                                     android:background="@color/pastel_palette_yellow"
-                                    android:scaleType="fitCenter"
                                     android:padding="15dp"
-                                    android:src="@drawable/activity_edit_icon_look_normal"
-                                    android:alpha="0.2" />
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/activity_edit_icon_look_normal" />
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
@@ -147,26 +145,26 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/edit_middle_layout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="62"
-                android:id="@+id/edit_middle_layout">
+                android:layout_weight="62">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
 
                     <RelativeLayout
+                        android:id="@+id/edit_top_layout"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:id="@+id/edit_top_layout"
                         android:layout_weight="4">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
                             <RelativeLayout
                                 android:layout_width="0dp"
@@ -174,10 +172,10 @@
                                 android:layout_weight="9"></RelativeLayout>
 
                             <RelativeLayout
+                                android:id="@+id/edit_top_layout_text"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="44"
-                                android:id="@+id/edit_top_layout_text" >
+                                android:layout_weight="44">
 
                                 <TextView
                                     android:id="@+id/edit_title_text_view"
@@ -193,52 +191,52 @@
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="9" >
+                                android:layout_weight="9">
 
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/edit_center_layout"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:id="@+id/edit_center_layout"
                         android:layout_weight="41">
 
                         <LinearLayout
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
                             <RelativeLayout
+                                android:id="@+id/edit_center_left"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:id="@+id/edit_center_left"
-                                android:layout_weight="9" >
+                                android:layout_weight="9">
 
                             </RelativeLayout>
 
                             <RelativeLayout
+                                android:id="@+id/relativeLayout"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:id="@+id/relativeLayout"
-                                android:layout_weight="44" >
+                                android:layout_weight="44">
 
                                 <LinearLayout
-                                    android:orientation="vertical"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent" >
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
 
                                     <RelativeLayout
+                                        android:id="@+id/edit_center_center_layout"
                                         android:layout_width="match_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight="32"
-                                        android:id="@+id/edit_center_center_layout" >
+                                        android:layout_weight="32">
 
                                         <LinearLayout
-                                            android:orientation="vertical"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent">
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
 
                                             <FrameLayout
                                                 android:id="@+id/edit_fragment_trim_preview"
@@ -250,9 +248,9 @@
                                         </LinearLayout>
 
                                         <LinearLayout
-                                            android:orientation="vertical"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent">
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
 
                                             <FrameLayout
                                                 android:id="@+id/edit_fragment_all_preview"
@@ -264,34 +262,26 @@
                                     </RelativeLayout>
 
                                     <RelativeLayout
+                                        android:id="@+id/edit_center_bottom_layout"
                                         android:layout_width="match_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight="9"
-                                        android:id="@+id/edit_center_bottom_layout"
-                                        android:layout_marginBottom="8dp">
+                                        android:layout_marginBottom="8dp"
+                                        android:layout_weight="9">
 
-                                        <LinearLayout
-                                            android:orientation="vertical"
+                                        <FrameLayout
+                                            android:id="@+id/edit_bottom_panel"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent" >
+                                            android:layout_height="match_parent" />
 
-                                            <FrameLayout
-                                                android:id="@+id/edit_bottom_panel"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:layout_toEndOf="@+id/edit_left_panel"
-                                                android:layout_toStartOf="@+id/edit_right_panel" />
-
-                                        </LinearLayout>
                                     </RelativeLayout>
                                 </LinearLayout>
                             </RelativeLayout>
 
                             <RelativeLayout
+                                android:id="@+id/edit_center_right"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:id="@+id/edit_center_right"
-                                android:layout_weight="9" >
+                                android:layout_weight="9">
 
                             </RelativeLayout>
                         </LinearLayout>
@@ -300,29 +290,29 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/edit_right_layout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/edit_right_layout"
                 android:layout_weight="9">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="visible" >
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="9" >
+                        android:layout_weight="9">
 
                         <ImageButton
                             android:id="@+id/buttonOkEditActivity"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
-                            android:scaleType="fitCenter"
                             android:padding="15dp"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/edit_activity_icon_save_selector" />
                     </RelativeLayout>
 
@@ -332,10 +322,10 @@
                         android:layout_weight="36">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="28"
+                            android:orientation="vertical"
                             android:visibility="visible">
 
                             <FrameLayout
