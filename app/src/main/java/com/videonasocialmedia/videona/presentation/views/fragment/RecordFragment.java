@@ -510,6 +510,7 @@ public class RecordFragment extends Fragment implements RecordView,
         } else {
             recordPresenter.startRecording();
             sendButtonTracked(START_RECORDING);
+            buttonNavigateEdit.setVisibility(View.INVISIBLE);
             //stopMonitoringOrientation();
         }
     }
