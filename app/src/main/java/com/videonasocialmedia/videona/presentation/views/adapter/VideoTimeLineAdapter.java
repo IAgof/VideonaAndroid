@@ -28,18 +28,22 @@ import butterknife.OnClick;
 public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdapter.VideoViewHolder>
         implements MovableItemsAdapter {
 
+    private final int TYPE_VIDEO = 0;
+    private final int TYPE_ADD_BUTTON = 1;
+
     private Context context;
     private List<Video> videoList;
-
+    private List<Object> timeLine;
     private VideoTimeLineRecyclerViewClickListener clickListener;
+
+    private int selectedVideoPosition = -1;
 
     public VideoTimeLineAdapter(List<Video> videoList) {
         this.videoList = videoList;
-
     }
 
     public VideoTimeLineAdapter() {
-        this.videoList= new ArrayList<>();
+        this.videoList = new ArrayList<>();
     }
 
     public void setClickListener(VideoTimeLineRecyclerViewClickListener clickListener) {
@@ -50,25 +54,46 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public void moveItem(int fromPositon, int toPosition) {
         if (fromPositon != toPosition) {
             Collections.swap(videoList, fromPositon, toPosition);
+            selectedVideoPosition = toPosition;
             notifyItemMoved(fromPositon, toPosition);
         }
+
     }
 
     @Override
     public void remove(int itemPosition) {
-         videoList.remove(itemPosition);
+        int newPosition = recalculateSelectedVideoPosition(itemPosition);
+        videoList.remove(itemPosition);
         notifyItemRemoved(itemPosition);
+        updateSelection(newPosition);
+    }
+
+    private int recalculateSelectedVideoPosition(int removedItemPosition) {
+        int newPosition = selectedVideoPosition;
+        if (removedItemPosition < selectedVideoPosition ||
+                (removedItemPosition == videoList.size() - 1 &&
+                        selectedVideoPosition == removedItemPosition)) {
+            newPosition = selectedVideoPosition - 1;
+        }
+        return newPosition;
     }
 
     @Override
     public void finishMovement(int newPosition) {
-        //presenter.moveItem(videoList.get(newPosition), newPosition);
+        if (newPosition != -1)
+            notifyDataSetChanged();
+    }
+
+    private void updateSelection(int positionSelected) {
+        notifyItemChanged(selectedVideoPosition);
+        selectedVideoPosition = positionSelected;
+        notifyItemChanged(selectedVideoPosition);
+        //TODO post event
     }
 
     public void setVideoList(List<Video> videoList) {
         this.videoList = videoList;
     }
-
 
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -80,14 +105,15 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     @Override
     public void onBindViewHolder(VideoViewHolder holder, int position) {
-        Video selectedVideo = videoList.get(position);
-        String path = selectedVideo.getIconPath() != null
-                ? selectedVideo.getIconPath() : selectedVideo.getMediaPath();
+        Video current = videoList.get(position);
+        String path = current.getIconPath() != null
+                ? current.getIconPath() : current.getMediaPath();
         Glide.with(context)
                 .load(path)
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
+        holder.thumb.setSelected(position == selectedVideoPosition);
     }
 
     @Override
@@ -112,8 +138,10 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
         @OnClick(R.id.timelinevideo_thumb)
         public void videoClick() {
-            if (clickListener!=null)
-            clickListener.onVideoClicked(this.getAdapterPosition());
+            updateSelection(getAdapterPosition());
+//            if (clickListener != null)
+//                clickListener.onVideoClicked(this.getAdapterPosition());
+
         }
     }
 }
