@@ -424,4 +424,11 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="add_videos_to_project">Por favor, añade vídeos al proyecto</string>
     <string name="videos_removed">Videos borrados del proyecto, grabe o añada nuevos videos</string>
 
+    <!-- Drawer -->
+    <string name="error_rate_app">Error de conexión con Google Play</string>
+    <string name="exit_app_title">Apagar</string>
+    <string name="exit_app_message">¿Desea salir de la aplicación?</string>
+
+
+
 </resources>

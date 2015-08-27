@@ -1,9 +1,9 @@
 <!--
-~ Copyright (c) 2015. Videona Socialmedia SL
-~ http://www.videona.com
-~ info@videona.com
-~ All rights reserved
--->
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,75 +22,6 @@
         />
 
 
-
-
-    <RelativeLayout
-        android:id="@+id/rec_1"
-        android:layout_width="120dp"
-        android:layout_height="450dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="false"
-        android:paddingEnd="8dp">
-
-        <ImageButton
-            android:id="@+id/button_navigate_edit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal|end"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/common_icon_edit_normal"
-            android:layout_above="@+id/button_record"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible" />
-
-        <ImageButton
-            android:id="@+id/button_record"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_gravity="center_horizontal|end"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/activity_record_icon_rec_normal"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <ImageButton
-            android:id="@+id/button_camera_effect_fx"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="visible"
-            android:layout_gravity="center_horizontal|end"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/activity_record_fx_normal"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentStart="false"
-            android:layout_above="@+id/button_camera_effect_color"
-            android:padding="10dp" />
-
-        <ImageButton
-            android:id="@+id/button_camera_effect_color"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="visible"
-            android:layout_gravity="center_horizontal|end"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/activity_record_icon_filters_normal"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentBottom="true"
-            android:padding="10dp" />
-
-
-    </RelativeLayout>
-
     <ImageView
         android:id="@+id/rotateDeviceHint"
         android:layout_width="150dp"
@@ -99,151 +30,442 @@
         android:visibility="gone"
         android:src="@drawable/common_icon_rotate_device" />
 
-    <RelativeLayout
-        android:id="@+id/relativelayout_camera_effect_fx"
-        android:layout_width="400dp"
-        android:layout_height="100dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-100dp"
-        android:layout_toStartOf="@+id/rec_1" >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/record_catalog_recycler_fx"
-            android:scrollbars="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-
-    </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativelayout_camera_effect_color"
-        android:layout_width="400dp"
-        android:layout_height="100dp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-100dp"
-        android:layout_toStartOf="@+id/rec_1" >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/record_catalog_recycler_color"
-            android:scrollbars="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/relativeLayoutRecordCameraOptions"
-        android:visibility="visible">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/record_layout">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/linearLayout"
-            android:gravity="right"
-            android:layout_alignParentEnd="true"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_alignParentStart="true"
-            >
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/linearLayoutRecordCameraOptions"
-                android:background="@color/transparent_palette_grey">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8">
 
-                <ImageButton
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:id="@+id/button_flash_mode"
-                    android:src="@drawable/record_activity_icon_flash_camera_selector"
-                    android:visibility="visible"
-                    android:layout_centerHorizontal="true"
-                    android:focusableInTouchMode="false"
-                    android:padding="15dp"
-                    android:scaleType="fitXY"
-                    android:background="@null" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
 
-                <ImageButton
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:id="@+id/button_change_camera"
-                    android:src="@drawable/activity_record_change_camera_normal"
-                    android:visibility="visible"
-                    android:background="@null"
-                    android:layout_toStartOf="@+id/button_flash_mode"
-                    android:layout_centerHorizontal="true"
-                    android:focusableInTouchMode="false"
-                    android:padding="15dp"
-                    android:scaleType="fitXY"
-                    android:layout_gravity="center_horizontal|top"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="71"></RelativeLayout>
 
-            </LinearLayout>
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="9">
 
-            <ImageButton
-                android:id="@+id/button_settings_camera"
-                android:src="@drawable/record_activity_button_settings_camera_selector"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_above="@+id/button_color_effect"
-                android:layout_centerHorizontal="true"
-                android:background="@null"
-                android:focusableInTouchMode="false"
-                android:padding="15dp"
-                android:scaleType="fitXY" />
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent">
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.5" />
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="8">
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.5"></RelativeLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"></RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
-            android:id="@+id/linearLayoutRecTimer"
-            android:gravity="center_horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:measureWithLargestChild="false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_alignParentStart="true"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageRecPoint"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_toStartOf="@+id/chronometer_record"
-                android:src="@anim/activity_record_drawable_rec_progress"
-                android:background="@color/transparent_palette_grey"
-                android:visibility="invisible"
-                android:paddingLeft="5dp" />
+                android:layout_weight="18">
 
-            <Chronometer
-                android:id="@+id/chronometer_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingRight="10dp"
-                android:textSize="18sp"
-                android:background="@color/transparent_palette_grey"
-                android:paddingLeft="10dp"
-                android:textColor="@android:color/white"
-                android:text="00:00" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="8">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="9">
+
+                                <ImageButton
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:id="@+id/button_navigate_drawer"
+                                    android:src="@drawable/common_icon_drawer_normal"
+                                    android:background="@null"
+                                    android:padding="16dp"
+                                    android:visibility="visible" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="9"></RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="37"></RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="44"
+                android:gravity="bottom">
+
+                <RelativeLayout
+                    android:id="@+id/relativelayout_camera_effect_fx"
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginBottom="-80dp"
+                    android:layout_centerVertical="true">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/record_catalog_recycler_fx"
+                        android:scrollbars="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativelayout_camera_effect_color"
+                    android:layout_width="fill_parent"
+                    android:layout_height="80dp"
+                    android:layout_alignParentBottom="false"
+                    android:layout_marginBottom="-80dp"
+                    android:layout_centerVertical="true">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/record_catalog_recycler_color"
+                        android:scrollbars="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="18" >
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="5">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:id="@+id/linearLayoutRecTimer"
+                            android:measureWithLargestChild="false"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="false"
+                            android:layout_weight="2"
+                            android:layout_alignParentRight="false"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:gravity="right"
+                            android:layout_alignParentEnd="false"
+                            android:baselineAligned="false"
+                            android:layout_centerInParent="true">
+
+                            <ImageView
+                                android:id="@+id/imageRecPoint"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_toStartOf="@+id/chronometer_record"
+                                android:src="@anim/activity_record_drawable_rec_progress"
+                                android:background="@color/pastel_palette_grey_record"
+                                android:visibility="invisible"
+                                android:paddingLeft="4dp"
+                                android:alpha="0.5" />
+
+                            <Chronometer
+                                android:id="@+id/chronometer_record"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"
+                                android:layout_gravity="center_vertical"
+                                android:textSize="18sp"
+                                android:background="@color/pastel_palette_grey_record"
+                                android:textColor="@android:color/white"
+                                android:text="00:00"
+                                android:gravity="center_vertical"
+                                android:paddingRight="16dp"
+                                android:paddingLeft="8dp"
+                                android:alpha="0.5" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="8">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="fill_parent"
+                                android:layout_weight="10"></RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="fill_parent"
+                                android:layout_weight="8">
+
+                                <ImageButton
+                                    android:id="@+id/button_navigate_edit"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center_horizontal|end"
+                                    android:background="@null"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/activity_record_edit_normal"
+                                    android:visibility="visible"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
+                                    android:paddingLeft="4dp"
+                                    android:paddingRight="12dp" />
+                            </RelativeLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="24"
+                        android:background="@drawable/activity_record_icon_rec_circle"
+                        android:alpha="0.5">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="8">
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2" />
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8">
+
+                                    <ImageButton
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent"
+                                        android:id="@+id/button_camera_effect_color"
+                                        android:src="@drawable/activity_record_icon_filters_normal"
+                                        android:visibility="visible"
+                                        android:scaleType="fitCenter"
+                                        android:paddingRight="4dp"
+                                        android:paddingLeft="28dp"
+                                        android:paddingTop="28dp"
+                                        android:paddingBottom="4dp"
+                                        android:background="@null" />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8">
+
+                                    <ImageButton
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent"
+                                        android:id="@+id/button_change_camera"
+                                        android:src="@drawable/activity_record_change_camera_normal"
+                                        android:visibility="visible"
+                                        android:background="@null"
+                                        android:paddingRight="24dp"
+                                        android:paddingLeft="8dp"
+                                        android:paddingTop="20dp"
+                                        android:paddingBottom="12dp"
+                                        android:scaleType="fitCenter" />
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="8">
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    >
+
+                                    <ImageButton
+                                        android:id="@+id/button_play"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent"
+                                        android:src="@drawable/activity_record_icon_play_normal"
+                                        android:visibility="visible"
+                                        android:background="@null"
+                                        android:scaleType="fitCenter"
+                                        android:layout_weight="6"
+                                        android:padding="16dp"
+                                        />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8" >
+
+                                    <ImageButton
+                                        android:id="@+id/button_record"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent"
+                                        android:src="@drawable/activity_record_icon_rec_normal"
+                                        android:visibility="visible"
+                                        android:background="@null"
+                                        android:scaleType="fitCenter"
+                                        android:layout_weight="6"
+                                        />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="8">
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="2" />
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8" >
+
+                                    <ImageButton
+                                        android:id="@+id/button_camera_effect_fx"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent"
+                                        android:background="@null"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/record_activity_button_camera_effect_fx_selector"
+                                        android:layout_weight="6"
+                                        android:paddingRight="4dp"
+                                        android:paddingLeft="28dp"
+                                        android:paddingTop="4dp"
+                                        android:paddingBottom="28dp"
+                                        />
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8" >
+
+                                    <ImageButton
+                                        android:id="@+id/button_flash_mode"
+                                        android:src="@drawable/record_activity_icon_flash_camera_selector"
+
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent"
+                                        android:background="@null"
+                                        android:scaleType="fitCenter"
+
+                                        android:layout_weight="6"
+                                        android:paddingRight="24dp"
+                                        android:paddingLeft="8dp"
+                                        android:paddingTop="12dp"
+                                        android:paddingBottom="20dp"
+                                        />
+                                </RelativeLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9"></RelativeLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
     </RelativeLayout>

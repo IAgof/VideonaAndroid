@@ -12,7 +12,7 @@
     android:id="@+id/activity_edit_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="#000000">
 
 
     <RelativeLayout
@@ -32,7 +32,8 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:contentDescription="Beta Label"
-            android:src="@drawable/beta_label" />
+            android:src="@drawable/beta_label"
+            android:visibility="invisible" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -58,13 +59,13 @@
                         android:layout_weight="9" >
 
                         <ImageButton
-                            android:id="@+id/buttonCancelEditActivity"
+                            android:id="@+id/button_navigate_drawer"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
                             android:scaleType="fitCenter"
                             android:padding="15dp"
-                            android:src="@drawable/edit_activity_button_cancel_selector" />
+                            android:src="@drawable/common_icon_drawer_normal" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -87,10 +88,10 @@
                                     android:id="@+id/edit_button_scissor"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@color/pastel_palette_green"
                                     android:scaleType="fitCenter"
                                     android:padding="15dp"
-                                    android:src="@drawable/edit_activity_button_scissor_selector" />
+                                    android:src="@drawable/edit_activity_button_scissor_selector"
+                                    android:background="@null" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -102,7 +103,7 @@
                                     android:id="@+id/edit_button_audio"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@color/pastel_palette_blue"
+                                    android:background="@null"
                                     android:scaleType="fitCenter"
                                     android:padding="15dp"
                                     android:src="@drawable/edit_activity_button_audio_selector"
@@ -118,7 +119,7 @@
                                     android:id="@+id/edit_button_fx"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@color/pastel_palette_red"
+                                    android:background="@null"
                                     android:scaleType="fitCenter"
                                     android:padding="15dp"
                                     android:src="@drawable/activity_edit_icon_fx_normal"
@@ -135,7 +136,7 @@
                                     android:id="@+id/edit_button_look"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:background="@color/pastel_palette_yellow"
+                                    android:background="@null"
                                     android:scaleType="fitCenter"
                                     android:padding="15dp"
                                     android:src="@drawable/activity_edit_icon_look_normal"

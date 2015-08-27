@@ -425,6 +425,11 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="add_videos_to_project">Please, add videos to project</string>
     <string name="videos_removed">Clear videos from project, record or add new videos</string>
 
+    <!-- Drawer -->
+    <string name="error_rate_app">Could not launch Google Play</string>
+    <string name="exit_app_title">Shut down</string>
+    <string name="exit_app_message">Do you want to close the application?</string>
+
 
 
 </resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:state_pressed="true">
+    <bitmap android:src="@drawable/activity_menu_fragment_navigator_rate_pressed"/>
+  </item>
+  <item>
+    <bitmap android:src="@drawable/activity_menu_fragment_navigator_rate_normal"/>
+  </item>
+</selector>
