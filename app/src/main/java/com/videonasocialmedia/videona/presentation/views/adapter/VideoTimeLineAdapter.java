@@ -10,6 +10,8 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideoInsertedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -65,7 +67,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public void remove(int itemPosition) {
         videoList.remove(itemPosition);
         notifyItemRemoved(itemPosition);
-        EventBus.getDefault().post(new UpdateProjectDuration(Project.getInstance(null, null, null).getDuration()));
+        EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
+        EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
     }
 
     @Override

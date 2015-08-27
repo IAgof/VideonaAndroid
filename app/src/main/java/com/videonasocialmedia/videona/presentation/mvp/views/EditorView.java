@@ -24,4 +24,6 @@ public interface EditorView {
 
     void updateProjectDuration(int projectDuration);
 
+    void updateNumVideosInProject(int numVideos);
+
 }

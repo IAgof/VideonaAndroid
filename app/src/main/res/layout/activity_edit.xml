@@ -196,7 +196,13 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="9" >
-
+                                <TextView
+                                    android:id="@+id/num_videos"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="0"
+                                    android:textColor="@color/videona_blue_5"
+                                    android:gravity="center"/>
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
