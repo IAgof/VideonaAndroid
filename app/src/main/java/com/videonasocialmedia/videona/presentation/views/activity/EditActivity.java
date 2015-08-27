@@ -37,6 +37,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
@@ -47,10 +48,13 @@ import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenu
 import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.DuplicateClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.IOException;
@@ -66,7 +70,7 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener {
+        OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -74,6 +78,10 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     ImageButton scissorButton;
     @InjectView(R.id.edit_button_audio)
     ImageButton audioFxButton;
+    @InjectView(R.id.project_duration)
+    TextView projectDuration;
+    @InjectView(R.id.num_videos)
+    TextView numVideos;
 
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
@@ -229,6 +237,16 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void updateProjectDuration(int time) {
+        projectDuration.setText(TimeUtils.toFormattedTime(time));
+    }
+
+    @Override
+    public void updateNumVideosInProject(int num) {
+        numVideos.setText(String.valueOf(num));
     }
 
     @Override
@@ -484,6 +502,40 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         scissorsFxMenuFragment.habilitateTrashButton();
     }
 
+    @Override
+    public void duplicateSelectedClip() {
+        int positionInAdapter = getCurrentPosition();
+        if(positionInAdapter < 0) {
+            Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
+        } else {
+            editPresenter.duplicateClip(getCurrentVideo(), positionInAdapter);
+        }
+    }
+
+    private Video getCurrentVideo() {
+        // TODO change this code to videotimeline fragment
+        return previewVideoListFragment.getCurrentVideo();
+    }
+
+    private int getCurrentPosition() {
+        // TODO change this code to videotimeline fragment
+        return previewVideoListFragment.getCurrentPosition();
+    }
+
+    @Override
+    public void razorSelectedClip() {
+        int positionInAdapter = getCurrentPosition();
+        if(positionInAdapter < 0) {
+            Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
+        } else {
+            int timeVideoInSeekBarInMsec = previewVideoListFragment.getCurrentVideoTimeInMsec(positionInAdapter);
+            if(timeVideoInSeekBarInMsec > 0) {
+                editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.invalidRazorTime, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     /**
      * OnClick buttons, tracking Google Analytics

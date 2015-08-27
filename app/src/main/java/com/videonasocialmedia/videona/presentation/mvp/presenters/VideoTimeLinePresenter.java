@@ -48,7 +48,6 @@ public class VideoTimeLinePresenter implements OnVideosRetrieved, OnReorderMedia
         //TODO if there is no list notify the user
     }
 
-
     public void start() {
         EventBus.getDefault().register(this);
         obtainVideos();

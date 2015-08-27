@@ -22,4 +22,8 @@ public interface EditorView {
 
     void showMessage(int stringToast);
 
+    void updateProjectDuration(int projectDuration);
+
+    void updateNumVideosInProject(int numVideos);
+
 }

@@ -18,21 +18,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:orientation="horizontal"
-        >
-
-
-        <ImageView
-            android:id="@+id/imageBetaLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center"
-            android:contentDescription="Beta Label"
-            android:src="@drawable/beta_label" />
+        android:orientation="horizontal" >
 
         <LinearLayout
             android:orientation="horizontal"
@@ -171,7 +157,25 @@
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="9"></RelativeLayout>
+                                android:layout_weight="9">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@android:color/black"
+                                        android:src="@drawable/edit_activity_icon_timer"/>
+                                    <TextView
+                                        android:id="@+id/project_duration"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/videona_blue_5"
+                                        android:text="00:00"/>
+                                </LinearLayout>
+                            </RelativeLayout>
 
                             <RelativeLayout
                                 android:layout_width="0dp"
@@ -194,7 +198,13 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="9" >
-
+                                <TextView
+                                    android:id="@+id/num_videos"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:text="0"
+                                    android:textColor="@color/videona_blue_5"
+                                    android:gravity="center"/>
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>

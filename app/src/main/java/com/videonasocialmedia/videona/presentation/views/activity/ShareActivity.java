@@ -209,10 +209,6 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     }
 
     public void initMediaPlayer(final String videoPath) {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.VISIBLE);
         mediaController.setAnchorView(videoView);

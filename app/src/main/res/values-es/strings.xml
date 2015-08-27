@@ -122,6 +122,8 @@
     <string name="confirmDeleteVideosFromProjectTitle">Borrar vídeos del proyecto</string>
     <string name="confirmDeleteVideosFromProjectMessage">¿Desea eliminar estos elementos?</string>
     <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
+    <string name="addVideosToProject">Por favor, graba o añade nuevos vídeos</string>
+    <string name="invalidRazorTime">Por favor, selecciona un instante de tiempo para cortar el vídeo</string>
 
     <!-- Activity About -->
     <string name="aboutUsTitle"><u>Sobre nosotros</u></string>
