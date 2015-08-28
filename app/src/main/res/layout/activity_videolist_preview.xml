@@ -86,7 +86,7 @@
             android:indeterminate="false"
             android:longClickable="true"
             android:maxHeight="2dp"
-            android:progressDrawable="@color/videona_blue_5"
+            android:progressDrawable="@color/videona_red_1"
             android:layout_alignBottom="@+id/edit_preview_player" />
 
 </RelativeLayout>
