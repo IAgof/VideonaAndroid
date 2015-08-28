@@ -12,13 +12,28 @@
     android:id="@+id/activity_edit_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="#000000">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal" >
+
+        android:orientation="horizontal"
+        >
+
+
+        <ImageView
+            android:id="@+id/imageBetaLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:contentDescription="Beta Label"
+            android:src="@drawable/beta_label"
+            android:visibility="invisible" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -44,13 +59,13 @@
                         android:layout_weight="9">
 
                         <ImageButton
-                            android:id="@+id/buttonCancelEditActivity"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:id="@+id/button_navigate_drawer"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
-                            android:padding="15dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/edit_activity_button_cancel_selector" />
+                            android:padding="20dp"
+                            android:src="@drawable/common_icon_drawer" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -71,12 +86,12 @@
 
                                 <ImageButton
                                     android:id="@+id/edit_button_scissor"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/pastel_palette_green"
-                                    android:padding="15dp"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
                                     android:scaleType="fitCenter"
-                                    android:src="@drawable/edit_activity_button_scissor_selector" />
+                                    android:padding="16dp"
+                                    android:src="@drawable/edit_activity_button_scissor_selector"
+                                    android:background="@null" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -88,11 +103,11 @@
                                     android:id="@+id/edit_button_audio"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="@color/pastel_palette_blue"
-                                    android:padding="15dp"
+                                    android:background="@null"
                                     android:scaleType="fitCenter"
-                                    android:src="@drawable/edit_activity_button_audio_selector" />
+                                    android:padding="16dp"
+                                    android:src="@drawable/edit_activity_button_audio_selector"
+                                    android:layout_weight="1" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -104,12 +119,12 @@
                                     android:id="@+id/edit_button_fx"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:alpha="0.2"
-                                    android:background="@color/pastel_palette_red"
-                                    android:padding="15dp"
+                                    android:background="@null"
                                     android:scaleType="fitCenter"
-                                    android:src="@drawable/activity_edit_icon_fx_normal" />
+                                    android:padding="16dp"
+                                    android:src="@drawable/activity_edit_icon_fx_normal"
+                                    android:layout_weight="1"
+                                    android:alpha="0.2" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -121,11 +136,11 @@
                                     android:id="@+id/edit_button_look"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:alpha="0.2"
-                                    android:background="@color/pastel_palette_yellow"
-                                    android:padding="15dp"
+                                    android:background="@null"
                                     android:scaleType="fitCenter"
-                                    android:src="@drawable/activity_edit_icon_look_normal" />
+                                    android:padding="16dp"
+                                    android:src="@drawable/activity_edit_icon_look_normal"
+                                    android:alpha="0.2" />
                             </RelativeLayout>
                         </LinearLayout>
                     </RelativeLayout>
@@ -191,7 +206,7 @@
                                     android:layout_centerVertical="true"
                                     android:text="@string/edit_title_name"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:textColor="@color/videona_blue_5" />
+                                    android:textColor="@color/videona_blue_6" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -242,15 +257,14 @@
                                     android:orientation="vertical">
 
                                     <RelativeLayout
-                                        android:id="@+id/edit_center_center_layout"
-                                        android:layout_width="match_parent"
+                                        android:layout_width="fill_parent"
                                         android:layout_height="0dp"
-                                        android:layout_weight="32">
+                                        android:layout_weight="32"
+                                        android:id="@+id/edit_center_center_layout" >
 
                                         <LinearLayout
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:orientation="vertical">
+                                            android:layout_height="match_parent">
 
                                             <FrameLayout
                                                 android:id="@+id/edit_fragment_trim_preview"
@@ -270,7 +284,6 @@
                                                 android:id="@+id/edit_fragment_all_preview"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
-                                                android:layout_gravity="center_horizontal"
                                                 android:visibility="visible" />
                                         </LinearLayout>
                                     </RelativeLayout>
@@ -325,8 +338,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
-                            android:padding="15dp"
                             android:scaleType="fitCenter"
+                            android:padding="20dp"
                             android:src="@drawable/edit_activity_icon_save_selector" />
                     </RelativeLayout>
 

@@ -6,16 +6,6 @@
     android:layout_height="fill_parent"
     android:clickable="true">
 
-    <ImageButton
-        android:id="@+id/fragment_navigator_settings_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:background="@null"
-        android:src="@drawable/common_button_settings_selector" />
-
     <LinearLayout
 
         android:layout_width="wrap_content"
@@ -26,56 +16,242 @@
         android:layout_marginTop="0dp"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/fragment_navigator_record_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@null"
-            android:src="@drawable/common_icon_film_normal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter" />
+    </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/fragment_navigator_edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="8dp"
-            android:background="@null"
-            android:src="@drawable/common_icon_edit_normal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/fragment_navigator_share_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@null"
-            android:src="@drawable/common_icon_redsocial_normal"
-            android:layout_weight="1"
-            android:scaleType="fitCenter" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9">
 
-        <ImageButton
-            android:id="@+id/fragment_navigator_game_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="9"
+                    android:layout_marginLeft="8dp">
+
+                    <ImageButton
+                        android:id="@+id/fragment_navigator_drawer_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="false"
+                        android:background="@null"
+                        android:src="@drawable/common_icon_drawer"
+                        android:layout_centerInParent="true"
+                        android:padding="16dp"
+                        android:layout_weight="9"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="47"></RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="9">
+
+                    <ImageButton
+                        android:id="@+id/fragment_navigator_rate_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="false"
+                        android:background="@null"
+                        android:src="@drawable/activity_menu_fragment_nagivator_rate"
+                        android:layout_centerInParent="true"
+                        android:padding="16dp"
+                        android:layout_weight="9"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2"></RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="9"
+                    android:layout_marginRight="8dp">
+
+                    <ImageButton
+                        android:id="@+id/fragment_navigator_settings_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="false"
+                        android:background="@null"
+                        android:src="@drawable/activity_menu_fragment_nagivator_settings"
+                        android:layout_centerInParent="true"
+                        android:padding="16dp"
+                        android:layout_weight="9"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="27">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginBottom="48dp">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="7" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="17" >
+
+                        <ImageButton
+                            android:id="@+id/fragment_navigator_record_button"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:background="@null"
+                            android:src="@drawable/activity_menu_fragment_nagivator_record"
+                            android:layout_weight="1"
+                            android:scaleType="fitCenter"
+                            android:layout_centerInParent="true"
+                            android:padding="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="17" >
+
+                        <ImageButton
+                            android:id="@+id/fragment_navigator_edit_button"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:background="@null"
+                            android:src="@drawable/activity_menu_fragment_nagivator_edit"
+                            android:layout_weight="1"
+                            android:scaleType="fitCenter"
+                            android:layout_centerInParent="true"
+                            android:padding="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="8dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="17" >
+
+                        <ImageButton
+                            android:id="@+id/fragment_navigator_share_button"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:background="@null"
+                            android:src="@drawable/activity_menu_fragment_nagivator_share"
+                            android:layout_weight="1"
+                            android:scaleType="fitCenter"
+                            android:layout_centerInParent="true"
+                            android:padding="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="17">
+
+                        <ImageButton
+                            android:id="@+id/fragment_navigator_game_button"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:background="@null"
+                            android:src="@drawable/activity_menu_fragment_game"
+                            android:layout_weight="1"
+                            android:scaleType="fitCenter"
+                            android:layout_centerInParent="true"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="8dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="5" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@null"
-            android:src="@drawable/common_icon_gamification_normal"
-            android:alpha="0.60"
-            android:layout_weight="1"
-            android:scaleType="fitCenter" />
+            android:layout_marginRight="16dp" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="71"></RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="9">
+
+                    <ImageButton
+                        android:id="@+id/fragment_navigator_exit_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="false"
+                        android:background="@null"
+                        android:src="@drawable/activity_menu_fragment_nagivator_exit"
+                        android:layout_centerInParent="true"
+                        android:padding="16dp"
+                        android:layout_gravity="right"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

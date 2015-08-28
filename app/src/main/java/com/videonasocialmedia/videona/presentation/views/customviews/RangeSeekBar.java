@@ -436,7 +436,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
 
         //paint.setColor(R.color.videona_blue_1);
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
         //paint.setColor(Color.LTGRAY);
         paint.setAlpha(200);
         paint.setAntiAlias(true);

@@ -284,7 +284,6 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
                     fragmentManager.getFragment(savedStateInstance, EDITED_FRAGMENT_TAG);
         }
 
-
         // Returns total number of pages
         @Override
         public int getCount() {

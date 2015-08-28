@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linearLayoutColorEffect"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="72dp"
+    android:layout_height="72dp">
 
 
         <ImageButton
             android:id="@+id/imageCameraEffectColor"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:background="@null"
-            android:padding="5dp"
+            android:padding="4dp"
             android:scaleType="fitCenter"
             android:src="@drawable/common_filter_ad0_none_normal"
             android:text="Color Effect" />

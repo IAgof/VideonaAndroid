@@ -37,7 +37,8 @@
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
             android:contentDescription="Beta Label"
-            android:src="@drawable/beta_label" />
+            android:src="@drawable/beta_label"
+            android:visibility="invisible" />
 
         <ImageView
             android:layout_width="1px"
@@ -47,6 +48,48 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:id="@+id/relativeLayout2"
+                android:layout_weight="9" >
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible" >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="9" >
+
+                        <ImageButton
+                            android:id="@+id/button_navigate_drawer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitCenter"
+                            android:padding="20dp"
+                            android:src="@drawable/common_icon_drawer" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="36" >
+
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 
     <!-- Left Drawrer -->

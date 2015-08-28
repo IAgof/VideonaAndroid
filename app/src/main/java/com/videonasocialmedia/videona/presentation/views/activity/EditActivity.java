@@ -70,7 +70,9 @@ import butterknife.OnClick;
  */
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
+        DrawerLayout.DrawerListener, OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
+        
+        
 
     private static EditActivity parent;
     private final String LOG_TAG = "EDIT ACTIVITY";
@@ -88,6 +90,14 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
+
+    /**
+     * Button navigation drawer
+     */
+    @InjectView(R.id.button_navigate_drawer)
+    ImageButton buttonNavigateDrawer;
+
+    private static EditActivity parent;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
     private VideoFxMenuFragment videoFxMenuFragment;
@@ -150,6 +160,8 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
         editPresenter.onCreate();
         createProgressDialog();
+
+        drawerLayout.setDrawerListener(this);
     }
 
     private void createProgressDialog() {
@@ -187,9 +199,12 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         super.onDestroy();
     }
 
-    @OnClick(R.id.buttonCancelEditActivity)
-    public void cancelEditActivity() {
-        this.onBackPressed();
+
+    @OnClick(R.id.button_navigate_drawer)
+    public void navigationDrawerListener() {
+
+        drawerLayout.openDrawer(navigatorView);
+
     }
 
     @OnClick(R.id.buttonOkEditActivity)
@@ -559,7 +574,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     /**
      * OnClick buttons, tracking Google Analytics
      */
-    @OnClick({R.id.buttonCancelEditActivity, R.id.buttonOkEditActivity, R.id.edit_button_fx,
+    @OnClick({R.id.button_navigate_drawer, R.id.buttonOkEditActivity, R.id.edit_button_fx,
             R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
@@ -574,8 +589,8 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         Log.d(LOG_TAG, "sendButtonTracked");
         String label;
         switch (id) {
-            case R.id.buttonCancelEditActivity:
-                label = "Cancel, return to the camera";
+            case R.id.button_navigate_drawer:
+                label = "Navigation drawer, show drawer options";
                 break;
             case R.id.buttonOkEditActivity:
                 label = "Ok, export the project";
@@ -631,5 +646,25 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                 .setLabel(label)
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        buttonNavigateDrawer.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        buttonNavigateDrawer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
     }
 }

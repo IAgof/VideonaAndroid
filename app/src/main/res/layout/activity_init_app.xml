@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@android:color/black"
     tools:context=".mainActivity">
 
     <ImageView
@@ -24,6 +24,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:contentDescription="Beta Label"
-        android:layout_alignParentLeft="false" />
+        android:layout_alignParentLeft="false"
+        android:visibility="invisible" />
 
 </RelativeLayout>

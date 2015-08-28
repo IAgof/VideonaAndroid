@@ -10,7 +10,6 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,7 +31,7 @@ import butterknife.InjectView;
  * RecordActivity manages a single live record.
  */
 
-public class RecordActivity extends Activity {
+public class RecordActivity extends Activity implements DrawerLayout.DrawerListener {
 
     /**
      * LOG_TAG
@@ -42,6 +41,8 @@ public class RecordActivity extends Activity {
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_record_navigation_drawer)
     View navigatorView;
+
+
     /**
      * Record fragment
      */
@@ -59,9 +60,6 @@ public class RecordActivity extends Activity {
 
         Log.d(LOG_TAG, "onCreate");
 
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         if (savedInstanceState == null) {
@@ -70,20 +68,14 @@ public class RecordActivity extends Activity {
                     .add(R.id.record_fragment, recordFragment)
                     .commit();
         }
+
+        drawerLayout.setDrawerListener(this);
     }
 
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
-                drawerLayout.closeDrawer(navigatorView);
-            }
-        }, 2000);
-        Log.d(LOG_TAG, "onAttachedToWindow");
     }
 
     @Override
@@ -110,8 +102,13 @@ public class RecordActivity extends Activity {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
+
     public void unLockNavigator() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public void showDrawer(){
+        drawerLayout.openDrawer(navigatorView);
     }
 
     @Override
@@ -119,6 +116,7 @@ public class RecordActivity extends Activity {
 
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(navigatorView);
+
             return;
         }
 
@@ -142,7 +140,6 @@ public class RecordActivity extends Activity {
         }
     }
 
-
     public void navigateToEdit() {
 
         Log.d(LOG_TAG, "navigateToEdit");
@@ -153,4 +150,27 @@ public class RecordActivity extends Activity {
     }
 
 
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        if (recordFragment != null) {
+            recordFragment.hideNavigationDrawer();
+        }
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        if (recordFragment != null) {
+            recordFragment.showNavigationDrawer();
+        }
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
+    }
 }

@@ -38,7 +38,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/common_gallery_overlay_icon_selector_background"
             android:clickable="false"
-            android:src="@drawable/fragment_gallery_music_overlay_icon_selector_icon" />
+            android:src="@drawable/fragment_gallery_video_overlay_icon_selector_icon" />
     </RelativeLayout>
 
     <RelativeLayout
