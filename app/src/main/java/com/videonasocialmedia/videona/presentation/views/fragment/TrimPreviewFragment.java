@@ -203,11 +203,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     }
 
     @Override
-    public void seekToStartOfVideo(int videoIndex) {
-
-    }
-
-    @Override
     public void updateVideoList() {
     }
 
@@ -416,16 +411,15 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
      * @param maxValue
      */
     @Override
-    public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue) {
+    public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue,
+                                            RangeSeekBar.Thumb pressedThumb) {
         if (videoPlayer != null && videoPlayer.isPlaying()) {
             videoPlayer.pause();
         }
-        if (startTimeMs != (int) Math.round((double) minValue) && videoPlayer != null) {
+        if (pressedThumb == RangeSeekBar.Thumb.MIN)
             videoPlayer.seekTo((int) Math.round((double) minValue));
-        }
-        if (finishTimeMs != (int) Math.round((double) maxValue) && videoPlayer != null) {
+        else if (pressedThumb == RangeSeekBar.Thumb.MAX)
             videoPlayer.seekTo((int) Math.round((double) maxValue));
-        }
     }
 
     @Override

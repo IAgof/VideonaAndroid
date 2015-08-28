@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.eventbus.events.PreviewingVideoChangedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
@@ -21,6 +22,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Juan Javier Cabanas Abascal
@@ -57,7 +59,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             selectedVideoPosition = toPosition;
             notifyItemMoved(fromPositon, toPosition);
         }
-
     }
 
     @Override
@@ -82,17 +83,25 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public void finishMovement(int newPosition) {
         if (newPosition != -1)
             notifyDataSetChanged();
+        EventBus.getDefault().post(new PreviewingVideoChangedEvent(selectedVideoPosition, true));
     }
 
     private void updateSelection(int positionSelected) {
         notifyItemChanged(selectedVideoPosition);
         selectedVideoPosition = positionSelected;
         notifyItemChanged(selectedVideoPosition);
-        //TODO post event
+        EventBus.getDefault().post(new PreviewingVideoChangedEvent(selectedVideoPosition, true));
+    }
+
+    public void onEvent (PreviewingVideoChangedEvent event){
+        if (!event.fromUser){
+            updateSelection(event.previewingVideoIndex);
+        }
     }
 
     public void setVideoList(List<Video> videoList) {
         this.videoList = videoList;
+        updateSelection(0);
     }
 
     @Override
@@ -139,9 +148,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         @OnClick(R.id.timelinevideo_thumb)
         public void videoClick() {
             updateSelection(getAdapterPosition());
-//            if (clickListener != null)
-//                clickListener.onVideoClicked(this.getAdapterPosition());
-
+            clickListener.onVideoClicked(getAdapterPosition());
         }
     }
 }

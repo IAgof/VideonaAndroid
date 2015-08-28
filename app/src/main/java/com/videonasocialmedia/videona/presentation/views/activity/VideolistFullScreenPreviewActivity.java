@@ -45,7 +45,7 @@ import butterknife.OnTouch;
 /**
  * This class is used to show a preview of the selected video.
  */
-public class VideolistPreviewActivity extends Activity implements PreviewView,
+public class VideolistFullScreenPreviewActivity extends Activity implements PreviewView,
         SeekBar.OnSeekBarChangeListener {
 
     @InjectView(R.id.edit_preview_player)
@@ -220,11 +220,6 @@ public class VideolistPreviewActivity extends Activity implements PreviewView,
     @Override
     public void seekTo(int timeInMsec) {
         videoPlayer.seekTo(timeInMsec);
-    }
-
-    @Override
-    public void seekToStartOfVideo(int videoIndex) {
-
     }
 
     @Override

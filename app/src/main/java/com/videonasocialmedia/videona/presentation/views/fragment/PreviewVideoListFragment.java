@@ -15,14 +15,11 @@ import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -31,7 +28,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -51,8 +47,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
-import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
-import com.videonasocialmedia.videona.presentation.views.activity.VideolistPreviewActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.VideolistFullScreenPreviewActivity;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.IOException;
@@ -61,7 +56,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.InjectViews;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import de.greenrobot.event.EventBus;
@@ -70,10 +64,8 @@ import de.greenrobot.event.EventBus;
  * This class is used to show the right panel of the audio fx menu
  */
 public class PreviewVideoListFragment extends Fragment implements PreviewView,
-        TrimView,
         SeekBar.OnSeekBarChangeListener {
 
-    protected Handler handler = new Handler();
     @InjectView(R.id.edit_preview_player)
     VideoView preview;
     @InjectView(R.id.edit_button_play)
@@ -84,34 +76,24 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     TextView startTimeTag;
     @InjectView(R.id.edit_text_end_trim)
     TextView stopTimeTag;
+
     //Hide relativeLayout, needed to show trimming bar
     //TODO change with EventBus
     @InjectView(R.id.relativeLayoutPreviewVideo)
     RelativeLayout relativeLayoutPreviewVideoTrim;
-    @InjectViews({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
-            R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6, R.id.imageViewFrame7,
-            R.id.imageViewFrame8})
-    List<ImageView> videoThumbs;
-    private final Handler thumbCreationHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            ImageView currentThumb = videoThumbs.get(msg.what);
-            currentThumb.setImageBitmap((Bitmap) msg.obj);
-            currentThumb.setScaleType(ImageView.ScaleType.FIT_XY);
-        }
-    };
+
+    protected Handler handler = new Handler();
     private PreviewPresenter previewPresenter;
     private MediaController mediaController;
     private MediaPlayer videoPlayer;
     private MediaPlayer musicPlayer;
-    private VideoPlayerListener videoPlayerListener;
     private Music music;
     private Project project;
     private int projectDuration = 0;
     private List<Video> movieList;
     private List<Integer> videoStartTimeInProject;
     private List<Integer> videoStopTimeInProject;
-    private int currentVideoIndex = -1;
+    private int currentVideoIndex = 0;
     private int instantTime = 0;
     private final Runnable updateTimeTask = new Runnable() {
         @Override
@@ -174,6 +156,27 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     public void onStop() {
         super.onStop();
     }
+
+    public Video getCurrentVideo() {
+        if(!movieList.isEmpty()) {
+            return movieList.get(currentVideoIndex);
+        } else {
+            return null;
+        }
+    }
+
+    public int getCurrentPosition() {
+        return currentVideoIndex;
+    }
+
+    public int getCurrentTimeInMsec() {
+        return seekBar.getProgress();
+    }
+
+    public int getCurrentVideoTimeInMsec(int positionInAdapter) {
+        return seekBar.getProgress() - videoStartTimeInProject.get(positionInAdapter);
+    }
+
 
     @OnTouch(R.id.edit_preview_player)
     public boolean onTouchPreview(MotionEvent event) {
@@ -279,15 +282,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
 
     @Override
     public void seekTo(int timeInMsec) {
-        if (videoPlayer!=null)
+        if (videoPlayer != null)
             videoPlayer.seekTo(timeInMsec);
-    }
-
-
-    @Override
-    public void seekToStartOfVideo(int videoIndex) {
-        int time= videoStartTimeInProject.get(videoIndex);
-        seekTo(time);
     }
 
     @Override
@@ -319,7 +315,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         if (movieList.size() > 0) {
             Video video = getVideoByProgress(instantTime);
             currentVideoIndex = getPosition(video);
-            EventBus.getDefault().post(new PreviewingVideoChangedEvent(currentVideoIndex, false));
             int timeInMsec = instantTime - videoStartTimeInProject.get(currentVideoIndex) +
                     movieList.get(currentVideoIndex).getFileStartTime();
             if (isFullScreenBack) {
@@ -345,7 +340,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         preview.setMediaController(mediaController);
         preview.canSeekBackward();
         preview.canSeekForward();
-        videoPlayerListener = new VideoPlayerListener();
         preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -375,7 +369,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             @Override
             public void onCompletion(MediaPlayer mp) {
                 currentVideoIndex++;
-                EventBus.getDefault().post(new PreviewingVideoChangedEvent(currentVideoIndex, false));
                 if (hasNextVideoToPlay()) {
                     playNextVideo(movieList.get(currentVideoIndex),
                             movieList.get(currentVideoIndex).getFileStartTime());
@@ -402,7 +395,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
 
 
     private void playNextVideo(final Video video, final int instantToStart) {
-
         preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -436,7 +428,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             @Override
             public void onCompletion(MediaPlayer mp) {
                 currentVideoIndex++;
-                EventBus.getDefault().post(new PreviewingVideoChangedEvent(currentVideoIndex, false));
                 if (hasNextVideoToPlay()) {
                     playNextVideo(movieList.get(currentVideoIndex),
                             movieList.get(currentVideoIndex).getFileStartTime());
@@ -482,6 +473,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 Video video = getVideoByProgress(progress);
                 int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
                         movieList.get(currentVideoIndex).getFileStartTime();
+                EventBus.getDefault().post(new PreviewingVideoChangedEvent(currentVideoIndex,false));
                 if (videoPlayer != null) {
                     playNextVideo(video, timeInMsec);
                 } else {
@@ -492,6 +484,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 seekBar.setProgress(0);
             }
         }
+
     }
 
     private Video getVideoByProgress(int progress) {
@@ -518,7 +511,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     }
 
 
-
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
     }
@@ -538,6 +530,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                     if (isEndOfVideo()) {
                         currentVideoIndex++;
                         if (hasNextVideoToPlay()) {
+                            EventBus.getDefault().post(new PreviewingVideoChangedEvent(currentVideoIndex,false));
                             playNextVideo(movieList.get(currentVideoIndex),
                                     movieList.get(currentVideoIndex).getFileStartTime());
                         } else {
@@ -587,26 +580,11 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         }
     }
 
-    @Override
-    public void showTrimBar(int videoDuration, int leftMarkerPosition, int RightMarkerPosition) {
-
-    }
-
-    @Override
-    public void createAndPaintVideoThumbs(String videoPath, int videoDuration) {
-
-    }
-
-    @Override
-    public void refreshDurationTag(int duration) {
-
-    }
-
-    public void refreshStartTimeTag(int time) {
+    private void refreshStartTimeTag(int time) {
         startTimeTag.setText(TimeUtils.toFormattedTime(time));
     }
 
-    public void refreshStopTimeTag(int time) {
+    private void refreshStopTimeTag(int time) {
         stopTimeTag.setText(TimeUtils.toFormattedTime(time));
     }
 
@@ -614,7 +592,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     public void onClickFullScreenInMode() {
         if (isVideosOnProject()) {
             isFullScreenBack = true;
-            Intent i = new Intent(this.getActivity(), VideolistPreviewActivity.class);
+            Intent i = new Intent(this.getActivity(), VideolistFullScreenPreviewActivity.class);
             //i.putExtra("TIME", seekBar.getProgress());
             i.putExtra("TIME", 0);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -653,27 +631,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 .setAction("button clicked")
                 .setLabel(label)
                 .build());
-        GoogleAnalytics.getInstance(this.getActivity().getApplication()
-                .getBaseContext()).dispatchLocalHits();
-    }
-
-
-    class VideoPlayerListener implements MediaPlayer.OnPreparedListener,
-            MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
-        @Override
-        public void onCompletion(MediaPlayer mp) {
-
-        }
-
-        @Override
-        public boolean onError(MediaPlayer mp, int what, int extra) {
-            return false;
-        }
-
-        @Override
-        public void onPrepared(MediaPlayer mp) {
-
-        }
+        GoogleAnalytics.getInstance(this.getActivity().getApplication().getBaseContext())
+                .dispatchLocalHits();
     }
 
 }

@@ -31,7 +31,7 @@ import butterknife.InjectView;
 /**
  * This class is used to show a preview of the selected video.
  */
-public class VideoPreviewActivity extends Activity implements OnPreparedListener, OnErrorListener {
+public class VideoFullScreenPreviewActivity extends Activity implements OnPreparedListener, OnErrorListener {
 
     @InjectView(R.id.videoView)
     VideoView videoView;
@@ -110,13 +110,13 @@ public class VideoPreviewActivity extends Activity implements OnPreparedListener
      * Shows an alert dialog if an error occurs and returns to the previous activity
      */
     private void showError() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(VideoPreviewActivity.this,
+        AlertDialog.Builder builder = new AlertDialog.Builder(VideoFullScreenPreviewActivity.this,
                 AlertDialog.THEME_HOLO_LIGHT);
         builder.setMessage(R.string.invalid_video)
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        (VideoPreviewActivity.this).finish();
+                        (VideoFullScreenPreviewActivity.this).finish();
                     }
                 });
         AlertDialog alert = builder.create();

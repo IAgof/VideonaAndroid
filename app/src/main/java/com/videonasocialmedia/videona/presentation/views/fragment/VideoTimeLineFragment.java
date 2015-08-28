@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.app.usage.UsageEvents;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Juan Javier Cabanas Abascal
@@ -75,6 +77,7 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
     public void onPause() {
         super.onPause();
         presenter.pause();
+        EventBus.getDefault().unregister(adapter);
 }
 
     @Override
@@ -89,6 +92,9 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
             initRecycler();
         adapter.setVideoList(videoList);
         adapter.notifyDataSetChanged();
+        if (!EventBus.getDefault().isRegistered(adapter)){
+            EventBus.getDefault().register(adapter);
+        }
     }
 
     @Override
