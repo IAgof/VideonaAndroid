@@ -71,8 +71,6 @@ import butterknife.OnClick;
 public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
         DrawerLayout.DrawerListener, OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
-        
-        
 
     private static EditActivity parent;
     private final String LOG_TAG = "EDIT ACTIVITY";
@@ -85,19 +83,15 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     TextView projectDuration;
     @InjectView(R.id.num_videos)
     TextView numVideos;
-
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
-
     /**
      * Button navigation drawer
      */
     @InjectView(R.id.button_navigate_drawer)
     ImageButton buttonNavigateDrawer;
-
-    private static EditActivity parent;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
     private VideoFxMenuFragment videoFxMenuFragment;
@@ -400,7 +394,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         if (!f.isAdded()) {
             if (f instanceof TrimPreviewFragment) {
                 //TODO HAZ VISIBLE TIC
-            }else if (f instanceof PreviewVideoListFragment) {
+            } else if (f instanceof PreviewVideoListFragment) {
                 //TODO HAZ VISIBLE DISCO
             }
             FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -520,11 +514,11 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     public void duplicateSelectedClip() {
         int positionInAdapter = getCurrentPosition();
-        if(positionInAdapter < 0) {
+        if (positionInAdapter < 0) {
             Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
         } else {
             editPresenter.duplicateClip(getCurrentVideo(), positionInAdapter);
-            if(trimFragment != null && trimFragment.isVisible()) {
+            if (trimFragment != null && trimFragment.isVisible()) {
                 switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
                 this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
             }
@@ -542,14 +536,14 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     public void cutSelectedClip() {
         int positionInAdapter = getCurrentPosition();
-        if(positionInAdapter < 0) {
+        if (positionInAdapter < 0) {
             Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
         } else {
             int timeVideoInSeekBarInMsec = calculateCutPoint(positionInAdapter);
             Log.d("seekbar", String.valueOf(timeVideoInSeekBarInMsec));
-            if(timeVideoInSeekBarInMsec > 0) {
+            if (timeVideoInSeekBarInMsec > 0) {
                 Video video = getCurrentVideo();
-                if(trimFragment != null && trimFragment.isVisible()) {
+                if (trimFragment != null && trimFragment.isVisible()) {
                     editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
                     switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
                     this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
@@ -564,9 +558,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     private int calculateCutPoint(int positionInAdapter) {
         int timeVideoInSeekBarInMsec = 0;
-        if(previewVideoListFragment.isVisible())
+        if (previewVideoListFragment.isVisible())
             timeVideoInSeekBarInMsec = previewVideoListFragment.getCurrentVideoTimeInMsec(positionInAdapter);
-        else if(trimFragment.isVisible())
+        else if (trimFragment.isVisible())
             timeVideoInSeekBarInMsec = trimFragment.getCurrentVideoTimeInMsec();
         return timeVideoInSeekBarInMsec;
     }
