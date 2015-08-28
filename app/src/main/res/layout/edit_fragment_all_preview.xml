@@ -16,14 +16,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_horizontal|bottom"
         android:layout_weight="25">
 
         <VideoView
             android:id="@+id/edit_preview_player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true" />
 
         <ImageButton
             android:id="@+id/edit_button_fullscreen_in"
@@ -101,7 +102,7 @@
 
             <SeekBar
                 android:id="@+id/edit_seek_bar"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:focusable="false"
@@ -109,8 +110,7 @@
                 android:indeterminate="false"
                 android:longClickable="true"
                 android:progressDrawable="@color/videona_red_1"
-                android:maxHeight="4dp"
-                android:layout_weight="36" />
+                android:maxHeight="4dp" />
         </LinearLayout>
 
     </RelativeLayout>
@@ -126,13 +126,5 @@
 
     </RelativeLayout>
 
-    ImageButton
-        android:id="@+id/validate_trim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/edit_activity_button_ok_selector"/>
 
 </LinearLayout>

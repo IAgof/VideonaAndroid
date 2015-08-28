@@ -47,7 +47,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="false"
                         android:background="@null"
-                        android:src="@drawable/common_icon_drawer_normal"
+                        android:src="@drawable/common_icon_drawer"
                         android:layout_centerInParent="true"
                         android:padding="16dp"
                         android:layout_weight="9"
@@ -222,18 +222,35 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" >
 
-            <ImageButton
-                android:id="@+id/fragment_navigator_exit_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="false"
-                android:background="@null"
-                android:src="@drawable/activity_menu_fragment_nagivator_exit"
-                android:layout_centerInParent="true"
-                android:padding="16dp"
-                android:layout_gravity="right"
-                android:scaleType="fitCenter" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="71"></RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="9">
+
+                    <ImageButton
+                        android:id="@+id/fragment_navigator_exit_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="false"
+                        android:background="@null"
+                        android:src="@drawable/activity_menu_fragment_nagivator_exit"
+                        android:layout_centerInParent="true"
+                        android:padding="16dp"
+                        android:layout_gravity="right"
+                        android:scaleType="fitCenter" />
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

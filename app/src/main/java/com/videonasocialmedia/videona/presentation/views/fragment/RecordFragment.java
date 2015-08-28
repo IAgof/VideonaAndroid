@@ -536,7 +536,7 @@ public class RecordFragment extends Fragment implements RecordView,
             hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
-            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_normal);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_filter_normal);
         }
         if (!relativeEffectsFxHidden) {
             hideView(relativeLayoutCameraEffectFx);
@@ -569,7 +569,7 @@ public class RecordFragment extends Fragment implements RecordView,
             hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
-            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_normal);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_filter_normal);
         } else {
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
@@ -577,7 +577,7 @@ public class RecordFragment extends Fragment implements RecordView,
             showView(relativeLayoutCameraEffectColor, Direction.UP);
             relativeEffectsColorHidden = false;
             buttonCameraEffectColor.setActivated(true);
-            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_icon_filters_pressed);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_filter_pressed);
         }
     }
 

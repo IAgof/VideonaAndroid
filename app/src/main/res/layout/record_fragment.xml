@@ -129,9 +129,9 @@
                                     android:layout_width="fill_parent"
                                     android:layout_height="fill_parent"
                                     android:id="@+id/button_navigate_drawer"
-                                    android:src="@drawable/activity_record_drawer_normal"
+                                    android:src="@drawable/activity_record_drawer"
                                     android:background="@null"
-                                    android:padding="16dp"
+                                    android:padding="20dp"
                                     android:visibility="visible"
                                     android:scaleType="fitCenter" />
                             </RelativeLayout>
