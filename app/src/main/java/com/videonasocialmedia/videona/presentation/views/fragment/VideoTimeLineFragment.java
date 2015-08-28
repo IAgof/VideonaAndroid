@@ -60,7 +60,7 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
         recyclerView.setAdapter(adapter);
 
         Drawable trashIcon = getActivity().getResources()
-                .getDrawable(R.drawable.common_icon_delete_grey);
+                .getDrawable(R.drawable.common_icon_delete_media);
         callback = new ItemTouchHelperCallback(adapter, trashIcon);
         touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);

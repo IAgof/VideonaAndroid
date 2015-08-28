@@ -13,23 +13,11 @@
     android:orientation="vertical">
 
     <ImageButton
-        android:id="@+id/edit_fragment_sound_button_fx"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:padding="16dp"
-        android:src="@drawable/edit_fragment_sound_icon_fx_normal"
-        android:alpha="0.20"
-        android:layout_weight="9"
-        android:scaleType="fitCenter" />
-
-    <ImageButton
         android:id="@+id/edit_fragment_sound_button_music"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:src="@drawable/edit_fragment_sound_icon_music_normal"
-        android:alpha="0.20"
+        android:src="@drawable/edit_fragment_sound_icon_music_pressed"
         android:layout_weight="9"
         android:scaleType="fitCenter"
         android:background="@null" />
@@ -51,7 +39,18 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:padding="16dp"
-        android:src="@drawable/activity_edit_icon_audio_normal"
+        android:src="@drawable/edit_fragment_sound_icon_equalizer_normal"
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_sound_button_fx"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="16dp"
+        android:src="@drawable/edit_fragment_sound_icon_fx_normal"
         android:alpha="0.20"
         android:layout_weight="9"
         android:scaleType="fitCenter" />

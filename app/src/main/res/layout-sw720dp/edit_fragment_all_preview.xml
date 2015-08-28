@@ -76,7 +76,7 @@
                 android:focusableInTouchMode="true"
                 android:indeterminate="false"
                 android:longClickable="true"
-                android:progressDrawable="@color/videona_blue_5"
+                android:progressDrawable="@color/videona_red_1"
                 android:maxHeight="6dp"
                 android:layout_weight="36" />
 
