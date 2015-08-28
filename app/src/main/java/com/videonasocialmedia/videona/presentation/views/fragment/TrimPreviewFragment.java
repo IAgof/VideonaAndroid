@@ -125,7 +125,6 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         mediaController = new MediaController(getActivity());
         mediaController.setVisibility(View.INVISIBLE);
         videoIndexOnTrack = this.getArguments().getInt("VIDEO_INDEX", 0);
-        presenter.init(videoIndexOnTrack);
         return view;
     }
 
@@ -140,6 +139,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Override
     public void onResume() {
         super.onResume();
+        presenter.init(videoIndexOnTrack);
         presenter.onResume();
     }
 
@@ -284,6 +284,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
                 seekBar.setProgress(videoPlayer.getCurrentPosition() - video.getFileStartTime());
+                refreshStartTimeTag(videoPlayer.getCurrentPosition());
                 if (isEndOfVideo()) {
                     videoPlayer.pause();
                 }
@@ -427,6 +428,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         if (fromUser) {
             videoPlayer.seekTo(progress + video.getFileStartTime());
             afterTrimming = false;
+            refreshStartTimeTag(progress + video.getFileStartTime());
         }
     }
 
@@ -438,4 +440,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
+    public int getCurrentVideoTimeInMsec() {
+        return seekBar.getProgress();
+    }
 }

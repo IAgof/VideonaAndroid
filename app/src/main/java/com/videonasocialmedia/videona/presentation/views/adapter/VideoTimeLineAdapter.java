@@ -114,6 +114,10 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         updateSelection(0);
     }
 
+    public int getSelectedVideoPosition() {
+        return selectedVideoPosition;
+    }
+
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();

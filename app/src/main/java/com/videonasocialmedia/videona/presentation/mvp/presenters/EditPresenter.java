@@ -112,10 +112,9 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     }
 
     public void razorClip(Video video, int positionInAdapter, int timeMs) {
-        int timeToRazorInMsec = timeMs + video.getFileStartTime();
         Video copyVideo = new Video(video);
-        video.setFileStopTime(timeToRazorInMsec);
-        copyVideo.setFileStartTime(timeToRazorInMsec);
+        video.setFileStopTime(timeMs);
+        copyVideo.setFileStartTime(timeMs);
         addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);
     }
 

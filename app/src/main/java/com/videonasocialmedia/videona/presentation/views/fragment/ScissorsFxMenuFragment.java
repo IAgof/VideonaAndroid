@@ -103,7 +103,7 @@ public class ScissorsFxMenuFragment extends Fragment {
 
     @OnClick(R.id.edit_fragment_scissors_button_razor)
     public void razorVideo() {
-        razorClipListener.razorSelectedClip();
+        razorClipListener.cutSelectedClip();
     }
 
     @OnClick(R.id.edit_fragment_scissors_button_duplicate)

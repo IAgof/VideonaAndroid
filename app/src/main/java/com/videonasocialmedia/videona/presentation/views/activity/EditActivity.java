@@ -383,6 +383,11 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     private void switchFragment(Fragment f, int panel) {
         getFragmentManager().executePendingTransactions();
         if (!f.isAdded()) {
+            if (f instanceof TrimPreviewFragment) {
+                //TODO HAZ VISIBLE TIC
+            }else if (f instanceof PreviewVideoListFragment) {
+                //TODO HAZ VISIBLE DISCO
+            }
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).commit();
         }
@@ -430,7 +435,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void onVideoClicked(int position) {
-        // this.getFragmentManager().beginTransaction().remove(videoTimeLineFragment).commit();
         trimFragment = new TrimPreviewFragment();
         Bundle args = new Bundle();
         args.putInt("VIDEO_INDEX", position);
@@ -505,32 +509,51 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
         } else {
             editPresenter.duplicateClip(getCurrentVideo(), positionInAdapter);
+            if(trimFragment != null && trimFragment.isVisible()) {
+                switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
+                this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+            }
         }
     }
 
     private Video getCurrentVideo() {
-        // TODO change this code to videotimeline fragment
-        return previewVideoListFragment.getCurrentVideo();
+        return videoTimeLineFragment.getCurrentVideo();
     }
 
     private int getCurrentPosition() {
-        // TODO change this code to videotimeline fragment
-        return previewVideoListFragment.getCurrentPosition();
+        return videoTimeLineFragment.getCurrentPosition();
     }
 
     @Override
-    public void razorSelectedClip() {
+    public void cutSelectedClip() {
         int positionInAdapter = getCurrentPosition();
         if(positionInAdapter < 0) {
             Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
         } else {
-            int timeVideoInSeekBarInMsec = previewVideoListFragment.getCurrentVideoTimeInMsec(positionInAdapter);
+            int timeVideoInSeekBarInMsec = calculateCutPoint(positionInAdapter);
+            Log.d("seekbar", String.valueOf(timeVideoInSeekBarInMsec));
             if(timeVideoInSeekBarInMsec > 0) {
-                editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
+                Video video = getCurrentVideo();
+                if(trimFragment != null && trimFragment.isVisible()) {
+                    editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
+                    switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
+                    this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+                } else {
+                    editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec + video.getFileStartTime());
+                }
             } else {
                 Toast.makeText(getApplicationContext(), R.string.invalidRazorTime, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private int calculateCutPoint(int positionInAdapter) {
+        int timeVideoInSeekBarInMsec = 0;
+        if(previewVideoListFragment.isVisible())
+            timeVideoInSeekBarInMsec = previewVideoListFragment.getCurrentVideoTimeInMsec(positionInAdapter);
+        else if(trimFragment.isVisible())
+            timeVideoInSeekBarInMsec = trimFragment.getCurrentVideoTimeInMsec();
+        return timeVideoInSeekBarInMsec;
     }
 
     /**

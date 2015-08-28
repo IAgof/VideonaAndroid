@@ -156,18 +156,6 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         super.onStop();
     }
 
-    public Video getCurrentVideo() {
-        if(!movieList.isEmpty()) {
-            return movieList.get(currentVideoIndex);
-        } else {
-            return null;
-        }
-    }
-
-    public int getCurrentPosition() {
-        return currentVideoIndex;
-    }
-
     public int getCurrentTimeInMsec() {
         return seekBar.getProgress();
     }
@@ -176,6 +164,9 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         return seekBar.getProgress() - videoStartTimeInProject.get(positionInAdapter);
     }
 
+    public void seekToCurrentVideo(int positionInAdapter) {
+        videoPlayer.seekTo(videoStartTimeInProject.get(positionInAdapter));
+    }
 
     @OnTouch(R.id.edit_preview_player)
     public boolean onTouchPreview(MotionEvent event) {

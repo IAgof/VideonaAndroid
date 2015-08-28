@@ -9,5 +9,5 @@ package com.videonasocialmedia.videona.presentation.views.listener;
 
 public interface RazorClipListener {
 
-    public void razorSelectedClip();
+    public void cutSelectedClip();
 }
