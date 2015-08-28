@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.utils;
+package com.videonasocialmedia.videona.presentation.views.customviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;

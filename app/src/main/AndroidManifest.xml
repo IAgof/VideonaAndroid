@@ -100,12 +100,12 @@
             android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name=".presentation.views.activity.VideoPreviewActivity"
+            android:name=".presentation.views.activity.VideoFullScreenPreviewActivity"
             android:label="@string/title_activity_video_player"
             android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name=".presentation.views.activity.VideolistPreviewActivity"
+            android:name=".presentation.views.activity.VideolistFullScreenPreviewActivity"
             android:screenOrientation="sensorLandscape" />
 
     </application>

@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Fragment;
+import android.app.usage.UsageEvents;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -93,6 +94,9 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
             initRecycler();
         adapter.setVideoList(videoList);
         adapter.notifyDataSetChanged();
+        if (!EventBus.getDefault().isRegistered(adapter)){
+            EventBus.getDefault().register(adapter);
+        }
     }
 
     @Override
