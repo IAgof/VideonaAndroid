@@ -195,7 +195,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:background="@null"
-                            android:src="@drawable/activity_menu_fragment_game_selector"
+                            android:src="@drawable/activity_menu_fragment_game"
                             android:layout_weight="1"
                             android:scaleType="fitCenter"
                             android:layout_centerInParent="true"
