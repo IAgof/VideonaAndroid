@@ -37,65 +37,6 @@
         android:id="@+id/record_layout">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="8">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="71"></RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="9">
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent">
-
-                            <RelativeLayout
-                                android:layout_width="fill_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.5" />
-
-                            <RelativeLayout
-                                android:layout_width="fill_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="8">
-
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="fill_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.5"></RelativeLayout>
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"></RelativeLayout>
-                </LinearLayout>
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
