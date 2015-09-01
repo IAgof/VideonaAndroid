@@ -445,6 +445,12 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     }
 
     @Override
+    public void updateSeekBarDuration(int projectDuration) {
+        seekBar.setMax(projectDuration);
+        refreshStopTimeTag(projectDuration);
+    }
+
+    @Override
     public void updateSeekBarSize() {
 
     }

@@ -354,6 +354,11 @@ public class VideolistFullScreenPreviewActivity extends Activity implements Prev
     }
 
     @Override
+    public void updateSeekBarDuration(int projectDuration) {
+
+    }
+
+    @Override
     public void updateSeekBarSize() {
 
     }
