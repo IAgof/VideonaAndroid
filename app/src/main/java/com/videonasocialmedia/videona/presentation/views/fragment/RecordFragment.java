@@ -971,15 +971,6 @@ public class RecordFragment extends Fragment implements RecordView,
             case R.drawable.common_filter_ad8_sepia_normal:
                 label = "Sepia color filter";
                 break;
-            case R.drawable.common_filter_ad9_sketch_normal:
-                label = "Sketch color filter";
-                break;
-            case R.drawable.common_filter_ad10_solarize_normal:
-                label = "Solarize color filter";
-                break;
-            case R.drawable.common_filter_ad11_whiteboard_normal:
-                label = "Whiteboard color filter";
-                break;
             case R.drawable.common_filter_fx_fx0_none_normal:
                 label = "None fx filter";
                 break;

@@ -43,7 +43,7 @@ public class ScissorsFxMenuFragment extends Fragment {
 
     private final String LOG_TAG = "ScissorsFxMenuFragment";
 
-    @InjectView(R.id.edit_fragment_scissors_button_crop)
+    @InjectView(R.id.edit_fragment_scissors_button_trash)
     ImageButton trashButton;
 
     /*CONFIG*/
@@ -111,7 +111,7 @@ public class ScissorsFxMenuFragment extends Fragment {
         duplicateClipListener.duplicateSelectedClip();
     }
 
-    @OnClick(R.id.edit_fragment_scissors_button_crop)
+    @OnClick(R.id.edit_fragment_scissors_button_trash)
     public void clearProject() {
         Log.d(LOG_TAG, "clearProject");
         callbackRemoveAllProject.onRemoveAllProjectSelected();
@@ -126,7 +126,7 @@ public class ScissorsFxMenuFragment extends Fragment {
 
     @OnClick({R.id.edit_fragment_scissors_button_razor, R.id.edit_fragment_scissors_button_duplicate,
             R.id.edit_fragment_scissors_button_add_clip,
-            R.id.edit_fragment_scissors_button_crop})
+            R.id.edit_fragment_scissors_button_trash})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -148,7 +148,7 @@ public class ScissorsFxMenuFragment extends Fragment {
             case R.id.edit_fragment_scissors_button_duplicate:
                 label = "Go to duplicate of edit fragment scissor";
                 break;
-            case R.id.edit_fragment_scissors_button_crop:
+            case R.id.edit_fragment_scissors_button_trash:
                 label = "Go to delete project of edit fragment scissor";
                 break;
             default:
