@@ -36,6 +36,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.eventbus.events.PreviewingVideoChangedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
@@ -63,6 +64,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 
 /**
@@ -340,7 +342,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             videoTimeLineFragment = new VideoTimeLineFragment();
         }
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
-        scissorsFxMenuFragment.habilitateTrashButton();
+        //scissorsFxMenuFragment.habilitateTrashButton();
 
         if (trimFragment != null) {
             this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
@@ -405,13 +407,14 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         getFragmentManager().executePendingTransactions();
         if (!f.isAdded()) {
             if (f instanceof TrimPreviewFragment) {
-                //TODO HAZ VISIBLE TIC
                 buttonOkEditActivity.setVisibility(View.GONE);
                 buttonOkTrimDetail.setVisibility(View.VISIBLE);
             } else if (f instanceof PreviewVideoListFragment) {
-                //TODO HAZ VISIBLE DISCO
-                buttonOkTrimDetail.setVisibility(View.GONE);
-                buttonOkEditActivity.setVisibility(View.VISIBLE);
+                if(buttonOkTrimDetail.getVisibility() == View.VISIBLE) {
+                    buttonOkTrimDetail.setVisibility(View.GONE);
+                    buttonOkEditActivity.setVisibility(View.VISIBLE);
+                    EventBus.getDefault().post(new PreviewingVideoChangedEvent(0, false));
+                }
             }
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).commit();
@@ -466,7 +469,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         trimFragment.setArguments(args);
         switchFragment(trimFragment, R.id.edit_fragment_trim_preview);
         this.getFragmentManager().beginTransaction().remove(previewVideoListFragment).commit();
-        scissorsFxMenuFragment.inhabilitateTrashButton();
+        //scissorsFxMenuFragment.inhabilitateTrashButton();
     }
 
     private boolean isAlreadySelected(int musicPosition) {
@@ -495,10 +498,18 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                         editPresenter.resetProject();
                         showMessage(R.string.deletedVideosFromProject);
                         removeVideoTimelineFragment();
+                        if (trimFragment != null && trimFragment.isVisible()) {
+                            switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
+                            removeTrimFragment();
+                        }
                     }
                 })
                 .setNegativeButton(R.string.no, null)
                 .show();
+    }
+
+    private void removeTrimFragment() {
+        this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
     }
 
     private void removeVideoTimelineFragment() {
@@ -524,7 +535,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
         switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
         switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
-        scissorsFxMenuFragment.habilitateTrashButton();
+        //scissorsFxMenuFragment.habilitateTrashButton();
     }
 
     @Override

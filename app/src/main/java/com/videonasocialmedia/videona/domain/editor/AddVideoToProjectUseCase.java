@@ -10,6 +10,7 @@
 
 package com.videonasocialmedia.videona.domain.editor;
 
+import com.videonasocialmedia.videona.eventbus.events.preview.UpdateSeekBarDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideoInsertedErrorEvent;
@@ -57,6 +58,7 @@ public class AddVideoToProjectUseCase {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItemAt(position, video);
             EventBus.getDefault().post(new VideoInsertedEvent(video, position));
+            EventBus.getDefault().post(new UpdateSeekBarDurationEvent(Project.getInstance(null, null, null).getDuration()));
             EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
             EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
         } catch (IllegalItemOnTrack illegalItemOnTrack) {

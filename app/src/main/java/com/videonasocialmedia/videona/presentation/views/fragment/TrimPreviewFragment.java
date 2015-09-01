@@ -275,6 +275,11 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     }
 
     @Override
+    public void updateSeekBarDuration(int projectDuration) {
+
+    }
+
+    @Override
     public void updateSeekBarSize() {
         seekBar.setProgress(0);
         seekBar.setMax(video.getDuration());
