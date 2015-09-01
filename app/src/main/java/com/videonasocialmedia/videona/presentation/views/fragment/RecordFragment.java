@@ -718,12 +718,6 @@ public class RecordFragment extends Fragment implements RecordView,
         //OnBackPressed
     }
 
-    @Override
-    public void showSettingsCamera(boolean isChangeCameraSupported, boolean isFlashSupported) {
-
-        showFlash(isFlashSupported);
-        showChangeCamera(isChangeCameraSupported);
-    }
 
     private void showFlash(boolean isFlashSupported) {
         if (isFlashSupported) {

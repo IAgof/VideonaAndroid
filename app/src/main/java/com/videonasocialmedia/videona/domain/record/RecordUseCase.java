@@ -20,7 +20,6 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffect
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSessionConfigListener;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSettingsCameraListener;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -228,13 +227,6 @@ public class RecordUseCase {
         } else {
             return SystemClock.uptimeMillis() - timeColorEffect;
         }
-    }
-
-    /**
-     * Get camera settings
-     */
-    public void getSettingsCamera(OnSettingsCameraListener listener, Camera camera) {
-        listener.onSettingsCameraSuccess(supportChangeCamera(camera), supportFlashMode(camera));
     }
 
 
