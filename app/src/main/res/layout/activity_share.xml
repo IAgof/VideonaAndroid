@@ -7,43 +7,46 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
+        android:layout_height="match_parent">
 
-        
-
-        <VideoView
-            android:id="@+id/share_video_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true" />
-
-        <ImageButton
-            android:id="@+id/share_button_share"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/share_activity_button_share_selector" />
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible" >
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="1px"
+                android:src="@drawable/gatito_rules"
+                android:layout_margin="0dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                />
+
+            <VideoView
+                android:id="@+id/share_video_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="visible">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
                 android:layout_weight="9" >
 
                 <ImageButton
                     android:id="@+id/button_navigate_drawer"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:scaleType="fitCenter"
                     android:padding="20dp"
@@ -51,11 +54,28 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="36" >
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="62" >
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="9">
+
+                <ImageButton
+                    android:id="@+id/share_button_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/share_activity_button_share_selector"
+                    android:padding="16dp" />
+            </RelativeLayout>
+
         </LinearLayout>
     </RelativeLayout>
 
