@@ -83,6 +83,10 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     TextView projectDuration;
     @InjectView(R.id.num_videos)
     TextView numVideos;
+    @InjectView(R.id.edit_button_ok)
+    ImageButton buttonOkEditActivity;
+    @InjectView(R.id.edit_button_ok_trim_detail)
+    ImageButton buttonOkTrimDetail;
     @InjectView(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_edit_navigation_drawer)
@@ -201,7 +205,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     }
 
-    @OnClick(R.id.buttonOkEditActivity)
+    @OnClick(R.id.edit_button_ok)
     public void okEditActivity() {
         pausePreview();
         showProgressDialog();
@@ -213,6 +217,14 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         performOnBackgroundThread(this, r);
     }
 
+    @OnClick(R.id.edit_button_ok_trim_detail)
+    public void okTrimDetail() {
+        pausePreview();
+        if (trimFragment != null && trimFragment.isVisible()) {
+            switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
+            this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+        }
+    }
 
     void pausePreview() {
         if (previewVideoListFragment.isVisible())
@@ -394,8 +406,12 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         if (!f.isAdded()) {
             if (f instanceof TrimPreviewFragment) {
                 //TODO HAZ VISIBLE TIC
+                buttonOkEditActivity.setVisibility(View.GONE);
+                buttonOkTrimDetail.setVisibility(View.VISIBLE);
             } else if (f instanceof PreviewVideoListFragment) {
                 //TODO HAZ VISIBLE DISCO
+                buttonOkTrimDetail.setVisibility(View.GONE);
+                buttonOkEditActivity.setVisibility(View.VISIBLE);
             }
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).commit();
@@ -568,7 +584,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     /**
      * OnClick buttons, tracking Google Analytics
      */
-    @OnClick({R.id.button_navigate_drawer, R.id.buttonOkEditActivity, R.id.edit_button_fx,
+    @OnClick({R.id.button_navigate_drawer, R.id.edit_button_ok, R.id.edit_button_fx,
             R.id.edit_button_audio, R.id.edit_button_scissor, R.id.edit_button_look})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
@@ -586,7 +602,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             case R.id.button_navigate_drawer:
                 label = "Navigation drawer, show drawer options";
                 break;
-            case R.id.buttonOkEditActivity:
+            case R.id.edit_button_ok:
                 label = "Ok, export the project";
                 break;
             case R.id.edit_button_fx:
