@@ -34,6 +34,8 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -51,6 +53,7 @@ import butterknife.InjectView;
 import butterknife.InjectViews;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to show the right panel of the audio fx menu
@@ -399,6 +402,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                         presenter.modifyVideoFinishTime(finishTimeMs);
                     }
                     afterTrimming = true;
+                    EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
                 }
                 return false;
             }
