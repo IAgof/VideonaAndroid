@@ -6,6 +6,7 @@ import android.app.Activity;
  * Created by jca on 9/3/15.
  */
 public interface RegisterView {
+
     public void showValidField();
 
     public void showInvalidField();

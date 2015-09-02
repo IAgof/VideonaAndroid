@@ -320,7 +320,7 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
         } else {
             seekBar.setProgress(0);
             playButton.setVisibility(View.VISIBLE);
-            currentVideoIndex = -1;
+            currentVideoIndex = 0;
             instantTime = 0;
         }
     }
@@ -550,12 +550,13 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
     private void releaseView() {
         playButton.setVisibility(View.VISIBLE);
         releaseVideoView();
-        currentVideoIndex = -1;
+        currentVideoIndex = 0;
         if (movieList.size() > 0)
             initVideoPlayer(movieList.get(currentVideoIndex),
                     movieList.get(currentVideoIndex).getFileStartTime() + 100);
         seekBar.setProgress(0);
         instantTime = 0;
+        refreshStartTimeTag(0);
         if (musicPlayer != null && musicPlayer.isPlaying()) {
             musicPlayer.pause();
             releaseMusicPlayer();
