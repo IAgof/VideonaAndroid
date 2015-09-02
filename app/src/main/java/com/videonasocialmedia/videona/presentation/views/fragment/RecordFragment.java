@@ -14,6 +14,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -36,6 +37,7 @@ import android.view.animation.Interpolator;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -112,6 +114,8 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.imageRecPoint)
     ImageView imageRecPoint;
 
+    @InjectView(R.id.linear_layout_black_background)
+    LinearLayout linearLayoutBlackBackground;
     /**
      * Button navigation drawer
      */
@@ -435,10 +439,12 @@ public class RecordFragment extends Fragment implements RecordView,
 
     public void showNavigationDrawer(){
         buttonNavigateDrawer.setVisibility(View.VISIBLE);
+        linearLayoutBlackBackground.setBackground(null);
     }
 
     public void hideNavigationDrawer(){
         buttonNavigateDrawer.setVisibility(View.INVISIBLE);
+        linearLayoutBlackBackground.setBackgroundColor(Color.BLACK);
     }
 
     /**

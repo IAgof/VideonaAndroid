@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -68,6 +70,9 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     @InjectView(R.id.activity_share_navigation_drawer)
     View navigatorView;
 
+
+    @InjectView(R.id.linear_layout_black_background)
+    LinearLayout linearLayoutBlackBackground;
     /**
      * Button navigation drawer
      */
@@ -309,6 +314,7 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     public void onDrawerOpened(View drawerView) {
 
         buttonNavigateDrawer.setVisibility(View.INVISIBLE);
+        linearLayoutBlackBackground.setBackgroundColor(Color.BLACK);
 
     }
 
@@ -316,6 +322,7 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     public void onDrawerClosed(View drawerView) {
 
         buttonNavigateDrawer.setVisibility(View.VISIBLE);
+        linearLayoutBlackBackground.setBackground(null);
     }
 
     @Override
