@@ -95,7 +95,7 @@
                     android:layout_marginBottom="4dp"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentStart="false"
-                    android:layout_alignBottom="@+id/edit_preview_player" />
+                     />
             </RelativeLayout>
 
             <RelativeLayout
