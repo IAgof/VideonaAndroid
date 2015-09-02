@@ -40,6 +40,17 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:visibility="gone">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="27dp"
+                android:background="@android:color/black"
+                android:src="@drawable/icon_number_clips"
+                android:id="@+id/gallery_image_view_clips"
+                android:layout_marginRight="4dp"
+                android:layout_gravity="center"
+                android:padding="4dp" />
+
             <TextView
                 android:id="@+id/gallery_count_selected_videos"
                 android:layout_width="wrap_content"

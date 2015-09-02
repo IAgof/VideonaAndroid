@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     ImageButton okButton;
     @InjectView(R.id.gallery_count_selected_videos)
     TextView videoCounter;
+    @InjectView(R.id.gallery_image_view_clips)
+    ImageView galleryImageViewClips;
     @InjectView(R.id.selection_mode)
     LinearLayout selectionMode;
 
@@ -218,6 +221,7 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         if(sharing) {
             countVideosSelected = 1;
             videoCounter.setVisibility(View.GONE);
+            galleryImageViewClips.setVisibility(View.GONE);
         } else {
             countVideosSelected++;
         }
