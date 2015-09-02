@@ -28,6 +28,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,6 +94,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     DrawerLayout drawerLayout;
     @InjectView(R.id.activity_edit_navigation_drawer)
     View navigatorView;
+
+    @InjectView(R.id.linear_layout_black_background)
+    LinearLayout linearLayoutBlackBackground;
     /**
      * Button navigation drawer
      */
@@ -677,11 +681,13 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     public void onDrawerOpened(View drawerView) {
         buttonNavigateDrawer.setVisibility(View.INVISIBLE);
+        linearLayoutBlackBackground.setBackgroundColor(Color.BLACK);
     }
 
     @Override
     public void onDrawerClosed(View drawerView) {
         buttonNavigateDrawer.setVisibility(View.VISIBLE);
+        linearLayoutBlackBackground.setBackground(null);
     }
 
     @Override

@@ -388,8 +388,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/linear_layout_black_background"
-            android:background="@null"></LinearLayout>
+            android:id="@+id/linear_layout_black_background"></LinearLayout>
 
     </RelativeLayout>
 
