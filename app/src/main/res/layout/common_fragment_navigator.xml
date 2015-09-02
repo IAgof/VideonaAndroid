@@ -47,7 +47,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="false"
                         android:background="@null"
-                        android:src="@drawable/common_icon_drawer_selector"
+                        android:src="@drawable/common_icon_drawer_back_selector"
                         android:layout_centerInParent="true"
                         android:padding="16dp"
                         android:layout_weight="9"
