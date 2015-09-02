@@ -295,6 +295,10 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                 refreshStartTimeTag(videoPlayer.getCurrentPosition());
                 if (isEndOfVideo()) {
                     videoPlayer.pause();
+                    playButton.setVisibility(View.VISIBLE);
+                    refreshStartTimeTag(video.getFileStartTime());
+                    seekBar.setProgress(0);
+                    videoPlayer.seekTo(video.getFileStartTime());
                 }
             }
             handler.postDelayed(updateTimeTask, 20);
