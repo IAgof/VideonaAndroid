@@ -94,7 +94,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        >
+        android:layoutMode="opticalBounds">
 
         <android.support.v4.view.PagerTabStrip
             android:id="@+id/pager_header"
@@ -103,7 +103,10 @@
             android:layout_gravity="top"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:background="@color/videona_blue_6" />
+            android:background="@color/videona_blue_6"
+            android:transitionGroup="false"
+            android:touchscreenBlocksFocus="false"
+            />
 
     </android.support.v4.view.ViewPager>
 
