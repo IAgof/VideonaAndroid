@@ -13,13 +13,15 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddMusicToProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.CheckIfVideoFilesExistUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.music.ErrorAddingMusicToProjectEvent;
-import com.videonasocialmedia.videona.eventbus.events.music.MusicRemovedFromProjectEvent;
+import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -48,6 +50,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     private RemoveVideoFromProjectUseCase removeVideoFromProjectUseCase;
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     private CheckIfVideoFilesExistUseCase checkIfVideoFilesExistUseCase;
+    private AddVideoToProjectUseCase addVideoToProjectUseCase;
     /**
      * Get media list from project use case
      */
@@ -60,24 +63,38 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     public EditPresenter(EditorView editorView) {
         this.editorView = editorView;
         exportProjectUseCase = new ExportProjectUseCase(this);
-
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addMusicToProjectUseCase = new AddMusicToProjectUseCase();
         removeVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
         checkIfVideoFilesExistUseCase = new CheckIfVideoFilesExistUseCase();
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
     }
+
+    /**
+     * on Create Presenter
+     */
+    public void onCreate() {}
 
 
     public void onResume() {
         EventBus.getDefault().register(this);
         checkIfVideoFilesExistUseCase.check();
+        EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
+        EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
     }
 
     public void onPause(){
         EventBus.getDefault().unregister(this);
     }
 
+    public void onEvent(UpdateProjectDurationEvent event){
+        editorView.updateProjectDuration(event.projectDuration);
+    }
+
+    public void onEvent(NumVideosChangedEvent event){
+        editorView.updateNumVideosInProject(event.numVideos);
+    }
 
     /**
      * Ok edit button click listener
@@ -87,6 +104,18 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         //check VideoList is not empty, if true exportProjectUseCase
         getMediaListFromProjectUseCase.getMediaListFromProject(this);
         //exportProjectUseCase.export();
+    }
+
+    public void duplicateClip(Video video, int positionInAdapter) {
+        Video copyVideo = new Video(video);
+        addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);
+    }
+
+    public void razorClip(Video video, int positionInAdapter, int timeMs) {
+        Video copyVideo = new Video(video);
+        video.setFileStopTime(timeMs);
+        copyVideo.setFileStartTime(timeMs);
+        addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);
     }
 
     public void addMusic(Music music) {

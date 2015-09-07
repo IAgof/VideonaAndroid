@@ -18,6 +18,8 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -32,7 +34,8 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -50,6 +53,7 @@ import butterknife.InjectView;
 import butterknife.InjectViews;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to show the right panel of the audio fx menu
@@ -73,8 +77,19 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @InjectView(R.id.linearLayoutRangeSeekBar)
     ViewGroup layoutSeekBar;
     @InjectViews({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
-            R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6})
+            R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6, R.id.imageViewFrame7,
+            R.id.imageViewFrame8})
     List<ImageView> videoThumbs;
+
+    private final Handler thumbCreationHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            ImageView currentThumb = videoThumbs.get(msg.what);
+            currentThumb.setImageBitmap((Bitmap) msg.obj);
+            currentThumb.setScaleType(ImageView.ScaleType.FIT_XY);
+        }
+    };
+
     RangeSeekBar<Double> trimBar;
     int videoIndexOnTrack;
     private TrimPreviewPresenter presenter;
@@ -105,17 +120,14 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_trim_preview, container, false);
+        View view = inflater.inflate(R.layout.edit_fragment_trim_preview, container, false);
         ButterKnife.inject(this, view);
-
         presenter = new TrimPreviewPresenter(this, this);
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
         mediaController = new MediaController(getActivity());
         mediaController.setVisibility(View.INVISIBLE);
         videoIndexOnTrack = this.getArguments().getInt("VIDEO_INDEX", 0);
-        presenter.init(videoIndexOnTrack);
-
         return view;
     }
 
@@ -123,12 +135,14 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     public void onDestroyView() {
         super.onDestroyView();
         handler.removeCallbacksAndMessages(null);
+        thumbCreationHandler.removeCallbacksAndMessages(null);
         ButterKnife.reset(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        presenter.init(videoIndexOnTrack);
         presenter.onResume();
     }
 
@@ -151,19 +165,20 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         return result;
     }
 
-    @OnClick(R.id.validate_trim)
     public void validateTrim() {
         onTrimConfirmListener.onTrimConfirmed();
     }
 
     @OnClick(R.id.edit_button_play)
     public void playPausePreview() {
-        if (videoPlayer.isPlaying()) {
-            pausePreview();
-        } else {
-            playPreview();
+        if (videoPlayer != null) {
+            if (videoPlayer.isPlaying()) {
+                pausePreview();
+            } else {
+                playPreview();
+            }
+            updateSeekBarProgress();
         }
-        updateSeekBarProgress();
     }
 
     @Override
@@ -257,9 +272,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         }
     }
 
-
     @Override
     public void showError(String message) {
+
+    }
+
+    @Override
+    public void updateSeekBarDuration(int projectDuration) {
 
     }
 
@@ -273,8 +292,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
                 seekBar.setProgress(videoPlayer.getCurrentPosition() - video.getFileStartTime());
+                refreshStartTimeTag(videoPlayer.getCurrentPosition());
                 if (isEndOfVideo()) {
                     videoPlayer.pause();
+                    playButton.setVisibility(View.VISIBLE);
+                    refreshStartTimeTag(video.getFileStartTime());
+                    seekBar.setProgress(0);
+                    videoPlayer.seekTo(video.getFileStartTime());
                 }
             }
             handler.postDelayed(updateTimeTask, 20);
@@ -309,30 +333,27 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
-
     @Override
     public void createAndPaintVideoThumbs(final String videoPath, final int videoDuration) {
-        Handler h = new Handler();
-        h.post(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 Size thumbSize = determineThumbsSize();
-
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                 retriever.setDataSource(videoPath);
                 for (int thumbOrder = 0; thumbOrder < videoThumbs.size(); thumbOrder++) {
                     int frameTime = getFrameTime(videoDuration, thumbOrder, videoThumbs.size());
                     try {
                         Bitmap thumbImage = createVideoThumb(retriever, thumbSize, frameTime);
-                        ImageView currentThumb = videoThumbs.get(thumbOrder);
-                        currentThumb.setImageBitmap(thumbImage);
-                        currentThumb.setScaleType(ImageView.ScaleType.FIT_XY);
+                        Message msg = thumbCreationHandler.obtainMessage(thumbOrder, thumbImage);
+                        msg.sendToTarget();
                     } catch (Exception Exception) {
                         //TODO treat exception properly. Probably do nothing is fine for the time being
                     }
                 }
             }
         });
+        t.start();
     }
 
     private Size determineThumbsSize() {
@@ -385,6 +406,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                         presenter.modifyVideoFinishTime(finishTimeMs);
                     }
                     afterTrimming = true;
+                    EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
                 }
                 return false;
             }
@@ -403,16 +425,15 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
      * @param maxValue
      */
     @Override
-    public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue) {
+    public void onRangeSeekBarValuesChanged(RangeSeekBar trimBar, Object minValue, Object maxValue,
+                                            RangeSeekBar.Thumb pressedThumb) {
         if (videoPlayer != null && videoPlayer.isPlaying()) {
             videoPlayer.pause();
         }
-        if (startTimeMs != (int) Math.round((double) minValue) && videoPlayer != null) {
+        if (pressedThumb == RangeSeekBar.Thumb.MIN)
             videoPlayer.seekTo((int) Math.round((double) minValue));
-        }
-        if (finishTimeMs != (int) Math.round((double) maxValue) && videoPlayer != null) {
+        else if (pressedThumb == RangeSeekBar.Thumb.MAX)
             videoPlayer.seekTo((int) Math.round((double) maxValue));
-        }
     }
 
     @Override
@@ -420,6 +441,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
         if (fromUser) {
             videoPlayer.seekTo(progress + video.getFileStartTime());
             afterTrimming = false;
+            refreshStartTimeTag(progress + video.getFileStartTime());
         }
     }
 
@@ -431,4 +453,7 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
     public void onStopTrackingTouch(SeekBar seekBar) {
     }
 
+    public int getCurrentVideoTimeInMsec() {
+        return seekBar.getProgress();
+    }
 }

@@ -10,6 +10,8 @@
 
 package com.videonasocialmedia.videona.domain.editor;
 
+import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
@@ -18,6 +20,8 @@ import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRemoveMediaFinishedListener;
 
 import java.util.ArrayList;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to removed videos from the project.
@@ -39,12 +43,13 @@ public class RemoveVideoFromProjectUseCase implements RemoveMediaFromProjectUseC
             correct = removeVideoItemFromTrack(media, mediaTrack);
             if (!correct) break;
         }
-
         if (correct) {
             listener.onRemoveMediaItemFromTrackSuccess();
         } else {
             listener.onRemoveMediaItemFromTrackError();
         }
+        EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
+        EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
     }
 
     /**
@@ -57,6 +62,8 @@ public class RemoveVideoFromProjectUseCase implements RemoveMediaFromProjectUseC
         boolean result;
         try {
             mediaTrack.deleteItem(video);
+            EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
+            EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
             result = true;
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             result = false;

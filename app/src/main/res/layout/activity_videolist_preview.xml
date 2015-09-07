@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity"
+    tools:context="com.videonasocialmedia.videona.presentation.views.activity.VideoFullScreenPreviewActivity"
     android:background="@android:color/black" >
 
         <VideoView
@@ -86,7 +86,7 @@
             android:indeterminate="false"
             android:longClickable="true"
             android:maxHeight="2dp"
-            android:progressDrawable="@color/videona_blue_5"
+            android:progressDrawable="@color/videona_red_1"
             android:layout_alignBottom="@+id/edit_preview_player" />
 
 </RelativeLayout>

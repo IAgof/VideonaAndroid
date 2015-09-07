@@ -14,6 +14,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -51,6 +52,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.CustomManualFocusView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraEncoderView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxAdapter;
@@ -112,11 +114,23 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.imageRecPoint)
     ImageView imageRecPoint;
 
+    @InjectView(R.id.linear_layout_black_background)
+    LinearLayout linearLayoutBlackBackground;
+    /**
+     * Button navigation drawer
+     */
+    @InjectView(R.id.button_navigate_drawer)
+    ImageButton buttonNavigateDrawer;
+
     /**
      * Button change camera
      */
     @InjectView((R.id.button_change_camera))
     ImageButton buttonChangeCamera;
+    /**
+     * Boolean to control change camera resource pressed or not
+     */
+    private boolean isCameraChanged = false;
     /**
      * Button flash mode
      */
@@ -167,17 +181,7 @@ public class RecordFragment extends Fragment implements RecordView,
     @InjectView(R.id.customManualFocusView)
     CustomManualFocusView customManualFocusView;
 
-    @InjectView(R.id.button_settings_camera)
-    ImageButton buttonSettingsCamera;
-    /**
-     * Boolean, control show settings camera options
-     */
-    private boolean isSettingsCameraPressed = false;
-    /**
-     * Relative layout to show, hide camera options
-     */
-    @InjectView(R.id.linearLayoutRecordCameraOptions)
-    LinearLayout linearLayoutRecordCameraOptions;
+
 
     /**
      * For lock the orientation to the current landscape.
@@ -340,9 +344,6 @@ public class RecordFragment extends Fragment implements RecordView,
         // AutoFocusView
         customManualFocusView.onPreviewTouchEvent(getActivity().getApplicationContext());
 
-        // Hide menu camera options
-        linearLayoutRecordCameraOptions.setVisibility(View.GONE);
-
         //TODO String text chronometer default
         chronometerRecord.setText("00:00");
 
@@ -391,6 +392,31 @@ public class RecordFragment extends Fragment implements RecordView,
 
 
     /**
+     * Navigation drawer
+     */
+    @OnClick(R.id.button_navigate_drawer)
+    public void setButtonNavigateDrawerListener(){
+
+        Log.d(LOG_TAG, "setButtonNavigateDrawerListener");
+
+        RecordActivity activity = (RecordActivity) this.getActivity();
+        activity.showDrawer();
+
+        buttonNavigateDrawer.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void showNavigationDrawer(){
+        buttonNavigateDrawer.setVisibility(View.VISIBLE);
+        linearLayoutBlackBackground.setBackground(null);
+    }
+
+    public void hideNavigationDrawer(){
+        buttonNavigateDrawer.setVisibility(View.INVISIBLE);
+        linearLayoutBlackBackground.setBackgroundColor(Color.BLACK);
+    }
+
+    /**
      * Change camera listener
      */
     @OnClick(R.id.button_change_camera)
@@ -398,10 +424,18 @@ public class RecordFragment extends Fragment implements RecordView,
 
         // Check flashMode and return to normal
         buttonFlashMode.setActivated(false);
-        buttonSettinsCameraListener();
         int rotation = this.getActivity().getWindowManager().getDefaultDisplay()
                 .getRotation();
         recordPresenter.requestOtherCamera(rotation);
+
+        if(isCameraChanged){
+            buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_normal);
+            isCameraChanged = false;
+        } else {
+            buttonChangeCamera.setImageResource(R.drawable.activity_record_change_camera_pressed);
+            isCameraChanged = true;
+        }
+
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -419,28 +453,6 @@ public class RecordFragment extends Fragment implements RecordView,
     }
 
 
-    /**
-     * Camera settings listener
-     */
-    @OnClick(R.id.button_settings_camera)
-    public void buttonSettinsCameraListener() {
-
-
-        if (isSettingsCameraPressed) {
-            // Hide menu
-            linearLayoutRecordCameraOptions.setVisibility(View.GONE);
-            buttonSettingsCamera.setActivated(false);
-            buttonSettingsCamera.setBackground(null);
-            isSettingsCameraPressed = false;
-        } else {
-            // Show menu
-            linearLayoutRecordCameraOptions.setVisibility(View.VISIBLE);
-            buttonSettingsCamera.setActivated(true);
-            buttonSettingsCamera.setBackgroundResource(R.color.transparent_palette_grey);
-            isSettingsCameraPressed = true;
-            // recordPresenter.settingsCameraListener();
-        }
-    }
 
     /**
      * Record button on click listener
@@ -473,6 +485,7 @@ public class RecordFragment extends Fragment implements RecordView,
         } else {
             recordPresenter.startRecording();
             sendButtonTracked(START_RECORDING);
+            buttonNavigateEdit.setVisibility(View.INVISIBLE);
             //stopMonitoringOrientation();
         }
     }
@@ -498,11 +511,13 @@ public class RecordFragment extends Fragment implements RecordView,
             hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_filter_normal);
         }
         if (!relativeEffectsFxHidden) {
             hideView(relativeLayoutCameraEffectFx);
             relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_normal);
         } else {
             if (cameraEffectFxAdapter == null) {
                 recordPresenter.cameraEffectFxClickListener();
@@ -510,6 +525,7 @@ public class RecordFragment extends Fragment implements RecordView,
             showView(relativeLayoutCameraEffectFx, Direction.UP);
             relativeEffectsFxHidden = false;
             buttonCameraEffectFx.setActivated(true);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_pressed);
         }
     }
 
@@ -522,11 +538,13 @@ public class RecordFragment extends Fragment implements RecordView,
             hideView(relativeLayoutCameraEffectFx);
             relativeEffectsFxHidden = true;
             buttonCameraEffectFx.setActivated(false);
+            buttonCameraEffectFx.setImageResource(R.drawable.activity_record_fx_normal);
         }
         if (!relativeEffectsColorHidden) {
             hideView(relativeLayoutCameraEffectColor);
             relativeEffectsColorHidden = true;
             buttonCameraEffectColor.setActivated(false);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_filter_normal);
         } else {
             if (cameraEffectColorAdapter == null) {
                 recordPresenter.cameraEffectColorClickListener();
@@ -534,6 +552,7 @@ public class RecordFragment extends Fragment implements RecordView,
             showView(relativeLayoutCameraEffectColor, Direction.UP);
             relativeEffectsColorHidden = false;
             buttonCameraEffectColor.setActivated(true);
+            buttonCameraEffectColor.setImageResource(R.drawable.activity_record_filter_pressed);
         }
     }
 
@@ -557,6 +576,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         return height + margins;
     }
+
 
     private void hideView(View view) {
         runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
@@ -662,19 +682,17 @@ public class RecordFragment extends Fragment implements RecordView,
 
     @Override
     public void lockNavigator() {
+
+        //Simulate swipe gesture
+
     }
 
     @Override
     public void unLockNavigator() {
-        // this.unLockNavigator();
+
+        //OnBackPressed
     }
 
-    @Override
-    public void showSettingsCamera(boolean isChangeCameraSupported, boolean isFlashSupported) {
-
-        showFlash(isFlashSupported);
-        showChangeCamera(isChangeCameraSupported);
-    }
 
     private void showFlash(boolean isFlashSupported) {
         if (isFlashSupported) {
@@ -860,7 +878,7 @@ public class RecordFragment extends Fragment implements RecordView,
      * OnClick buttons, tracking Google Analytics
      */
     @OnClick({R.id.button_record, R.id.button_flash_mode, R.id.button_camera_effect_color,
-            R.id.button_camera_effect_fx, R.id.button_settings_camera, R.id.button_change_camera})
+            R.id.button_camera_effect_fx, R.id.button_change_camera})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -888,9 +906,6 @@ public class RecordFragment extends Fragment implements RecordView,
                 break;
             case R.id.button_flash_mode:
                 label = "Flash camera";
-                break;
-            case R.id.button_settings_camera:
-                label = "Settings camera";
                 break;
             case R.id.button_camera_effect_fx:
                 label = "Fx filters";
@@ -924,15 +939,6 @@ public class RecordFragment extends Fragment implements RecordView,
                 break;
             case R.drawable.common_filter_ad8_sepia_normal:
                 label = "Sepia color filter";
-                break;
-            case R.drawable.common_filter_ad9_sketch_normal:
-                label = "Sketch color filter";
-                break;
-            case R.drawable.common_filter_ad10_solarize_normal:
-                label = "Solarize color filter";
-                break;
-            case R.drawable.common_filter_ad11_whiteboard_normal:
-                label = "Whiteboard color filter";
                 break;
             case R.drawable.common_filter_fx_fx0_none_normal:
                 label = "None fx filter";

@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
-
 /**
  * Created by jca on 7/7/15.
  */
@@ -18,7 +16,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     public ItemTouchHelperCallback(MovableItemsAdapter adapter, Drawable underSwipeIcon) {
         this.adapter = adapter;
-        this.underSwipeIcon=underSwipeIcon;
+        this.underSwipeIcon = underSwipeIcon;
     }
 
     public ItemTouchHelperCallback(MovableItemsAdapter adapter) {
@@ -48,20 +46,18 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        if (underSwipeIcon!=null && actionState==ItemTouchHelper.ACTION_STATE_SWIPE){
-            View item= viewHolder.itemView;
-            int left= item.getLeft();
-            int right= item.getRight();
-            int top= item.getTop();
-            int bottom= item.getBottom();
+        if (underSwipeIcon != null && actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            View item = viewHolder.itemView;
+            int left = item.getLeft();
+            int right = item.getRight();
+            int top = item.getTop();
 
-            int height= top-bottom;
-            int width= right-left;
+            int bottom = item.getBottom();
+            int height = top - bottom;
+            int width = right - left;
 
             //TODO remove hardcoded values
-            //underSwipeIcon.setBounds(left+50,top+100,right-50,bottom-5);
-            underSwipeIcon.setBounds(left+(width/4),top-height/2,right-width/4,bottom);
-            //underSwipeIcon.setBounds(left,top,right,bottom);
+            underSwipeIcon.setBounds(left + (width / 4), top - height / 3, right - width / 4, bottom + height / 8);
             underSwipeIcon.draw(c);
         }
     }
@@ -86,6 +82,6 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-        //adapter.finishMovement(viewHolder.getAdapterPosition());
+        adapter.finishMovement(viewHolder.getAdapterPosition());
     }
 }

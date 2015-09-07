@@ -8,47 +8,52 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <ImageButton
         android:id="@+id/edit_fragment_look_button_item1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_green"
-        android:padding="15dp"
-        android:layout_marginBottom="0.5dp"
+        android:background="@null"
+        android:padding="16dp"
         android:src="@drawable/edit_fragment_look_icon_filters_normal"
-        android:alpha="0.20" />
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
 
     <ImageButton
         android:id="@+id/edit_fragment_look_button_item2"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_purple"
-        android:padding="15dp"
-        android:layout_marginBottom="0.5dp"
+        android:background="@null"
+        android:padding="16dp"
         android:src="@drawable/edit_fragment_look_icon_sticker_normal"
-        android:alpha="0.20" />
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
 
     <ImageButton
         android:id="@+id/edit_fragment_look_button_item3"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_pink_2"
-        android:padding="15dp"
-        android:layout_marginBottom="0.5dp"
+        android:background="@null"
+        android:padding="16dp"
         android:src="@drawable/edit_fragment_look_icon_themes_normal"
-        android:alpha="0.20" />
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
 
     <ImageButton
         android:id="@+id/edit_fragment_look_button_item4"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_red"
-        android:padding="15dp"
+        android:background="@null"
+        android:padding="16dp"
         android:src="@drawable/edit_fragment_look_icon_transition_normal"
-        android:alpha="0.20" />
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
 
 </LinearLayout>

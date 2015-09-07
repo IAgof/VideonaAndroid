@@ -34,7 +34,7 @@ public class AppIntroActivity extends AppIntro3 {
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_4));
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_5));
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_6));
-        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_7));
+        //addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_7));
 
         // OPTIONAL METHODS
         // Override bar/separator color

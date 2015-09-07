@@ -56,14 +56,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final float lineHeightHalf = 0.5f * lineleft.getHeight();
     private final float lineWidthHalf = 0.5f * lineleft.getWidth();
 
-    // private final float thumbHalfWidth = 0.5f *  thumbImageRight.getWidth();
+
     private final float thumbHalfWidth = thumbImageRight.getWidth();
     private final float thumbHalfHeight = 0.5f * thumbImageRight.getHeight();
 
-    //  private final float lineHeight = 0.53f * thumbHalfHeight;
+
     private final float lineHeight = thumbHalfHeight;
-    //private final float padding = thumbHalfWidth / 2;
-    //private final float padding = thumbHalfWidth*2;
+
     private final float padding = thumbImageRight.getWidth();
     private final T absoluteMinValue, absoluteMaxValue;
     private final NumberType numberType;
@@ -293,8 +292,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                     }
 
                     if (notifyWhileDragging && listener != null) {
-                        listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue());
-
+                        listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue(), pressedThumb);
                     }
                 }
                 break;
@@ -317,7 +315,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 pressedThumb = null;
                 invalidate();
                 if (listener != null) {
-                    listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue());
+                    listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue(), pressedThumb);
                     onDraw2();
                 }
                 break;
@@ -438,7 +436,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
 
         //paint.setColor(R.color.videona_blue_1);
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
         //paint.setColor(Color.LTGRAY);
         paint.setAlpha(200);
         paint.setAntiAlias(true);
@@ -693,14 +691,14 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @author Stephan Tittel (stephan.tittel@kom.tu-darmstadt.de)
      */
     public interface OnRangeSeekBarChangeListener<T> {
-        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, T minValue, T maxValue);
+         void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, T minValue, T maxValue, Thumb thumb);
 
     }
 
     /**
      * Thumb constants (min and max).
      */
-    private static enum Thumb {
+    public enum Thumb {
         MIN, MAX
     }
 

@@ -168,7 +168,8 @@ public class Utils {
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
-        BitmapShader shader = new BitmapShader(squaredBitmap, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+        BitmapShader shader = new BitmapShader(squaredBitmap, BitmapShader.TileMode.CLAMP,
+                BitmapShader.TileMode.CLAMP);
         paint.setShader(shader);
         paint.setAntiAlias(true);
         float r = size / 2f;
@@ -178,9 +179,10 @@ public class Utils {
         return bitmap;
     }
 
-    private static Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
+    private static Bitmap addWhiteBorderToBitmap (Bitmap bmp, int borderSize) {
         int size = Math.min(bmp.getWidth(), bmp.getHeight());
-        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2,
+                bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
         Paint paint = new Paint();
         BitmapShader shader = new BitmapShader(bmp, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
@@ -196,7 +198,8 @@ public class Utils {
     }
 
     private Bitmap addWhiteBorderOriginal(Bitmap bmp, int borderSize) {
-        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2,
+                bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(bmp, borderSize, borderSize, null);

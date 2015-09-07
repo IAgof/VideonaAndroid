@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,8 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
     ImageButton okButton;
     @InjectView(R.id.gallery_count_selected_videos)
     TextView videoCounter;
+    @InjectView(R.id.gallery_image_view_clips)
+    ImageView galleryImageViewClips;
     @InjectView(R.id.selection_mode)
     LinearLayout selectionMode;
 
@@ -73,6 +77,12 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
 
         vpPager.setOnPageChangeListener(this);
         galleryPagerPresenter = new GalleryPagerPresenter(this);
+
+        PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.pager_header);
+        pagerTabStrip.setDrawFullUnderline(true);
+        pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.videona_black_1));
+        pagerTabStrip.setTextColor(getResources().getColor(R.color.videona_black_1));
+
     }
 
     @Override
@@ -218,6 +228,7 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
         if(sharing) {
             countVideosSelected = 1;
             videoCounter.setVisibility(View.GONE);
+            galleryImageViewClips.setVisibility(View.GONE);
         } else {
             countVideosSelected++;
         }
@@ -283,7 +294,6 @@ public class GalleryActivity extends Activity implements ViewPager.OnPageChangeL
             editedFragment=(VideoGalleryFragment)
                     fragmentManager.getFragment(savedStateInstance, EDITED_FRAGMENT_TAG);
         }
-
 
         // Returns total number of pages
         @Override

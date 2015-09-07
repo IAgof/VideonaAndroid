@@ -10,6 +10,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.music.MusicAddedToProjectEvent;
 import com.videonasocialmedia.videona.eventbus.events.music.MusicRemovedFromProjectEvent;
+import com.videonasocialmedia.videona.eventbus.events.preview.UpdateSeekBarDurationEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -57,6 +58,10 @@ public class PreviewPresenter implements OnVideosRetrieved {
 
     public void onEvent(MusicRemovedFromProjectEvent event){
         update();
+    }
+
+    public void onEvent(UpdateSeekBarDurationEvent event){
+        previewView.updateSeekBarDuration(event.projectDuration);
     }
 
     public void init() {

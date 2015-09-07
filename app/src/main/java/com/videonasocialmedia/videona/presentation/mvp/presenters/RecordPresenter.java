@@ -40,7 +40,7 @@ import java.util.List;
  */
 
 public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffectColorListener,
-        OnFlashModeListener, OnSettingsCameraListener, OnRemoveMediaFinishedListener,
+        OnFlashModeListener, OnRemoveMediaFinishedListener,
         OnAddMediaFinishedListener, OnSessionConfigListener, OnChangeCameraListener,
         AndroidEncoder.OnMuxerFinishedEventListener, OnRecordEventListener {
 
@@ -410,15 +410,6 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
 
     /**
-     * Settings camera button listener
-     */
-    public void settingsCameraListener() {
-
-        recordUseCase.getSettingsCamera(this, mCamEncoder.getCamera());
-
-    }
-
-    /**
      * Effect, camera effects fx button pressed
      */
     public void cameraEffectFxClickListener() {
@@ -469,13 +460,12 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     @Override
     public void onCameraEffectFxAdded(String cameraEffect, long time) {
         recordView.showCameraEffectFxSelected(cameraEffect);
-      //  mCamEncoder.setCameraEffectFx(filter);
 
     }
 
     @Override
     public void onCameraEffectFxRemoved(String cameraEffect, long time) {
-        //recordView.showCameraEffectFxSelected(cameraEffect);
+
 
     }
 
@@ -516,15 +506,6 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
     @Override
     public void onFlashModeTorchError() {
-
-    }
-
-    @Override
-    public void onSettingsCameraSuccess(boolean isChangeCameraSupported, boolean isFlashSupported) {
-
-        recordView.showSettingsCamera(isChangeCameraSupported, isFlashSupported);
-        Log.d(LOG_TAG, "onSettingsCameraSuccess isChangeCameraSupported " + isChangeCameraSupported
-                + " isFlashSupported " + isFlashSupported);
 
     }
 
