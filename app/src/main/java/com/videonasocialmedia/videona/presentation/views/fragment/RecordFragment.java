@@ -39,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -301,6 +302,7 @@ public class RecordFragment extends Fragment implements RecordView,
                 unLockNavigator();
 
                 buttonRecord.setEnabled(true);
+              //  buttonRecord.setImageAlpha(255); // (100%)
                 chronometerRecord.setText("00:00");
 
                 recordPresenter.onHostActivityPaused();
@@ -497,7 +499,7 @@ public class RecordFragment extends Fragment implements RecordView,
             recordPresenter.stopRecording();
             sendButtonTracked(STOP_RECORDING);
 
-       /*     countDownTimer = new CountDownTimer(4000, 1000) {
+            countDownTimer = new CountDownTimer(4000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
 
@@ -506,11 +508,10 @@ public class RecordFragment extends Fragment implements RecordView,
                 @Override
                 public void onFinish() {
                     Toast.makeText(getActivity().getApplicationContext(), getString(R.string.recordError), Toast.LENGTH_SHORT).show();
-                  //  reStartFragment();
+                    reStartFragment();
 
                 }
-            }.start(); */
-
+            }.start();
 
         } else {
             recordPresenter.startRecording();
@@ -524,12 +525,13 @@ public class RecordFragment extends Fragment implements RecordView,
 
         //Restart original buttonRecord view
         buttonRecord.setEnabled(true);
-
+      //  buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
+        recreateRecordFragment();
+        setupRecordPresenter();
+
     }
-
-
 
     /**
      * Camera effect on click listener
@@ -670,10 +672,11 @@ public class RecordFragment extends Fragment implements RecordView,
 
         Log.d(LOG_TAG, "navigateEditActivity() RecordActivity");
 
-      //  countDownTimer.cancel();
+        countDownTimer.cancel();
 
         //Restart original buttonRecord view
         buttonRecord.setEnabled(true);
+       // buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
         sendTrackDurationVideoRecorded(durationVideoRecorded);
@@ -700,13 +703,6 @@ public class RecordFragment extends Fragment implements RecordView,
         ft.commit();
 
 
-    }
-
-    @Override
-    public void showRestartVideo() {
-        //Restart original buttonRecord view
-        buttonRecord.setEnabled(true);
-        chronometerRecord.setText("00:00");
     }
 
 
@@ -848,7 +844,7 @@ public class RecordFragment extends Fragment implements RecordView,
     @Override
     public void showRecordStarted() {
         buttonRecord.setImageResource(R.drawable.activity_record_icon_stop_normal);
-
+       // buttonRecord.setImageAlpha(125); // (50%)
     }
 
     @Override
