@@ -230,8 +230,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="0dp"
                         android:layout_weight="24"
-                        android:background="@drawable/activity_record_icon_rec_circle"
-                        android:alpha="0.5">
+                        android:background="@drawable/activity_record_icon_rec_circle">
 
                         <LinearLayout
                             android:orientation="vertical"
@@ -242,7 +241,8 @@
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="8">
+                                android:layout_weight="8"
+                                android:alpha="0.5">
 
                                 <RelativeLayout
                                     android:layout_width="0dp"
@@ -298,13 +298,14 @@
                                 <RelativeLayout
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="1" />
+                                    android:layout_weight="1"
+                                    android:alpha="0.5" />
 
                                 <RelativeLayout
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="8"
-                                    >
+                                    android:alpha="0.5">
 
                                     <ImageButton
                                         android:id="@+id/button_play"
@@ -323,7 +324,7 @@
                                 <RelativeLayout
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="8" >
+                                    android:layout_weight="8">
 
                                     <ImageButton
                                         android:id="@+id/button_record"
@@ -340,14 +341,16 @@
                                 <RelativeLayout
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="1" />
+                                    android:layout_weight="1"
+                                    android:alpha="0.5" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:layout_weight="8">
+                                android:layout_weight="8"
+                                android:alpha="0.5">
 
                                 <RelativeLayout
                                     android:layout_width="0dp"

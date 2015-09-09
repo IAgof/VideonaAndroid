@@ -302,7 +302,7 @@ public class RecordFragment extends Fragment implements RecordView,
                 unLockNavigator();
 
                 buttonRecord.setEnabled(true);
-                buttonRecord.setImageAlpha(255); // (100%)
+              //  buttonRecord.setImageAlpha(255); // (100%)
                 chronometerRecord.setText("00:00");
 
                 recordPresenter.onHostActivityPaused();
@@ -525,7 +525,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         //Restart original buttonRecord view
         buttonRecord.setEnabled(true);
-        buttonRecord.setImageAlpha(255); // (100%)
+      //  buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
         recreateRecordFragment();
@@ -676,7 +676,7 @@ public class RecordFragment extends Fragment implements RecordView,
 
         //Restart original buttonRecord view
         buttonRecord.setEnabled(true);
-        buttonRecord.setImageAlpha(255); // (100%)
+       // buttonRecord.setImageAlpha(255); // (100%)
         chronometerRecord.setText("00:00");
 
         sendTrackDurationVideoRecorded(durationVideoRecorded);
@@ -844,7 +844,7 @@ public class RecordFragment extends Fragment implements RecordView,
     @Override
     public void showRecordStarted() {
         buttonRecord.setImageResource(R.drawable.activity_record_icon_stop_normal);
-        buttonRecord.setImageAlpha(125); // (50%)
+       // buttonRecord.setImageAlpha(125); // (50%)
     }
 
     @Override
