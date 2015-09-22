@@ -24,8 +24,8 @@ import com.videonasocialmedia.videona.domain.record.RecordUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.GLCameraView;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
@@ -203,7 +203,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
      */
     public void setCameraEffectColor(int filter){
         //Color and fx are in the same list, add size to adjust number with color list.
-        mCamEncoder.applyFilterColor(filter + CameraEffectFxList.getCameraEffectList().size());
+        mCamEncoder.applyFilterColor(filter + CameraEffectFx.getCameraEffectList().size());
     }
 
     /**
@@ -470,7 +470,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     }
 
     @Override
-    public void onCameraEffectFxListRetrieved(List<CameraEffectFxList> effects) {
+    public void onCameraEffectFxListRetrieved(List<CameraEffectFx> effects) {
 
         recordView.showCameraEffectFx(effects);
     }
@@ -486,7 +486,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     }
 
     @Override
-    public void onCameraEffectColorListRetrieved(List<CameraEffectColorList> effects) {
+    public void onCameraEffectColorListRetrieved(List<CameraEffectColor> effects) {
         Log.d(LOG_TAG, "onCameraEffectColorListRetrieved()");
 
         recordView.showCameraEffectColor(effects);
@@ -494,13 +494,13 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
     @Override
     public void onFlashModeTorchAdded() {
-        recordView.showFlashModeTorch(true);
+        recordView.showFlashOn(true);
         Log.d(LOG_TAG, "onFlashModeTorchAdded");
     }
 
     @Override
     public void onFlashModeTorchRemoved() {
-        recordView.showFlashModeTorch(false);
+        recordView.showFlashOn(false);
         Log.d(LOG_TAG, "onFlashModeTorchRemoved");
     }
 
@@ -547,7 +547,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
     public void onRecordStarted() {
         Log.d(LOG_TAG, "onRecordStarted");
 
-        recordView.showRecordStarted();
+        recordView.showRecordButton();
         recordView.lockScreenRotation();
         recordView.lockNavigator();
         recordView.startChronometer();
@@ -561,7 +561,7 @@ public class RecordPresenter implements OnCameraEffectFxListener, OnCameraEffect
 
         release();
 
-        recordView.showRecordFinished();
+        recordView.showStopButton();
         recordView.stopChronometer();
         recordView.unLockNavigator();
 

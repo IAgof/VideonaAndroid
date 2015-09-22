@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 
 import java.util.List;
 
@@ -29,16 +29,16 @@ public interface CameraEffectFxView {
     /**
      * Shows the list of the available songs.
      *
-     * @param cameraEffectFxList the list of the available songs
+     * @param cameraEffectFx the list of the available songs
      */
-    void showCameraEffectFxList(List<CameraEffectFxList> cameraEffectFxList);
+    void showCameraEffectFxList(List<CameraEffectFx> cameraEffectFx);
 
     /**
      * Shows the list of the available songs.
      *
-     * @param cameraEffectFxListList the list of the available songs
+     * @param cameraEffectFxList the list of the available songs
      */
-    void reloadCameraEffectFxList(List<CameraEffectFxList> cameraEffectFxListList);
+    void reloadCameraEffectFxList(List<CameraEffectFx> cameraEffectFxList);
 
     /**
      * Checks if the list of the available songs is empty.
@@ -48,8 +48,8 @@ public interface CameraEffectFxView {
     /**
      * Add new songs to the available songs.
      *
-     * @param cameraEffectFxList the list of the available songs
+     * @param cameraEffectFx the list of the available songs
      */
-    void appendCameraEffectFxList(List<CameraEffectFxList> cameraEffectFxList);
+    void appendCameraEffectFxList(List<CameraEffectFx> cameraEffectFx);
 
 }

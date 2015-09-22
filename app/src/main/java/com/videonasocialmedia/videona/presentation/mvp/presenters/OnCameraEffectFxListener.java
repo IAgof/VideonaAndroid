@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 
 import java.util.List;
 
@@ -17,6 +17,6 @@ public interface OnCameraEffectFxListener {
 
     void onCameraEffectFxRemoved(String cameraEffect, long time);
 
-    void onCameraEffectFxListRetrieved(List<CameraEffectFxList> effects);
+    void onCameraEffectFxListRetrieved(List<CameraEffectFx> effects);
 
 }

@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
 
 import java.util.List;
 
@@ -17,6 +17,6 @@ public interface OnCameraEffectColorListener {
 
     void onCameraEffectColorRemoved(String cameraEffectColor, long time);
 
-    void onCameraEffectColorListRetrieved(List<CameraEffectColorList> effects);
+    void onCameraEffectColorListRetrieved(List<CameraEffectColor> effects);
 
 }

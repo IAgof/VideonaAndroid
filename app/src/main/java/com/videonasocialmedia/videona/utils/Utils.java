@@ -185,7 +185,8 @@ public class Utils {
                 bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
         Paint paint = new Paint();
-        BitmapShader shader = new BitmapShader(bmp, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+        BitmapShader shader = new BitmapShader(bmp, BitmapShader.TileMode.CLAMP,
+                BitmapShader.TileMode.CLAMP);
         paint.setShader(shader);
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);

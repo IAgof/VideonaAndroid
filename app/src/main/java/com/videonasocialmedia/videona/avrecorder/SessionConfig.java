@@ -165,7 +165,6 @@ public class SessionConfig {
 
             if (outputLocation.contains(".mp4")) {
                 mMuxer = AndroidMuxer.create(createRecordingPath(outputLocation), Muxer.FORMAT.MPEG4);
-                //mMuxer = FFmpegMuxer.create(createRecordingPath(outputLocation), Muxer.FORMAT.MPEG4);
             } else
                 throw new RuntimeException("Unexpected muxer output. Expected a .mp4. Got: " + outputLocation);
 
