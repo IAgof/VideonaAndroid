@@ -20,8 +20,8 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.OnCameraEffect
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnFlashModeListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRecordEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnSessionConfigListener;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
@@ -58,7 +58,7 @@ public class RecordUseCase {
     /**
      *
      */
-     List<CameraEffectColorList> cameraEffectColorListAux;
+     List<CameraEffectColor> cameraEffectColorAux;
 
     public RecordUseCase(){
 
@@ -97,7 +97,7 @@ public class RecordUseCase {
 
         // TODO, get audio data from Profile
         /*
-        mConfig = new SessionConfig.Builder(outputLocation)
+        mConfig = new EncodingConfig.Builder(outputLocation)
                 .withVideoBitrate(videoQuality.getVideoBitRate())
                 .withVideoResolution(videoSize.getWidth(), videoSize.getHeigth())
                 .withAudioChannels(1)
@@ -153,9 +153,9 @@ public class RecordUseCase {
      */
     public void getAvailableCameraEffectFx(OnCameraEffectFxListener listener) {
         /// TODO getAvailableColorEffects from model
-        List<CameraEffectFxList> cameraEffectFxList = CameraEffectFxList.getCameraEffectList();
+        List<CameraEffectFx> cameraEffectFx = CameraEffectFx.getCameraEffectList();
         //ArrayList<String> effectList = ColorEffectList.getColorEffectList(getCameraInstance());
-        listener.onCameraEffectFxListRetrieved(cameraEffectFxList);
+        listener.onCameraEffectFxListRetrieved(cameraEffectFx);
     }
 
     /**
@@ -166,12 +166,12 @@ public class RecordUseCase {
     public void getAvailableCameraEffectColor(OnCameraEffectColorListener listener, Camera camera) {
         /// TODO getAvailableColorEffects from model
 
-           // List<CameraEffectColorList> cameraEffectColorList = CameraEffectColorList.getCameraEffectColorListSorted(camera);
-            List<CameraEffectColorList> cameraEffectColorList = CameraEffectColorList.getCameraEffectColorList();
+           // List<cameraEffectViewHolder> cameraEffectColor = cameraEffectViewHolder.getCameraEffectColorListSorted(camera);
+            List<CameraEffectColor> cameraEffectColor = CameraEffectColor.getDefaultCameraEffectColorList();
 
-            cameraEffectColorListAux = cameraEffectColorList;
+            cameraEffectColorAux = cameraEffectColor;
 
-            listener.onCameraEffectColorListRetrieved(cameraEffectColorList);
+            listener.onCameraEffectColorListRetrieved(cameraEffectColor);
     }
 
 
@@ -184,7 +184,7 @@ public class RecordUseCase {
         //TODO add CameraEffect, add Effect, add time and add effect to Project
     public void addAndroidCameraEffect(int position, Camera camera) {
 
-        String colorEffect =  cameraEffectColorListAux.get(position).getNameResourceId();
+        String colorEffect =  cameraEffectColorAux.get(position).getName();
 
         Camera.Parameters parameters = camera.getParameters();
         parameters.setColorEffect(colorEffect);

@@ -51,6 +51,7 @@ dependencies {
     compile project(':androidtranscoder')
     compile project(':androidmuxer')
     compile project(':appintro')
+    compile project(':avrecorder')
 
     debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     debugCompile 'com.google.dexmaker:dexmaker:1.0'

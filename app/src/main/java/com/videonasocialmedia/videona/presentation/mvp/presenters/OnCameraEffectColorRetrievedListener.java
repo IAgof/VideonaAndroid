@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public interface OnCameraEffectColorRetrievedListener {
      *
      * @param effectColorList the actual list of the available fx effects
      */
-    void onCameraEffectColorRetrieved(List<CameraEffectColorList> effectColorList);
+    void onCameraEffectColorRetrieved(List<CameraEffectColor> effectColorList);
 
     /**
      * This method is used when music items haven't been retrieved.

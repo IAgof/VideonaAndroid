@@ -7,10 +7,12 @@
 
 package com.videonasocialmedia.videona.presentation.views.listener;
 
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
+
 /**
  * @author Álvaro Martínez Marco
  */
-public interface CameraEffectFxViewClickListener {
+public interface OnFxSelectedListener {
 
-    void onClickCameraEffectFx(int position);
+    void onFxSelected(CameraEffectFx fx);
 }

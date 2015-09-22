@@ -12,45 +12,59 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 
 import java.util.List;
 
 public interface RecordView extends MVPView {
 
-    void showRecordStarted();
+    void showRecordButton();
 
-    void showRecordFinished();
+    void showStopButton();
 
     void startChronometer();
 
     void stopChronometer();
 
-    void showCameraEffectFx(List<CameraEffectFxList> effects);
+    void showCameraEffectFx(List<CameraEffectFx> effects);
 
-    void showCameraEffectFxSelected(String colorEffect);
+    void showCameraEffectFxSelected(String colorEffect); //candidato a salir
 
-    void showCameraEffectColor(List<CameraEffectColorList> effects);
+    void showCameraEffectColor(List<CameraEffectColor> effects);
 
-    void showCameraEffectColorSelected(String colorEffect);
+    void showCameraEffectColorSelected(String colorEffect); //candidato a salir
 
     void navigateEditActivity(String durationVideoRecorded);
 
     void lockScreenRotation();
 
-    void lockNavigator();
+    void lockNavigator(); //en VideonaView
 
-    void unLockNavigator();
+    void unLockNavigator(); //en VideonaView
 
-    void showFlashModeTorch(boolean mode);
+    /**
+     *
+     * @param on true=on, false=off
+     */
+    void showFlashOn(boolean on);
 
-    void showCamera(int cameraMode);
+    void showFrontCameraSelected();
 
-    void changeCamera();
+    void showBackCameraSelected();
 
-    void showError();
+    void changeCamera(); // candidato a salir
 
-    void reStartFragment();
+    void showError(String errorMessage); //videonaView
+
+    void showError(int stringResourceId); //videonaView
+
+    //Qué cojones tiene que ver esto con una recordView.
+    // Las interfaces son ABSTRACCIONES deben ser generales e independientes de fragments y demás
+    void reStartFragment(); //Este se va seguro!
+
+    void showRecordedVideoThumb(String path);
+
+    void showVideosRecordedNumber(int numberOfVideos);
 
 }

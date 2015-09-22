@@ -42,29 +42,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private static final String TAG = "CameraEncoder";
     private static final boolean TRACE = true;         // Systrace
     private static final boolean VERBOSE = true;       // Lots of logging
-
-    private boolean isEncoderReleased = false;
-
-
-    private enum STATE {
-        /* Stopped or pre-construction */
-        UNINITIALIZED,
-        /* Construction-prompted initialization */
-        INITIALIZING,
-        /* Camera frames are being received */
-        INITIALIZED,
-        /* Camera frames are being sent to Encoder */
-        RECORDING,
-        /* Was recording, and is now stopping */
-        STOPPING,
-        /* Releasing resources. */
-        RELEASING,
-        /* This instance can no longer be used */
-        RELEASED
-    }
-
-    private volatile STATE mState = STATE.UNINITIALIZED;
-
     // EncoderHandler Message types (Message#what)
     private static final int MSG_FRAME_AVAILABLE = 2;
     private static final int MSG_SET_SURFACE_TEXTURE = 3;
@@ -72,7 +49,12 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private static final int MSG_RELEASE_CAMERA = 5;
     private static final int MSG_RELEASE = 6;
     private static final int MSG_RESET = 7;
-
+    private final Object mStopFence = new Object();
+    private final Object mSurfaceTextureFence = new Object();   // guards mSurfaceTexture shared with GLSurfaceView.Renderer
+    private final Object mReadyForFrameFence = new Object();    // guards mReadyForFrames/mRecording
+    private final Object mReadyFence = new Object();            // guards ready/running
+    private boolean isEncoderReleased = false;
+    private volatile STATE mState = STATE.UNINITIALIZED;
     // ----- accessed exclusively by encoder thread -----
     private WindowSurface mInputWindowSurface;
     private EglCore mEglCore;
@@ -83,24 +65,30 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private int mFrameNum;
     private VideoEncoderCore mVideoEncoder;
     private Camera mCamera;
+    /**
+     * AutoFocus callback
+     */
+    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback() {
+        @Override
+        public void onAutoFocus(boolean arg0, Camera arg1) {
+            if (arg0) {
+                mCamera.cancelAutoFocus();
+            }
+        }
+    };
     private SessionConfig mSessionConfig;
     private float[] mTransform = new float[16];
     private int mCurrentFilter;
     private int mNewFilter;
     private boolean mIncomingSizeUpdated;
-
     // ----- accessed by multiple threads -----
     private volatile EncoderHandler mHandler;
     private EglStateSaver mEglSaver;
-    private final Object mStopFence = new Object();
-    private final Object mSurfaceTextureFence = new Object();   // guards mSurfaceTexture shared with GLSurfaceView.Renderer
     private SurfaceTexture mSurfaceTexture;
-    private final Object mReadyForFrameFence = new Object();    // guards mReadyForFrames/mRecording
     private boolean mReadyForFrames;
-                // Is the SurfaceTexture et all created
+    // Is the SurfaceTexture et all created
     private boolean mRecording;                                 // Are frames being recorded
     private boolean mEosRequested;                              // Should an EOS be sent on next frame. Used to stop encoder
-    private final Object mReadyFence = new Object();            // guards ready/running
     private boolean mReady;                                     // mHandler created on Encoder thread
     private boolean mRunning;                                   // Encoder thread running
 
@@ -139,7 +127,36 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mState = STATE.INITIALIZED;
 
         this.onMuxerFinishedEventListener = listener;
+    }
 
+    /**
+     * Attempts to find a preview size that matches the provided width and height (which
+     * specify the dimensions of the encoded video).  If it fails to find a match it just
+     * uses the default preview size.
+     * <p/>
+     * TODO: should do a best-fit match.
+     */
+    private static void choosePreviewSize(Parameters parms, int width, int height) {
+        // We should make sure that the requested MPEG size is less than the preferred
+        // size, and has the same aspect ratio.
+        Camera.Size ppsfv = parms.getPreferredPreviewSizeForVideo();
+        if (ppsfv != null && VERBOSE) {
+            Log.d(TAG, "Camera preferred preview size for video is " +
+                    ppsfv.width + "x" + ppsfv.height);
+        }
+
+        for (Camera.Size size : parms.getSupportedPreviewSizes()) {
+            if (size.width == width && size.height == height) {
+                parms.setPreviewSize(width, height);
+                return;
+            }
+        }
+
+        Log.w(TAG, "Unable to set preview size to " + width + "x" + height);
+        if (ppsfv != null) {
+            parms.setPreviewSize(ppsfv.width, ppsfv.height);
+        }
+        // else use whatever the default size is
     }
 
     /**
@@ -178,13 +195,13 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * This must be called after {@link #stopRecording()} and before {@link #release()}
      *
      * @param config the desired parameters for the next recording. Make sure you're
-     *               providing a new {@link com.videonasocialmedia.videona.avrecorder.SessionConfig} to avoid
+     *               providing a new {@link SessionConfig} to avoid
      *               overwriting a previous recording.
      */
     public void reset(SessionConfig config) {
         if (mState != STATE.UNINITIALIZED) {
             onMuxerFinishedEventListener.onMuxerVideoError("reset called in invalid state");
-          //  throw new IllegalArgumentException("reset called in invalid state");
+            //  throw new IllegalArgumentException("reset called in invalid state");
         }
         mState = STATE.INITIALIZING;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_RESET, config));
@@ -232,7 +249,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     }
 
-
     /**
      * Request a Camera by cameraId. This will take effect immediately
      * or as soon as the camera preview becomes active.
@@ -271,7 +287,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * Request a thumbnail be generated deltaFrame frames from now.
      *
      * @param scaleFactor a downscale factor. e.g scaleFactor 2 will
-     * produce a 640x360 thumbnail from a 1280x720 frame
+     *                    produce a 640x360 thumbnail from a 1280x720 frame
      */
     public void requestThumbnailOnDeltaFrameWithScaling(int deltaFrame, int scaleFactor) {
         requestThumbnailOnFrameWithScaling(mFrameNum + deltaFrame, scaleFactor);
@@ -287,36 +303,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     public void requestThumbnailOnFrameWithScaling(int frame, int scaleFactor) {
         mThumbnailScaleFactor = scaleFactor;
         mThumbnailRequestedOnFrame = frame;
-    }
-
-    /**
-     * Attempts to find a preview size that matches the provided width and height (which
-     * specify the dimensions of the encoded video).  If it fails to find a match it just
-     * uses the default preview size.
-     * <p/>
-     * TODO: should do a best-fit match.
-     */
-    private static void choosePreviewSize(Parameters parms, int width, int height) {
-        // We should make sure that the requested MPEG size is less than the preferred
-        // size, and has the same aspect ratio.
-        Camera.Size ppsfv = parms.getPreferredPreviewSizeForVideo();
-        if (ppsfv != null && VERBOSE) {
-            Log.d(TAG, "Camera preferred preview size for video is " +
-                    ppsfv.width + "x" + ppsfv.height);
-        }
-
-        for (Camera.Size size : parms.getSupportedPreviewSizes()) {
-            if (size.width == width && size.height == height) {
-                parms.setPreviewSize(width, height);
-                return;
-            }
-        }
-
-        Log.w(TAG, "Unable to set preview size to " + width + "x" + height);
-        if (ppsfv != null) {
-            parms.setPreviewSize(ppsfv.width, ppsfv.height);
-        }
-        // else use whatever the default size is
     }
 
     public void adjustBitrate(int targetBitrate) {
@@ -345,13 +331,13 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mDisplayView = display;
     }
 
-    public void updatePreviewDisplay(int rotationView){
+    public void updatePreviewDisplay(int rotationView) {
         //mDisplayView.setRotation(rotation);
         mCamera.setDisplayOrientation(getDisplayOrientation(rotationView));
         configureDisplayView();
     }
 
-    private int getDisplayOrientation(int rotationView){
+    private int getDisplayOrientation(int rotationView) {
 
         int displayOrientation = 0;
         if (rotationView == Surface.ROTATION_90) {
@@ -362,8 +348,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 displayOrientation = 180;
             }
             Log.d(TAG, "setRotationView rotation 90, cameraOrientation " + cameraInfoOrientation);
-        } else
-        if (rotationView == Surface.ROTATION_270) {
+        } else if (rotationView == Surface.ROTATION_270) {
             if (cameraInfoOrientation == 0) {
                 displayOrientation = 180;
             }
@@ -371,8 +356,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 displayOrientation = 0;
             }
             Log.d(TAG, "setRotationView rotation 270, cameraOrientation " + cameraInfoOrientation);
-        } else
-        if(rotationView == Surface.ROTATION_0) {
+        } else if (rotationView == Surface.ROTATION_0) {
             if (cameraInfoOrientation == 90) {
                 displayOrientation = 90;
             }
@@ -380,15 +364,14 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 displayOrientation = 270;
             }
             Log.d(TAG, "setRotationView rotation 0, cameraOrientation " + cameraInfoOrientation);
-        } else
-        if(rotationView == Surface.ROTATION_180) {
-                if (cameraInfoOrientation == 90) {
-                    displayOrientation = 270;
-                }
-                if (cameraInfoOrientation == 270) {
-                    displayOrientation = 90;
-                }
-                Log.d(TAG, "setRotationView rotation 180, cameraOrientation " + cameraInfoOrientation);
+        } else if (rotationView == Surface.ROTATION_180) {
+            if (cameraInfoOrientation == 90) {
+                displayOrientation = 270;
+            }
+            if (cameraInfoOrientation == 270) {
+                displayOrientation = 90;
+            }
+            Log.d(TAG, "setRotationView rotation 180, cameraOrientation " + cameraInfoOrientation);
         }
 
         return displayOrientation;
@@ -501,7 +484,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     /**
      * Stop recording. After this call you must call either {@link #release()} to release resources if you're not going to
-     * make any subsequent recordings, or {@link #reset( com.videonasocialmedia.videona.avrecorder.SessionConfig)} to prepare
+     * make any subsequent recordings, or {@link #reset(SessionConfig)} to prepare
      * the encoder for the next recording
      * <p/>
      * Called from UI thread
@@ -516,8 +499,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         synchronized (mReadyForFrameFence) {
             mEosRequested = true;
         }
-
-
     }
 
 
@@ -556,7 +537,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private void handleRelease() {
         if (mState != STATE.RELEASING) {
             onMuxerFinishedEventListener.onMuxerVideoError("handleRelease called in invalid state");
-           // throw new IllegalArgumentException("handleRelease called in invalid state");
+            // throw new IllegalArgumentException("handleRelease called in invalid state");
         }
         Log.i(TAG, "handleRelease");
         shutdown();
@@ -602,8 +583,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             }
             mFrameNum++;
             if (VERBOSE && (mFrameNum % 30 == 0)) //Log.i(TAG, "handleFrameAvailable");
-            if (!surfaceTexture.equals(mSurfaceTexture))
-                Log.w(TAG, "SurfaceTexture from OnFrameAvailable does not match saved SurfaceTexture!");
+                if (!surfaceTexture.equals(mSurfaceTexture))
+                    Log.w(TAG, "SurfaceTexture from OnFrameAvailable does not match saved SurfaceTexture!");
 
             if (mRecording) {
                 mInputWindowSurface.makeCurrent();
@@ -627,7 +608,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 surfaceTexture.getTransformMatrix(mTransform);
                 if (TRACE) Trace.beginSection("drawVEncoderFrame");
-                GLES20.glViewport(0,0,mSessionConfig.getVideoWidth(),mSessionConfig.getVideoHeight());
+                GLES20.glViewport(0, 0, mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
                 mFullScreen.drawFrame(mTextureId, mTransform);
                 GLES20.glViewport(15, 15, 178, 36);
                 mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
@@ -640,8 +621,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                     mThumbnailRequested = true;
                 }
                 if (mThumbnailRequested) {
-                   // TODO study saveFrame functionality, it is done!
-                   // saveFrameAsImage();
+                    // TODO study saveFrame functionality, it is done!
+                    // saveFrameAsImage();
                     mThumbnailRequested = false;
                 }
 
@@ -778,7 +759,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 mFullScreen.getProgram().setTexSize(mSessionConfig.getVideoWidth(),
                         mSessionConfig.getVideoHeight());
 
-                mFullScreenOverlay= new FullFrameRect(
+                mFullScreenOverlay = new FullFrameRect(
                         new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
                 mFullScreenOverlay.getProgram().setTexSize(mSessionConfig.getVideoWidth(),
                         mSessionConfig.getVideoHeight());
@@ -796,7 +777,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 mTextureId = textureId;
                 mSurfaceTexture = new SurfaceTexture(mTextureId);
 
-                mFullScreenOverlay= new FullFrameRect(
+                mFullScreenOverlay = new FullFrameRect(
                         new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
                 mFullScreenOverlay.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
 
@@ -999,10 +980,14 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         int rotation = mCurrentCameraRotation;
         int degrees = 90;
         switch (rotation) {
-           // case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
+            // case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
             // case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
         }
 
         int result;
@@ -1027,8 +1012,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
         Camera.Parameters parameters = mCamera.getParameters();
 
-        for(String autoFocus: parameters.getSupportedFocusModes()){
-            if(autoFocus.compareTo(Camera.Parameters.FOCUS_MODE_AUTO) == 0){
+        for (String autoFocus : parameters.getSupportedFocusModes()) {
+            if (autoFocus.compareTo(Camera.Parameters.FOCUS_MODE_AUTO) == 0) {
                 //Log.d(LOG_TAG, "Autofocus supported");
                 return true;
             }
@@ -1045,7 +1030,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      */
     public void doTouchFocus(final Rect tfocusRect) {
 
-        if(supportAutoFocus(mCamera)) {
+        if (supportAutoFocus(mCamera)) {
 
             try {
                 final List<Camera.Area> focusList = new ArrayList<Camera.Area>();
@@ -1062,22 +1047,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
             } catch (Exception e) {
                 e.printStackTrace();
-               // Log.i(LOG_TAG, "Unable to autofocus");
+                // Log.i(LOG_TAG, "Unable to autofocus");
             }
         }
     }
-
-    /**
-     * AutoFocus callback
-     */
-    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback() {
-        @Override
-        public void onAutoFocus(boolean arg0, Camera arg1) {
-            if (arg0) {
-                mCamera.cancelAutoFocus();
-            }
-        }
-    };
 
     /**
      * Stops camera preview, and releases the camera to the system.
@@ -1112,69 +1085,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             ((GLCameraEncoderView) mDisplayView).releaseCamera();
         } else if (mDisplayView instanceof GLCameraView)
             ((GLCameraView) mDisplayView).releaseCamera();
-    }
-
-    /**
-     * Handles encoder state change requests.  The handler is created on the encoder thread.
-     */
-    private static class EncoderHandler extends Handler {
-        private WeakReference<CameraEncoder> mWeakEncoder;
-
-        public EncoderHandler(CameraEncoder encoder) {
-            mWeakEncoder = new WeakReference<CameraEncoder>(encoder);
-        }
-
-        /**
-         * Called on Encoder thread
-         *
-         * @param inputMessage
-         */
-        @Override
-        public void handleMessage(Message inputMessage) {
-            int what = inputMessage.what;
-            Object obj = inputMessage.obj;
-
-            CameraEncoder encoder = mWeakEncoder.get();
-            if (encoder == null) {
-                Log.w(TAG, "EncoderHandler.handleMessage: encoder is null");
-                return;
-            }
-
-            try {
-                switch (what) {
-                    case MSG_SET_SURFACE_TEXTURE:
-                        encoder.handleSetSurfaceTexture((Integer) obj);
-                        Log.i(TAG, "MSG_SET_SURFACE_TEXTURE");
-                        break;
-                    case MSG_FRAME_AVAILABLE:
-                        encoder.handleFrameAvailable((SurfaceTexture) obj);
-                       // Log.i(TAG, "MSG_FRAME_AVAILABLE");
-                        break;
-                    case MSG_REOPEN_CAMERA:
-                        encoder.openAndAttachCameraToSurfaceTexture();
-                        Log.i(TAG, "MSG_REOPEN_CAMERA");
-                        break;
-                    case MSG_RELEASE_CAMERA:
-                        encoder.releaseCamera();
-                        Log.i(TAG, "MSG_RELEASE_CAMERA");
-                        break;
-                    case MSG_RELEASE:
-                        encoder.handleRelease();
-                        Log.i(TAG, "MSG_RELEASE");
-
-                        break;
-                    case MSG_RESET:
-                        encoder.handleReset((SessionConfig) obj);
-                        Log.i(TAG, "MSG_RESET");
-                        break;
-                    default:
-                        throw new RuntimeException("Unexpected msg what=" + what);
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "Unable to reset! Could be trouble creating MediaCodec encoder");
-                e.printStackTrace();
-            }
-        }
     }
 
     public int getCurrentCamera() {
@@ -1266,6 +1176,85 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         //TODO postCameraOpen listener
     }
 
-
-
+    private enum STATE {
+        /* Stopped or pre-construction */
+        UNINITIALIZED,
+        /* Construction-prompted initialization */
+        INITIALIZING,
+        /* Camera frames are being received */
+        INITIALIZED,
+        /* Camera frames are being sent to Encoder */
+        RECORDING,
+        /* Was recording, and is now stopping */
+        STOPPING,
+        /* Releasing resources. */
+        RELEASING,
+        /* This instance can no longer be used */
+        RELEASED
     }
+
+    /**
+     * Handles encoder state change requests.  The handler is created on the encoder thread.
+     */
+    private static class EncoderHandler extends Handler {
+        private WeakReference<CameraEncoder> mWeakEncoder;
+
+        public EncoderHandler(CameraEncoder encoder) {
+            mWeakEncoder = new WeakReference<CameraEncoder>(encoder);
+        }
+
+        /**
+         * Called on Encoder thread
+         *
+         * @param inputMessage
+         */
+        @Override
+        public void handleMessage(Message inputMessage) {
+            int what = inputMessage.what;
+            Object obj = inputMessage.obj;
+
+            CameraEncoder encoder = mWeakEncoder.get();
+            if (encoder == null) {
+                Log.w(TAG, "EncoderHandler.handleMessage: encoder is null");
+                return;
+            }
+
+            try {
+                switch (what) {
+                    case MSG_SET_SURFACE_TEXTURE:
+                        encoder.handleSetSurfaceTexture((Integer) obj);
+                        Log.i(TAG, "MSG_SET_SURFACE_TEXTURE");
+                        break;
+                    case MSG_FRAME_AVAILABLE:
+                        encoder.handleFrameAvailable((SurfaceTexture) obj);
+                        // Log.i(TAG, "MSG_FRAME_AVAILABLE");
+                        break;
+                    case MSG_REOPEN_CAMERA:
+                        encoder.openAndAttachCameraToSurfaceTexture();
+                        Log.i(TAG, "MSG_REOPEN_CAMERA");
+                        break;
+                    case MSG_RELEASE_CAMERA:
+                        encoder.releaseCamera();
+                        Log.i(TAG, "MSG_RELEASE_CAMERA");
+                        break;
+                    case MSG_RELEASE:
+                        encoder.handleRelease();
+                        Log.i(TAG, "MSG_RELEASE");
+
+                        break;
+                    case MSG_RESET:
+                        encoder.handleReset((SessionConfig) obj);
+                        Log.i(TAG, "MSG_RESET");
+                        break;
+                    default:
+                        throw new RuntimeException("Unexpected msg what=" + what);
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to reset! Could be trouble creating MediaCodec encoder");
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+}

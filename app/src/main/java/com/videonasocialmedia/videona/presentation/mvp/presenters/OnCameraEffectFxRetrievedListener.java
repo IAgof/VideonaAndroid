@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public interface OnCameraEffectFxRetrievedListener {
      *
      * @param effectFxList the actual list of the available fx effects
      */
-    void onCameraEffectFxRetrieved(List<CameraEffectFxList> effectFxList);
+    void onCameraEffectFxRetrieved(List<CameraEffectFx> effectFxList);
 
     /**
      * This method is used when music items haven't been retrieved.

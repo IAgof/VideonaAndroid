@@ -425,13 +425,13 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //    }
 //
 //    @Override
-//    public void onClickCameraEffectFx(View view) {
+//    public void onFxSelected(View view) {
 //        switch (view.getId()) {
 //            case R.id.button_record: {
 //                if (mIsRecordingVideo) {
-//                    showRecordFinished();
+//                    showStopButton();
 //                } else {
-//                    showRecordStarted();
+//                    showRecordButton();
 //                }
 //                break;
 //            }
@@ -801,7 +801,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //    }
 //
 //    @Override
-//    public void showRecordStarted() {
+//    public void showRecordButton() {
 //
 //        try {
 //            // UI
@@ -826,7 +826,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //    }
 //
 //    @Override
-//    public void showRecordFinished() {
+//    public void showStopButton() {
 //
 //        // UI
 //        mIsRecordingVideo = false;
@@ -943,7 +943,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 //                    .setMessage("This device doesn't support Camera2 API.")
 //                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 //                        @Override
-//                        public void onClickCameraEffectFx(DialogInterface dialogInterface, int i) {
+//                        public void onFxSelected(DialogInterface dialogInterface, int i) {
 //                            activity.finish();
 //                        }
 //                    })
