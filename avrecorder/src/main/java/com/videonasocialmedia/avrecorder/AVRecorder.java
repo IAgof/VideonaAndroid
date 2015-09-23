@@ -141,4 +141,8 @@ public class AVRecorder {
     public void onHostActivityResumed() {
         mCamEncoder.onHostActivityResumed();
     }
+
+    public int getActiveCameraIndex() {
+        return mCamEncoder.getCurrentCamera();
+    }
 }
