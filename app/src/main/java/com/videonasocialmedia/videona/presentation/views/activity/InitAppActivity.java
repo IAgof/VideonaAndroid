@@ -318,6 +318,8 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         checkAndInitPath(Constants.PATH_APP_TEMP);
         checkAndInitPath(Constants.PATH_APP_MASTERS);
         checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
+        // Delete this method, only util after release v0.3.12. Clean old music files
+        checkAndDeletePath(Constants.PATH_APP_TEMP_DEPRECATED);
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
         editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
@@ -328,6 +330,27 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         if (!fEdited.exists()) {
             fEdited.mkdir();
         }
+    }
+
+    // Delete this methods, only util after release v0.3.12. Needed to clean old music files
+    private void checkAndDeletePath(String pathApp){
+        File folderTemp = new File(pathApp);
+        if(folderTemp.exists()){
+            deleteFolderRecursive(folderTemp);
+        }
+    }
+    private void deleteFolderRecursive(File dir) {
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteFolderRecursive(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+        dir.delete();
     }
 
     /**
