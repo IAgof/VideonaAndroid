@@ -41,7 +41,8 @@ public class Constants {
     final public static String FOLDER_VIDEONA_MASTERS = "Videona_Masters";
     final public static String FOLDER_VIDEONA_EDITED = "Videona_Edited";
     final public static String FOLDER_VIDEONA = "Videona";
-    final public static String FOLDER_VIDEONA_TEMP = ".temp";
+    final public static String FOLDER_VIDEONA_TEMP = ".temporal";
+    final public static String FOLDER_VIDEONA_TEMP_DEPRECATED = ".temp";
 
     final public static String PATH_APP = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA;
@@ -52,6 +53,7 @@ public class Constants {
             Environment.DIRECTORY_MOVIES) + File.separator + FOLDER_VIDEONA_MASTERS;
 
     final public static String PATH_APP_TEMP = PATH_APP + File.separator + FOLDER_VIDEONA_TEMP;
+    final public static String PATH_APP_TEMP_DEPRECATED = PATH_APP + File.separator + FOLDER_VIDEONA_TEMP_DEPRECATED;
     final public static String VIDEO_MUSIC_TEMP_FILE = PATH_APP + File.separator + FOLDER_VIDEONA_TEMP + File.separator + "tempAV.mp4";
     final public static String VIDEO_CUT_AUX_NAME = "/videona_trim.mp4";
 
