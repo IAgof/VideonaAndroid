@@ -187,27 +187,49 @@
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
-                                android:layout_weight="10"></RelativeLayout>
+                                android:layout_weight="9"></RelativeLayout>
 
                             <RelativeLayout
                                 android:layout_width="0dp"
                                 android:layout_height="fill_parent"
                                 android:layout_weight="8">
 
-                                <ImageButton
+                                <com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView
                                     android:id="@+id/button_navigate_edit"
                                     android:layout_width="fill_parent"
                                     android:layout_height="fill_parent"
-                                    android:layout_gravity="center_horizontal|end"
-                                    android:paddingBottom="8dp"
-                                    android:paddingLeft="4dp"
-                                    android:paddingRight="12dp"
-                                    android:paddingTop="8dp"
-                                    android:scaleType="fitCenter"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:paddingBottom="12dp"
+                                    android:paddingLeft="8dp"
+                                    android:paddingRight="24dp"
+                                    android:paddingTop="20dp"
                                     android:background="@null"
+                                    android:scaleType="fitCenter"
                                     android:src="@drawable/activity_record_navigator_edit_selector"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"
+                                    android:layout_margin="8dp" />
+
+                                <TextView
+                                    android:id="@+id/text_view_num_videos"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center_horizontal|end"
+                                    android:scaleType="fitCenter"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textSize="27sp"
+                                    android:textColor="@android:color/white"
+                                    android:layout_margin="8dp"
+                                    android:layout_alignParentBottom="false"
+                                    android:layout_alignParentEnd="false"
+                                    android:layout_alignParentStart="false"
+                                    android:gravity="center_vertical|center_horizontal" />
+
                             </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="fill_parent"
+                                android:layout_weight="1" />
                         </LinearLayout>
                     </RelativeLayout>
 

@@ -11,6 +11,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -26,6 +27,7 @@ import android.view.animation.Interpolator;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,6 +39,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.CameraColorFilt
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectsAdapter;
+import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnColorEffectSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnFxSelectedListener;
 
@@ -68,7 +71,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @InjectView(R.id.button_change_camera)
     ImageButton rotateCameraButton;
     @InjectView(R.id.button_navigate_edit)
-    ImageButton navigateToEditButton;
+    CircleImageView navigateToEditButton;
     @InjectView(R.id.record_catalog_recycler_fx)
     RecyclerView effectsRecycler;
     @InjectView(R.id.record_catalog_recycler_color)
@@ -85,6 +88,8 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     ImageButton buttonCameraEffectColor;
     @InjectView(R.id.button_navigate_drawer)
     ImageButton drawerButton;
+    @InjectView(R.id.text_view_num_videos)
+    TextView numVideosRecorded;
 
     RecordPresenter2 recordPresenter;
     CameraEffectsAdapter cameraEffectsAdapter;
@@ -105,6 +110,9 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recordPresenter = new RecordPresenter2(this, this, cameraView);
         initEffectsRecycler();
         configChronometer();
+
+        navigateToEditButton.setBorderWidth(5);
+        navigateToEditButton.setBorderColor(Color.WHITE);
     }
 
     private void initEffectsRecycler() {
@@ -357,13 +365,13 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @Override
     public void showRecordedVideoThumb(String path) {
-        //TODO hacer redondo
-        Glide.with(this).load(path).centerCrop().crossFade().into(navigateToEditButton);
+       // Glide.with(this).load(path).centerCrop().crossFade().into(navigateToEditButton);
+        Glide.with(this).load(path).into(navigateToEditButton);
     }
 
     @Override
     public void showVideosRecordedNumber(int numberOfVideos) {
-
+        numVideosRecorded.setText(String.valueOf(numberOfVideos));
     }
 
     @Override
