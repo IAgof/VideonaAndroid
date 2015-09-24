@@ -54,6 +54,7 @@ public class RecordPresenter2 {
     private AVRecorder recorder;
 
     private int selectedEffect;
+    private int recorderVideosNumber = 0;
 
     public RecordPresenter2(Context context, RecordView recordView,
                             GLCameraEncoderView cameraPreview) {
@@ -141,6 +142,7 @@ public class RecordPresenter2 {
         String path = e.videoAdded.getMediaPath();
         recordView.showRecordedVideoThumb(path);
         recordView.showStopButton();
+        recordView.showVideosRecordedNumber(++recorderVideosNumber);
     }
 
     public void changeCamera() {
