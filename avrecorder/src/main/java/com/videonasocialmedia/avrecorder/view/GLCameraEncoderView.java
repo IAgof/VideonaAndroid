@@ -41,7 +41,6 @@ public class GLCameraEncoderView extends GLCameraView {
            // mCameraEncoder.handleCameraPreviewTouchEvent(ev);
         }else if(mCameraEncoder != null && ev.getPointerCount() == 1 && (ev.getAction() == MotionEvent.ACTION_DOWN)){
            // mCameraEncoder.handleCameraPreviewTouchEvent(ev);
-
         }
         return true;
     }
