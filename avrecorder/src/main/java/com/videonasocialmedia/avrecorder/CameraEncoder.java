@@ -802,10 +802,11 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         postCameraOpenedEvent(parms);
 
         List<String> focusModes = parms.getSupportedFocusModes();
-        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-            parms.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
             parms.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+            parms.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
         } else {
             if (VERBOSE) Log.i(TAG, "Camera does not support autofocus");
         }

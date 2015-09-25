@@ -57,8 +57,3 @@ dependencies {
     debugCompile 'com.google.dexmaker:dexmaker:1.0'
     debugCompile 'org.mockito:mockito-core:1.10.17'
 }
-
-
-
-
-

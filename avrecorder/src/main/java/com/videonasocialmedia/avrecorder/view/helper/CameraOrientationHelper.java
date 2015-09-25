@@ -11,22 +11,22 @@ import com.videonasocialmedia.avrecorder.AVRecorder;
 /**
  * Created by jca on 23/9/15.
  */
-public class CameraOrientationHelper extends OrientationEventListener{
+public class CameraOrientationHelper extends OrientationEventListener {
 
     AVRecorder recorder;
-    int currenScreentOrientation= Surface.ROTATION_0;
-    int currentCameraRotation= Surface.ROTATION_0;
+    int currenScreentOrientation = Surface.ROTATION_0;
+    int currentCameraRotation = Surface.ROTATION_0;
 
 
     public CameraOrientationHelper(Context context, int rate, AVRecorder recorder) {
         super(context, rate);
-        this.recorder=recorder;
+        this.recorder = recorder;
 
     }
 
     public CameraOrientationHelper(Context context, AVRecorder recorder) {
         super(context);
-        this.recorder=recorder;
+        this.recorder = recorder;
 
     }
 
@@ -36,14 +36,14 @@ public class CameraOrientationHelper extends OrientationEventListener{
         updateCurrentScreenOrientation(orientation);
     }
 
-    private int calculateScreenOrientation(int orientation){
-
+    private int calculateScreenOrientation(int orientation) {
+        return 0;
     }
 
-    private void updateCurrentScreenOrientation (int orientation){
+    private void updateCurrentScreenOrientation(int orientation) {
         Camera.CameraInfo info =
                 new Camera.CameraInfo();
-        int cameraIndex=recorder.getActiveCameraIndex();
+        int cameraIndex = recorder.getActiveCameraIndex();
         Camera.getCameraInfo(cameraIndex, info);
         int rotation = currentCameraRotation;
         int degrees = 90;
@@ -63,10 +63,10 @@ public class CameraOrientationHelper extends OrientationEventListener{
         } else {  // back-facing
             result = (info.orientation - degrees + 360) % 360;
         }
-        recorder.changeCameraOrientation(result);
+        //recorder.changeCameraOrientation(result);
 
-        cameraInfoOrientation = result;
-        Log.d(TAG, "cameraInfoOrientation " + result + " cameraId " + cameraIndex);
+        //cameraInfoOrientation = result;
+        Log.d("OrientationHelper", "cameraInfoOrientation " + result + " cameraId " + cameraIndex);
 
     }
 }

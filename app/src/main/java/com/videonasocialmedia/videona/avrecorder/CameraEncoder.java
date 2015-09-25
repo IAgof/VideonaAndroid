@@ -1044,7 +1044,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 //touchArea = tfocusRect;
 
-
             } catch (Exception e) {
                 e.printStackTrace();
                 // Log.i(LOG_TAG, "Unable to autofocus");

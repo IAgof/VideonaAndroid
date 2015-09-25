@@ -69,7 +69,6 @@ public class CustomManualFocusView extends View {
                 R.drawable.activity_record_icon_focus_focused);
 
         canvas = new Canvas(bitmap.copy(Bitmap.Config.ARGB_8888, true));
-
     }
 
         @Override
