@@ -54,7 +54,6 @@ public class RecordPresenter2 {
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
     private int selectedEffect;
-    private boolean toRestore = false;
 
     public RecordPresenter2(Context context, RecordView recordView,
                             GLCameraEncoderView cameraPreview) {
@@ -81,10 +80,8 @@ public class RecordPresenter2 {
         }
     }
 
-    public void onResume(Context context, GLCameraEncoderView cameraPreview) {
+    public void onResume() {
         EventBus.getDefault().register(this);
-//        if (toRestore)
-//            initRecorder(context, cameraPreview);
         recorder.onHostActivityResumed();
         Log.d(LOG_TAG,"resume presenter");
     }
@@ -93,8 +90,6 @@ public class RecordPresenter2 {
         EventBus.getDefault().unregister(this);
         stopRecord();
         recorder.onHostActivityPaused();
-        //recorder.release();
-        toRestore = true;
         Log.d(LOG_TAG,"pause presenter");
     }
 

@@ -32,8 +32,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter2;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraColorFilterAdapter;
@@ -91,10 +95,10 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
 
-    RecordPresenter2 recordPresenter;
-    CameraEffectsAdapter cameraEffectsAdapter;
-    CameraColorFilterAdapter cameraColorFilterAdapter;
-
+    private RecordPresenter2 recordPresenter;
+    private CameraEffectsAdapter cameraEffectsAdapter;
+    private CameraColorFilterAdapter cameraColorFilterAdapter;
+    private Tracker tracker;
 
     private boolean buttonBackPressed;
     private boolean fxHidden;
@@ -115,6 +119,8 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         configChronometer();
         lockRotation = false;
         orientationHelper = new OrientationHelper(this);
+        VideonaApplication app = (VideonaApplication) getApplication();
+        tracker = app.getTracker();
     }
 
 
@@ -161,10 +167,10 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @Override
     protected void onResume() {
         super.onResume();
-        recordPresenter.onResume(this, cameraView);
+        recordPresenter.onResume();
         try {
             orientationHelper.startMonitoringOrientation();
-        }catch (OrientationHelper.NoOrientationSupportException exception){
+        } catch (OrientationHelper.NoOrientationSupportException exception) {
             //TODO lock activity rotation;
         }
         recording = false;
@@ -178,10 +184,13 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @OnClick(R.id.button_record)
     public void OnRecordButtonClicked() {
-        if (!recording)
+        if (!recording) {
             recordPresenter.requestRecord();
-        else
+            sendButtonTracked("Start recording");
+        } else {
             recordPresenter.stopRecord();
+            sendButtonTracked("Stop recording");
+        }
     }
 
     @Override
@@ -458,11 +467,111 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @Override
     public void onColorEffectSelected(CameraEffectColor colorEffect) {
         recordPresenter.applyEffect(colorEffect.getFilterId());
+        sendButtonTracked(colorEffect.getIconResourceId());
     }
 
     @Override
     public void onFxSelected(CameraEffectFx fx) {
         recordPresenter.applyEffect(fx.getFilterId());
+        sendButtonTracked(fx.getIconResourceId());
+    }
+
+    @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_color,
+            R.id.button_camera_effect_fx, R.id.button_change_camera})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id identifier of the clicked view
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.button_record:
+                label = "Capture ";
+                break;
+            case R.id.button_change_camera:
+                label = "Change camera";
+                break;
+            case R.id.button_toggle_flash:
+                label = "Flash camera";
+                break;
+            case R.id.button_camera_effect_fx:
+                label = "Fx filters";
+                break;
+            case R.id.button_camera_effect_color:
+                label = "Color filters";
+                break;
+            case R.drawable.common_filter_ad0_none_normal:
+                label = "None color filter";
+                break;
+            case R.drawable.common_filter_ad1_aqua_normal:
+                label = "Aqua color filter";
+                break;
+            case R.drawable.common_filter_ad2_postericebw_normal:
+                label = "Posterize bw color filter";
+                break;
+            case R.drawable.common_filter_ad3_emboss_normal:
+                label = "Emboss color filter";
+                break;
+            case R.drawable.common_filter_ad4_mono_normal:
+                label = "Mono color filter";
+                break;
+            case R.drawable.common_filter_ad5_negative_normal:
+                label = "Negative color filter";
+                break;
+            case R.drawable.common_filter_ad6_green_normal:
+                label = "Green color filter";
+                break;
+            case R.drawable.common_filter_ad7_posterize_normal:
+                label = "Posterize color filter";
+                break;
+            case R.drawable.common_filter_ad8_sepia_normal:
+                label = "Sepia color filter";
+                break;
+            case R.drawable.common_filter_fx_fx0_none_normal:
+                label = "None fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx1_fisheye_normal:
+                label = "Fisheye fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx2_stretch_normal:
+                label = "Stretch fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx3_dent_normal:
+                label = "Dent fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx4_mirror_normal:
+                label = "Mirror fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx5_squeeze_normal:
+                label = "Squeeze fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx6_tunnel_normal:
+                label = "Tunnel fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx7_twirl_normal:
+                label = "Twirl fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx8_bulge_normal:
+                label = "Bulge filter";
+                break;
+            default:
+                label = "Other";
+        }
+        sendButtonTracked(label);
+    }
+
+    private void sendButtonTracked(String label) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
 
@@ -560,20 +669,18 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
                     rotateDeviceHint.setRotation(270);
                     rotateDeviceHint.setRotationX(0);
                     rotateDeviceHint.setVisibility(View.VISIBLE);
-                } else
-                    if (orientation > 165 && orientation < 195) {
-                        rotateDeviceHint.setRotation(-270);
-                        rotateDeviceHint.setRotationX(180);
-                        rotateDeviceHint.setVisibility(View.VISIBLE);
-                    } else {
-                        rotateDeviceHint.setVisibility(View.GONE);
-                    }
+                } else if (orientation > 165 && orientation < 195) {
+                    rotateDeviceHint.setRotation(-270);
+                    rotateDeviceHint.setRotationX(180);
+                    rotateDeviceHint.setVisibility(View.VISIBLE);
+                } else {
+                    rotateDeviceHint.setVisibility(View.GONE);
+                }
             }
         }
 
         private class NoOrientationSupportException extends Exception {
         }
     }
-
 }
 
