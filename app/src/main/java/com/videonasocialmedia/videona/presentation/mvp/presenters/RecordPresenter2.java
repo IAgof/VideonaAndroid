@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.videonasocialmedia.avrecorder.AVRecorder;
 import com.videonasocialmedia.avrecorder.Filters;
@@ -52,34 +53,55 @@ public class RecordPresenter2 {
      */
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
-
     private int selectedEffect;
+    private boolean toRestore = false;
 
     public RecordPresenter2(Context context, RecordView recordView,
                             GLCameraEncoderView cameraPreview) {
-        this.recordView = recordView;
-        config = new SessionConfig(Constants.PATH_APP_TEMP);
-        try {
-            recorder = new AVRecorder(config, context.getResources()
-                    .getDrawable(R.drawable.watermark720));
-            recorder.setPreviewDisplay(cameraPreview);
-            first = true;
-        } catch (IOException ioe) {
 
-        }
+        Log.d(LOG_TAG, "constructor presenter");
+
+        this.recordView = recordView;
+        initRecorder(context, cameraPreview);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         selectedEffect = Filters.FILTER_NONE;
     }
 
-    public void onResume() {
+    private void initRecorder(Context context, GLCameraEncoderView cameraPreview) {
+        config = new SessionConfig(Constants.PATH_APP_TEMP);
+        if (recorder == null) {
+            try {
+                recorder = new AVRecorder(config, context.getResources()
+                        .getDrawable(R.drawable.watermark720));
+                recorder.setPreviewDisplay(cameraPreview);
+                first = true;
+            } catch (IOException ioe) {
+                Log.e("ERROR", "ERROR", ioe);
+            }
+        }
+    }
+
+    public void onResume(Context context, GLCameraEncoderView cameraPreview) {
         EventBus.getDefault().register(this);
+//        if (toRestore)
+//            initRecorder(context, cameraPreview);
         recorder.onHostActivityResumed();
+        Log.d(LOG_TAG,"resume presenter");
     }
 
     public void onPause() {
         EventBus.getDefault().unregister(this);
         stopRecord();
         recorder.onHostActivityPaused();
+        //recorder.release();
+        toRestore = true;
+        Log.d(LOG_TAG,"pause presenter");
+    }
+
+    public void stopRecord() {
+        if (recorder.isRecording())
+            recorder.stopRecording();
+        //TODO show a gif to indicate the process is running til the video is added to the project
     }
 
     public void requestRecord() {
@@ -113,11 +135,6 @@ public class RecordPresenter2 {
         first = false;
     }
 
-    public void stopRecord() {
-        if (recorder.isRecording())
-            recorder.stopRecording();
-        //TODO show a gif to indicate the process is running til the video is added to the project
-    }
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         recordView.stopChronometer();
@@ -161,5 +178,13 @@ public class RecordPresenter2 {
     public void applyEffect(int filterId) {
         selectedEffect = filterId;
         recorder.applyFilter(filterId);
+    }
+
+    public void rotateCamera(int rotation) {
+        recorder.rotateCamera(rotation);
+    }
+
+    public void onDestroy() {
+        //recorder.release();
     }
 }

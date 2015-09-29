@@ -145,4 +145,8 @@ public class AVRecorder {
     public int getActiveCameraIndex() {
         return mCamEncoder.getCurrentCamera();
     }
+
+    public void rotateCamera(int rotation) {
+        mCamEncoder.updateRotationDisplay(rotation);
+    }
 }

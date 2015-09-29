@@ -10,6 +10,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -85,15 +88,20 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     ImageButton buttonCameraEffectColor;
     @InjectView(R.id.button_navigate_drawer)
     ImageButton drawerButton;
+    @InjectView(R.id.rotateDeviceHint)
+    ImageView rotateDeviceHint;
 
     RecordPresenter2 recordPresenter;
     CameraEffectsAdapter cameraEffectsAdapter;
     CameraColorFilterAdapter cameraColorFilterAdapter;
 
+
     private boolean buttonBackPressed;
     private boolean fxHidden;
     private boolean colorFilterHidden;
     private boolean recording;
+    private OrientationHelper orientationHelper;
+    private boolean lockRotation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +113,10 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recordPresenter = new RecordPresenter2(this, this, cameraView);
         initEffectsRecycler();
         configChronometer();
+        lockRotation = false;
+        orientationHelper = new OrientationHelper(this);
     }
+
 
     private void initEffectsRecycler() {
         cameraEffectsAdapter = new CameraEffectsAdapter(this);
@@ -144,13 +155,25 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     public void onPause() {
         super.onPause();
         recordPresenter.onPause();
+        orientationHelper.stopMonitoringOrientation();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        recordPresenter.onResume();
+        recordPresenter.onResume(this, cameraView);
+        try {
+            orientationHelper.startMonitoringOrientation();
+        }catch (OrientationHelper.NoOrientationSupportException exception){
+            //TODO lock activity rotation;
+        }
         recording = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recordPresenter.onDestroy();
     }
 
     @OnClick(R.id.button_record)
@@ -166,6 +189,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(0.5f);
         recording = true;
+        orientationHelper.stopMonitoringOrientation();
     }
 
     @Override
@@ -173,6 +197,11 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
         recButton.setAlpha(1f);
         recording = false;
+        try {
+            orientationHelper.startMonitoringOrientation();
+        } catch (OrientationHelper.NoOrientationSupportException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -435,4 +464,116 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     public void onFxSelected(CameraEffectFx fx) {
         recordPresenter.applyEffect(fx.getFilterId());
     }
+
+
+    private class OrientationHelper extends OrientationEventListener {
+
+        Context context;
+        private int rotationView;
+        private boolean detectScreenOrientation90;
+        private boolean detectScreenOrientation270;
+
+        public OrientationHelper(Context context) {
+            super(context);
+            detectScreenOrientation90 = false;
+            detectScreenOrientation270 = false;
+            this.context = context;
+        }
+
+        /**
+         *
+         */
+        public void startMonitoringOrientation() throws NoOrientationSupportException {
+            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+            determineInitialOrientation();
+            if (this.canDetectOrientation()) {
+                this.enable();
+            } else {
+                this.disable();
+                throw new NoOrientationSupportException();
+            }
+        }
+
+        public void stopMonitoringOrientation() {
+            this.disable();
+        }
+
+        private void determineInitialOrientation() {
+            if (rotationView == Surface.ROTATION_90) {
+                detectScreenOrientation90 = true;
+
+            } else if (rotationView == Surface.ROTATION_270) {
+                detectScreenOrientation270 = true;
+            }
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            if (!lockRotation) {
+                if (orientation > 85 && orientation < 95) {
+                    //  Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
+                    rotateDeviceHint.setVisibility(View.GONE);
+                    if (detectScreenOrientation90) {
+                        if (rotationView == Surface.ROTATION_90 && detectScreenOrientation270) {
+                            return;
+                        }
+                        if (rotationView == Surface.ROTATION_270) {
+                            rotationView = Surface.ROTATION_90;
+                            if (recordPresenter != null) {
+                                recordPresenter.rotateCamera(rotationView);
+                            }
+                        } else {
+                            if (rotationView == Surface.ROTATION_90) {
+                                rotationView = Surface.ROTATION_270;
+                                if (recordPresenter != null) {
+                                    recordPresenter.rotateCamera(rotationView);
+                                }
+                            }
+                        }
+                        detectScreenOrientation90 = false;
+                        detectScreenOrientation270 = true;
+                    }
+                } else if (orientation > 265 && orientation < 275) {
+                    rotateDeviceHint.setVisibility(View.GONE);
+                    if (detectScreenOrientation270) {
+                        //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
+                        if (rotationView == Surface.ROTATION_270 && detectScreenOrientation90) {
+                            return;
+                        }
+                        if (rotationView == Surface.ROTATION_270) {
+                            rotationView = Surface.ROTATION_90;
+                            if (recordPresenter != null) {
+                                recordPresenter.rotateCamera(rotationView);
+                            }
+                        } else {
+                            if (rotationView == Surface.ROTATION_90) {
+                                rotationView = Surface.ROTATION_270;
+                                if (recordPresenter != null) {
+                                    recordPresenter.rotateCamera(rotationView);
+                                }
+                            }
+                        }
+                        detectScreenOrientation90 = true;
+                        detectScreenOrientation270 = false;
+                    }
+                } else if ((orientation > 345 || orientation < 15) && orientation != -1) {
+                    rotateDeviceHint.setRotation(270);
+                    rotateDeviceHint.setRotationX(0);
+                    rotateDeviceHint.setVisibility(View.VISIBLE);
+                } else
+                    if (orientation > 165 && orientation < 195) {
+                        rotateDeviceHint.setRotation(-270);
+                        rotateDeviceHint.setRotationX(180);
+                        rotateDeviceHint.setVisibility(View.VISIBLE);
+                    } else {
+                        rotateDeviceHint.setVisibility(View.GONE);
+                    }
+            }
+        }
+
+        private class NoOrientationSupportException extends Exception {
+        }
+    }
+
 }
+
