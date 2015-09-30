@@ -84,7 +84,7 @@ public class RecordPresenter {
 
     public void onResume() {
         EventBus.getDefault().register(this);
-        recorder.onHostActivityResumed();
+        //recorder.onHostActivityResumed();
         Log.d(LOG_TAG, "resume presenter");
     }
 
@@ -185,6 +185,6 @@ public class RecordPresenter {
     }
 
     public void onDestroy() {
-        //recorder.release();
+        recorder.release();
     }
 }

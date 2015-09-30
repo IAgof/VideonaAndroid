@@ -111,7 +111,7 @@ public abstract class Muxer {
     public abstract void forceStop();
 
     protected boolean allTracksFinished() {
-        Log.w("MUXER", ""+mNumTracksFinished);
+        Log.w("MUXER", "Tracks finished"+mNumTracksFinished);
         return (mNumTracks == mNumTracksFinished);
     }
 

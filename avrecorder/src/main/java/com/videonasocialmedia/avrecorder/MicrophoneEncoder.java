@@ -87,6 +87,13 @@ public class MicrophoneEncoder implements Runnable {
         init(config);
     }
 
+    public void release(){
+        mAudioRecord.stop();
+        mAudioRecord.release();
+        mEncoderCore.release();
+        mThreadRunning = false;
+    }
+
     public boolean isRecording() {
         return mRecordingRequested;
     }
@@ -192,8 +199,8 @@ public class MicrophoneEncoder implements Runnable {
                 }
             }
         } catch (Throwable t) {
-            Log.e(TAG, "_offerAudioEncoder exception");
-            t.printStackTrace();
+            Log.e(TAG, "_offerAudioEncoder exception", t);
+            //t.printStackTrace();
         }
     }
 

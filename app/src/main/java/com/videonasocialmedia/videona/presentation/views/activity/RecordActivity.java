@@ -190,9 +190,15 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        //recordPresenter.onDestroy();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        recordPresenter.onDestroy();
+        //recordPresenter.onDestroy();
     }
 
     @OnClick(R.id.button_record)

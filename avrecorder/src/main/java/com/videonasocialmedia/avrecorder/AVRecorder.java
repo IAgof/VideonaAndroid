@@ -135,6 +135,7 @@ public class AVRecorder {
     }
 
     public void onHostActivityPaused() {
+        mMicEncoder.release();
         mCamEncoder.onHostActivityPaused();
     }
 
