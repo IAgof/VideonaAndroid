@@ -43,7 +43,7 @@ public class CameraColorFilterAdapter
     public CameraColorFilterAdapter(List<CameraEffectColor> cameraEffectColor,
                                     OnColorEffectSelectedListener listener) {
         this.cameraEffectColors = cameraEffectColor;
-        this.onColorEffectSelectedListener=listener;
+        this.onColorEffectSelectedListener = listener;
     }
 
     /**
@@ -51,7 +51,7 @@ public class CameraColorFilterAdapter
      */
     public CameraColorFilterAdapter(OnColorEffectSelectedListener listener) {
         cameraEffectColors = CameraEffectColor.getDefaultCameraEffectColorList();
-        this.onColorEffectSelectedListener=listener;
+        this.onColorEffectSelectedListener = listener;
     }
 
     /**
@@ -128,6 +128,11 @@ public class CameraColorFilterAdapter
      */
     public boolean isCameraEffectColorListEmpty() {
         return cameraEffectColors.isEmpty();
+    }
+
+    public void resetSelectedEffect() {
+        selectedPosition = -1;
+        this.notifyDataSetChanged();
     }
 
     /**

@@ -130,6 +130,11 @@ public class CameraEffectsAdapter extends
         return cameraFxList.isEmpty();
     }
 
+    public void resetSelectedEffect() {
+        selectedPosition=-1;
+        this.notifyDataSetChanged();
+    }
+
     /**
      * This class is used to controls an item view of cameraEffectFx and metadata about its place
      * within the recycler view.

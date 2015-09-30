@@ -54,6 +54,7 @@ public class RecordPresenter {
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
     private int selectedEffect;
+    private int recordedVideosNumber;
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview) {
@@ -64,6 +65,7 @@ public class RecordPresenter {
         initRecorder(context, cameraPreview);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         selectedEffect = Filters.FILTER_NONE;
+        recordedVideosNumber = 0;
     }
 
     private void initRecorder(Context context, GLCameraEncoderView cameraPreview) {
@@ -83,14 +85,14 @@ public class RecordPresenter {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        Log.d(LOG_TAG,"resume presenter");
+        Log.d(LOG_TAG, "resume presenter");
     }
 
     public void onPause() {
         EventBus.getDefault().unregister(this);
         stopRecord();
         recorder.onHostActivityPaused();
-        Log.d(LOG_TAG,"pause presenter");
+        Log.d(LOG_TAG, "pause presenter");
     }
 
     public void stopRecord() {
@@ -125,6 +127,7 @@ public class RecordPresenter {
     private void startRecord() {
         applyEffect(selectedEffect);
         recorder.startRecording();
+        recordView.lockScreenRotation();
         recordView.showRecordButton();
         recordView.startChronometer();
         first = false;
@@ -151,7 +154,9 @@ public class RecordPresenter {
 
     public void onEvent(AddMediaItemToTrackSuccessEvent e) {
         String path = e.videoAdded.getMediaPath();
+        recordView.unlockScreenRotation();
         recordView.showRecordedVideoThumb(path);
+        recordView.showVideosRecordedNumber(++recordedVideosNumber);
         recordView.showStopButton();
     }
 

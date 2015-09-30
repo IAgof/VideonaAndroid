@@ -31,9 +31,9 @@ public interface RecordView extends MVPView {
 
     void showCameraEffectColor(List<CameraEffectColor> effects);
 
-    void navigateEditActivity(String durationVideoRecorded);
-
     void lockScreenRotation();
+
+    void unlockScreenRotation();
 
     void lockNavigator(); //en VideonaView
 

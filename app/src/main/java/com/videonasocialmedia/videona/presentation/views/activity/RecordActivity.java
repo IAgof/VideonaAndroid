@@ -12,6 +12,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -117,17 +118,25 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         setContentView(R.layout.record_activity);
         ButterKnife.inject(this);
         drawerLayout.setDrawerListener(this);
+
         cameraView.setKeepScreenOn(true);
         recordPresenter = new RecordPresenter(this, this, cameraView);
+
         initEffectsRecycler();
         configChronometer();
-        lockRotation = false;
-        orientationHelper = new OrientationHelper(this);
-        VideonaApplication app = (VideonaApplication) getApplication();
-        tracker = app.getTracker();
+        initOrientationHelper();
 
         navigateToEditButton.setBorderWidth(5);
         navigateToEditButton.setBorderColor(Color.WHITE);
+        numVideosRecorded.setVisibility(View.GONE);
+
+        VideonaApplication app = (VideonaApplication) getApplication();
+        tracker = app.getTracker();
+    }
+
+    private void initOrientationHelper() {
+        lockRotation = false;
+        orientationHelper = new OrientationHelper(this);
     }
 
     private void initEffectsRecycler() {
@@ -174,11 +183,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     protected void onResume() {
         super.onResume();
         recordPresenter.onResume();
-        try {
-            orientationHelper.startMonitoringOrientation();
-        } catch (OrientationHelper.NoOrientationSupportException exception) {
-            //TODO lock activity rotation;
-        }
+        unlockScreenRotation();
         recording = false;
     }
 
@@ -204,7 +209,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(0.5f);
         recording = true;
-        orientationHelper.stopMonitoringOrientation();
+
     }
 
     @Override
@@ -212,11 +217,6 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
         recButton.setAlpha(1f);
         recording = false;
-        try {
-            orientationHelper.startMonitoringOrientation();
-        } catch (OrientationHelper.NoOrientationSupportException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -323,12 +323,6 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         }
     }
 
-
-    @Override
-    public void showCameraEffectFxSelected(String colorEffect) {
-
-    }
-
     @Override
     public void showCameraEffectColor(List<CameraEffectColor> effects) {
         showEffectsRecyler(colorFilterRecycler);
@@ -337,20 +331,17 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     @Override
-    public void showCameraEffectColorSelected(String colorEffect) {
-
-    }
-
-    @Override
-    public void navigateEditActivity(String durationVideoRecorded) {
-        //TODO stop record if recording
-        Intent edit = new Intent(this, EditActivity.class);
-        startActivity(edit);
-    }
-
-    @Override
     public void lockScreenRotation() {
+        orientationHelper.stopMonitoringOrientation();
+    }
 
+    @Override
+    public void unlockScreenRotation() {
+        try {
+            orientationHelper.startMonitoringOrientation();
+        } catch (OrientationHelper.NoOrientationSupportException e) {
+            e.printStackTrace();
+        }
     }
 
     public void lockNavigator() {
@@ -394,19 +385,14 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     @Override
-    public void reStartFragment() {
-
-    }
-
-
-    @Override
     public void showRecordedVideoThumb(String path) {
-       // Glide.with(this).load(path).centerCrop().crossFade().into(navigateToEditButton);
+        // Glide.with(this).load(path).centerCrop().crossFade().into(navigateToEditButton);
         Glide.with(this).load(path).into(navigateToEditButton);
     }
 
     @Override
     public void showVideosRecordedNumber(int numberOfVideos) {
+        numVideosRecorded.setVisibility(View.VISIBLE);
         numVideosRecorded.setText(String.valueOf(numberOfVideos));
     }
 
@@ -440,7 +426,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @OnClick(R.id.button_navigate_edit)
     public void navigateToEdit() {
         Intent edit = new Intent(this, EditActivity.class);
-        edit.putExtra("SHARE", false);
+        //edit.putExtra("SHARE", false);
         startActivity(edit);
     }
 
@@ -474,12 +460,14 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     public void onColorEffectSelected(CameraEffectColor colorEffect) {
         recordPresenter.applyEffect(colorEffect.getFilterId());
         sendButtonTracked(colorEffect.getIconResourceId());
+        cameraEffectsAdapter.resetSelectedEffect();
     }
 
     @Override
     public void onFxSelected(CameraEffectFx fx) {
         recordPresenter.applyEffect(fx.getFilterId());
         sendButtonTracked(fx.getIconResourceId());
+        cameraColorFilterAdapter.resetSelectedEffect();
     }
 
     @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_color,
