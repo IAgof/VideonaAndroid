@@ -10,8 +10,8 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -19,6 +19,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -31,9 +33,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter2;
+import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraColorFilterAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
@@ -90,15 +96,20 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     ImageButton drawerButton;
     @InjectView(R.id.text_view_num_videos)
     TextView numVideosRecorded;
+    @InjectView(R.id.rotateDeviceHint)
+    ImageView rotateDeviceHint;
 
-    RecordPresenter2 recordPresenter;
-    CameraEffectsAdapter cameraEffectsAdapter;
-    CameraColorFilterAdapter cameraColorFilterAdapter;
+    private RecordPresenter recordPresenter;
+    private CameraEffectsAdapter cameraEffectsAdapter;
+    private CameraColorFilterAdapter cameraColorFilterAdapter;
+    private Tracker tracker;
 
     private boolean buttonBackPressed;
     private boolean fxHidden;
     private boolean colorFilterHidden;
     private boolean recording;
+    private OrientationHelper orientationHelper;
+    private boolean lockRotation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +118,13 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         ButterKnife.inject(this);
         drawerLayout.setDrawerListener(this);
         cameraView.setKeepScreenOn(true);
-        recordPresenter = new RecordPresenter2(this, this, cameraView);
+        recordPresenter = new RecordPresenter(this, this, cameraView);
         initEffectsRecycler();
         configChronometer();
+        lockRotation = false;
+        orientationHelper = new OrientationHelper(this);
+        VideonaApplication app = (VideonaApplication) getApplication();
+        tracker = app.getTracker();
 
         navigateToEditButton.setBorderWidth(5);
         navigateToEditButton.setBorderColor(Color.WHITE);
@@ -152,21 +167,36 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     public void onPause() {
         super.onPause();
         recordPresenter.onPause();
+        orientationHelper.stopMonitoringOrientation();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         recordPresenter.onResume();
+        try {
+            orientationHelper.startMonitoringOrientation();
+        } catch (OrientationHelper.NoOrientationSupportException exception) {
+            //TODO lock activity rotation;
+        }
         recording = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recordPresenter.onDestroy();
     }
 
     @OnClick(R.id.button_record)
     public void OnRecordButtonClicked() {
-        if (!recording)
+        if (!recording) {
             recordPresenter.requestRecord();
-        else
+            sendButtonTracked("Start recording");
+        } else {
             recordPresenter.stopRecord();
+            sendButtonTracked("Stop recording");
+        }
     }
 
     @Override
@@ -174,6 +204,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(0.5f);
         recording = true;
+        orientationHelper.stopMonitoringOrientation();
     }
 
     @Override
@@ -181,6 +212,11 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
         recButton.setAlpha(1f);
         recording = false;
+        try {
+            orientationHelper.startMonitoringOrientation();
+        } catch (OrientationHelper.NoOrientationSupportException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -437,10 +473,219 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @Override
     public void onColorEffectSelected(CameraEffectColor colorEffect) {
         recordPresenter.applyEffect(colorEffect.getFilterId());
+        sendButtonTracked(colorEffect.getIconResourceId());
     }
 
     @Override
     public void onFxSelected(CameraEffectFx fx) {
         recordPresenter.applyEffect(fx.getFilterId());
+        sendButtonTracked(fx.getIconResourceId());
+    }
+
+    @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_color,
+            R.id.button_camera_effect_fx, R.id.button_change_camera})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id identifier of the clicked view
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.button_record:
+                label = "Capture ";
+                break;
+            case R.id.button_change_camera:
+                label = "Change camera";
+                break;
+            case R.id.button_toggle_flash:
+                label = "Flash camera";
+                break;
+            case R.id.button_camera_effect_fx:
+                label = "Fx filters";
+                break;
+            case R.id.button_camera_effect_color:
+                label = "Color filters";
+                break;
+            case R.drawable.common_filter_ad0_none_normal:
+                label = "None color filter";
+                break;
+            case R.drawable.common_filter_ad1_aqua_normal:
+                label = "Aqua color filter";
+                break;
+            case R.drawable.common_filter_ad2_postericebw_normal:
+                label = "Posterize bw color filter";
+                break;
+            case R.drawable.common_filter_ad3_emboss_normal:
+                label = "Emboss color filter";
+                break;
+            case R.drawable.common_filter_ad4_mono_normal:
+                label = "Mono color filter";
+                break;
+            case R.drawable.common_filter_ad5_negative_normal:
+                label = "Negative color filter";
+                break;
+            case R.drawable.common_filter_ad6_green_normal:
+                label = "Green color filter";
+                break;
+            case R.drawable.common_filter_ad7_posterize_normal:
+                label = "Posterize color filter";
+                break;
+            case R.drawable.common_filter_ad8_sepia_normal:
+                label = "Sepia color filter";
+                break;
+            case R.drawable.common_filter_fx_fx0_none_normal:
+                label = "None fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx1_fisheye_normal:
+                label = "Fisheye fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx2_stretch_normal:
+                label = "Stretch fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx3_dent_normal:
+                label = "Dent fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx4_mirror_normal:
+                label = "Mirror fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx5_squeeze_normal:
+                label = "Squeeze fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx6_tunnel_normal:
+                label = "Tunnel fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx7_twirl_normal:
+                label = "Twirl fx filter";
+                break;
+            case R.drawable.common_filter_fx_fx8_bulge_normal:
+                label = "Bulge filter";
+                break;
+            default:
+                label = "Other";
+        }
+        sendButtonTracked(label);
+    }
+
+    private void sendButtonTracked(String label) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
+
+
+    private class OrientationHelper extends OrientationEventListener {
+
+        Context context;
+        private int rotationView;
+        private boolean detectScreenOrientation90;
+        private boolean detectScreenOrientation270;
+
+        public OrientationHelper(Context context) {
+            super(context);
+            detectScreenOrientation90 = false;
+            detectScreenOrientation270 = false;
+            this.context = context;
+        }
+
+        /**
+         *
+         */
+        public void startMonitoringOrientation() throws NoOrientationSupportException {
+            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+            determineInitialOrientation();
+            if (this.canDetectOrientation()) {
+                this.enable();
+            } else {
+                this.disable();
+                throw new NoOrientationSupportException();
+            }
+        }
+
+        public void stopMonitoringOrientation() {
+            this.disable();
+        }
+
+        private void determineInitialOrientation() {
+            if (rotationView == Surface.ROTATION_90) {
+                detectScreenOrientation90 = true;
+
+            } else if (rotationView == Surface.ROTATION_270) {
+                detectScreenOrientation270 = true;
+            }
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            if (!lockRotation) {
+                if (orientation > 85 && orientation < 95) {
+                    //  Log.d(LOG_TAG, "rotationPreview onOrientationChanged " + orientation);
+                    rotateDeviceHint.setVisibility(View.GONE);
+                    if (detectScreenOrientation90) {
+                        if (rotationView == Surface.ROTATION_90 && detectScreenOrientation270) {
+                            return;
+                        }
+                        if (rotationView == Surface.ROTATION_270) {
+                            rotationView = Surface.ROTATION_90;
+                            if (recordPresenter != null) {
+                                recordPresenter.rotateCamera(rotationView);
+                            }
+                        } else {
+                            if (rotationView == Surface.ROTATION_90) {
+                                rotationView = Surface.ROTATION_270;
+                                if (recordPresenter != null) {
+                                    recordPresenter.rotateCamera(rotationView);
+                                }
+                            }
+                        }
+                        detectScreenOrientation90 = false;
+                        detectScreenOrientation270 = true;
+                    }
+                } else if (orientation > 265 && orientation < 275) {
+                    rotateDeviceHint.setVisibility(View.GONE);
+                    if (detectScreenOrientation270) {
+                        //  Log.d("CameraPreview", "rotationPreview onOrientationChanged .*.*.*.*.*.* 270");
+                        if (rotationView == Surface.ROTATION_270 && detectScreenOrientation90) {
+                            return;
+                        }
+                        if (rotationView == Surface.ROTATION_270) {
+                            rotationView = Surface.ROTATION_90;
+                            if (recordPresenter != null) {
+                                recordPresenter.rotateCamera(rotationView);
+                            }
+                        } else {
+                            if (rotationView == Surface.ROTATION_90) {
+                                rotationView = Surface.ROTATION_270;
+                                if (recordPresenter != null) {
+                                    recordPresenter.rotateCamera(rotationView);
+                                }
+                            }
+                        }
+                        detectScreenOrientation90 = true;
+                        detectScreenOrientation270 = false;
+                    }
+                } else if ((orientation > 345 || orientation < 15) && orientation != -1) {
+                    rotateDeviceHint.setRotation(270);
+                    rotateDeviceHint.setRotationX(0);
+                    rotateDeviceHint.setVisibility(View.VISIBLE);
+                } else if (orientation > 165 && orientation < 195) {
+                    rotateDeviceHint.setRotation(-270);
+                    rotateDeviceHint.setRotationX(180);
+                    rotateDeviceHint.setVisibility(View.VISIBLE);
+                } else {
+                    rotateDeviceHint.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        private class NoOrientationSupportException extends Exception {
+        }
     }
 }

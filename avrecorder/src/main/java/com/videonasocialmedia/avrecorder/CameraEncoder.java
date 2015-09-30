@@ -13,6 +13,7 @@ import android.os.Message;
 import android.os.Trace;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Surface;
 
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
@@ -83,6 +84,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private boolean mThumbnailRequested;
     private int mThumbnailScaleFactor;
     private int mThumbnailRequestedOnFrame;
+    private int mCurrentCameraRotation;
+    private int cameraInfoOrientation;
 
     public CameraEncoder(SessionConfig config) {
         mState = STATE.INITIALIZING;
@@ -559,12 +562,12 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             if (mDisplayView != null)
                 mDisplayView.onPause();
             // Release camera if we're not recording
-            if (!mRecording && mSurfaceTexture != null) {
+            //if (!mRecording && mSurfaceTexture != null) {
                 if (VERBOSE) Log.i("CameraRelease", "Releasing camera");
                 if (mDisplayView != null)
                     releaseDisplayView();
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE_CAMERA));
-            }
+           // }
         }
     }
 
@@ -797,15 +800,18 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             throw new RuntimeException("Unable to open camera");
         }
 
+        initDisplayOrientation();
+
         Camera.Parameters parms = mCamera.getParameters();
 
         postCameraOpenedEvent(parms);
 
         List<String> focusModes = parms.getSupportedFocusModes();
-        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-            parms.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
             parms.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+            parms.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
         } else {
             if (VERBOSE) Log.i(TAG, "Camera does not support autofocus");
         }
@@ -882,6 +888,82 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             ((GLCameraEncoderView) mDisplayView).releaseCamera();
         } else if (mDisplayView instanceof GLCameraView)
             ((GLCameraView) mDisplayView).releaseCamera();
+    }
+
+    private void initDisplayOrientation() {
+        //Sets the camera right Orientation.
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+
+        android.hardware.Camera.getCameraInfo(mCurrentCamera, info);
+        int rotation = mCurrentCameraRotation;
+        int degrees = 90;
+        switch (rotation) {
+            // case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            // case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        mCamera.setDisplayOrientation(result);
+        cameraInfoOrientation = result;
+    }
+
+
+    public void updateRotationDisplay(int rotationView) {
+        mCamera.setDisplayOrientation(getDisplayOrientation(rotationView));
+        configureDisplayView();
+    }
+
+    private int getDisplayOrientation(int rotationView) {
+
+        int displayOrientation = 0;
+        if (rotationView == Surface.ROTATION_90) {
+            if (cameraInfoOrientation == 0) {
+                displayOrientation = 0;
+            }
+            if (cameraInfoOrientation == 180) {
+                displayOrientation = 180;
+            }
+            Log.d(TAG, "setRotationView rotation 90, cameraOrientation " + cameraInfoOrientation);
+        } else if (rotationView == Surface.ROTATION_270) {
+            if (cameraInfoOrientation == 0) {
+                displayOrientation = 180;
+            }
+            if (cameraInfoOrientation == 180) {
+                displayOrientation = 0;
+            }
+            Log.d(TAG, "setRotationView rotation 270, cameraOrientation " + cameraInfoOrientation);
+        } else if (rotationView == Surface.ROTATION_0) {
+            if (cameraInfoOrientation == 90) {
+                displayOrientation = 90;
+            }
+            if (cameraInfoOrientation == 270) {
+                displayOrientation = 270;
+            }
+            Log.d(TAG, "setRotationView rotation 0, cameraOrientation " + cameraInfoOrientation);
+        } else if (rotationView == Surface.ROTATION_180) {
+            if (cameraInfoOrientation == 90) {
+                displayOrientation = 270;
+            }
+            if (cameraInfoOrientation == 270) {
+                displayOrientation = 90;
+            }
+            Log.d(TAG, "setRotationView rotation 180, cameraOrientation " + cameraInfoOrientation);
+        }
+
+        return displayOrientation;
     }
 
     public int getCurrentCamera() {

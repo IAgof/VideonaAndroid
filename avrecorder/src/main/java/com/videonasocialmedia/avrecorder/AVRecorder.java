@@ -141,4 +141,12 @@ public class AVRecorder {
     public void onHostActivityResumed() {
         mCamEncoder.onHostActivityResumed();
     }
+
+    public int getActiveCameraIndex() {
+        return mCamEncoder.getCurrentCamera();
+    }
+
+    public void rotateCamera(int rotation) {
+        mCamEncoder.updateRotationDisplay(rotation);
+    }
 }

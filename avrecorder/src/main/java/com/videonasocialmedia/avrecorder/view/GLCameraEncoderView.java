@@ -1,7 +1,9 @@
 package com.videonasocialmedia.avrecorder.view;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.videonasocialmedia.avrecorder.CameraEncoder;
@@ -31,13 +33,14 @@ public class GLCameraEncoderView extends GLCameraView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        super.onTouchEvent(ev);
         if(mScaleGestureDetector != null){
             mScaleGestureDetector.onTouchEvent(ev);
         }
         if(mCameraEncoder != null && ev.getPointerCount() == 1 && (ev.getAction() == MotionEvent.ACTION_MOVE)){
-            mCameraEncoder.handleCameraPreviewTouchEvent(ev);
+           // mCameraEncoder.handleCameraPreviewTouchEvent(ev);
         }else if(mCameraEncoder != null && ev.getPointerCount() == 1 && (ev.getAction() == MotionEvent.ACTION_DOWN)){
-            mCameraEncoder.handleCameraPreviewTouchEvent(ev);
+           // mCameraEncoder.handleCameraPreviewTouchEvent(ev);
         }
         return true;
     }
