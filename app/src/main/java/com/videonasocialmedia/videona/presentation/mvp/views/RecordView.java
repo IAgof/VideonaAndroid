@@ -29,11 +29,7 @@ public interface RecordView extends MVPView {
 
     void showCameraEffectFx(List<CameraEffectFx> effects);
 
-    void showCameraEffectFxSelected(String colorEffect); //candidato a salir
-
     void showCameraEffectColor(List<CameraEffectColor> effects);
-
-    void showCameraEffectColorSelected(String colorEffect); //candidato a salir
 
     void navigateEditActivity(String durationVideoRecorded);
 
@@ -53,15 +49,9 @@ public interface RecordView extends MVPView {
 
     void showBackCameraSelected();
 
-    void changeCamera(); // candidato a salir
-
     void showError(String errorMessage); //videonaView
 
     void showError(int stringResourceId); //videonaView
-
-    //Qué cojones tiene que ver esto con una recordView.
-    // Las interfaces son ABSTRACCIONES deben ser generales e independientes de fragments y demás
-    void reStartFragment(); //Este se va seguro!
 
     void showRecordedVideoThumb(String path);
 

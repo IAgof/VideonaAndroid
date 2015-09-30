@@ -38,7 +38,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter2;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraColorFilterAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
@@ -95,7 +95,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
 
-    private RecordPresenter2 recordPresenter;
+    private RecordPresenter recordPresenter;
     private CameraEffectsAdapter cameraEffectsAdapter;
     private CameraColorFilterAdapter cameraColorFilterAdapter;
     private Tracker tracker;
@@ -114,7 +114,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         ButterKnife.inject(this);
         drawerLayout.setDrawerListener(this);
         cameraView.setKeepScreenOn(true);
-        recordPresenter = new RecordPresenter2(this, this, cameraView);
+        recordPresenter = new RecordPresenter(this, this, cameraView);
         initEffectsRecycler();
         configChronometer();
         lockRotation = false;
