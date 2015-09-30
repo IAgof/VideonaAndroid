@@ -408,13 +408,16 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/linear_layout_black_background"
+        <ImageView
+            android:id="@+id/drawer_full_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@null"
-            android:orientation="horizontal" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="0dp"
+            android:visibility="gone"
+            android:clickable="false"
+            android:src="#000" />
 
     </RelativeLayout>
 

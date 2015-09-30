@@ -2,9 +2,10 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_navigator_list"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="#000">
 
     <LinearLayout
 
