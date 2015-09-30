@@ -99,7 +99,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     TextView numVideosRecorded;
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
-    @InjectView (R.id.drawer_full_background)
+    @InjectView(R.id.drawer_full_background)
     ImageView drawerBackground;
 
     private RecordPresenter recordPresenter;
@@ -436,6 +436,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @OnClick(R.id.button_navigate_drawer)
     public void showDrawer() {
         drawerLayout.openDrawer(navigatorView);
+        drawerBackground.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -457,7 +458,6 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @Override
     public void onDrawerStateChanged(int newState) {
-
     }
 
     @Override
