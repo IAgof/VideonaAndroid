@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomManualFocusView">
+        <attr name="focus_icon" format="integer"/>
+    </declare-styleable>
+</resources>

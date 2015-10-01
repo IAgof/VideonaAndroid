@@ -10,6 +10,7 @@
 
 package com.videonasocialmedia.videona.domain.editor;
 
+import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.preview.UpdateSeekBarDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
@@ -36,11 +37,29 @@ public class AddVideoToProjectUseCase {
     public AddVideoToProjectUseCase() {
     }
 
+    /**
+     * @param videoPath
+     */
+    public void addVideoToTrack(String videoPath) {
+        Video videoToAdd = new Video(videoPath);
+        addVideoToTrack(videoToAdd);
+    }
+
+    /**
+     * @param videoPath
+     * @param listener
+     * @deprecated use the one parameter version instead
+     */
     public void addVideoToTrack(String videoPath, OnAddMediaFinishedListener listener) {
         Video videoToAdd = new Video(videoPath);
         addVideoToTrack(videoToAdd, listener);
     }
 
+    /**
+     * @param video
+     * @param listener
+     * @deprecated use the one parameter version instead
+     */
     public void addVideoToTrack(Video video, OnAddMediaFinishedListener listener) {
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
@@ -50,6 +69,18 @@ public class AddVideoToProjectUseCase {
             EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             listener.onAddMediaItemToTrackError();
+        }
+    }
+
+    public void addVideoToTrack(Video video) {
+        try {
+            MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
+            mediaTrack.insertItem(video);
+            EventBus.getDefault().post(new AddMediaItemToTrackSuccessEvent(video));
+            EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
+            EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
+        } catch (IllegalItemOnTrack illegalItemOnTrack) {
+            //TODO manejar error
         }
     }
 
@@ -66,10 +97,10 @@ public class AddVideoToProjectUseCase {
         }
     }
 
-    public void addVideoListToTrack(List<Video> videoList, OnAddMediaFinishedListener listener){
+    public void addVideoListToTrack(List<Video> videoList, OnAddMediaFinishedListener listener) {
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
-            for(Video video: videoList){
+            for (Video video : videoList) {
                 mediaTrack.insertItem(video);
             }
             listener.onAddMediaItemToTrackSuccess(null);

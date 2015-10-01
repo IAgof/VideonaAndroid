@@ -12,45 +12,49 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColorList;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFxList;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
+import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 
 import java.util.List;
 
 public interface RecordView extends MVPView {
 
-    void showRecordStarted();
+    void showRecordButton();
 
-    void showRecordFinished();
+    void showStopButton();
 
     void startChronometer();
 
     void stopChronometer();
 
-    void showCameraEffectFx(List<CameraEffectFxList> effects);
+    void showCameraEffectFx(List<CameraEffectFx> effects);
 
-    void showCameraEffectFxSelected(String colorEffect);
-
-    void showCameraEffectColor(List<CameraEffectColorList> effects);
-
-    void showCameraEffectColorSelected(String colorEffect);
-
-    void navigateEditActivity(String durationVideoRecorded);
+    void showCameraEffectColor(List<CameraEffectColor> effects);
 
     void lockScreenRotation();
 
-    void lockNavigator();
+    void unlockScreenRotation();
 
-    void unLockNavigator();
+    void lockNavigator(); //en VideonaView
 
-    void showFlashModeTorch(boolean mode);
+    void unLockNavigator(); //en VideonaView
 
-    void showCamera(int cameraMode);
+    /**
+     *
+     * @param on true=on, false=off
+     */
+    void showFlashOn(boolean on);
 
-    void changeCamera();
+    void showFrontCameraSelected();
 
-    void showError();
+    void showBackCameraSelected();
 
-    void reStartFragment();
+    void showError(String errorMessage); //videonaView
+
+    void showError(int stringResourceId); //videonaView
+
+    void showRecordedVideoThumb(String path);
+
+    void showVideosRecordedNumber(int numberOfVideos);
 
 }
