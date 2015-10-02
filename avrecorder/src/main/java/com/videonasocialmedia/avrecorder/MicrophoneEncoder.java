@@ -16,21 +16,24 @@ import java.nio.ByteBuffer;
  * @hide
  */
 public class MicrophoneEncoder implements Runnable {
+    protected static final int SAMPLES_PER_FRAME = 1024;                            // AAC frame size. Audio encoder input size is a multiple of this
+    protected static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private static final boolean TRACE = true;
     private static final boolean VERBOSE = false;
     private static final String TAG = "MicrophoneEncoder";
-
-    protected static final int SAMPLES_PER_FRAME = 1024;                            // AAC frame size. Audio encoder input size is a multiple of this
-    protected static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
-
     private final Object mReadyFence = new Object();    // Synchronize audio thread readiness
+    private final Object mRecordingFence = new Object();
+    // Variables recycled between calls to sendAudioToEncoder
+    MediaCodec mMediaCodec;
+    int audioInputBufferIndex;
+    int audioInputLength;
+    long audioAbsolutePtsUs;
+    long startPTS = 0;
+    long totalSamplesNum = 0;
     private boolean mThreadReady;                       // Is audio thread ready
     private boolean mThreadRunning;                     // Is audio thread running
-    private final Object mRecordingFence = new Object();
-
     private AudioRecord mAudioRecord;
     private AudioEncoderCore mEncoderCore;
-
     private boolean mRecordingRequested;
 
     public MicrophoneEncoder(SessionConfig config) throws IOException {
@@ -60,7 +63,6 @@ public class MicrophoneEncoder implements Runnable {
                 mEncoderCore.mChannelConfig,         // channels
                 AUDIO_FORMAT,                        // audio format
                 minBufferSize * 4);                  // buffer size (bytes)
-
     }
 
     public void startRecording() {
@@ -87,8 +89,19 @@ public class MicrophoneEncoder implements Runnable {
         init(config);
     }
 
-    public void release(){
-        mAudioRecord.stop();
+    public void onHostActivityResumed() {
+        startThread();
+    }
+
+    public void onHostActivityPaused() {
+        stopThread();
+    }
+
+    private void stopThread() {
+        release();
+    }
+
+    public void release() {
         mAudioRecord.release();
         mEncoderCore.release();
         mThreadRunning = false;
@@ -97,7 +110,6 @@ public class MicrophoneEncoder implements Runnable {
     public boolean isRecording() {
         return mRecordingRequested;
     }
-
 
     private void startThread() {
         synchronized (mReadyFence) {
@@ -120,15 +132,16 @@ public class MicrophoneEncoder implements Runnable {
 
     @Override
     public void run() {
+        //configurar audioRecord
         setupAudioRecord();
         mAudioRecord.startRecording();
-        synchronized (mReadyFence){
+        synchronized (mReadyFence) {
             mThreadReady = true;
             mReadyFence.notify();
         }
 
         synchronized (mRecordingFence) {
-            while (!mRecordingRequested) {
+            while (!mRecordingRequested) { //Mientras no se halla pedido grabar
                 try {
                     mRecordingFence.wait();
                 } catch (InterruptedException e) {
@@ -136,9 +149,10 @@ public class MicrophoneEncoder implements Runnable {
                 }
             }
         }
-        if (VERBOSE) Log.i(TAG, "Begin Audio transmission to encoder. encoder : " + mEncoderCore.mEncoder);
+        if (VERBOSE)
+            Log.i(TAG, "Begin Audio transmission to encoder. encoder : " + mEncoderCore.mEncoder);
 
-        while (mRecordingRequested) {
+        while (mRecordingRequested) { //Mientras se quiera grabar
 
             if (TRACE) Trace.beginSection("drainAudio");
             mEncoderCore.drainEncoder(false);
@@ -148,9 +162,10 @@ public class MicrophoneEncoder implements Runnable {
             sendAudioToEncoder(false);
             if (TRACE) Trace.endSection();
 
-        }
+        } //Se para la grabacion
         mThreadReady = false;
-        /*if (VERBOSE) */ Log.d(TAG, "Stop: Exiting audio encode loop. Draining Audio Encoder");
+        /*if (VERBOSE) */
+        Log.d(TAG, "Stop: Exiting audio encode loop. Draining Audio Encoder");
         if (TRACE) Trace.beginSection("sendAudio");
         sendAudioToEncoder(true);
         if (TRACE) Trace.endSection();
@@ -160,14 +175,8 @@ public class MicrophoneEncoder implements Runnable {
         if (TRACE) Trace.endSection();
         mEncoderCore.release();
         mThreadRunning = false;
-        Log.d(TAG,"Stop: finished audio record loop");
+        Log.d(TAG, "Stop: finished audio record loop");
     }
-
-    // Variables recycled between calls to sendAudioToEncoder
-    MediaCodec mMediaCodec;
-    int audioInputBufferIndex;
-    int audioInputLength;
-    long audioAbsolutePtsUs;
 
     private void sendAudioToEncoder(boolean endOfStream) {
         if (mMediaCodec == null)
@@ -185,7 +194,7 @@ public class MicrophoneEncoder implements Runnable {
                 // 16bit.
                 audioAbsolutePtsUs = getJitterFreePTS(audioAbsolutePtsUs, audioInputLength / 2);
 
-                if(audioInputLength == AudioRecord.ERROR_INVALID_OPERATION)
+                if (audioInputLength == AudioRecord.ERROR_INVALID_OPERATION)
                     Log.e(TAG, "Audio read error: invalid operation");
                 if (audioInputLength == AudioRecord.ERROR_BAD_VALUE)
                     Log.e(TAG, "Audio read error: bad value");
@@ -204,12 +213,10 @@ public class MicrophoneEncoder implements Runnable {
         }
     }
 
-    long startPTS = 0;
-    long totalSamplesNum = 0;
-
     /**
      * Ensures that each audio pts differs by a constant amount from the previous one.
-     * @param bufferPts presentation timestamp in us
+     *
+     * @param bufferPts        presentation timestamp in us
      * @param bufferSamplesNum the number of samples of the buffer's frame
      * @return
      */
@@ -222,8 +229,8 @@ public class MicrophoneEncoder implements Runnable {
             startPTS = bufferPts;
             totalSamplesNum = 0;
         }
-        correctedPts = startPTS +  (1000000 * totalSamplesNum) / (mEncoderCore.mSampleRate);
-        if(bufferPts - correctedPts >= 2*bufferDuration) {
+        correctedPts = startPTS + (1000000 * totalSamplesNum) / (mEncoderCore.mSampleRate);
+        if (bufferPts - correctedPts >= 2 * bufferDuration) {
             // reset
             startPTS = bufferPts;
             totalSamplesNum = 0;

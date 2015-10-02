@@ -421,8 +421,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             Log.i(TAG, "Stopped. Proceeding to release");
         } else if (mState != STATE.UNINITIALIZED) {
             Log.i(TAG, "release called in invalid state " + mState);
-            return;
-            //throw new IllegalArgumentException("release called in invalid state");
+            //return;
+            throw new IllegalArgumentException("release called in invalid state");
         }
         mState = STATE.RELEASING;
         mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE));
@@ -563,10 +563,11 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 mDisplayView.onPause();
             // Release camera if we're not recording
             //if (!mRecording && mSurfaceTexture != null) {
-                if (VERBOSE) Log.i("CameraRelease", "Releasing camera");
-                if (mDisplayView != null)
-                    releaseDisplayView();
-                mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE_CAMERA));
+            if (VERBOSE)
+                Log.i("CameraRelease", "Releasing camera");
+            if (mDisplayView != null)
+                releaseDisplayView();
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE_CAMERA));
            // }
         }
     }
@@ -767,7 +768,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         // with Camera.getCameraInfo().facing values. However the API specifies that Camera.open(0)
         // will always be a rear-facing camera, and CAMERA_FACING_BACK = 0.
         if (mCamera != null) {
-            throw new RuntimeException("camera already initialized");
+            throw new RuntimeException("c" +
+                    "amera already initialized");
         }
 
         Camera.CameraInfo info = new Camera.CameraInfo();

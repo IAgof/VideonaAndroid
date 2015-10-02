@@ -127,6 +127,7 @@ public class AVRecorder {
      */
     public void release() {
         mCamEncoder.release();
+        mMicEncoder.release();
         // MicrophoneEncoder releases all it's resources when stopRecording is called
         // because it doesn't have any meaningful state
         // between recordings. It might someday if we decide to present
@@ -135,12 +136,13 @@ public class AVRecorder {
     }
 
     public void onHostActivityPaused() {
-        mMicEncoder.release();
         mCamEncoder.onHostActivityPaused();
+        //mMicEncoder.onHostActivityPaused();
     }
 
     public void onHostActivityResumed() {
         mCamEncoder.onHostActivityResumed();
+        //mMicEncoder.onHostActivityResumed();
     }
 
     public int getActiveCameraIndex() {

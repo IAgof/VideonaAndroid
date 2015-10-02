@@ -84,7 +84,7 @@ public class RecordPresenter {
 
     public void onResume() {
         EventBus.getDefault().register(this);
-        //recorder.onHostActivityResumed();
+        recorder.onHostActivityResumed();
         Log.d(LOG_TAG, "resume presenter");
     }
 
@@ -94,6 +94,16 @@ public class RecordPresenter {
         recorder.onHostActivityPaused();
         Log.d(LOG_TAG, "pause presenter");
     }
+
+    public void onStop(){
+        //recorder.onHostActivityPaused();
+    }
+
+    public void onDestroy() {
+        recorder.release();
+    }
+
+
 
     public void stopRecord() {
         if (recorder.isRecording())
@@ -128,7 +138,7 @@ public class RecordPresenter {
         applyEffect(selectedEffect);
         recorder.startRecording();
         recordView.lockScreenRotation();
-        recordView.showRecordButton();
+        recordView.showStopButton();
         recordView.startChronometer();
         first = false;
     }
@@ -156,8 +166,8 @@ public class RecordPresenter {
         String path = e.videoAdded.getMediaPath();
         recordView.unlockScreenRotation();
         recordView.showRecordedVideoThumb(path);
+        recordView.showRecordButton();
         recordView.showVideosRecordedNumber(++recordedVideosNumber);
-        recordView.showStopButton();
     }
 
     public void changeCamera() {
@@ -184,7 +194,5 @@ public class RecordPresenter {
         recorder.rotateCamera(rotation);
     }
 
-    public void onDestroy() {
-        recorder.release();
-    }
+
 }

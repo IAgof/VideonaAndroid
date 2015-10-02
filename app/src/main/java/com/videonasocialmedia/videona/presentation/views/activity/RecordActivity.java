@@ -192,13 +192,13 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @Override
     protected void onStop() {
         super.onStop();
-        //recordPresenter.onDestroy();
+        recordPresenter.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //recordPresenter.onDestroy();
+        recordPresenter.onDestroy();
     }
 
     @OnClick(R.id.button_record)
@@ -214,17 +214,21 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @Override
     public void showRecordButton() {
-        recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
-        recButton.setAlpha(0.5f);
-        recording = true;
-
+        recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
+        recButton.setAlpha(1f);
+        recording = false;
+        unLockNavigator();
+        navigateToEditButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showStopButton() {
-        recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
+        recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(1f);
-        recording = false;
+        recording = true;
+        lockNavigator();
+        navigateToEditButton.setVisibility(View.INVISIBLE);
+        numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -335,7 +339,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     public void showCameraEffectColor(List<CameraEffectColor> effects) {
         showEffectsRecyler(colorFilterRecycler);
         colorFilterHidden = false;
-        buttonCameraEffectFx.setActivated(true);
+        buttonCameraEffectColor.setActivated(true);
     }
 
     @Override
@@ -353,11 +357,13 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     public void lockNavigator() {
+        drawerButton.setVisibility(View.INVISIBLE);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
 
     public void unLockNavigator() {
+        drawerButton.setVisibility(View.VISIBLE);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
@@ -395,6 +401,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @Override
     public void showRecordedVideoThumb(String path) {
         // Glide.with(this).load(path).centerCrop().crossFade().into(navigateToEditButton);
+
         Glide.with(this).load(path).into(navigateToEditButton);
     }
 
@@ -433,16 +440,20 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @OnClick(R.id.button_navigate_edit)
     public void navigateToEdit() {
-        Intent edit = new Intent(this, EditActivity.class);
-        //edit.putExtra("SHARE", false);
-        startActivity(edit);
+        if (!recording) {
+            Intent edit = new Intent(this, EditActivity.class);
+            //edit.putExtra("SHARE", false);
+            startActivity(edit);
+        }
     }
 
 
     @OnClick(R.id.button_navigate_drawer)
     public void showDrawer() {
-        drawerLayout.openDrawer(navigatorView);
-        drawerBackground.setVisibility(View.VISIBLE);
+        if (!recording) {
+            drawerLayout.openDrawer(navigatorView);
+            drawerBackground.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

@@ -10,6 +10,9 @@
   <item android:state_pressed="true">
     <bitmap android:src="@drawable/activity_record_filter_pressed"/>
   </item>
+  <item android:state_activated="true">
+    <bitmap android:src="@drawable/activity_record_filter_pressed"/>
+  </item>
   <item>
     <bitmap android:src="@drawable/activity_record_filter_normal"/>
   </item>

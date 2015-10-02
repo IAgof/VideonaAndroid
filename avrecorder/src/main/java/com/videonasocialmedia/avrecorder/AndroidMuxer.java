@@ -61,11 +61,8 @@ public class AndroidMuxer extends Muxer {
     }
 
     protected void stop() {
-
         mMuxer.stop();
-        boolean t= EventBus.getDefault().hasSubscriberForEvent(MuxerFinishedEvent.class);
         EventBus.getDefault().post(new MuxerFinishedEvent());
-
         //release();
         mStarted = false;
     }
