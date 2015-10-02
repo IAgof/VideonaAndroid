@@ -39,6 +39,9 @@ public class VideonaApplication extends Application {
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         app_tracker = analytics.newTracker(R.xml.app_tracker);
         app_tracker.enableAdvertisingIdCollection(true);
+
+        Qordoba.init(this, "dev_a2e09b7e-fe87-4ea0-9f44-64ce45922798",
+                "43d79114-c163-419f-bb57-275533726cd1");
     }
 
     /**
