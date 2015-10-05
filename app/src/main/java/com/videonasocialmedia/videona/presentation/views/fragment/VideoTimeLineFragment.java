@@ -29,7 +29,7 @@ import de.greenrobot.event.EventBus;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView {
+public class VideoTimeLineFragment extends VideonaFragment implements VideoTimeLineView {
 
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;

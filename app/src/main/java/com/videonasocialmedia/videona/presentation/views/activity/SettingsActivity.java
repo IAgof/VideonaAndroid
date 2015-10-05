@@ -18,7 +18,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragme
 /**
  * This class is used to manage the setting menu.
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends VideonaActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

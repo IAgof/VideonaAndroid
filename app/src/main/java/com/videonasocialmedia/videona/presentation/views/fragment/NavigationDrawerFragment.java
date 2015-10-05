@@ -40,7 +40,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the video fx menu
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends VideonaFragment {
 
     /*CONFIG*/
     /**

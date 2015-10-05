@@ -15,6 +15,7 @@ import android.app.Application;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.qordoba.sdk.Qordoba;
 
 public class VideonaApplication extends Application {
 
@@ -33,15 +34,20 @@ public class VideonaApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        setupGoogleAnalytics();
+        setupQordoba();
+    }
 
-        //Analytics setup
+    private void setupQordoba() {
+        Qordoba.init(this, "dev_a2e09b7e-fe87-4ea0-9f44-64ce45922798",
+                "43d79114-c163-419f-bb57-275533726cd1");
+    }
+
+    private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         app_tracker = analytics.newTracker(R.xml.app_tracker);
         app_tracker.enableAdvertisingIdCollection(true);
-
-        Qordoba.init(this, "dev_a2e09b7e-fe87-4ea0-9f44-64ce45922798",
-                "43d79114-c163-419f-bb57-275533726cd1");
     }
 
     /**

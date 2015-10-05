@@ -58,7 +58,7 @@ import de.greenrobot.event.EventBus;
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class TrimPreviewFragment extends Fragment implements PreviewView, TrimView,
+public class TrimPreviewFragment extends VideonaFragment implements PreviewView, TrimView,
         RangeSeekBar.OnRangeSeekBarChangeListener, SeekBar.OnSeekBarChangeListener {
 
     protected Handler handler = new Handler();

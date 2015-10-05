@@ -31,7 +31,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the video fx menu
  */
-public class VideoFxMenuFragment extends Fragment {
+public class VideoFxMenuFragment extends VideonaFragment {
 
     /**
      * Tracker google analytics

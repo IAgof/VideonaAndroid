@@ -44,7 +44,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class ShareActivity extends Activity implements ShareView, OnPreparedListener,
+public class ShareActivity extends VideonaActivity implements ShareView, OnPreparedListener,
         DrawerLayout.DrawerListener, MediaPlayer.OnErrorListener {
 
 

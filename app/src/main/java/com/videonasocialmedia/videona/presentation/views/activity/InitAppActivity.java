@@ -37,7 +37,7 @@ import java.util.List;
  * Show a dummy splash screen and initialize all data needed to start
  */
 
-public class InitAppActivity extends Activity implements InitAppView, OnInitAppEventListener {
+public class InitAppActivity extends VideonaActivity implements InitAppView, OnInitAppEventListener {
 
     /**
      * LOG_TAG

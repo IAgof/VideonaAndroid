@@ -40,7 +40,7 @@ import butterknife.InjectView;
 /**
  * Created by jca on 14/5/15.
  */
-public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
+public class VideoGalleryFragment extends VideonaFragment implements VideoGalleryView,
         MusicRecyclerViewClickListener, OnTransitionClickListener {
 
     public static final int SELECTION_MODE_SINGLE = 0;

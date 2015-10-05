@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.eventbus.events.PreviewingVideoChangedEvent;
@@ -71,7 +72,7 @@ import de.greenrobot.event.EventBus;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
+public class EditActivity extends VideonaActivity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
         DrawerLayout.DrawerListener, OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
 
@@ -420,6 +421,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                     EventBus.getDefault().post(new PreviewingVideoChangedEvent(0, false));
                 }
             }
+            Qordoba.setCurrentNavigationRoute(panel,this.getClass().getName());
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(panel, f).setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).commit();
         }

@@ -39,7 +39,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the scissors fx menu
  */
-public class ScissorsFxMenuFragment extends Fragment {
+public class ScissorsFxMenuFragment extends VideonaFragment {
 
     private final String LOG_TAG = "ScissorsFxMenuFragment";
 
