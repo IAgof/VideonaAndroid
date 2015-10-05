@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.videonasocialmedia.videona.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * This class is used to show a preview of the selected video.
@@ -121,6 +123,16 @@ public class VideoFullScreenPreviewActivity extends Activity implements OnPrepar
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @OnClick({R.id.edit_button_fullscreen_out})
+    public void onClickFullScreenOutMode() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        } else {
+            finish();
+        }
+        releaseVideoView();
     }
 
     /**
