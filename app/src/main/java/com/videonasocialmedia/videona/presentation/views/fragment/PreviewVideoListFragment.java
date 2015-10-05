@@ -308,6 +308,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
             int timeInMsec = instantTime - videoStartTimeInProject.get(currentVideoIndex) +
                     movieList.get(currentVideoIndex).getFileStartTime();
             if (isFullScreenBack) {
+                if (playButton.getVisibility() == View.INVISIBLE)
+                    playButton.setVisibility(View.VISIBLE);
                 initVideoPlayer(video, timeInMsec);
                 isFullScreenBack = false;
             } else {
@@ -391,6 +393,8 @@ public class PreviewVideoListFragment extends Fragment implements PreviewView,
                 try {
                     videoPlayer.setLooping(false);
                     videoPlayer.start();
+                    if (playButton.getVisibility() == View.VISIBLE)
+                        playButton.setVisibility(View.INVISIBLE);
                     videoPlayer.seekTo(instantToStart);
                     if (isMusicOnProject()) {
                         muteVideo();
