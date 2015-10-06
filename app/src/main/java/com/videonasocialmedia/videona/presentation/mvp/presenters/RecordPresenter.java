@@ -95,14 +95,13 @@ public class RecordPresenter {
         Log.d(LOG_TAG, "pause presenter");
     }
 
-    public void onStop(){
-        //recorder.onHostActivityPaused();
-    }
-
-    public void onDestroy() {
+    public void onStop() {
         recorder.release();
     }
 
+    public void onDestroy() {
+        //recorder.release();
+    }
 
 
     public void stopRecord() {

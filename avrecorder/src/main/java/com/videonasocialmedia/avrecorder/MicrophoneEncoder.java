@@ -19,7 +19,7 @@ public class MicrophoneEncoder implements Runnable {
     protected static final int SAMPLES_PER_FRAME = 1024;                            // AAC frame size. Audio encoder input size is a multiple of this
     protected static final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
     private static final boolean TRACE = true;
-    private static final boolean VERBOSE = false;
+    private static final boolean VERBOSE = true;
     private static final String TAG = "MicrophoneEncoder";
     private final Object mReadyFence = new Object();    // Synchronize audio thread readiness
     private final Object mRecordingFence = new Object();
@@ -53,18 +53,6 @@ public class MicrophoneEncoder implements Runnable {
         if (VERBOSE) Log.i(TAG, "Finished init. encoder : " + mEncoderCore.mEncoder);
     }
 
-    private void setupAudioRecord() {
-        int minBufferSize = AudioRecord.getMinBufferSize(mEncoderCore.mSampleRate,
-                mEncoderCore.mChannelConfig, AUDIO_FORMAT);
-
-        mAudioRecord = new AudioRecord(
-                MediaRecorder.AudioSource.CAMCORDER, // source
-                mEncoderCore.mSampleRate,            // sample rate, hz
-                mEncoderCore.mChannelConfig,         // channels
-                AUDIO_FORMAT,                        // audio format
-                minBufferSize * 4);                  // buffer size (bytes)
-    }
-
     public void startRecording() {
         if (VERBOSE) Log.i(TAG, "startRecording");
         synchronized (mRecordingFence) {
@@ -89,22 +77,10 @@ public class MicrophoneEncoder implements Runnable {
         init(config);
     }
 
-    public void onHostActivityResumed() {
-        startThread();
-    }
-
-    public void onHostActivityPaused() {
-        stopThread();
-    }
-
-    private void stopThread() {
-        release();
-    }
-
     public void release() {
+        if (VERBOSE) Log.d(TAG, "release requested");
         mAudioRecord.release();
         mEncoderCore.release();
-        mThreadRunning = false;
     }
 
     public boolean isRecording() {
@@ -132,40 +108,63 @@ public class MicrophoneEncoder implements Runnable {
 
     @Override
     public void run() {
-        //configurar audioRecord
         setupAudioRecord();
         mAudioRecord.startRecording();
+        Log.d(TAG, "AudioRecordStarted");
         synchronized (mReadyFence) {
             mThreadReady = true;
             mReadyFence.notify();
         }
-
         synchronized (mRecordingFence) {
-            while (!mRecordingRequested) { //Mientras no se halla pedido grabar
-                try {
-                    mRecordingFence.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            while (!mRecordingRequested) {
+                waitForRecordRequested();
             }
         }
+
         if (VERBOSE)
             Log.i(TAG, "Begin Audio transmission to encoder. encoder : " + mEncoderCore.mEncoder);
 
-        while (mRecordingRequested) { //Mientras se quiera grabar
+        while (mRecordingRequested) {
+            doRecord();
+        }
 
-            if (TRACE) Trace.beginSection("drainAudio");
-            mEncoderCore.drainEncoder(false);
-            if (TRACE) Trace.endSection();
+        if (VERBOSE)
+            Log.d(TAG, "Stop: Exiting audio encode loop. Draining Audio Encoder");
+        doStopRecord();
+        Log.d(TAG, "Stop: finished audio record loop");
+    }
 
-            if (TRACE) Trace.beginSection("sendAudio");
-            sendAudioToEncoder(false);
-            if (TRACE) Trace.endSection();
+    private void setupAudioRecord() {
+        int minBufferSize = AudioRecord.getMinBufferSize(mEncoderCore.mSampleRate,
+                mEncoderCore.mChannelConfig, AUDIO_FORMAT);
 
-        } //Se para la grabacion
+        mAudioRecord = new AudioRecord(
+                MediaRecorder.AudioSource.CAMCORDER, // source
+                mEncoderCore.mSampleRate,            // sample rate, hz
+                mEncoderCore.mChannelConfig,         // channels
+                AUDIO_FORMAT,                        // audio format
+                minBufferSize * 4);                  // buffer size (bytes)
+    }
+
+    private void waitForRecordRequested() {
+        try {
+            mRecordingFence.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void doRecord() {
+        if (TRACE) Trace.beginSection("drainAudio");
+        mEncoderCore.drainEncoder(false);
+        if (TRACE) Trace.endSection();
+        if (TRACE) Trace.beginSection("sendAudio");
+        sendAudioToEncoder(false);
+        if (TRACE) Trace.endSection();
+    }
+
+    private void doStopRecord() {
         mThreadReady = false;
-        /*if (VERBOSE) */
-        Log.d(TAG, "Stop: Exiting audio encode loop. Draining Audio Encoder");
         if (TRACE) Trace.beginSection("sendAudio");
         sendAudioToEncoder(true);
         if (TRACE) Trace.endSection();
@@ -175,8 +174,8 @@ public class MicrophoneEncoder implements Runnable {
         if (TRACE) Trace.endSection();
         mEncoderCore.release();
         mThreadRunning = false;
-        Log.d(TAG, "Stop: finished audio record loop");
     }
+
 
     private void sendAudioToEncoder(boolean endOfStream) {
         if (mMediaCodec == null)

@@ -419,9 +419,12 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 }
             }
             Log.i(TAG, "Stopped. Proceeding to release");
-        } else if (mState != STATE.UNINITIALIZED) {
+        }else if (mState == STATE.INITIALIZED){
+            releaseEncoder();
+            mState=STATE.UNINITIALIZED;
+        }
+        if (mState != STATE.UNINITIALIZED) {
             Log.i(TAG, "release called in invalid state " + mState);
-            //return;
             throw new IllegalArgumentException("release called in invalid state");
         }
         mState = STATE.RELEASING;
