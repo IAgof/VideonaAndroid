@@ -282,6 +282,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         checkNotNull(display);
         mDisplayRenderer = new CameraSurfaceRenderer(this, overlayImage);
         // Prep GLSurfaceView and attach Renderer
+
         display.setEGLContextClientVersion(2);
         display.setRenderer(mDisplayRenderer);
         //display.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR | GLSurfaceView.DEBUG_LOG_GL_CALLS);

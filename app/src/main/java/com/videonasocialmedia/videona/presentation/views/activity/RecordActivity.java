@@ -175,10 +175,9 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        recordPresenter.onPause();
-        orientationHelper.stopMonitoringOrientation();
+    protected void onStart() {
+        super.onStart();
+        recordPresenter.onStart();
     }
 
     @Override
@@ -190,9 +189,17 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        recordPresenter.onPause();
+        orientationHelper.stopMonitoringOrientation();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         recordPresenter.onStop();
+        finish();
     }
 
     @Override

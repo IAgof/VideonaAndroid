@@ -32,6 +32,7 @@ public class AVRecorder {
     private SessionConfig mConfig;
     private boolean mIsRecording;
     private Drawable overlayImage;
+    private boolean released;
 
     public AVRecorder(SessionConfig config, Drawable overlayImage) throws IOException {
         init(config);
@@ -43,6 +44,7 @@ public class AVRecorder {
         mMicEncoder = new MicrophoneEncoder(config);
         mConfig = config;
         mIsRecording = false;
+        released=false;
     }
 
     public void setPreviewDisplay(GLCameraView display) {
@@ -128,6 +130,7 @@ public class AVRecorder {
     public void release() {
         mMicEncoder.release();
         mCamEncoder.release();
+        released=true;
         // MicrophoneEncoder releases all it's resources when stopRecording is called
         // because it doesn't have any meaningful state
         // between recordings. It might someday if we decide to present
@@ -147,6 +150,10 @@ public class AVRecorder {
 
     public int getActiveCameraIndex() {
         return mCamEncoder.getCurrentCamera();
+    }
+
+    public boolean isReleased(){
+        return released;
     }
 
     public void rotateCamera(int rotation) {
