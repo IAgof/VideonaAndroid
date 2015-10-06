@@ -49,6 +49,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     private SharedPreferences.Editor editor;
     private Camera camera;
     private int numSupportedCameras;
+    private final long MINIMUN_WAIT_TIME = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,13 +117,13 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         protected void onPostExecute(Boolean loggedIn) {
             long currentTimeEnd = System.currentTimeMillis();
             long timePassed = currentTimeEnd-currentTimeInit;
-            if (timePassed < 2000) {
+            if (timePassed < MINIMUN_WAIT_TIME) {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         exitSplashScreen();
                     }
-                }, 2000-timePassed);
+                }, MINIMUN_WAIT_TIME-timePassed);
             } else {
                 exitSplashScreen();
             }
