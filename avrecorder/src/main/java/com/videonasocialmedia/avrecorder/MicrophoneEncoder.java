@@ -35,8 +35,6 @@ public class MicrophoneEncoder implements Runnable {
     private AudioRecord mAudioRecord;
     private AudioEncoderCore mEncoderCore;
     private boolean mRecordingRequested;
-    private boolean releaseRequested;
-    private boolean hasRecorded;
 
     public MicrophoneEncoder(SessionConfig config) throws IOException {
         init(config);
@@ -47,28 +45,12 @@ public class MicrophoneEncoder implements Runnable {
                 config.getAudioBitrate(),
                 config.getAudioSamplerate(),
                 config.getMuxer());
-
         mMediaCodec = null;
         mThreadReady = false;
         mThreadRunning = false;
         mRecordingRequested = false;
-        releaseRequested = false;
-        hasRecorded=false;
-
         startThread();
         if (VERBOSE) Log.i(TAG, "Finished init. encoder : " + mEncoderCore.mEncoder);
-    }
-
-    private void setupAudioRecord() {
-        int minBufferSize = AudioRecord.getMinBufferSize(mEncoderCore.mSampleRate,
-                mEncoderCore.mChannelConfig, AUDIO_FORMAT);
-
-        mAudioRecord = new AudioRecord(
-                MediaRecorder.AudioSource.CAMCORDER, // source
-                mEncoderCore.mSampleRate,            // sample rate, hz
-                mEncoderCore.mChannelConfig,         // channels
-                AUDIO_FORMAT,                        // audio format
-                minBufferSize * 4);                  // buffer size (bytes)
     }
 
     public void startRecording() {
@@ -77,9 +59,7 @@ public class MicrophoneEncoder implements Runnable {
             totalSamplesNum = 0;
             startPTS = 0;
             mRecordingRequested = true;
-            hasRecorded=true;
             mRecordingFence.notify();
-            releaseRequested=false;
         }
     }
 
@@ -98,9 +78,7 @@ public class MicrophoneEncoder implements Runnable {
     }
 
     public void release() {
-        if (VERBOSE) Log.d(TAG,"release requested");
-        mRecordingRequested = false;
-        releaseRequested = false;
+        if (VERBOSE) Log.d(TAG, "release requested");
         mAudioRecord.release();
         mEncoderCore.release();
     }
@@ -130,56 +108,74 @@ public class MicrophoneEncoder implements Runnable {
 
     @Override
     public void run() {
-        //configurar audioRecord
         setupAudioRecord();
         mAudioRecord.startRecording();
-        Log.d(TAG,"AudioRecordStarted");
+        Log.d(TAG, "AudioRecordStarted");
         synchronized (mReadyFence) {
             mThreadReady = true;
             mReadyFence.notify();
         }
-
         synchronized (mRecordingFence) {
-            while (!mRecordingRequested && !releaseRequested) { //Mientras no se halla pedido grabar
-                try {
-                    mRecordingFence.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            while (!mRecordingRequested) {
+                waitForRecordRequested();
             }
         }
-        if (VERBOSE) {
+
+        if (VERBOSE)
             Log.i(TAG, "Begin Audio transmission to encoder. encoder : " + mEncoderCore.mEncoder);
-            Log.i(TAG, "mRecordingRequested: " +mRecordingRequested+" releaseRequested: "+releaseRequested);
+
+        while (mRecordingRequested) {
+            doRecord();
         }
 
-        while (mRecordingRequested) { //Mientras se quiera grabar
-            if (TRACE) Trace.beginSection("drainAudio");
-            mEncoderCore.drainEncoder(false);
-            if (TRACE) Trace.endSection();
-            if (TRACE) Trace.beginSection("sendAudio");
-            sendAudioToEncoder(false);
-            if (TRACE) Trace.endSection();
-        } //Se para la grabacion
-
-        mThreadReady = false;
-        /*if (VERBOSE) */
-        Log.d(TAG, "Stop: Exiting audio encode loop. Draining Audio Encoder");
-        if (hasRecorded) {
-            if (TRACE) Trace.beginSection("sendAudio");
-            sendAudioToEncoder(true);
-            if (TRACE) Trace.endSection();
-        }
-        mAudioRecord.stop();
-        if(hasRecorded) {
-            if (TRACE) Trace.beginSection("drainAudioFinal");
-            mEncoderCore.drainEncoder(true);
-            if (TRACE) Trace.endSection();
-        }
-        mEncoderCore.release();
-        mThreadRunning = false;
+        if (VERBOSE)
+            Log.d(TAG, "Stop: Exiting audio encode loop. Draining Audio Encoder");
+        doStopRecord();
         Log.d(TAG, "Stop: finished audio record loop");
     }
+
+    private void setupAudioRecord() {
+        int minBufferSize = AudioRecord.getMinBufferSize(mEncoderCore.mSampleRate,
+                mEncoderCore.mChannelConfig, AUDIO_FORMAT);
+
+        mAudioRecord = new AudioRecord(
+                MediaRecorder.AudioSource.CAMCORDER, // source
+                mEncoderCore.mSampleRate,            // sample rate, hz
+                mEncoderCore.mChannelConfig,         // channels
+                AUDIO_FORMAT,                        // audio format
+                minBufferSize * 4);                  // buffer size (bytes)
+    }
+
+    private void waitForRecordRequested() {
+        try {
+            mRecordingFence.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void doRecord() {
+        if (TRACE) Trace.beginSection("drainAudio");
+        mEncoderCore.drainEncoder(false);
+        if (TRACE) Trace.endSection();
+        if (TRACE) Trace.beginSection("sendAudio");
+        sendAudioToEncoder(false);
+        if (TRACE) Trace.endSection();
+    }
+
+    private void doStopRecord() {
+        mThreadReady = false;
+        if (TRACE) Trace.beginSection("sendAudio");
+        sendAudioToEncoder(true);
+        if (TRACE) Trace.endSection();
+        mAudioRecord.stop();
+        if (TRACE) Trace.beginSection("drainAudioFinal");
+        mEncoderCore.drainEncoder(true);
+        if (TRACE) Trace.endSection();
+        mEncoderCore.release();
+        mThreadRunning = false;
+    }
+
 
     private void sendAudioToEncoder(boolean endOfStream) {
         if (mMediaCodec == null)
