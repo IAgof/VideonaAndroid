@@ -40,7 +40,7 @@ import java.util.List;
 
 public class InitAppActivity extends Activity implements InitAppView, OnInitAppEventListener {
 
-    private static final long MINIMUN_WAIT_TIME = 1500;
+    private static final long MINIMUN_WAIT_TIME = 900;
     /**
      * LOG_TAG
      */
@@ -50,6 +50,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     private SharedPreferences.Editor editor;
     private Camera camera;
     private int numSupportedCameras;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     @Override
     protected void onStart() {
         super.onStart();
+        startTime = System.currentTimeMillis();
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -100,12 +102,11 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      * Shows the splash screen
      */
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
-        long currentTimeInit;
+
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                currentTimeInit = System.currentTimeMillis();
                 setup();
             } catch (Exception e) {
                 Log.e("SETUP", "setup failed", e);
@@ -116,7 +117,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         @Override
         protected void onPostExecute(Boolean loggedIn) {
             long currentTimeEnd = System.currentTimeMillis();
-            long timePassed = currentTimeEnd-currentTimeInit;
+            long timePassed = currentTimeEnd- startTime;
             if (timePassed < MINIMUN_WAIT_TIME) {
                 handler.postDelayed(new Runnable() {
                     @Override
