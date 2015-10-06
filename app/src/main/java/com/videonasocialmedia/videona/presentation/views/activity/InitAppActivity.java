@@ -40,6 +40,7 @@ import java.util.List;
 
 public class InitAppActivity extends Activity implements InitAppView, OnInitAppEventListener {
 
+    private static final long MINIMUN_WAIT_TIME = 1500;
     /**
      * LOG_TAG
      */
@@ -116,13 +117,13 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         protected void onPostExecute(Boolean loggedIn) {
             long currentTimeEnd = System.currentTimeMillis();
             long timePassed = currentTimeEnd-currentTimeInit;
-            if (timePassed < 2000) {
+            if (timePassed < MINIMUN_WAIT_TIME) {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         exitSplashScreen();
                     }
-                }, 2000-timePassed);
+                }, MINIMUN_WAIT_TIME-timePassed);
             } else {
                 exitSplashScreen();
             }
