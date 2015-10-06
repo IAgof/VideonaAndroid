@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -43,6 +44,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      * LOG_TAG
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
+    protected Handler handler = new Handler();
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Camera camera;
@@ -76,6 +78,12 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         releaseCamera();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
     /**
      * Releases the camera object
      */
@@ -91,10 +99,12 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      * Shows the splash screen
      */
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
+        long currentTimeInit;
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
+                currentTimeInit = System.currentTimeMillis();
                 setup();
             } catch (Exception e) {
                 Log.e("SETUP", "setup failed", e);
@@ -104,6 +114,21 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
 
         @Override
         protected void onPostExecute(Boolean loggedIn) {
+            long currentTimeEnd = System.currentTimeMillis();
+            long timePassed = currentTimeEnd-currentTimeInit;
+            if (timePassed < 2000) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        exitSplashScreen();
+                    }
+                }, 2000-timePassed);
+            } else {
+                exitSplashScreen();
+            }
+        }
+
+        private void exitSplashScreen() {
             if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
                 navigate(AppIntroActivity.class);
             } else {
@@ -113,8 +138,8 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     }
 
     private void setup() {
-        initSettings();
-        setupCameraSettings();
+        //initSettings();
+        //setupCameraSettings();
         setupPathsApp(this);
         // TODO: change this variable of 30MB (size of the raw folder)
         if (Utils.isAvailableSpace(30)) {
