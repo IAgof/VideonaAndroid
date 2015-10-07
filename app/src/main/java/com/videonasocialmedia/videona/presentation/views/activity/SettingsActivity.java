@@ -13,6 +13,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
 
 /**
@@ -25,6 +26,7 @@ public class SettingsActivity extends VideonaActivity{
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
+        Qordoba.setCurrentNavigationRoute(android.R.id.content,this.getClass().getName());
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();

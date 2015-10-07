@@ -18,6 +18,6 @@ public abstract class VideonaActivity extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
-        Qordoba.updateScreen(this);
+        //Qordoba.updateScreen(this);
     }
 }
