@@ -246,6 +246,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                     updateSeekBarProgress();
                 }
             });
+            preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    seekBar.setProgress(0);
+                    playButton.setVisibility(View.VISIBLE);
+                }
+            });
             preview.requestFocus();
 
         } else {
@@ -259,7 +266,13 @@ public class TrimPreviewFragment extends Fragment implements PreviewView, TrimVi
                     updateSeekBarProgress();
                 }
             });
-
+            preview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    seekBar.setProgress(0);
+                    playButton.setVisibility(View.VISIBLE);
+                }
+            });
             try {
                 videoPlayer.reset();
                 videoPlayer.setDataSource(videoPath);

@@ -134,6 +134,10 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         removeMusicFromProjectUseCase.removeAllMusic(0);
     }
 
+    public int getProjectDuration() {
+        return Project.getInstance(null, null, null).getDuration();
+    }
+
     @Override
     public void onAddMediaItemToTrackError() {
         //TODO modify error message
