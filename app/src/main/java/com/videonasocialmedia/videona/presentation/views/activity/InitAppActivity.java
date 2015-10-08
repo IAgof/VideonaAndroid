@@ -103,7 +103,6 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
      */
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
 
-
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {

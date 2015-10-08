@@ -571,8 +571,8 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
         } else {
             int timeVideoInSeekBarInMsec = calculateCutPoint(positionInAdapter);
-            Log.d("seekbar", String.valueOf(timeVideoInSeekBarInMsec));
-            if (timeVideoInSeekBarInMsec > 0) {
+            int projectDuration = editPresenter.getProjectDuration();
+            if (timeVideoInSeekBarInMsec > 0 && (projectDuration-timeVideoInSeekBarInMsec) > 200) {
                 Video video = getCurrentVideo();
                 if (trimFragment != null && trimFragment.isVisible()) {
                     editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);

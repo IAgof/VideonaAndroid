@@ -12,7 +12,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -238,7 +237,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
                 for (int index = 0; index < videoList.size(); index++) {
                     Video video = videoList.get(index);
                     try {
-                        Log.d("SHOW TIME TAG", "" + index);
+                        //Log.d("SHOW TIME TAG", "" + index);
                         retriever.setDataSource(video.getMediaPath());
                         String duration = retriever.extractMetadata(
                                 MediaMetadataRetriever.METADATA_KEY_DURATION);
