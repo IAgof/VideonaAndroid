@@ -228,7 +228,26 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         pausePreview();
         if (trimFragment != null && trimFragment.isVisible()) {
             switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
-            this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+            removeTrimFragment();
+        }
+        if (musicGalleryFragment != null && musicGalleryFragment.isVisible()) {
+            if (scissorsFxMenuFragment == null) {
+                scissorsFxMenuFragment = new ScissorsFxMenuFragment();
+            }
+            switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+            switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+            if (audioFxButton.isActivated()) {
+                scissorButton.setActivated(true);
+                audioFxButton.setActivated(false);
+            }
+            hideOkDetailButton();
+        }
+    }
+
+    private void hideOkDetailButton() {
+        if(buttonOkTrimDetail.getVisibility() == View.VISIBLE) {
+            buttonOkTrimDetail.setVisibility(View.GONE);
+            buttonOkEditActivity.setVisibility(View.VISIBLE);
         }
     }
 
@@ -320,7 +339,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
             switchFragment(musicGalleryFragment, R.id.edit_bottom_panel);
             if (trimFragment != null) {
-                this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+                removeTrimFragment();
             }
         }
         scissorButton.setActivated(false);
@@ -334,6 +353,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     public void showScissorsFxMenu() {
         audioFxButton.setActivated(false);
         scissorButton.setActivated(true);
+        hideOkDetailButton();
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
@@ -349,7 +369,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         //scissorsFxMenuFragment.habilitateTrashButton();
 
         if (trimFragment != null) {
-            this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+            removeTrimFragment();
         }
 
     }
@@ -410,7 +430,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     private void switchFragment(Fragment f, int panel) {
         getFragmentManager().executePendingTransactions();
         if (!f.isAdded()) {
-            if (f instanceof TrimPreviewFragment) {
+            if (f instanceof TrimPreviewFragment || f instanceof MusicGalleryFragment) {
                 buttonOkEditActivity.setVisibility(View.GONE);
                 buttonOkTrimDetail.setVisibility(View.VISIBLE);
             } else if (f instanceof PreviewVideoListFragment) {
@@ -463,7 +483,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             selectedMusicIndex = position;
         }
     }
-
 
     @Override
     public void onVideoClicked(int position) {
@@ -522,13 +541,14 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
 
     @Override
     public void onTrimConfirmed() {
-        this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+        if (trimFragment != null) {
+            removeTrimFragment();
+        }
 
         if (!scissorButton.isActivated()) {
             scissorButton.setActivated(true);
             audioFxButton.setActivated(false);
         }
-
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         }
@@ -551,7 +571,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             editPresenter.duplicateClip(getCurrentVideo(), positionInAdapter);
             if (trimFragment != null && trimFragment.isVisible()) {
                 switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
-                this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+                removeTrimFragment();
             }
         }
     }
@@ -577,7 +597,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                 if (trimFragment != null && trimFragment.isVisible()) {
                     editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
                     switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
-                    this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+                    removeTrimFragment();
                 } else {
                     editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec + video.getFileStartTime());
                 }
