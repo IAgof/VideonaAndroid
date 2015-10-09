@@ -2,51 +2,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_share_drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:visibility="visible">
+        android:layout_height="match_parent">
 
-        
 
-        <VideoView
-            android:id="@+id/share_video_view"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:layout_width="1px"
+                android:layout_height="1px"
+                android:src="@drawable/gatito_rules"
+                android:layout_margin="0dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                />
+
+            <VideoView
+                android:id="@+id/share_video_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="9" >
+
+                <ImageButton
+                    android:id="@+id/button_navigate_drawer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    android:padding="20dp"
+                    android:src="@drawable/common_icon_drawer_selector" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="62" >
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="9">
+
+                <ImageButton
+                    android:id="@+id/share_button_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/share_activity_button_share_selector"
+                    android:padding="16dp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true" />
-
-        <ImageButton
-            android:id="@+id/share_button_share"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/share_activity_button_share_selector" />
-
-        <ImageView
-            android:id="@+id/imageBetaLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center"
-            android:contentDescription="Beta Label"
-            android:src="@drawable/beta_label" />
-
-        <ImageView
-            android:layout_width="1px"
-            android:layout_height="1px"
-            android:src="@drawable/gatito_rules"
-            android:layout_margin="0dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            />
+            android:id="@+id/linear_layout_black_background"
+            android:background="@null" />
     </RelativeLayout>
 
     <!-- Left Drawrer -->
@@ -56,7 +94,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:layout_margin="0dp"
         tools:layout="@layout/common_fragment_navigator"/>
 
 </android.support.v4.widget.DrawerLayout>

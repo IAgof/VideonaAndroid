@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="transparent">#7F000000</color>
+    <color name="grey_transparent">#7F000000</color>
+    <color name="transparent">#00000000</color>
 
 
     <color name="videona_blue_1">#0091ea</color>
@@ -13,6 +14,12 @@
     <color name="videona_blue_4">#00e7fb</color>
 
     <color name="videona_blue_5">#00e7fb</color>
+
+    <color name="videona_blue_6">#00a3ef</color>
+
+    <color name="videona_red_1">#fe304b</color>
+
+    <color name="videona_black_1">#000000</color>
 
 
     <color name="pastel_palette_brown">#c4bdab</color>
@@ -32,6 +39,8 @@
     <color name="pastel_palette_pink_2">#e0a1a9</color>
 
     <color name="pastel_palette_grey">#8e97a3</color>
+
+    <color name="pastel_palette_grey_record">#404040</color>
 
     <color name="pastel_palette_yellow">#eace83</color>
 

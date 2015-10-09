@@ -29,7 +29,7 @@ public class AppIntroActivity extends AppIntro3 {
         editor = sharedPreferences.edit();
 
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_1));
-        //addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_2));
+        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_2));
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_3));
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_4));
         addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_5));

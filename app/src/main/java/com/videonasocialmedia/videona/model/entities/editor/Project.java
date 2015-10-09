@@ -13,6 +13,7 @@ package com.videonasocialmedia.videona.model.entities.editor;
 
 import com.videonasocialmedia.videona.model.entities.editor.media.Audio;
 import com.videonasocialmedia.videona.model.entities.editor.media.Image;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.AudioTrack;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
@@ -58,6 +59,11 @@ public class Project {
      */
     private Profile profile;
 
+    /**
+     * Project duration. The duration of the project in milliseconds.
+     */
+    private int duration;
+
     public static String VIDEONA_PATH = "";
 
     /**
@@ -75,6 +81,8 @@ public class Project {
         this.audioTracks = new ArrayList<>();
         audioTracks.add(new AudioTrack());
         this.profile = profile;
+        this.duration = 0;
+
     }
 
     /**
@@ -151,5 +159,17 @@ public class Project {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getDuration() {
+        duration = 0;
+        for(Media video: mediaTrack.getItems()){
+            duration = duration + video.getDuration();
+        }
+        return duration;
     }
 }

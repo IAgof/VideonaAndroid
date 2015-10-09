@@ -12,5 +12,4 @@ public interface TrimView {
     void refreshDurationTag(int duration);
     void refreshStartTimeTag(int startTime);
     void refreshStopTimeTag(int stopTime);
-
 }

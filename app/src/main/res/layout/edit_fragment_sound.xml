@@ -13,33 +13,21 @@
     android:orientation="vertical">
 
     <ImageButton
-        android:id="@+id/edit_fragment_sound_button_fx"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_green"
-        android:padding="15dp"
-        android:src="@drawable/edit_fragment_sound_icon_fx_normal"
-        android:alpha="0.20"
-        android:layout_weight="9"
-        android:scaleType="fitCenter" />
-
-    <ImageButton
         android:id="@+id/edit_fragment_sound_button_music"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_purple_dark"
-        android:padding="15dp"
-        android:src="@drawable/edit_fragment_sound_icon_music_normal"
-        android:alpha="0.20"
+        android:padding="16dp"
+        android:src="@drawable/edit_fragment_sound_icon_music_pressed"
         android:layout_weight="9"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:background="@null" />
 
     <ImageButton
         android:id="@+id/edit_fragment_sound_button_audio"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_pink_2"
-        android:padding="15dp"
+        android:background="@null"
+        android:padding="16dp"
         android:src="@drawable/edit_fragment_sound_icon_audio_normal"
         android:alpha="0.20"
         android:layout_weight="9"
@@ -49,9 +37,20 @@
         android:id="@+id/edit_fragment_sound_button_music_catalog"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/pastel_palette_red"
-        android:padding="15dp"
-        android:src="@drawable/activity_edit_icon_audio_normal"
+        android:background="@null"
+        android:padding="16dp"
+        android:src="@drawable/edit_fragment_sound_icon_equalizer_normal"
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_sound_button_fx"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:padding="16dp"
+        android:src="@drawable/edit_fragment_sound_icon_fx_normal"
         android:alpha="0.20"
         android:layout_weight="9"
         android:scaleType="fitCenter" />

@@ -14,8 +14,8 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 38 // 21/08/2015
-        versionName "0.3.10"
+        versionCode 46 // 09/10/2015
+        versionName "0.3.18"
         // Enabling multidex support.
         //multiDexEnabled true
     }
@@ -51,13 +51,9 @@ dependencies {
     compile project(':androidtranscoder')
     compile project(':androidmuxer')
     compile project(':appintro')
+    compile project(':avrecorder')
 
     debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     debugCompile 'com.google.dexmaker:dexmaker:1.0'
     debugCompile 'org.mockito:mockito-core:1.10.17'
 }
-
-
-
-
-

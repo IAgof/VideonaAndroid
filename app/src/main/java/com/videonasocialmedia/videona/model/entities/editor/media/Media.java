@@ -55,6 +55,10 @@ public abstract class Media extends EditorElement {
     protected int fileStopTime;
 
     /**
+     * @deprecated
+     * It's not necessary to set this param. In getter calculates the difference between stop time
+     * and start time
+     *
      * The long of the media resource to be added to the project
      */
     protected int duration;
@@ -178,9 +182,13 @@ public abstract class Media extends EditorElement {
     }
 
     public int getDuration() {
-        return duration;
+        return fileStopTime - fileStartTime;
     }
 
+    /**
+     * @deprecated
+     * @param duration
+     */
     public void setDuration(int duration) {
         this.duration = duration;
     }

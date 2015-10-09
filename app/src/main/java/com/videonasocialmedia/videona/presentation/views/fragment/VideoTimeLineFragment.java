@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Juan Javier Cabanas Abascal
@@ -60,7 +61,7 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
         recyclerView.setAdapter(adapter);
 
         Drawable trashIcon = getActivity().getResources()
-                .getDrawable(R.drawable.common_icon_delete_grey);
+                .getDrawable(R.drawable.common_icon_delete_media);
         callback = new ItemTouchHelperCallback(adapter, trashIcon);
         touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(recyclerView);
@@ -75,12 +76,15 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
     public void onPause() {
         super.onPause();
         presenter.pause();
-}
+        EventBus.getDefault().unregister(adapter);
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         presenter.start();
+        if (!EventBus.getDefault().isRegistered(adapter))
+            EventBus.getDefault().register(adapter);
     }
 
     @Override
@@ -89,11 +93,23 @@ public class VideoTimeLineFragment extends Fragment implements VideoTimeLineView
             initRecycler();
         adapter.setVideoList(videoList);
         adapter.notifyDataSetChanged();
+        if (!EventBus.getDefault().isRegistered(adapter)) {
+            EventBus.getDefault().register(adapter);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+    }
+
+    public Video getCurrentVideo() {
+        int selectedVideoIndex = adapter.getSelectedVideoPosition();
+        return adapter.getItem(selectedVideoIndex);
+    }
+
+    public int getCurrentPosition() {
+        return adapter.getSelectedVideoPosition();
     }
 }

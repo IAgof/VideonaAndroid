@@ -16,13 +16,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
@@ -39,7 +44,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class ShareActivity extends Activity implements ShareView, OnPreparedListener, MediaPlayer.OnErrorListener {
+public class ShareActivity extends Activity implements ShareView, OnPreparedListener,
+        DrawerLayout.DrawerListener, MediaPlayer.OnErrorListener {
 
 
     private final String LOG_TAG = this.getClass().getSimpleName();
@@ -59,6 +65,20 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
      */
     private Tracker tracker;
 
+    @InjectView(R.id.activity_share_drawer_layout)
+    DrawerLayout drawerLayout;
+    @InjectView(R.id.activity_share_navigation_drawer)
+    View navigatorView;
+
+
+    @InjectView(R.id.linear_layout_black_background)
+    LinearLayout linearLayoutBlackBackground;
+    /**
+     * Button navigation drawer
+     */
+    @InjectView(R.id.button_navigate_drawer)
+    ImageButton buttonNavigateDrawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +92,8 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
         Intent in = getIntent();
         videoPath = in.getStringExtra("VIDEO_EDITED");
         uri = Utils.obtainUriToShare(this, videoPath);
+
+        drawerLayout.setDrawerListener(this);
     }
 
 
@@ -91,6 +113,17 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
         } else {
             showError();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            drawerLayout.closeDrawer(navigatorView);
+            return;
+        }
+
+        finish();
+
     }
 
     /**
@@ -146,6 +179,14 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+    @OnClick(R.id.button_navigate_drawer)
+    public void navigationDrawerListener() {
+
+        drawerLayout.openDrawer(navigatorView);
+
     }
 
     //@OnClick(R.id.share_button_play)
@@ -209,10 +250,6 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
     }
 
     public void initMediaPlayer(final String videoPath) {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.VISIBLE);
         mediaController.setAnchorView(videoView);
@@ -230,6 +267,15 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
         videoView.requestFocus();
     }
 
+
+    public void navigateToEdit() {
+
+        Log.d(LOG_TAG, "navigateToEdit");
+
+        Intent edit = new Intent(this, EditActivity.class);
+        edit.putExtra("SHARE", false);
+        startActivity(edit);
+    }
 
     @OnClick(R.id.share_button_share)
     public void clickListener(View view) {
@@ -259,4 +305,28 @@ public class ShareActivity extends Activity implements ShareView, OnPreparedList
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+
+        buttonNavigateDrawer.setVisibility(View.INVISIBLE);
+        linearLayoutBlackBackground.setBackgroundColor(Color.BLACK);
+
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+
+        buttonNavigateDrawer.setVisibility(View.VISIBLE);
+        linearLayoutBlackBackground.setBackground(null);
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
+    }
 }

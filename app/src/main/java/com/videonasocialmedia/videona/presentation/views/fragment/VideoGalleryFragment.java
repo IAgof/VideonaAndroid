@@ -12,7 +12,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -23,7 +22,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
-import com.videonasocialmedia.videona.presentation.views.activity.VideoPreviewActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.VideoFullScreenPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
@@ -238,7 +237,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
                 for (int index = 0; index < videoList.size(); index++) {
                     Video video = videoList.get(index);
                     try {
-                        Log.d("SHOW TIME TAG", "" + index);
+                        //Log.d("SHOW TIME TAG", "" + index);
                         retriever.setDataSource(video.getMediaPath());
                         String duration = retriever.extractMetadata(
                                 MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -272,7 +271,7 @@ public class VideoGalleryFragment extends Fragment implements VideoGalleryView,
     public void onClick(View transitionOrigin, int positionOnAdapter) {
         selectedVideo = videoGalleryAdapter.getVideo(positionOnAdapter);
         String videoPath = selectedVideo.getMediaPath();
-        Intent i = new Intent(getActivity(), VideoPreviewActivity.class);
+        Intent i = new Intent(getActivity(), VideoFullScreenPreviewActivity.class);
         i.putExtra("VIDEO_PATH", videoPath);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options = ActivityOptions

@@ -50,40 +50,36 @@ public class Utils {
         return size <= megabytesAvailable;
     }
 
-    public static void copyResourceToTemp(Context ctx, int rawResourceId, String fileTypeExtensionConstant) throws IOException {
-
-        InputStream in = ctx.getResources().openRawResource(rawResourceId);
-
+    public static void copyResourceToTemp(Context ctx, int rawResourceId,
+                                          String fileTypeExtensionConstant) throws IOException {
         String nameFile = String.valueOf(rawResourceId);
+        File file = new File(Constants.PATH_APP_TEMP + File.separator + nameFile +
+                fileTypeExtensionConstant);
 
-        // Log.d(LOG_TAG, "copyResourceToTemp " + nameFile);
-
-        File file = new File(Constants.PATH_APP_TEMP + File.separator + nameFile + fileTypeExtensionConstant);
-
-        if (file.exists() && file.isFile()) {
-            file.delete();
-        }
-        try {
-            FileOutputStream out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator + nameFile + fileTypeExtensionConstant);
-            byte[] buff = new byte[1024];
-            int read = 0;
-            while ((read = in.read(buff)) > 0) {
-                out.write(buff, 0, read);
+        if (!file.exists() || !file.isFile()) {
+            if (!file.isFile())
+                file.delete();
+            InputStream in = ctx.getResources().openRawResource(rawResourceId);
+            try {
+                FileOutputStream out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator +
+                        nameFile + fileTypeExtensionConstant);
+                byte[] buff = new byte[1024];
+                int read = 0;
+                while ((read = in.read(buff)) > 0) {
+                    out.write(buff, 0, read);
+                }
+                out.close();
+            } catch (FileNotFoundException e) {
+                //TODO show error message
+            } finally {
+                in.close();
             }
-            out.close();
-        } catch (FileNotFoundException e) {
-            //TODO show error message
-        } finally {
-            in.close();
         }
     }
-
-
 
     public static void copyMusicResourceToTemp(Context ctx, int rawResourceId) throws IOException {
         copyResourceToTemp(ctx, rawResourceId, Constants.AUDIO_MUSIC_FILE_EXTENSION);
     }
-
 
     public static File getMusicFileById(int rawResourceId) {
         File f = new File(Constants.PATH_APP_TEMP + File.separator + rawResourceId + Constants.AUDIO_MUSIC_FILE_EXTENSION);
@@ -168,7 +164,8 @@ public class Utils {
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
-        BitmapShader shader = new BitmapShader(squaredBitmap, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+        BitmapShader shader = new BitmapShader(squaredBitmap, BitmapShader.TileMode.CLAMP,
+                BitmapShader.TileMode.CLAMP);
         paint.setShader(shader);
         paint.setAntiAlias(true);
         float r = size / 2f;
@@ -178,12 +175,14 @@ public class Utils {
         return bitmap;
     }
 
-    private static Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
+    private static Bitmap addWhiteBorderToBitmap (Bitmap bmp, int borderSize) {
         int size = Math.min(bmp.getWidth(), bmp.getHeight());
-        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2,
+                bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
         Paint paint = new Paint();
-        BitmapShader shader = new BitmapShader(bmp, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+        BitmapShader shader = new BitmapShader(bmp, BitmapShader.TileMode.CLAMP,
+                BitmapShader.TileMode.CLAMP);
         paint.setShader(shader);
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
@@ -196,7 +195,8 @@ public class Utils {
     }
 
     private Bitmap addWhiteBorderOriginal(Bitmap bmp, int borderSize) {
-        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2,
+                bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
         canvas.drawColor(Color.WHITE);
         canvas.drawBitmap(bmp, borderSize, borderSize, null);

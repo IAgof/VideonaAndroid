@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -39,14 +40,17 @@ import java.util.List;
 
 public class InitAppActivity extends Activity implements InitAppView, OnInitAppEventListener {
 
+    private static final long MINIMUN_WAIT_TIME = 900;
     /**
      * LOG_TAG
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
+    protected Handler handler = new Handler();
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Camera camera;
     private int numSupportedCameras;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     @Override
     protected void onStart() {
         super.onStart();
+        startTime = System.currentTimeMillis();
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -74,6 +79,12 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     protected void onPause() {
         super.onPause();
         releaseCamera();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
     }
 
     /**
@@ -104,6 +115,21 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
 
         @Override
         protected void onPostExecute(Boolean loggedIn) {
+            long currentTimeEnd = System.currentTimeMillis();
+            long timePassed = currentTimeEnd- startTime;
+            if (timePassed < MINIMUN_WAIT_TIME) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        exitSplashScreen();
+                    }
+                }, MINIMUN_WAIT_TIME-timePassed);
+            } else {
+                exitSplashScreen();
+            }
+        }
+
+        private void exitSplashScreen() {
             if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
                 navigate(AppIntroActivity.class);
             } else {
@@ -113,8 +139,8 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     }
 
     private void setup() {
-        initSettings();
-        setupCameraSettings();
+        //initSettings();
+        //setupCameraSettings();
         setupPathsApp(this);
         // TODO: change this variable of 30MB (size of the raw folder)
         if (Utils.isAvailableSpace(30)) {
@@ -318,6 +344,8 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         checkAndInitPath(Constants.PATH_APP_TEMP);
         checkAndInitPath(Constants.PATH_APP_MASTERS);
         checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
+        // Delete this method, only util after release v0.3.12. Clean old music files
+        checkAndDeletePath(Constants.PATH_APP_TEMP_DEPRECATED);
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
         editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
@@ -328,6 +356,27 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         if (!fEdited.exists()) {
             fEdited.mkdir();
         }
+    }
+
+    // Delete this methods, only util after release v0.3.12. Needed to clean old music files
+    private void checkAndDeletePath(String pathApp){
+        File folderTemp = new File(pathApp);
+        if(folderTemp.exists()){
+            deleteFolderRecursive(folderTemp);
+        }
+    }
+    private void deleteFolderRecursive(File dir) {
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteFolderRecursive(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+        dir.delete();
     }
 
     /**
@@ -361,10 +410,6 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         musicList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.pastel_palette_brown));
         musicList.add(new Music(R.drawable.activity_music_icon_folk_normal, "audio_folk", R.raw.audio_folk, R.color.pastel_palette_red));
         musicList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "audio_hiphop", R.raw.audio_hiphop, R.color.pastel_palette_green));
-        musicList.add(new Music(R.drawable.activity_music_icon_pop_normal, "audio_pop", R.raw.audio_pop, R.color.pastel_palette_purple));
-        musicList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "audio_reggae", R.raw.audio_reggae, R.color.pastel_palette_orange));
-        musicList.add(new Music(R.drawable.activity_music_icon_violin_normal, "audio_clasica_violin", R.raw.audio_clasica_violin, R.color.pastel_palette_yellow));
-        musicList.add(new Music(R.drawable.activity_music_icon_remove_normal, "Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
         return musicList;
     }
 
