@@ -414,7 +414,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                 buttonOkEditActivity.setVisibility(View.GONE);
                 buttonOkTrimDetail.setVisibility(View.VISIBLE);
             } else if (f instanceof PreviewVideoListFragment) {
-                if(buttonOkTrimDetail.getVisibility() == View.VISIBLE) {
+                if (buttonOkTrimDetail.getVisibility() == View.VISIBLE) {
                     buttonOkTrimDetail.setVisibility(View.GONE);
                     buttonOkEditActivity.setVisibility(View.VISIBLE);
                     EventBus.getDefault().post(new PreviewingVideoChangedEvent(0, false));
@@ -572,7 +572,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         } else {
             int timeVideoInSeekBarInMsec = calculateCutPoint(positionInAdapter);
             int projectDuration = editPresenter.getProjectDuration();
-            if (timeVideoInSeekBarInMsec > 0 && (projectDuration-timeVideoInSeekBarInMsec) > 200) {
+            if (timeVideoInSeekBarInMsec > 0 && (projectDuration - timeVideoInSeekBarInMsec) > 200) {
                 Video video = getCurrentVideo();
                 if (trimFragment != null && trimFragment.isVisible()) {
                     editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
@@ -644,15 +644,6 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
             case R.drawable.activity_music_icon_hip_hop_normal:
                 label = "Cap music icon selected";
                 break;
-            case R.drawable.activity_music_icon_pop_normal:
-                label = "Microphone music icon selected";
-                break;
-            case R.drawable.activity_music_icon_reggae_normal:
-                label = "Conga drum music icon selected";
-                break;
-            case R.drawable.activity_music_icon_violin_normal:
-                label = "Violin music icon selected";
-                break;
             case R.drawable.activity_music_icon_folk_normal:
                 label = "Spanish guitar music icon selected";
                 break;
@@ -661,6 +652,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
                 break;
             case R.drawable.activity_music_icon_remove_normal:
                 label = "Remove music icon selected";
+                break;
+            case R.drawable.activity_music_icon_birthday_normal:
+                label = "Happy birthday music selected";
                 break;
             default:
                 label = "Other";
