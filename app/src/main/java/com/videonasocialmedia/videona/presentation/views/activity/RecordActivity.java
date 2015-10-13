@@ -89,6 +89,8 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     Chronometer chronometer;
     @InjectView(R.id.button_toggle_flash)
     ImageButton flashButton;
+    @InjectView(R.id.button_flash_not_supported)
+    ImageButton flashSupported;
     @InjectView(R.id.button_camera_effect_fx)
     ImageButton buttonCameraEffectFx;
     @InjectView(R.id.button_camera_effect_color)
@@ -385,6 +387,22 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     @Override
+    public void showFlashSupported(boolean supported) {
+
+        if(supported){
+           // flashButton.setEnabled(true);
+           // flashSupported.setVisibility(View.INVISIBLE);
+            flashSupported.setImageResource(R.drawable.gatito_rules);
+        } else {
+           // flashButton.setEnabled(false);
+           // flashSupported.setVisibility(View.VISIBLE);
+           // flashSupported.setPressed(false);
+            flashSupported.setImageResource(R.drawable.gatito_rules_pressed);
+            //TODO implement new button Not Flash supported
+        }
+    }
+
+    @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
     }
@@ -442,6 +460,9 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @OnClick(R.id.button_change_camera)
     public void changeCamera() {
+
+        recordPresenter.setFlashOff();
+
         recordPresenter.changeCamera();
     }
 
