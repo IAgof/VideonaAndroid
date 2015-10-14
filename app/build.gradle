@@ -17,7 +17,7 @@ android {
         versionCode 46 // 09/10/2015
         versionName "0.3.18"
         // Enabling multidex support.
-        //multiDexEnabled true
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    //compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
@@ -47,6 +47,9 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
+    compile 'com.mixpanel.android:mixpanel-android:4.6.4'
+    compile 'com.google.android.gms:play-services-base:7.5.0'
+    compile 'com.google.android.gms:play-services-gcm:7.5.0'
 
     compile project(':androidtranscoder')
     compile project(':androidmuxer')
