@@ -45,6 +45,8 @@ public interface RecordView extends MVPView {
      */
     void showFlashOn(boolean on);
 
+    void showFlashSupported(boolean state);
+
     void showFrontCameraSelected();
 
     void showBackCameraSelected();
