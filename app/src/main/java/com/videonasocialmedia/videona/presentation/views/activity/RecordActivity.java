@@ -19,6 +19,7 @@ import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.OrientationEventListener;
 import android.view.Surface;
@@ -385,13 +386,39 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     }
 
     @Override
+    public void showFlashSupported(boolean supported) {
+
+        if(supported){
+
+            flashButton.setImageAlpha(255);
+            flashButton.setActivated(false);
+            flashButton.setActivated(false);
+            flashButton.setEnabled(true);
+
+        } else {
+
+            flashButton.setImageAlpha(65);
+            flashButton.setActivated(false);
+            flashButton.setEnabled(false);
+
+        }
+    }
+
+    @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
+        Log.d(LOG_TAG, "checkFlashSupport now");
+       // recordPresenter.checkFlashSupport();
     }
 
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
+
+        // Now Check flash support
+        Log.d(LOG_TAG, "checkFlashSupport now");
+       // recordPresenter.checkFlashSupport();
+
     }
 
 
@@ -442,6 +469,9 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @OnClick(R.id.button_change_camera)
     public void changeCamera() {
+
+        recordPresenter.setFlashOff();
+
         recordPresenter.changeCamera();
     }
 

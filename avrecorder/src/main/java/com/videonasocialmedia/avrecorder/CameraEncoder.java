@@ -36,7 +36,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, Runnable {
     private static final String TAG = "CameraEncoder";
     private static final boolean TRACE = true;         // Systrace
-    private static final boolean VERBOSE = false;       // Lots of logging
+    private static final boolean VERBOSE = true;       // Lots of logging
     // EncoderHandler Message types (Message#what)
     private static final int MSG_FRAME_AVAILABLE = 2;
     private static final int MSG_SET_SURFACE_TEXTURE = 3;
@@ -49,6 +49,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private final Object mReadyForFrameFence = new Object();    // guards mReadyForFrames/mRecording
     private final Object mReadyFence = new Object();            // guards ready/running
     private volatile STATE mState = STATE.UNINITIALIZED;
+
+    private final Object mChangeCameraFence = new Object();
+    private volatile STATE mStateCamera = STATE.UNINITIALIZED;
+
     // ----- accessed exclusively by encoder thread -----
     private WindowSurface mInputWindowSurface;
     private EglCore mEglCore;
@@ -206,6 +210,19 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         if (mCurrentCamera == 0)
             otherCamera = 1;
         requestCamera(otherCamera);
+
+        mStateCamera = STATE.UNINITIALIZED;
+
+        synchronized (mChangeCameraFence) {
+
+            while (mStateCamera != STATE.INITIALIZED) {
+                try {
+                    mChangeCameraFence.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return otherCamera;
     }
 
@@ -756,6 +773,12 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         try {
             mCamera.setPreviewTexture(mSurfaceTexture);
             mCamera.startPreview();
+
+            mStateCamera = STATE.INITIALIZED;
+            synchronized (mChangeCameraFence) {
+                mChangeCameraFence.notify();
+            }
+
             if (VERBOSE)
                 Log.i("CameraRelease", "Opened / Started Camera preview. mDisplayView ready? " + (mDisplayView == null ? " no" : " yes"));
             if (mDisplayView != null) configureDisplayView();
@@ -855,6 +878,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             previewFacts += " @" + (fpsRange[0] / 1000.0) + " - " + (fpsRange[1] / 1000.0) + "fps";
         }
         if (VERBOSE) Log.i(TAG, "Camera preview set: " + previewFacts);
+
     }
 
     public Camera getCamera() {
@@ -1003,6 +1027,89 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         return on;
     }
 
+    public boolean setFlashOff() {
+        String flashMode = "";
+        boolean on = false;
+        if (mCurrentFlash.equals(Parameters.FLASH_MODE_TORCH)) {
+            flashMode = Parameters.FLASH_MODE_OFF;
+            requestFlash(flashMode);
+            on = false;
+        }
+
+        return on;
+    }
+
+    // Check flash support
+    public int checkSupportFlash(){
+        int supportFlash;
+
+         /* If mCamera for some reason is null now flash mode will be applied
+         * next time the camera opens through mDesiredFlash. */
+        if (mCamera == null) {
+            Log.w(TAG, "Ignoring requestFlash: Camera isn't available now.");
+            return 2; // Ignoring case
+        }
+        Parameters params = mCamera.getParameters();
+        List<String> flashModes = params.getSupportedFlashModes();
+
+        if (VERBOSE) {
+            Log.i(TAG, "checkSupportFlash Trying to set flash into camera: " + mCurrentCamera);
+            Log.i(TAG, "checkSupportFlash Trying to set flash to: " + Parameters.FLASH_MODE_TORCH + " modes available: " + flashModes);
+        }
+
+        if(isValidFlashMode(flashModes, Parameters.FLASH_MODE_TORCH)){
+            supportFlash = 0; // true
+        } else {
+            supportFlash = 1; // false
+        }
+
+        Log.d(TAG, "checkSupportFlash supportFlash " + supportFlash );
+
+        return supportFlash;
+    }
+
+    // Check auto focus
+    public int checkSupportAutoFocus(){
+        int supportAutoFocus;
+
+         /* If mCamera for some reason is null now flash mode will be applied
+         * next time the camera opens through mDesiredFlash. */
+        if (mCamera == null) {
+            Log.w(TAG, "Ignoring requestFlash: Camera isn't available now.");
+            return 2; // Ignoring case
+        }
+        Parameters params = mCamera.getParameters();
+        List<String> focusModes = params.getSupportedFocusModes();
+
+        if (VERBOSE) {
+            Log.i(TAG, "checkSupportAutoFocus Trying to set flash into camera: " + mCurrentCamera);
+            Log.i(TAG, "checkSupportAutoFocus Trying to set flash to: " + Parameters.FLASH_MODE_TORCH + " modes available: " + focusModes);
+        }
+
+        if(isValidFocusMode(focusModes, Parameters.FOCUS_MODE_AUTO)){
+            supportAutoFocus = 0; // true
+        } else {
+            supportAutoFocus = 1; // false
+        }
+
+        Log.d(TAG, "checkSupportAutoFocus supportAutoFocus " + supportAutoFocus );
+
+        return supportAutoFocus;
+    }
+
+    /**
+     * @param focusModes
+     * @param focusMode
+     * @return returns true if flashModes aren't null AND they contain the flashMode,
+     * else returns false
+     */
+    private boolean isValidFocusMode(List<String> focusModes, String focusMode) {
+        if (focusModes != null && focusModes.contains(focusMode)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Sets the requested flash mode and restarts the
      * camera preview. This will take effect immediately
@@ -1024,6 +1131,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         /* If the device doesn't have a camera flash or
          * doesn't support our desired flash modes return */
         if (VERBOSE) {
+            Log.i(TAG, "Trying to set flash into camera: " + mCurrentCamera);
             Log.i(TAG, "Trying to set flash to: " + mDesiredFlash + " modes available: " + flashModes);
         }
 
