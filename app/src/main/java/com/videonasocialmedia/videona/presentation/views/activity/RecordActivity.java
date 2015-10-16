@@ -215,9 +215,13 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         if (!recording) {
             recordPresenter.requestRecord();
             sendButtonTracked("Start recording");
+            mixpanel.timeEvent("Time recording one video");
+            mixpanel.track("Start recording");
         } else {
             recordPresenter.stopRecord();
             sendButtonTracked("Stop recording");
+            mixpanel.track("Time recording one video");
+            mixpanel.track("Stop recording");
         }
     }
 
@@ -279,6 +283,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } else {
             showCameraEffectFx(null);
         }
+        mixpanel.track("Camera effect fx Button clicked", null);
     }
 
     private void hideColorFilters() {
@@ -342,6 +347,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } else {
             showCameraEffectColor(null);
         }
+        mixpanel.track("Camera effect color Button clicked", null);
     }
 
     @Override
@@ -379,6 +385,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_toggle_flash)
     public void toggleFlash() {
         recordPresenter.toggleFlash();
+        mixpanel.track("Toggle flash Button clicked", null);
     }
 
     @Override
@@ -445,6 +452,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_change_camera)
     public void changeCamera() {
         recordPresenter.changeCamera();
+        mixpanel.track("Change camera Button clicked", null);
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -453,6 +461,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             Intent edit = new Intent(this, EditActivity.class);
             //edit.putExtra("SHARE", false);
             startActivity(edit);
+            mixpanel.track("Navigate edit Button clicked in Record Activity", null);
         }
     }
 
@@ -462,6 +471,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         if (!recording) {
             drawerLayout.openDrawer(navigatorView);
             drawerBackground.setVisibility(View.VISIBLE);
+            mixpanel.track("Navigate drawer Button clicked in Record Activity", null);
         }
     }
 
