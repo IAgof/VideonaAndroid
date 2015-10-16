@@ -283,7 +283,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } else {
             showCameraEffectFx(null);
         }
-        mixpanel.track("Camera effect fx Button clicked", null);
     }
 
     private void hideColorFilters() {
@@ -347,7 +346,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } else {
             showCameraEffectColor(null);
         }
-        mixpanel.track("Camera effect color Button clicked", null);
     }
 
     @Override
@@ -396,13 +394,14 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
+        mixpanel.track("Front camera selected", null);
     }
 
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
+        mixpanel.track("Back camera selected", null);
     }
-
 
     @Override
     public void showError(String errorMessage) {
@@ -452,7 +451,10 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_change_camera)
     public void changeCamera() {
         recordPresenter.changeCamera();
-        mixpanel.track("Change camera Button clicked", null);
+        if (recording)
+            mixpanel.track("Change camera Button clicked while recording", null);
+        else
+            mixpanel.track("Change camera Button clicked on preview", null);
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -541,57 +543,75 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                 break;
             case R.drawable.common_filter_ad0_none_normal:
                 label = "None color filter";
+                mixpanel.track("None color filter selected", null);
                 break;
             case R.drawable.common_filter_ad1_aqua_normal:
                 label = "Aqua color filter";
+                mixpanel.track("Aqua color filter selected", null);
                 break;
             case R.drawable.common_filter_ad2_postericebw_normal:
                 label = "Posterize bw color filter";
+                mixpanel.track("Posterize bw color filter selected", null);
                 break;
             case R.drawable.common_filter_ad3_emboss_normal:
                 label = "Emboss color filter";
+                mixpanel.track("Emboss color filter selected", null);
                 break;
             case R.drawable.common_filter_ad4_mono_normal:
                 label = "Mono color filter";
+                mixpanel.track("Mono color filter selected", null);
                 break;
             case R.drawable.common_filter_ad5_negative_normal:
                 label = "Negative color filter";
+                mixpanel.track("Negative color filter selected", null);
                 break;
             case R.drawable.common_filter_ad6_green_normal:
                 label = "Green color filter";
+                mixpanel.track("Green color filter selected", null);
                 break;
             case R.drawable.common_filter_ad7_posterize_normal:
                 label = "Posterize color filter";
+                mixpanel.track("Posterize color filter selected", null);
                 break;
             case R.drawable.common_filter_ad8_sepia_normal:
                 label = "Sepia color filter";
+                mixpanel.track("Sepia color filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx0_none_normal:
                 label = "None fx filter";
+                mixpanel.track("None fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx1_fisheye_normal:
                 label = "Fisheye fx filter";
+                mixpanel.track("Fisheye fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx2_stretch_normal:
                 label = "Stretch fx filter";
+                mixpanel.track("Stretch fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx3_dent_normal:
                 label = "Dent fx filter";
+                mixpanel.track("Dent fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx4_mirror_normal:
                 label = "Mirror fx filter";
+                mixpanel.track("Mirror fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx5_squeeze_normal:
                 label = "Squeeze fx filter";
+                mixpanel.track("Squeeze fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx6_tunnel_normal:
                 label = "Tunnel fx filter";
+                mixpanel.track("Tunnel fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx7_twirl_normal:
                 label = "Twirl fx filter";
+                mixpanel.track("Twirl fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx8_bulge_normal:
                 label = "Bulge filter";
+                mixpanel.track("Bulge filter selected", null);
                 break;
             default:
                 label = "Other";
