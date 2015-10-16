@@ -130,11 +130,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         }
 
         private void exitSplashScreen() {
-            if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
-                navigate(AppIntroActivity.class);
-            } else {
-                navigate(RecordActivity.class);
-            }
+            navigate(RecordActivity.class);
         }
     }
 
