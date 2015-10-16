@@ -38,6 +38,7 @@
 -keep public class com.videonasocialmedia.videona.utils.VideoUtils
 
 # Mixpanel
+-dontwarn com.mixpanel.**
 -keep class com.mixpanel.android.abtesting.** { *; }
 -keep class com.mixpanel.android.mpmetrics.** { *; }
 -keep class com.mixpanel.android.surveys.** { *; }
