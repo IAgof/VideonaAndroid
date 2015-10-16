@@ -177,6 +177,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     @Override
     protected void onStart() {
         super.onStart();
+        mixpanel.timeEvent("Time in Edit Activity");
     }
 
     @Override
@@ -189,6 +190,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     protected void onPause() {
         super.onPause();
         editPresenter.onPause();
+        mixpanel.track("Time in Edit Activity");
     }
 
     @Override

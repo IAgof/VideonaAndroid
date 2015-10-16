@@ -51,6 +51,18 @@ public class AboutActivity extends VideonaActivity {
         versionName.setText(this.getString(R.string.versionContent) + " " + BuildConfig.VERSION_NAME + "\n");
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent("Time in About Activity");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mixpanel.track("Time in About Activity");
+    }
+
     /**
      * Tracks when user clicks the link to go to Videona web page
      */

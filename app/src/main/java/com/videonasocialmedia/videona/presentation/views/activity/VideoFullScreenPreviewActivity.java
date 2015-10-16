@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
@@ -57,6 +56,7 @@ public class VideoFullScreenPreviewActivity extends VideonaActivity implements O
     protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart");
+        mixpanel.timeEvent("Time in VideoFullScreen Activity");
     }
 
     @Override
@@ -84,6 +84,7 @@ public class VideoFullScreenPreviewActivity extends VideonaActivity implements O
         super.onPause();
         releaseVideoView();
         Log.d(LOG_TAG, "onPause");
+        mixpanel.track("Time in VideoFullScreen Activity");
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
@@ -82,7 +81,6 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
         pagerTabStrip.setDrawFullUnderline(true);
         pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.videona_black_1));
         pagerTabStrip.setTextColor(getResources().getColor(R.color.videona_black_1));
-
     }
 
     @Override
@@ -93,9 +91,16 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent("Time in Gallery Activity");
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         countVideosSelected = getSelectedVideos().size();
+        mixpanel.track("Time in Gallery Activity");
     }
 
 

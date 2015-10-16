@@ -29,4 +29,15 @@ public class SettingsActivity extends VideonaActivity {
                 .commit();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent("Time in Settings Activity");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mixpanel.track("Time in Settings Activity");
+    }
 }

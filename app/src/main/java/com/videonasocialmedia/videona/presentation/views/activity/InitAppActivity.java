@@ -1,6 +1,5 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,6 +67,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
+        mixpanel.timeEvent("Time in Init Activity");
     }
 
     @Override
@@ -79,6 +79,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     protected void onPause() {
         super.onPause();
         releaseCamera();
+        mixpanel.track("Time in Init Activity");
     }
 
     @Override

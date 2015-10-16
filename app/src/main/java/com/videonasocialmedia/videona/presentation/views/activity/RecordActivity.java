@@ -178,6 +178,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     protected void onStart() {
         super.onStart();
         recordPresenter.onStart();
+        mixpanel.timeEvent("Time in Record Activity");
     }
 
     @Override
@@ -193,6 +194,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onPause();
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
+        mixpanel.track("Time in Record Activity");
     }
 
     @Override

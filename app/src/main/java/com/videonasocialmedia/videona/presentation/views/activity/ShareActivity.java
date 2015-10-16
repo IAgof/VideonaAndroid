@@ -100,6 +100,7 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
     protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart");
+        mixpanel.timeEvent("Time in Share Activity");
     }
 
     @Override
@@ -154,6 +155,7 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
         super.onPause();
         //pauseVideo();
         releaseVideoView();
+        mixpanel.track("Time in Share Activity");
     }
 
     /**
@@ -215,6 +217,7 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
         intent.setType("video/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+        mixpanel.track("Share Button clicked", null);
     }
 
 
