@@ -7,7 +7,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -29,7 +28,7 @@ import butterknife.OnClick;
  * @author vlf
  * @since 04/05/2015
  */
-public class AboutActivity extends Activity {
+public class AboutActivity extends VideonaActivity {
 
     /*CONFIG*/
     /**

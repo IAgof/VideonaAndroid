@@ -33,7 +33,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show a preview of the selected video.
  */
-public class VideoFullScreenPreviewActivity extends Activity implements OnPreparedListener, OnErrorListener {
+public class VideoFullScreenPreviewActivity extends VideonaActivity implements OnPreparedListener, OnErrorListener {
 
     @InjectView(R.id.videoView)
     VideoView videoView;

@@ -63,7 +63,7 @@ import butterknife.OnClick;
 /**
  * RecordActivity manages a single live record.
  */
-public class RecordActivity extends Activity implements DrawerLayout.DrawerListener, RecordView,
+public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener, RecordView,
         OnColorEffectSelectedListener, OnFxSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
