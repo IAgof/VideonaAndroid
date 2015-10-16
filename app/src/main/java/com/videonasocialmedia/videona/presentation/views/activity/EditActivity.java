@@ -12,7 +12,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -71,7 +70,7 @@ import de.greenrobot.event.EventBus;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
+public class EditActivity extends VideonaActivity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
         DrawerLayout.DrawerListener, OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
 
@@ -178,6 +177,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onStart() {
         super.onStart();
+        mixpanel.timeEvent("Time in Edit Activity");
     }
 
     @Override
@@ -190,6 +190,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     protected void onPause() {
         super.onPause();
         editPresenter.onPause();
+        mixpanel.track("Time in Edit Activity");
     }
 
     @Override
