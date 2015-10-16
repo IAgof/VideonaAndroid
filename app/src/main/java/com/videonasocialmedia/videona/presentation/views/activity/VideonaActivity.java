@@ -26,7 +26,7 @@ public abstract class VideonaActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO change this key for videona app
+        // TODO change this token in production mode
         //String projectToken = "1b1b93477de96457ce00058031524aed";
         String projectToken = "985b2aeb535dbc92b81fb5cce7ad1212";
         mixpanel = MixpanelAPI.getInstance(this, projectToken);
