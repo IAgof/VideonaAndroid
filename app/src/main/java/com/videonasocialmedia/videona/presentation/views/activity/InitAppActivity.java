@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
@@ -55,6 +56,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init_app);
+        final String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        mixpanel.identify(androidId);
+        mixpanel.getPeople().identify(androidId);
+        //mixpanel.getPeople().getDistinctId();
+        mixpanel.getPeople().set("User Type", "Free");
     }
 
     @Override
