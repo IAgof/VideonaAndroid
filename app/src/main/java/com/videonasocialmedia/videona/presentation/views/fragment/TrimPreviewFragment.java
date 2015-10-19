@@ -439,7 +439,12 @@ public class TrimPreviewFragment extends VideonaFragment implements PreviewView,
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            videoPlayer.seekTo(progress + video.getFileStartTime());
+            if (videoPlayer.isPlaying()) {
+                videoPlayer.seekTo(progress + video.getFileStartTime());
+            } else {
+                videoPlayer.seekTo(progress + video.getFileStartTime());
+                videoPlayer.pause();
+            }
             afterTrimming = false;
             refreshStartTimeTag(progress + video.getFileStartTime());
         }

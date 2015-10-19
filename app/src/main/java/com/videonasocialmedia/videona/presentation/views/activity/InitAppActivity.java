@@ -1,12 +1,12 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -39,14 +39,17 @@ import java.util.List;
 
 public class InitAppActivity extends VideonaActivity implements InitAppView, OnInitAppEventListener {
 
+    private static final long MINIMUN_WAIT_TIME = 900;
     /**
      * LOG_TAG
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
+    protected Handler handler = new Handler();
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Camera camera;
     private int numSupportedCameras;
+    private long startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +60,14 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     protected void onStart() {
         super.onStart();
+        startTime = System.currentTimeMillis();
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
+        mixpanel.timeEvent("Time in Init Activity");
     }
 
     @Override
@@ -74,6 +79,13 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     protected void onPause() {
         super.onPause();
         releaseCamera();
+        mixpanel.track("Time in Init Activity");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
     }
 
     /**
@@ -104,17 +116,28 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
         @Override
         protected void onPostExecute(Boolean loggedIn) {
-            if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
-                navigate(AppIntroActivity.class);
+            long currentTimeEnd = System.currentTimeMillis();
+            long timePassed = currentTimeEnd- startTime;
+            if (timePassed < MINIMUN_WAIT_TIME) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        exitSplashScreen();
+                    }
+                }, MINIMUN_WAIT_TIME-timePassed);
             } else {
-                navigate(RecordActivity.class);
+                exitSplashScreen();
             }
+        }
+
+        private void exitSplashScreen() {
+            navigate(RecordActivity.class);
         }
     }
 
     private void setup() {
-        initSettings();
-        setupCameraSettings();
+        //initSettings();
+        //setupCameraSettings();
         setupPathsApp(this);
         // TODO: change this variable of 30MB (size of the raw folder)
         if (Utils.isAvailableSpace(30)) {
@@ -384,10 +407,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         musicList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.pastel_palette_brown));
         musicList.add(new Music(R.drawable.activity_music_icon_folk_normal, "audio_folk", R.raw.audio_folk, R.color.pastel_palette_red));
         musicList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "audio_hiphop", R.raw.audio_hiphop, R.color.pastel_palette_green));
-        musicList.add(new Music(R.drawable.activity_music_icon_pop_normal, "audio_pop", R.raw.audio_pop, R.color.pastel_palette_purple));
-        musicList.add(new Music(R.drawable.activity_music_icon_reggae_normal, "audio_reggae", R.raw.audio_reggae, R.color.pastel_palette_orange));
-        musicList.add(new Music(R.drawable.activity_music_icon_violin_normal, "audio_clasica_violin", R.raw.audio_clasica_violin, R.color.pastel_palette_yellow));
-        musicList.add(new Music(R.drawable.activity_music_icon_remove_normal, "Remove", R.raw.audio_clasica_violin, R.color.pastel_palette_grey));
         return musicList;
     }
 

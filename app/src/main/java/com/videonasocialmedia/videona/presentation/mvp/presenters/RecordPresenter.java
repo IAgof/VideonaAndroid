@@ -39,46 +39,47 @@ public class RecordPresenter {
      * LOG_TAG
      */
     private static final String LOG_TAG = "RecordPresenter";
-    boolean first;
-    /**
-     * RecordView
-     */
+    private boolean firstTimeRecording;
     private RecordView recordView;
-    /**
-     * EncodingConfig, configure muxer and audio and video settings
-     */
     private SessionConfig config;
-    /**
-     * Add Media to Project Use Case
-     */
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
     private int selectedEffect;
     private int recordedVideosNumber;
 
+    private Context context;
+    private GLCameraEncoderView cameraPreview;
+
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview) {
-
         Log.d(LOG_TAG, "constructor presenter");
-
         this.recordView = recordView;
-        initRecorder(context, cameraPreview);
+        this.context = context;
+        this.cameraPreview = cameraPreview;
+
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         selectedEffect = Filters.FILTER_NONE;
         recordedVideosNumber = 0;
+
+        initRecorder(context, cameraPreview);
     }
 
     private void initRecorder(Context context, GLCameraEncoderView cameraPreview) {
         config = new SessionConfig(Constants.PATH_APP_TEMP);
-        if (recorder == null) {
-            try {
-                recorder = new AVRecorder(config, context.getResources()
-                        .getDrawable(R.drawable.watermark720));
-                recorder.setPreviewDisplay(cameraPreview);
-                first = true;
-            } catch (IOException ioe) {
-                Log.e("ERROR", "ERROR", ioe);
-            }
+        try {
+            recorder = new AVRecorder(config, context.getResources()
+                    .getDrawable(R.drawable.watermark720));
+            recorder.setPreviewDisplay(cameraPreview);
+            firstTimeRecording = true;
+        } catch (IOException ioe) {
+            Log.e("ERROR", "ERROR", ioe);
+        }
+    }
+
+    public void onStart() {
+        if (recorder.isReleased()) {
+            cameraPreview.releaseCamera();
+            initRecorder(context, cameraPreview);
         }
     }
 
@@ -86,6 +87,9 @@ public class RecordPresenter {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
         Log.d(LOG_TAG, "resume presenter");
+
+
+
     }
 
     public void onPause() {
@@ -95,14 +99,13 @@ public class RecordPresenter {
         Log.d(LOG_TAG, "pause presenter");
     }
 
-    public void onStop(){
-        //recorder.onHostActivityPaused();
-    }
-
-    public void onDestroy() {
+    public void onStop() {
         recorder.release();
     }
 
+    public void onDestroy() {
+        //recorder.release();
+    }
 
 
     public void stopRecord() {
@@ -113,7 +116,7 @@ public class RecordPresenter {
 
     public void requestRecord() {
         if (!recorder.isRecording()) {
-            if (!first) {
+            if (!firstTimeRecording) {
                 try {
                     resetRecorder();
                 } catch (IOException ioe) {
@@ -140,7 +143,7 @@ public class RecordPresenter {
         recordView.lockScreenRotation();
         recordView.showStopButton();
         recordView.startChronometer();
-        first = false;
+        firstTimeRecording = false;
     }
 
 
@@ -172,12 +175,47 @@ public class RecordPresenter {
 
     public void changeCamera() {
         //TODO controlar el estado del flash
+
         int camera = recorder.requestOtherCamera();
-        if (camera == 0)
+
+        if (camera == 0) {
             recordView.showBackCameraSelected();
-        else if (camera == 1)
-            recordView.showFrontCameraSelected();
+
+        } else {
+
+            if (camera == 1) {
+                recordView.showFrontCameraSelected();
+            }
+        }
+
         applyEffect(selectedEffect);
+
+        checkFlashSupport();
+
+    }
+
+    public void checkFlashSupport() {
+
+        // Check flash support
+        int flashSupport = recorder.checkSupportFlash(); // 0 true, 1 false, 2 ignoring, not prepared
+
+        Log.d(LOG_TAG, "checkSupportFlash flashSupport " + flashSupport);
+
+        if(flashSupport == 0){
+            recordView.showFlashSupported(true);
+            Log.d(LOG_TAG, "checkSupportFlash flash Supported camera");
+        } else {
+            if(flashSupport == 1) {
+                recordView.showFlashSupported(false);
+                Log.d(LOG_TAG, "checkSupportFlash flash NOT Supported camera");
+            }
+        }
+    }
+
+    public void setFlashOff(){
+        boolean on = recorder.setFlashOff();
+        recordView.showFlashOn(on);
+
     }
 
     public void toggleFlash() {

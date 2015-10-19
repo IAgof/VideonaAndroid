@@ -10,12 +10,12 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
@@ -27,6 +27,7 @@ import com.videonasocialmedia.videona.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * This class is used to show a preview of the selected video.
@@ -55,6 +56,7 @@ public class VideoFullScreenPreviewActivity extends VideonaActivity implements O
     protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart");
+        mixpanel.timeEvent("Time in VideoFullScreen Activity");
     }
 
     @Override
@@ -82,6 +84,7 @@ public class VideoFullScreenPreviewActivity extends VideonaActivity implements O
         super.onPause();
         releaseVideoView();
         Log.d(LOG_TAG, "onPause");
+        mixpanel.track("Time in VideoFullScreen Activity");
     }
 
     @Override
@@ -121,6 +124,16 @@ public class VideoFullScreenPreviewActivity extends VideonaActivity implements O
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @OnClick({R.id.edit_button_fullscreen_out})
+    public void onClickFullScreenOutMode() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAfterTransition();
+        } else {
+            finish();
+        }
+        releaseVideoView();
     }
 
     /**

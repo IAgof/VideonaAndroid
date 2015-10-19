@@ -14,4 +14,8 @@
     <!-- default state -->
     <item android:drawable="@drawable/activity_record_icon_flash_camera_normal" />
 
+    <!-- not support state -->
+    <item android:drawable="@drawable/gatito_rules_pressed" android:state_focused="true" />
+
+
 </selector>

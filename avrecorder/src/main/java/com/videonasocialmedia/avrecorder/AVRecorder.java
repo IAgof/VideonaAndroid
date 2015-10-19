@@ -32,6 +32,10 @@ public class AVRecorder {
     private SessionConfig mConfig;
     private boolean mIsRecording;
     private Drawable overlayImage;
+    private boolean released;
+
+    // To flash support
+    private boolean cameraChanged;
 
     public AVRecorder(SessionConfig config, Drawable overlayImage) throws IOException {
         init(config);
@@ -43,6 +47,9 @@ public class AVRecorder {
         mMicEncoder = new MicrophoneEncoder(config);
         mConfig = config;
         mIsRecording = false;
+        released=false;
+
+        cameraChanged=false;
     }
 
     public void setPreviewDisplay(GLCameraView display) {
@@ -61,6 +68,7 @@ public class AVRecorder {
      * @return Return the camera code (i.e. 0 for back camera and 1 for front camera)
      */
     public int requestOtherCamera() {
+
         return mCamEncoder.requestOtherCamera();
     }
 
@@ -73,6 +81,18 @@ public class AVRecorder {
      */
     public boolean toggleFlash() {
         return mCamEncoder.toggleFlashMode();
+    }
+
+    /**
+     * @return whether the flash is on (true) or off (false)
+     */
+    public boolean setFlashOff() {
+        return mCamEncoder.setFlashOff();
+    }
+
+    public int checkSupportFlash(){
+
+        return mCamEncoder.checkSupportFlash() ;
     }
 
     public void adjustVideoBitrate(int targetBitRate) {
@@ -126,8 +146,10 @@ public class AVRecorder {
      * this instance may no longer be used.
      */
     public void release() {
-        mCamEncoder.release();
         mMicEncoder.release();
+        mCamEncoder.release();
+        released=true;
+
         // MicrophoneEncoder releases all it's resources when stopRecording is called
         // because it doesn't have any meaningful state
         // between recordings. It might someday if we decide to present
@@ -147,6 +169,14 @@ public class AVRecorder {
 
     public int getActiveCameraIndex() {
         return mCamEncoder.getCurrentCamera();
+    }
+
+    public boolean isReleased(){
+        return released;
+    }
+
+    public boolean isCameraChanged(){
+        return cameraChanged;
     }
 
     public void rotateCamera(int rotation) {

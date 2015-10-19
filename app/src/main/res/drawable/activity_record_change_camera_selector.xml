@@ -12,4 +12,7 @@
     <item>
         <bitmap android:src="@drawable/activity_record_change_camera_normal" />
     </item>
+    <item android:state_pressed="true">
+        <bitmap android:src="@drawable/activity_record_change_camera_pressed"/>
+    </item>
 </selector>

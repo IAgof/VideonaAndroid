@@ -7,7 +7,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -50,6 +49,18 @@ public class AboutActivity extends VideonaActivity {
         setContentView(R.layout.activity_about);
         ButterKnife.inject(this);
         versionName.setText(this.getString(R.string.versionContent) + " " + BuildConfig.VERSION_NAME + "\n");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent("Time in About Activity");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mixpanel.track("Time in About Activity");
     }
 
     /**

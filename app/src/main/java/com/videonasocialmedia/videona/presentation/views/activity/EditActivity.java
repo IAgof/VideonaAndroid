@@ -12,7 +12,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -179,6 +178,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     @Override
     protected void onStart() {
         super.onStart();
+        mixpanel.timeEvent("Time in Edit Activity");
     }
 
     @Override
@@ -191,6 +191,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     protected void onPause() {
         super.onPause();
         editPresenter.onPause();
+        mixpanel.track("Time in Edit Activity");
     }
 
     @Override
@@ -229,7 +230,26 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         pausePreview();
         if (trimFragment != null && trimFragment.isVisible()) {
             switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
-            this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+            removeTrimFragment();
+        }
+        if (musicGalleryFragment != null && musicGalleryFragment.isVisible()) {
+            if (scissorsFxMenuFragment == null) {
+                scissorsFxMenuFragment = new ScissorsFxMenuFragment();
+            }
+            switchFragment(videoTimeLineFragment, R.id.edit_bottom_panel);
+            switchFragment(scissorsFxMenuFragment, R.id.edit_right_panel);
+            if (audioFxButton.isActivated()) {
+                scissorButton.setActivated(true);
+                audioFxButton.setActivated(false);
+            }
+            hideOkDetailButton();
+        }
+    }
+
+    private void hideOkDetailButton() {
+        if(buttonOkTrimDetail.getVisibility() == View.VISIBLE) {
+            buttonOkTrimDetail.setVisibility(View.GONE);
+            buttonOkEditActivity.setVisibility(View.VISIBLE);
         }
     }
 
@@ -321,7 +341,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
             switchFragment(audioFxMenuFragment, R.id.edit_right_panel);
             switchFragment(musicGalleryFragment, R.id.edit_bottom_panel);
             if (trimFragment != null) {
-                this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+                removeTrimFragment();
             }
         }
         scissorButton.setActivated(false);
@@ -335,6 +355,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     public void showScissorsFxMenu() {
         audioFxButton.setActivated(false);
         scissorButton.setActivated(true);
+        hideOkDetailButton();
 
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
@@ -350,7 +371,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         //scissorsFxMenuFragment.habilitateTrashButton();
 
         if (trimFragment != null) {
-            this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+            removeTrimFragment();
         }
 
     }
@@ -411,11 +432,11 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     private void switchFragment(Fragment f, int panel) {
         getFragmentManager().executePendingTransactions();
         if (!f.isAdded()) {
-            if (f instanceof TrimPreviewFragment) {
+            if (f instanceof TrimPreviewFragment || f instanceof MusicGalleryFragment) {
                 buttonOkEditActivity.setVisibility(View.GONE);
                 buttonOkTrimDetail.setVisibility(View.VISIBLE);
             } else if (f instanceof PreviewVideoListFragment) {
-                if(buttonOkTrimDetail.getVisibility() == View.VISIBLE) {
+                if (buttonOkTrimDetail.getVisibility() == View.VISIBLE) {
                     buttonOkTrimDetail.setVisibility(View.GONE);
                     buttonOkEditActivity.setVisibility(View.VISIBLE);
                     EventBus.getDefault().post(new PreviewingVideoChangedEvent(0, false));
@@ -465,7 +486,6 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
             selectedMusicIndex = position;
         }
     }
-
 
     @Override
     public void onVideoClicked(int position) {
@@ -524,13 +544,14 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void onTrimConfirmed() {
-        this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+        if (trimFragment != null) {
+            removeTrimFragment();
+        }
 
         if (!scissorButton.isActivated()) {
             scissorButton.setActivated(true);
             audioFxButton.setActivated(false);
         }
-
         if (scissorsFxMenuFragment == null) {
             scissorsFxMenuFragment = new ScissorsFxMenuFragment();
         }
@@ -553,7 +574,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
             editPresenter.duplicateClip(getCurrentVideo(), positionInAdapter);
             if (trimFragment != null && trimFragment.isVisible()) {
                 switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
-                this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+                removeTrimFragment();
             }
         }
     }
@@ -573,13 +594,13 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
             Toast.makeText(getApplicationContext(), R.string.addVideosToProject, Toast.LENGTH_SHORT).show();
         } else {
             int timeVideoInSeekBarInMsec = calculateCutPoint(positionInAdapter);
-            Log.d("seekbar", String.valueOf(timeVideoInSeekBarInMsec));
-            if (timeVideoInSeekBarInMsec > 0) {
+            int projectDuration = editPresenter.getProjectDuration();
+            if (timeVideoInSeekBarInMsec > 0 && (projectDuration - timeVideoInSeekBarInMsec) > 200) {
                 Video video = getCurrentVideo();
                 if (trimFragment != null && trimFragment.isVisible()) {
                     editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec);
                     switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
-                    this.getFragmentManager().beginTransaction().remove(trimFragment).commit();
+                    removeTrimFragment();
                 } else {
                     editPresenter.razorClip(getCurrentVideo(), positionInAdapter, timeVideoInSeekBarInMsec + video.getFileStartTime());
                 }
@@ -646,15 +667,6 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
             case R.drawable.activity_music_icon_hip_hop_normal:
                 label = "Cap music icon selected";
                 break;
-            case R.drawable.activity_music_icon_pop_normal:
-                label = "Microphone music icon selected";
-                break;
-            case R.drawable.activity_music_icon_reggae_normal:
-                label = "Conga drum music icon selected";
-                break;
-            case R.drawable.activity_music_icon_violin_normal:
-                label = "Violin music icon selected";
-                break;
             case R.drawable.activity_music_icon_folk_normal:
                 label = "Spanish guitar music icon selected";
                 break;
@@ -663,6 +675,9 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
                 break;
             case R.drawable.activity_music_icon_remove_normal:
                 label = "Remove music icon selected";
+                break;
+            case R.drawable.activity_music_icon_birthday_normal:
+                label = "Happy birthday music selected";
                 break;
             default:
                 label = "Other";
