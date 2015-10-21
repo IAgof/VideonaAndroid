@@ -58,6 +58,9 @@ import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineR
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -216,12 +219,26 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     public void okEditActivity() {
         pausePreview();
         showProgressDialog();
+        sendMetadataTracking();
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
             }
         };
         performOnBackgroundThread(this, r);
+    }
+
+    private void sendMetadataTracking() {
+        try {
+            int projectDuration = editPresenter.getProjectDuration();
+            int numVideosOnProject = editPresenter.getNumVideosOnProject();
+            JSONObject props = new JSONObject();
+            props.put("Number of videos", numVideosOnProject);
+            props.put("Duration of the exported video in msec", projectDuration);
+            mixpanel.track("Exported video", props);
+        } catch (JSONException e) {
+            Log.e("TRACK_FAILED", String.valueOf(e));
+        }
     }
 
     @OnClick(R.id.edit_button_ok_trim_detail)
