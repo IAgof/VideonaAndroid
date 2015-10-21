@@ -342,6 +342,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
         if (musicGalleryFragment != null)
             this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+        hideOkDetailButton();
     }
 
     @OnClick(R.id.edit_button_audio)
@@ -401,9 +402,9 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         if (lookFxMenuFragment == null)
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
-
         if (musicGalleryFragment != null)
             this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+        hideOkDetailButton();
     }
 
 
