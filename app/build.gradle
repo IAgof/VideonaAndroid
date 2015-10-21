@@ -7,13 +7,13 @@ android {
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
-        targetSdkVersion 21
+        targetSdkVersion 23
         versionCode 47 // 16/10/2015
         versionName "0.3.19"
         // Enabling multidex support.
@@ -24,6 +24,10 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "2048M"
     }
 }
 
@@ -36,14 +40,18 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
-    compile 'com.android.support:multidex:1.0.0'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
-    compile 'com.android.support:support-v13:22.2.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'com.android.support:support-v13:23.1.0'
     compile 'com.github.bumptech.glide:glide:3.6.0'
-    compile 'com.google.android.gms:play-services-analytics:7.5.0'
+    //compile 'com.google.android.gms:play-services-analytics:8.1.0'
+    //compile 'com.google.android.gms:play-services-base:8.1.0'
+    //compile 'com.google.android.gms:play-services-gcm:8.1.0'
+    compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.googlecode.mp4parser:isoparser:1.0.5.4'
     compile 'com.jakewharton:butterknife:6.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
@@ -52,16 +60,12 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
     compile 'com.mixpanel.android:mixpanel-android:4.6.4'
-    compile 'com.google.android.gms:play-services-base:7.5.0'
-    compile 'com.google.android.gms:play-services-gcm:7.5.0'
-
-    compile 'com.qordoba.sdk:qordoba-sdk:1.3.75@aar'
-
+    compile 'com.qordoba.sdk:qordoba-sdk:1.3.77@aar'
     compile project(':androidtranscoder')
     compile project(':androidmuxer')
     compile project(':avrecorder')
-
     debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     debugCompile 'com.google.dexmaker:dexmaker:1.0'
     debugCompile 'org.mockito:mockito-core:1.10.17'
+
 }

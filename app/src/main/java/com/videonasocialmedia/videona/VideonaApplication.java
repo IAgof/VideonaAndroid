@@ -41,8 +41,10 @@ public class VideonaApplication extends Application {
     }
 
     private void setupQordoba() {
-        Qordoba.init(this, "dev_a2e09b7e-fe87-4ea0-9f44-64ce45922798",
-                "43d79114-c163-419f-bb57-275533726cd1");
+//        Qordoba.init(this, "dev_a2e09b7e-fe87-4ea0-9f44-64ce45922798",
+//                "43d79114-c163-419f-bb57-275533726cd1");
+        Qordoba.init(this, "dev_c27d4b18-e14e-4a46-b533-f4150aba67ca",
+                "08e33aa6-e2f8-4edf-89ca-59e41580a104");
     }
 
     private void setupGoogleAnalytics() {
