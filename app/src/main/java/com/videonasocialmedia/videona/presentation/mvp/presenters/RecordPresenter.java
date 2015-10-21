@@ -14,6 +14,7 @@ import com.videonasocialmedia.avrecorder.AVRecorder;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
+import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
@@ -137,6 +138,17 @@ public class RecordPresenter {
         startRecord();
     }
 
+    public void onEventMainThread(CameraOpenedEvent e){
+
+        Log.d(LOG_TAG, "camera opened, camera != null");
+        //Calculate orientation, rotate if needed
+        //recordView.unlockScreenRotation();
+        if(firstTimeRecording){
+            recordView.unlockScreenRotation();
+        }
+
+    }
+
     private void startRecord() {
         applyEffect(selectedEffect);
         recorder.startRecording();
@@ -167,10 +179,10 @@ public class RecordPresenter {
 
     public void onEvent(AddMediaItemToTrackSuccessEvent e) {
         String path = e.videoAdded.getMediaPath();
-        recordView.unlockScreenRotation();
         recordView.showRecordedVideoThumb(path);
         recordView.showRecordButton();
         recordView.showVideosRecordedNumber(++recordedVideosNumber);
+        recordView.reStartScreenRotation();
     }
 
     public void changeCamera() {

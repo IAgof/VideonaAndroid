@@ -214,12 +214,12 @@
 
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="24">
 
                 <ImageView
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/activity_record_icon_rec_circle"
                     android:alpha="0.5"/>
