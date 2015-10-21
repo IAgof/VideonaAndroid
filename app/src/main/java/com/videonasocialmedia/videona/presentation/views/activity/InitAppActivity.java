@@ -1,6 +1,5 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
@@ -38,7 +38,7 @@ import java.util.List;
  * Show a dummy splash screen and initialize all data needed to start
  */
 
-public class InitAppActivity extends Activity implements InitAppView, OnInitAppEventListener {
+public class InitAppActivity extends VideonaActivity implements InitAppView, OnInitAppEventListener {
 
     private static final long MINIMUN_WAIT_TIME = 900;
     /**
@@ -51,6 +51,8 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     private Camera camera;
     private int numSupportedCameras;
     private long startTime;
+    private static final String ANDROID_PUSH_SENDER_ID = "741562382107";
+    private String androidId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
+        mixpanel.timeEvent("Time in Init Activity");
     }
 
     @Override
@@ -79,6 +82,7 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
     protected void onPause() {
         super.onPause();
         releaseCamera();
+        mixpanel.track("Time in Init Activity");
     }
 
     @Override
@@ -130,15 +134,17 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         }
 
         private void exitSplashScreen() {
-            if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
-                navigate(AppIntroActivity.class);
-            } else {
-                navigate(RecordActivity.class);
-            }
+            navigate(RecordActivity.class);
         }
     }
 
     private void setup() {
+        androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
+            createUserProfile();
+            editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
+        }
+        initPushNotifications();
         //initSettings();
         //setupCameraSettings();
         setupPathsApp(this);
@@ -146,6 +152,17 @@ public class InitAppActivity extends Activity implements InitAppView, OnInitAppE
         if (Utils.isAvailableSpace(30)) {
             downloadingMusicResources();
         }
+    }
+
+    private void createUserProfile() {
+        mixpanel.identify(androidId);
+        mixpanel.getPeople().identify(androidId);
+        mixpanel.getPeople().set("User Type", "Free");
+    }
+
+    private void initPushNotifications() {
+        mixpanel.getPeople().identify(androidId);
+        mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
     }
 
     /**

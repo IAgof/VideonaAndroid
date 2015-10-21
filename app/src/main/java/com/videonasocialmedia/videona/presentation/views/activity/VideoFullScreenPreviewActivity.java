@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
@@ -33,7 +32,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show a preview of the selected video.
  */
-public class VideoFullScreenPreviewActivity extends Activity implements OnPreparedListener, OnErrorListener {
+public class VideoFullScreenPreviewActivity extends VideonaActivity implements OnPreparedListener, OnErrorListener {
 
     @InjectView(R.id.videoView)
     VideoView videoView;
@@ -57,6 +56,7 @@ public class VideoFullScreenPreviewActivity extends Activity implements OnPrepar
     protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart");
+        mixpanel.timeEvent("Time in VideoFullScreen Activity");
     }
 
     @Override
@@ -84,6 +84,7 @@ public class VideoFullScreenPreviewActivity extends Activity implements OnPrepar
         super.onPause();
         releaseVideoView();
         Log.d(LOG_TAG, "onPause");
+        mixpanel.track("Time in VideoFullScreen Activity");
     }
 
     @Override

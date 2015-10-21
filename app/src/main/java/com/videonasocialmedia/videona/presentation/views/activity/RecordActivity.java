@@ -64,7 +64,7 @@ import butterknife.OnClick;
 /**
  * RecordActivity manages a single live record.
  */
-public class RecordActivity extends Activity implements DrawerLayout.DrawerListener, RecordView,
+public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener, RecordView,
         OnColorEffectSelectedListener, OnFxSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
@@ -179,11 +179,11 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     protected void onStart() {
         super.onStart();
         recordPresenter.onStart();
+        mixpanel.timeEvent("Time in Record Activity");
     }
 
     @Override
     protected void onResume() {
-        Log.d(LOG_TAG, "onResume");
         super.onResume();
         recordPresenter.onResume();
         recording = false;
@@ -194,6 +194,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         super.onPause();
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
+        mixpanel.track("Time in Record Activity");
     }
 
     @Override
@@ -214,9 +215,13 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         if (!recording) {
             recordPresenter.requestRecord();
             sendButtonTracked("Start recording");
+            mixpanel.timeEvent("Time recording one video");
+            mixpanel.track("Start recording");
         } else {
             recordPresenter.stopRecord();
             sendButtonTracked("Stop recording");
+            mixpanel.track("Time recording one video");
+            mixpanel.track("Stop recording");
         }
     }
 
@@ -227,8 +232,6 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         recording = false;
         unLockNavigator();
         navigateToEditButton.setVisibility(View.VISIBLE);
-      //  orientationHelper.backInitialOrientation();
-
     }
 
     @Override
@@ -389,13 +392,12 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     public void unLockNavigator() {
         drawerButton.setVisibility(View.VISIBLE);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        //orientationHelper.onOrientationChanged(270);
-
     }
 
     @OnClick(R.id.button_toggle_flash)
     public void toggleFlash() {
         recordPresenter.toggleFlash();
+        mixpanel.track("Toggle flash Button clicked", null);
     }
 
     @Override
@@ -425,6 +427,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
+        mixpanel.track("Front camera selected", null);
 
         try {
             orientationHelper.reStartMonitoringOrientation();
@@ -437,6 +440,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
+        mixpanel.track("Back camera selected", null);
 
         try {
             orientationHelper.reStartMonitoringOrientation();
@@ -444,7 +448,6 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void showError(String errorMessage) {
@@ -493,10 +496,12 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
 
     @OnClick(R.id.button_change_camera)
     public void changeCamera() {
-
         recordPresenter.setFlashOff();
-
         recordPresenter.changeCamera();
+        if (recording)
+            mixpanel.track("Change camera Button clicked while recording", null);
+        else
+            mixpanel.track("Change camera Button clicked on preview", null);
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -505,6 +510,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
             Intent edit = new Intent(this, EditActivity.class);
             //edit.putExtra("SHARE", false);
             startActivity(edit);
+            mixpanel.track("Navigate edit Button clicked in Record Activity", null);
         }
     }
 
@@ -514,6 +520,7 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
         if (!recording) {
             drawerLayout.openDrawer(navigatorView);
             drawerBackground.setVisibility(View.VISIBLE);
+            mixpanel.track("Navigate drawer Button clicked in Record Activity", null);
         }
     }
 
@@ -583,57 +590,75 @@ public class RecordActivity extends Activity implements DrawerLayout.DrawerListe
                 break;
             case R.drawable.common_filter_ad0_none_normal:
                 label = "None color filter";
+                mixpanel.track("None color filter selected", null);
                 break;
             case R.drawable.common_filter_ad1_aqua_normal:
                 label = "Aqua color filter";
+                mixpanel.track("Aqua color filter selected", null);
                 break;
             case R.drawable.common_filter_ad2_postericebw_normal:
                 label = "Posterize bw color filter";
+                mixpanel.track("Posterize bw color filter selected", null);
                 break;
             case R.drawable.common_filter_ad3_emboss_normal:
                 label = "Emboss color filter";
+                mixpanel.track("Emboss color filter selected", null);
                 break;
             case R.drawable.common_filter_ad4_mono_normal:
                 label = "Mono color filter";
+                mixpanel.track("Mono color filter selected", null);
                 break;
             case R.drawable.common_filter_ad5_negative_normal:
                 label = "Negative color filter";
+                mixpanel.track("Negative color filter selected", null);
                 break;
             case R.drawable.common_filter_ad6_green_normal:
                 label = "Green color filter";
+                mixpanel.track("Green color filter selected", null);
                 break;
             case R.drawable.common_filter_ad7_posterize_normal:
                 label = "Posterize color filter";
+                mixpanel.track("Posterize color filter selected", null);
                 break;
             case R.drawable.common_filter_ad8_sepia_normal:
                 label = "Sepia color filter";
+                mixpanel.track("Sepia color filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx0_none_normal:
                 label = "None fx filter";
+                mixpanel.track("None fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx1_fisheye_normal:
                 label = "Fisheye fx filter";
+                mixpanel.track("Fisheye fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx2_stretch_normal:
                 label = "Stretch fx filter";
+                mixpanel.track("Stretch fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx3_dent_normal:
                 label = "Dent fx filter";
+                mixpanel.track("Dent fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx4_mirror_normal:
                 label = "Mirror fx filter";
+                mixpanel.track("Mirror fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx5_squeeze_normal:
                 label = "Squeeze fx filter";
+                mixpanel.track("Squeeze fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx6_tunnel_normal:
                 label = "Tunnel fx filter";
+                mixpanel.track("Tunnel fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx7_twirl_normal:
                 label = "Twirl fx filter";
+                mixpanel.track("Twirl fx filter selected", null);
                 break;
             case R.drawable.common_filter_fx_fx8_bulge_normal:
                 label = "Bulge filter";
+                mixpanel.track("Bulge filter selected", null);
                 break;
             default:
                 label = "Other";

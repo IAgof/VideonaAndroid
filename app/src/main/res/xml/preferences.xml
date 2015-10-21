@@ -35,12 +35,4 @@
         </Preference>
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/title_tutorial_section">
-        <Preference
-            android:title="@string/content_tutorial_section">
-            <intent android:action=".presentation.views.activity.AppIntroActivity"/>
-        </Preference>
-    </PreferenceCategory>
-
 </PreferenceScreen>
