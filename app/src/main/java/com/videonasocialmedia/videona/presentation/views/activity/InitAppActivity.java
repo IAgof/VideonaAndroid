@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.R;
@@ -50,6 +51,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private Camera camera;
     private int numSupportedCameras;
     private long startTime;
+    private static final String ANDROID_PUSH_SENDER_ID = "741562382107";
+    private String androidId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +139,12 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     }
 
     private void setup() {
+        androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
+            createUserProfile();
+            editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
+        }
+        initPushNotifications();
         //initSettings();
         //setupCameraSettings();
         setupPathsApp(this);
@@ -143,6 +152,17 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         if (Utils.isAvailableSpace(30)) {
             downloadingMusicResources();
         }
+    }
+
+    private void createUserProfile() {
+        mixpanel.identify(androidId);
+        mixpanel.getPeople().identify(androidId);
+        mixpanel.getPeople().set("User Type", "Free");
+    }
+
+    private void initPushNotifications() {
+        mixpanel.getPeople().identify(androidId);
+        mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
     }
 
     /**
