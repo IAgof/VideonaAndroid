@@ -51,7 +51,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private volatile STATE mState = STATE.UNINITIALIZED;
 
     private final Object mChangeCameraFence = new Object();
-    private volatile STATE mStateCamera = STATE.UNINITIALIZED;
+    private volatile STATE mStateChangeCamera = STATE.UNINITIALIZED;
 
     // ----- accessed exclusively by encoder thread -----
     private WindowSurface mInputWindowSurface;
@@ -211,11 +211,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             otherCamera = 1;
         requestCamera(otherCamera);
 
-        mStateCamera = STATE.UNINITIALIZED;
-
+        mStateChangeCamera = STATE.UNINITIALIZED;
         synchronized (mChangeCameraFence) {
 
-            while (mStateCamera != STATE.INITIALIZED) {
+            while (mStateChangeCamera != STATE.INITIALIZED) {
                 try {
                     mChangeCameraFence.wait();
                 } catch (InterruptedException e) {
@@ -494,7 +493,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 return;
             }
             mFrameNum++;
-            if (VERBOSE && (mFrameNum % 30 == 0)) Log.i(TAG, "handleFrameAvailable");
+           // Too much info on screen if (VERBOSE && (mFrameNum % 30 == 0)) Log.i(TAG, "handleFrameAvailable");
             if (!surfaceTexture.equals(mSurfaceTexture))
                 Log.w(TAG, "SurfaceTexture from OnFrameAvailable does not match saved SurfaceTexture!");
 
@@ -611,6 +610,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 Log.w("CameraRelease", "Didn't try to open camera onHAResume. rec: " + mRecording + " mSurfaceTexture ready? " + (mSurfaceTexture == null ? " no" : " yes"));
             }
         }
+
     }
 
     /**
@@ -774,14 +774,19 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             mCamera.setPreviewTexture(mSurfaceTexture);
             mCamera.startPreview();
 
-            mStateCamera = STATE.INITIALIZED;
+            mStateChangeCamera = STATE.INITIALIZED;
             synchronized (mChangeCameraFence) {
                 mChangeCameraFence.notify();
             }
 
+
             if (VERBOSE)
                 Log.i("CameraRelease", "Opened / Started Camera preview. mDisplayView ready? " + (mDisplayView == null ? " no" : " yes"));
-            if (mDisplayView != null) configureDisplayView();
+            if (mDisplayView != null){
+                configureDisplayView();
+            } else {
+
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -833,7 +838,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
         Camera.Parameters parms = mCamera.getParameters();
 
-        postCameraOpenedEvent(parms);
+        postCameraOpenedEvent(parms, cameraInfoOrientation);
 
         List<String> focusModes = parms.getSupportedFocusModes();
 
@@ -926,8 +931,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 new android.hardware.Camera.CameraInfo();
 
         android.hardware.Camera.getCameraInfo(mCurrentCamera, info);
-        int rotation = mCurrentCameraRotation;
+
         int degrees = 90;
+        /*
+        int rotation = mCurrentCameraRotation;
         switch (rotation) {
             // case Surface.ROTATION_0: degrees = 0; break;
             case Surface.ROTATION_90:
@@ -938,13 +945,17 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 degrees = 270;
                 break;
         }
+        */
+
 
         int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360;
             result = (360 - result) % 360;  // compensate the mirror
+            Log.d(TAG, " front camera " + result);
         } else {  // back-facing
             result = (info.orientation - degrees + 360) % 360;
+            Log.d(TAG, " back camera " + result);
         }
         mCamera.setDisplayOrientation(result);
         cameraInfoOrientation = result;
@@ -952,6 +963,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
 
     public void updateRotationDisplay(int rotationView) {
+
         mCamera.setDisplayOrientation(getDisplayOrientation(rotationView));
         configureDisplayView();
     }
@@ -1170,9 +1182,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         return (mDesiredFlash != null) ? mDesiredFlash : mCurrentFlash;
     }
 
-    private void postCameraOpenedEvent(Parameters params) {
+    private void postCameraOpenedEvent(Parameters params, int cameraInfoOrientation) {
         if (mEventBus != null) {
-            mEventBus.post(new CameraOpenedEvent(params));
+            mEventBus.post(new CameraOpenedEvent(params, cameraInfoOrientation));
         }
     }
 

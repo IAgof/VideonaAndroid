@@ -35,6 +35,8 @@ public interface RecordView extends MVPView {
 
     void unlockScreenRotation();
 
+    void reStartScreenRotation();
+
     void lockNavigator(); //en VideonaView
 
     void unLockNavigator(); //en VideonaView
