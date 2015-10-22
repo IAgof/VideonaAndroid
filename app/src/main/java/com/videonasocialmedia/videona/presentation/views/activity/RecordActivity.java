@@ -38,7 +38,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
@@ -188,9 +187,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onResume();
         recordPresenter.onResume();
         recording = false;
-        //mixpanel.getPeople().showNotificationIfAvailable(this);
-        //InAppNotification inAppNotification = mixpanel.getPeople().getNotificationIfAvailable();
-        //mixpanel.getPeople().showSurveyIfAvailable(this);
     }
 
     @Override
