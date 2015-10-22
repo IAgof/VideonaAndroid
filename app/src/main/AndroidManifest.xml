@@ -40,7 +40,7 @@
         android:theme="@style/AppTheme">
 
         <meta-data android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates"
-            android:value="true" />
+            android:value="false" />
 
         <activity android:name="com.mixpanel.android.surveys.SurveyActivity"
             android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
