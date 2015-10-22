@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.videonasocialmedia.videona">
 
-    <uses-sdk
-        android:minSdkVersion="18"
-        android:targetSdkVersion="18" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -55,7 +51,7 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <category android:name="com.videonasocialmedia.videona" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
 
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
@@ -87,7 +83,7 @@
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
 
         <activity
             android:name=".presentation.views.activity.InitAppActivity"
