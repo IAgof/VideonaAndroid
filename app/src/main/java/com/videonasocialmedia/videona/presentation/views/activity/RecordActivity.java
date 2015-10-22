@@ -740,7 +740,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                         recordPresenter.rotateCamera(rotationView);
                     }
                 }
-                Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
+            Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
                         " cameraInfoOrientation ");
 
         }
