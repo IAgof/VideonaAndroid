@@ -41,6 +41,9 @@ public class VideonaApplication extends Application {
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         app_tracker = analytics.newTracker(R.xml.app_tracker);
         app_tracker.enableAdvertisingIdCollection(true);
+
+
+
     }
 
     protected void attachBaseContext(Context base) {
