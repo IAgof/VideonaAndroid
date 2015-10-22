@@ -144,7 +144,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
             createUserProfile();
             editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
         }
-        initPushNotifications();
+        //initPushNotifications();
         //initSettings();
         //setupCameraSettings();
         setupPathsApp(this);
