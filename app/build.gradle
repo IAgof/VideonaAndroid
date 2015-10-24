@@ -21,8 +21,18 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "String", "MIXPANEL_TOKEN", "\"985b2aeb535dbc92b81fb5cce7ad1212\""
+            buildConfigField "String", "QORDOBA_APP_ID", "\"08e33aa6-e2f8-4edf-89ca-59e41580a104\""
+            buildConfigField "String", "QORDOBA_KEY", "\"5fe39b44-0c5d-49c0-96a4-b1a0f7fd958b\""
+            resValue "String", "GOOGLE_ANALYTICS_ID", "UA-59687187-1"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "MIXPANEL_TOKEN", "\"XXXXXXXXXXXXXXXXXXXXXXX\""
+            buildConfigField "String", "QORDOBA_APP_ID", "\"08e33aa6-e2f8-4edf-89ca-59e41580a104\""
+            buildConfigField "String", "QORDOBA_KEY", "\"dev_c27d4b18-e14e-4a46-b533-f4150aba67ca\""
+            resValue "String", "GOOGLE_ANALYTICS_ID", "UA-XXXXXXXX-1"
         }
     }
     dexOptions {
@@ -36,7 +46,6 @@ repositories {
     maven {
         url 'http://dl.bintray.com/qordobaandroidsdk/maven'
     }
-
     mavenCentral()
 }
 
@@ -48,9 +57,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.android.support:support-v13:23.1.0'
     compile 'com.github.bumptech.glide:glide:3.6.0'
-    //compile 'com.google.android.gms:play-services-analytics:8.1.0'
-    //compile 'com.google.android.gms:play-services-base:8.1.0'
-    //compile 'com.google.android.gms:play-services-gcm:8.1.0'
     compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.googlecode.mp4parser:isoparser:1.0.5.4'
     compile 'com.jakewharton:butterknife:6.0.0'

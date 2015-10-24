@@ -8,16 +8,13 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
-import android.app.Activity;
-import android.content.Context;
-
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.qordoba.sdk.Qordoba;
 import com.qordoba.sdk.common.QordobaContextWrapper;
-
-
-import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 
 /**
  * /**
@@ -33,11 +30,9 @@ public abstract class VideonaActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // TODO change this token in production mode
         //String projectToken = "1b1b93477de96457ce00058031524aed";
-        String projectToken = "985b2aeb535dbc92b81fb5cce7ad1212";
-        mixpanel = MixpanelAPI.getInstance(this, projectToken);
+        mixpanel = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN);
     }
 
     @Override
@@ -45,7 +40,7 @@ public abstract class VideonaActivity extends Activity {
         mixpanel.flush();
         super.onDestroy();
     }
-        
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(new QordobaContextWrapper(this, newBase));
