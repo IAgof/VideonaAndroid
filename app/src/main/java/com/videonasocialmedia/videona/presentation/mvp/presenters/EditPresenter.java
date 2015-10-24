@@ -138,6 +138,10 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         return Project.getInstance(null, null, null).getDuration();
     }
 
+    public int getNumVideosOnProject() {
+        return Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject();
+    }
+
     @Override
     public void onAddMediaItemToTrackError() {
         //TODO modify error message

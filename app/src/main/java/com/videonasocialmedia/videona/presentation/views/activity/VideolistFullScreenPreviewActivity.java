@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +44,7 @@ import butterknife.OnTouch;
 /**
  * This class is used to show a preview of the selected video.
  */
-public class VideolistFullScreenPreviewActivity extends Activity implements PreviewView,
+public class VideolistFullScreenPreviewActivity extends VideonaActivity implements PreviewView,
         SeekBar.OnSeekBarChangeListener {
 
     @InjectView(R.id.edit_preview_player)
@@ -101,6 +100,7 @@ public class VideolistFullScreenPreviewActivity extends Activity implements Prev
     @Override
     protected void onStart() {
         super.onStart();
+        mixpanel.timeEvent("Time in VideolistFullScreen Activity");
     }
 
     @Override
@@ -116,6 +116,7 @@ public class VideolistFullScreenPreviewActivity extends Activity implements Prev
         releaseMusicPlayer();
         projectDuration = 0;
         instantTime = 0;
+        mixpanel.track("Time in VideolistFullScreen Activity");
     }
 
     @Override

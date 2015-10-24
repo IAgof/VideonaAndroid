@@ -14,6 +14,7 @@ import com.videonasocialmedia.avrecorder.AVRecorder;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
+import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
@@ -87,6 +88,9 @@ public class RecordPresenter {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
         Log.d(LOG_TAG, "resume presenter");
+
+
+
     }
 
     public void onPause() {
@@ -134,6 +138,17 @@ public class RecordPresenter {
         startRecord();
     }
 
+    public void onEventMainThread(CameraOpenedEvent e){
+
+        Log.d(LOG_TAG, "camera opened, camera != null");
+        //Calculate orientation, rotate if needed
+        //recordView.unlockScreenRotation();
+        if(firstTimeRecording){
+            recordView.unlockScreenRotation();
+        }
+
+    }
+
     private void startRecord() {
         applyEffect(selectedEffect);
         recorder.startRecording();
@@ -164,20 +179,55 @@ public class RecordPresenter {
 
     public void onEvent(AddMediaItemToTrackSuccessEvent e) {
         String path = e.videoAdded.getMediaPath();
-        recordView.unlockScreenRotation();
         recordView.showRecordedVideoThumb(path);
         recordView.showRecordButton();
         recordView.showVideosRecordedNumber(++recordedVideosNumber);
+        recordView.reStartScreenRotation();
     }
 
     public void changeCamera() {
         //TODO controlar el estado del flash
+
         int camera = recorder.requestOtherCamera();
-        if (camera == 0)
+
+        if (camera == 0) {
             recordView.showBackCameraSelected();
-        else if (camera == 1)
-            recordView.showFrontCameraSelected();
+
+        } else {
+
+            if (camera == 1) {
+                recordView.showFrontCameraSelected();
+            }
+        }
+
         applyEffect(selectedEffect);
+
+        checkFlashSupport();
+
+    }
+
+    public void checkFlashSupport() {
+
+        // Check flash support
+        int flashSupport = recorder.checkSupportFlash(); // 0 true, 1 false, 2 ignoring, not prepared
+
+        Log.d(LOG_TAG, "checkSupportFlash flashSupport " + flashSupport);
+
+        if(flashSupport == 0){
+            recordView.showFlashSupported(true);
+            Log.d(LOG_TAG, "checkSupportFlash flash Supported camera");
+        } else {
+            if(flashSupport == 1) {
+                recordView.showFlashSupported(false);
+                Log.d(LOG_TAG, "checkSupportFlash flash NOT Supported camera");
+            }
+        }
+    }
+
+    public void setFlashOff(){
+        boolean on = recorder.setFlashOff();
+        recordView.showFlashOn(on);
+
     }
 
     public void toggleFlash() {

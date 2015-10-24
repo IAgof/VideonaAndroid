@@ -214,12 +214,12 @@
 
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="24">
 
                 <ImageView
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/activity_record_icon_rec_circle"
                     android:alpha="0.5"/>
@@ -283,6 +283,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1" />
 
+
                         <ImageButton
                             android:id="@+id/button_play"
                             android:layout_width="0dp"
@@ -291,8 +292,9 @@
                             android:background="@null"
                             android:padding="16dp"
                             android:scaleType="fitCenter"
+                            android:visibility="invisible"
                             android:src="@drawable/activity_record_play_video_selector"
-                            android:visibility="invisible" />
+                             />
 
                         <ImageButton
                             android:id="@+id/button_record"

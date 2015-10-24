@@ -12,7 +12,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -59,6 +58,9 @@ import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineR
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -71,7 +73,7 @@ import de.greenrobot.event.EventBus;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends Activity implements EditorView, MusicRecyclerViewClickListener
+public class EditActivity extends VideonaActivity implements EditorView, MusicRecyclerViewClickListener
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
         DrawerLayout.DrawerListener, OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
 
@@ -178,6 +180,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     @Override
     protected void onStart() {
         super.onStart();
+        mixpanel.timeEvent("Time in Edit Activity");
     }
 
     @Override
@@ -190,6 +193,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     protected void onPause() {
         super.onPause();
         editPresenter.onPause();
+        mixpanel.track("Time in Edit Activity");
     }
 
     @Override
@@ -215,12 +219,26 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
     public void okEditActivity() {
         pausePreview();
         showProgressDialog();
+        sendMetadataTracking();
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
             }
         };
         performOnBackgroundThread(this, r);
+    }
+
+    private void sendMetadataTracking() {
+        try {
+            int projectDuration = editPresenter.getProjectDuration();
+            int numVideosOnProject = editPresenter.getNumVideosOnProject();
+            JSONObject props = new JSONObject();
+            props.put("Number of videos", numVideosOnProject);
+            props.put("Duration of the exported video in msec", projectDuration);
+            mixpanel.track("Exported video", props);
+        } catch (JSONException e) {
+            Log.e("TRACK_FAILED", String.valueOf(e));
+        }
     }
 
     @OnClick(R.id.edit_button_ok_trim_detail)
@@ -324,6 +342,7 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         this.switchFragment(videoFxMenuFragment, R.id.edit_right_panel);
         if (musicGalleryFragment != null)
             this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+        hideOkDetailButton();
     }
 
     @OnClick(R.id.edit_button_audio)
@@ -383,9 +402,9 @@ public class EditActivity extends Activity implements EditorView, MusicRecyclerV
         if (lookFxMenuFragment == null)
             lookFxMenuFragment = new LookFxMenuFragment();
         this.switchFragment(lookFxMenuFragment, R.id.edit_right_panel);
-
         if (musicGalleryFragment != null)
             this.getFragmentManager().beginTransaction().remove(musicGalleryFragment).commit();
+        hideOkDetailButton();
     }
 
 

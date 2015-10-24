@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
@@ -18,7 +17,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragme
 /**
  * This class is used to manage the setting menu.
  */
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends VideonaActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,4 +29,15 @@ public class SettingsActivity extends Activity {
                 .commit();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent("Time in Settings Activity");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mixpanel.track("Time in Settings Activity");
+    }
 }

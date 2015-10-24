@@ -82,70 +82,80 @@ public class GLCameraView extends GLSurfaceView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+
+        if (mCamera != null && ev.getPointerCount() == 1 && (ev.getAction() == MotionEvent.ACTION_DOWN))
+            Log.d("Focus", "onTouchEvent doTouchFocus");
+
         if (mScaleGestureDetector != null) {
             if (!mScaleGestureDetector.onTouchEvent(ev)) {
                 // No scale gesture detected
 
             }
         }
-        if (mCamera != null && ev.getPointerCount() == 1 && (ev.getAction() == MotionEvent.ACTION_DOWN))
-            Log.d("Focus", "onTouchEvent doTouchFocus");
 
-        float x = ev.getX();
-        float y = ev.getY();
-        Rect touchRect = new Rect(
-                (int) (x - 100),
-                (int) (y - 100),
-                (int) (x + 100),
-                (int) (y + 100));
-        final Rect targetFocusRect = new Rect(
-                touchRect.left * 2000 / this.getWidth() - 1000,
-                touchRect.top * 2000 / this.getHeight() - 1000,
-                touchRect.right * 2000 / this.getWidth() - 1000,
-                touchRect.bottom * 2000 / this.getHeight() - 1000);
+        if (supportAutoFocus(mCamera)) {
 
-        doTouchFocus(targetFocusRect);
-        return true;
+            float x = ev.getX();
+            float y = ev.getY();
+            Rect touchRect = new Rect(
+                    (int) (x - 100),
+                    (int) (y - 100),
+                    (int) (x + 100),
+                    (int) (y + 100));
+            final Rect targetFocusRect = new Rect(
+                    touchRect.left * 2000 / this.getWidth() - 1000,
+                    touchRect.top * 2000 / this.getHeight() - 1000,
+                    touchRect.right * 2000 / this.getWidth() - 1000,
+                    touchRect.bottom * 2000 / this.getHeight() - 1000);
+
+            doTouchFocus(targetFocusRect);
+            return true;
+        }
+
+        return false;
     }
 
     private void doTouchFocus(final Rect tfocusRect) {
 
-        if (supportAutoFocus(mCamera)) {
+        try {
 
-            try {
-                final List<Camera.Area> focusList = new ArrayList<Camera.Area>();
-                Camera.Area focusArea = new Camera.Area(tfocusRect, 1000);
-                focusList.add(focusArea);
-                Camera.Parameters para = mCamera.getParameters();
-                para.setFocusAreas(focusList);
-                para.setMeteringAreas(focusList);
-                mCamera.setParameters(para);
-                mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                    @Override
-                    public void onAutoFocus(boolean arg0, Camera arg1) {
-                        if (arg0) {
-                            mCamera.cancelAutoFocus();
-                        }
+            final List<Camera.Area> focusList = new ArrayList<Camera.Area>();
+            Camera.Area focusArea = new Camera.Area(tfocusRect, 1000);
+            focusList.add(focusArea);
+            Camera.Parameters para = mCamera.getParameters();
+            para.setFocusAreas(focusList);
+            para.setMeteringAreas(focusList);
+            mCamera.setParameters(para);
+            mCamera.autoFocus(new Camera.AutoFocusCallback() {
+                @Override
+                public void onAutoFocus(boolean arg0, Camera arg1) {
+                    if (arg0) {
+                        mCamera.cancelAutoFocus();
                     }
-                });
+                }
+            });
 
-                //touchArea = tfocusRect;
+            //touchArea = tfocusRect;
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Log.i(LOG_TAG, "Unable to autofocus");
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Log.i(LOG_TAG, "Unable to autofocus");
         }
     }
 
     private boolean supportAutoFocus(Camera mCamera) {
-        boolean result = false;
-        Camera.Parameters parameters = mCamera.getParameters();
 
-        for (String autoFocus : parameters.getSupportedFocusModes()) {
-            if (autoFocus.compareTo(Camera.Parameters.FOCUS_MODE_AUTO) == 0) {
-                //Log.d(LOG_TAG, "Autofocus supported");
-                result = true;
+        boolean result = false;
+
+        if(mCamera != null){
+
+            Camera.Parameters parameters = mCamera.getParameters();
+
+            for (String autoFocus : parameters.getSupportedFocusModes()) {
+                if (autoFocus.compareTo(Camera.Parameters.FOCUS_MODE_AUTO) == 0) {
+                    //Log.d(LOG_TAG, "Autofocus supported");
+                    result = true;
+                }
             }
         }
         return result;

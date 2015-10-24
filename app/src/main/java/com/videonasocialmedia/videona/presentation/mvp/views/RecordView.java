@@ -35,6 +35,8 @@ public interface RecordView extends MVPView {
 
     void unlockScreenRotation();
 
+    void reStartScreenRotation();
+
     void lockNavigator(); //en VideonaView
 
     void unLockNavigator(); //en VideonaView
@@ -44,6 +46,8 @@ public interface RecordView extends MVPView {
      * @param on true=on, false=off
      */
     void showFlashOn(boolean on);
+
+    void showFlashSupported(boolean state);
 
     void showFrontCameraSelected();
 

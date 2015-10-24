@@ -8,9 +8,11 @@ import android.hardware.Camera.Parameters;
 public class CameraOpenedEvent {
 
     public Parameters params;
+    public int cameraInfoOrientation;
 
-    public CameraOpenedEvent(Parameters params) {
+    public CameraOpenedEvent(Parameters params, int cameraInfoOrientation) {
         this.params = params;
+        this.cameraInfoOrientation = cameraInfoOrientation;
     }
 
 }
