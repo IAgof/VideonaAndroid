@@ -19,11 +19,9 @@ import com.google.android.gms.analytics.Tracker;
 
 public class InstallReceiver extends BroadcastReceiver {
 
-    private Tracker tracker;
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        handleIntent(context, intent);
+        //handleIntent(context, intent);
 
         new CampaignTrackingReceiver().onReceive(context, intent);
     }
