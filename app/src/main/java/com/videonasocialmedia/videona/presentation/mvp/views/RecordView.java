@@ -17,7 +17,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 
 import java.util.List;
 
-public interface RecordView extends MVPView {
+public interface RecordView {
 
     void showRecordButton();
 
@@ -37,9 +37,6 @@ public interface RecordView extends MVPView {
 
     void reStartScreenRotation();
 
-    void lockNavigator(); //en VideonaView
-
-    void unLockNavigator(); //en VideonaView
 
     /**
      *

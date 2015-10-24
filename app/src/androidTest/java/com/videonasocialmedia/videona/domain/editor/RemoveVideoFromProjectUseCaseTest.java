@@ -16,7 +16,6 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.model.entities.social.User;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRemoveMediaFinishedListener;
 
 import org.mockito.ArgumentCaptor;
 
