@@ -10,8 +10,6 @@ package com.videonasocialmedia.videona.common.utils;
  * Juan Javier Cabanas
  */
 
-import com.videonasocialmedia.videona.utils.StringUtils;
-
 import junit.framework.TestCase;
 
 public class TestValidator extends TestCase {

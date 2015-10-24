@@ -377,15 +377,6 @@
 
     </RelativeLayout>
 
-    <!-- Left Drawer -->
-    <fragment
-        android:id="@+id/activity_record_navigation_drawer"
-        android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        tools:layout="@layout/common_fragment_navigator" />
-
 </android.support.v4.widget.DrawerLayout>
 
 

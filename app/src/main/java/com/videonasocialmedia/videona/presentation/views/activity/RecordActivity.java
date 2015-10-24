@@ -16,11 +16,9 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -64,14 +62,10 @@ import butterknife.OnClick;
 /**
  * RecordActivity manages a single live record.
  */
-public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener, RecordView,
+public class RecordActivity extends VideonaActivity implements RecordView,
         OnColorEffectSelectedListener, OnFxSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    @InjectView(R.id.activity_record_drawer_layout)
-    DrawerLayout drawerLayout;
-    @InjectView(R.id.activity_record_navigation_drawer)
-    View navigatorView;
     @InjectView(R.id.button_record)
     ImageButton recButton;
     @InjectView(R.id.cameraPreview)
@@ -94,14 +88,10 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     ImageButton buttonCameraEffectFx;
     @InjectView(R.id.button_camera_effect_color)
     ImageButton buttonCameraEffectColor;
-    @InjectView(R.id.button_navigate_drawer)
-    ImageButton drawerButton;
     @InjectView(R.id.text_view_num_videos)
     TextView numVideosRecorded;
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
-    @InjectView(R.id.drawer_full_background)
-    ImageView drawerBackground;
 
     private RecordPresenter recordPresenter;
     private CameraEffectsAdapter cameraEffectsAdapter;
@@ -120,7 +110,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_activity);
         ButterKnife.inject(this);
-        drawerLayout.setDrawerListener(this);
 
         cameraView.setKeepScreenOn(true);
         recordPresenter = new RecordPresenter(this, this, cameraView);
@@ -230,7 +219,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
         recButton.setAlpha(1f);
         recording = false;
-        unLockNavigator();
+
         navigateToEditButton.setVisibility(View.VISIBLE);
     }
 
@@ -239,7 +228,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(1f);
         recording = true;
-        lockNavigator();
         navigateToEditButton.setVisibility(View.INVISIBLE);
         numVideosRecorded.setVisibility(View.INVISIBLE);
     }
@@ -383,16 +371,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         }
     }
 
-    public void lockNavigator() {
-        drawerButton.setVisibility(View.INVISIBLE);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-
-    public void unLockNavigator() {
-        drawerButton.setVisibility(View.VISIBLE);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
 
     @OnClick(R.id.button_toggle_flash)
     public void toggleFlash() {
@@ -475,9 +453,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void onBackPressed() {
 
-        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            drawerLayout.closeDrawer(navigatorView);
-        } else if (buttonBackPressed) {
+        if (buttonBackPressed) {
             buttonBackPressed = false;
 
             Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -507,9 +483,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_navigate_edit)
     public void navigateToEdit() {
         if (!recording) {
-            Intent edit = new Intent(this, EditActivity.class);
+           // Intent edit = new Intent(this, EditActivity.class);
             //edit.putExtra("SHARE", false);
-            startActivity(edit);
+          //  startActivity(edit);
             mixpanel.track("Navigate edit Button clicked in Record Activity", null);
         }
     }
@@ -518,32 +494,10 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_navigate_drawer)
     public void showDrawer() {
         if (!recording) {
-            drawerLayout.openDrawer(navigatorView);
-            drawerBackground.setVisibility(View.VISIBLE);
             mixpanel.track("Navigate drawer Button clicked in Record Activity", null);
         }
     }
 
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-        drawerButton.setVisibility(View.GONE);
-        drawerBackground.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-        drawerButton.setVisibility(View.VISIBLE);
-        drawerBackground.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-    }
 
     @Override
     public void onColorEffectSelected(CameraEffectColor colorEffect) {
