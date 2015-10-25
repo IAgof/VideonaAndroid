@@ -34,6 +34,7 @@ public class CameraEffectsAdapter extends
     private List<CameraEffectFx> cameraFxList;
     private OnFxSelectedListener onFxSelectedListener;
     private int selectedPosition = 0;
+    private int previousSelectionPosition;
 
     /**
      * Constructor.
@@ -135,6 +136,10 @@ public class CameraEffectsAdapter extends
         this.notifyDataSetChanged();
     }
 
+    public int getPreviousSelectionPosition() {
+        return previousSelectionPosition;
+    }
+
     /**
      * This class is used to controls an item view of cameraEffectFx and metadata about its place
      * within the recycler view.
@@ -164,6 +169,7 @@ public class CameraEffectsAdapter extends
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
+                previousSelectionPosition=selectedPosition;
                 notifyItemChanged(selectedPosition);
                 selectedPosition = getAdapterPosition();
                 notifyItemChanged(selectedPosition);
