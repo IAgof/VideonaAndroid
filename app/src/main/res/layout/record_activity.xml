@@ -292,8 +292,8 @@
                             android:padding="16dp"
                             android:scaleType="fitCenter"
                             android:visibility="visible"
-                            android:alpha="65"
-                            android:clicable="false"
+                            android:alpha="0.25"
+                            android:clickable="false"
                             android:src="@drawable/activity_record_button_share_selector"
                              />
 

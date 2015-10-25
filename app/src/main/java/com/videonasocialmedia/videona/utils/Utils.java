@@ -152,6 +152,17 @@ public class Utils {
         }
     }
 
+    public static void removeVideo(String path) {
+        File file = new File(path);
+        if (file != null) {
+            if (file.isDirectory()) {
+                cleanDirectory(file);
+            } else {
+                file.delete();
+            }
+        }
+    }
+
     // Glide circle imageView
     public static Bitmap getCircularBitmapImage(Bitmap source) {
         int size = Math.min(source.getWidth(), source.getHeight());

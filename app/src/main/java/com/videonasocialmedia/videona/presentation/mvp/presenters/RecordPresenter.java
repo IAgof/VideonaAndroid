@@ -20,6 +20,7 @@ import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -39,7 +40,8 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrieved {
+public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrieved,
+        OnRemoveMediaFinishedListener {
 
     /**
      * LOG_TAG
@@ -63,6 +65,7 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
      * Get media list from project use case
      */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
+    private RemoveVideosUseCase removeVideosUseCase;
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview) {
@@ -73,6 +76,7 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
 
         exportProjectUseCase = new ExportProjectUseCase(this);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        removeVideosUseCase = new RemoveVideosUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         selectedEffect = Filters.FILTER_NONE;
         recordedVideosNumber = 0;
@@ -152,6 +156,10 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
         //exportProjectUseCase.export();
     }
 
+    public void removeMasterVideos() {
+        removeVideosUseCase.removeMediaItemsFromProject(this);
+    }
+
     public void onEventMainThread(CameraEncoderResetEvent e) {
         startRecord();
     }
@@ -175,7 +183,6 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
         recordView.startChronometer();
         firstTimeRecording = false;
     }
-
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         recordView.stopChronometer();
@@ -292,5 +299,15 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
     public void onExportSuccess(Video exportedVideo) {
         recordView.hideProgressDialog();
         recordView.goToShare(exportedVideo.getMediaPath());
+    }
+
+    @Override
+    public void onRemoveMediaItemFromTrackError() {
+
+    }
+
+    @Override
+    public void onRemoveMediaItemFromTrackSuccess() {
+
     }
 }

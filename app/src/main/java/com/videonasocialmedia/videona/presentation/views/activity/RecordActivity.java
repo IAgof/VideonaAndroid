@@ -221,6 +221,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onResume();
         recordPresenter.onResume();
         recording = false;
+        shareButton.setClickable(false);
     }
 
     @Override
@@ -283,7 +284,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         resetChronometer();
         chronometer.start();
         showRecordingIndicator();
-        shareButton.setImageAlpha(65);
+        shareButton.setAlpha(0.25f);
         shareButton.setClickable(false);
     }
 
@@ -303,7 +304,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void stopChronometer() {
         chronometer.stop();
         hideRecordingIndicator();
-        shareButton.setImageAlpha(255);
+        shareButton.setAlpha(1f);
         shareButton.setClickable(true);
     }
 
@@ -612,7 +613,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         Uri uri = Utils.obtainUriToShare(this, videoToSharePath);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
-        //TODO remove master videos
+        recordPresenter.removeMasterVideos();
     }
 
     @Override
