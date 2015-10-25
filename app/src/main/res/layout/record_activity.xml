@@ -57,14 +57,14 @@
                     android:orientation="horizontal">
 
                     <ImageButton
-                        android:id="@+id/button_navigate_drawer"
+                        android:id="@+id/button_settings"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="9"
                         android:background="@null"
                         android:padding="20dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/activity_record_drawer_selector"
+                        android:src="@drawable/activity_record_settings_selector"
                         android:visibility="visible" />
 
                     <RelativeLayout

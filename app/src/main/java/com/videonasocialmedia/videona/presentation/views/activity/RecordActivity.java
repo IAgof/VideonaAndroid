@@ -491,11 +491,15 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
 
-    @OnClick(R.id.button_navigate_drawer)
-    public void showDrawer() {
+    @OnClick(R.id.button_settings)
+    public void showSettings() {
         if (!recording) {
-            mixpanel.track("Navigate drawer Button clicked in Record Activity", null);
+            mixpanel.track("Navigate settings Button clicked in Record Activity", null);
         }
+
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+
     }
 
 
