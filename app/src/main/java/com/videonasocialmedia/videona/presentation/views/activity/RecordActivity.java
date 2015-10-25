@@ -221,6 +221,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onResume();
         recordPresenter.onResume();
         recording = false;
+        shareButton.setAlpha(0.25f);
         shareButton.setClickable(false);
     }
 
@@ -505,9 +506,19 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
+    public void hideRecordedVideoThumb() {
+        navigateToEditButton.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public void showVideosRecordedNumber(int numberOfVideos) {
         numVideosRecorded.setVisibility(View.VISIBLE);
         numVideosRecorded.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideVideosRecordedNumber() {
+        numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -608,12 +619,12 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void goToShare(String videoToSharePath) {
+        recordPresenter.removeMasterVideos();
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
         Uri uri = Utils.obtainUriToShare(this, videoToSharePath);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
-        recordPresenter.removeMasterVideos();
     }
 
     @Override

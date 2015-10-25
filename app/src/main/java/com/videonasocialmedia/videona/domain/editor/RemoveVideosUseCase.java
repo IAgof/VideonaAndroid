@@ -12,6 +12,7 @@ package com.videonasocialmedia.videona.domain.editor;
 
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
+import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
@@ -50,6 +51,11 @@ public class RemoveVideosUseCase {
         } else {
             listener.onRemoveMediaItemFromTrackError();
         }
+        if(!mediaTrack.getItems().isEmpty()) {
+            mediaTrack = new MediaTrack();
+        }
+
+        EventBus.getDefault().post(new VideosRemovedFromProjectEvent());
         EventBus.getDefault().post(new UpdateProjectDurationEvent(0));
         EventBus.getDefault().post(new NumVideosChangedEvent(0));
     }

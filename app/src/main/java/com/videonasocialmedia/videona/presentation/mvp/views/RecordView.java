@@ -61,6 +61,10 @@ public interface RecordView extends MVPView {
 
     void showVideosRecordedNumber(int numberOfVideos);
 
+    void hideRecordedVideoThumb();
+
+    void hideVideosRecordedNumber();
+
     void goToShare(String videoToSharePath);
 
     void showProgressDialog();
