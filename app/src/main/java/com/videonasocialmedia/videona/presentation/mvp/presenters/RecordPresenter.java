@@ -214,6 +214,8 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
     public void onEvent(VideosRemovedFromProjectEvent e) {
         recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
+        // todo esconder el número de vídeos
+        // todo poner la transparencia al avión de nuevo y que no se clicable
     }
 
     public int getProjectDuration() {
