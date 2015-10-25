@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.listener.OnColorEffectSelectedListener;
 
@@ -34,7 +35,8 @@ public class CameraColorFilterAdapter
     private List<CameraEffectColor> cameraEffectColors;
     private OnColorEffectSelectedListener onColorEffectSelectedListener;
     private int selectedPosition = -1;
-    private int previousSelectionPosition=-1;
+    private int previousSelectionPosition = -1;
+    private CameraEffectColor defaultEffect;
 
     /**
      * Constructor.
@@ -45,6 +47,7 @@ public class CameraColorFilterAdapter
                                     OnColorEffectSelectedListener listener) {
         this.cameraEffectColors = cameraEffectColor;
         this.onColorEffectSelectedListener = listener;
+        defaultEffect = new CameraEffectColor(null, -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -53,6 +56,7 @@ public class CameraColorFilterAdapter
     public CameraColorFilterAdapter(OnColorEffectSelectedListener listener) {
         cameraEffectColors = CameraEffectColor.getDefaultCameraEffectColorList();
         this.onColorEffectSelectedListener = listener;
+        defaultEffect = new CameraEffectColor(null, -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -168,12 +172,16 @@ public class CameraColorFilterAdapter
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                previousSelectionPosition=selectedPosition;
+                previousSelectionPosition = selectedPosition;
                 notifyItemChanged(selectedPosition);
-                //if (getAdapterPosition()==selectedPosition)
-                selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
-                onClickListener.onColorEffectSelected(cameraEffectColors.get(selectedPosition));
+                if (selectedPosition == getAdapterPosition()) {
+                    resetSelectedEffect();
+                    onClickListener.onColorEffectSelected(defaultEffect);
+                } else {
+                    selectedPosition = getAdapterPosition();
+                    notifyItemChanged(selectedPosition);
+                    onClickListener.onColorEffectSelected(cameraEffectColors.get(selectedPosition));
+                }
             }
             return true;
         }

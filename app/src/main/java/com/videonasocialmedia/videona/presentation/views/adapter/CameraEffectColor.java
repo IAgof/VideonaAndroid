@@ -42,9 +42,6 @@ public final class CameraEffectColor {
         List<CameraEffectColor> cameraEffectColor = new ArrayList<>();
 
         cameraEffectColor.add(
-                new CameraEffectColor("none", R.drawable.common_filter_ad0_none_normal,
-                        R.drawable.common_filter_ad0_none_pressed, Filters.FILTER_NONE));
-        cameraEffectColor.add(
                 new CameraEffectColor("aqua", R.drawable.common_filter_ad1_aqua_normal,
                         R.drawable.common_filter_ad1_aqua_pressed, Filters.FILTER_AQUA));
         cameraEffectColor.add(
