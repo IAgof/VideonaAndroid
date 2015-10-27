@@ -23,6 +23,22 @@ public interface RecordView {
 
     void showStopButton();
 
+    void showSettings();
+
+    void hideSettings();
+
+    void showChronometer();
+
+    void hideChronometer();
+
+    void hideThumbClipsRecorded();
+
+    void showRecordedVideoThumb(String path);
+
+    void showVideosRecordedNumber(int numberOfVideos);
+
+    void hideVideosRecordedNumber();
+
     void startChronometer();
 
     void stopChronometer();
@@ -37,11 +53,6 @@ public interface RecordView {
 
     void reStartScreenRotation();
 
-
-    /**
-     *
-     * @param on true=on, false=off
-     */
     void showFlashOn(boolean on);
 
     void showFlashSupported(boolean state);
@@ -54,8 +65,6 @@ public interface RecordView {
 
     void showError(int stringResourceId); //videonaView
 
-    void showRecordedVideoThumb(String path);
 
-    void showVideosRecordedNumber(int numberOfVideos);
 
 }

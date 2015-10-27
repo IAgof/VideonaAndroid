@@ -82,6 +82,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     ImageView recordingIndicator;
     @InjectView(R.id.chronometer_record)
     Chronometer chronometer;
+    @InjectView(R.id.button_settings)
+    ImageButton buttonSettings;
     @InjectView(R.id.button_toggle_flash)
     ImageButton flashButton;
     @InjectView(R.id.button_camera_effect_fx)
@@ -220,7 +222,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recButton.setAlpha(1f);
         recording = false;
 
-        navigateToEditButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -228,9 +229,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(1f);
         recording = true;
-        navigateToEditButton.setVisibility(View.INVISIBLE);
-        numVideosRecorded.setVisibility(View.INVISIBLE);
+
     }
+
 
     @Override
     public void startChronometer() {
@@ -439,8 +440,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void showRecordedVideoThumb(String path) {
-        // Glide.with(this).load(path).centerCrop().crossFade().into(navigateToEditButton);
 
+        navigateToEditButton.setVisibility(View.VISIBLE);
         Glide.with(this).load(path).into(navigateToEditButton);
     }
 
@@ -448,6 +449,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void showVideosRecordedNumber(int numberOfVideos) {
         numVideosRecorded.setVisibility(View.VISIBLE);
         numVideosRecorded.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideVideosRecordedNumber() {
+        numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -492,7 +498,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
 
     @OnClick(R.id.button_settings)
-    public void showSettings() {
+    public void navigateToSettings() {
         if (!recording) {
             mixpanel.track("Navigate settings Button clicked in Record Activity", null);
         }
@@ -500,6 +506,32 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void showSettings(){
+        buttonSettings.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideSettings() {
+        buttonSettings.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showChronometer() {
+        chronometer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideChronometer() {
+        chronometer.setVisibility(View.INVISIBLE);
+    }
+
+
+    @Override
+    public void hideThumbClipsRecorded() {
+        navigateToEditButton.setVisibility(View.INVISIBLE);
     }
 
 
