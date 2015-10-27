@@ -22,17 +22,17 @@ android {
     buildTypes {
         release {
             buildConfigField "String", "MIXPANEL_TOKEN", "\"985b2aeb535dbc92b81fb5cce7ad1212\""
-            buildConfigField "String", "QORDOBA_APP_ID", "\"08e33aa6-e2f8-4edf-89ca-59e41580a104\""
-            buildConfigField "String", "QORDOBA_KEY", "\"5fe39b44-0c5d-49c0-96a4-b1a0f7fd958b\""
-            resValue "String", "GOOGLE_ANALYTICS_ID", "UA-59687187-1"
+            buildConfigField "String", "QORDOBA_APP_ID", "\"2bfd914a-433c-43b2-bd73-d77262c00241\""
+            buildConfigField "String", "QORDOBA_KEY", "\"7b42298d-8bc3-42a3-a4b6-17f11c383f32\""
+            resValue "string", "GOOGLE_ANALYTICS_ID", "UA-59687187-1"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             buildConfigField "String", "MIXPANEL_TOKEN", "\"XXXXXXXXXXXXXXXXXXXXXXX\""
-            buildConfigField "String", "QORDOBA_APP_ID", "\"08e33aa6-e2f8-4edf-89ca-59e41580a104\""
-            buildConfigField "String", "QORDOBA_KEY", "\"dev_c27d4b18-e14e-4a46-b533-f4150aba67ca\""
-            resValue "String", "GOOGLE_ANALYTICS_ID", "UA-XXXXXXXX-1"
+            buildConfigField "String", "QORDOBA_APP_ID", "\"2bfd914a-433c-43b2-bd73-d77262c00241\""
+            buildConfigField "String", "QORDOBA_KEY", "\"dev_b1f915c8-384d-4956-8136-bc1712e0234f\""
+            resValue "string", "GOOGLE_ANALYTICS_ID", "UA-XXXXXXXX-1"
         }
     }
     dexOptions {
