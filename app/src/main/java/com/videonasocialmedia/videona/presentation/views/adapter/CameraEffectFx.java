@@ -35,9 +35,6 @@ public class CameraEffectFx {
         List<CameraEffectFx> cameraEffects = new ArrayList<>();
 
         cameraEffects.add(
-                new CameraEffectFx("Normal", R.drawable.common_filter_fx_fx0_none_normal,
-                        R.drawable.common_filter_fx_fx0_none_pressed, Filters.FILTER_NONE));
-        cameraEffects.add(
                 new CameraEffectFx("Fisheye", R.drawable.common_filter_fx_fx1_fisheye_normal,
                         R.drawable.common_filter_fx_fx1_fisheye_pressed, Filters.FILTER_FISHEYE));
         cameraEffects.add(

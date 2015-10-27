@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.listener.OnFxSelectedListener;
 
@@ -33,7 +34,9 @@ public class CameraEffectsAdapter extends
     private Context context;
     private List<CameraEffectFx> cameraFxList;
     private OnFxSelectedListener onFxSelectedListener;
-    private int selectedPosition = 0;
+    private int selectedPosition = -1;
+    private int previousSelectionPosition=-1;
+    private CameraEffectFx defaultFx;
 
     /**
      * Constructor.
@@ -43,6 +46,7 @@ public class CameraEffectsAdapter extends
     public CameraEffectsAdapter(List<CameraEffectFx> cameraFxList, OnFxSelectedListener listener) {
         this.cameraFxList = cameraFxList;
         this.onFxSelectedListener = listener;
+        defaultFx = new CameraEffectFx(null, -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -51,6 +55,7 @@ public class CameraEffectsAdapter extends
     public CameraEffectsAdapter(OnFxSelectedListener listener) {
         this.cameraFxList = CameraEffectFx.getCameraEffectList();
         this.onFxSelectedListener = listener;
+        defaultFx = new CameraEffectFx(null, -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -73,7 +78,6 @@ public class CameraEffectsAdapter extends
     @Override
     public void onBindViewHolder(CameraEffectViewHolder holder, int position) {
         CameraEffectFx selectedCameraFx = cameraFxList.get(position);
-
         if (position == selectedPosition) {
             Glide.with(context)
                     .load(selectedCameraFx.getIconPressedResourceId())
@@ -131,8 +135,12 @@ public class CameraEffectsAdapter extends
     }
 
     public void resetSelectedEffect() {
-        selectedPosition=-1;
+        selectedPosition = -1;
         this.notifyDataSetChanged();
+    }
+
+    public int getPreviousSelectionPosition() {
+        return previousSelectionPosition;
     }
 
     /**
@@ -164,12 +172,19 @@ public class CameraEffectsAdapter extends
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_UP) {
+                previousSelectionPosition = selectedPosition;
                 notifyItemChanged(selectedPosition);
-                selectedPosition = getAdapterPosition();
-                notifyItemChanged(selectedPosition);
-                onClickListener.onFxSelected(cameraFxList.get(selectedPosition));
+                if (selectedPosition == getAdapterPosition()) {
+                    resetSelectedEffect();
+                    onClickListener.onFxSelected(defaultFx);
+                } else {
+                    selectedPosition = getAdapterPosition();
+                    notifyItemChanged(selectedPosition);
+                    onClickListener.onFxSelected(cameraFxList.get(selectedPosition));
+                }
             }
             return true;
         }
     }
+
 }
