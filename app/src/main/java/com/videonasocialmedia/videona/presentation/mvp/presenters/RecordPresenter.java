@@ -63,6 +63,8 @@ public class RecordPresenter {
         recordedVideosNumber = 0;
 
         initRecorder(context, cameraPreview);
+
+        hideInitialsButtons();
     }
 
     private void initRecorder(Context context, GLCameraEncoderView cameraPreview) {
@@ -72,9 +74,17 @@ public class RecordPresenter {
                     .getDrawable(R.drawable.watermark720));
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
+
+
         } catch (IOException ioe) {
             Log.e("ERROR", "ERROR", ioe);
         }
+    }
+
+    private void hideInitialsButtons() {
+        recordView.hideThumbClipsRecorded();
+        recordView.hideVideosRecordedNumber();
+        recordView.hideChronometer();
     }
 
     public void onStart() {
@@ -155,7 +165,11 @@ public class RecordPresenter {
         recordView.lockScreenRotation();
         recordView.showStopButton();
         recordView.startChronometer();
+        recordView.showChronometer();
+        recordView.hideSettings();
+        recordView.hideThumbClipsRecorded();
         firstTimeRecording = false;
+
     }
 
 
@@ -182,6 +196,8 @@ public class RecordPresenter {
         recordView.showRecordedVideoThumb(path);
         recordView.showRecordButton();
         recordView.showVideosRecordedNumber(++recordedVideosNumber);
+        recordView.showSettings();
+        recordView.hideChronometer();
         recordView.reStartScreenRotation();
     }
 
