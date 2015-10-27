@@ -170,6 +170,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     protected void onStart() {
         super.onStart();
         recordPresenter.onStart();
+        onColorFiltersButtonClicked();
         mixpanel.timeEvent("Time in Record Activity");
     }
 
