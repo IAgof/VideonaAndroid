@@ -10,10 +10,13 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
@@ -43,6 +46,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraColorFilterAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
@@ -50,6 +54,10 @@ import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectsAd
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnColorEffectSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnFxSelectedListener;
+import com.videonasocialmedia.videona.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -65,7 +73,7 @@ import butterknife.OnClick;
  * RecordActivity manages a single live record.
  */
 public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener, RecordView,
-        OnColorEffectSelectedListener, OnFxSelectedListener {
+        ShareView, OnColorEffectSelectedListener, OnFxSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @InjectView(R.id.activity_record_drawer_layout)
@@ -102,7 +110,10 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     ImageView rotateDeviceHint;
     @InjectView(R.id.drawer_full_background)
     ImageView drawerBackground;
+    @InjectView(R.id.button_share)
+    ImageButton shareButton;
 
+    private static RecordActivity parent;
     private RecordPresenter recordPresenter;
     private CameraEffectsAdapter cameraEffectsAdapter;
     private CameraColorFilterAdapter cameraColorFilterAdapter;
@@ -114,6 +125,22 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean recording;
     private OrientationHelper orientationHelper;
     private boolean lockRotation;
+    private ProgressDialog progressDialog;
+
+    public Thread performOnBackgroundThread(RecordActivity parent, final Runnable runnable) {
+        this.parent = parent;
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } finally {
+                }
+            }
+        };
+        t.start();
+        return t;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +150,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         drawerLayout.setDrawerListener(this);
 
         cameraView.setKeepScreenOn(true);
-        recordPresenter = new RecordPresenter(this, this, cameraView);
+        recordPresenter = new RecordPresenter(this, this, this, cameraView);
 
         initEffectsRecycler();
         configChronometer();
@@ -135,6 +162,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
+        createProgressDialog();
     }
 
     private void initOrientationHelper() {
@@ -175,6 +203,13 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         });
     }
 
+    private void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.dialog_processing));
+        progressDialog.setTitle(getString(R.string.please_wait));
+        progressDialog.setIndeterminate(true);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -188,6 +223,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onResume();
         recordPresenter.onResume();
         recording = false;
+        disableShareButton();
     }
 
     @Override
@@ -250,6 +286,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         resetChronometer();
         chronometer.start();
         showRecordingIndicator();
+        disableShareButton();
     }
 
     private void resetChronometer() {
@@ -268,6 +305,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void stopChronometer() {
         chronometer.stop();
         hideRecordingIndicator();
+        enableShareButton();
     }
 
     private void hideRecordingIndicator() {
@@ -413,7 +451,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
             flashButton.setImageAlpha(255);
             flashButton.setActivated(false);
-            flashButton.setActivated(false);
             flashButton.setEnabled(true);
 
         } else {
@@ -468,9 +505,19 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
+    public void hideRecordedVideoThumb() {
+        navigateToEditButton.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public void showVideosRecordedNumber(int numberOfVideos) {
         numVideosRecorded.setVisibility(View.VISIBLE);
         numVideosRecorded.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideVideosRecordedNumber() {
+        numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -508,6 +555,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_navigate_edit)
     public void navigateToEdit() {
         if (!recording) {
+
             Intent edit = new Intent(this, EditActivity.class);
             //edit.putExtra("SHARE", false);
             startActivity(edit);
@@ -515,6 +563,77 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         }
     }
 
+    @OnClick(R.id.button_share)
+    public void exportAndShare() {
+        if (!recording) {
+            showProgressDialog();
+            sendMetadataTracking();
+            final Runnable r = new Runnable() {
+                public void run() {
+                    recordPresenter.startExport();
+                }
+            };
+            performOnBackgroundThread(this, r);
+        }
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+        progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
+
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("message", "id", "android")))
+                .setTextColor(Color.WHITE);
+
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("alertTitle", "id", "android")))
+                .setTextColor(Color.WHITE);
+
+        progressDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id",
+                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
+
+        progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
+                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    private void sendMetadataTracking() {
+        try {
+            int projectDuration = recordPresenter.getProjectDuration();
+            int numVideosOnProject = recordPresenter.getNumVideosOnProject();
+            JSONObject props = new JSONObject();
+            props.put("Number of videos", numVideosOnProject);
+            props.put("Duration of the exported video in msec", projectDuration);
+            mixpanel.track("Exported video", props);
+        } catch (JSONException e) {
+            Log.e("TRACK_FAILED", String.valueOf(e));
+        }
+    }
+
+    @Override
+    public void goToShare(String videoToSharePath) {
+        recordPresenter.removeMasterVideos();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("video/*");
+        Uri uri = Utils.obtainUriToShare(this, videoToSharePath);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+    }
+
+    @Override
+    public void showMessage(final int message) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @OnClick(R.id.button_navigate_drawer)
     public void showDrawer() {
@@ -689,6 +808,18 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                 .setLabel(label)
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
+
+    @Override
+    public void enableShareButton() {
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
+    }
+
+    @Override
+    public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
     }
 
 
