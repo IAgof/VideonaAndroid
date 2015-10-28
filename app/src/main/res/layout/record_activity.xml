@@ -24,8 +24,8 @@
 
         <com.videonasocialmedia.avrecorder.view.CustomManualFocusView
             android:id="@+id/customManualFocusView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             CustomManualFocusView:focus_icon="@drawable/activity_record_icon_focus_focused" />
 
 
@@ -153,7 +153,8 @@
                             android:paddingRight="16dp"
                             android:text="00:00"
                             android:textColor="@android:color/white"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:visibility="visible"/>
                     </LinearLayout>
                 </RelativeLayout>
 
@@ -175,7 +176,7 @@
                         android:layout_weight="8">
 
                         <com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView
-                            android:id="@+id/button_navigate_edit"
+                            android:id="@+id/button_thumb_clip_recorded"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:layout_gravity="center_horizontal|center_vertical"
@@ -202,7 +203,9 @@
                             android:scaleType="fitCenter"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@android:color/white"
-                            android:textSize="27sp" />
+                            android:textSize="27sp"
+                            tools:text="00"
+                            />
 
                     </RelativeLayout>
 
@@ -216,13 +219,16 @@
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="24">
+                    android:layout_weight="24"
+                    android:background="@drawable/activity_record_icon_rec_circle"
+                    android:backgroundTintMode="src_atop"
+                    android:backgroundTint="@color/pastel_palette_grey_record">
 
-                <ImageView
-                    android:layout_width="fill_parent"
+              <!--  <ImageView
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/activity_record_icon_rec_circle"
-                    android:alpha="0.5"/>
+                    android:alpha="0.5"/> -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
