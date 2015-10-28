@@ -17,11 +17,27 @@ import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
 
 import java.util.List;
 
-public interface RecordView extends MVPView {
+public interface RecordView {
 
     void showRecordButton();
 
     void showStopButton();
+
+    void showSettings();
+
+    void hideSettings();
+
+    void showChronometer();
+
+    void hideChronometer();
+
+    void hideThumbClipsRecorded();
+
+    void showRecordedVideoThumb(String path);
+
+    void showVideosRecordedNumber(int numberOfVideos);
+
+    void hideVideosRecordedNumber();
 
     void startChronometer();
 
@@ -37,14 +53,6 @@ public interface RecordView extends MVPView {
 
     void reStartScreenRotation();
 
-    void lockNavigator(); //en VideonaView
-
-    void unLockNavigator(); //en VideonaView
-
-    /**
-     *
-     * @param on true=on, false=off
-     */
     void showFlashOn(boolean on);
 
     void showFlashSupported(boolean state);
@@ -57,8 +65,6 @@ public interface RecordView extends MVPView {
 
     void showError(int stringResourceId); //videonaView
 
-    void showRecordedVideoThumb(String path);
 
-    void showVideosRecordedNumber(int numberOfVideos);
 
 }

@@ -8,11 +8,11 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- pressed state -->
-    <item android:drawable="@drawable/activity_edit_icon_fx_pressed" android:state_pressed="true" />
-    <item android:drawable="@drawable/activity_edit_icon_fx_pressed" android:state_activated="true" />
+    <item android:drawable="@drawable/activity_record_fx_pressed" android:state_pressed="true" />
+    <item android:drawable="@drawable/activity_record_fx_pressed" android:state_activated="true" />
 
 
     <!-- default state -->
-    <item android:drawable="@drawable/activity_edit_icon_fx_normal" />
+    <item android:drawable="@drawable/activity_record_fx_normal" />
 
 </selector>

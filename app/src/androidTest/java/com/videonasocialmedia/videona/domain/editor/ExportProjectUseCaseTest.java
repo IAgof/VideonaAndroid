@@ -12,7 +12,6 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;
-import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 
 public class ExportProjectUseCaseTest extends ActivityInstrumentationTestCase2<EditActivity> {
 
