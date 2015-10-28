@@ -67,4 +67,16 @@ public interface RecordView {
 
 
 
+    void hideRecordedVideoThumb();
+
+    void hideVideosRecordedNumber();
+
+    void goToShare(String videoToSharePath);
+
+    void showProgressDialog();
+
+    void hideProgressDialog();
+
+    void showMessage(int stringToast);
+
 }

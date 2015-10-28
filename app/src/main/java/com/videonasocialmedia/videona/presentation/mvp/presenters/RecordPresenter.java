@@ -19,14 +19,22 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
+import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
+import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRemovedFromProjectEvent;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -34,7 +42,8 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter {
+public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrieved,
+        OnRemoveMediaFinishedListener {
 
     /**
      * LOG_TAG
@@ -42,6 +51,7 @@ public class RecordPresenter {
     private static final String LOG_TAG = "RecordPresenter";
     private boolean firstTimeRecording;
     private RecordView recordView;
+    private ShareView shareView;
     private SessionConfig config;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
@@ -50,15 +60,28 @@ public class RecordPresenter {
 
     private Context context;
     private GLCameraEncoderView cameraPreview;
+    /**
+     * Export project use case
+     */
+    private ExportProjectUseCase exportProjectUseCase;
+    /**
+     * Get media list from project use case
+     */
+    private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
+    private RemoveVideosUseCase removeVideosUseCase;
 
-    public RecordPresenter(Context context, RecordView recordView,
+    public RecordPresenter(Context context, RecordView recordView, ShareView shareView,
                            GLCameraEncoderView cameraPreview) {
         Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
+        this.shareView = shareView;
         this.context = context;
         this.cameraPreview = cameraPreview;
 
+        exportProjectUseCase = new ExportProjectUseCase(this);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        removeVideosUseCase = new RemoveVideosUseCase();
+        getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         selectedEffect = Filters.FILTER_NONE;
         recordedVideosNumber = 0;
 
@@ -98,9 +121,6 @@ public class RecordPresenter {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
         Log.d(LOG_TAG, "resume presenter");
-
-
-
     }
 
     public void onPause() {
@@ -117,7 +137,6 @@ public class RecordPresenter {
     public void onDestroy() {
         //recorder.release();
     }
-
 
     public void stopRecord() {
         if (recorder.isRecording())
@@ -142,6 +161,17 @@ public class RecordPresenter {
     private void resetRecorder() throws IOException {
         config = new SessionConfig(Constants.PATH_APP_TEMP);
         recorder.reset(config);
+    }
+
+    public void startExport() {
+        //editorView.showProgressDialog();
+        //check VideoList is not empty, if true exportProjectUseCase
+        getMediaListFromProjectUseCase.getMediaListFromProject(this);
+        //exportProjectUseCase.export();
+    }
+
+    public void removeMasterVideos() {
+        removeVideosUseCase.removeMediaItemsFromProject(this);
     }
 
     public void onEventMainThread(CameraEncoderResetEvent e) {
@@ -172,7 +202,6 @@ public class RecordPresenter {
 
     }
 
-
     public void onEventMainThread(MuxerFinishedEvent e) {
         recordView.stopChronometer();
         String finalPath = moveVideoToMastersFolder();
@@ -201,25 +230,33 @@ public class RecordPresenter {
         recordView.reStartScreenRotation();
     }
 
+    public void onEventMainThread(VideosRemovedFromProjectEvent e) {
+        recordView.hideRecordedVideoThumb();
+        recordView.hideVideosRecordedNumber();
+        recordedVideosNumber = 0;
+        shareView.disableShareButton();
+    }
+
+    public int getProjectDuration() {
+        return Project.getInstance(null, null, null).getDuration();
+    }
+
+    public int getNumVideosOnProject() {
+        return recordedVideosNumber;
+    }
+
     public void changeCamera() {
         //TODO controlar el estado del flash
-
         int camera = recorder.requestOtherCamera();
-
         if (camera == 0) {
             recordView.showBackCameraSelected();
-
         } else {
-
             if (camera == 1) {
                 recordView.showFrontCameraSelected();
             }
         }
-
         applyEffect(selectedEffect);
-
         checkFlashSupport();
-
     }
 
     public void checkFlashSupport() {
@@ -260,5 +297,37 @@ public class RecordPresenter {
         recorder.rotateCamera(rotation);
     }
 
+    @Override
+    public void onVideosRetrieved(List<Video> videoList) {
+        exportProjectUseCase.export();
+    }
 
+    @Override
+    public void onNoVideosRetrieved() {
+        recordView.hideProgressDialog();
+        recordView.showMessage(R.string.add_videos_to_project);
+    }
+
+    @Override
+    public void onExportError(String error) {
+        recordView.hideProgressDialog();
+        //TODO modify error message
+        recordView.showError(R.string.addMediaItemToTrackError);
+    }
+
+    @Override
+    public void onExportSuccess(Video exportedVideo) {
+        recordView.hideProgressDialog();
+        recordView.goToShare(exportedVideo.getMediaPath());
+    }
+
+    @Override
+    public void onRemoveMediaItemFromTrackError() {
+
+    }
+
+    @Override
+    public void onRemoveMediaItemFromTrackSuccess() {
+
+    }
 }

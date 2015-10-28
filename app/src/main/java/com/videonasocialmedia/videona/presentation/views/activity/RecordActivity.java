@@ -10,10 +10,13 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,6 +44,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraColorFilterAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
@@ -48,6 +52,10 @@ import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectsAd
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnColorEffectSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnFxSelectedListener;
+import com.videonasocialmedia.videona.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -63,7 +71,7 @@ import butterknife.OnClick;
  * RecordActivity manages a single live record.
  */
 public class RecordActivity extends VideonaActivity implements RecordView,
-        OnColorEffectSelectedListener, OnFxSelectedListener {
+        ShareView, OnColorEffectSelectedListener, OnFxSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @InjectView(R.id.button_record)
@@ -94,7 +102,10 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     TextView numVideosRecorded;
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
+    @InjectView(R.id.button_share)
+    ImageButton shareButton;
 
+    private static RecordActivity parent;
     private RecordPresenter recordPresenter;
     private CameraEffectsAdapter cameraEffectsAdapter;
     private CameraColorFilterAdapter cameraColorFilterAdapter;
@@ -106,6 +117,22 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean recording;
     private OrientationHelper orientationHelper;
     private boolean lockRotation;
+    private ProgressDialog progressDialog;
+
+    public Thread performOnBackgroundThread(RecordActivity parent, final Runnable runnable) {
+        this.parent = parent;
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } finally {
+                }
+            }
+        };
+        t.start();
+        return t;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +141,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         ButterKnife.inject(this);
 
         cameraView.setKeepScreenOn(true);
-        recordPresenter = new RecordPresenter(this, this, cameraView);
+        recordPresenter = new RecordPresenter(this, this, this, cameraView);
 
         initEffectsRecycler();
         configChronometer();
@@ -126,6 +153,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
+        createProgressDialog();
     }
 
     private void initOrientationHelper() {
@@ -166,6 +194,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         });
     }
 
+    private void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.dialog_processing));
+        progressDialog.setTitle(getString(R.string.please_wait));
+        progressDialog.setIndeterminate(true);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -179,6 +214,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         super.onResume();
         recordPresenter.onResume();
         recording = false;
+        disableShareButton();
     }
 
     @Override
@@ -230,15 +266,14 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(1f);
         recording = true;
-
     }
-
 
     @Override
     public void startChronometer() {
         resetChronometer();
         chronometer.start();
         showRecordingIndicator();
+        disableShareButton();
     }
 
     private void resetChronometer() {
@@ -257,6 +292,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void stopChronometer() {
         chronometer.stop();
         hideRecordingIndicator();
+        enableShareButton();
     }
 
     private void hideRecordingIndicator() {
@@ -354,7 +390,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void reStartScreenRotation() {
-
         try {
             lockRotation = false;
             orientationHelper.startMonitoringOrientation();
@@ -373,6 +408,10 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         }
     }
 
+    public void lockNavigator() {
+        drawerButton.setVisibility(View.INVISIBLE);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
 
     @OnClick(R.id.button_toggle_flash)
     public void toggleFlash() {
@@ -441,9 +480,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void showRecordedVideoThumb(String path) {
-
         navigateToEditButton.setVisibility(View.VISIBLE);
         Glide.with(this).load(path).into(navigateToEditButton);
+    }
+
+    @Override
+    public void hideRecordedVideoThumb() {
+        navigateToEditButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -497,6 +540,77 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         }
     }
 
+    @OnClick(R.id.button_share)
+    public void exportAndShare() {
+        if (!recording) {
+            showProgressDialog();
+            sendMetadataTracking();
+            final Runnable r = new Runnable() {
+                public void run() {
+                    recordPresenter.startExport();
+                }
+            };
+            performOnBackgroundThread(this, r);
+        }
+    }
+    
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+        progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
+
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("message", "id", "android")))
+                .setTextColor(Color.WHITE);
+
+        ((TextView) progressDialog.findViewById(Resources.getSystem()
+                .getIdentifier("alertTitle", "id", "android")))
+                .setTextColor(Color.WHITE);
+
+        progressDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id",
+                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
+
+        progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
+                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    private void sendMetadataTracking() {
+        try {
+            int projectDuration = recordPresenter.getProjectDuration();
+            int numVideosOnProject = recordPresenter.getNumVideosOnProject();
+            JSONObject props = new JSONObject();
+            props.put("Number of videos", numVideosOnProject);
+            props.put("Duration of the exported video in msec", projectDuration);
+            mixpanel.track("Exported video", props);
+        } catch (JSONException e) {
+            Log.e("TRACK_FAILED", String.valueOf(e));
+        }
+    }
+
+    @Override
+    public void goToShare(String videoToSharePath) {
+        recordPresenter.removeMasterVideos();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("video/*");
+        Uri uri = Utils.obtainUriToShare(this, videoToSharePath);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+    }
+
+    @Override
+    public void showMessage(final int message) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @OnClick(R.id.button_settings)
     public void navigateToSettings() {
@@ -528,13 +642,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void hideChronometer() {
         chronometer.setVisibility(View.INVISIBLE);
     }
-
-
+    
     @Override
     public void hideThumbClipsRecorded() {
         navigateToEditButton.setVisibility(View.INVISIBLE);
     }
-
 
     @Override
     public void onColorEffectSelected(CameraEffectColor colorEffect) {
@@ -681,6 +793,18 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
+    @Override
+    public void enableShareButton() {
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
+    }
+
+    @Override
+    public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
+    }
+
 
     private class OrientationHelper extends OrientationEventListener {
 
@@ -748,58 +872,39 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             }
             Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
                     " cameraInfoOrientation ");
-
         }
-
-
+        
         @Override
         public void onOrientationChanged(int orientation) {
 
             if (orientation > 85 && orientation < 95) {
-
                 if (isNormalOrientation && !orientationHaveChanged) {
-
                     Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
                     recordPresenter.rotateCamera(Surface.ROTATION_270);
                     orientationHaveChanged = true;
-
-
                 } else {
-
                     if (orientationHaveChanged) {
                         Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
                         recordPresenter.rotateCamera(Surface.ROTATION_270);
                         orientationHaveChanged = false;
-
                     }
-
                 }
-
             } else if (orientation > 265 && orientation < 275) {
-
                 if (isNormalOrientation) {
-
                     if (orientationHaveChanged) {
                         Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
                         recordPresenter.rotateCamera(Surface.ROTATION_90);
                         orientationHaveChanged = false;
-
                     }
-
                 } else {
-
                     if (!orientationHaveChanged) {
                         Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
                         recordPresenter.rotateCamera(Surface.ROTATION_90);
                         orientationHaveChanged = true;
-
                     }
                 }
-
             }
-
             checkShowRotateDevice(orientation);
-
         }
 
 
