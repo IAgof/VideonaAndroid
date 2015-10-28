@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2015. Videona Socialmedia SL
  * http://www.videona.com
@@ -68,18 +69,15 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         OnColorEffectSelectedListener, OnFxSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    @InjectView(R.id.activity_record_drawer_layout)
-    DrawerLayout drawerLayout;
-    @InjectView(R.id.activity_record_navigation_drawer)
-    View navigatorView;
+
     @InjectView(R.id.button_record)
     ImageButton recButton;
     @InjectView(R.id.cameraPreview)
     GLCameraEncoderView cameraView;
     @InjectView(R.id.button_change_camera)
     ImageButton rotateCameraButton;
-    @InjectView(R.id.button_navigate_edit)
-    CircleImageView navigateToEditButton;
+    @InjectView(R.id.button_thumb_clip_recorded)
+    CircleImageView buttonThumbClipRecorded;
     @InjectView(R.id.record_catalog_recycler_fx)
     RecyclerView effectsRecycler;
     @InjectView(R.id.record_catalog_recycler_color)
@@ -102,6 +100,16 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     ImageView rotateDeviceHint;
     @InjectView(R.id.drawer_full_background)
     ImageView drawerBackground;
+
+    // develop
+    //@InjectView(R.id.button_settings)
+    //ImageButton buttonSettings;
+
+    // alpha
+    @InjectView(R.id.activity_record_drawer_layout)
+    DrawerLayout drawerLayout;
+    @InjectView(R.id.activity_record_navigation_drawer)
+    View navigatorView;
 
     private RecordPresenter recordPresenter;
     private CameraEffectsAdapter cameraEffectsAdapter;
@@ -129,8 +137,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         configChronometer();
         initOrientationHelper();
 
-        navigateToEditButton.setBorderWidth(5);
-        navigateToEditButton.setBorderColor(Color.WHITE);
+        buttonThumbClipRecorded.setBorderWidth(5);
+        buttonThumbClipRecorded.setBorderColor(Color.WHITE);
         numVideosRecorded.setVisibility(View.GONE);
 
         VideonaApplication app = (VideonaApplication) getApplication();
@@ -232,7 +240,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recButton.setAlpha(1f);
         recording = false;
         unLockNavigator();
-        navigateToEditButton.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -241,9 +249,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recButton.setAlpha(1f);
         recording = true;
         lockNavigator();
-        navigateToEditButton.setVisibility(View.INVISIBLE);
-        numVideosRecorded.setVisibility(View.INVISIBLE);
+
     }
+
 
     @Override
     public void startChronometer() {
@@ -462,15 +470,20 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void showRecordedVideoThumb(String path) {
-        // Glide.with(this).load(path).centerCrop().crossFade().into(navigateToEditButton);
 
-        Glide.with(this).load(path).into(navigateToEditButton);
+        buttonThumbClipRecorded.setVisibility(View.VISIBLE);
+        Glide.with(this).load(path).into(buttonThumbClipRecorded);
     }
 
     @Override
     public void showVideosRecordedNumber(int numberOfVideos) {
         numVideosRecorded.setVisibility(View.VISIBLE);
         numVideosRecorded.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideVideosRecordedNumber() {
+        numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -505,7 +518,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             mixpanel.track("Change camera Button clicked on preview", null);
     }
 
-    @OnClick(R.id.button_navigate_edit)
+    @OnClick(R.id.button_thumb_clip_recorded)
     public void navigateToEdit() {
         if (!recording) {
             Intent edit = new Intent(this, EditActivity.class);
@@ -513,6 +526,40 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             startActivity(edit);
             mixpanel.track("Navigate edit Button clicked in Record Activity", null);
         }
+    }
+
+
+    @Override
+    public void showMenuOptions(){
+       // develop
+       // buttonSettings.setVisibility(View.VISIBLE);
+       // alpha
+        navigatorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideMenuOptions() {
+       // develop
+       // buttonSettings.setVisibility(View.INVISIBLE);
+        // alpha
+        navigatorView.setVisibility(View.INVISIBLE);
+    }
+
+
+    @Override
+    public void showChronometer() {
+        chronometer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideChronometer() {
+        chronometer.setVisibility(View.INVISIBLE);
+    }
+
+
+    @Override
+    public void hideThumbClipsRecorded() {
+        buttonThumbClipRecorded.setVisibility(View.INVISIBLE);
     }
 
 
