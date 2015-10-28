@@ -46,6 +46,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraColorFilterAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
 import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
@@ -72,7 +73,7 @@ import butterknife.OnClick;
  * RecordActivity manages a single live record.
  */
 public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener, RecordView,
-        OnColorEffectSelectedListener, OnFxSelectedListener {
+        ShareView, OnColorEffectSelectedListener, OnFxSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @InjectView(R.id.activity_record_drawer_layout)
@@ -149,7 +150,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         drawerLayout.setDrawerListener(this);
 
         cameraView.setKeepScreenOn(true);
-        recordPresenter = new RecordPresenter(this, this, cameraView);
+        recordPresenter = new RecordPresenter(this, this, this, cameraView);
 
         initEffectsRecycler();
         configChronometer();
@@ -221,8 +222,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onResume();
         recordPresenter.onResume();
         recording = false;
-        shareButton.setAlpha(0.25f);
-        shareButton.setClickable(false);
+        disableShareButton();
     }
 
     @Override
@@ -285,8 +285,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         resetChronometer();
         chronometer.start();
         showRecordingIndicator();
-        shareButton.setAlpha(0.25f);
-        shareButton.setClickable(false);
+        disableShareButton();
     }
 
     private void resetChronometer() {
@@ -305,8 +304,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void stopChronometer() {
         chronometer.stop();
         hideRecordingIndicator();
-        shareButton.setAlpha(1f);
-        shareButton.setClickable(true);
+        enableShareButton();
     }
 
     private void hideRecordingIndicator() {
@@ -794,6 +792,18 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                 .setLabel(label)
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
+
+    @Override
+    public void enableShareButton() {
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
+    }
+
+    @Override
+    public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
     }
 
 

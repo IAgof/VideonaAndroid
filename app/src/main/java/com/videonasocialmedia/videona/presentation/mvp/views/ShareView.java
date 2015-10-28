@@ -8,4 +8,6 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 public interface ShareView {
+    void enableShareButton();
+    void disableShareButton();
 }

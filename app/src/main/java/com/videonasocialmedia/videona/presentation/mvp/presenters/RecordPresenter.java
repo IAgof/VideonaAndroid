@@ -27,6 +27,7 @@ import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRemo
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
     private static final String LOG_TAG = "RecordPresenter";
     private boolean firstTimeRecording;
     private RecordView recordView;
+    private ShareView shareView;
     private SessionConfig config;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
@@ -68,10 +70,11 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private RemoveVideosUseCase removeVideosUseCase;
 
-    public RecordPresenter(Context context, RecordView recordView,
+    public RecordPresenter(Context context, RecordView recordView, ShareView shareView,
                            GLCameraEncoderView cameraPreview) {
         Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
+        this.shareView = shareView;
         this.context = context;
         this.cameraPreview = cameraPreview;
 
@@ -211,11 +214,11 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
         recordView.reStartScreenRotation();
     }
 
-    public void onEvent(VideosRemovedFromProjectEvent e) {
+    public void onEventMainThread(VideosRemovedFromProjectEvent e) {
         recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
-        // todo esconder el número de vídeos
-        // todo poner la transparencia al avión de nuevo y que no se clicable
+        recordedVideosNumber = 0;
+        shareView.disableShareButton();
     }
 
     public int getProjectDuration() {
@@ -228,23 +231,16 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
 
     public void changeCamera() {
         //TODO controlar el estado del flash
-
         int camera = recorder.requestOtherCamera();
-
         if (camera == 0) {
             recordView.showBackCameraSelected();
-
         } else {
-
             if (camera == 1) {
                 recordView.showFrontCameraSelected();
             }
         }
-
         applyEffect(selectedEffect);
-
         checkFlashSupport();
-
     }
 
     public void checkFlashSupport() {

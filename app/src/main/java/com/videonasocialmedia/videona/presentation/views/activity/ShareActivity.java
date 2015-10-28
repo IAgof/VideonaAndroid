@@ -331,4 +331,14 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
     public void onDrawerStateChanged(int newState) {
 
     }
+
+    @Override
+    public void enableShareButton() {
+
+    }
+
+    @Override
+    public void disableShareButton() {
+
+    }
 }
