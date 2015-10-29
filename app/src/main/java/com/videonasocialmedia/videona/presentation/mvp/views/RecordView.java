@@ -31,9 +31,9 @@ public interface RecordView {
 
     void hideChronometer();
 
-    void hideThumbClipsRecorded();
-
     void showRecordedVideoThumb(String path);
+
+    void hideRecordedVideoThumb();
 
     void showVideosRecordedNumber(int numberOfVideos);
 
@@ -64,12 +64,6 @@ public interface RecordView {
     void showError(String errorMessage); //videonaView
 
     void showError(int stringResourceId); //videonaView
-
-
-
-    void hideRecordedVideoThumb();
-
-    void hideVideosRecordedNumber();
 
     void goToShare(String videoToSharePath);
 
