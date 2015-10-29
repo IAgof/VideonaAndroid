@@ -637,11 +637,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void hideChronometer() {
         chronometer.setVisibility(View.INVISIBLE);
     }
-    
-    @Override
-    public void hideThumbClipsRecorded() {
-        navigateToEditButton.setVisibility(View.INVISIBLE);
-    }
 
     @Override
     public void onColorEffectSelected(CameraEffectColor colorEffect) {

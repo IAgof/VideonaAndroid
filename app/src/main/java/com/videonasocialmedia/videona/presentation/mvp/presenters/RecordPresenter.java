@@ -25,6 +25,7 @@ import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
@@ -42,8 +43,7 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrieved,
-        OnRemoveMediaFinishedListener {
+public class RecordPresenter implements OnExportFinishedListener {
 
     /**
      * LOG_TAG
@@ -105,7 +105,7 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
     }
 
     private void hideInitialsButtons() {
-        recordView.hideThumbClipsRecorded();
+        recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
         recordView.hideChronometer();
     }
@@ -166,12 +166,18 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
     public void startExport() {
         //editorView.showProgressDialog();
         //check VideoList is not empty, if true exportProjectUseCase
-        getMediaListFromProjectUseCase.getMediaListFromProject(this);
+        List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (videoList.size()>0) {
+            exportProjectUseCase.export();
+        } else {
+            recordView.hideProgressDialog();
+            recordView.showMessage(R.string.add_videos_to_project);
+        }
         //exportProjectUseCase.export();
     }
 
     public void removeMasterVideos() {
-        removeVideosUseCase.removeMediaItemsFromProject(this);
+        removeVideosUseCase.removeMediaItemsFromProject();
     }
 
     public void onEventMainThread(CameraEncoderResetEvent e) {
@@ -197,7 +203,8 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
         recordView.startChronometer();
         recordView.showChronometer();
         recordView.hideSettings();
-        recordView.hideThumbClipsRecorded();
+        recordView.hideRecordedVideoThumb();
+        recordView.hideVideosRecordedNumber();
         firstTimeRecording = false;
 
     }
@@ -298,17 +305,6 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
     }
 
     @Override
-    public void onVideosRetrieved(List<Video> videoList) {
-        exportProjectUseCase.export();
-    }
-
-    @Override
-    public void onNoVideosRetrieved() {
-        recordView.hideProgressDialog();
-        recordView.showMessage(R.string.add_videos_to_project);
-    }
-
-    @Override
     public void onExportError(String error) {
         recordView.hideProgressDialog();
         //TODO modify error message
@@ -321,13 +317,4 @@ public class RecordPresenter implements OnExportFinishedListener, OnVideosRetrie
         recordView.goToShare(exportedVideo.getMediaPath());
     }
 
-    @Override
-    public void onRemoveMediaItemFromTrackError() {
-
-    }
-
-    @Override
-    public void onRemoveMediaItemFromTrackSuccess() {
-
-    }
 }
