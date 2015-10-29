@@ -110,7 +110,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private CameraEffectsAdapter cameraEffectsAdapter;
     private CameraColorFilterAdapter cameraColorFilterAdapter;
     private Tracker tracker;
-
     private boolean buttonBackPressed;
     private boolean fxHidden;
     private boolean colorFilterHidden;
@@ -157,7 +156,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     private void initOrientationHelper() {
-        lockRotation = false;
         orientationHelper = new OrientationHelper(this);
     }
 
@@ -172,7 +170,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         colorFilterRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         colorFilterRecycler.setAdapter(cameraColorFilterAdapter);
-        colorFilterHidden = true;
+        colorFilterHidden = false;
+        buttonCameraEffectColor.setActivated(true);
     }
 
     private void configChronometer() {
@@ -188,7 +187,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 String mm = m < 10 ? "0" + m : m + "";
                 String ss = s < 10 ? "0" + s : s + "";
                 String time = mm + ":" + ss;
-
                 chronometer.setText(time);
             }
         });
@@ -205,7 +203,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     protected void onStart() {
         super.onStart();
         recordPresenter.onStart();
-        onColorFiltersButtonClicked();
         mixpanel.timeEvent("Time in Record Activity");
     }
 
@@ -312,13 +309,14 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     private void hideColorFilters() {
-        hideView(colorFilterRecycler);
+        int height = calculateTranslation(colorFilterRecycler);
+        runTranslateAnimation(colorFilterRecycler, height, new DecelerateInterpolator(3));
         colorFilterHidden = true;
         buttonCameraEffectColor.setActivated(false);
     }
 
     private void hideView(View view) {
-        runTranslateAnimation(view, 0, new DecelerateInterpolator(3));
+        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
     }
 
     private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
@@ -376,7 +374,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void showCameraEffectColor(List<CameraEffectColor> effects) {
-        showEffectsRecyler(colorFilterRecycler);
+        runTranslateAnimation(colorFilterRecycler, 0, new AccelerateInterpolator(3));
         colorFilterHidden = false;
         buttonCameraEffectColor.setActivated(true);
     }
@@ -385,13 +383,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void lockScreenRotation() {
         orientationHelper.stopMonitoringOrientation();
-        lockRotation = true;
     }
 
     @Override
     public void reStartScreenRotation() {
-        try {
-            lockRotation = false;
+        try{
             orientationHelper.startMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
             e.printStackTrace();
@@ -421,20 +417,15 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void showFlashSupported(boolean supported) {
-
         if (supported) {
-
             flashButton.setImageAlpha(255);
             flashButton.setActivated(false);
             flashButton.setActivated(false);
             flashButton.setEnabled(true);
-
         } else {
-
             flashButton.setImageAlpha(65);
             flashButton.setActivated(false);
             flashButton.setEnabled(false);
-
         }
     }
 
@@ -523,16 +514,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             mixpanel.track("Change camera Button clicked while recording", null);
         else
             mixpanel.track("Change camera Button clicked on preview", null);
-    }
-
-    @OnClick(R.id.button_navigate_edit)
-    public void navigateToEdit() {
-        if (!recording) {
-           // Intent edit = new Intent(this, EditActivity.class);
-            //edit.putExtra("SHARE", false);
-          //  startActivity(edit);
-            mixpanel.track("Navigate edit Button clicked in Record Activity", null);
-        }
     }
 
     @OnClick(R.id.button_share)
@@ -859,9 +840,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                     rotation = 270;
                     recordPresenter.rotateCamera(rotationView);
                 }
-            }
             Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
-                    " cameraInfoOrientation ");
+                        " cameraInfoOrientation ");
         }
         
         @Override

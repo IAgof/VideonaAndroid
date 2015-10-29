@@ -98,8 +98,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="-80dp"
-                    android:scrollbars="horizontal" />
+                    android:scrollbars="horizontal"
+                    tools:listitem="@layout/record_item_camera_effect_color"
+                    tools:scrollbars="horizontal"
+                    />
 
             </RelativeLayout>
 
@@ -217,7 +219,7 @@
 
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="24"
                     android:background="@drawable/activity_record_icon_rec_circle"
@@ -260,6 +262,7 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/activity_record_filter_color_selector"
                             android:visibility="visible" />
+
 
                         <ImageButton
                             android:id="@+id/button_change_camera"
@@ -364,7 +367,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="9" />
             </LinearLayout>
