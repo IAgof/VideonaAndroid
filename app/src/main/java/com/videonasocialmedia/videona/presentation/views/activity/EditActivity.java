@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -62,6 +63,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -168,7 +170,10 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         createProgressDialog();
 
         drawerLayout.setDrawerListener(this);
+
     }
+
+
 
     private void createProgressDialog() {
         progressDialog = new ProgressDialog(this);
@@ -181,6 +186,9 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     protected void onStart() {
         super.onStart();
         mixpanel.timeEvent("Time in Edit Activity");
+
+        DownloadMusicTask downloadMusicTask = new DownloadMusicTask();
+        downloadMusicTask.execute();
     }
 
     @Override
@@ -727,4 +735,65 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     public void onDrawerStateChanged(int newState) {
 
     }
+
+    /**
+     * Copy music from raw folder to sdcard
+     *
+     * AsyncTask, do not block UI
+     *
+     */
+    class DownloadMusicTask extends AsyncTask<Void, Void, Boolean> {
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            setupMusicResources();
+
+            return true;
+        }
+    }
+
+    // Copy music to sdcard from raw folder
+    //TODO Develope backend
+    private void setupMusicResources() {
+        if (Utils.isAvailableSpace(30)) {
+            downloadingMusicResources();
+        }
+    }
+
+    /**
+     * Downloads music to sdcard.
+     * Downloads items during loading screen, first time the user open the app.
+     * Export video engine, need  a music resources in file system, not raw folder.
+     * <p/>
+     */
+    private void downloadingMusicResources() {
+        List<Music> musicList = getMusicList();
+        for (Music music : musicList) {
+            try {
+                Utils.copyMusicResourceToTemp(this, music.getMusicResourceId());
+            } catch (IOException e) {
+                Log.d("Init App", "Error copying resources to temp");
+            }
+        }
+    }
+
+    /**
+     * TODO obtaing this List from model
+     *
+     * @return getMusicList
+     */
+    private List<Music> getMusicList() {
+        List<Music> musicList = new ArrayList<>();
+        musicList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
+        musicList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental, R.color.pastel_palette_red));
+        musicList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta, R.color.pastel_palette_blue));
+        musicList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.pastel_palette_brown));
+        musicList.add(new Music(R.drawable.activity_music_icon_folk_normal, "audio_folk", R.raw.audio_folk, R.color.pastel_palette_red));
+        musicList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "audio_hiphop", R.raw.audio_hiphop, R.color.pastel_palette_green));
+        return musicList;
+    }
+
+
 }
