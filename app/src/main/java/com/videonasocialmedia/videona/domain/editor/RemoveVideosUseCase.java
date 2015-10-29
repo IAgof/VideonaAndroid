@@ -18,7 +18,6 @@ import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalIt
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRemoveMediaFinishedListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class RemoveVideosUseCase {
     public RemoveVideosUseCase() {
     }
 
-    public void removeMediaItemsFromProject(OnRemoveMediaFinishedListener listener) {
+    public void removeMediaItemsFromProject() {
         boolean correct = false;
         MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
         List<Media> list = new ArrayList<Media>(mediaTrack.getItems());
@@ -45,11 +44,6 @@ public class RemoveVideosUseCase {
             correct = removeVideoItemFromTrack(media, mediaTrack);
             if (!correct) break;
             Utils.removeVideo(media.getMediaPath());
-        }
-        if (correct) {
-            listener.onRemoveMediaItemFromTrackSuccess();
-        } else {
-            listener.onRemoveMediaItemFromTrackError();
         }
         if(!mediaTrack.getItems().isEmpty()) {
             mediaTrack = new MediaTrack();
