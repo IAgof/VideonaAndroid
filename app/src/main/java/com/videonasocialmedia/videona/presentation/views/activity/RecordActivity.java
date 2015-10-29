@@ -408,11 +408,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         }
     }
 
-    public void lockNavigator() {
-        drawerButton.setVisibility(View.INVISIBLE);
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
     @OnClick(R.id.button_toggle_flash)
     public void toggleFlash() {
         recordPresenter.toggleFlash();
@@ -557,7 +552,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showProgressDialog() {
         progressDialog.show();
-        progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
+        progressDialog.setIcon(R.drawable.icon_cut_normal);
 
         ((TextView) progressDialog.findViewById(Resources.getSystem()
                 .getIdentifier("message", "id", "android")))
