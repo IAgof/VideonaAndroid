@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -357,6 +358,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
      * @throws IOException
      */
     private void initPaths() throws IOException {
+        checkRootPathMovies();
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
         checkAndInitPath(Constants.PATH_APP_MASTERS);
@@ -366,6 +368,14 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
         editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
+    }
+
+    private void checkRootPathMovies() {
+        File fMovies = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES);
+        if(!fMovies.exists()){
+            fMovies.mkdir();
+        }
     }
 
     private void checkAndInitPath(String pathApp) {
