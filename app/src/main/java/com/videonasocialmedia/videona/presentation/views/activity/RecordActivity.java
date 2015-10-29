@@ -105,7 +105,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @InjectView(R.id.button_share)
     ImageButton shareButton;
 
-    private static RecordActivity parent;
     private RecordPresenter recordPresenter;
     private CameraEffectsAdapter cameraEffectsAdapter;
     private CameraColorFilterAdapter cameraColorFilterAdapter;
@@ -115,23 +114,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean colorFilterHidden;
     private boolean recording;
     private OrientationHelper orientationHelper;
-    private boolean lockRotation;
+
     private ProgressDialog progressDialog;
 
-    public Thread performOnBackgroundThread(RecordActivity parent, final Runnable runnable) {
-        this.parent = parent;
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } finally {
-                }
-            }
-        };
-        t.start();
-        return t;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -387,7 +372,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void reStartScreenRotation() {
-        try{
+        try {
             orientationHelper.startMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
             e.printStackTrace();
@@ -521,15 +506,20 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         if (!recording) {
             showProgressDialog();
             sendMetadataTracking();
-            final Runnable r = new Runnable() {
-                public void run() {
-                    recordPresenter.startExport();
-                }
-            };
-            performOnBackgroundThread(this, r);
+            startExportThread();
         }
     }
-    
+
+    private void startExportThread() {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                recordPresenter.startExport();
+            }
+        };
+        t.start();
+    }
+
     @Override
     public void showProgressDialog() {
         progressDialog.show();
@@ -600,7 +590,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @Override
-    public void showSettings(){
+    public void showSettings() {
         buttonSettings.setVisibility(View.VISIBLE);
     }
 
@@ -630,7 +620,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private void scrollColorEffectList(CameraEffectColor colorEffect) {
         List effects = cameraColorFilterAdapter.getElementList();
         int index = effects.indexOf(colorEffect);
-        int scroll= index>cameraColorFilterAdapter.getPreviousSelectionPosition()?1:-1;
+        int scroll = index > cameraColorFilterAdapter.getPreviousSelectionPosition() ? 1 : -1;
         colorFilterRecycler.scrollToPosition(index + scroll);
     }
 
@@ -641,10 +631,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         cameraColorFilterAdapter.resetSelectedEffect();
         scrollColorEffectList(fx);
     }
+
     private void scrollColorEffectList(CameraEffectFx fx) {
         List effects = cameraEffectsAdapter.getElementList();
         int index = effects.indexOf(fx);
-        int scroll= index>cameraEffectsAdapter.getPreviousSelectionPosition()?1:-1;
+        int scroll = index > cameraEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
         effectsRecycler.scrollToPosition(index + scroll);
     }
 
@@ -840,13 +831,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                     rotation = 270;
                     recordPresenter.rotateCamera(rotationView);
                 }
-            Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
+                Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
                         " cameraInfoOrientation ");
+            }
         }
-        
+
         @Override
         public void onOrientationChanged(int orientation) {
-
             if (orientation > 85 && orientation < 95) {
                 if (isNormalOrientation && !orientationHaveChanged) {
                     Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
