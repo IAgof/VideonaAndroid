@@ -63,7 +63,7 @@ import de.greenrobot.event.EventBus;
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class PreviewVideoListFragment extends Fragment implements PreviewView,
+public class PreviewVideoListFragment extends VideonaFragment implements PreviewView,
         SeekBar.OnSeekBarChangeListener {
 
     @InjectView(R.id.edit_preview_player)

@@ -31,7 +31,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the look fx menu
  */
-public class LookFxMenuFragment extends Fragment {
+public class LookFxMenuFragment extends VideonaFragment {
 
     /*CONFIG*/
     /**

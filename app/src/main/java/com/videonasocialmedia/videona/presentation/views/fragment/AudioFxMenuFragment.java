@@ -38,7 +38,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the audio fx menu
  */
-public class AudioFxMenuFragment extends Fragment implements FxMenuView {
+public class AudioFxMenuFragment extends VideonaFragment implements FxMenuView {
 
     /**
      * Tracker google analytics

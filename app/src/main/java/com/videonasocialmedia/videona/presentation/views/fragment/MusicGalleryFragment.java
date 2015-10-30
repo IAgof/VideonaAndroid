@@ -34,7 +34,7 @@ import butterknife.InjectView;
 /**
  * This class is used to show the music gallery.
  */
-public class MusicGalleryFragment extends Fragment implements MusicGalleryView {
+public class MusicGalleryFragment extends VideonaFragment implements MusicGalleryView {
 
     @InjectView(R.id.catalog_recycler)
     RecyclerView recyclerView;

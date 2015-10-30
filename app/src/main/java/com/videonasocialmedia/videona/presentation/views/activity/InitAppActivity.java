@@ -38,7 +38,7 @@ import java.util.List;
 
 public class InitAppActivity extends VideonaActivity implements InitAppView, OnInitAppEventListener {
 
-    private static final long MINIMUN_WAIT_TIME = 900;
+    private static final long MINIMUN_WAIT_TIME = 10900;
     /**
      * LOG_TAG
      */
