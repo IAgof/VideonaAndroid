@@ -510,7 +510,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 if (mIncomingSizeUpdated) {
                     mFullScreen.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
-                    mFullScreenOverlay.getProgram().setTexSize(178, 36);
+                    configTexWatermark();
                     mIncomingSizeUpdated = false;
                 }
 
@@ -521,8 +521,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 if (TRACE) Trace.beginSection("drawVEncoderFrame");
                 GLES20.glViewport(0, 0, mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
                 mFullScreen.drawFrame(mTextureId, mTransform);
-                GLES20.glViewport(15, 15, 265, 36);
-                mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
+                configViewportWatermark();
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {
                     mEncodedFirstFrame = true;
@@ -559,6 +558,28 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mDisplayView.requestRender();
 
         if (TRACE) Trace.endSection();
+    }
+
+    private void configTexWatermark() {
+        int watermarkSize[] = calculateWatermarkSize();
+        mFullScreenOverlay.getProgram().setTexSize(watermarkSize[0], watermarkSize[1]);
+    }
+
+    private int[] calculateWatermarkSize() {
+        int width = (mSessionConfig.getVideoWidth()*265)/1280;
+        int height = (mSessionConfig.getVideoHeight()*36)/720;
+        return new int[] {width, height};
+    }
+
+    private void configViewportWatermark() {
+        int watermarkSize[] = calculateWatermarkSize();
+        int watermarkPosition = calculateWatermarkPosition();
+        GLES20.glViewport(watermarkPosition, watermarkPosition, watermarkSize[0], watermarkSize[1]);
+        mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
+    }
+
+    private int calculateWatermarkPosition() {
+        return (mSessionConfig.getVideoWidth()*15)/1280;
     }
 
     private void saveFrameAsImage() {
