@@ -15,7 +15,6 @@ import android.util.Log;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
@@ -24,7 +23,6 @@ import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -358,16 +356,46 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
      * @throws IOException
      */
     private void initPaths() throws IOException {
+
+
         checkRootPathMovies();
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
         checkAndInitPath(Constants.PATH_APP_MASTERS);
         checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
-        // Delete this method, only util after release v0.3.12. Clean old music files
-        checkAndDeletePath(Constants.PATH_APP_TEMP_DEPRECATED);
+
+        checkAndDeleteOldMusicSongs();
+
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
         editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
+    }
+
+    //TODO Delete this method, only util after release v0.3.23.
+    // Clean old music files and temp folder.
+    private void checkAndDeleteOldMusicSongs() {
+
+        deleteMusicResources();
+
+    }
+
+    // Don't exist music resource ids in app
+    // Delete one by one every song
+    // Cannot delete folder temp and after create, app crash coming back from settings :(
+    private void deleteMusicResources() {
+
+        int musicId[] = {2131099648, 2131099650, 2131099651, 2131099653, 2131099654, 2131099655 };
+
+        for (int i=0; i<musicId.length; i++) {
+                Log.d(LOG_TAG, " deleteMusicResources " + musicId[i]);
+                String nameFile = Constants.PATH_APP_TEMP + File.separator + musicId[i] + ".m4a";
+                Log.d(LOG_TAG, " deleteMusicResources nameFile " + nameFile);
+                File file = new File(nameFile);
+                if(file.exists()){
+                    file.delete();
+                }
+
+        }
     }
 
     private void checkRootPathMovies() {
@@ -385,7 +413,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-    // Delete this methods, only util after release v0.3.12. Needed to clean old music files
+
     private void checkAndDeletePath(String pathApp){
         File folderTemp = new File(pathApp);
         if(folderTemp.exists()){
@@ -406,40 +434,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         dir.delete();
     }
 
-    /**
-     * Downloads music to sdcard.
-     * Downloads items during loading screen, first time the user open the app.
-     * Export video engine, need  a music resources in file system, not raw folder.
-     * <p/>
-     * TODO DownloadResourcesUseCase
-     */
-    private void downloadingMusicResources() {
-        List<Music> musicList = getMusicList();
-        for (Music music : musicList) {
-            try {
-                Utils.copyMusicResourceToTemp(this, music.getMusicResourceId());
-            } catch (IOException e) {
-                Log.d("Init App", "Error copying resources to temp");
-            }
-        }
-    }
-
-    /**
-     * TODO obtaing this List from model
-     *
-     * @return getMusicList
-     */
-    private List<Music> getMusicList() {
-        List<Music> musicList = new ArrayList<>();
-      /*  musicList.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.pastel_palette_pink_2));
-        musicList.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental, R.color.pastel_palette_red));
-        musicList.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta, R.color.pastel_palette_blue));
-        musicList.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.pastel_palette_brown));
-        musicList.add(new Music(R.drawable.activity_music_icon_folk_normal, "audio_folk", R.raw.audio_folk, R.color.pastel_palette_red));
-        musicList.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "audio_hiphop", R.raw.audio_hiphop, R.color.pastel_palette_green));
-      */
-        return musicList;
-    }
 
     private void startLoadingProject(OnInitAppEventListener listener) {
         //TODO Define project title (by date, by project count, ...)
