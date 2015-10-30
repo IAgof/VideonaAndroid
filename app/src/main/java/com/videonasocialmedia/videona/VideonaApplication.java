@@ -22,7 +22,7 @@ import com.qordoba.sdk.Qordoba;
 public class VideonaApplication extends Application {
 
 
-    Tracker app_tracker;
+    Tracker tracker;
 
     /**
      * Called when the application is starting, before any activity, service,
@@ -48,11 +48,8 @@ public class VideonaApplication extends Application {
     private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
-        app_tracker = analytics.newTracker(R.xml.app_tracker);
-        app_tracker.enableAdvertisingIdCollection(true);
-
-
-
+        tracker = analytics.newTracker(R.xml.app_tracker);
+        tracker.enableAdvertisingIdCollection(true);
     }
 
     protected void attachBaseContext(Context base) {
@@ -64,6 +61,6 @@ public class VideonaApplication extends Application {
      * @return google analytics tracker
      */
     public synchronized Tracker getTracker() {
-        return app_tracker;
+        return tracker;
     }
 }
