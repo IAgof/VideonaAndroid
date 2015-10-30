@@ -137,7 +137,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     private void initOrientationHelper() {
-        lockRotation = false;
         orientationHelper = new OrientationHelper(this);
     }
 
@@ -348,7 +347,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void showCameraEffectColor(List<CameraEffectColor> effects) {
-
         runTranslateAnimation(colorFilterRecycler, 0, new AccelerateInterpolator(3));
         colorFilterHidden = false;
         buttonCameraEffectColor.setActivated(true);
@@ -358,14 +356,11 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void lockScreenRotation() {
         orientationHelper.stopMonitoringOrientation();
-        lockRotation = true;
     }
 
     @Override
     public void reStartScreenRotation() {
-
         try {
-            lockRotation = false;
             orientationHelper.startMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
             e.printStackTrace();
@@ -406,20 +401,15 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void showFlashSupported(boolean supported) {
-
         if (supported) {
-
             flashButton.setImageAlpha(255);
             flashButton.setActivated(false);
             flashButton.setActivated(false);
             flashButton.setEnabled(true);
-
         } else {
-
             flashButton.setImageAlpha(65);
             flashButton.setActivated(false);
             flashButton.setEnabled(false);
-
         }
     }
 
@@ -427,20 +417,17 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
         mixpanel.track("Front camera selected", null);
-
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
         mixpanel.track("Back camera selected", null);
-
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
@@ -477,12 +464,10 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onBackPressed() {
-
         if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
             drawerLayout.closeDrawer(navigatorView);
         } else if (buttonBackPressed) {
             buttonBackPressed = false;
-
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
@@ -520,17 +505,11 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void showMenuOptions(){
-       // develop
-       // buttonSettings.setVisibility(View.VISIBLE);
-       // alpha
         navigatorView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideMenuOptions() {
-       // develop
-       // buttonSettings.setVisibility(View.INVISIBLE);
-        // alpha
         navigatorView.setVisibility(View.INVISIBLE);
     }
 
@@ -732,7 +711,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
         Context context;
         private int rotationView;
-
         private boolean orientationHaveChanged = false;
         private boolean isNormalOrientation;
 
@@ -778,25 +756,20 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         }
 
         private void determineOrientation(int rotationView) {
-
             Log.d(LOG_TAG, " determineOrientation" + " rotationView " + rotationView);
-
-                int rotation = -1;
-                if (rotationView == Surface.ROTATION_90) {
-                    rotation = 90;
+            int rotation = -1;
+            if (rotationView == Surface.ROTATION_90) {
+                rotation = 90;
+                recordPresenter.rotateCamera(rotationView);
+            } else {
+                if (rotationView == Surface.ROTATION_270) {
+                    rotation = 270;
                     recordPresenter.rotateCamera(rotationView);
-
-                } else {
-                    if (rotationView == Surface.ROTATION_270) {
-                        rotation = 270;
-                        recordPresenter.rotateCamera(rotationView);
-                    }
                 }
+            }
             Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
                         " cameraInfoOrientation ");
-
         }
-
 
         @Override
         public void onOrientationChanged(int orientation) {
@@ -806,7 +779,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                     recordPresenter.rotateCamera(Surface.ROTATION_270);
                     orientationHaveChanged = true;
                 } else {
-
                     if (orientationHaveChanged) {
                         Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
                         recordPresenter.rotateCamera(Surface.ROTATION_270);
@@ -814,31 +786,22 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                     }
                 }
             } else if (orientation > 265 && orientation < 275) {
-
                 if (isNormalOrientation) {
-
                     if (orientationHaveChanged) {
                         Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
                         recordPresenter.rotateCamera(Surface.ROTATION_90);
                         orientationHaveChanged = false;
-
                     }
-
                 } else {
-
                     if (!orientationHaveChanged) {
                         Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
                         recordPresenter.rotateCamera(Surface.ROTATION_90);
                         orientationHaveChanged = true;
-
                     }
                 }
             }
-
             checkShowRotateDevice(orientation);
-
         }
-
 
         // Show image to Rotate Device
         private void checkShowRotateDevice(int orientation) {
