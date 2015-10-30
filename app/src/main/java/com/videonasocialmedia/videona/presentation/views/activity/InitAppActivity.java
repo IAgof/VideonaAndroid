@@ -384,10 +384,12 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     // Cannot delete folder temp and after create, app crash coming back from settings :(
     private void deleteMusicResources() {
 
-        String musics[] = {"2131099648", "2131099650", "2131099651", "2131099653","2131099654","2131099655" };
+        int musicId[] = {2131099648, 2131099650, 2131099651, 2131099653, 2131099654, 2131099655 };
 
-        for (String song : musics) {
-                String nameFile = Constants.VIDEO_MUSIC_TEMP_FILE + File.separator + musics + ".m4a";
+        for (int i=0; i<musicId.length; i++) {
+                Log.d(LOG_TAG, " deleteMusicResources " + musicId[i]);
+                String nameFile = Constants.PATH_APP_TEMP + File.separator + musicId[i] + ".m4a";
+                Log.d(LOG_TAG, " deleteMusicResources nameFile " + nameFile);
                 File file = new File(nameFile);
                 if(file.exists()){
                     file.delete();
@@ -411,7 +413,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-    // Delete this methods, only util after release v0.3.12. Needed to clean old music files
+
     private void checkAndDeletePath(String pathApp){
         File folderTemp = new File(pathApp);
         if(folderTemp.exists()){
