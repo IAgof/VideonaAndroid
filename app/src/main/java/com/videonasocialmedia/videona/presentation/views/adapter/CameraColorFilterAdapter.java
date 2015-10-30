@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.avrecorder.Filters;
@@ -47,7 +49,7 @@ public class CameraColorFilterAdapter
                                     OnColorEffectSelectedListener listener) {
         this.cameraEffectColors = cameraEffectColor;
         this.onColorEffectSelectedListener = listener;
-        defaultEffect = new CameraEffectColor(null, -1, -1, Filters.FILTER_NONE);
+        defaultEffect = new CameraEffectColor(null, "AD0", -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -56,7 +58,7 @@ public class CameraColorFilterAdapter
     public CameraColorFilterAdapter(OnColorEffectSelectedListener listener) {
         cameraEffectColors = CameraEffectColor.getDefaultCameraEffectColorList();
         this.onColorEffectSelectedListener = listener;
-        defaultEffect = new CameraEffectColor(null, -1, -1, Filters.FILTER_NONE);
+        defaultEffect = new CameraEffectColor(null, "AD0", -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -71,7 +73,7 @@ public class CameraColorFilterAdapter
     @Override
     public cameraEffectViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View rowView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.record_item_camera_effect_color, viewGroup, false);
+                .inflate(R.layout.record_effects_view_holder, viewGroup, false);
         this.context = viewGroup.getContext();
         return new cameraEffectViewHolder(rowView, onColorEffectSelectedListener);
     }
@@ -79,16 +81,16 @@ public class CameraColorFilterAdapter
     @Override
     public void onBindViewHolder(cameraEffectViewHolder holder, int position) {
         CameraEffectColor selectedCameraEffectColor = cameraEffectColors.get(position);
+        Glide.with(context)
+                .load(selectedCameraEffectColor.getIconResourceId())
+                .error(R.drawable.gatito_rules)
+                .into(holder.effectImage);
         if (position == selectedPosition) {
-            Glide.with(context)
-                    .load(selectedCameraEffectColor.getIconPressedResourceId())
-                    .error(R.drawable.gatito_rules)
-                    .into(holder.thumb);
+            holder.effect.setBackgroundResource(R.color.videona_red_1);
+            holder.effectName.setText(selectedCameraEffectColor.getIconResourceName());
         } else {
-            Glide.with(context)
-                    .load(selectedCameraEffectColor.getIconResourceId())
-                    .error(R.drawable.gatito_rules)
-                    .into(holder.thumb);
+            holder.effect.setBackgroundResource(0);
+            holder.effectName.setText(null);
         }
     }
 
@@ -152,8 +154,12 @@ public class CameraColorFilterAdapter
 
         OnColorEffectSelectedListener onClickListener;
 
-        @InjectView(R.id.imageCameraEffectColor)
-        ImageView thumb;
+        @InjectView(R.id.effectViewHolder)
+        LinearLayout effect;
+        @InjectView(R.id.effectImage)
+        ImageView effectImage;
+        @InjectView(R.id.effectName)
+        TextView effectName;
 
         /**
          * Constructor.
@@ -165,7 +171,7 @@ public class CameraColorFilterAdapter
                                       OnColorEffectSelectedListener onClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
-            thumb.setOnTouchListener(this);
+            effect.setOnTouchListener(this);
             this.onClickListener = onClickListener;
         }
 

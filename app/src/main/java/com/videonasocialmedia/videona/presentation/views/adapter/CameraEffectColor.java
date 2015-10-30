@@ -17,6 +17,7 @@ import java.util.List;
 public final class CameraEffectColor {
 
     private final String name;
+    private final String iconResourceName;
     private final int iconResourceId;
     private final int iconPressedResourceId;
     //filterID is tight coupled with the camera framework. It's necessary to rewrite the effects
@@ -29,9 +30,10 @@ public final class CameraEffectColor {
      * @param iconResourceIdPressed pressed icon id
      * @param filterId Filter constant of {@link com.videonasocialmedia.avrecorder.Filters}
      */
-    public CameraEffectColor(String name, int iconResourceId, int iconResourceIdPressed,
-                             int filterId) {
+    public CameraEffectColor(String name, String iconResourceName, int iconResourceId,
+                             int iconResourceIdPressed, int filterId) {
         this.name = name;
+        this.iconResourceName = iconResourceName;
         this.iconResourceId = iconResourceId;
         this.iconPressedResourceId = iconResourceIdPressed;
         this.filterId=filterId;
@@ -42,30 +44,30 @@ public final class CameraEffectColor {
         List<CameraEffectColor> cameraEffectColor = new ArrayList<>();
 
         cameraEffectColor.add(
-                new CameraEffectColor("aqua", R.drawable.common_filter_ad1_aqua_normal,
+                new CameraEffectColor("aqua", "AD1",R.drawable.common_filter_ad1_aqua_normal,
                         R.drawable.common_filter_ad1_aqua_pressed, Filters.FILTER_AQUA));
         cameraEffectColor.add(
                 new CameraEffectColor("posterize_bw",
-                        R.drawable.common_filter_ad2_postericebw_normal,
+                        "AD2",R.drawable.common_filter_ad2_postericebw_normal,
                         R.drawable.common_filter_ad2_postericebw_pressed,
                         Filters.FILTER_POSTERIZE_BW));
         cameraEffectColor.add(
-                new CameraEffectColor("emboss", R.drawable.common_filter_ad3_emboss_normal,
+                new CameraEffectColor("emboss", "AD3",R.drawable.common_filter_ad3_emboss_normal,
                         R.drawable.common_filter_ad3_emboss_pressed, Filters.FILTER_EMBOSS));
         cameraEffectColor.add(
-                new CameraEffectColor("mono", R.drawable.common_filter_ad4_mono_normal,
+                new CameraEffectColor("mono", "AD4",R.drawable.common_filter_ad4_mono_normal,
                         R.drawable.common_filter_ad4_mono_pressed, Filters.FILTER_MONO));
         cameraEffectColor.add(
-                new CameraEffectColor("negative", R.drawable.common_filter_ad5_negative_normal,
+                new CameraEffectColor("negative", "AD5",R.drawable.common_filter_ad5_negative_normal,
                         R.drawable.common_filter_ad5_negative_pressed, Filters.FILTER_NEGATIVE));
         cameraEffectColor.add(
-                new CameraEffectColor("night", R.drawable.common_filter_ad6_green_normal,
+                new CameraEffectColor("night", "AD6",R.drawable.common_filter_ad6_green_normal,
                         R.drawable.common_filter_ad6_green_pressed, Filters.FILTER_NIGHT));
         cameraEffectColor.add(
-                new CameraEffectColor("posterize", R.drawable.common_filter_ad7_posterize_normal,
+                new CameraEffectColor("posterize", "AD7",R.drawable.common_filter_ad7_posterize_normal,
                         R.drawable.common_filter_ad7_posterize_pressed, Filters.FILTER_POSTERIZE));
         cameraEffectColor.add(
-                new CameraEffectColor("sepia", R.drawable.common_filter_ad8_sepia_normal,
+                new CameraEffectColor("sepia", "AD8",R.drawable.common_filter_ad8_sepia_normal,
                         R.drawable.common_filter_ad8_sepia_pressed, Filters.FILTER_SEPIA));
 
         return cameraEffectColor;
@@ -74,6 +76,8 @@ public final class CameraEffectColor {
     public String getName() {
         return name;
     }
+
+    public String getIconResourceName() { return iconResourceName; }
 
     public int getIconResourceId() {
         return iconResourceId;

@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.avrecorder.Filters;
@@ -46,7 +48,7 @@ public class CameraEffectsAdapter extends
     public CameraEffectsAdapter(List<CameraEffectFx> cameraFxList, OnFxSelectedListener listener) {
         this.cameraFxList = cameraFxList;
         this.onFxSelectedListener = listener;
-        defaultFx = new CameraEffectFx(null, -1, -1, Filters.FILTER_NONE);
+        defaultFx = new CameraEffectFx(null, "FX0", -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -55,7 +57,7 @@ public class CameraEffectsAdapter extends
     public CameraEffectsAdapter(OnFxSelectedListener listener) {
         this.cameraFxList = CameraEffectFx.getCameraEffectList();
         this.onFxSelectedListener = listener;
-        defaultFx = new CameraEffectFx(null, -1, -1, Filters.FILTER_NONE);
+        defaultFx = new CameraEffectFx(null, "FX0", -1, -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -70,7 +72,7 @@ public class CameraEffectsAdapter extends
     @Override
     public CameraEffectViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View rowView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.record_item_camera_effect_fx, viewGroup, false);
+                .inflate(R.layout.record_effects_view_holder, viewGroup, false);
         this.context = viewGroup.getContext();
         return new CameraEffectViewHolder(rowView, onFxSelectedListener);
     }
@@ -78,16 +80,16 @@ public class CameraEffectsAdapter extends
     @Override
     public void onBindViewHolder(CameraEffectViewHolder holder, int position) {
         CameraEffectFx selectedCameraFx = cameraFxList.get(position);
+        Glide.with(context)
+                .load(selectedCameraFx.getIconPressedResourceId())
+                .error(R.drawable.gatito_rules)
+                .into(holder.effectImage);
         if (position == selectedPosition) {
-            Glide.with(context)
-                    .load(selectedCameraFx.getIconPressedResourceId())
-                    .error(R.drawable.gatito_rules)
-                    .into(holder.thumb);
+            holder.effect.setBackgroundResource(R.color.videona_red_1);
+            holder.effectName.setText(selectedCameraFx.getIconResourceName());
         } else {
-            Glide.with(context)
-                    .load(selectedCameraFx.getIconResourceId())
-                    .error(R.drawable.gatito_rules)
-                    .into(holder.thumb);
+            holder.effect.setBackgroundResource(0);
+            holder.effectName.setText(null);
         }
     }
 
@@ -151,8 +153,12 @@ public class CameraEffectsAdapter extends
 
         OnFxSelectedListener onClickListener;
 
-        @InjectView(R.id.imageCameraEffectFx)
-        ImageView thumb;
+        @InjectView(R.id.effectViewHolder)
+        LinearLayout effect;
+        @InjectView(R.id.effectImage)
+        ImageView effectImage;
+        @InjectView(R.id.effectName)
+        TextView effectName;
 
         /**
          * Constructor.
@@ -165,7 +171,7 @@ public class CameraEffectsAdapter extends
                                       OnFxSelectedListener onClickListener) {
             super(itemView);
             ButterKnife.inject(this, itemView);
-            thumb.setOnTouchListener(this);
+            effect.setOnTouchListener(this);
             this.onClickListener = onClickListener;
         }
 
