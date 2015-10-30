@@ -9,6 +9,7 @@ android {
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.videonasocialmedia.videona"
@@ -38,6 +39,10 @@ android {
     dexOptions {
         incremental true
         javaMaxHeapSize "2048M"
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
     }
 }
 
