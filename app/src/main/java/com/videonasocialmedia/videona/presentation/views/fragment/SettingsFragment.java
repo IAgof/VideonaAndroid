@@ -18,6 +18,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
@@ -60,6 +61,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         super.onResume();
         preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        Qordoba.updateScreen(getActivity());
     }
 
     @Override
