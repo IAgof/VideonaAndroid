@@ -117,6 +117,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         }
 
         for (Camera.Size size : parms.getSupportedPreviewSizes()) {
+            Log.d(TAG, "Camera getSupportedPreviewSizes widthXheigth: " + size.width + " X " + size.height );
             if (size.width == width && size.height == height) {
                 parms.setPreviewSize(width, height);
                 return;

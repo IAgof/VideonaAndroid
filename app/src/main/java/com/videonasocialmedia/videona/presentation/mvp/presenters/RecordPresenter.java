@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.videonasocialmedia.avrecorder.AVRecorder;
@@ -57,6 +58,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     private AVRecorder recorder;
     private int selectedEffect;
     private int recordedVideosNumber;
+    private SharedPreferences sharedPreferences;
 
     private Context context;
     private GLCameraEncoderView cameraPreview;
@@ -71,12 +73,13 @@ public class RecordPresenter implements OnExportFinishedListener {
     private RemoveVideosUseCase removeVideosUseCase;
 
     public RecordPresenter(Context context, RecordView recordView, ShareView shareView,
-                           GLCameraEncoderView cameraPreview) {
+                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
         Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
         this.shareView = shareView;
         this.context = context;
         this.cameraPreview = cameraPreview;
+        this.sharedPreferences = sharedPreferences;
 
         exportProjectUseCase = new ExportProjectUseCase(this);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
@@ -85,13 +88,15 @@ public class RecordPresenter implements OnExportFinishedListener {
         selectedEffect = Filters.FILTER_NONE;
         recordedVideosNumber = 0;
 
-        initRecorder(context, cameraPreview);
+        initRecorder(context, cameraPreview, sharedPreferences);
 
         hideInitialsButtons();
     }
 
-    private void initRecorder(Context context, GLCameraEncoderView cameraPreview) {
-        config = new SessionConfig(Constants.PATH_APP_TEMP);
+    private void initRecorder(Context context, GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
+
+        config = getConfigFromPreferences(sharedPreferences);
+
         try {
             recorder = new AVRecorder(config, context.getResources()
                     .getDrawable(R.drawable.watermark720));
@@ -104,6 +109,57 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
+    private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
+
+        String key_resolution = "list_preference_resolution";
+        String resolution = sharedPreferences.getString(key_resolution, "");
+
+        String destinationFolderPath = Constants.PATH_APP_TEMP;
+        int width = 1280;
+        int height = 720;
+        if (resolution.compareTo(context.getString(R.string.low_resolution_value)) == 0) {
+            width = 1280;
+            height = 720;
+        } else {
+            if (resolution.compareTo(context.getString(R.string.good_resolution_value)) == 0) {
+                width = 1920;
+                height = 1080;
+            } else {
+                if (resolution.compareTo(context.getString(R.string.high_resolution_value)) == 0) {
+                    width = 3840;
+                    height = 2160;
+                }
+            }
+        }
+
+        Log.d(LOG_TAG, " Config video resolution width: " + width + " x " + height);
+
+        String key_quality = "list_preference_quality";
+        String quality = sharedPreferences.getString(key_quality, "");
+        Log.d(LOG_TAG, "list_preferences_quality " + quality);
+        int videoBitrate = 5 * 1000 * 1000;
+        if (quality.compareTo(context.getString(R.string.low_quality_value)) == 0) {
+            videoBitrate = 2 * 1000 * 1000;
+        } else {
+            if (quality.compareTo(context.getString(R.string.good_quality_value)) == 0) {
+                videoBitrate = 5 * 1000 * 1000;
+            } else{
+            if (quality.compareTo(context.getString(R.string.high_quality_value)) == 0) {
+                videoBitrate = 10 * 1000 * 1000;
+            }
+        }
+
+    }
+
+        //TODO make audio setting preferences
+        int audioChannels = 1;
+        int audioFrequency = 48000;
+        int audioBitrate = 192 * 1000;
+
+        return new SessionConfig(destinationFolderPath, width, height, videoBitrate,
+        audioChannels, audioFrequency, audioBitrate);
+    }
+
     private void hideInitialsButtons() {
         recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
@@ -113,7 +169,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onStart() {
         if (recorder.isReleased()) {
             cameraPreview.releaseCamera();
-            initRecorder(context, cameraPreview);
+            initRecorder(context, cameraPreview, sharedPreferences);
         }
     }
 
@@ -159,7 +215,8 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void resetRecorder() throws IOException {
-        config = new SessionConfig(Constants.PATH_APP_TEMP);
+
+        config = getConfigFromPreferences(sharedPreferences);
         recorder.reset(config);
     }
 

@@ -9,18 +9,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -147,18 +146,38 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     }
 
     private void setup() {
-        androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
-            createUserProfile();
-            editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
-        }
-        //initPushNotifications();
-        //initSettings();
-        //setupCameraSettings();
+
         setupPathsApp(this);
-        // TODO: change this variable of 30MB (size of the raw folder)
-        if (Utils.isAvailableSpace(30)) {
-         //   downloadingMusicResources();
+
+        setupStartApp();
+    }
+
+    private void setupStartApp() {
+
+        AppStart appStart = new AppStart();
+
+        switch (appStart.checkAppStart(this,sharedPreferences)) {
+            case NORMAL:
+                Log.d(LOG_TAG, " AppStart State NORMAL");
+
+                initSettings();
+
+                break;
+            case FIRST_TIME_VERSION:
+                Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
+                // example: show what's new
+                // could be appear a mix panel popup with improvements.
+                initSettings();
+                break;
+            case FIRST_TIME:
+                Log.d(LOG_TAG, " AppStart State FIRST_TIME");
+                // example: show a tutorial
+                setupCameraSettings();
+                createUserProfile();
+                initSettings();
+                break;
+            default:
+                break;
         }
     }
 

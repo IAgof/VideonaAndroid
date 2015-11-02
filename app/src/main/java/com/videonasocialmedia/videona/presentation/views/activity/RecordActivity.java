@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -52,6 +53,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectsAd
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnColorEffectSelectedListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnFxSelectedListener;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -116,6 +118,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private OrientationHelper orientationHelper;
 
     private ProgressDialog progressDialog;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -124,8 +127,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         setContentView(R.layout.record_activity);
         ButterKnife.inject(this);
 
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+
         cameraView.setKeepScreenOn(true);
-        recordPresenter = new RecordPresenter(this, this, this, cameraView);
+        recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
 
         initEffectsRecycler();
         configChronometer();
