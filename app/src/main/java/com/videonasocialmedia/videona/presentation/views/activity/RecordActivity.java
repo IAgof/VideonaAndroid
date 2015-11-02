@@ -50,6 +50,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
