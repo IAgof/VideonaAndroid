@@ -111,6 +111,8 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="title_about_section">About</string>
     <string name="title_vote_section">Vote</string>
     <string name="content_vote_section">Vote our app</string>
+    <string name="title_contact_section">Contact</string>
+    <string name="content_contact_section">Give us feedback</string>
     <string name="title_tutorial_section">Tutorial</string>
     <string name="content_tutorial_section">See our tutorial</string>
     <string name="preferences_resolution_not_supported">Incompatible device</string>

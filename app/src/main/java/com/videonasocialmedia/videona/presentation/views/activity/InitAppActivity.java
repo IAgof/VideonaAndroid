@@ -78,6 +78,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
         mixpanel.timeEvent("Time in Init Activity");
+
     }
 
     @Override
