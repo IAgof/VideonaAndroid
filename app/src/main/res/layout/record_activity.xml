@@ -94,7 +94,7 @@
                 android:layout_height="80dp"
                 android:layout_alignParentBottom="true"
                 android:scrollbars="horizontal"
-                tools:listitem="@layout/record_item_camera_effect_color"
+                tools:listitem="@layout/record_effects_view_holder"
                 tools:scrollbars="horizontal" />
 
         </RelativeLayout>
