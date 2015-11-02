@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -38,7 +39,8 @@ import java.util.List;
 
 public class InitAppActivity extends VideonaActivity implements InitAppView, OnInitAppEventListener {
 
-    private static final long MINIMUN_WAIT_TIME = 900;
+    private long MINIMUN_WAIT_TIME;
+
     /**
      * LOG_TAG
      */
@@ -55,7 +57,14 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_init_app);
+        if (BuildConfig.DEBUG){
+            //Wait longer while debug so we can start qordoba sandbox mode on splash screen
+            MINIMUN_WAIT_TIME = 10900;
+        }else{
+            MINIMUN_WAIT_TIME = 900;
+        }
     }
 
     @Override

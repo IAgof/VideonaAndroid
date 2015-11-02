@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayoutCameraEffect"
     android:layout_width="72dp"
-    android:layout_height="72dp"
-    android:id="@+id/linearLayoutCameraEffect">
+    android:layout_height="72dp">
 
-        <ImageView
-            android:id="@+id/imageCameraEffectFx"
-            android:src="@drawable/common_filter_fx_fx0_none_normal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:padding="4dp"
-            android:scaleType="fitCenter"
-            android:layout_alignParentBottom="false" />
+    <ImageView
+        android:id="@+id/imageCameraEffectFx"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="false"
+        android:background="@null"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_filter_fx_fx0_none_normal" />
 
 
 </RelativeLayout>

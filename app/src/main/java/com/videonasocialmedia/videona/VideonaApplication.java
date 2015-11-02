@@ -17,13 +17,12 @@ import android.support.multidex.MultiDex;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.qordoba.sdk.Qordoba;
 
 public class VideonaApplication extends Application {
 
 
-    Tracker app_tracker;
-
-    private static Context context;
+    Tracker tracker;
 
     /**
      * Called when the application is starting, before any activity, service,
@@ -37,15 +36,22 @@ public class VideonaApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        setupGoogleAnalytics();
+        setupQordoba();
+    }
 
-        //Analytics setup
+    private void setupQordoba() {
+        Qordoba.init(this, BuildConfig.QORDOBA_KEY,
+                BuildConfig.QORDOBA_APP_ID);
+    }
+
+    private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         app_tracker = analytics.newTracker(R.xml.app_tracker);
         app_tracker.enableAdvertisingIdCollection(true);
 
 
-        VideonaApplication.context = getApplicationContext();
 
     }
 
@@ -59,9 +65,5 @@ public class VideonaApplication extends Application {
      */
     public synchronized Tracker getTracker() {
         return app_tracker;
-    }
-
-    public static Context getAppContext() {
-        return VideonaApplication.context;
     }
 }
