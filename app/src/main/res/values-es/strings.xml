@@ -112,6 +112,8 @@
     <string name="title_about_section">Sobre nosotros</string>
     <string name="title_vote_section">Vota</string>
     <string name="content_vote_section">Vota nuestra aplicación</string>
+    <string name="title_contact_section">Contacta con Videona</string>
+    <string name="content_contact_section">Dinos que opinas de la aplicación</string>
     <string name="title_tutorial_section">Tutorial</string>
     <string name="content_tutorial_section">Mira nuestro tutorial</string>
     <string name="preferences_resolution_not_supported">Su dispositivo no es compatible</string>

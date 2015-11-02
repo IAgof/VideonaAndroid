@@ -35,4 +35,15 @@
         </Preference>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/title_contact_section">
+        <Preference
+            android:title="@string/content_contact_section">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="mailto:info@videona.com" />
+            />
+        </Preference>
+    </PreferenceCategory>
+
+    <!-- android:data="twitter://user?screen_name=videona_es"  Follow us! -->
 </PreferenceScreen>
