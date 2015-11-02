@@ -23,6 +23,8 @@ public class VideonaApplication extends Application {
 
     Tracker app_tracker;
 
+    private static Context context;
+
     /**
      * Called when the application is starting, before any activity, service,
      * or receiver objects (excluding content providers) have been created.
@@ -43,6 +45,7 @@ public class VideonaApplication extends Application {
         app_tracker.enableAdvertisingIdCollection(true);
 
 
+        VideonaApplication.context = getApplicationContext();
 
     }
 
@@ -56,5 +59,9 @@ public class VideonaApplication extends Application {
      */
     public synchronized Tracker getTracker() {
         return app_tracker;
+    }
+
+    public static Context getAppContext() {
+        return VideonaApplication.context;
     }
 }
