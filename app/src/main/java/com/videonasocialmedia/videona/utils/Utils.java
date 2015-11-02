@@ -14,6 +14,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -31,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 /**
  * Utils.
@@ -202,5 +204,36 @@ public class Utils {
         canvas.drawBitmap(bmp, borderSize, borderSize, null);
         return bmpWithBorder;
     }
+
+
+    public static String getDeviceInfo(){
+
+        StringBuilder deviceInfo = new StringBuilder();
+
+        deviceInfo.append(" ---------------------------------------------");
+        deviceInfo.append(" Brand: " + android.os.Build.BRAND);
+        deviceInfo.append(" Device: " + android.os.Build.DEVICE);
+        deviceInfo.append(" Model: " + android.os.Build.MODEL);
+        deviceInfo.append(" Hardware: " + android.os.Build.HARDWARE);
+        deviceInfo.append(" Language: " + Locale.getDefault().getLanguage());
+
+
+        return  deviceInfo.toString();
+    }
+
+    //   PackageInfo infor = getApplication().getPackageManager().getPackageInfo("com.videonasocialmedia.videona", PackageManager.GET_ACTIVITIES);
+    public static String getAppInfo(PackageInfo info){
+
+        StringBuilder appInfo = new StringBuilder();
+        appInfo.append(" ---------------------------------------------" );
+        appInfo.append(" Version name: " + info.versionName);
+        appInfo.append(" Version code: " + String.valueOf(info.versionCode));
+        appInfo.append(" Install location: " + String.valueOf(info.installLocation));
+        appInfo.append(" PackageName: " + info.packageName);
+
+
+        return appInfo.toString();
+    }
+
 
 }
