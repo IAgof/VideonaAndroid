@@ -15,7 +15,7 @@
         android:id="@+id/effectImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        tools:src="@drawable/common_filter_ad0_none_normal"
+        tools:src="@drawable/common_filter_color_aqua"
         android:layout_marginTop="5dp"
         android:background="@null"
         android:scaleType="centerCrop"

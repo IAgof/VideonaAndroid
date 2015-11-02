@@ -12,8 +12,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectColor;
-import com.videonasocialmedia.videona.presentation.views.adapter.CameraEffectFx;
+import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
 
 import java.util.List;
 
@@ -43,9 +42,9 @@ public interface RecordView {
 
     void stopChronometer();
 
-    void showCameraEffectFx(List<CameraEffectFx> effects);
+    void showCameraEffectFx(List<Effect> effects);
 
-    void showCameraEffectColor(List<CameraEffectColor> effects);
+    void showCameraEffectColor(List<Effect> effects);
 
     void lockScreenRotation();
 
