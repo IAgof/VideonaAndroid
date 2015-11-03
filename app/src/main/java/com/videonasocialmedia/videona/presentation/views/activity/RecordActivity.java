@@ -81,9 +81,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     ImageButton rotateCameraButton;
     @InjectView(R.id.button_navigate_edit)
     CircleImageView navigateToEditButton;
-    @InjectView(R.id.record_catalog_recycler_fx)
+    @InjectView(R.id.record_catalog_recycler_distortion_effects)
     RecyclerView effectsRecycler;
-    @InjectView(R.id.record_catalog_recycler_color)
+    @InjectView(R.id.record_catalog_recycler_color_effects)
     RecyclerView colorFilterRecycler;
     @InjectView(R.id.imageRecPoint)
     ImageView recordingIndicator;
@@ -731,11 +731,15 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void onEffectSelected(Effect effect) {
         recordPresenter.applyEffect(effect.getFilterId());
         sendButtonTracked(effect.getIconResourceId());
-        if (!colorFilterHidden)
-            cameraDistortionEffectsAdapter.resetSelectedEffect();
-        if (!fxHidden)
-            cameraColorEffectsAdapter.resetSelectedEffect();
+        resetOtherEffects();
         scrollEffectList(effect);
+    }
+
+    private void resetOtherEffects() {
+        if (!colorFilterHidden) {
+            cameraDistortionEffectsAdapter.resetSelectedEffect();
+        } else if (!fxHidden)
+            cameraColorEffectsAdapter.resetSelectedEffect();
     }
 
     private void scrollEffectList(Effect effect) {
