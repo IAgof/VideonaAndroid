@@ -86,7 +86,7 @@
                 android:gravity="bottom">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/record_catalog_recycler_fx"
+                    android:id="@+id/record_catalog_recycler_distortion_effects"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
@@ -94,7 +94,7 @@
                     android:scrollbars="horizontal" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/record_catalog_recycler_color"
+                    android:id="@+id/record_catalog_recycler_color_effects"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
@@ -243,7 +243,7 @@
                             android:layout_weight="2" />
 
                         <ImageButton
-                            android:id="@+id/button_camera_effect_color"
+                            android:id="@+id/button_toggle_flash"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="8"
@@ -253,8 +253,7 @@
                             android:paddingRight="4dp"
                             android:paddingTop="28dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/activity_record_filter_color_selector"
-                            android:visibility="visible" />
+                            android:src="@drawable/record_activity_icon_flash_camera_selector" />
 
 
                         <ImageButton
@@ -338,9 +337,8 @@
                             android:scaleType="fitCenter"
                             android:src="@drawable/activity_record_filter_fx_selector" />
 
-
                         <ImageButton
-                            android:id="@+id/button_toggle_flash"
+                            android:id="@+id/button_camera_effect_color"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="8"
@@ -350,7 +348,8 @@
                             android:paddingRight="24dp"
                             android:paddingTop="12dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/record_activity_icon_flash_camera_selector" />
+                            android:src="@drawable/activity_record_filter_color_selector"
+                            android:visibility="visible" />
 
                     </LinearLayout>
 
