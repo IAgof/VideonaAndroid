@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/effectViewHolder"
+    android:orientation="vertical"
+    android:layout_width="70dp"
+    android:layout_height="80dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginBottom="2dp"
+    android:background="@color/videona_black_1"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/effectImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        tools:src="@drawable/common_filter_color_aqua"
+        android:layout_marginTop="5dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
+        android:gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/effectName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="AD0"
+        android:textColor="@android:color/white"
+        android:background="@null"
+        android:textSize="12sp"
+        android:gravity="center_horizontal|top"/>
+
+</LinearLayout>
