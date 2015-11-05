@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.BuildConfig;
@@ -20,6 +21,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.config.PermissionGrantedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.AppStart;
@@ -58,7 +60,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private Camera camera;
     private int numSupportedCameras;
     private long startTime;
-    private static final String ANDROID_PUSH_SENDER_ID = "741562382107";
     private String androidId = null;
     private SplashScreenTask splashScreenTask;
 
@@ -359,6 +360,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     }
 
     private void setup() {
+        androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         setupPathsApp(this);
         setupStartApp();
     }
@@ -392,11 +394,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         mixpanel.identify(androidId);
         mixpanel.getPeople().identify(androidId);
         mixpanel.getPeople().set("User Type", "Free");
-    }
-
-    private void initPushNotifications() {
-        mixpanel.getPeople().identify(androidId);
-        mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
     }
 
     /**

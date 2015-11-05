@@ -19,11 +19,13 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_about_section">
-        <Preference
-            android:title="@string/aboutUsTitle">
-            <intent android:action=".presentation.views.activity.AboutActivity"/>
-        </Preference>
+        android:title="@string/title_advanced_section">
+       <com.videonasocialmedia.videona.presentation.views.customviews.DialogPreferences
+            android:key="dialog_preferences_key"
+            android:title="@string/content_advanced_section"
+            android:dialogMessage="@string/content_join_beta_dialog"
+            android:positiveButtonText="@string/positive_button_join_beta_dialog"
+            android:negativeButtonText="@string/negative_button_join_beta_dialog"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -45,5 +47,12 @@
         </Preference>
     </PreferenceCategory>
 
-    <!-- android:data="twitter://user?screen_name=videona_es"  Follow us! -->
+    <PreferenceCategory
+        android:title="@string/title_about_section">
+        <Preference
+            android:title="@string/aboutUsTitle">
+            <intent android:action=".presentation.views.activity.AboutActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
 </PreferenceScreen>
