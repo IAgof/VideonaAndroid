@@ -1,29 +1,36 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.eventbus.events.config.PermissionGrantedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
+import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * InitAppActivity.
@@ -53,6 +60,31 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private long startTime;
     private static final String ANDROID_PUSH_SENDER_ID = "741562382107";
     private String androidId = null;
+    private SplashScreenTask splashScreenTask;
+
+    // Storage Permissions
+    private int numPermissionsGranted = 0;
+    private static final int NUM_PERMISSIONS_REQUESTED = 4;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_CONTACTS = 2;
+    private static final int REQUEST_NOTIFICATIONS = 3;
+    private static final int REQUEST_CAMERA = 4;
+    private static final int REQUEST_AUDIO = 5;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    private static String[] PERMISSIONS_CONTACTS = {
+            Manifest.permission.GET_ACCOUNTS
+    };
+    private static String[] PERMISSIONS_NOTIFICATIONS = {
+            Manifest.permission.RECEIVE_WAP_PUSH
+    };
+    private static String[] PERMISSIONS_CAMERA = {
+            Manifest.permission.CAMERA
+    };
+    private static String[] PERMISSIONS_AUDIO = {
+            Manifest.permission.RECORD_AUDIO
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +107,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SplashScreenTask splashScreenTask = new SplashScreenTask();
-        splashScreenTask.execute();
+        EventBus.getDefault().register(this);
+        splashScreenTask = new SplashScreenTask();
+        checkPermissionsRequested();
+        checkPermissionsGranted();
         mixpanel.timeEvent("Time in Init Activity");
-
     }
 
     @Override
@@ -94,9 +127,188 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        numPermissionsGranted = 0;
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
+    }
+
+    public void onEvent(PermissionGrantedEvent event){
+        checkPermissionsGranted();
+    }
+
+
+    private void checkPermissionsGranted() {
+        if(numPermissionsGranted == NUM_PERMISSIONS_REQUESTED) {
+            splashScreenTask.execute();
+        }
+    }
+
+    private void checkPermissionsRequested() {
+        checkStorage();
+        checkCamera();
+        checkAudio();
+        checkContacts();
+        checkNotifications();
+    }
+
+    private void checkStorage() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        } else {
+            numPermissionsGranted++;
+        }
+    }
+
+    private void checkCamera() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_CAMERA,
+                    REQUEST_CAMERA
+            );
+
+        } else {
+            numPermissionsGranted++;
+        }
+    }
+
+    private void checkAudio() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_AUDIO,
+                    REQUEST_AUDIO
+            );
+        } else {
+            numPermissionsGranted++;
+        }
+    }
+
+    private void checkContacts() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_CONTACTS,
+                    REQUEST_CONTACTS
+            );
+        } else {
+            numPermissionsGranted++;
+        }
+    }
+
+    private void checkNotifications() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECEIVE_WAP_PUSH) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_NOTIFICATIONS,
+                    REQUEST_NOTIFICATIONS
+            );
+        } else {
+            numPermissionsGranted++;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    numPermissionsGranted++;
+                    EventBus.getDefault().post(new PermissionGrantedEvent());
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case REQUEST_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    numPermissionsGranted++;
+                    EventBus.getDefault().post(new PermissionGrantedEvent());
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case REQUEST_NOTIFICATIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    numPermissionsGranted++;
+                    EventBus.getDefault().post(new PermissionGrantedEvent());
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    numPermissionsGranted++;
+                    EventBus.getDefault().post(new PermissionGrantedEvent());
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case REQUEST_AUDIO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    numPermissionsGranted++;
+                    EventBus.getDefault().post(new PermissionGrantedEvent());
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
     }
 
     /**
@@ -147,22 +359,16 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     }
 
     private void setup() {
-
         setupPathsApp(this);
-
         setupStartApp();
     }
 
     private void setupStartApp() {
-
         AppStart appStart = new AppStart();
-
         switch (appStart.checkAppStart(this,sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
-
                 initSettings();
-
                 break;
             case FIRST_TIME_VERSION:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
