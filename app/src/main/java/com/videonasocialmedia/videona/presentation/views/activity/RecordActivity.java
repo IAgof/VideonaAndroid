@@ -20,6 +20,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.DialogPreference;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -49,6 +50,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
+import com.videonasocialmedia.videona.presentation.views.customviews.DialogPreferences;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -117,27 +119,21 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private ProgressDialog progressDialog;
     private SharedPreferences sharedPreferences;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.record_activity);
         ButterKnife.inject(this);
-
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-
         cameraView.setKeepScreenOn(true);
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
-
         initEffectsRecycler();
         configChronometer();
         initOrientationHelper();
-
         navigateToEditButton.setBorderWidth(5);
         navigateToEditButton.setBorderColor(Color.WHITE);
         numVideosRecorded.setVisibility(View.GONE);
-
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
         createProgressDialog();
@@ -236,6 +232,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             mixpanel.track("Time recording one video");
             mixpanel.track("Stop recording");
         }
+    }
+
+    @OnClick(R.id.button_navigate_edit)
+    public void OnButtonNavigateEditClicked() {
+        DialogPreference dialogPreferences = new DialogPreferences(this, null);
+        dialogPreferences.setTitle(R.string.title_advanced_section);
+        dialogPreferences.setDialogMessage(R.string.content_join_beta_dialog);
+        dialogPreferences.setPositiveButtonText(R.string.positive_button_join_beta_dialog);
+        dialogPreferences.setNegativeButtonText(R.string.negative_button_join_beta_dialog);
+        //dialogPreferences.show();
     }
 
     @Override
