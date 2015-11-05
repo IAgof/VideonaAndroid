@@ -13,7 +13,10 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.os.Bundle;
 
 import com.qordoba.sdk.Qordoba;
+import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to manage the setting menu.
@@ -29,6 +32,12 @@ public class SettingsActivity extends VideonaActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+        initPushNotifications();
+    }
+
+    private void initPushNotifications() {
+        mixpanel.getPeople().identify(mixpanel.getPeople().getDistinctId());
+        mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
     }
 
     @Override
@@ -38,8 +47,21 @@ public class SettingsActivity extends VideonaActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
         mixpanel.track("Time in Settings Activity");
     }
+
+    public void onEvent(JoinBetaEvent event){
+        mixpanel.getPeople().showNotificationIfAvailable(this);
+        mixpanel.getPeople().showNotificationIfAvailable(this);
+    }
+
 }

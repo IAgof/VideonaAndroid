@@ -11,7 +11,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
+
+import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
+
+import de.greenrobot.event.EventBus;
 
 public class DialogPreferences extends DialogPreference {
 
@@ -22,15 +25,8 @@ public class DialogPreferences extends DialogPreference {
 
     @Override
     public void onClick(DialogInterface dialog, int which){
-
         if(which == DialogInterface.BUTTON_POSITIVE) {
-            // do your stuff to handle positive button
-            Log.d("Dialog preferences", " OK Button" );
-
-        }else if(which == DialogInterface.BUTTON_NEGATIVE){
-            // do your stuff to handle negative button
-            Log.d("Dialog preferences", " Cancel Button" );
-
+            EventBus.getDefault().post(new JoinBetaEvent());
         }
     }
 }

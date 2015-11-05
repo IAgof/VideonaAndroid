@@ -26,12 +26,11 @@ import com.videonasocialmedia.videona.BuildConfig;
 public abstract class VideonaActivity extends Activity {
 
     protected MixpanelAPI mixpanel;
+    protected static final String ANDROID_PUSH_SENDER_ID = "783686583047";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO change this token in production mode
-        //String projectToken = "1b1b93477de96457ce00058031524aed";
         mixpanel = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN);
     }
 

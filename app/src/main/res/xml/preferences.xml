@@ -20,14 +20,13 @@
 
     <PreferenceCategory
         android:title="Advanced">
-
-    <com.videonasocialmedia.videona.presentation.views.customviews.DialogPreferences
-        android:key="dialog_preferences_key"
-        android:dialogIcon="@android:drawable/ic_dialog_alert"
-        android:title="Join Videona Beta"
-        android:dialogMessage="Videona es ... ¿Te atreves a ser un Videona testers y probar nuevas funcionalidades?"
-        android:positiveButtonText="Why not, let's try"
-        android:negativeButtonText="Not now, thanks"/>
+       <com.videonasocialmedia.videona.presentation.views.customviews.DialogPreferences
+            android:key="dialog_preferences_key"
+            android:dialogIcon="@android:drawable/ic_dialog_alert"
+            android:title="Join Videona Beta"
+            android:dialogMessage="Videona es ... ¿Te atreves a ser un Videona testers y probar nuevas funcionalidades?"
+            android:positiveButtonText="Why not, let's try"
+            android:negativeButtonText="Not now, thanks"/>
     </PreferenceCategory>
 
     <PreferenceCategory
