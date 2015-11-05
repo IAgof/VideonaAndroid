@@ -11,9 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.BuildConfig;
@@ -21,7 +21,6 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.config.PermissionGrantedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.AppStart;
