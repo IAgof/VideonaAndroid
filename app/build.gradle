@@ -30,7 +30,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "MIXPANEL_TOKEN", "\"XXXXXXXXXXXXXXXXXXXXXXX\""
+            buildConfigField "String", "MIXPANEL_TOKEN", "\"c6617213110cd2513dfc0ad97dbaee66\""
             buildConfigField "String", "QORDOBA_APP_ID", "\"2bfd914a-433c-43b2-bd73-d77262c00241\""
             buildConfigField "String", "QORDOBA_KEY", "\"dev_b1f915c8-384d-4956-8136-bc1712e0234f\""
             resValue "string", "GOOGLE_ANALYTICS_ID", "UA-XXXXXXXX-1"
