@@ -34,21 +34,18 @@ public class AboutActivity extends VideonaActivity {
     /**
      * Tracker google analytics
      */
-    private VideonaApplication app;
-    private Tracker tracker;
     @InjectView(R.id.videona_version)
     TextView versionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        app = (VideonaApplication) getApplication();
-        tracker = app.getTracker();
-
         setContentView(R.layout.activity_about);
         ButterKnife.inject(this);
-        versionName.setText(this.getString(R.string.versionContent) + " " + BuildConfig.VERSION_NAME + "\n");
+
+        String version= this.getString(R.string.versionContent) + " "
+                + BuildConfig.VERSION_NAME + "\n";
+        versionName.setText(version);
     }
 
     @Override

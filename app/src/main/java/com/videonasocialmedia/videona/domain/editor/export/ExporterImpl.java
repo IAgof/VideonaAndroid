@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -155,7 +155,7 @@ public class ExporterImpl implements Exporter {
     }
 
     private Transcoder createTranscoder() {
-        Size.Resolution resolution = project.getProfile().getResolution();
+        VideoResolution.Resolution resolution = project.getProfile().getResolution();
         final File tempDir = new File (tempTranscodeDirectory);
         if (!tempDir.exists())
             tempDir.mkdirs();
