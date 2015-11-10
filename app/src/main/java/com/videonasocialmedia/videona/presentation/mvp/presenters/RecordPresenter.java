@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.videonasocialmedia.avrecorder.AVRecorder;
@@ -28,6 +29,8 @@ import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRemo
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -98,66 +101,61 @@ public class RecordPresenter implements OnExportFinishedListener {
         config = getConfigFromPreferences(sharedPreferences);
 
         try {
-            recorder = new AVRecorder(config, context.getResources()
-                    .getDrawable(R.drawable.watermark720));
+            Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
+            recorder = new AVRecorder(config, watermark);
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
-
-
         } catch (IOException ioe) {
             Log.e("ERROR", "ERROR", ioe);
         }
     }
 
     private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
-
-        String key_resolution = "list_preference_resolution";
-        String resolution = sharedPreferences.getString(key_resolution, "");
-
         String destinationFolderPath = Constants.PATH_APP_TEMP;
-        int width = 1280;
-        int height = 720;
-        if (resolution.compareTo(context.getString(R.string.low_resolution_value)) == 0) {
-            width = 1280;
-            height = 720;
-        } else {
-            if (resolution.compareTo(context.getString(R.string.good_resolution_value)) == 0) {
-                width = 1920;
-                height = 1080;
-            } else {
-                if (resolution.compareTo(context.getString(R.string.high_resolution_value)) == 0) {
-                    width = 3840;
-                    height = 2160;
-                }
-            }
-        }
 
-        Log.d(LOG_TAG, " Config video resolution width: " + width + " x " + height);
+        VideoResolution videoResolution = obtainResolutionFromPreferences(sharedPreferences);
+        Log.d(LOG_TAG, " Config video resolution width: " + videoResolution.getWidth() + " x "
+                + videoResolution.getHeight());
 
-        String key_quality = "list_preference_quality";
-        String quality = sharedPreferences.getString(key_quality, "");
-        Log.d(LOG_TAG, "list_preferences_quality " + quality);
-        int videoBitrate = 5 * 1000 * 1000;
-        if (quality.compareTo(context.getString(R.string.low_quality_value)) == 0) {
-            videoBitrate = 2 * 1000 * 1000;
-        } else {
-            if (quality.compareTo(context.getString(R.string.good_quality_value)) == 0) {
-                videoBitrate = 5 * 1000 * 1000;
-            } else{
-            if (quality.compareTo(context.getString(R.string.high_quality_value)) == 0) {
-                videoBitrate = 10 * 1000 * 1000;
-            }
-        }
-
-    }
+        int videoBitrate = obtainVideoBitrateFromPreferences(sharedPreferences);
 
         //TODO make audio setting preferences
         int audioChannels = 1;
         int audioFrequency = 48000;
         int audioBitrate = 192 * 1000;
 
-        return new SessionConfig(destinationFolderPath, width, height, videoBitrate,
-        audioChannels, audioFrequency, audioBitrate);
+        return new SessionConfig(destinationFolderPath, videoResolution.getWidth(),
+                videoResolution.getHeight(), videoBitrate, audioChannels, audioFrequency,
+                audioBitrate);
+    }
+
+    private VideoResolution obtainResolutionFromPreferences(SharedPreferences sharedPreferences) {
+        VideoResolution videoResolution;
+        String key_resolution = "list_preference_resolution";
+        String resolution = sharedPreferences.getString(key_resolution, "");
+        if (resolution.compareTo(context.getString(R.string.good_resolution_value)) == 0) {
+            videoResolution = new VideoResolution(VideoResolution.Resolution.HD1080);
+        } else if (resolution.compareTo(context.getString(R.string.high_resolution_value)) == 0) {
+            videoResolution = new VideoResolution(VideoResolution.Resolution.HD4K);
+        } else {
+            videoResolution = new VideoResolution(VideoResolution.Resolution.HD720);
+        }
+        return videoResolution;
+    }
+
+    private int obtainVideoBitrateFromPreferences(SharedPreferences sharedPreferences) {
+        String key_quality = "list_preference_quality";
+        String quality = sharedPreferences.getString(key_quality, "");
+        Log.d(LOG_TAG, "list_preferences_quality " + quality);
+        VideoQuality videoQuality;
+        if (quality.compareTo(context.getString(R.string.good_quality_value)) == 0) {
+            videoQuality = new VideoQuality(VideoQuality.Quality.VERY_GOOD);
+        } else if (quality.compareTo(context.getString(R.string.high_quality_value)) == 0) {
+            videoQuality = new VideoQuality(VideoQuality.Quality.EXCELLENT);
+        } else {
+            videoQuality = new VideoQuality(VideoQuality.Quality.GOOD);
+        }
+        return videoQuality.getVideoBitRate();
     }
 
     private void hideInitialsButtons() {
@@ -224,7 +222,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         //editorView.showProgressDialog();
         //check VideoList is not empty, if true exportProjectUseCase
         List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
-        if (videoList.size()>0) {
+        if (videoList.size() > 0) {
             exportProjectUseCase.export();
         } else {
             recordView.hideProgressDialog();
@@ -241,12 +239,12 @@ public class RecordPresenter implements OnExportFinishedListener {
         startRecord();
     }
 
-    public void onEventMainThread(CameraOpenedEvent e){
+    public void onEventMainThread(CameraOpenedEvent e) {
 
         Log.d(LOG_TAG, "camera opened, camera != null");
         //Calculate orientation, rotate if needed
         //recordView.unlockScreenRotation();
-        if(firstTimeRecording){
+        if (firstTimeRecording) {
             recordView.unlockScreenRotation();
         }
 
@@ -330,18 +328,18 @@ public class RecordPresenter implements OnExportFinishedListener {
 
         Log.d(LOG_TAG, "checkSupportFlash flashSupport " + flashSupport);
 
-        if(flashSupport == 0){
+        if (flashSupport == 0) {
             recordView.showFlashSupported(true);
             Log.d(LOG_TAG, "checkSupportFlash flash Supported camera");
         } else {
-            if(flashSupport == 1) {
+            if (flashSupport == 1) {
                 recordView.showFlashSupported(false);
                 Log.d(LOG_TAG, "checkSupportFlash flash NOT Supported camera");
             }
         }
     }
 
-    public void setFlashOff(){
+    public void setFlashOff() {
         boolean on = recorder.setFlashOff();
         recordView.showFlashOn(on);
 

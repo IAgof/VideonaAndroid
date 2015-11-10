@@ -107,7 +107,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private RecordPresenter recordPresenter;
     private EffectAdapter cameraDistortionEffectsAdapter;
     private EffectAdapter cameraColorEffectsAdapter;
-    private Tracker tracker;
     private boolean buttonBackPressed;
     private boolean fxHidden;
     private boolean colorFilterHidden;
@@ -115,7 +114,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private OrientationHelper orientationHelper;
 
     private ProgressDialog progressDialog;
-    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -124,23 +122,24 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         setContentView(R.layout.record_activity);
         ButterKnife.inject(this);
 
-        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
-                Context.MODE_PRIVATE);
-
         cameraView.setKeepScreenOn(true);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
 
         initEffectsRecycler();
         configChronometer();
         initOrientationHelper();
+        configThumbsView();
+        createProgressDialog();
+    }
 
+    private void configThumbsView() {
         navigateToEditButton.setBorderWidth(5);
         navigateToEditButton.setBorderColor(Color.WHITE);
         numVideosRecorded.setVisibility(View.GONE);
-
-        VideonaApplication app = (VideonaApplication) getApplication();
-        tracker = app.getTracker();
-        createProgressDialog();
     }
 
     private void initOrientationHelper() {
@@ -611,6 +610,47 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         chronometer.setVisibility(View.INVISIBLE);
     }
 
+    @Override
+    public void enableShareButton() {
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
+    }
+
+    @Override
+    public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
+    }
+
+    @Override
+    public void onEffectSelected(Effect effect) {
+        recordPresenter.applyEffect(effect.getFilterId());
+        sendButtonTracked(effect.getIconResourceId());
+        resetOtherEffects();
+        scrollEffectList(effect);
+    }
+
+    private void resetOtherEffects() {
+        if (!colorFilterHidden) {
+            cameraDistortionEffectsAdapter.resetSelectedEffect();
+        } else if (!fxHidden)
+            cameraColorEffectsAdapter.resetSelectedEffect();
+    }
+
+    private void scrollEffectList(Effect effect) {
+        if (!colorFilterHidden) {
+            List effects = cameraColorEffectsAdapter.getElementList();
+            int index = effects.indexOf(effect);
+            int scroll = index > cameraColorEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            colorFilterRecycler.scrollToPosition(index + scroll);
+        } else if (!fxHidden) {
+            List effects = cameraDistortionEffectsAdapter.getElementList();
+            int index = effects.indexOf(effect);
+            int scroll = index > cameraDistortionEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            effectsRecycler.scrollToPosition(index + scroll);
+        }
+    }
+
     @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_color,
             R.id.button_camera_effect_fx, R.id.button_change_camera})
     public void clickListener(View view) {
@@ -713,47 +753,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 .setLabel(label)
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-    }
-
-    @Override
-    public void enableShareButton() {
-        shareButton.setAlpha(1f);
-        shareButton.setClickable(true);
-    }
-
-    @Override
-    public void disableShareButton() {
-        shareButton.setAlpha(0.25f);
-        shareButton.setClickable(false);
-    }
-
-    @Override
-    public void onEffectSelected(Effect effect) {
-        recordPresenter.applyEffect(effect.getFilterId());
-        sendButtonTracked(effect.getIconResourceId());
-        resetOtherEffects();
-        scrollEffectList(effect);
-    }
-
-    private void resetOtherEffects() {
-        if (!colorFilterHidden) {
-            cameraDistortionEffectsAdapter.resetSelectedEffect();
-        } else if (!fxHidden)
-            cameraColorEffectsAdapter.resetSelectedEffect();
-    }
-
-    private void scrollEffectList(Effect effect) {
-        if (!colorFilterHidden) {
-            List effects = cameraColorEffectsAdapter.getElementList();
-            int index = effects.indexOf(effect);
-            int scroll = index > cameraColorEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            colorFilterRecycler.scrollToPosition(index + scroll);
-        } else if (!fxHidden) {
-            List effects = cameraDistortionEffectsAdapter.getElementList();
-            int index = effects.indexOf(effect);
-            int scroll = index > cameraDistortionEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            effectsRecycler.scrollToPosition(index + scroll);
-        }
     }
 
     private class OrientationHelper extends OrientationEventListener {

@@ -11,10 +11,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.google.android.gms.analytics.Tracker;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.qordoba.sdk.Qordoba;
 import com.qordoba.sdk.common.QordobaContextWrapper;
 import com.videonasocialmedia.videona.BuildConfig;
+import com.videonasocialmedia.videona.VideonaApplication;
 
 /**
  * /**
@@ -25,13 +27,16 @@ import com.videonasocialmedia.videona.BuildConfig;
  */
 public abstract class VideonaActivity extends Activity {
 
-    protected MixpanelAPI mixpanel;
     protected static final String ANDROID_PUSH_SENDER_ID = "783686583047";
+    protected MixpanelAPI mixpanel;
+    protected Tracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mixpanel = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN);
+        VideonaApplication app = (VideonaApplication) getApplication();
+        tracker = app.getTracker();
     }
 
     @Override
