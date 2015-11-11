@@ -10,6 +10,8 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.qordoba.sdk.Qordoba;
@@ -28,16 +30,10 @@ public class SettingsActivity extends VideonaActivity {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
-        Qordoba.setCurrentNavigationRoute(android.R.id.content,this.getClass().getName());
+        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
-        initPushNotifications();
-    }
-
-    private void initPushNotifications() {
-        mixpanel.getPeople().identify(mixpanel.getPeople().getDistinctId());
-        mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
     }
 
     @Override
@@ -60,8 +56,9 @@ public class SettingsActivity extends VideonaActivity {
     }
 
     public void onEvent(JoinBetaEvent event){
-        mixpanel.getPeople().showNotificationIfAvailable(this);
-        mixpanel.getPeople().showNotificationIfAvailable(this);
+        Uri uri = Uri.parse("https://plus.google.com/u/0/communities/105699797773551023689");
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(browserIntent);
     }
 
 }

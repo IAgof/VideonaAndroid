@@ -35,6 +35,8 @@ public abstract class VideonaActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mixpanel = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN);
+        mixpanel.getPeople().identify(mixpanel.getPeople().getDistinctId());
+        mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
     }

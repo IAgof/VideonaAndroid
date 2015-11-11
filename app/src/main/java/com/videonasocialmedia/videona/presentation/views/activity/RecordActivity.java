@@ -10,8 +10,10 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -43,6 +45,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
@@ -61,6 +64,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Álvaro Martínez Marco
@@ -115,7 +119,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     private ProgressDialog progressDialog;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +131,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
-
         initEffectsRecycler();
         configChronometer();
         initOrientationHelper();
@@ -196,6 +198,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     protected void onResume() {
         super.onResume();
+        EventBus.getDefault().register(this);
         recordPresenter.onResume();
         recording = false;
         disableShareButton();
@@ -204,6 +207,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
         mixpanel.track("Time in Record Activity");
@@ -235,6 +239,32 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             mixpanel.track("Time recording one video");
             mixpanel.track("Stop recording");
         }
+    }
+
+    @OnClick(R.id.button_navigate_edit)
+    public void OnButtonNavigateEditClicked() {
+        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
+                .setTitle(R.string.title_advanced_section)
+                .setMessage(R.string.content_join_beta_dialog)
+                .setPositiveButton(R.string.positive_button_join_beta_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                EventBus.getDefault().post(new JoinBetaEvent());
+                            }
+                        })
+                .setNegativeButton(R.string.negative_button_join_beta_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                .show();
+    }
+
+    public void onEvent(JoinBetaEvent event){
+        Uri uri = Uri.parse("https://plus.google.com/u/0/communities/105699797773551023689");
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(browserIntent);
     }
 
     @Override
