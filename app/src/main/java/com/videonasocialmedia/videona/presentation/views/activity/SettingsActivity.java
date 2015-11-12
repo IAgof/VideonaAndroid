@@ -10,9 +10,8 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
@@ -56,9 +55,10 @@ public class SettingsActivity extends VideonaActivity {
     }
 
     public void onEvent(JoinBetaEvent event){
-        Uri uri = Uri.parse("https://plus.google.com/u/0/communities/105699797773551023689");
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(browserIntent);
+//        Uri uri = Uri.parse("https://plus.google.com/u/0/communities/105699797773551023689");
+//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(browserIntent);
+        Log.d("prueba", "seeeeeeeeeeeeeeeeeeeeeeeeeeeeeeend");
     }
 
 }

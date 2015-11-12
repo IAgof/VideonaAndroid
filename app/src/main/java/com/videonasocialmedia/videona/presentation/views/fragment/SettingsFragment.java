@@ -34,6 +34,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
     private ListPreference resolutionPref;
     private ListPreference qualityPref;
+    private Preference joinBetaPref;
     private PreferencesPresenter preferencesPresenter;
     private Context context;
     private SharedPreferences sharedPreferences;
@@ -52,6 +53,14 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         editor = sharedPreferences.edit();
         resolutionPref = (ListPreference) findPreference("list_preference_resolution");
         qualityPref = (ListPreference) findPreference("list_preference_quality");
+        joinBetaPref = findPreference("join_beta");
+        joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new JoinBetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
+                return true;
+            }
+        });
         preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
                 sharedPreferences);
     }
@@ -104,4 +113,5 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         Preference connectionPref = findPreference(key);
         connectionPref.setSummary(sharedPreferences.getString(key, ""));
     }
+
 }
