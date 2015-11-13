@@ -103,6 +103,9 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="high_resolution_value">Excellent</string>
     <string name="quality">Quality</string>
     <string name="join_beta">Join Videona Beta</string>
+    <string name="email">email</string>
+    <string name="send_email">Send</string>
+    <string name="invalid_email">Please, insert a valid email</string>
     <string name="low_quality_name">Good (2 Mbps)</string>
     <string name="low_quality_value">Good</string>
     <string name="good_quality_name">Very good (5 Mbps)</string>
