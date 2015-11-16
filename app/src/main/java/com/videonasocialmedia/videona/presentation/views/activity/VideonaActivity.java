@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.gms.analytics.Tracker;
@@ -34,6 +35,9 @@ public abstract class VideonaActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
         mixpanel = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN);
         mixpanel.getPeople().identify(mixpanel.getPeople().getDistinctId());
         mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
@@ -56,5 +60,12 @@ public abstract class VideonaActivity extends Activity {
     protected void onResume() {
         super.onResume();
         Qordoba.updateScreen(this);
+    }
+
+    protected final void closeApp(){
+        Intent intent = new Intent(getApplicationContext(), InitAppActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
     }
 }

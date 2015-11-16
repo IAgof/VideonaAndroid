@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -16,15 +17,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -41,10 +47,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
@@ -54,6 +58,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+import com.videonasocialmedia.videona.utils.PermissionConstants;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -107,7 +112,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     ImageView rotateDeviceHint;
     @InjectView(R.id.button_share)
     ImageButton shareButton;
-
     private RecordPresenter recordPresenter;
     private EffectAdapter cameraDistortionEffectsAdapter;
     private EffectAdapter cameraColorEffectsAdapter;
@@ -116,8 +120,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean colorFilterHidden;
     private boolean recording;
     private OrientationHelper orientationHelper;
-
     private ProgressDialog progressDialog;
+    private boolean dontAskAgain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,6 +197,61 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         super.onStart();
         recordPresenter.onStart();
         mixpanel.timeEvent("Time in Record Activity");
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkAndRequestPermissions();
+        }
+    }
+
+    private void checkAndRequestPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setCancelable(true)
+                        .setMessage("Videona no puede funcionar sin este permiso")
+                        .create();
+                dontAskAgain = true;
+            }
+            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CAMERA,
+                    PermissionConstants.REQUEST_CAMERA);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PermissionConstants.REQUEST_CAMERA: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//notify granted
+                } else {
+                    if (dontAskAgain) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setCancelable(true)
+                                .setMessage("Videona no puede funcionar sin este permiso")
+                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialogInterface) {
+                                        finish();
+                                    }
+                                }).setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            @Override
+                            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                                finish();
+                                return false;
+                            }
+                        });
+                    }else{
+
+                    }
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
     }
 
     @Override
@@ -261,7 +320,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 .show();
     }
 
-    public void onEvent(JoinBetaEvent event){
+    public void onEvent(JoinBetaEvent event) {
         Uri uri = Uri.parse("https://plus.google.com/u/0/communities/105699797773551023689");
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(browserIntent);

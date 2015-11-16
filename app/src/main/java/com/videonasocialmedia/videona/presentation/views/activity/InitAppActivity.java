@@ -1,7 +1,9 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,13 +14,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.eventbus.events.config.PermissionGrantedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
@@ -26,12 +30,11 @@ import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.PermissionConstants;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * InitAppActivity.
@@ -47,54 +50,29 @@ import de.greenrobot.event.EventBus;
 
 public class InitAppActivity extends VideonaActivity implements InitAppView, OnInitAppEventListener {
 
-    private long MINIMUN_WAIT_TIME;
 
     /**
      * LOG_TAG
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
     protected Handler handler = new Handler();
+    private long MINIMUN_WAIT_TIME;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Camera camera;
     private int numSupportedCameras;
     private long startTime;
     private String androidId = null;
-    private SplashScreenTask splashScreenTask;
-
-    // Storage Permissions
-    private int numPermissionsGranted = 0;
-    private static final int NUM_PERMISSIONS_REQUESTED = 4;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static final int REQUEST_CONTACTS = 2;
-    private static final int REQUEST_NOTIFICATIONS = 3;
-    private static final int REQUEST_CAMERA = 4;
-    private static final int REQUEST_AUDIO = 5;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-    private static String[] PERMISSIONS_CONTACTS = {
-            Manifest.permission.GET_ACCOUNTS
-    };
-    private static String[] PERMISSIONS_NOTIFICATIONS = {
-            Manifest.permission.RECEIVE_WAP_PUSH
-    };
-    private static String[] PERMISSIONS_CAMERA = {
-            Manifest.permission.CAMERA
-    };
-    private static String[] PERMISSIONS_AUDIO = {
-            Manifest.permission.RECORD_AUDIO
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_init_app);
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             //Wait longer while debug so we can start qordoba sandbox mode on splash screen
             MINIMUN_WAIT_TIME = 10900;
-        }else{
+        } else {
             MINIMUN_WAIT_TIME = 900;
         }
     }
@@ -107,11 +85,34 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        EventBus.getDefault().register(this);
-        splashScreenTask = new SplashScreenTask();
-        checkPermissionsRequested();
-        checkPermissionsGranted();
+        checkAndRequestPermissions();
+        SplashScreenTask splashScreenTask = new SplashScreenTask();
         mixpanel.timeEvent("Time in Init Activity");
+    }
+
+    private void checkAndRequestPermissions() {
+        checkContacts();
+        checkNotificationsPermissions();
+        checkStoragePermissions();
+        checkAudioStoragePermissions();
+        checkCameraPermissions();
+        waitForCriticalPermissions();
+    }
+
+    private void waitForCriticalPermissions() {
+        while (!areCriticalPermissionsGranted()) {
+            //just wait
+            //TODO reimplement using handlers and semaphores
+        }
+    }
+
+    private boolean areCriticalPermissionsGranted() {
+        return ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
@@ -129,8 +130,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     protected void onStop() {
         super.onStop();
-        numPermissionsGranted = 0;
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -139,222 +138,99 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         handler.removeCallbacksAndMessages(null);
     }
 
-    public void onEvent(PermissionGrantedEvent event){
-        checkPermissionsGranted();
-    }
-
-
-    private void checkPermissionsGranted() {
-        if(numPermissionsGranted == NUM_PERMISSIONS_REQUESTED) {
-            splashScreenTask.execute();
-        }
-    }
-
-    private void checkPermissionsRequested() {
-        checkStorage();
-        checkCamera();
-        checkAudio();
-        checkContacts();
-        checkNotifications();
-    }
-
-    private void checkStorage() {
+    private void checkStoragePermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        } else {
-            numPermissionsGranted++;
+            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_STORAGE,
+                    PermissionConstants.REQUEST_EXTERNAL_STORAGE);
         }
     }
 
-    private void checkCamera() {
+    private void checkCameraPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_CAMERA,
-                    REQUEST_CAMERA
-            );
-
-        } else {
-            numPermissionsGranted++;
+            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CAMERA,
+                    PermissionConstants.REQUEST_CAMERA);
         }
     }
 
-    private void checkAudio() {
+    private void checkAudioStoragePermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_AUDIO,
-                    REQUEST_AUDIO
-            );
-        } else {
-            numPermissionsGranted++;
+                    this, PermissionConstants.PERMISSIONS_AUDIO, PermissionConstants.REQUEST_AUDIO);
         }
     }
 
     private void checkContacts() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_CONTACTS,
-                    REQUEST_CONTACTS
-            );
-        } else {
-            numPermissionsGranted++;
+            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CONTACTS,
+                    PermissionConstants.REQUEST_CONTACTS);
         }
     }
 
-    private void checkNotifications() {
+    private void checkNotificationsPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECEIVE_WAP_PUSH) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_NOTIFICATIONS,
-                    REQUEST_NOTIFICATIONS
-            );
-        } else {
-            numPermissionsGranted++;
+            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_NOTIFICATIONS,
+                    PermissionConstants.REQUEST_NOTIFICATIONS);
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[],
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    numPermissionsGranted++;
-                    EventBus.getDefault().post(new PermissionGrantedEvent());
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+            case PermissionConstants.REQUEST_EXTERNAL_STORAGE:
+            case PermissionConstants.REQUEST_CAMERA:
+            case PermissionConstants.REQUEST_AUDIO:
+                if (!isPermissionGranted(grantResults)) {
+                    showCloseAppDialog();
                 }
-                return;
-            }
-            case REQUEST_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    numPermissionsGranted++;
-                    EventBus.getDefault().post(new PermissionGrantedEvent());
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            case REQUEST_NOTIFICATIONS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    numPermissionsGranted++;
-                    EventBus.getDefault().post(new PermissionGrantedEvent());
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            case REQUEST_CAMERA: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    numPermissionsGranted++;
-                    EventBus.getDefault().post(new PermissionGrantedEvent());
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            case REQUEST_AUDIO: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    numPermissionsGranted++;
-                    EventBus.getDefault().post(new PermissionGrantedEvent());
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
         }
+    }
+
+    private boolean isPermissionGranted(@NonNull int[] grantResults) {
+        return grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void showCloseAppDialog() {
+        View dialogView= this.getLayoutInflater().inflate(R.layout.close_app_dialog,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog dialog = builder.setCancelable(true)
+                .setView(dialogView)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        closeApp();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        closeApp();
+                    }
+                }).setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                        closeApp();
+                        return false;
+                    }
+                }).create();
+        dialog.show();
     }
 
     /**
      * Releases the camera object
      */
+
     private void releaseCamera() {
         if (camera != null) {
             //camera.stopPreview();
             camera.release();
             camera = null;
-        }
-    }
-
-    /**
-     * Shows the splash screen
-     */
-    class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            try {
-                setup();
-            } catch (Exception e) {
-                Log.e("SETUP", "setup failed", e);
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean loggedIn) {
-            long currentTimeEnd = System.currentTimeMillis();
-            long timePassed = currentTimeEnd- startTime;
-            if (timePassed < MINIMUN_WAIT_TIME) {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        exitSplashScreen();
-                    }
-                }, MINIMUN_WAIT_TIME-timePassed);
-            } else {
-                exitSplashScreen();
-            }
-        }
-
-        private void exitSplashScreen() {
-            navigate(RecordActivity.class);
         }
     }
 
@@ -366,7 +242,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
     private void setupStartApp() {
         AppStart appStart = new AppStart();
-        switch (appStart.checkAppStart(this,sharedPreferences)) {
+        switch (appStart.checkAppStart(this, sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
                 initSettings();
@@ -415,6 +291,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     /**
      * Checks the available cameras on the device (back/front)
      */
+
     private void checkAvailableCameras() {
         if (camera != null) {
             releaseCamera();
@@ -615,16 +492,16 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     // Cannot delete folder temp and after create, app crash coming back from settings :(
     private void deleteMusicResources() {
 
-        int musicId[] = {2131099648, 2131099650, 2131099651, 2131099653, 2131099654, 2131099655 };
+        int musicId[] = {2131099648, 2131099650, 2131099651, 2131099653, 2131099654, 2131099655};
 
-        for (int i=0; i<musicId.length; i++) {
-                Log.d(LOG_TAG, " deleteMusicResources " + musicId[i]);
-                String nameFile = Constants.PATH_APP_TEMP + File.separator + musicId[i] + ".m4a";
-                Log.d(LOG_TAG, " deleteMusicResources nameFile " + nameFile);
-                File file = new File(nameFile);
-                if(file.exists()){
-                    file.delete();
-                }
+        for (int i = 0; i < musicId.length; i++) {
+            Log.d(LOG_TAG, " deleteMusicResources " + musicId[i]);
+            String nameFile = Constants.PATH_APP_TEMP + File.separator + musicId[i] + ".m4a";
+            Log.d(LOG_TAG, " deleteMusicResources nameFile " + nameFile);
+            File file = new File(nameFile);
+            if (file.exists()) {
+                file.delete();
+            }
 
         }
     }
@@ -632,7 +509,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private void checkRootPathMovies() {
         File fMovies = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_MOVIES);
-        if(!fMovies.exists()){
+        if (!fMovies.exists()) {
             fMovies.mkdir();
         }
     }
@@ -644,13 +521,13 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-
-    private void checkAndDeletePath(String pathApp){
+    private void checkAndDeletePath(String pathApp) {
         File folderTemp = new File(pathApp);
-        if(folderTemp.exists()){
+        if (folderTemp.exists()) {
             deleteFolderRecursive(folderTemp);
         }
     }
+
     private void deleteFolderRecursive(File dir) {
         File[] files = dir.listFiles();
         if (files != null) {
@@ -664,7 +541,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
         dir.delete();
     }
-
 
     private void startLoadingProject(OnInitAppEventListener listener) {
         //TODO Define project title (by date, by project count, ...)
@@ -703,31 +579,40 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         startActivity(new Intent(getApplicationContext(), cls));
     }
 
-    /*+++++++++*/
-    /* SESSION */
-    /*+++++++++*/
+    /**
+     * Shows the splash screen
+     */
+    class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
 
-    private boolean isSessionActive() {
-        SharedPreferences config = getApplicationContext()
-                .getSharedPreferences("USER_INFO", MODE_PRIVATE);
-        boolean remembered = config.getBoolean("rememberUser", false);
-        String sessionCookie = config.getString("sessionCookie", null);
-        String rememberMeCookie = config.getString("rememberMeCookie", null);
-        if (remembered && sessionCookie != null && rememberMeCookie != null) {
-           /*
-              Falla getApiHeaders()
-
-            VideonaApplication app = (VideonaApplication) getApplication();
-            app.getApiHeaders().setSessionCookieValue(sessionCookie);
-            app.getApiHeaders().setRememberMeCookieValue(rememberMeCookie);
-            ApiClient apiClient = app.getApiClient();
-          */
-
-            //apiClient.getUserName();
-            //TODO Check session against server
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                setup();
+            } catch (Exception e) {
+                Log.e("SETUP", "setup failed", e);
+            }
             return true;
         }
-        return false;
+
+        @Override
+        protected void onPostExecute(Boolean loggedIn) {
+            long currentTimeEnd = System.currentTimeMillis();
+            long timePassed = currentTimeEnd - startTime;
+            if (timePassed < MINIMUN_WAIT_TIME) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        exitSplashScreen();
+                    }
+                }, MINIMUN_WAIT_TIME - timePassed);
+            } else {
+                exitSplashScreen();
+            }
+        }
+
+        private void exitSplashScreen() {
+            navigate(RecordActivity.class);
+        }
     }
 
 }
