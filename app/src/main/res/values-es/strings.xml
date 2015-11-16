@@ -105,7 +105,7 @@
     <string name="quality">Calidad</string>
     <string name="join_beta">Prueba Videona Beta</string>
     <string name="email">email</string>
-    <string name="send_email">Enviars</string>
+    <string name="send_email">Enviar</string>
     <string name="invalid_email">Por favor, añade un email válido</string>
     <string name="low_quality_name">Buena (2 Mbps)</string>
     <string name="low_quality_value">Buena</string>

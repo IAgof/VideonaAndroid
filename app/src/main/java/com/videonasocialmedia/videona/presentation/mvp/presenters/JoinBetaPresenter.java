@@ -32,9 +32,10 @@ public class JoinBetaPresenter {
     }
 
     public void validateEmail(CharSequence email) {
-        if(isValidEmail(email))
+        if(isValidEmail(email)) {
             EventBus.getDefault().post(new JoinBetaEvent(email.toString()));
-        else
+            joinBetaView.hideDialog();
+        } else
             joinBetaView.showMessage();
     }
 

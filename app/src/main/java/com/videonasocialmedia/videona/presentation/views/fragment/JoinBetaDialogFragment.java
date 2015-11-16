@@ -32,7 +32,7 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
         View cancelButton = v.findViewById(R.id.cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                JoinBetaDialogFragment.this.getDialog().cancel();
+                getDialog().cancel();
             }
         });
         View sendButton = v.findViewById(R.id.sendEmail);
@@ -49,5 +49,10 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
     public void showMessage() {
         Toast.makeText(getActivity().getApplicationContext(), R.string.invalid_email,
                 Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void hideDialog() {
+        getDialog().cancel();
     }
 }
