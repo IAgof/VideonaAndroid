@@ -6,13 +6,25 @@
     tools:context=".mainActivity">
 
     <ImageView
+        android:id="@+id/splash_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:src="@drawable/splashscreen" />
+        android:src="@drawable/splash_screen" />
+
+    <TextView
+        android:id="@+id/videona_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
+        android:textColor="@color/pastel_palette_grey"
+        tools:text="Version"
+        android:layout_alignBottom="@+id/splash_screen"
+        android:layout_alignEnd="@+id/splash_screen" />
 
 </RelativeLayout>
