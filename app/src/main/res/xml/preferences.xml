@@ -20,12 +20,10 @@
 
     <PreferenceCategory
         android:title="@string/title_advanced_section">
-       <com.videonasocialmedia.videona.presentation.views.customviews.DialogPreferences
-            android:key="dialog_preferences_key"
-            android:title="@string/content_advanced_section"
-            android:dialogMessage="@string/content_join_beta_dialog"
-            android:positiveButtonText="@string/positive_button_join_beta_dialog"
-            android:negativeButtonText="@string/negative_button_join_beta_dialog"/>
+        <Preference
+            android:key="join_beta"
+            android:title="@string/join_beta">
+        </Preference>
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -10,10 +10,8 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -41,10 +39,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
@@ -52,6 +48,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
+import com.videonasocialmedia.videona.presentation.views.fragment.JoinBetaDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -243,28 +240,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @OnClick(R.id.button_navigate_edit)
     public void OnButtonNavigateEditClicked() {
-        new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_LIGHT)
-                .setTitle(R.string.title_advanced_section)
-                .setMessage(R.string.content_join_beta_dialog)
-                .setPositiveButton(R.string.positive_button_join_beta_dialog,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                EventBus.getDefault().post(new JoinBetaEvent());
-                            }
-                        })
-                .setNegativeButton(R.string.negative_button_join_beta_dialog,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                .show();
+        new JoinBetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
     }
 
     public void onEvent(JoinBetaEvent event){
-        Uri uri = Uri.parse("https://plus.google.com/u/0/communities/105699797773551023689");
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(browserIntent);
+        String email = event.email;
+        mixpanel.getPeople().identify(mixpanel.getDistinctId());
+        mixpanel.getPeople().set("Email", email);
     }
 
     @Override
