@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
@@ -31,6 +32,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -46,6 +49,9 @@ import de.greenrobot.event.EventBus;
  */
 
 public class InitAppActivity extends VideonaActivity implements InitAppView, OnInitAppEventListener {
+
+    @InjectView(R.id.videona_version)
+    TextView versionName;
 
     private long MINIMUN_WAIT_TIME;
 
@@ -91,12 +97,20 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_init_app);
+        ButterKnife.inject(this);
         if (BuildConfig.DEBUG){
             //Wait longer while debug so we can start qordoba sandbox mode on splash screen
             MINIMUN_WAIT_TIME = 10900;
         }else{
             MINIMUN_WAIT_TIME = 900;
         }
+        checkVersionCode();
+    }
+
+    private void checkVersionCode() {
+        String version= this.getString(R.string.versionTitle) + " "
+                + BuildConfig.VERSION_NAME + "\n";
+        versionName.setText(version);
     }
 
     @Override
