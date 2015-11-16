@@ -693,63 +693,63 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 label = "Color filters";
                 break;
             case R.drawable.common_filter_color_aqua:
-                label = "Aqua color filter";
+                label = "Aqua color filter AD1";
                 mixpanel.track("Aqua color filter selected", null);
                 break;
+            case R.drawable.common_filter_color_postericebw:
+                label = "Posterize color filter AD2";
+                mixpanel.track("Posterize color filter selected", null);
+                break;
             case R.drawable.common_filter_color_emboss:
-                label = "Emboss color filter";
+                label = "Emboss color filter AD3";
                 mixpanel.track("Emboss color filter selected", null);
                 break;
             case R.drawable.common_filter_color_mono:
-                label = "Mono color filter";
+                label = "Mono color filter AD4";
                 mixpanel.track("Mono color filter selected", null);
                 break;
             case R.drawable.common_filter_color_negative:
-                label = "Negative color filter";
+                label = "Negative color filter AD5";
                 mixpanel.track("Negative color filter selected", null);
                 break;
             case R.drawable.common_filter_color_green:
-                label = "Green color filter";
+                label = "Green color filter AD6";
                 mixpanel.track("Green color filter selected", null);
                 break;
-            case R.drawable.common_filter_color_postericebw:
-                label = "Posterize color filter";
-                mixpanel.track("Posterize color filter selected", null);
-                break;
             case R.drawable.common_filter_color_sepia:
-                label = "Sepia color filter";
+                label = "Sepia color filter AD7";
                 mixpanel.track("Sepia color filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_fisheye:
-                label = "Fisheye fx filter";
+                label = "Fisheye fx filter FX1";
                 mixpanel.track("Fisheye fx filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_stretch:
-                label = "Stretch fx filter";
+                label = "Stretch fx filter FX2";
                 mixpanel.track("Stretch fx filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_dent:
-                label = "Dent fx filter";
+                label = "Dent fx filter FX3";
                 mixpanel.track("Dent fx filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_mirror:
-                label = "Mirror fx filter";
+                label = "Mirror fx filter FX4";
                 mixpanel.track("Mirror fx filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_squeeze:
-                label = "Squeeze fx filter";
+                label = "Squeeze fx filter FX5";
                 mixpanel.track("Squeeze fx filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_tunnel:
-                label = "Tunnel fx filter";
+                label = "Tunnel fx filter FX6";
                 mixpanel.track("Tunnel fx filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_twirl:
-                label = "Twirl fx filter";
+                label = "Twirl fx filter FX7";
                 mixpanel.track("Twirl fx filter selected", null);
                 break;
             case R.drawable.common_filter_distortion_bulge:
-                label = "Bulge filter";
+                label = "Bulge filter FX8";
                 mixpanel.track("Bulge filter selected", null);
                 break;
             default:
