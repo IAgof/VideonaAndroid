@@ -506,7 +506,8 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="error_rate_app">Could not launch Google Play</string>
     <string name="exit_app_title">Shut down</string>
     <string name="exit_app_message">Do you want to close the application?</string>
-
+    <string name="permissionsDeniedMessage">Videona needs some permissions to use the camera or record audio.\nWithout them Videona can\'t continue and will be closed</string>
+    <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
 
 
 </resources>

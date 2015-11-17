@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -14,15 +15,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -51,6 +57,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.CircleImage
 import com.videonasocialmedia.videona.presentation.views.fragment.JoinBetaDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+import com.videonasocialmedia.videona.utils.PermissionConstants;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -104,7 +111,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     ImageView rotateDeviceHint;
     @InjectView(R.id.button_share)
     ImageButton shareButton;
-
+    
     private RecordPresenter recordPresenter;
     private EffectAdapter cameraDistortionEffectsAdapter;
     private EffectAdapter cameraColorEffectsAdapter;
@@ -113,7 +120,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean colorFilterHidden;
     private boolean recording;
     private OrientationHelper orientationHelper;
-
     private ProgressDialog progressDialog;
 
     @Override
@@ -188,9 +194,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     protected void onStart() {
         super.onStart();
+            checkAndRequestPermissions();
         recordPresenter.onStart();
         mixpanel.timeEvent("Time in Record Activity");
     }
+
 
     @Override
     protected void onResume() {

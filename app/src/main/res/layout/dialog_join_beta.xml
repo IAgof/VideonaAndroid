@@ -79,7 +79,7 @@
             android:textColor="@android:color/white"
             android:textAlignment="center"
             android:layout_gravity="center"
-            android:background="@drawable/join_beta_button_send_email_selector"
+            android:background="@drawable/button_color_selector"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_alignParentEnd="true" />
