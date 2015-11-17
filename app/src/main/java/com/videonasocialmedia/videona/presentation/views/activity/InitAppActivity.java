@@ -90,31 +90,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         mixpanel.timeEvent("Time in Init Activity");
     }
 
-    private void checkAndRequestPermissions() {
-        checkContacts();
-        checkNotificationsPermissions();
-        checkStoragePermissions();
-        checkAudioStoragePermissions();
-        checkCameraPermissions();
-        waitForCriticalPermissions();
-    }
-
-    private void waitForCriticalPermissions() {
-        while (!areCriticalPermissionsGranted()) {
-            //just wait
-            //TODO reimplement using handlers and semaphores
-        }
-    }
-
-    private boolean areCriticalPermissionsGranted() {
-        return ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -138,94 +113,9 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         handler.removeCallbacksAndMessages(null);
     }
 
-    private void checkStoragePermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_STORAGE,
-                    PermissionConstants.REQUEST_EXTERNAL_STORAGE);
-        }
-    }
-
-    private void checkCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CAMERA,
-                    PermissionConstants.REQUEST_CAMERA);
-        }
-    }
-
-    private void checkAudioStoragePermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this, PermissionConstants.PERMISSIONS_AUDIO, PermissionConstants.REQUEST_AUDIO);
-        }
-    }
-
-    private void checkContacts() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CONTACTS,
-                    PermissionConstants.REQUEST_CONTACTS);
-        }
-    }
-
-    private void checkNotificationsPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECEIVE_WAP_PUSH) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_NOTIFICATIONS,
-                    PermissionConstants.REQUEST_NOTIFICATIONS);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PermissionConstants.REQUEST_EXTERNAL_STORAGE:
-            case PermissionConstants.REQUEST_CAMERA:
-            case PermissionConstants.REQUEST_AUDIO:
-                if (!isPermissionGranted(grantResults)) {
-                    showCloseAppDialog();
-                }
-        }
-    }
-
-    private boolean isPermissionGranted(@NonNull int[] grantResults) {
-        return grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void showCloseAppDialog() {
-        View dialogView= this.getLayoutInflater().inflate(R.layout.close_app_dialog,null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        AlertDialog dialog = builder.setCancelable(true)
-                .setView(dialogView)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        closeApp();
-                    }
-                })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        closeApp();
-                    }
-                }).setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-                        closeApp();
-                        return false;
-                    }
-                }).create();
-        dialog.show();
-    }
-
     /**
      * Releases the camera object
      */
-
     private void releaseCamera() {
         if (camera != null) {
             //camera.stopPreview();

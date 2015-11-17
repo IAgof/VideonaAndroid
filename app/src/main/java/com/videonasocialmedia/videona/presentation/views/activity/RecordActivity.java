@@ -121,7 +121,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean recording;
     private OrientationHelper orientationHelper;
     private ProgressDialog progressDialog;
-    private boolean dontAskAgain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,64 +194,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     protected void onStart() {
         super.onStart();
+            checkAndRequestPermissions();
         recordPresenter.onStart();
         mixpanel.timeEvent("Time in Record Activity");
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkAndRequestPermissions();
-        }
     }
 
-    private void checkAndRequestPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.CAMERA)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setCancelable(true)
-                        .setMessage("Videona no puede funcionar sin este permiso")
-                        .create();
-                dontAskAgain = true;
-            }
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CAMERA,
-                    PermissionConstants.REQUEST_CAMERA);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PermissionConstants.REQUEST_CAMERA: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//notify granted
-                } else {
-                    if (dontAskAgain) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setCancelable(true)
-                                .setMessage("Videona no puede funcionar sin este permiso")
-                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                    @Override
-                                    public void onDismiss(DialogInterface dialogInterface) {
-                                        finish();
-                                    }
-                                }).setOnKeyListener(new DialogInterface.OnKeyListener() {
-                            @Override
-                            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-                                finish();
-                                return false;
-                            }
-                        });
-                    }else{
-
-                    }
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-        }
-    }
 
     @Override
     protected void onResume() {
