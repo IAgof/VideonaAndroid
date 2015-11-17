@@ -115,10 +115,8 @@
     <string name="high_quality_value">Excelente</string>
     <string name="title_advanced_section">Avanzado</string>
     <string name="content_advanced_section">Prueba Videona Beta</string>
-    <string name="content_join_beta_dialog">Inscríbete en nuestra Beta si quieres ser embajador de
-        Videona y testar en exclusiva nuestras próximas actualizaciones. Podrás opinar sobre ellas
-        y nos ayudarás a crear la mejor app de vídeo para smartphones del momento. Déjanos tu mail
-        para que podamos contactar contigo e indicarte los pasos a seguir.</string>
+    <string name="content_join_beta_dialog">Si quieres testar en exclusiva la Beta de nuestra app,
+        introduce tu mail y te indicaremos los pasos a seguir.</string>
     <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
     <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
     <string name="title_about_section">Sobre nosotros</string>

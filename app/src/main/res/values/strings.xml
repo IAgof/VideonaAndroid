@@ -114,10 +114,8 @@ We will be very grateful if you spread the news in your social networks.</string
     <string name="high_quality_value">Excellent</string>
     <string name="title_advanced_section">Advanced</string>
     <string name="content_advanced_section">Join Videona Beta</string>
-    <string name="content_join_beta_dialog">Join our Beta if you want to be an ambassador of
-        Videona and test our next updates. You can review them and help us to create the best video
-        app for smartphones of the moment. Leave us your email so we can contact you and tell you
-        the steps.</string>
+    <string name="content_join_beta_dialog">If you want to be part of the exclusive Beta of our app,
+        enter your email and we will show you the steps.</string>
     <string name="positive_button_join_beta_dialog">Why not, let\'s try!</string>
     <string name="negative_button_join_beta_dialog">Not now, thanks</string>
     <string name="title_about_section">About</string>
