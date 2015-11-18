@@ -11,10 +11,14 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import de.greenrobot.event.EventBus;
 
@@ -56,7 +60,13 @@ public class SettingsActivity extends VideonaActivity {
     public void onEvent(JoinBetaEvent event){
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
-        mixpanel.getPeople().set("Email", email);
+        JSONObject props = new JSONObject();
+        try {
+            props.put("$email", email); //Special properties in Mixpanel use $ before property name
+            mixpanel.getPeople().set(props);
+        } catch (JSONException e) {
+            Log.e("Mixpanel error", String.valueOf(e), e);
+        }
     }
 
 }
