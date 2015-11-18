@@ -8,6 +8,6 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 public interface JoinBetaView {
-    void showMessage();
+    void showMessage(int messageId);
     void hideDialog();
 }
