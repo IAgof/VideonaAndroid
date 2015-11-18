@@ -46,8 +46,8 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
     }
 
     @Override
-    public void showMessage() {
-        Toast.makeText(getActivity().getApplicationContext(), R.string.invalid_email,
+    public void showMessage(int messageId) {
+        Toast.makeText(getActivity().getApplicationContext(), getString(messageId),
                 Toast.LENGTH_LONG).show();
     }
 

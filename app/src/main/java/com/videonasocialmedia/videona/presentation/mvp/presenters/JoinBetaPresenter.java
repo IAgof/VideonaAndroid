@@ -10,6 +10,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.presentation.mvp.views.JoinBetaView;
 
@@ -35,8 +36,9 @@ public class JoinBetaPresenter {
         if(isValidEmail(email)) {
             EventBus.getDefault().post(new JoinBetaEvent(email.toString()));
             joinBetaView.hideDialog();
+            joinBetaView.showMessage(R.string.valid_email);
         } else
-            joinBetaView.showMessage();
+            joinBetaView.showMessage(R.string.invalid_email);
     }
 
     private boolean isValidEmail(CharSequence email) {
