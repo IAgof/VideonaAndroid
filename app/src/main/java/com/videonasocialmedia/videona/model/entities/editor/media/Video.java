@@ -102,5 +102,4 @@ public class Video extends Media {
         this.fileDuration = fileDuration;
     }
 
-
 }
