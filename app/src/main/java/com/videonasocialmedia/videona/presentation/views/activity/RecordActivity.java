@@ -247,13 +247,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void onEvent(JoinBetaEvent event) {
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
-        JSONObject props = new JSONObject();
-        try {
-            props.put("$email", email); //Special properties in Mixpanel use $ before property name
-            mixpanel.getPeople().set(props);
-        } catch (JSONException e) {
-            Log.e("Mixpanel error", String.valueOf(e), e);
-        }
+        mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before
+                                                   // property name
     }
 
     @Override
