@@ -20,6 +20,16 @@ android {
         // Enabling multidex support.
         multiDexEnabled true
     }
+    productFlavors {
+        alpha {
+            applicationId "com.videonasocialmedia.videona.alpha"
+            versionName "1.0-alpha"
+        }
+        stable {
+            applicationId "com.videonasocialmedia.videona.stable"
+            versionName "1.0-stable"
+        }
+    }
     buildTypes {
         release {
             buildConfigField "String", "MIXPANEL_TOKEN", "\"985b2aeb535dbc92b81fb5cce7ad1212\""
