@@ -25,7 +25,7 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
-import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRemovedFromProjectEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
