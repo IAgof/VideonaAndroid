@@ -1,88 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/back_rectangle" >
+    android:background="@drawable/back_rectangle"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp" >
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/join_beta"
-            android:textSize="25sp"
-            android:gravity="center"
-            android:textColor="@android:color/white"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/join_beta"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
+
         <ImageView
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/join_beta_button_cancel_selector"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:padding="5dp"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/join_beta_button_cancel_selector" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="@string/content_join_beta_dialog"
         android:layout_gravity="center_vertical|end"
         android:layout_margin="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
-    
+        android:layout_marginRight="10dp"
+        android:text="@string/content_join_beta_dialog"
+        android:textColor="@android:color/white" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp" >
+        android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/email_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/join_beta_icon_mail"
+            android:layout_alignParentStart="true"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_alignParentStart="true" />
+            android:src="@drawable/join_beta_icon_mail" />
+
         <EditText
             android:id="@+id/email"
-            android:inputType="textEmailAddress"
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:hint="@string/email"
-            android:textColor="@android:color/white"
-            android:background="@drawable/back_rectangle"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toEndOf="@id/email_icon"
-            android:layout_toStartOf="@+id/sendEmail" />
+            android:layout_toStartOf="@+id/sendEmail"
+            android:background="@drawable/back_rectangle"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:textColor="@android:color/white" />
+
         <Button
             android:id="@+id/sendEmail"
             android:layout_width="80dp"
             android:layout_height="40dp"
-            android:text="@string/send_email"
-            android:textColor="@android:color/white"
-            android:textAlignment="center"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="center"
-            android:background="@drawable/button_color_selector"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_alignParentEnd="true" />
+            android:background="@drawable/button_color_selector"
+            android:text="@string/send_email"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
     </RelativeLayout>
 
 </LinearLayout>

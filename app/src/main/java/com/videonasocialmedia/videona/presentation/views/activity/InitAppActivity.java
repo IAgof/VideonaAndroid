@@ -71,7 +71,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         setContentView(R.layout.activity_init_app);
         if (BuildConfig.DEBUG) {
             //Wait longer while debug so we can start qordoba sandbox mode on splash screen
-            MINIMUN_WAIT_TIME = 10900;
+            MINIMUN_WAIT_TIME = 10000;
         } else {
             MINIMUN_WAIT_TIME = 900;
         }
@@ -87,6 +87,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         checkAndRequestPermissions();
         SplashScreenTask splashScreenTask = new SplashScreenTask();
+        splashScreenTask.execute();
         mixpanel.timeEvent("Time in Init Activity");
     }
 
@@ -354,8 +355,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
      * @throws IOException
      */
     private void initPaths() throws IOException {
-
-
         checkRootPathMovies();
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
@@ -372,16 +371,13 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     //TODO Delete this method, only util after release v0.3.23.
     // Clean old music files and temp folder.
     private void checkAndDeleteOldMusicSongs() {
-
         deleteMusicResources();
-
     }
 
     // Don't exist music resource ids in app
     // Delete one by one every song
     // Cannot delete folder temp and after create, app crash coming back from settings :(
     private void deleteMusicResources() {
-
         int musicId[] = {2131099648, 2131099650, 2131099651, 2131099653, 2131099654, 2131099655};
 
         for (int i = 0; i < musicId.length; i++) {
@@ -392,7 +388,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
             if (file.exists()) {
                 file.delete();
             }
-
         }
     }
 
@@ -477,6 +472,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
+                waitForCriticalPermissions();
                 setup();
             } catch (Exception e) {
                 Log.e("SETUP", "setup failed", e);
@@ -503,6 +499,22 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         private void exitSplashScreen() {
             navigate(RecordActivity.class);
         }
-    }
 
+        private void waitForCriticalPermissions() {
+            while (!areCriticalPermissionsGranted()) {
+                //just wait
+                //TODO reimplement using handlers and semaphores
+            }
+        }
+
+        private boolean areCriticalPermissionsGranted() {
+            boolean granted=ContextCompat.checkSelfPermission(InitAppActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(InitAppActivity.this,
+                            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(InitAppActivity.this,
+                            Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+            return granted;
+        }
+    }
 }

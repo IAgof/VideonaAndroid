@@ -45,6 +45,7 @@ public abstract class VideonaActivity extends Activity {
     protected static final String ANDROID_PUSH_SENDER_ID = "783686583047";
     protected MixpanelAPI mixpanel;
     protected Tracker tracker;
+    protected boolean criticalPermissionDenied=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,6 @@ public abstract class VideonaActivity extends Activity {
             checkStoragePermissions();
             checkAudioStoragePermissions();
             checkCameraPermissions();
-            waitForCriticalPermissions();
         }
     }
 
@@ -135,22 +135,6 @@ public abstract class VideonaActivity extends Activity {
         }
     }
 
-    private void waitForCriticalPermissions() {
-        while (!areCriticalPermissionsGranted()) {
-            //just wait
-            //TODO reimplement using handlers and semaphores
-        }
-    }
-
-    private boolean areCriticalPermissionsGranted() {
-        return ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED;
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
@@ -172,6 +156,5 @@ public abstract class VideonaActivity extends Activity {
     private void showCloseAppDialog() {
         CriticalPermissionsDeniedDialogFragment dialog= new CriticalPermissionsDeniedDialogFragment();
         dialog.show(getFragmentManager(), "closeAppBecauseOfPermissionsDialog");
-
     }
 }
