@@ -1,9 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,12 +12,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
@@ -30,7 +24,6 @@ import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
 import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.PermissionConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,7 +135,14 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
                 // example: show what's new
                 // could be appear a mix panel popup with improvements.
+
+                // Repeat this method for security, if user delete app data miss this configs.
+                setupCameraSettings();
+
+                createUserProfile();
+
                 initSettings();
+                checkAndDeleteOldMusicSongs();
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
@@ -150,6 +150,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 setupCameraSettings();
                 createUserProfile();
                 initSettings();
+                checkAndDeleteOldMusicSongs();
                 break;
             default:
                 break;
@@ -361,7 +362,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         checkAndInitPath(Constants.PATH_APP_MASTERS);
         checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
 
-        checkAndDeleteOldMusicSongs();
 
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
