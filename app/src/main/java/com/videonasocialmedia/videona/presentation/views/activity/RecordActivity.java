@@ -7,28 +7,21 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -57,7 +50,6 @@ import com.videonasocialmedia.videona.presentation.views.customviews.CircleImage
 import com.videonasocialmedia.videona.presentation.views.fragment.JoinBetaDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
-import com.videonasocialmedia.videona.utils.PermissionConstants;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -111,7 +103,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     ImageView rotateDeviceHint;
     @InjectView(R.id.button_share)
     ImageButton shareButton;
-    
+
     private RecordPresenter recordPresenter;
     private EffectAdapter cameraDistortionEffectsAdapter;
     private EffectAdapter cameraColorEffectsAdapter;
@@ -120,7 +112,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean colorFilterHidden;
     private boolean recording;
     private OrientationHelper orientationHelper;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,16 +177,17 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     private void createProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.dialog_processing));
-        progressDialog.setTitle(getString(R.string.please_wait));
-        progressDialog.setIndeterminate(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.export_progress_dialog, null);
+        progressDialog = builder.setCancelable(false)
+                .setView(dialogView)
+                .create();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-            checkAndRequestPermissions();
+        checkAndRequestPermissions();
         recordPresenter.onStart();
         mixpanel.timeEvent("Time in Record Activity");
     }
@@ -251,7 +244,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         new JoinBetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
     }
 
-    public void onEvent(JoinBetaEvent event){
+    public void onEvent(JoinBetaEvent event) {
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
         mixpanel.getPeople().set("Email", email);
@@ -544,21 +537,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showProgressDialog() {
         progressDialog.show();
-        progressDialog.setIcon(R.drawable.icon_cut_normal);
-
-        ((TextView) progressDialog.findViewById(Resources.getSystem()
-                .getIdentifier("message", "id", "android")))
-                .setTextColor(Color.WHITE);
-
-        ((TextView) progressDialog.findViewById(Resources.getSystem()
-                .getIdentifier("alertTitle", "id", "android")))
-                .setTextColor(Color.WHITE);
-
-        progressDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id",
-                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
-
-        progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
-                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
     }
 
     @Override
