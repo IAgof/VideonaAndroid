@@ -1,12 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    packagingOptions {
-        exclude 'LICENSE.txt'
-    }
-}
-
-android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     useLibrary 'org.apache.http.legacy'
@@ -46,11 +40,13 @@ android {
             resValue "string", "GOOGLE_ANALYTICS_ID", "UA-XXXXXXXX-1"
         }
     }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
     dexOptions {
         incremental true
         javaMaxHeapSize "2048M"
     }
-
     lintOptions {
         disable 'MissingTranslation'
     }
