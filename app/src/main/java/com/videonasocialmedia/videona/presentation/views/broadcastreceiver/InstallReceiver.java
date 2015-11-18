@@ -21,7 +21,6 @@ public class InstallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         //handleIntent(context, intent);
-        Log.d("InstallReceiver", "tracker campaign receiver on first installation");
         new CampaignTrackingReceiver().onReceive(context, intent);
     }
 

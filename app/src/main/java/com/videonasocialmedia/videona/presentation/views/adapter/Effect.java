@@ -75,7 +75,7 @@ public final class Effect {
                 new Effect("Stretch", "FX2",R.drawable.common_filter_distortion_stretch,
                         Filters.FILTER_STRETCH));
         distortionEffects.add(
-                new Effect("Dent", "FX3",R.drawable.common_filter_distortion_dent,
+                new Effect("Dent", "FX3", R.drawable.common_filter_distortion_dent,
                         Filters.FILTER_DENT));
         distortionEffects.add(
                 new Effect("Mirror", "FX4",R.drawable.common_filter_distortion_mirror,

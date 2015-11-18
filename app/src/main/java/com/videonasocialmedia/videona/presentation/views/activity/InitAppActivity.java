@@ -183,7 +183,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     /**
      * Checks the available cameras on the device (back/front)
      */
-
     private void checkAvailableCameras() {
         if (camera != null) {
             releaseCamera();

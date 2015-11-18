@@ -13,10 +13,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -42,10 +40,8 @@ public class AboutActivity extends VideonaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ButterKnife.inject(this);
-
-        String version= this.getString(R.string.versionContent) + " "
-                + BuildConfig.VERSION_NAME + "\n";
-        versionName.setText(version);
+        versionName.setText(this.getString(R.string.versionContent) + " " +
+                BuildConfig.VERSION_NAME + "\n");
     }
 
     @Override
