@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/edit_fragment_fx_button_item1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/edit_fragment_fx_icon_intro_outro_normal"
+        android:background="@null"
+        android:padding="16dp"
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_fx_button_item2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/edit_fragment_fx_icon_reverse_normal"
+        android:background="@null"
+        android:padding="16dp"
+        android:adjustViewBounds="false"
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_fx_button_item3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/edit_fragment_fx_icon_speed_normal"
+        android:background="@null"
+        android:padding="16dp"
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
+
+    <ImageButton
+        android:id="@+id/edit_fragment_fx_button_item4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/edit_fragment_fx_icon_text_normal"
+        android:background="@null"
+        android:padding="16dp"
+        android:alpha="0.20"
+        android:layout_weight="9"
+        android:scaleType="fitCenter" />
+</LinearLayout>

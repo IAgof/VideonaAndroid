@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.videonasocialmedia.videona.presentation.views.activity.VideoFullScreenPreviewActivity"
+    android:background="@android:color/black" >
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:transitionName="preview of one video" />
+
+    <ImageButton
+        android:id="@+id/edit_button_fullscreen_out"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/videoView"
+        android:layout_alignLeft="@+id/videoView"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_icon_fullscreen_out_selector" />
+
+</RelativeLayout>

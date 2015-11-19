@@ -25,6 +25,8 @@
     <string name="confirmDeleteTitle2">videos</string>
     <string name="confirmDeleteMessage">¿Do you want to delete this elements?</string>
 
+    <!-- Trim fragment -->
+    <string name="confirmTrim">Done</string>
 
     <!-- Music genres -->
     <string name="music_genre_rock">Rock</string>
@@ -42,6 +44,8 @@
     <string name="music_genre_caribbean">Caribbean</string>
     <string name="music_genre_folk">Folk</string>
 
+    <!-- Activity Video Preview -->
+    <string name="invalid_video">This video is not valid. Please, select another one</string>
 
     <!-- Filters_Effects -->
     <string name="filter_effect_sepia">sepia</string>
