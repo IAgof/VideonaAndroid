@@ -19,14 +19,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_advanced_section">
-        <Preference
-            android:key="join_beta"
-            android:title="@string/join_beta">
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/title_vote_section">
         <Preference
             android:title="@string/content_vote_section">
