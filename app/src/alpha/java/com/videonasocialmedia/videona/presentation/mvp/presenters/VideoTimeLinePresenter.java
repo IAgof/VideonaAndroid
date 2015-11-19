@@ -28,7 +28,6 @@ public class VideoTimeLinePresenter implements OnVideosRetrieved, OnReorderMedia
         reorderMediaItemUseCase= new ReorderMediaItemUseCase();
     }
 
-
     @Deprecated
     @Override
     public void onVideosRetrieved(List<Video> videoList) {

@@ -9,9 +9,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -19,23 +17,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.KeyEvent;
-import android.view.View;
 
 import com.google.android.gms.analytics.Tracker;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.qordoba.sdk.Qordoba;
 import com.qordoba.sdk.common.QordobaContextWrapper;
 import com.videonasocialmedia.videona.BuildConfig;
-import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.views.fragment.CriticalPermissionsDeniedDialogFragment;
-import com.videonasocialmedia.videona.presentation.views.fragment.JoinBetaDialogFragment;
 import com.videonasocialmedia.videona.utils.PermissionConstants;
 
 /**
- * /**
- * Videona base activity. Every
+ * Videona base activity.
  *
  * @author vlf
  * @since 04/05/2015
@@ -45,7 +38,7 @@ public abstract class VideonaActivity extends Activity {
     protected static final String ANDROID_PUSH_SENDER_ID = "783686583047";
     protected MixpanelAPI mixpanel;
     protected Tracker tracker;
-    protected boolean criticalPermissionDenied=false;
+    protected boolean criticalPermissionDenied = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +147,7 @@ public abstract class VideonaActivity extends Activity {
     }
 
     private void showCloseAppDialog() {
-        CriticalPermissionsDeniedDialogFragment dialog= new CriticalPermissionsDeniedDialogFragment();
+        CriticalPermissionsDeniedDialogFragment dialog = new CriticalPermissionsDeniedDialogFragment();
         dialog.show(getFragmentManager(), "closeAppBecauseOfPermissionsDialog");
     }
 }

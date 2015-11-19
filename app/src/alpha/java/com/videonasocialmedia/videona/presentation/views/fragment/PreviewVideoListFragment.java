@@ -12,7 +12,6 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.ActivityOptions;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;

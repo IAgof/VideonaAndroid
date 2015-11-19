@@ -30,7 +30,7 @@ public interface RecordView extends MVPView {
 
     void hideChronometer();
 
-    void hideThumbClipsRecorded();
+    void hideRecordedVideoThumb();
 
     void showRecordedVideoThumb(String path);
 

@@ -76,7 +76,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     GLCameraEncoderView cameraView;
     @InjectView(R.id.button_change_camera)
     ImageButton rotateCameraButton;
-    @InjectView(R.id.button_thumb_clip_recorded)
+    @InjectView(R.id.button_navigate_edit)
     CircleImageView buttonThumbClipRecorded;
     @InjectView(R.id.record_catalog_recycler_distortion_effects)
     RecyclerView effectsRecycler;
@@ -489,7 +489,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             mixpanel.track("Change camera Button clicked on preview", null);
     }
 
-    @OnClick(R.id.button_thumb_clip_recorded)
+    @OnClick(R.id.button_navigate_edit)
     public void navigateToEdit() {
         if (!recording) {
             Intent edit = new Intent(this, EditActivity.class);
@@ -523,7 +523,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
 
     @Override
-    public void hideThumbClipsRecorded() {
+    public void hideRecordedVideoThumb() {
         buttonThumbClipRecorded.setVisibility(View.INVISIBLE);
     }
 

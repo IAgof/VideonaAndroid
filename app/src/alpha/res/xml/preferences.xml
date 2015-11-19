@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/title_camera_section">
+
+        <ListPreference
+            android:key="list_preference_resolution"
+            android:title="@string/resolution"
+            android:dialogTitle="@string/resolution"
+            android:defaultValue="@string/low_resolution_value"/>
+
+        <ListPreference
+            android:key="list_preference_quality"
+            android:title="@string/quality"
+            android:dialogTitle="@string/quality"
+            android:defaultValue="@string/good_quality_value" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_advanced_section">
+        <Preference
+            android:key="join_beta"
+            android:title="@string/join_beta">
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_vote_section">
+        <Preference
+            android:title="@string/content_vote_section">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="market://details?id=com.videonasocialmedia.videona" />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_contact_section">
+        <Preference
+            android:title="@string/content_contact_section">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="mailto:info@videona.com" />
+            />
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/title_about_section">
+        <Preference
+            android:title="@string/aboutUsTitle">
+            <intent android:action=".presentation.views.activity.AboutActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

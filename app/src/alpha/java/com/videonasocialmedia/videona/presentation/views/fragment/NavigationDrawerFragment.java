@@ -12,7 +12,6 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;

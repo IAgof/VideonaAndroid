@@ -42,6 +42,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 import com.videonasocialmedia.videona.presentation.views.customviews.RangeSeekBar;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
+
 import com.videonasocialmedia.videona.utils.Size;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 

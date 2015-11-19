@@ -82,7 +82,7 @@ public class RecordPresenter {
     }
 
     private void hideInitialsButtons() {
-        recordView.hideThumbClipsRecorded();
+        recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
         recordView.hideChronometer();
     }
@@ -167,7 +167,7 @@ public class RecordPresenter {
         recordView.startChronometer();
         recordView.showChronometer();
         recordView.hideMenuOptions();
-        recordView.hideThumbClipsRecorded();
+        recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
         firstTimeRecording = false;
 
