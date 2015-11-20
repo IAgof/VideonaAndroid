@@ -178,7 +178,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     private void createProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.export_progress_dialog, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
         progressDialog = builder.setCancelable(false)
                 .setView(dialogView)
                 .create();

@@ -15,10 +15,8 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,6 +46,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFrag
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.PreviewVideoListFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.SimpleDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
@@ -172,7 +171,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     private void createProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.export_progress_dialog, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
         progressDialog = builder.setCancelable(false)
                 .setView(dialogView)
                 .create();
@@ -281,16 +280,12 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void showError(final int causeTextResource) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
-                builder.setMessage(causeTextResource)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.ok, null);
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
+        SimpleDialogFragment errorDialog= new SimpleDialogFragment();
+        errorDialog.setTitle(getString(R.string.error));
+        String message= getResources().getString(causeTextResource);
+
+        errorDialog.setMessage(message);
+        errorDialog.getDialog().show();
     }
 
     @Override
