@@ -27,7 +27,6 @@
             android:layout_height="match_parent"
             CustomManualFocusView:focus_icon="@drawable/activity_record_icon_focus_focused" />
 
-
         <ImageView
             android:id="@+id/rotateDeviceHint"
             android:layout_width="150dp"
@@ -35,7 +34,6 @@
             android:layout_centerInParent="true"
             android:src="@drawable/common_icon_rotate_device"
             android:visibility="gone" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -158,7 +156,6 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
@@ -258,7 +255,6 @@
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/record_activity_icon_flash_camera_selector" />
 
-
                             <ImageButton
                                 android:id="@+id/button_change_camera"
                                 android:layout_width="0dp"
@@ -326,7 +322,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="2" />
-
 
                             <ImageButton
                                 android:id="@+id/button_camera_effect_fx"
