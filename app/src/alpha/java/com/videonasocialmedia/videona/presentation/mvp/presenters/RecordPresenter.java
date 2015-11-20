@@ -182,11 +182,8 @@ public class RecordPresenter {
 
     private String moveVideoToMastersFolder() {
         File originalFile = new File(config.getOutputPath());
-        String fileName = originalFile.getName();
-        if (fileName.isEmpty()) {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            fileName = "VID_" + timeStamp + ".mp4";
-        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
         originalFile.renameTo(destinationFile);
         return destinationFile.getAbsolutePath();
