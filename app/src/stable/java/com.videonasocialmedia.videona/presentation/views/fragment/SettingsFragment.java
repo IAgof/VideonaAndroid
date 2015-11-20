@@ -51,8 +51,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        resolutionPref = (ListPreference) findPreference("list_preference_resolution");
-        qualityPref = (ListPreference) findPreference("list_preference_quality");
+        resolutionPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION);
+        qualityPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY);
         joinBetaPref = findPreference("join_beta");
         joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

@@ -42,8 +42,7 @@ public final class Effect {
                 new Effect("aqua", "AD1", R.drawable.common_filter_color_aqua,
                         Filters.FILTER_AQUA));
         colorEffects.add(
-                new Effect("posterize_bw",
-                        "AD2", R.drawable.common_filter_color_postericebw,
+                new Effect("posterize_bw", "AD2", R.drawable.common_filter_color_postericebw,
                         Filters.FILTER_POSTERIZE_BW));
         colorEffects.add(
                 new Effect("emboss", "AD3", R.drawable.common_filter_color_emboss,

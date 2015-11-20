@@ -65,7 +65,7 @@ public class PreferencesPresenter {
         ArrayList<String> resolutionNames = new ArrayList<>();
         ArrayList<String> resolutionValues = new ArrayList<>();
         String defaultResolution = null;
-        String key = "list_preference_resolution";
+        String key = ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION; //"list_preference_resolution";
         boolean isPaidApp = true;
         // TODO check with flavors the app version (free/paid)
 
