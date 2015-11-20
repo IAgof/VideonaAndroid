@@ -40,8 +40,8 @@ public class AboutActivity extends VideonaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ButterKnife.inject(this);
-        versionName.setText(this.getString(R.string.versionContent) + " " +
-                BuildConfig.VERSION_NAME + "\n");
+        String version= BuildConfig.VERSION_NAME + "\n";
+        versionName.setText(version);
     }
 
     @Override
