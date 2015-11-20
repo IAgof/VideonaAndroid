@@ -1,0 +1,3 @@
+TASK com.videonasocialmedia.videona id=3258
+  ACTIVITY com.videonasocialmedia.videona/.presentation.views.activity.InitAppActivity 3d978b0a pid=5747
+    Failure while dumping the activity: java.io.IOException: Timeout
