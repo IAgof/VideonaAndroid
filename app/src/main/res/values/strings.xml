@@ -2,7 +2,6 @@
 <resources>
 
     <string name="videona_web">http://www.videona.com</string>
-    <string name="app_name">Videona</string>
     <string name="action_settings">Settings</string>
     <string name="toast_exit">Press back to exit</string>
     <string name="edit_title_name">Edit Room</string>
