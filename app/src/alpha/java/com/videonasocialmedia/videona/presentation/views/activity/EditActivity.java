@@ -80,7 +80,6 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
         DrawerLayout.DrawerListener, OnTrimConfirmListener, DuplicateClipListener, RazorClipListener {
 
-    private static EditActivity parent;
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
     @InjectView(R.id.edit_button_scissor)
@@ -126,12 +125,11 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
      * Boolean, register button back pressed to go to record Activity
      */
     private boolean buttonBackPressed = false;
-    private ProgressDialog progressDialog;
+    private AlertDialog progressDialog;
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
-        this.parent = parent;
         final Thread t = new Thread() {
             @Override
             public void run() {
@@ -169,18 +167,15 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
         editPresenter.onCreate();
         createProgressDialog();
-
         drawerLayout.setDrawerListener(this);
-
     }
 
-
-
     private void createProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.dialog_processing));
-        progressDialog.setTitle(getString(R.string.please_wait));
-        progressDialog.setIndeterminate(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.export_progress_dialog, null);
+        progressDialog = builder.setCancelable(false)
+                .setView(dialogView)
+                .create();
     }
 
     @Override
@@ -219,9 +214,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @OnClick(R.id.button_navigate_drawer)
     public void navigationDrawerListener() {
-
         drawerLayout.openDrawer(navigatorView);
-
     }
 
     @OnClick(R.id.edit_button_ok)
@@ -288,10 +281,9 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void showError(final int causeTextResource) {
-        parent.runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(parent,
-                        AlertDialog.THEME_HOLO_LIGHT);
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
                 builder.setMessage(causeTextResource)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, null);
@@ -323,21 +315,6 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     @Override
     public void showProgressDialog() {
         progressDialog.show();
-        progressDialog.setIcon(R.drawable.activity_edit_icon_cut_normal);
-
-        ((TextView) progressDialog.findViewById(Resources.getSystem()
-                .getIdentifier("message", "id", "android")))
-                .setTextColor(Color.WHITE);
-
-        ((TextView) progressDialog.findViewById(Resources.getSystem()
-                .getIdentifier("alertTitle", "id", "android")))
-                .setTextColor(Color.WHITE);
-
-        progressDialog.findViewById(Resources.getSystem().getIdentifier("topPanel", "id",
-                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_1));
-
-        progressDialog.findViewById(Resources.getSystem().getIdentifier("customPanel", "id",
-                "android")).setBackgroundColor(getResources().getColor(R.color.videona_blue_2));
     }
 
 
