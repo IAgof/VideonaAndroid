@@ -33,6 +33,7 @@ import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
@@ -131,7 +132,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     private VideoResolution obtainResolutionFromPreferences(SharedPreferences sharedPreferences) {
         VideoResolution videoResolution;
-        String key_resolution = "list_preference_resolution";
+        String key_resolution = ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION; //"list_preference_resolution";
         String resolution = sharedPreferences.getString(key_resolution, "");
         if (resolution.compareTo(context.getString(R.string.good_resolution_value)) == 0) {
             videoResolution = new VideoResolution(VideoResolution.Resolution.HD1080);
@@ -144,7 +145,8 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private int obtainVideoBitrateFromPreferences(SharedPreferences sharedPreferences) {
-        String key_quality = "list_preference_quality";
+
+        String key_quality = ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY;
         String quality = sharedPreferences.getString(key_quality, "");
         Log.d(LOG_TAG, "list_preferences_quality " + quality);
         VideoQuality videoQuality;
@@ -272,11 +274,8 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     private String moveVideoToMastersFolder() {
         File originalFile = new File(config.getOutputPath());
-        String fileName = originalFile.getName();
-        if (fileName.isEmpty()) {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            fileName = "VID_" + timeStamp + ".mp4";
-        }
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
         originalFile.renameTo(destinationFile);
         return destinationFile.getAbsolutePath();

@@ -1,8 +1,6 @@
 package com.videonasocialmedia.avrecorder;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
 
@@ -57,10 +55,16 @@ public class SessionConfig {
     }
 
     private File createOutputFile(String path) {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "VID_" + timeStamp + ".mp4";
+        // Not time stamp, reuse name
+        // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        String fileName = "VID_temp.mp4";
         File rootDir = new File(path);
         rootDir.mkdir();
+        File vTemp = new File(rootDir, fileName);
+        if(vTemp.exists()) {
+            vTemp.delete(); // Delete old temp files.
+        }
         return new File(rootDir, fileName);
     }
 

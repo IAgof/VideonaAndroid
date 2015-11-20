@@ -47,6 +47,9 @@
     <!-- Activity Video Preview -->
     <string name="invalid_video">This video is not valid. Please, select another one</string>
 
+    <!-- Record Activity -->
+    <string name="chronometerDefault">00:00</string>
+
     <!-- Filters_Effects -->
     <string name="filter_effect_sepia">sepia</string>
     <string name="filter_effect_aqua">aqua</string>

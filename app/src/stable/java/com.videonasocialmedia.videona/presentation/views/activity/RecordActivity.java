@@ -276,7 +276,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     private void resetChronometer() {
         chronometer.setBase(SystemClock.elapsedRealtime());
-        chronometer.setText("00:00");
+        chronometer.setText(getString(R.string.chronometerDefault));
     }
 
     private void showRecordingIndicator() {
