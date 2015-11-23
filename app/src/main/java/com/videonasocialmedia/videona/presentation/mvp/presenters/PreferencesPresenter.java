@@ -109,7 +109,7 @@ public class PreferencesPresenter {
         ArrayList<String> qualityNames = new ArrayList<>();
         ArrayList<String> qualityValues = new ArrayList<>();
         String defaultQuality = null;
-        String key = "list_preference_quality";
+        String key = ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY; //"list_preference_quality";
         boolean isPaidApp = true;
         // TODO check with flavors the app version (free/paid)
 

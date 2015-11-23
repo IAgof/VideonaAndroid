@@ -27,7 +27,6 @@ public class ConfigPreferences {
     public final static String BACK_CAMERA_720P_SUPPORTED = "back_camera_720p_supported"; // HD
     public final static String BACK_CAMERA_1080P_SUPPORTED = "back_camera_1080p_supported"; // Full HD
     public final static String BACK_CAMERA_2160P_SUPPORTED = "back_camera_2160p_supported"; // 4K
-
     public final static String KEY_LIST_PREFERENCES_QUALITY = "list_preferences_quality";
     public final static String KEY_LIST_PREFERENCES_RESOLUTION = "list_preferences_resolution";
 }
