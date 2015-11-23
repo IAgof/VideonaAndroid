@@ -71,9 +71,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         ButterKnife.inject(this);
 
         setVersionCode();
-
-        Log.d("APP_NAME",getString(R.string.app_name));
-
         if (BuildConfig.DEBUG) {
             //Wait longer while debug so we can start qordoba sandbox mode on splash screen
             MINIMUN_WAIT_TIME = 10000;
@@ -83,7 +80,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     }
 
     private void setVersionCode() {
-        String version= this.getString(R.string.versionTitle)+" "+ BuildConfig.VERSION_NAME;
+        String version = "v "+ BuildConfig.VERSION_NAME;
         versionName.setText(version);
     }
 

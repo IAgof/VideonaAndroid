@@ -33,7 +33,7 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:padding="5dp"
-            android:src="@drawable/join_beta_button_cancel_selector" />
+            android:src="@drawable/common_icon_close_dialog_selector" />
     </RelativeLayout>
 
     <TextView
