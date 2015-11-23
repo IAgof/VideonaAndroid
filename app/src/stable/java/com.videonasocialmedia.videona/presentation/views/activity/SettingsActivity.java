@@ -23,6 +23,7 @@ import de.greenrobot.event.EventBus;
  */
 public class SettingsActivity extends VideonaActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,7 @@ public class SettingsActivity extends VideonaActivity {
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+
     }
 
     @Override
@@ -59,5 +61,6 @@ public class SettingsActivity extends VideonaActivity {
         mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before
                                                    // property name
     }
+
 
 }

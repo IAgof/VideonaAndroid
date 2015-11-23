@@ -9,11 +9,13 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
@@ -25,6 +27,7 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -47,6 +50,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.videona.utils.Utils;
 
 import java.util.List;
 
@@ -110,6 +114,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean colorFilterHidden;
     private boolean recording;
     private OrientationHelper orientationHelper;
+
+    private boolean mUseImmersiveMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +188,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onResume();
         recordPresenter.onResume();
         recording = false;
+        hideSystemUi();
     }
 
     @Override
@@ -203,6 +210,36 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     protected void onDestroy() {
         super.onDestroy();
         recordPresenter.onDestroy();
+    }
+
+    private void hideSystemUi() {
+        if (!Utils.isKitKat() || !mUseImmersiveMode) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else if (mUseImmersiveMode) {
+            setKitKatWindowFlags();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
+            setKitKatWindowFlags();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void setKitKatWindowFlags() {
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
     }
 
     @OnClick(R.id.button_record)
