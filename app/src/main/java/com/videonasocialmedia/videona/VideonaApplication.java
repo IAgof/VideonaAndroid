@@ -47,6 +47,8 @@ public class VideonaApplication extends Application {
 
     private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        if (BuildConfig.DEBUG)
+            analytics.setDryRun(true);
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         appTracker = analytics.newTracker(R.xml.app_tracker);
         appTracker.enableAdvertisingIdCollection(true);
