@@ -19,7 +19,9 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.utils.Constants;
 
@@ -27,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -97,10 +100,24 @@ public class RecordPresenter {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
+        showThumbAndNumber();
         Log.d(LOG_TAG, "resume presenter");
+    }
 
-
-
+    private void showThumbAndNumber() {
+        GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        final List mediaInProject=getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (mediaInProject!=null && mediaInProject.size()>0){
+            int lastItemIndex= mediaInProject.size()-1;
+            final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
+            this.recordedVideosNumber=mediaInProject.size();
+            recordView.showVideosRecordedNumber(recordedVideosNumber);
+            recordView.showRecordedVideoThumb(lastItem.getMediaPath());
+        }
+        else{
+            recordView.hideRecordedVideoThumb();
+            recordView.hideVideosRecordedNumber();
+        }
     }
 
     public void onPause() {

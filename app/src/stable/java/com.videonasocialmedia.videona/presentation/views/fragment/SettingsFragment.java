@@ -70,6 +70,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         super.onResume();
         preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
         Qordoba.updateScreen(getActivity());
     }
 
@@ -77,6 +78,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public void onPause() {
         super.onPause();
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
     }
 
     @Override

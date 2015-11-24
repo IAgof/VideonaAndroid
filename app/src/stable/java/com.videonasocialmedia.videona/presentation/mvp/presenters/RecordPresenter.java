@@ -93,7 +93,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordedVideosNumber = 0;
 
         initRecorder(context, cameraPreview, sharedPreferences);
-
         hideInitialsButtons();
     }
 
@@ -176,7 +175,24 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
+        showThumbAndNumber();
         Log.d(LOG_TAG, "resume presenter");
+    }
+
+    private void showThumbAndNumber() {
+        GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        final List mediaInProject=getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (mediaInProject!=null && mediaInProject.size()>0){
+            int lastItemIndex= mediaInProject.size()-1;
+            final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
+            this.recordedVideosNumber=mediaInProject.size();
+            recordView.showVideosRecordedNumber(recordedVideosNumber);
+            recordView.showRecordedVideoThumb(lastItem.getMediaPath());
+        }
+        else{
+            recordView.hideRecordedVideoThumb();
+            recordView.hideVideosRecordedNumber();
+        }
     }
 
     public void onPause() {
