@@ -2,6 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:title="My account">
+
+        <Preference
+            android:key="username"
+            android:title="Username" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/title_camera_section">
 
         <ListPreference
