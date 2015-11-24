@@ -178,6 +178,11 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.onHostActivityResumed();
         GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         final List mediaOnProject=getMediaListFromProjectUseCase.getMediaListFromProject();
+        showThumbAndNumber(mediaOnProject);
+        Log.d(LOG_TAG, "resume presenter");
+    }
+
+    private void showThumbAndNumber(List mediaOnProject) {
         if (mediaOnProject!=null && mediaOnProject.size()>0){
             int lastItemIndex= mediaOnProject.size()-1;
             final Video lastItem= (Video)mediaOnProject.get(lastItemIndex);
@@ -189,7 +194,6 @@ public class RecordPresenter implements OnExportFinishedListener {
             recordView.hideRecordedVideoThumb();
             recordView.hideVideosRecordedNumber();
         }
-        Log.d(LOG_TAG, "resume presenter");
     }
 
     public void onPause() {
