@@ -176,6 +176,19 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
+        GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        final List mediaOnProject=getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (mediaOnProject!=null && mediaOnProject.size()>0){
+            int lastItemIndex= mediaOnProject.size()-1;
+            final Video lastItem= (Video)mediaOnProject.get(lastItemIndex);
+            this.recordedVideosNumber=mediaOnProject.size();
+            recordView.showVideosRecordedNumber(lastItemIndex);
+            recordView.showRecordedVideoThumb(lastItem.getMediaPath());
+        }
+        else{
+            recordView.hideRecordedVideoThumb();
+            recordView.hideVideosRecordedNumber();
+        }
         Log.d(LOG_TAG, "resume presenter");
     }
 
