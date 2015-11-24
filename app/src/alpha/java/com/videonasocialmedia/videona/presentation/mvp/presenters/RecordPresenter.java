@@ -111,7 +111,7 @@ public class RecordPresenter {
             int lastItemIndex= mediaInProject.size()-1;
             final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
             this.recordedVideosNumber=mediaInProject.size();
-            recordView.showVideosRecordedNumber(lastItemIndex);
+            recordView.showVideosRecordedNumber(recordedVideosNumber);
             recordView.showRecordedVideoThumb(lastItem.getMediaPath());
         }
         else{
