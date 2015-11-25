@@ -71,4 +71,18 @@
     <color name="transparent_palette_grey">#66666666</color>
 
 
+    <!-- brand color: orange -->
+    <color name="colorPrimary">#0091ea</color>
+    <color name="colorPrimaryDark">#00b8f3</color>
+    <color name="colorPrimaryLight">#00cff7</color>
+    <!-- accent color: red -->
+    <color name="colorAccent">#0091ea</color>
+    <!-- text color: white -->
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="textColorSecondary">#9E9E9E</color>
+    <!-- inverse text color: 87% black -->
+    <color name="textColorPrimaryInverse">#DE000000</color>
+    <color name="textColorSecondaryInverse">#9E9E9E</color>
+
+
 </resources>

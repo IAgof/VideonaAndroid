@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/back_rectangle"
     android:orientation="vertical">
+    <!--android:background="@drawable/back_rectangle" -->
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,8 +24,8 @@
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="@string/join_beta"
-            android:textColor="@android:color/white"
             android:textSize="25sp" />
+
 
         <ImageView
             android:id="@+id/cancel"
@@ -33,7 +34,11 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:padding="5dp"
-            android:src="@drawable/common_icon_close_dialog_selector" />
+            android:src="@drawable/common_icon_close_dialog_selector"
+
+            />
+            <!--android:src="?attr/ic_settings_videona"-->
+
     </RelativeLayout>
 
     <TextView
@@ -44,7 +49,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/content_join_beta_dialog"
-        android:textColor="@android:color/white" />
+         />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -72,10 +77,10 @@
             android:layout_marginRight="5dp"
             android:layout_toEndOf="@id/email_icon"
             android:layout_toStartOf="@+id/sendEmail"
-            android:background="@drawable/back_rectangle"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:textColor="@android:color/white" />
+             />
+        <!-- android:background="@drawable/back_rectangle" -->
 
         <Button
             android:id="@+id/sendEmail"

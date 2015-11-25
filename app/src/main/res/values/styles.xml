@@ -18,10 +18,83 @@
     </style>
 
     <style name="Title">
+        <item name="android:textColor">@color/videona_red_1</item>
         <item name="android:textSize">20dp</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
+    <!-- AppTheme Videona Light -->
+    <style name="VideonaSettingsThemeLight" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+        <!-- some other theme configurations for actionbar, overflow menu etc. -->
+
+        <!-- No action Bar -->
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <!-- FullScreen -->
+        <item name="android:windowFullscreen">true</item>
+
+        <item name="android:dialogTheme">@style/MyDialogStyle</item>
+        <item name="android:alertDialogTheme">@style/MyDialogStyle</item>
+
+        <!-- Icons -->
+        <item name="ic_settings_videona">@drawable/ic_settings_light</item>
+
+        ...
+    </style>
+
+    <!-- http://stackoverflow.com/questions/18456226/theming-dialogpreferences -->
+    <style name="MyDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/videona_blue_6</item>
+        <item name="colorPrimaryDark">@color/videona_blue_3</item>
+        <item name="colorAccent">@color/videona_red_1</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
+
+
+    <!-- AppTheme Videona Dark -->
+    <style name="VideonaSettingsThemeDark" parent="Base.ThemeOverlay.AppCompat.Dark">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+        <!-- some other theme configurations for actionbar, overflow menu etc. -->
+
+        <!-- No action Bar -->
+        <item name="windowActionBar">false</item>
+        <!-- No title -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- FullScreen -->
+        <item name="android:windowFullscreen">true</item>
+
+        <item name="android:dialogTheme">@style/MyDialogStyleDark</item>
+        <item name="android:alertDialogTheme">@style/MyDialogStyleDark</item>
+
+        <item name="ic_settings_videona">@drawable/ic_settings_dark</item>
+
+        ...
+    </style>
+
+    <!-- http://stackoverflow.com/questions/18456226/theming-dialogpreferences -->
+    <style name="MyDialogStyleDark" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/videona_blue_6</item>
+        <item name="colorPrimaryDark">@color/videona_blue_3</item>
+        <item name="colorAccent">@color/videona_red_1</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
+
 
 </resources>

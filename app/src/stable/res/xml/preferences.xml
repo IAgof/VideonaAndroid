@@ -2,7 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/title_camera_section">
+        android:title="@string/title_camera_section"
+        >
 
         <ListPreference
             android:key="list_preferences_resolution"
@@ -22,7 +23,8 @@
         android:title="@string/title_advanced_section">
         <Preference
             android:key="join_beta"
-            android:title="@string/join_beta">
+            android:title="@string/join_beta"
+            >
         </Preference>
     </PreferenceCategory>
 
