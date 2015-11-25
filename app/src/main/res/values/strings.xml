@@ -477,6 +477,7 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="permissionsDeniedMessage">Videona needs some permissions to use the camera or record audio.\nWithout them Videona can\'t continue and will be closed.</string>
     <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
     <string name="error">error</string>
+    <string name="settingsTitle">Settings</string>
 
 
 </resources>
