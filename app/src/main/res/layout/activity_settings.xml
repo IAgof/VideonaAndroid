@@ -11,8 +11,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:theme="@style/toolbarStyle"
-        android:elevation="4dp"/>
+        android:theme="@style/Toolbar"
+        app:title="@string/settingsTitle"
+        android:elevation="4dp" />
 
     <FrameLayout
         android:id="@+id/fragment_preferences"
