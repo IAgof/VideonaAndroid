@@ -20,7 +20,9 @@ import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
+import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -275,5 +277,12 @@ public class RecordPresenter {
         recorder.rotateCamera(rotation);
     }
 
+    public List<ShaderEffect> getDistortionEffectList() {
+        return GetEffectListUseCase.getDistortionEffectList();
+    }
+
+    public List<ShaderEffect> getColorEffectList() {
+        return GetEffectListUseCase.getColorEffectList();
+    }
 
 }

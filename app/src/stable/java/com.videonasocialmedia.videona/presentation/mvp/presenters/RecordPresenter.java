@@ -24,9 +24,11 @@ import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
+import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
@@ -385,6 +387,14 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onExportSuccess(Video exportedVideo) {
         recordView.hideProgressDialog();
         recordView.goToShare(exportedVideo.getMediaPath());
+    }
+
+    public List<ShaderEffect> getDistortionEffectList() {
+        return GetEffectListUseCase.getDistortionEffectList();
+    }
+
+    public List<ShaderEffect> getColorEffectList() {
+        return GetEffectListUseCase.getColorEffectList();
     }
 
 }
