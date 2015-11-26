@@ -17,12 +17,14 @@ import android.view.Surface;
 
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
+import com.videonasocialmedia.avrecorder.overlay.Overlay;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.avrecorder.view.GLCameraView;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -59,7 +61,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private FullFrameRect mFullScreen;
     private FullFrameRect mFullScreenOverlay;
     private int mTextureId;
-    private int mOverlayTextureId;
+//    private int mOverlayTextureId;
     private int mFrameNum;
     private VideoEncoderCore mVideoEncoder;
     private Camera mCamera;
@@ -90,6 +92,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private int mThumbnailRequestedOnFrame;
     private int mCurrentCameraRotation;
     private int cameraInfoOrientation;
+
+    private List<Overlay> overlayList;
+    private boolean watermarkAdded;
 
     public CameraEncoder(SessionConfig config) {
         mState = STATE.INITIALIZING;
@@ -295,9 +300,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mEglSaver.logState();
     }
 
-    public void setPreviewDisplay(GLCameraView display, Drawable overlayImage) {
+    public void setPreviewDisplay(GLCameraView display) {
         checkNotNull(display);
-        mDisplayRenderer = new CameraSurfaceRenderer(this, overlayImage);
+        mDisplayRenderer = new CameraSurfaceRenderer(this);
         // Prep GLSurfaceView and attach Renderer
 
         display.setEGLContextClientVersion(2);
@@ -339,6 +344,52 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mDisplayRenderer.changeFilterMode(filter);
         synchronized (mReadyForFrameFence) {
             mNewFilter = filter;
+        }
+    }
+
+    public void addOverlay(Drawable overlayImage,
+                           int positionX, int positionY, int width, int height) {
+        Overlay overlayToAdd = new Overlay(overlayImage, positionX, positionY, width, height);
+        if (overlayList == null) {
+            overlayList = new ArrayList<>();
+            mDisplayRenderer.setOverlayList(overlayList);
+        }
+        if (watermarkAdded) {
+            int position = overlayList.size() < 2 ? 0 : overlayList.size() - 2;
+            overlayList.add(position, overlayToAdd);
+        }else{
+            overlayList.add(overlayToAdd);
+        }
+    }
+
+    public void removeOverlay(Overlay overlay) {
+        overlayList.remove(overlay);
+    }
+
+    public void addWaterMark(Drawable overlayImage,
+                             int positionX, int positionY, int width, int height) {
+        Overlay watermark = new Overlay(overlayImage, positionX, positionY, width, height);
+        if (overlayList == null) {
+            overlayList = new ArrayList<>();
+            watermarkAdded = false;
+            mDisplayRenderer.setOverlayList(overlayList);
+            mDisplayRenderer.setWatermarkAdded(false);
+        }
+        if (watermarkAdded) {
+            overlayList.set(overlayList.size() - 1, watermark);
+        } else {
+            overlayList.add(watermark);
+            watermarkAdded = true;
+            mDisplayRenderer.setWatermarkAdded(true);
+        }
+
+    }
+
+    public void removeWaterMark() {
+        if (watermarkAdded) {
+            overlayList.remove(overlayList.size() - 1);
+            watermarkAdded = false;
+            mDisplayRenderer.setWatermarkAdded(false);
         }
     }
 
@@ -511,7 +562,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
                 if (mIncomingSizeUpdated) {
                     mFullScreen.getProgram().setTexSize(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
-                    configTexWatermark();
+                    //configTexWatermark();
                     mIncomingSizeUpdated = false;
                 }
 
@@ -522,7 +573,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 if (TRACE) Trace.beginSection("drawVEncoderFrame");
                 GLES20.glViewport(0, 0, mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
                 mFullScreen.drawFrame(mTextureId, mTransform);
-                configViewportWatermark();
+//                configViewportWatermark();
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {
                     mEncodedFirstFrame = true;
@@ -561,23 +612,23 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         if (TRACE) Trace.endSection();
     }
 
-    private void configTexWatermark() {
-        int watermarkSize[] = calculateWatermarkSize();
-        mFullScreenOverlay.getProgram().setTexSize(watermarkSize[0], watermarkSize[1]);
-    }
-
-    private int[] calculateWatermarkSize() {
-        int width = (mSessionConfig.getVideoWidth()*265)/1280;
-        int height = (mSessionConfig.getVideoHeight()*36)/720;
-        return new int[] {width, height};
-    }
-
-    private void configViewportWatermark() {
-        int watermarkSize[] = calculateWatermarkSize();
-        int watermarkPosition = calculateWatermarkPosition();
-        GLES20.glViewport(watermarkPosition, watermarkPosition, watermarkSize[0], watermarkSize[1]);
-        mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
-    }
+//    private void configTexWatermark() {
+//        int watermarkSize[] = calculateWatermarkSize();
+//        mFullScreenOverlay.getProgram().setTexSize(watermarkSize[0], watermarkSize[1]);
+//    }
+//
+//    private int[] calculateWatermarkSize() {
+//        int width = (mSessionConfig.getVideoWidth()*265)/1280;
+//        int height = (mSessionConfig.getVideoHeight()*36)/720;
+//        return new int[] {width, height};
+//    }
+//
+//    private void configViewportWatermark() {
+//        int watermarkSize[] = calculateWatermarkSize();
+//        int watermarkPosition = calculateWatermarkPosition();
+//        GLES20.glViewport(watermarkPosition, watermarkPosition, watermarkSize[0], watermarkSize[1]);
+//        mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
+//    }
 
     private int calculateWatermarkPosition() {
         return (mSessionConfig.getVideoWidth()*15)/1280;
@@ -645,15 +696,13 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      *
      * @param textureId the id of the texture bound to the new display surface
      */
-    public void onSurfaceCreated(int textureId, int overlayTextureId) {
+    public void onSurfaceCreated(int textureId) {
         if (VERBOSE) Log.i(TAG, "onSurfaceCreated. Saving EGL State");
         synchronized (mReadyFence) {
             // The Host Activity lifecycle may go through a OnDestroy ... OnCreate ... OnSurfaceCreated ... OnPause ... OnStop...
             // on it's way out, so our real sense of bearing should come from whether the EncoderThread is running
             if (mReady) {
                 mEglSaver.saveEGLState();
-                //TODO si funciona mover al handler
-                mOverlayTextureId = overlayTextureId;
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_SURFACE_TEXTURE, textureId));
             }
         }

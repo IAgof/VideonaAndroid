@@ -6,6 +6,11 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.videonasocialmedia.avrecorder.overlay.Overlay;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -30,7 +35,9 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     private int mIncomingHeight;
     private int mCurrentFilter;
     private int mNewFilter;
-    private Drawable overlayImage;
+
+    private List<Overlay> overlayList;
+    private boolean watermarkAdded;
 
 
     /**
@@ -39,7 +46,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
      *
      * @param recorder video encoder object
      */
-    public CameraSurfaceRenderer(CameraEncoder recorder, Drawable overlayImage) {
+    public CameraSurfaceRenderer(CameraEncoder recorder) {
         mCameraEncoder = recorder;
 
         mCameraTextureId = -1;
@@ -54,10 +61,15 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         mNewFilter = Filters.FILTER_NONE;
 
         mRecordingEnabled = false;
-
-        this.overlayImage = overlayImage;
     }
 
+    public void setOverlayList(List<Overlay> overlayList) {
+        this.overlayList = overlayList;
+    }
+
+    public void setWatermarkAdded(boolean watermarkAdded) {
+        this.watermarkAdded = watermarkAdded;
+    }
 
     /**
      * Notifies the renderer that we want to stop or start recording.
@@ -80,10 +92,9 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         mFullScreenOverlay = new FullFrameRect(
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
 
-        mOverlayTextureId = GlUtil.createTextureFromDrawable(overlayImage);
         mCameraTextureId = mFullScreenCamera.createTextureObject();
 
-        mCameraEncoder.onSurfaceCreated(mCameraTextureId, mOverlayTextureId);
+        mCameraEncoder.onSurfaceCreated(mCameraTextureId);
         mFrameCount = 0;
     }
 
@@ -109,7 +120,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
 
         if (mIncomingSizeUpdated) {
             mFullScreenCamera.getProgram().setTexSize(mIncomingWidth, mIncomingHeight);
-            mFullScreenOverlay.getProgram().setTexSize(mIncomingWidth, mIncomingHeight);
+            //mFullScreenOverlay.getProgram().setTexSize(mIncomingWidth, mIncomingHeight);
             mIncomingSizeUpdated = false;
             Log.i(TAG, "setTexSize on display Texture");
         }
@@ -121,8 +132,33 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
             //Drawing texture overlay:
             //mFullScreenOverlay.drawFrame(mOverlayTextureId, mSTMatrix);
             mFullScreenCamera.drawFrame(mCameraTextureId, mSTMatrix);
+            //drawOverlayList();
         }
         mFrameCount++;
+    }
+
+    private void drawOverlayList() {
+        if (overlayList != null && overlayList.size() > 0) {
+            for (Overlay overlay : overlayList) {
+                setBlendMode(overlay);
+                overlay.draw();
+            }
+        }
+    }
+
+    private void setBlendMode(Overlay overlay) {
+        if (isWatermark(overlay)) {
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        }else {
+            GLES20.glEnable(GLES20.GL_BLEND);
+            //TODO change blend func
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        }
+    }
+
+    private boolean isWatermark(Overlay overlay) {
+        return overlayList.lastIndexOf(overlay) == overlayList.size() - 1 && watermarkAdded;
     }
 
     public void signalVertialVideo(FullFrameRect.SCREEN_ROTATION isVertical) {
