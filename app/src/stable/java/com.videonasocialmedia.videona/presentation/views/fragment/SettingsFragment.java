@@ -13,10 +13,12 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 import android.os.Bundle;
 import android.preference.Preference;
 
+import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
+
 /**
  * This class is used to manage the setting menu.
  */
-public class SettingsFragment extends SettingsBaseFragment {
+public class SettingsFragment extends SettingsBaseFragment implements PreferencesView {
 
     private Preference joinBetaPref;
 
@@ -32,6 +34,18 @@ public class SettingsFragment extends SettingsBaseFragment {
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
     }
 
 }
