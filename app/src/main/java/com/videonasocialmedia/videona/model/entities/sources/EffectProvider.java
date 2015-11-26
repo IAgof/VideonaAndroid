@@ -1,11 +1,4 @@
-/*
- * Copyright (c) 2015. Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- */
-
-package com.videonasocialmedia.videona.presentation.views.adapter;
+package com.videonasocialmedia.videona.model.entities.sources;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
@@ -14,7 +7,10 @@ import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Effect {
+/**
+ * Created by Veronica Lago Fominaya on 25/11/2015.
+ */
+public class EffectProvider {
 
     public static List<ShaderEffect> getColorEffectList() {
 
