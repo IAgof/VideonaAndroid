@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.ListPreference;
 
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
@@ -165,10 +166,13 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.compareTo(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY)==0 ||
-                key.compareTo(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION)==0) {
-            RemoveVideosUseCase videoRemover= new RemoveVideosUseCase();
-            videoRemover.removeMediaItemsFromProject();
+        if (key.compareTo(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY) == 0 ||
+                key.compareTo(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION) == 0) {
+            if (BuildConfig.FLAVOR.compareTo("stable") == 0) {
+                RemoveVideosUseCase videoRemover = new RemoveVideosUseCase();
+                videoRemover.removeMediaItemsFromProject();
+            }
         }
     }
+
 }

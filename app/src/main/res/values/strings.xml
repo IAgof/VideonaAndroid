@@ -64,6 +64,9 @@
     <string name="filter_effect_blackboard">blackboard</string>
 
     <!-- Activity Settings -->
+    <string name="settingsTitle">Settings</string>
+    <string name="titleUserSection">My account</string>
+    <string name="username">Username</string>
     <string name="title_camera_section">Camera</string>
     <string name="resolution">Resolution</string>
     <string name="low_resolution_name">Good (720p)</string>
