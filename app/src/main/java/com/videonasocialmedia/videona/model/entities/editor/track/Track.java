@@ -17,7 +17,6 @@ import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOr
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -137,9 +136,6 @@ public abstract class Track {
              * TODO transitions no entra en el deadline del 7 de mayo. Pero abrá que hacerlo
              */
 
-            //Adapt events to the new track configuration.
-            this.updateEffectsForAddItem(itemToAdd, this.getTrackStartTimeFor(afterMedia));
-
             //add the item.
             this.items.add(position, itemToAdd);
             return true;
@@ -222,9 +218,6 @@ public abstract class Track {
             return null;
         }
 
-        //Check to update effects.
-        this.updateEffectsForDeleteItem(this.items.get(position));
-
         //try to delete element from list.
         return items.remove(position);
     }
@@ -256,12 +249,6 @@ public abstract class Track {
             throw new IllegalOrphanTransitionOnTrack("Media item to move must be disengaged from " +
                     "transitions first");
         }
-
-
-        //check for effects
-
-        //apply update as is delete the item
-        ArrayList<Effect> removedEffects = this.updateEffectsForDeleteItem(itemToMove);
 
         //delete the item.
         this.items.remove(this.items.indexOf(itemToMove));
@@ -326,79 +313,6 @@ public abstract class Track {
     }
 
     //Local Utilities
-
-    /**
-     * Recalculate effects positions for the new track configuration after item has been removed.
-     *
-     * @param itemToAdd - Media Item to be added to the track, used to recalculated new effects
-     *                  startTime and durations.
-     */
-    private void updateEffectsForAddItem(Media itemToAdd, long newItemTrackStartTime) {
-        for (LinkedList<Effect> layer : this.effects.values()) {
-            for (Effect e : layer) {
-                if (newItemTrackStartTime >= e.getStartTime() + e.getDuration()) {
-                    //case insert item after the effect, we don't have to do anything
-                    //continue;
-
-                } else if (newItemTrackStartTime <= e.getStartTime()) {
-                    //case insert item before the effect. Add newItemDuration to effectStartTime
-                    e.setStartTime(e.getStartTime() + itemToAdd.getDuration());
-                } else {
-                    //case insert in the middle of an effect afected area. We extend the effect
-                    //to cover the new added item.
-                    e.setDuration(e.getDuration() + itemToAdd.getDuration());
-                }
-            }
-        }
-    }
-
-    /**
-     * Recalculate effects positions for the new track configuration after item has been removed.
-     *
-     * @param itemToDelete - Media item to be deleted. Used to recalculate startTimes an durations for
-     *                     effects in the new track configuration.
-     * @return An ArrayList<Effect> containing effects that has been removed from the track due to
-     * the action being performed. If action was a delteItem ignore this return, if action was a move
-     * item use this list to add the effects again in his new location after moving the item.
-     */
-    private ArrayList<Effect> updateEffectsForDeleteItem(Media itemToDelete) {
-        long itemStartTime = this.getTrackStartTimeFor(itemToDelete);
-        long itemEndTime = itemStartTime + itemToDelete.getDuration();
-        ArrayList<Effect> removedEffects = new ArrayList<Effect>();
-        for (LinkedList<Effect> layer : this.effects.values()) {
-            for (Effect e : layer) {
-                if (itemStartTime > e.getStartTime() + e.getDuration()) {
-                    //case effect occurs before the item. Nothing to do.
-                    //continue;
-
-                } else if (itemEndTime < e.getStartTime()) {
-                    //case effect occurs after the item. Deduct itemToDelete duration from effect startTime
-                    e.setStartTime(e.getStartTime() - itemToDelete.getDuration());
-
-                } else if (itemStartTime <= e.getStartTime() && itemEndTime >= e.getStartTime() + e.getDuration()) {
-                    //case effect is contained in item. Delete effect.
-                    //remove the item and store in a temporal list used for the moveItem action.
-                    removedEffects.add(layer.remove(layer.indexOf(e)));
-                    //set startTime relative to media, in case of moveItem action. Used later to stablish the new effect startTime.
-                    e.setStartTime(e.getStartTime() - itemStartTime);
-
-                } else if (itemStartTime > e.getStartTime() && itemEndTime < e.getStartTime() + e.getDuration()) {
-                    //case effect contains item. Set new effect duration deducting itemToDelete duration.
-                    e.setDuration(e.getDuration() - itemToDelete.getDuration());
-
-                } else if (itemStartTime <= e.getStartTime() && itemEndTime < e.getStartTime() + e.getDuration()) {
-                    //case effect starts during itemToDelete => Effect new startTime = itemToDelete startTime
-                    e.setStartTime(itemStartTime);
-
-                } else if (itemStartTime > e.getStartTime() && itemEndTime >= e.getStartTime() + e.getDuration()) {
-                    //case effect ends during itemToDelete => Trim effect duration to itemToDelete startTime
-                    e.setDuration(itemStartTime - e.getStartTime());
-
-                }
-            }
-        }
-        return removedEffects;
-    }
 
     /**
      * Calculates the time in milliseconds in which the given item starts for this MediaTrack.

@@ -24,9 +24,11 @@ import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
+import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
@@ -93,7 +95,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordedVideosNumber = 0;
 
         initRecorder(context, cameraPreview, sharedPreferences);
-
         hideInitialsButtons();
     }
 
@@ -176,7 +177,24 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
+        showThumbAndNumber();
         Log.d(LOG_TAG, "resume presenter");
+    }
+
+    private void showThumbAndNumber() {
+        GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        final List mediaInProject=getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (mediaInProject!=null && mediaInProject.size()>0){
+            int lastItemIndex= mediaInProject.size()-1;
+            final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
+            this.recordedVideosNumber=mediaInProject.size();
+            recordView.showVideosRecordedNumber(recordedVideosNumber);
+            recordView.showRecordedVideoThumb(lastItem.getMediaPath());
+        }
+        else{
+            recordView.hideRecordedVideoThumb();
+            recordView.hideVideosRecordedNumber();
+        }
     }
 
     public void onPause() {
@@ -369,6 +387,14 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onExportSuccess(Video exportedVideo) {
         recordView.hideProgressDialog();
         recordView.goToShare(exportedVideo.getMediaPath());
+    }
+
+    public List<ShaderEffect> getDistortionEffectList() {
+        return GetEffectListUseCase.getDistortionEffectList();
+    }
+
+    public List<ShaderEffect> getColorEffectList() {
+        return GetEffectListUseCase.getColorEffectList();
     }
 
 }
