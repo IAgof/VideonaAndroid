@@ -100,7 +100,37 @@
         <activity
             android:name=".presentation.views.activity.SettingsActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape" />
+            android:parentActivityName=".presentation.views.activity.InitAppActivity" />
+
+        <activity
+            android:name=".presentation.views.activity.NamePreferenceActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            <intent-filter>
+                <action android:name=".presentation.views.activity.NamePreferenceActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.views.activity.UsernamePreferenceActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            <intent-filter>
+                <action android:name=".presentation.views.activity.UsernamePreferenceActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".presentation.views.activity.EmailPreferenceActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            <intent-filter>
+                <action android:name=".presentation.views.activity.EmailPreferenceActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".presentation.views.activity.AboutActivity"

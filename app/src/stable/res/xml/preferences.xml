@@ -2,6 +2,24 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
+        android:title="@string/titleUserSection">
+        <Preference
+            android:key="name"
+            android:title="@string/name">
+            <intent android:action=".presentation.views.activity.NamePreferenceActivity"/>
+        </Preference>
+        <Preference
+
+            android:title="@string/username">
+            <intent android:action=".presentation.views.activity.UsernamePreferenceActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/emailPreference">
+            <intent android:action=".presentation.views.activity.EmailPreferenceActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/title_camera_section">
 
         <ListPreference

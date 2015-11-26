@@ -65,8 +65,10 @@
 
     <!-- Activity Settings -->
     <string name="settingsTitle">Ajustes</string>
-    <string name="titleUserSection">Mi cuenta</string>
+    <string name="titleUserSection">MI CUENTA</string>
+    <string name="name">Nombre</string>
     <string name="username">Nombre de usuario</string>
+    <string name="emailPreference">Email</string>
     <string name="title_camera_section">Cámara</string>
     <string name="resolution">Resolución</string>
     <string name="low_resolution_name">Buena (720p)</string>
