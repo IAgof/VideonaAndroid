@@ -65,7 +65,7 @@
 
     <!-- Activity Settings -->
     <string name="settingsTitle">Settings</string>
-    <string name="titleUserSection">MY ACCOUNT</string>
+    <string name="titleUserSection">My account</string>
     <string name="name">Name</string>
     <string name="username">Username</string>
     <string name="emailPreference">Email</string>

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <com.videonasocialmedia.videona.presentation.views.customviews.EditTextDialogPreference
+        android:key="prueba"
+        android:title="Prueba title"
+        android:summary="Prueba summary"
+        android:dialogTitle="Prueba dialog"
+        />
+
     <PreferenceCategory
         android:title="@string/titleUserSection">
         <Preference
