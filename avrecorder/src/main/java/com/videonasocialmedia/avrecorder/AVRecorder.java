@@ -54,7 +54,7 @@ public class AVRecorder {
     public void setPreviewDisplay(GLCameraView display) {
         mCamEncoder.setPreviewDisplay(display);
         //TODO remove from here. this is just a test
-        addOverlay(overlayImage);
+        //addOverlay(overlayImage);
     }
 
     /**
@@ -72,7 +72,7 @@ public class AVRecorder {
      * @param image the image shown on the layer
      */
     public void addOverlay(Drawable image) {
-        mCamEncoder.addOverlay(image, 0, 0, 1280, 720);
+        mCamEncoder.addOverlay(image, 0, 0, mConfig.getVideoWidth(), mConfig.getVideoHeight());
     }
 
     //TODO define how to identify a single overlay;

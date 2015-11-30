@@ -1,6 +1,5 @@
 package com.videonasocialmedia.avrecorder;
 
-import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
@@ -8,7 +7,6 @@ import android.view.MotionEvent;
 
 import com.videonasocialmedia.avrecorder.overlay.Overlay;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -132,7 +130,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
             //Drawing texture overlay:
             //mFullScreenOverlay.drawFrame(mOverlayTextureId, mSTMatrix);
             mFullScreenCamera.drawFrame(mCameraTextureId, mSTMatrix);
-            //drawOverlayList();
+            drawOverlayList();
         }
         mFrameCount++;
     }
@@ -140,6 +138,8 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     private void drawOverlayList() {
         if (overlayList != null && overlayList.size() > 0) {
             for (Overlay overlay : overlayList) {
+                if (!overlay.isInitialized())
+                    overlay.initProgram();
                 setBlendMode(overlay);
                 overlay.draw();
             }
@@ -150,10 +150,10 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         if (isWatermark(overlay)) {
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        }else {
+        } else {
             GLES20.glEnable(GLES20.GL_BLEND);
             //TODO change blend func
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_COLOR);
         }
     }
 
