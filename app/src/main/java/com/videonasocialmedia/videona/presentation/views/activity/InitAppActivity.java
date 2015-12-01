@@ -511,6 +511,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
         private void exitSplashScreen() {
             navigate(RecordActivity.class);
+
         }
 
         private void waitForCriticalPermissions() {

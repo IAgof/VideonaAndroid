@@ -109,7 +109,7 @@
                 android:focusableInTouchMode="true"
                 android:indeterminate="false"
                 android:longClickable="true"
-                android:progressDrawable="@color/videona_red_1"
+                android:progressDrawable="@color/colorAccent"
                 android:maxHeight="4dp" />
         </LinearLayout>
 

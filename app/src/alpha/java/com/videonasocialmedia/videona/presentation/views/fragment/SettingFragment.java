@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * This class is used to manage the setting menu.
  */
-public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener,
+public class SettingFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener,
         PreferencesView {
 
     private ListPreference resolutionPref;

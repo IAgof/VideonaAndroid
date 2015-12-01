@@ -193,7 +193,7 @@
                                     android:layout_centerVertical="true"
                                     android:text="@string/edit_title_name"
                                     android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:textColor="@color/videona_blue_6" />
+                                    android:textColor="@color/colorPrimary" />
                             </RelativeLayout>
 
                             <RelativeLayout

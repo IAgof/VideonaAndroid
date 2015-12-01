@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/titleUserSection">
+        <Preference
+            android:key="username"
+            android:title="@string/username"
+            />
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/title_camera_section"
@@ -9,7 +17,8 @@
             android:key="list_preferences_resolution"
             android:title="@string/resolution"
             android:dialogTitle="@string/resolution"
-            android:defaultValue="@string/low_resolution_value"/>
+            android:defaultValue="@string/low_resolution_value"
+            />
 
         <ListPreference
             android:key="list_preferences_quality"

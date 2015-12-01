@@ -77,7 +77,7 @@ public class EffectAdapter
                 .into(holder.effectImage);
         holder.effectName.setText(selectedEffect.getIconResourceName());
         if (position == selectedPosition) {
-            holder.effect.setBackgroundResource(R.color.videona_red_1);
+            holder.effect.setBackgroundResource(R.color.colorAccent);
         } else {
             holder.effect.setBackgroundResource(0);
         }

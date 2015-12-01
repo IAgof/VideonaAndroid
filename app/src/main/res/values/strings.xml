@@ -64,6 +64,9 @@
     <string name="filter_effect_blackboard">blackboard</string>
 
     <!-- Activity Settings -->
+    <string name="settingsTitle">Settings</string>
+    <string name="titleUserSection">My account</string>
+    <string name="username">Username</string>
     <string name="title_camera_section">Camera</string>
     <string name="resolution">Resolution</string>
     <string name="low_resolution_name">Good (720p)</string>
@@ -477,7 +480,6 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="permissionsDeniedMessage">Videona needs some permissions to use the camera or record audio.\nWithout them Videona can\'t continue and will be closed.</string>
     <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
     <string name="error">error</string>
-    <string name="settingsTitle">Settings</string>
 
 
 </resources>

@@ -79,8 +79,8 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
 
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.pager_header);
         pagerTabStrip.setDrawFullUnderline(true);
-        pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.videona_black_1));
-        pagerTabStrip.setTextColor(getResources().getColor(R.color.videona_black_1));
+        pagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.colorBlack));
+        pagerTabStrip.setTextColor(getResources().getColor(R.color.colorBlack));
     }
 
     @Override

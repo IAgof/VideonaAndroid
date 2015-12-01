@@ -1,88 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="grey_transparent">#7F000000</color>
-    <color name="transparent">#00000000</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorGreyTransparent">#7F000000</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="textColorFiltersRecord">#FFFFFF</color>
+    <color name="textColorNumVideos">#FFFFFF</color>
+    <color name="textColorChronometer">#FFFFFF</color>
+
+    <color name="colorButton">#0091ea</color>
+    <color name="colorButtonAccent">#fe304b</color>
+    <color name="textColorButton">#FFFFFF</color>
+
+    <color name="textColorTitlePreference">#0091ea</color>
+
+    <color name="textColorToolbar">#FFFFFF</color>
 
 
-    <color name="videona_blue_1">#0091ea</color>
-
-    <color name="videona_blue_2">#00b8f3</color>
-
-    <color name="videona_blue_3">#00cff7</color>
-
-    <color name="videona_blue_4">#00e7fb</color>
-
-    <color name="videona_blue_5">#00e7fb</color>
-
-    <color name="videona_blue_6">#00a3ef</color>
-
-    <color name="videona_red_1">#fe304b</color>
-
-    <color name="videona_black_1">#000000</color>
-
-
-    <color name="pastel_palette_brown">#c4bdab</color>
-
-    <color name="pastel_palette_blue">#a1c1e0</color>
-
-    <color name="pastel_palette_orange">#e6b285</color>
-
-    <color name="pastel_palette_pink">#ebcec5</color>
-
-    <color name="pastel_palette_red">#dd8977</color>
-
-    <color name="pastel_palette_green">#d3d899</color>
-
-    <color name="pastel_palette_purple">#ae9eab</color>
-
-    <color name="pastel_palette_pink_2">#e0a1a9</color>
-
-    <color name="pastel_palette_grey">#8e97a3</color>
-
-    <color name="pastel_palette_grey_record">#404040</color>
-
-    <color name="pastel_palette_yellow">#eace83</color>
-
-
-    <color name="pastel_palette_brown_dark">#8b8471</color>
-
-    <color name="pastel_palette_blue_dark">#6688ab</color>
-
-    <color name="pastel_palette_orange_dark">#b3774c</color>
-
-    <color name="pastel_palette_pink_dark">#b8978c</color>
-
-    <color name="pastel_palette_red_dark">#a85040</color>
-
-    <color name="pastel_palette_green_dark">#9ca25f</color>
-
-    <color name="pastel_palette_purple_dark">#736471</color>
-
-    <color name="pastel_palette_pink_2_dark">#973435</color>
-
-    <color name="pastel_palette_grey_dark">#545c69</color>
-
-    <color name="pastel_palette_yellow_dark">#b8974a</color>
-
-
-    <color name="alvaro_grey">#FF00FF00</color>
-
-    <color name="transparent_palette_grey">#66666666</color>
-
-
-    <!-- brand color: orange -->
     <color name="colorPrimary">#0091ea</color>
+    <color name="colorSecondary">#00b8f3</color>
     <color name="colorPrimaryDark">#00b8f3</color>
     <color name="colorPrimaryLight">#00cff7</color>
     <!-- accent color: red -->
-    <color name="colorAccent">#0091ea</color>
+    <color name="colorAccent">#fe304b</color>
+    <color name="colorBackground">#FF00FF</color>
+
     <!-- text color: white -->
-    <color name="textColorPrimary">#FFFFFF</color>
-    <color name="textColorSecondary">#9E9E9E</color>
+    <color name="textColorPrimary">#9E9E9E</color>
+    <color name="textColorSecondary">#00b8f3</color>
     <!-- inverse text color: 87% black -->
     <color name="textColorPrimaryInverse">#DE000000</color>
     <color name="textColorSecondaryInverse">#9E9E9E</color>
+
+    <color name="colorWindowBackgroundLight">#FFFFFF</color>
+    <color name="colorWindowBackgroundDark">#DE000000</color>
 
 
 </resources>

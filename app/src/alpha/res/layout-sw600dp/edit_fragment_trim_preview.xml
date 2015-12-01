@@ -134,7 +134,7 @@
                 android:focusableInTouchMode="true"
                 android:indeterminate="false"
                 android:longClickable="true"
-                android:progressDrawable="@color/videona_red_1"
+                android:progressDrawable="@color/colorAccent"
                 android:maxHeight="8dp" />
         </LinearLayout>
 
@@ -331,7 +331,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="false"
                     android:layout_alignParentTop="false"
-                    android:backgroundTint="@color/pastel_palette_blue"
+                    android:backgroundTint="@color/colorPrimary"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:orientation="horizontal">
