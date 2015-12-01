@@ -19,5 +19,5 @@ public interface OnEffectSelectedListener {
      */
     void onEffectSelected(Effect effect);
 
-    void onEffectSelectionCancel();
+    void onEffectSelectionCancel(Effect effect);
 }

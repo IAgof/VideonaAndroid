@@ -31,11 +31,11 @@ import butterknife.InjectView;
 /**
  * This class is used to show the camera effects gallery.
  */
-public class EffectAdapter<T extends Effect>
+public class EffectAdapter
         extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
 
     private Context context;
-    private List<T> effects;
+    private List<Effect> effects;
     private OnEffectSelectedListener onEffectSelectedListener;
     private int selectedPosition = -1;
     private int previousSelectionPosition = -1;
@@ -45,7 +45,7 @@ public class EffectAdapter<T extends Effect>
      *
      * @param effects the list of the available effects
      */
-    public EffectAdapter(List<T> effects, OnEffectSelectedListener listener) {
+    public EffectAdapter(List<Effect> effects, OnEffectSelectedListener listener) {
         this.effects = effects;
         this.onEffectSelectedListener = listener;
     }
@@ -55,7 +55,7 @@ public class EffectAdapter<T extends Effect>
      *
      * @return
      */
-    public List<T> getElementList() {
+    public List<Effect> getElementList() {
         return effects;
     }
 
@@ -93,7 +93,7 @@ public class EffectAdapter<T extends Effect>
      * @param position the position of the effect element
      * @return
      */
-    public T getEffect(int position) {
+    public Effect getEffect(int position) {
         return effects.get(position);
     }
 
@@ -112,7 +112,7 @@ public class EffectAdapter<T extends Effect>
      *
      * @param effects
      */
-    public void appendCameraEffect(List<T> effects) {
+    public void appendCameraEffect(List<Effect> effects) {
         this.effects.addAll(effects);
     }
 
@@ -169,8 +169,9 @@ public class EffectAdapter<T extends Effect>
                 previousSelectionPosition = selectedPosition;
                 notifyItemChanged(selectedPosition);
                 if (selectedPosition == getAdapterPosition()) {
+                    int adapterPosition= getAdapterPosition();
                     resetSelectedEffect();
-                    onClickListener.onEffectSelectionCancel();
+                    onClickListener.onEffectSelectionCancel(effects.get(adapterPosition));
                 } else {
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);

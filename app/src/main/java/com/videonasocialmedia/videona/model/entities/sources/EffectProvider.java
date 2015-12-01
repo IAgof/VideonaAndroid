@@ -2,6 +2,8 @@ package com.videonasocialmedia.videona.model.entities.sources;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 
 import java.util.ArrayList;
@@ -12,9 +14,9 @@ import java.util.List;
  */
 public class EffectProvider {
 
-    public static List<ShaderEffect> getColorEffectList() {
+    public static List<Effect> getColorEffectList() {
 
-        List<ShaderEffect> colorEffects = new ArrayList<>();
+        List<Effect> colorEffects = new ArrayList<>();
 
         colorEffects.add(
                 new ShaderEffect("AD1", "aqua", R.drawable.common_filter_color_ad1_aqua,
@@ -44,9 +46,9 @@ public class EffectProvider {
         return colorEffects;
     }
 
-    public static List<ShaderEffect> getDistortionEffectList() {
+    public static List<Effect> getDistortionEffectList() {
 
-        List<ShaderEffect> distortionEffects = new ArrayList<>();
+        List<Effect> distortionEffects = new ArrayList<>();
 
         distortionEffects.add(
                 new ShaderEffect("FX1", "Fisheye", R.drawable.common_filter_distortion_fx1_fisheye,
@@ -74,6 +76,29 @@ public class EffectProvider {
                         Filters.FILTER_BULGE));
 
         return distortionEffects;
+    }
+
+    public static List<Effect> getOverlayFilterList(){
+        List<Effect> overlayList= new ArrayList<>();
+        overlayList.add(new OverlayEffect("OV1","name",
+                R.drawable.common_filter_distortion_fx1_fisheye,
+                R.drawable.common_filter_color_ad1_aqua));
+        overlayList.add(new OverlayEffect("OV1","name",
+                R.drawable.common_filter_distortion_fx1_fisheye,
+                R.drawable.common_filter_color_ad1_aqua));
+        overlayList.add(new OverlayEffect("OV1","name",
+                R.drawable.common_filter_distortion_fx1_fisheye,
+                R.drawable.common_filter_color_ad1_aqua));
+        overlayList.add(new OverlayEffect("OV1","name",
+                R.drawable.common_filter_distortion_fx1_fisheye,
+                R.drawable.common_filter_color_ad1_aqua));
+        overlayList.add(new OverlayEffect("OV1","name",
+                R.drawable.common_filter_distortion_fx1_fisheye,
+                R.drawable.common_filter_color_ad1_aqua));
+        overlayList.add(new OverlayEffect("OV1","name",
+                R.drawable.common_filter_distortion_fx1_fisheye,
+                R.drawable.common_filter_color_ad1_aqua));
+        return overlayList;
     }
 
 }
