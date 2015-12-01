@@ -54,7 +54,6 @@ public class AVRecorder {
     public void setPreviewDisplay(GLCameraView display) {
         mCamEncoder.setPreviewDisplay(display);
         //TODO remove from here. this is just a test
-        //addOverlay(overlayImage);
     }
 
     /**
@@ -71,8 +70,20 @@ public class AVRecorder {
      *
      * @param image the image shown on the layer
      */
-    public void addOverlay(Drawable image) {
-        mCamEncoder.addOverlay(image, 0, 0, mConfig.getVideoWidth(), mConfig.getVideoHeight());
+    public void addOverlayFilter(Drawable image) {
+        mCamEncoder.addOverlayFilter(image, mConfig.getVideoWidth(), mConfig.getVideoHeight());
+    }
+
+    public void setWatermark(Drawable watermarkImage, boolean showInPreview){
+     mCamEncoder.addWatermark(watermarkImage, showInPreview);
+    }
+
+    /**
+     * Set a watermark hide in the preview
+     * @param watermarkImage
+     */
+    public void setWatermark(Drawable watermarkImage){
+        mCamEncoder.addWatermark(watermarkImage, false);
     }
 
     //TODO define how to identify a single overlay;
@@ -119,9 +130,6 @@ public class AVRecorder {
      * Signal that the recorder should treat
      * incoming video frames as Vertical Video, rotating
      * and cropping them for proper display.
-     * <p/>
-     * This method only has effect if {@link SessionConfig#setConvertVerticalVideo(boolean)}
-     * has been set true for the current recording session.
      */
     public void signalVerticalVideo(FullFrameRect.SCREEN_ROTATION orientation) {
         mCamEncoder.signalVerticalVideo(orientation);

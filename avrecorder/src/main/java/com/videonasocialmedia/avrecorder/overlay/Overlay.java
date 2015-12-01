@@ -3,7 +3,6 @@ package com.videonasocialmedia.avrecorder.overlay;
 import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import com.videonasocialmedia.avrecorder.FullFrameRect;
 import com.videonasocialmedia.avrecorder.GlUtil;
@@ -12,7 +11,7 @@ import com.videonasocialmedia.avrecorder.Texture2dProgram;
 /**
  * Created by jca on 25/11/15.
  */
-public class Overlay {
+public abstract class Overlay {
 
     Drawable overlayImage;
     private float[] IDENTITY_MATRIX = new float[16];
@@ -30,13 +29,12 @@ public class Overlay {
         this.width = width;
         this.positionX = positionX;
         this.positionY = positionY;
-        Log.d("EFFECTS", "created new overlay with texture id " + textureId);
     }
 
     /**
-     * Creates a shader program for the layer. It MUST be called on the GL thread
+     * Creates a texture and a shader program. It MUST be called on the GL thread
      */
-    public void initProgram() {
+    public final void initProgram() {
         textureId = GlUtil.createTextureFromDrawable(overlayImage);
         Texture2dProgram program =
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D);
@@ -44,12 +42,16 @@ public class Overlay {
         overlayLayer = new FullFrameRect(program);
     }
 
-    public void draw() {
-        //setGlViewportSize();
+
+    public final void draw() {
+        setGlViewportSize();
+        setBlendMode();
         overlayLayer.drawFrame(textureId, IDENTITY_MATRIX);
     }
 
-    private void setGlViewportSize() {
+    protected abstract void setBlendMode();
+
+    protected void setGlViewportSize() {
         GLES20.glViewport(positionX, positionY, width, height);
     }
 
@@ -64,4 +66,5 @@ public class Overlay {
     public boolean isInitialized() {
         return overlayLayer != null;
     }
+
 }

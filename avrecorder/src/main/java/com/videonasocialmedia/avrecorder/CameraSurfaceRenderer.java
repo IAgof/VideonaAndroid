@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.videonasocialmedia.avrecorder.overlay.Overlay;
+import com.videonasocialmedia.avrecorder.overlay.Watermark;
 
 import java.util.List;
 
@@ -22,7 +23,6 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     boolean showBox = false;
     private CameraEncoder mCameraEncoder;
     private FullFrameRect mFullScreenCamera;
-    private FullFrameRect mFullScreenOverlay;     // For texture overlay
     private int mOverlayTextureId;
     private int mCameraTextureId;
     private boolean mRecordingEnabled;
@@ -35,7 +35,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     private int mNewFilter;
 
     private List<Overlay> overlayList;
-    private boolean watermarkAdded;
+    private Watermark watermark;
 
 
     /**
@@ -65,8 +65,12 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         this.overlayList = overlayList;
     }
 
-    public void setWatermarkAdded(boolean watermarkAdded) {
-        this.watermarkAdded = watermarkAdded;
+    public void setWatermark(Watermark watermark){
+        this.watermark=watermark;
+    }
+
+    public void removeWatermark(){
+        watermark=null;
     }
 
     /**
@@ -84,14 +88,7 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         // is *not* applied to the recording, because that uses a separate shader.
         mFullScreenCamera = new FullFrameRect(
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_EXT));
-        // For texture overlay:
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        mFullScreenOverlay = new FullFrameRect(
-                new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D));
-
         mCameraTextureId = mFullScreenCamera.createTextureObject();
-
         mCameraEncoder.onSurfaceCreated(mCameraTextureId);
         mFrameCount = 0;
     }
@@ -118,7 +115,6 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
 
         if (mIncomingSizeUpdated) {
             mFullScreenCamera.getProgram().setTexSize(mIncomingWidth, mIncomingHeight);
-            //mFullScreenOverlay.getProgram().setTexSize(mIncomingWidth, mIncomingHeight);
             mIncomingSizeUpdated = false;
             Log.i(TAG, "setTexSize on display Texture");
         }
@@ -127,38 +123,23 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         if (mCameraEncoder.isSurfaceTextureReadyForDisplay()) {
             mCameraEncoder.getSurfaceTextureForDisplay().updateTexImage();
             mCameraEncoder.getSurfaceTextureForDisplay().getTransformMatrix(mSTMatrix);
-            //Drawing texture overlay:
-            //mFullScreenOverlay.drawFrame(mOverlayTextureId, mSTMatrix);
             mFullScreenCamera.drawFrame(mCameraTextureId, mSTMatrix);
             drawOverlayList();
+            if (watermark != null)
+                watermark.draw();
         }
         mFrameCount++;
     }
 
     private void drawOverlayList() {
         if (overlayList != null && overlayList.size() > 0) {
+            GLES20.glEnable(GLES20.GL_BLEND);
             for (Overlay overlay : overlayList) {
                 if (!overlay.isInitialized())
                     overlay.initProgram();
-                setBlendMode(overlay);
                 overlay.draw();
             }
         }
-    }
-
-    private void setBlendMode(Overlay overlay) {
-        if (isWatermark(overlay)) {
-            GLES20.glEnable(GLES20.GL_BLEND);
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-        } else {
-            GLES20.glEnable(GLES20.GL_BLEND);
-            //TODO change blend func
-            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_COLOR);
-        }
-    }
-
-    private boolean isWatermark(Overlay overlay) {
-        return overlayList.lastIndexOf(overlay) == overlayList.size() - 1 && watermarkAdded;
     }
 
     public void signalVertialVideo(FullFrameRect.SCREEN_ROTATION isVertical) {
