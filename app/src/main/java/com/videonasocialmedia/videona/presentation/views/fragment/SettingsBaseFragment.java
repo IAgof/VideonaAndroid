@@ -88,6 +88,12 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
     }
 
     @Override
+    public void setSummary(String key, String value) {
+        Preference preference = findPreference(key);
+        preference.setSummary(value);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         Preference connectionPref = findPreference(key);

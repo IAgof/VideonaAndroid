@@ -13,6 +13,9 @@ package com.videonasocialmedia.videona.utils;
 public class ConfigPreferences {
     public final static String FIRST_TIME = "first_time";
     public final static String SETTINGS_SHARED_PREFERENCES_FILE_NAME = "SETTINGS_SHARED_PREFERENCES_CAMERA";
+    public final static String NAME = "name";
+    public final static String USERNAME = "username";
+    public final static String EMAIL = "email";
     public final static int BACK_CAMERA = 0;
     public final static int FRONT_CAMERA = 1;
     public final static String CAMERA_ID = "camera_id";

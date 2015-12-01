@@ -12,7 +12,10 @@
         android:smallScreens="false"
         android:xlargeScreens="false" />
 
-    <permission android:name="com.videonasocialmedia.videona.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission
+        android:name="com.videonasocialmedia.videona.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="com.videonasocialmedia.videona.permission.C2D_MESSAGE" />
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -29,19 +32,23 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <meta-data android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates"
+        <meta-data
+            android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates"
             android:value="false" />
 
-        <activity android:name="com.mixpanel.android.surveys.SurveyActivity"
-            android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
+        <activity
+            android:name="com.mixpanel.android.surveys.SurveyActivity"
+            android:theme="@style/com_mixpanel_android_SurveyActivityTheme" />
 
-        <receiver android:name="com.mixpanel.android.mpmetrics.GCMReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+        <receiver
+            android:name="com.mixpanel.android.mpmetrics.GCMReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.videonasocialmedia.videona" />
             </intent-filter>
         </receiver>
@@ -49,19 +56,22 @@
 
         <!-- Optionally, register AnalyticsReceiver and AnalyticsService to support background
      dispatching on non-Google Play devices -->
-        <receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
             </intent-filter>
         </receiver>
-        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+        <service
+            android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <!-- Used for Google Play Store Campaign Measurement-->
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
-        <receiver android:name=".presentation.views.broadcastreceiver.InstallReceiver"
+        <receiver
+            android:name=".presentation.views.broadcastreceiver.InstallReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -70,7 +80,8 @@
         </receiver>
         <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
      installation campaign reporting -->
-        <receiver android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -95,7 +106,7 @@
             android:name=".presentation.views.activity.RecordActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape" />
 
         <activity
             android:name=".presentation.views.activity.SettingsActivity"
@@ -105,7 +116,8 @@
         <activity
             android:name=".presentation.views.activity.NamePreferenceActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name=".presentation.views.activity.NamePreferenceActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -115,7 +127,8 @@
         <activity
             android:name=".presentation.views.activity.UsernamePreferenceActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name=".presentation.views.activity.UsernamePreferenceActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -125,7 +138,8 @@
         <activity
             android:name=".presentation.views.activity.EmailPreferenceActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name=".presentation.views.activity.EmailPreferenceActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -136,7 +150,7 @@
             android:name=".presentation.views.activity.AboutActivity"
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name=".presentation.views.activity.AboutActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
