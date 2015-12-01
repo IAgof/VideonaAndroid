@@ -39,7 +39,7 @@ public class AVRecorder {
 
     public AVRecorder(SessionConfig config, Drawable overlayImage) throws IOException {
         init(config);
-        this.overlayImage=overlayImage;
+        this.overlayImage = overlayImage;
     }
 
     private void init(SessionConfig config) throws IOException {
@@ -47,21 +47,48 @@ public class AVRecorder {
         mMicEncoder = new MicrophoneEncoder(config);
         mConfig = config;
         mIsRecording = false;
-        released=false;
-
-        cameraChanged=false;
+        released = false;
+        cameraChanged = false;
     }
 
     public void setPreviewDisplay(GLCameraView display) {
-        mCamEncoder.setPreviewDisplay(display, this.overlayImage);
+        mCamEncoder.setPreviewDisplay(display);
+        //TODO remove from here. this is just a test
     }
 
     /**
      * Apply a filter from {@link Filters} class
+     *
      * @param filter
      */
     public void applyFilter(int filter) {
         mCamEncoder.applyFilter(filter);
+    }
+
+    /**
+     * Add a layer to a stack to be draw over the previews layers
+     *
+     * @param image the image shown on the layer
+     */
+    public void addOverlayFilter(Drawable image) {
+        mCamEncoder.addOverlayFilter(image, mConfig.getVideoWidth(), mConfig.getVideoHeight());
+    }
+
+    public void setWatermark(Drawable watermarkImage, boolean showInPreview){
+     mCamEncoder.addWatermark(watermarkImage, showInPreview);
+    }
+
+    /**
+     * Set a watermark hide in the preview
+     * @param watermarkImage
+     */
+    public void setWatermark(Drawable watermarkImage){
+        mCamEncoder.addWatermark(watermarkImage, false);
+    }
+
+    //TODO define how to identify a single overlay;
+    public void removeOverlay() {
+
     }
 
     /**
@@ -90,9 +117,9 @@ public class AVRecorder {
         return mCamEncoder.setFlashOff();
     }
 
-    public int checkSupportFlash(){
+    public int checkSupportFlash() {
 
-        return mCamEncoder.checkSupportFlash() ;
+        return mCamEncoder.checkSupportFlash();
     }
 
     public void adjustVideoBitrate(int targetBitRate) {
@@ -103,9 +130,6 @@ public class AVRecorder {
      * Signal that the recorder should treat
      * incoming video frames as Vertical Video, rotating
      * and cropping them for proper display.
-     * <p/>
-     * This method only has effect if {@link SessionConfig#setConvertVerticalVideo(boolean)}
-     * has been set true for the current recording session.
      */
     public void signalVerticalVideo(FullFrameRect.SCREEN_ROTATION orientation) {
         mCamEncoder.signalVerticalVideo(orientation);
@@ -148,7 +172,7 @@ public class AVRecorder {
     public void release() {
         mMicEncoder.release();
         mCamEncoder.release();
-        released=true;
+        released = true;
 
         // MicrophoneEncoder releases all it's resources when stopRecording is called
         // because it doesn't have any meaningful state
@@ -171,11 +195,11 @@ public class AVRecorder {
         return mCamEncoder.getCurrentCamera();
     }
 
-    public boolean isReleased(){
+    public boolean isReleased() {
         return released;
     }
 
-    public boolean isCameraChanged(){
+    public boolean isCameraChanged() {
         return cameraChanged;
     }
 
