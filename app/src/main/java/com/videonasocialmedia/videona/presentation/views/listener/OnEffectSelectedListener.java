@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.listener;
 
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 
 /**
@@ -16,5 +17,7 @@ public interface OnEffectSelectedListener {
     /**
      * @param effect
      */
-    void onEffectSelected(ShaderEffect effect);
+    void onEffectSelected(Effect effect);
+
+    void onEffectSelectionCancel();
 }
