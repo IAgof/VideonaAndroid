@@ -19,7 +19,7 @@
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
       android:padding="12dp"
-      android:textColor="@color/textColorTitlePreference"
+      android:textColor="@color/textColorTitle"
       android:textAllCaps="true"
       android:textSize="14sp"
       android:src="?android:attr/listDivider"

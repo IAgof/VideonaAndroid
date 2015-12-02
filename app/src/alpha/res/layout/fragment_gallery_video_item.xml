@@ -56,7 +56,8 @@
             android:text="00:00"
             android:gravity="center"
             android:layout_marginLeft="2dp"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:textColor="@color/textColorGalleryVideoDuration"/>
 
         <ImageButton
             android:id="@+id/gallery_preview_button"

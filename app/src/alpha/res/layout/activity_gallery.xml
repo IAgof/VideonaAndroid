@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:text="@string/galleryActivityTitle"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/textColorPrimary" />
+            android:textColor="@color/textColorGalleryTitle" />
 
         <LinearLayout
             android:id="@+id/selection_mode"

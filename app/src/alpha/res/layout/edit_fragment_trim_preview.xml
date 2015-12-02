@@ -330,7 +330,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="false"
                     android:layout_alignParentTop="false"
-                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimary"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:orientation="horizontal">

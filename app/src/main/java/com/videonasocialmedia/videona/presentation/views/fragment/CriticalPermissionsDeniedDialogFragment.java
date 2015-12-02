@@ -22,7 +22,7 @@ public class CriticalPermissionsDeniedDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_close_app, null);
+        View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_permission_app, null);
         AlertDialog dialog = builder.setCancelable(true)
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override

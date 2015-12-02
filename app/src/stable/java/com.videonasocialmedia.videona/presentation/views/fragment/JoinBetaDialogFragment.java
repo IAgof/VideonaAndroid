@@ -24,6 +24,7 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         joinBetaPresenter = new JoinBetaPresenter(this);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_join_beta, null);

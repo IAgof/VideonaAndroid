@@ -190,7 +190,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
                         String.valueOf(numVideosSelected) + " " +
                         getResources().getString(R.string.confirmDeleteTitle2);
             }
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, R.style.VideonaAlertDialogDark)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle(title)
                             .setMessage(R.string.confirmDeleteMessage)

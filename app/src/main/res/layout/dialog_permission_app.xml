@@ -12,7 +12,9 @@
         android:gravity="center"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:textColor="@color/textColorTitle"
+        android:layout_gravity="center"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,5 +30,6 @@
         android:textAlignment="center"
         android:background="@drawable/button_color_selector"
         android:layout_margin="5dp"
+        android:textColor="@color/textColorButton"
         />
 </LinearLayout>

@@ -512,7 +512,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void onRemoveAllProjectSelected() {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this, R.style.VideonaAlertDialogDark)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(R.string.confirmDeleteVideosFromProjectTitle)
                 .setMessage(R.string.confirmDeleteVideosFromProjectMessage)

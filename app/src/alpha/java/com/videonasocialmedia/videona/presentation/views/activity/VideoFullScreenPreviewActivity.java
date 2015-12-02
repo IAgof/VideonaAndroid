@@ -114,7 +114,7 @@ public class VideoFullScreenPreviewActivity extends VideonaActivity implements O
      */
     private void showError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(VideoFullScreenPreviewActivity.this,
-                AlertDialog.THEME_HOLO_LIGHT);
+                R.style.VideonaAlertDialogDark);
         builder.setMessage(R.string.invalid_video)
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
