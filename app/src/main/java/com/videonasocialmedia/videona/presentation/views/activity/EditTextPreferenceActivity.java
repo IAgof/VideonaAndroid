@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
@@ -80,7 +81,7 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
     @Override
     protected void onResume() {
         super.onResume();
-        editText.setHint(presenter.getHintText());
+        editText.setHint(getString(presenter.getHintText()));
         checkIfPreviousTextExists();
     }
 
@@ -132,6 +133,11 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
     @Override
     public void goBack() {
         finish();
+    }
+
+    public void showMessage(int messageId) {
+        Toast.makeText(getApplicationContext(), getString(messageId),
+                Toast.LENGTH_LONG).show();
     }
 
 }

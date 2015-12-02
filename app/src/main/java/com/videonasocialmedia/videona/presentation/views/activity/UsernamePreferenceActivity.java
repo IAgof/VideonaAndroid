@@ -16,7 +16,7 @@ public class UsernamePreferenceActivity extends EditTextPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        presenter = new UsernamePreferencePresenter(this, context, sharedPreferences);
+        presenter = new UsernamePreferencePresenter(this, sharedPreferences);
         getSupportActionBar().setTitle(R.string.username);
     }
 

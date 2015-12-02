@@ -22,6 +22,8 @@ public interface EditTextPreferenceView {
      */
     void setPreferenceToMixpanel(String propertie, String value);
 
+    void showMessage(int messageId);
+
     void showInfoText();
 
     void hideInfoText();

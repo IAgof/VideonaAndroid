@@ -22,11 +22,9 @@ import com.videonasocialmedia.videona.utils.ConfigPreferences;
  */
 public class NamePreferencePresenter extends EditTextPreferencePresenter {
 
-    private String name;
-
     public NamePreferencePresenter(EditTextPreferenceView editTextPreferenceView,
-                                   Context context, SharedPreferences sharedPreferences) {
-        super(editTextPreferenceView, context, sharedPreferences);
+                                   SharedPreferences sharedPreferences) {
+        super(editTextPreferenceView, sharedPreferences);
     }
 
     @Override
@@ -43,8 +41,8 @@ public class NamePreferencePresenter extends EditTextPreferencePresenter {
     }
 
     @Override
-    public String getHintText() {
-        return context.getResources().getString(R.string.name);
+    public int getHintText() {
+        return R.string.name;
     }
 
     @Override

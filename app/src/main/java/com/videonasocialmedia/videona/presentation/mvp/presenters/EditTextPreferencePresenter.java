@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.videonasocialmedia.videona.presentation.mvp.views.EditTextPreferenceView;
@@ -20,7 +19,6 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditTextPreferenceV
  */
 public abstract class EditTextPreferencePresenter {
 
-    protected Context context;
     protected SharedPreferences sharedPreferences;
     protected EditTextPreferenceView editTextPreferenceView;
     protected SharedPreferences.Editor editor;
@@ -29,13 +27,11 @@ public abstract class EditTextPreferencePresenter {
      * Constructor
      *
      * @param editTextPreferenceView
-     * @param context
      * @param sharedPreferences
      */
     public EditTextPreferencePresenter(EditTextPreferenceView editTextPreferenceView,
-                                       Context context, SharedPreferences sharedPreferences) {
+                                       SharedPreferences sharedPreferences) {
         this.editTextPreferenceView = editTextPreferenceView;
-        this.context = context;
         this.sharedPreferences = sharedPreferences;
         editor = sharedPreferences.edit();
     }
@@ -46,8 +42,8 @@ public abstract class EditTextPreferencePresenter {
         return null;
     }
 
-    public String getHintText() {
-        return null;
+    public int getHintText() {
+        return -1;
     }
 
     public void removeData() {}

@@ -22,11 +22,9 @@ import com.videonasocialmedia.videona.utils.ConfigPreferences;
  */
 public class EmailPreferencePresenter extends EditTextPreferencePresenter {
 
-    private String email;
-
     public EmailPreferencePresenter(EditTextPreferenceView editTextPreferenceView,
-                                    Context context, SharedPreferences sharedPreferences) {
-        super(editTextPreferenceView, context, sharedPreferences);
+                                    SharedPreferences sharedPreferences) {
+        super(editTextPreferenceView, sharedPreferences);
     }
 
     @Override
@@ -34,7 +32,18 @@ public class EmailPreferencePresenter extends EditTextPreferencePresenter {
         editor.putString(ConfigPreferences.EMAIL, text);
         editor.commit();
         editTextPreferenceView.setPreferenceToMixpanel("account_email", text);
-        editTextPreferenceView.goBack();
+        if(isValidEmail(text))
+            editTextPreferenceView.goBack();
+        else
+            editTextPreferenceView.showMessage(R.string.invalid_email);
+    }
+
+    private boolean isValidEmail(CharSequence email) {
+        if (email == null) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        }
     }
 
     @Override
@@ -43,8 +52,8 @@ public class EmailPreferencePresenter extends EditTextPreferencePresenter {
     }
 
     @Override
-    public String getHintText() {
-        return context.getResources().getString(R.string.email);
+    public int getHintText() {
+        return R.string.email;
     }
 
 }

@@ -14,7 +14,7 @@ public class EmailPreferenceActivity extends EditTextPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        presenter = new EmailPreferencePresenter(this, context, sharedPreferences);
+        presenter = new EmailPreferencePresenter(this, sharedPreferences);
         getSupportActionBar().setTitle(R.string.emailPreference);
     }
 
