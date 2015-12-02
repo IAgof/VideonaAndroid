@@ -67,7 +67,9 @@
     <string name="settingsTitle">Settings</string>
     <string name="titleUserSection">My account</string>
     <string name="name">Name</string>
+    <string name="removeName">Remove name</string>
     <string name="username">Username</string>
+    <string name="removeUsername">Remove username</string>
     <string name="emailPreference">Email</string>
     <string name="title_camera_section">Camera</string>
     <string name="resolution">Resolution</string>

@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
@@ -30,6 +31,8 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
     EditText editText;
     @InjectView(R.id.edit_text_preferences_icon)
     ImageView editTextImage;
+    @InjectView(R.id.info_field)
+    TextView infoText;
 
     protected Context context;
     protected EditTextPreferencePresenter presenter;
@@ -86,6 +89,7 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
         if (text != null && !text.isEmpty()) {
             editText.setText(text);
             putIconForEditTextIsNotNull();
+            showInfoText();
         } else {
             putIconForEditTextIsNull();
         }
@@ -97,6 +101,19 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
 
     private void putIconForEditTextIsNull() {
         editTextImage.setImageResource(R.drawable.gatito_rules);
+    }
+
+    @Override
+    public void showInfoText() {}
+
+    @Override
+    public void hideInfoText() {
+        infoText.setText(null);
+    }
+
+    @Override
+    public void removeEditText() {
+        editText.setText(null);
     }
 
     @OnClick(R.id.save)

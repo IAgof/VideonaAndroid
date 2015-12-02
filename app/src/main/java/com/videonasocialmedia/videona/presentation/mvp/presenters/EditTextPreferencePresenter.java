@@ -18,7 +18,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditTextPreferenceV
 /**
  * This class is used to show the setting menu.
  */
-public class EditTextPreferencePresenter {
+public abstract class EditTextPreferencePresenter {
 
     protected Context context;
     protected SharedPreferences sharedPreferences;
@@ -49,5 +49,7 @@ public class EditTextPreferencePresenter {
     public String getHintText() {
         return null;
     }
+
+    public void removeData() {}
 
 }

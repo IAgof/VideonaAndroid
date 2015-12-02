@@ -46,4 +46,12 @@ public class UsernamePreferencePresenter extends EditTextPreferencePresenter {
         return context.getResources().getString(R.string.username);
     }
 
+    @Override
+    public void removeData() {
+        editor.putString(ConfigPreferences.USERNAME, null);
+        editor.commit();
+        editTextPreferenceView.removeEditText();
+        editTextPreferenceView.hideInfoText();
+    }
+
 }
