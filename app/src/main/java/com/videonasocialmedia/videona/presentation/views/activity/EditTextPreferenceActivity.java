@@ -129,4 +129,9 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
         mixpanel.getPeople().set(propertie, value);
     }
 
+    @Override
+    public void goBack() {
+        finish();
+    }
+
 }

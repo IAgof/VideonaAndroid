@@ -27,4 +27,6 @@ public interface EditTextPreferenceView {
     void hideInfoText();
 
     void removeEditText();
+
+    void goBack();
 }

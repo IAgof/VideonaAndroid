@@ -34,6 +34,7 @@ public class EmailPreferencePresenter extends EditTextPreferencePresenter {
         editor.putString(ConfigPreferences.EMAIL, text);
         editor.commit();
         editTextPreferenceView.setPreferenceToMixpanel("account_email", text);
+        editTextPreferenceView.goBack();
     }
 
     @Override
