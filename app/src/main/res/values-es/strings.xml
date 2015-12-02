@@ -71,6 +71,7 @@
     <string name="username">Nombre de usuario</string>
     <string name="removeUsername">Borrar nombre de usuario</string>
     <string name="emailPreference">Email</string>
+    <string name="save">Guardar</string>
     <string name="title_camera_section">Cámara</string>
     <string name="resolution">Resolución</string>
     <string name="low_resolution_name">Buena (720p)</string>
@@ -97,7 +98,10 @@
         introduce tu mail y te indicaremos los pasos a seguir.</string>
     <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
     <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
-    <string name="title_about_section">Sobre nosotros</string>
+    <string name="moreInformation">Más información</string>
+    <string name="privacyPolicy">Política de privacidad</string>
+    <string name="termsOfService">Condiciones de servicio</string>
+    <string name="licenses">Licencias</string>
     <string name="title_vote_section">Vota</string>
     <string name="content_vote_section">Vota nuestra aplicación</string>
     <string name="title_contact_section">Contacta con Videona</string>

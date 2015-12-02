@@ -18,4 +18,14 @@ public class EmailPreferenceActivity extends EditTextPreferenceActivity {
         getSupportActionBar().setTitle(R.string.emailPreference);
     }
 
+    @Override
+    public void putIconForEditTextIsNotNull() {
+        editTextImage.setImageResource(R.drawable.gatito_rules_pressed);
+    }
+
+    @Override
+    public void putIconForEditTextIsNull() {
+        editTextImage.setImageResource(R.drawable.gatito_rules);
+    }
+
 }

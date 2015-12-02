@@ -65,10 +65,26 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_about_section">
+        android:title="@string/moreInformation">
         <Preference
             android:title="@string/aboutUsTitle">
             <intent android:action=".presentation.views.activity.AboutActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/privacyPolicy">
+            <intent android:action=".presentation.views.activity.PrivacyPolicyActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/termsOfService">
+            <intent android:action=".presentation.views.activity.TermsOfServiceActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/licenses">
+            <intent android:action=".presentation.views.activity.LicensesActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/legacyAdviceTitle">
+            <intent android:action=".presentation.views.activity.LegalNoticeActivity"/>
         </Preference>
     </PreferenceCategory>
 

@@ -20,6 +20,16 @@ public class UsernamePreferenceActivity extends EditTextPreferenceActivity {
         getSupportActionBar().setTitle(R.string.username);
     }
 
+    @Override
+    public void putIconForEditTextIsNotNull() {
+        editTextImage.setImageResource(R.drawable.gatito_rules_pressed);
+    }
+
+    @Override
+    public void putIconForEditTextIsNull() {
+        editTextImage.setImageResource(R.drawable.gatito_rules);
+    }
+
     @OnClick(R.id.info_field)
     public void removeUsername() {
         presenter.removeData();

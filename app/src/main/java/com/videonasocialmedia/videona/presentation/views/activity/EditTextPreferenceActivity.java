@@ -96,13 +96,9 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
         }
     }
 
-    private void putIconForEditTextIsNotNull() {
-        editTextImage.setImageResource(R.drawable.gatito_rules_pressed);
-    }
+    protected void putIconForEditTextIsNotNull() {}
 
-    private void putIconForEditTextIsNull() {
-        editTextImage.setImageResource(R.drawable.gatito_rules);
-    }
+    protected void putIconForEditTextIsNull() {}
 
     @Override
     public void showInfoText() {}

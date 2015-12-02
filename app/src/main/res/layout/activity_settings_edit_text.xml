@@ -23,8 +23,7 @@
         <ImageView
             android:id="@+id/edit_text_preferences_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/gatito_rules" />
+            android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/edit_user_account"
             android:layout_width="match_parent"
@@ -44,7 +43,7 @@
         android:id="@+id/save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@string/save"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
