@@ -20,12 +20,12 @@ public class EmailPreferenceActivity extends EditTextPreferenceActivity {
 
     @Override
     public void putIconForEditTextIsNotNull() {
-        editTextImage.setImageResource(R.drawable.gatito_rules_pressed);
+        editTextImage.setImageResource(R.drawable.activity_settings_icon_email);
     }
 
     @Override
     public void putIconForEditTextIsNull() {
-        editTextImage.setImageResource(R.drawable.gatito_rules);
+        editTextImage.setImageResource(R.drawable.activity_settings_icon_email_add);
     }
 
 }

@@ -23,7 +23,8 @@
         <ImageView
             android:id="@+id/edit_text_preferences_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
         <EditText
             android:id="@+id/edit_user_account"
             android:layout_width="match_parent"
