@@ -34,9 +34,11 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     private int mCurrentFilter;
     private int mNewFilter;
 
+    private int screenWidth;
+    private int screenHeight;
+
     private List<Overlay> overlayList;
     private Watermark watermark;
-
 
     /**
      * Constructs CameraSurfaceRenderer.
@@ -65,12 +67,12 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         this.overlayList = overlayList;
     }
 
-    public void setWatermark(Watermark watermark){
-        this.watermark=watermark;
+    public void setWatermark(Watermark watermark) {
+        this.watermark = watermark;
     }
 
-    public void removeWatermark(){
-        watermark=null;
+    public void removeWatermark() {
+        watermark = null;
     }
 
     /**
@@ -96,6 +98,8 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceChanged(GL10 unused, int width, int height) {
         Log.d(TAG, "onSurfaceChanged " + width + "x" + height);
+        screenWidth = width;
+        screenHeight = height;
     }
 
     @Override
@@ -123,10 +127,16 @@ class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         if (mCameraEncoder.isSurfaceTextureReadyForDisplay()) {
             mCameraEncoder.getSurfaceTextureForDisplay().updateTexImage();
             mCameraEncoder.getSurfaceTextureForDisplay().getTransformMatrix(mSTMatrix);
+            GLES20.glViewport(0, 0, screenWidth, screenHeight);
             mFullScreenCamera.drawFrame(mCameraTextureId, mSTMatrix);
             drawOverlayList();
-            if (watermark != null)
+            if (watermark != null) {
+                if (!watermark.isInitialized())
+                    watermark.initProgram();
                 watermark.draw();
+            }
+
+            GLES20.glDisable(GLES20.GL_BLEND);
         }
         mFrameCount++;
     }
