@@ -118,7 +118,7 @@
     <string name="invalidRazorTime">Please, select an instant time to razor this video</string>
 
     <!-- Activity About -->
-    <string name="aboutUsTitle"><u>About us</u></string>
+    <string name="aboutUsTitle">About us</string>
     <string name="aboutUsContent">
         Record, edit, share…Three simple things you will like to do as soon as you have the new
         Videona App in your smartphone.\nCopyright &#169; 2015. Videona Socialmedia S.L. All rights

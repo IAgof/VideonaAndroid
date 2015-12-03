@@ -118,7 +118,7 @@
     <string name="invalidRazorTime">Por favor, selecciona un instante de tiempo para cortar el vídeo</string>
 
     <!-- Activity About -->
-    <string name="aboutUsTitle"><u>Sobre nosotros</u></string>
+    <string name="aboutUsTitle">Sobre nosotros</string>
     <string name="aboutUsContent">
         Graba, edita comparte&#8230;Tres sencillas cosas que querrás hacer tan pronto como tengas
         descargada la app de Videona en tu smartphone.\nCopyright &#169; 2015. Videona Socialmedia
