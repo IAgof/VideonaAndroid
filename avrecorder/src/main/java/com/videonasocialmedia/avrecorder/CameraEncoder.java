@@ -366,7 +366,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     public void addWatermark(Drawable overlayImage,
                              int positionX, int positionY, int width, int height, boolean preview) {
-        this.watermark = new Watermark(overlayImage, positionX, positionY, width, height);
+        this.watermark = new Watermark(overlayImage, height, width, positionX, positionY);
         if (preview && mDisplayRenderer != null)
             mDisplayRenderer.setWatermark(watermark);
     }
@@ -374,6 +374,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     public void addWatermark(Drawable overlayImage, boolean preview) {
         int[] size = calculateDefaultWatermarkSize();
         int margin = calculateWatermarkDefaultPosition();
+        //addWatermark(overlayImage, 15, 15, 265, 36, preview);
         addWatermark(overlayImage, margin, margin, size[0], size[1], preview);
     }
 
