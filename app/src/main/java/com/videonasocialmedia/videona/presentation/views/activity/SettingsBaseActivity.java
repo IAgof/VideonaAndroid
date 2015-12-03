@@ -1,8 +1,12 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
@@ -43,6 +47,42 @@ public class SettingsBaseActivity extends VideonaActivity {
     protected void onPause() {
         super.onPause();
         mixpanel.track("Time in Settings Activity");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                goToContact();
+                return true;
+            case R.id.action_vote:
+                goToVote();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void goToContact() {
+        navigateTo("mailto:info@videona.com");
+    }
+
+    private void goToVote() {
+        navigateTo("market://details?id=com.videonasocialmedia.videona");
+    }
+
+    private void navigateTo(String url) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
 }

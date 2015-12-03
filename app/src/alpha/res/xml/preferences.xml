@@ -38,25 +38,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_vote_section">
-        <Preference
-            android:title="@string/content_vote_section">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="market://details?id=com.videonasocialmedia.videona" />
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/title_contact_section">
-        <Preference
-            android:title="@string/content_contact_section">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="mailto:info@videona.com" />
-            />
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/moreInformation">
         <Preference
             android:title="@string/aboutUsTitle">
