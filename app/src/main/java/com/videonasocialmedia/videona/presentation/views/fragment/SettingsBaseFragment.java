@@ -1,6 +1,9 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -27,6 +30,7 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
     protected Context context;
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
+    private Preference exitPref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,30 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
         qualityPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY);
         preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
                 sharedPreferences);
+        exitPref = findPreference("exit");
+        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new AlertDialog.Builder(getActivity(), android.app.AlertDialog.THEME_HOLO_DARK)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.exit_app_title)
+                        .setMessage(R.string.exit_app_message)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Intent.ACTION_MAIN);
+                                intent.addCategory(Intent.CATEGORY_HOME);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                getActivity().finish();
+                                System.exit(0);
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+                return true;
+            }
+        });
     }
 
     @Override

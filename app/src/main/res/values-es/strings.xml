@@ -108,6 +108,8 @@
     <string name="content_contact_section">Dinos que opinas de la aplicación</string>
     <string name="title_tutorial_section">Tutorial</string>
     <string name="content_tutorial_section">Mira nuestro tutorial</string>
+    <string name="accountActions">Acciones de cuenta</string>
+    <string name="exit">Salir</string>
 
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>

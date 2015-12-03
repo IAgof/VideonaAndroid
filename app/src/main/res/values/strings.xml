@@ -108,6 +108,8 @@
     <string name="content_contact_section">Give us feedback</string>
     <string name="title_tutorial_section">Tutorial</string>
     <string name="content_tutorial_section">See our tutorial</string>
+    <string name="accountActions">Account actions</string>
+    <string name="exit">Exit</string>
 
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>

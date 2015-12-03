@@ -88,4 +88,13 @@
         </Preference>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/accountActions">
+        <Preference
+            android:key="exit"
+            android:title="@string/exit">
+            <intent android:action=".presentation.views.activity.LogOutActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
 </PreferenceScreen>
