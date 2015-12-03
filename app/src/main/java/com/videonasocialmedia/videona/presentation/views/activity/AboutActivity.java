@@ -31,10 +31,6 @@ import butterknife.OnClick;
  */
 public class AboutActivity extends VideonaActivity {
 
-    /*CONFIG*/
-    /**
-     * Tracker google analytics
-     */
     @InjectView(R.id.videona_version)
     TextView versionName;
 

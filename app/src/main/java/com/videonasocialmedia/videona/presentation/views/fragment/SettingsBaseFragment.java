@@ -9,8 +9,14 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.qordoba.sdk.Qordoba;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
@@ -35,8 +41,8 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         addPreferencesFromResource(R.xml.preferences);
+
         context = getActivity().getApplicationContext();
         getPreferenceManager().setSharedPreferencesName(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME);
         sharedPreferences = getActivity().getSharedPreferences(
@@ -71,6 +77,23 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
                 return true;
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.list, null);
+        ListView listView = (ListView)v.findViewById(android.R.id.list);
+
+        ViewGroup footer = (ViewGroup) inflater.inflate(R.layout.footer, listView, false);
+        listView.addFooterView(footer, null, false);
+
+        TextView footerText = (TextView)v.findViewById(R.id.footerText);
+        String text = getString(R.string.videona) + " v" + BuildConfig.VERSION_NAME + "\n" +
+                getString(R.string.madeIn);
+        footerText.setText(text);
+
+        return v;
     }
 
     @Override

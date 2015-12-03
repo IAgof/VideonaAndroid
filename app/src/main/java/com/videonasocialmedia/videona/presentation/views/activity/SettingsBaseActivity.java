@@ -8,6 +8,8 @@ import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Veronica Lago Fominaya on 26/11/2015.
  */
@@ -17,6 +19,7 @@ public class SettingsBaseActivity extends VideonaActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        ButterKnife.inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
