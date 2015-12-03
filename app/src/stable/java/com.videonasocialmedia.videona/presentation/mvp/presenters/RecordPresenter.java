@@ -380,6 +380,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void applyEffect(Effect effect){
         if (effect instanceof OverlayEffect){
+            recorder.removeOverlay();
             Drawable overlay= context.getResources().getDrawable(((OverlayEffect) effect).getResourceId());
             recorder.addOverlayFilter(overlay);
         }
