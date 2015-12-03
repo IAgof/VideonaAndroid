@@ -31,15 +31,18 @@ public class AVRecorder {
     protected MicrophoneEncoder mMicEncoder;
     private SessionConfig mConfig;
     private boolean mIsRecording;
-    private Drawable overlayImage;
     private boolean released;
 
     // To flash support
     private boolean cameraChanged;
 
-    public AVRecorder(SessionConfig config, Drawable overlayImage) throws IOException {
+    public AVRecorder(SessionConfig config, Drawable watermark) throws IOException {
         init(config);
-        this.overlayImage = overlayImage;
+        setWatermark(watermark);
+    }
+
+    public AVRecorder (SessionConfig config) throws IOException{
+        init(config);
     }
 
     private void init(SessionConfig config) throws IOException {
@@ -74,21 +77,22 @@ public class AVRecorder {
         mCamEncoder.addOverlayFilter(image, mConfig.getVideoWidth(), mConfig.getVideoHeight());
     }
 
-    public void setWatermark(Drawable watermarkImage, boolean showInPreview){
-     mCamEncoder.addWatermark(watermarkImage, showInPreview);
+    public void setWatermark(Drawable watermarkImage, boolean showInPreview) {
+        mCamEncoder.addWatermark(watermarkImage, showInPreview);
     }
 
     /**
      * Set a watermark hide in the preview
+     *
      * @param watermarkImage
      */
-    public void setWatermark(Drawable watermarkImage){
+    public void setWatermark(Drawable watermarkImage) {
         mCamEncoder.addWatermark(watermarkImage, false);
     }
 
     //TODO define how to identify a single overlay;
     public void removeOverlay() {
-
+        mCamEncoder.removeOverlayFilter(null);
     }
 
     /**
