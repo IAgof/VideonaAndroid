@@ -35,27 +35,34 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
         View v = inflater.inflate(R.layout.dialog_join_beta, null);
         builder.setView(v);
         email = (EditText) v.findViewById(R.id.email);
-        String previousEmail = checkIfPreviousEmailExists();
-        if(previousEmail != null && !previousEmail.isEmpty())
-            email.setText(previousEmail);
-        View cancelButton = v.findViewById(R.id.cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getDialog().cancel();
-            }
-        });
+        joinBetaPresenter.checkIfPreviousEmailExists();
+        setNegativeButton(v);
+        setPositiveButton(v);
+
+        return builder.create();
+    }
+
+    private void setPositiveButton(View v) {
         View sendButton = v.findViewById(R.id.sendEmail);
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 joinBetaPresenter.validateEmail(email.getText().toString());
             }
         });
-
-        return builder.create();
     }
 
-    private String checkIfPreviousEmailExists() {
-        return joinBetaPresenter.getPreviousEmail();
+    private void setNegativeButton(View v) {
+        View cancelButton = v.findViewById(R.id.cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getDialog().cancel();
+            }
+        });
+    }
+
+    @Override
+    public void setEmail(String text) {
+        email.setText(text);
     }
 
     @Override

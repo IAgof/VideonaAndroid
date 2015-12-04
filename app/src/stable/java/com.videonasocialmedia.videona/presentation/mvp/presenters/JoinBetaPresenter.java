@@ -54,8 +54,10 @@ public class JoinBetaPresenter {
         }
     }
 
-    public String getPreviousEmail() {
-        return sharedPreferences.getString(ConfigPreferences.EMAIL, null);
+    public void checkIfPreviousEmailExists() {
+        String previousEmail = sharedPreferences.getString(ConfigPreferences.EMAIL, null);
+        if(previousEmail != null && !previousEmail.isEmpty())
+            joinBetaView.setEmail(previousEmail);
     }
 
 }
