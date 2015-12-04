@@ -10,7 +10,9 @@
         </Preference>
         <Preference
             android:key="username"
-            android:title="@string/username" />
+            android:title="@string/username" >
+            <intent android:action=".presentation.views.activity.UsernamePreferenceActivity" />
+        </Preference>
         <Preference
             android:key="email"
             android:title="@string/emailPreference">
