@@ -5,8 +5,6 @@ import android.os.Bundle;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.UsernamePreferencePresenter;
 
-import butterknife.OnClick;
-
 /**
  * Created by Veronica Lago Fominaya on 26/11/2015.
  */
@@ -28,11 +26,6 @@ public class UsernamePreferenceActivity extends EditTextPreferenceActivity {
     @Override
     public void putIconForEditTextIsNull() {
         editTextImage.setImageResource(R.drawable.activity_settings_icon_person_add);
-    }
-
-    @OnClick(R.id.info_field)
-    public void removeUsername() {
-        presenter.removeData();
     }
 
     @Override

@@ -136,4 +136,9 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
                 Toast.LENGTH_LONG).show();
     }
 
+    @OnClick(R.id.info_field)
+    public void removeData() {
+        presenter.removeData();
+    }
+
 }
