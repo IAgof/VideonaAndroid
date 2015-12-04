@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/Toolbar"
-        app:title="@string/aboutUsTitle"
+        app:title="@string/legacyAdviceTitle"
         android:elevation="4dp" />
 
     <ScrollView
@@ -29,39 +29,10 @@
             android:orientation="vertical">
 
             <TextView
-                android:text="@string/aboutUsContent"
+                android:text="@string/legacyAdviceContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right" />
-
-            <TextView
-                style="@style/Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/contactUsTitle" />
-
-            <TextView
-                android:text="@string/contactUsContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/videona_web"
-                android:text="@string/videonaWeb"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:autoLink="web" />
-
-            <TextView
-                style="@style/Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/versionTitle" />
-
-            <TextView
-                android:id="@+id/videona_version"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </ScrollView>

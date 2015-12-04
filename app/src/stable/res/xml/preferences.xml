@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferenceScreen">
+
+    <PreferenceCategory
+        android:title="@string/titleUserSection">
+        <Preference
+            android:key="name"
+            android:title="@string/name">
+            <intent android:action=".presentation.views.activity.NamePreferenceActivity"/>
+        </Preference>
+        <Preference
+            android:key="username"
+            android:title="@string/username">
+            <intent android:action=".presentation.views.activity.UsernamePreferenceActivity"/>
+        </Preference>
+        <Preference
+            android:key="email"
+            android:title="@string/emailPreference">
+            <intent android:action=".presentation.views.activity.EmailPreferenceActivity"/>
+        </Preference>
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/title_camera_section">
@@ -27,29 +47,35 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_vote_section">
-        <Preference
-            android:title="@string/content_vote_section">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="market://details?id=com.videonasocialmedia.videona" />
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/title_contact_section">
-        <Preference
-            android:title="@string/content_contact_section">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="mailto:info@videona.com" />
-            />
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/title_about_section">
+        android:title="@string/moreInformation">
         <Preference
             android:title="@string/aboutUsTitle">
             <intent android:action=".presentation.views.activity.AboutActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/privacyPolicy">
+            <intent android:action=".presentation.views.activity.PrivacyPolicyActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/termsOfService">
+            <intent android:action=".presentation.views.activity.TermsOfServiceActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/licenses">
+            <intent android:action=".presentation.views.activity.LicensesActivity"/>
+        </Preference>
+        <Preference
+            android:title="@string/legacyAdviceTitle">
+            <intent android:action=".presentation.views.activity.LegalNoticeActivity"/>
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/accountActions">
+        <Preference
+            android:key="exit"
+            android:title="@string/exit">
+            <intent android:action=".presentation.views.activity.LogOutActivity"/>
         </Preference>
     </PreferenceCategory>
 

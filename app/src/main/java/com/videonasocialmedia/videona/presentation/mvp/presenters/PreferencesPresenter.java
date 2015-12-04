@@ -56,8 +56,24 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
      * Checks the available preferences on the device
      */
     public void checkAvailablePreferences() {
+        checkUserAccountData();
         checkAvailableResolution();
         checkAvailableQuality();
+    }
+
+    /**
+     * Checks user preferences data
+     */
+    private void checkUserAccountData() {
+        checkUserAccountPreference(ConfigPreferences.NAME);
+        checkUserAccountPreference(ConfigPreferences.USERNAME);
+        checkUserAccountPreference(ConfigPreferences.EMAIL);
+    }
+
+    private void checkUserAccountPreference(String key) {
+        String data = sharedPreferences.getString(key, null);
+        if (data != null && !data.isEmpty())
+            preferencesView.setSummary(key, data);
     }
 
     /**

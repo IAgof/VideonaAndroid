@@ -34,8 +34,8 @@ public class SettingsActivity extends SettingsBaseActivity {
     public void onEvent(JoinBetaEvent event){
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
-        mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before
-                                                   // property name
+        //Special properties in Mixpanel use $ before property name
+        mixpanel.getPeople().set("$email", email);
     }
 
 
