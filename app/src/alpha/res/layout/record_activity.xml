@@ -134,7 +134,7 @@
                             android:layout_height="fill_parent"
                             android:layout_gravity="center_vertical"
                             android:alpha="0.5"
-                            android:background="@color/pastel_palette_grey_record"
+                            android:background="@color/colorGreyTransparent"
                             android:paddingLeft="4dp"
                             android:src="@anim/activity_record_drawable_rec_progress"
                             android:visibility="invisible" />
@@ -145,7 +145,7 @@
                             android:layout_height="fill_parent"
                             android:layout_gravity="center_vertical"
                             android:alpha="0.5"
-                            android:background="@color/pastel_palette_grey_record"
+                            android:background="@color/colorGreyTransparent"
                             android:gravity="center_vertical"
                             android:paddingLeft="8dp"
                             android:paddingRight="16dp"
@@ -217,7 +217,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="24"
                     android:background="@drawable/activity_record_icon_rec_circle"
-                    android:backgroundTint="@color/pastel_palette_grey_record"
+                    android:backgroundTint="@color/colorGreyTransparent"
                     android:backgroundTintMode="src_atop">
 
                     <!--  <ImageView

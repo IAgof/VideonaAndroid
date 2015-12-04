@@ -3,17 +3,18 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/back_rectangle" >
+     >
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/CloseBecauseOfPermissionsTitle"
         android:textSize="25sp"
         android:gravity="center"
-        android:textColor="@android:color/white"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:textColor="@color/textColorTitle"
+        android:layout_gravity="center"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,11 +25,11 @@
         android:id="@+id/ok"
         android:layout_width="80dp"
         android:layout_height="40dp"
+        android:layout_gravity="center"
         android:text="@string/ok"
-        android:textColor="@android:color/white"
         android:textAlignment="center"
-        android:layout_gravity="right"
         android:background="@drawable/button_color_selector"
         android:layout_margin="5dp"
+        android:textColor="@color/textColorButton"
         />
 </LinearLayout>

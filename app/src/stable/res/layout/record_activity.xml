@@ -79,7 +79,7 @@
 
                     <ImageView android:id="@+id/imageRecPoint" android:layout_width="wrap_content"
                         android:layout_height="fill_parent" android:layout_gravity="center_vertical"
-                        android:alpha="0.5" android:background="@color/pastel_palette_grey_record"
+                        android:alpha="0.5" android:background="@color/colorGreyTransparent"
                         android:paddingLeft="4dp"
                         android:src="@anim/activity_record_drawable_rec_progress"
                         android:visibility="invisible" />
@@ -87,10 +87,10 @@
                     <Chronometer android:id="@+id/chronometer_record"
                         android:layout_width="wrap_content" android:layout_height="fill_parent"
                         android:layout_gravity="center_vertical" android:alpha="0.5"
-                        android:background="@color/pastel_palette_grey_record"
+                        android:background="@color/colorGreyTransparent"
                         android:gravity="center_vertical" android:paddingLeft="8dp"
                         android:paddingRight="16dp" android:text="00:00"
-                        android:textColor="@android:color/white" android:textSize="18sp"
+                        android:textColor="@color/textColorChronometer" android:textSize="18sp"
                         android:visibility="visible" />
                 </LinearLayout>
             </RelativeLayout>
@@ -125,7 +125,7 @@
                         android:gravity="center_vertical|center_horizontal"
                         android:scaleType="fitCenter"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@android:color/white" android:textSize="27sp"
+                        android:textColor="@color/textColorNumVideos" android:textSize="27sp"
                         tools:text="00" />
 
                 </RelativeLayout>
@@ -138,7 +138,6 @@
             <RelativeLayout android:layout_width="match_parent" android:layout_height="0dp"
                 android:layout_weight="24"
                 android:background="@drawable/activity_record_icon_rec_circle"
-                android:backgroundTint="@color/pastel_palette_grey_record"
                 android:backgroundTintMode="src_atop">
 
                 <!--  <ImageView

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/videona_red_1" android:state_selected="true" />
+    <item android:drawable="@color/colorAccent" android:state_selected="true" />
     <!-- pressed state -->
-    <item android:drawable="@color/transparent" />
+    <item android:drawable="@color/colorTransparent" />
     <!-- default state -->
 </selector>

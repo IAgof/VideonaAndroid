@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/videona_black_1"
+    android:background="@color/colorBlack"
     android:animateLayoutChanges="true">
 
     <RelativeLayout
@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:text="@string/galleryActivityTitle"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/videona_blue_6" />
+            android:textColor="@color/textColorGalleryTitle" />
 
         <LinearLayout
             android:id="@+id/selection_mode"
@@ -103,7 +103,7 @@
             android:layout_gravity="top"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:background="@color/videona_blue_6"
+            android:background="@color/colorPrimary"
             android:transitionGroup="false"
             android:touchscreenBlocksFocus="false" />
 

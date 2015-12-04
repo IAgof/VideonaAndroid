@@ -10,10 +10,12 @@
 
 package com.videonasocialmedia.videona.utils;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -245,6 +247,54 @@ public class Utils {
 
         return appInfo.toString();
     }
+
+    // Utils to setTheme to app, always call before every Activity setContentView.
+    // Be carefull with delay
+    /*
+    // MUST BE SET BEFORE setContentView
+		Utils.onActivityCreateSetTheme(this);
+     */
+
+    //sTheme enum from SharedPreference with value saved
+    private static int sTheme;
+
+    public final static int THEME_VIDEONA = 0;
+    public final static int THEME_VIDEONA_2 = 1;
+
+
+
+    public static void changeToTheme(Activity activity, int theme) {
+
+        sTheme = theme;
+        // Save theme in Preferences, data persistent
+
+        activity.finish();
+        activity.startActivity(new Intent(activity, activity.getClass()));
+        activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+
+    }
+
+
+    public static void onActivityCreateSetTheme(Activity activity) {
+
+        switch (sTheme) {
+
+            default:
+
+            case THEME_VIDEONA:
+
+                // Note, if theme == theme default do nothing, es quicker.
+                //activity.setTheme(R.style.VideonaTheme);
+                break;
+
+            case THEME_VIDEONA_2:
+                // If theme different from defatul, setTheme
+                //activity.setTheme(R.style.VideonaTheme);
+                break;
+        }
+
+    }
+
 
 
 }

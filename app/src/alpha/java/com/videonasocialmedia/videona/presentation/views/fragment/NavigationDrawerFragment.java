@@ -131,7 +131,7 @@ public class NavigationDrawerFragment extends VideonaFragment {
         try {
             this.getActivity().startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity(), R.style.VideonaAlertDialogDark);
             builder.setMessage(getResources().getString(R.string.error_rate_app))
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setCancelable(false)
@@ -154,7 +154,7 @@ public class NavigationDrawerFragment extends VideonaFragment {
     @OnClick (R.id.fragment_navigator_exit_button)
     public void navigateToExitApp(){
 
-        new AlertDialog.Builder(this.getActivity(), AlertDialog.THEME_HOLO_DARK)
+        new AlertDialog.Builder(this.getActivity(), R.style.VideonaAlertDialogDark)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(R.string.exit_app_title)
                 .setMessage(R.string.exit_app_message)

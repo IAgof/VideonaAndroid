@@ -15,7 +15,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -141,7 +140,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     private void configThumbsView() {
         navigateToEditButton.setBorderWidth(5);
-        navigateToEditButton.setBorderColor(Color.WHITE);
+        navigateToEditButton.setBorderColorResource(R.color.textColorNumVideos);
         numVideosRecorded.setVisibility(View.GONE);
     }
 

@@ -23,9 +23,9 @@
             android:width="48dip" />
 
         <gradient
-            android:centerColor="@color/videona_blue_2"
+            android:centerColor="@color/colorSpinnerCenter"
             android:centerY="0.50"
-            android:endColor="@color/videona_blue_1"
+            android:endColor="@color/colorSpinnerEnd"
             android:startColor="#fff"
             android:type="sweep"
             android:useLevel="false" />
