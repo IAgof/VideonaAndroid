@@ -108,13 +108,10 @@
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape" />
 
-
         <activity
             android:name=".presentation.views.activity.SettingsActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape"
             android:parentActivityName=".presentation.views.activity.InitAppActivity" />
-            
 
         <activity
             android:name=".presentation.views.activity.NamePreferenceActivity"
@@ -152,8 +149,6 @@
         <activity
             android:name=".presentation.views.activity.AboutActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape"
-            >
             android:parentActivityName=".presentation.views.activity.SettingsActivity" >
             <intent-filter>
                 <action android:name=".presentation.views.activity.AboutActivity" />
