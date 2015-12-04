@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.os.Bundle;
+import android.text.InputType;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EmailPreferencePresenter;
@@ -15,6 +16,7 @@ public class EmailPreferenceActivity extends EditTextPreferenceActivity {
         super.onCreate(savedInstanceState);
 
         presenter = new EmailPreferencePresenter(this, sharedPreferences);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         getSupportActionBar().setTitle(R.string.emailPreference);
     }
 
