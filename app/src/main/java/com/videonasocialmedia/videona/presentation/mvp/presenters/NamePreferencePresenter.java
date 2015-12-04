@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.videonasocialmedia.videona.R;
@@ -42,7 +41,7 @@ public class NamePreferencePresenter extends EditTextPreferencePresenter {
 
     @Override
     public int getHintText() {
-        return R.string.name;
+        return R.string.enterName;
     }
 
     @Override

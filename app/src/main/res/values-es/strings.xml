@@ -67,8 +67,10 @@
     <string name="settingsTitle">Ajustes</string>
     <string name="titleUserSection">Mi cuenta</string>
     <string name="name">Nombre</string>
+    <string name="enterName">Introduce tu nombre</string>
     <string name="removeName">Borrar nombre</string>
     <string name="username">Nombre de usuario</string>
+    <string name="enterUsername">Introduce un nombre de usuario</string>
     <string name="removeUsername">Borrar nombre de usuario</string>
     <string name="emailPreference">Email</string>
     <string name="save">Guardar</string>
@@ -83,6 +85,8 @@
     <string name="quality">Calidad</string>
     <string name="join_beta">Prueba Videona Beta</string>
     <string name="email">email</string>
+    <string name="enterEmail">Introduce un email válido</string>
+    <string name="removeEmail">Borrar email</string>
     <string name="send_email">Enviar</string>
     <string name="invalid_email">Por favor, añade un email válido</string>
     <string name="valid_email">Gracias!!</string>
