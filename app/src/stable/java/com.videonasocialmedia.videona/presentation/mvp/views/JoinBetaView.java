@@ -10,4 +10,5 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
 public interface JoinBetaView {
     void showMessage(int messageId);
     void hideDialog();
+    void setEmail(String email);
 }
