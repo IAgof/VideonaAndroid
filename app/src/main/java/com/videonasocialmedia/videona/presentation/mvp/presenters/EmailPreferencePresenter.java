@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.videonasocialmedia.videona.R;
@@ -53,7 +52,15 @@ public class EmailPreferencePresenter extends EditTextPreferencePresenter {
 
     @Override
     public int getHintText() {
-        return R.string.email;
+        return R.string.enterEmail;
+    }
+
+    @Override
+    public void removeData() {
+        editor.putString(ConfigPreferences.EMAIL, null);
+        editor.commit();
+        editTextPreferenceView.removeEditText();
+        editTextPreferenceView.hideInfoText();
     }
 
 }

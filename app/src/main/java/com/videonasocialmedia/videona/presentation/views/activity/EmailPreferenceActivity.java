@@ -30,4 +30,9 @@ public class EmailPreferenceActivity extends EditTextPreferenceActivity {
         editTextImage.setImageResource(R.drawable.activity_settings_icon_email_add);
     }
 
+    @Override
+    public void showInfoText() {
+        infoText.setText(R.string.removeEmail);
+    }
+
 }
