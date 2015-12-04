@@ -66,7 +66,12 @@
     <!-- Activity Settings -->
     <string name="settingsTitle">Settings</string>
     <string name="titleUserSection">My account</string>
+    <string name="name">Name</string>
+    <string name="removeName">Remove name</string>
     <string name="username">Username</string>
+    <string name="removeUsername">Remove username</string>
+    <string name="emailPreference">Email</string>
+    <string name="save">Save</string>
     <string name="title_camera_section">Camera</string>
     <string name="resolution">Resolution</string>
     <string name="low_resolution_name">Good (720p)</string>
@@ -93,13 +98,18 @@
         enter your email and we will show you the steps.</string>
     <string name="positive_button_join_beta_dialog">Why not, let\'s try!</string>
     <string name="negative_button_join_beta_dialog">Not now, thanks</string>
-    <string name="title_about_section">About</string>
+    <string name="moreInformation">More information</string>
+    <string name="privacyPolicy">Privacy policy</string>
+    <string name="termsOfService">Terms of service</string>
+    <string name="licenses">Licenses</string>
     <string name="title_vote_section">Vote</string>
     <string name="content_vote_section">Vote our app</string>
     <string name="title_contact_section">Contact</string>
     <string name="content_contact_section">Give us feedback</string>
     <string name="title_tutorial_section">Tutorial</string>
     <string name="content_tutorial_section">See our tutorial</string>
+    <string name="accountActions">Account actions</string>
+    <string name="exit">Exit</string>
 
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
@@ -110,7 +120,7 @@
     <string name="invalidRazorTime">Please, select an instant time to razor this video</string>
 
     <!-- Activity About -->
-    <string name="aboutUsTitle"><u>About us</u></string>
+    <string name="aboutUsTitle">About us</string>
     <string name="aboutUsContent">
         Record, edit, share…Three simple things you will like to do as soon as you have the new
         Videona App in your smartphone.\nCopyright &#169; 2015. Videona Socialmedia S.L. All rights
@@ -120,7 +130,9 @@
     <string name="contactUsContent">Visit our web page:</string>
     <string name="videonaWeb">http://www.videona.com\n</string>
     <string name="versionTitle"><u>Version</u></string>
+    <string name="videona">Videona</string>
     <string name="versionContent">beta </string>
+    <string name="madeIn">Made in Madrid</string>
     <string name="licenseTitle"><u>Free software licenses</u></string>
     <string name="licenseContent">
         Copyright &#169; 2013 Jake Wharton\nLicensed under the Apache License, Version 2.0 (the
@@ -227,7 +239,7 @@ limitations under the License. \n
         http://freemusicarchive.org/music/Josh_Woodward/The_Beautiful_Machine/JoshWoodward-TheLastSliceOfPecanPie-NoVox,
         icono clave de sol, CC BY 4.0\n
     </string>
-    <string name="legacyAdviceTitle"><u>Legacy Advice</u></string>
+    <string name="legacyAdviceTitle"><u>Legal Notice</u></string>
     <string name="legacyAdviceContent">
         1. TITULARIDAD.\n\nVIDEONA SOCIAL MEDIA, S.L (en adelante, Videona) es Videona de la aplicación móvil (en adelante, Aplicación) y del portal web www.videona.es (en adelante, el Portal) (en adelante y conjuntamente denominados, la Plataforma). Su domicilio se encuentra en c/ María Blanchard, 2 – portal 7, bajo D, 28232, Las Rozas de Madrid, España y su CIF es B87047171.
 

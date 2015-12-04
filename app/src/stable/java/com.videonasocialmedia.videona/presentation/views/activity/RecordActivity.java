@@ -43,6 +43,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
+import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
@@ -148,13 +149,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     private void initEffectsRecycler() {
-        cameraDistortionEffectsAdapter = new EffectAdapter(Effect.getDistortionEffectList(), this);
+        cameraDistortionEffectsAdapter = new EffectAdapter(recordPresenter.getDistortionEffectList(), this);
         effectsRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         effectsRecycler.setAdapter(cameraDistortionEffectsAdapter);
         fxHidden = true;
 
-        cameraColorEffectsAdapter = new EffectAdapter(Effect.getColorEffectList(), this);
+        cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
         colorFilterRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         colorFilterRecycler.setAdapter(cameraColorEffectsAdapter);
@@ -657,9 +658,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @Override
-    public void onEffectSelected(Effect effect) {
-        recordPresenter.applyEffect(effect.getFilterId());
-        sendButtonTracked(effect.getIconResourceId());
+    public void onEffectSelected(ShaderEffect effect) {
+        recordPresenter.applyEffect(effect.getResourceId());
+        sendButtonTracked(effect.getIconId());
         resetOtherEffects();
         scrollEffectList(effect);
     }
@@ -671,7 +672,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             cameraColorEffectsAdapter.resetSelectedEffect();
     }
 
-    private void scrollEffectList(Effect effect) {
+    private void scrollEffectList(ShaderEffect effect) {
         if (!colorFilterHidden) {
             List effects = cameraColorEffectsAdapter.getElementList();
             int index = effects.indexOf(effect);

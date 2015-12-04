@@ -10,9 +10,12 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import android.content.SharedPreferences;
+
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.presentation.mvp.views.JoinBetaView;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import de.greenrobot.event.EventBus;
 
@@ -22,13 +25,15 @@ import de.greenrobot.event.EventBus;
 public class JoinBetaPresenter {
 
     private JoinBetaView joinBetaView;
+    private SharedPreferences sharedPreferences;
 
     /**
      * Constructor
      *
      * @param joinBetaView
      */
-    public JoinBetaPresenter(JoinBetaView joinBetaView) {
+    public JoinBetaPresenter(JoinBetaView joinBetaView, SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
         this.joinBetaView = joinBetaView;
     }
 
@@ -47,6 +52,12 @@ public class JoinBetaPresenter {
         } else {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
         }
+    }
+
+    public void checkIfPreviousEmailExists() {
+        String previousEmail = sharedPreferences.getString(ConfigPreferences.EMAIL, null);
+        if(previousEmail != null && !previousEmail.isEmpty())
+            joinBetaView.setEmail(previousEmail);
     }
 
 }

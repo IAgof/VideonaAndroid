@@ -9,106 +9,75 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class Effect {
 
-    private final String name;
-    private final String iconResourceName;
-    private final int iconResourceId;
-    //filterID is tight coupled with the camera framework. It's necessary to rewrite the effects
-    private final int filterId;
+    public static List<ShaderEffect> getColorEffectList() {
 
-
-    /**
-     * @param name                  name of the effect
-     * @param iconResourceId        normal icon id
-     * @param filterId Filter constant of {@link Filters}
-     */
-    public Effect(String name, String iconResourceName, int iconResourceId, int filterId) {
-        this.name = name;
-        this.iconResourceName = iconResourceName;
-        this.iconResourceId = iconResourceId;
-        this.filterId=filterId;
-    }
-
-    public static List<Effect> getColorEffectList() {
-
-        List<Effect> colorEffects = new ArrayList<>();
+        List<ShaderEffect> colorEffects = new ArrayList<>();
 
         colorEffects.add(
-                new Effect("aqua", "AD1", R.drawable.common_filter_color_ad1_aqua,
+                new ShaderEffect("AD1", "aqua", R.drawable.common_filter_color_ad1_aqua,
                         Filters.FILTER_AQUA));
         colorEffects.add(
-                new Effect("posterize_bw", "AD2", R.drawable.common_filter_color_ad2_posterizebw,
+                new ShaderEffect("AD2", "posterize_bw", R.drawable.common_filter_color_ad2_posterizebw,
                         Filters.FILTER_POSTERIZE_BW));
         colorEffects.add(
-                new Effect("emboss", "AD3", R.drawable.common_filter_color_ad3_emboss,
+                new ShaderEffect("AD3", "emboss", R.drawable.common_filter_color_ad3_emboss,
                         Filters.FILTER_EMBOSS));
         colorEffects.add(
-                new Effect("mono", "AD4", R.drawable.common_filter_color_ad4_mono,
+                new ShaderEffect("AD4", "mono", R.drawable.common_filter_color_ad4_mono,
                         Filters.FILTER_MONO));
         colorEffects.add(
-                new Effect("negative", "AD5", R.drawable.common_filter_color_ad5_negative,
+                new ShaderEffect("AD5", "negative", R.drawable.common_filter_color_ad5_negative,
                         Filters.FILTER_NEGATIVE));
         colorEffects.add(
-                new Effect("night", "AD6", R.drawable.common_filter_color_ad6_green,
+                new ShaderEffect("AD6", "night", R.drawable.common_filter_color_ad6_green,
                         Filters.FILTER_NIGHT));
         colorEffects.add(
-                new Effect("posterize", "AD7", R.drawable.common_filter_color_ad7_posterize,
+                new ShaderEffect("AD7", "posterize", R.drawable.common_filter_color_ad7_posterize,
                         Filters.FILTER_POSTERIZE));
         colorEffects.add(
-                new Effect("sepia", "AD8", R.drawable.common_filter_color_ad8_sepia,
+                new ShaderEffect("AD8", "sepia", R.drawable.common_filter_color_ad8_sepia,
                         Filters.FILTER_SEPIA));
 
         return colorEffects;
     }
 
-    public static List<Effect> getDistortionEffectList() {
+    public static List<ShaderEffect> getDistortionEffectList() {
 
-        List<Effect> distortionEffects = new ArrayList<>();
+        List<ShaderEffect> distortionEffects = new ArrayList<>();
 
         distortionEffects.add(
-                new Effect("Fisheye", "FX1", R.drawable.common_filter_distortion_fx1_fisheye,
+                new ShaderEffect("FX1", "Fisheye", R.drawable.common_filter_distortion_fx1_fisheye,
                         Filters.FILTER_FISHEYE));
         distortionEffects.add(
-                new Effect("Stretch", "FX2",R.drawable.common_filter_distortion_fx2_stretch,
+                new ShaderEffect("FX2", "Stretch", R.drawable.common_filter_distortion_fx2_stretch,
                         Filters.FILTER_STRETCH));
         distortionEffects.add(
-                new Effect("Dent", "FX3", R.drawable.common_filter_distortion_fx3_dent,
+                new ShaderEffect("FX3", "Dent", R.drawable.common_filter_distortion_fx3_dent,
                         Filters.FILTER_DENT));
         distortionEffects.add(
-                new Effect("Mirror", "FX4",R.drawable.common_filter_distortion_fx4_mirror,
+                new ShaderEffect("FX4", "Mirror", R.drawable.common_filter_distortion_fx4_mirror,
                         Filters.FILTER_MIRROR));
         distortionEffects.add(
-                new Effect("Squeeze", "FX5",R.drawable.common_filter_distortion_fx5_squeeze,
+                new ShaderEffect("FX5", "Squeeze", R.drawable.common_filter_distortion_fx5_squeeze,
                         Filters.FILTER_SQUEEZE));
         distortionEffects.add(
-                new Effect("Tunnel", "FX6",R.drawable.common_filter_distortion_fx6_tunnel,
+                new ShaderEffect("FX6", "Tunnel", R.drawable.common_filter_distortion_fx6_tunnel,
                         Filters.FILTER_TUNNEL));
         distortionEffects.add(
-                new Effect("Twirl", "FX7",R.drawable.common_filter_distortion_fx7_twirl,
+                new ShaderEffect("FX7", "Twirl", R.drawable.common_filter_distortion_fx7_twirl,
                         Filters.FILTER_TWIRL));
         distortionEffects.add(
-                new Effect("Bulge", "FX8",R.drawable.common_filter_distortion_fx8_bulge,
+                new ShaderEffect("FX8", "Bulge", R.drawable.common_filter_distortion_fx8_bulge,
                         Filters.FILTER_BULGE));
 
         return distortionEffects;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getIconResourceName() { return iconResourceName; }
-
-    public int getIconResourceId() {
-        return iconResourceId;
-    }
-
-    public int getFilterId() {
-        return filterId;
-    }
 }

@@ -66,7 +66,12 @@
     <!-- Activity Settings -->
     <string name="settingsTitle">Ajustes</string>
     <string name="titleUserSection">Mi cuenta</string>
+    <string name="name">Nombre</string>
+    <string name="removeName">Borrar nombre</string>
     <string name="username">Nombre de usuario</string>
+    <string name="removeUsername">Borrar nombre de usuario</string>
+    <string name="emailPreference">Email</string>
+    <string name="save">Guardar</string>
     <string name="title_camera_section">Cámara</string>
     <string name="resolution">Resolución</string>
     <string name="low_resolution_name">Buena (720p)</string>
@@ -93,13 +98,18 @@
         introduce tu mail y te indicaremos los pasos a seguir.</string>
     <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
     <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
-    <string name="title_about_section">Sobre nosotros</string>
+    <string name="moreInformation">Más información</string>
+    <string name="privacyPolicy">Política de privacidad</string>
+    <string name="termsOfService">Condiciones de servicio</string>
+    <string name="licenses">Licencias</string>
     <string name="title_vote_section">Vota</string>
     <string name="content_vote_section">Vota nuestra aplicación</string>
     <string name="title_contact_section">Contacta con Videona</string>
     <string name="content_contact_section">Dinos que opinas de la aplicación</string>
     <string name="title_tutorial_section">Tutorial</string>
     <string name="content_tutorial_section">Mira nuestro tutorial</string>
+    <string name="accountActions">Acciones de cuenta</string>
+    <string name="exit">Salir</string>
 
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
@@ -110,7 +120,7 @@
     <string name="invalidRazorTime">Por favor, selecciona un instante de tiempo para cortar el vídeo</string>
 
     <!-- Activity About -->
-    <string name="aboutUsTitle"><u>Sobre nosotros</u></string>
+    <string name="aboutUsTitle">Sobre nosotros</string>
     <string name="aboutUsContent">
         Graba, edita comparte&#8230;Tres sencillas cosas que querrás hacer tan pronto como tengas
         descargada la app de Videona en tu smartphone.\nCopyright &#169; 2015. Videona Socialmedia
@@ -120,7 +130,9 @@
     <string name="contactUsContent">Visita nuestra página web:</string>
     <string name="videonaWeb">http://www.videona.es\n</string>
     <string name="versionTitle"><u>Versión</u></string>
+    <string name="videona">Videona</string>
     <string name="versionContent">beta </string>
+    <string name="madeIn">Hecho en Madrid</string>
     <string name="licenseTitle"><u>Licencias de Software libre</u></string>
 <string name="licenseContent">
         Copyright &#169; 2013 Jake Wharton\nLicensed under the Apache License, Version 2.0 (the

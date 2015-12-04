@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 
 import java.util.List;
@@ -34,21 +35,21 @@ public class EffectAdapter
         extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
 
     private Context context;
-    private List<Effect> effects;
+    private List<ShaderEffect> effects;
     private OnEffectSelectedListener onEffectSelectedListener;
     private int selectedPosition = -1;
     private int previousSelectionPosition = -1;
-    private Effect defaultEffect;
+    private ShaderEffect defaultEffect;
 
     /**
      * Constructor.
      *
      * @param effects the list of the available effects
      */
-    public EffectAdapter(List<Effect> effects, OnEffectSelectedListener listener) {
+    public EffectAdapter(List<ShaderEffect> effects, OnEffectSelectedListener listener) {
         this.effects = effects;
         this.onEffectSelectedListener = listener;
-        defaultEffect = new Effect(null, "AD0", -1, Filters.FILTER_NONE);
+        defaultEffect = new ShaderEffect(null, "AD0", -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -56,7 +57,7 @@ public class EffectAdapter
      *
      * @return
      */
-    public List<Effect> getElementList() {
+    public List<ShaderEffect> getElementList() {
         return effects;
     }
 
@@ -70,12 +71,12 @@ public class EffectAdapter
 
     @Override
     public void onBindViewHolder(cameraEffectViewHolder holder, int position) {
-        Effect selectedEffect = effects.get(position);
+        ShaderEffect selectedEffect = effects.get(position);
         Glide.with(context)
-                .load(selectedEffect.getIconResourceId())
+                .load(selectedEffect.getIconId())
                 .error(R.drawable.gatito_rules)
                 .into(holder.effectImage);
-        holder.effectName.setText(selectedEffect.getIconResourceName());
+        holder.effectName.setText(selectedEffect.getIdentifier());
         if (position == selectedPosition) {
             holder.effect.setBackgroundResource(R.color.colorAccent);
         } else {
@@ -94,7 +95,7 @@ public class EffectAdapter
      * @param position the position of the effect element
      * @return
      */
-    public Effect getEffect(int position) {
+    public ShaderEffect getEffect(int position) {
         return effects.get(position);
     }
 
@@ -113,7 +114,7 @@ public class EffectAdapter
      *
      * @param effects
      */
-    public void appendCameraEffect(List<Effect> effects) {
+    public void appendCameraEffect(List<ShaderEffect> effects) {
         this.effects.addAll(effects);
     }
 

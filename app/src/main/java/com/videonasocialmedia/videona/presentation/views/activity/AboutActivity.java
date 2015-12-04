@@ -8,11 +8,14 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 
@@ -28,10 +31,6 @@ import butterknife.OnClick;
  */
 public class AboutActivity extends VideonaActivity {
 
-    /*CONFIG*/
-    /**
-     * Tracker google analytics
-     */
     @InjectView(R.id.videona_version)
     TextView versionName;
 
@@ -40,8 +39,15 @@ public class AboutActivity extends VideonaActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ButterKnife.inject(this);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
         String version= BuildConfig.VERSION_NAME + "\n";
         versionName.setText(version);
+        // Display the fragment as the main content.
+        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
     }
 
     @Override

@@ -43,4 +43,12 @@ public interface PreferencesView {
      * @param name
      */
     void setPreference(ListPreference preference, String name);
+
+    /**
+     * Sets the summary value of a preference
+     *
+     * @param key
+     * @param value
+     */
+    void setSummary(String key, String value);
 }
