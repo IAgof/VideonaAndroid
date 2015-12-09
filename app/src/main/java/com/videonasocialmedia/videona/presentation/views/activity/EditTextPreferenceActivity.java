@@ -59,7 +59,7 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                if (count > 0) {
+                if (s.length() > 0) {
                     putIconForEditTextIsNotNull();
                 } else {
                     putIconForEditTextIsNull();

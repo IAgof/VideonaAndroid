@@ -84,6 +84,9 @@
     <string name="high_resolution_value">Excellent</string>
     <string name="quality">Quality</string>
     <string name="join_beta">Join Videona Beta</string>
+    <string name="joinBetaLinkInfo">Thanks!!! Please click the link bellow to get the beta
+        version</string>
+    <string name="joinBetaLink"><u>Click here!!!</u></string>
     <string name="email">email</string>
     <string name="enterEmail">Enter a valid email</string>
     <string name="removeEmail">Remove email</string>
