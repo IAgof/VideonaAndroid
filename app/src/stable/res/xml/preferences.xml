@@ -21,8 +21,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/title_camera_section"
-        >
+        android:title="@string/title_camera_section" >
 
         <ListPreference
             android:key="list_preferences_resolution"
