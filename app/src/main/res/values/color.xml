@@ -44,4 +44,6 @@
     <color name="textColorPrimary">#808080</color>
     <color name="textColorSecondary">#0091ea</color>
 
+    <color name="editTextBottomLine">#808080</color>
+
 </resources>

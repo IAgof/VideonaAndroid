@@ -39,7 +39,6 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ButterKnife.inject(this.getActivity());
         sharedPreferences = this.getActivity().getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         joinBetaPresenter = new JoinBetaPresenter(this, sharedPreferences);
@@ -47,14 +46,17 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_join_beta, null);
         builder.setView(v);
+        ButterKnife.inject(this, v);
         email = (EditText) v.findViewById(R.id.email);
         emailIcon = (ImageView) v.findViewById(R.id.email_icon);
         email.addTextChangedListener(new TextWatcher() {
 
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
 
             public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {}
+                                          int count, int after) {
+            }
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
