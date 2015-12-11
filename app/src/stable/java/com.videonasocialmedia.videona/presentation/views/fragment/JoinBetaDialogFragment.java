@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
@@ -31,7 +32,7 @@ import butterknife.OnClick;
 public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaView {
 
     private LinearLayout joinBetaInfoLayout;
-    private LinearLayout joinBetaLinkLayout;
+    private RelativeLayout joinBetaLinkLayout;
     private JoinBetaPresenter joinBetaPresenter;
     private EditText email;
     private ImageView emailIcon;
@@ -71,7 +72,7 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
         setNegativeButton(v);
         setPositiveButton(v);
         joinBetaInfoLayout = (LinearLayout) v.findViewById(R.id.joinBetaInfo);
-        joinBetaLinkLayout = (LinearLayout) v.findViewById(R.id.joinBetaLink);
+        joinBetaLinkLayout = (RelativeLayout) v.findViewById(R.id.joinBetaLink);
 
         return builder.create();
     }
