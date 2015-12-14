@@ -29,6 +29,7 @@
             android:id="@+id/edit_user_account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/editTextBottomLine"
             android:imeActionLabel="Done"
             android:singleLine="true" />
     </LinearLayout>

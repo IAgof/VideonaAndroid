@@ -11,4 +11,5 @@ public interface JoinBetaView {
     void showMessage(int messageId);
     void hideDialog();
     void setEmail(String email);
+    void goToBeta();
 }
