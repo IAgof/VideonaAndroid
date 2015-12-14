@@ -6,12 +6,14 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +51,10 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
         builder.setView(v);
         ButterKnife.inject(this, v);
         email = (EditText) v.findViewById(R.id.email);
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
+            email.getBackground().setColorFilter(getResources().getColor(R.color.editTextBottomLine),
+                    PorterDuff.Mode.SRC_ATOP);
         emailIcon = (ImageView) v.findViewById(R.id.email_icon);
         email.addTextChangedListener(new TextWatcher() {
 
@@ -117,8 +123,14 @@ public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaVi
 
     @Override
     public void goToBeta() {
+        hideKeyboard();
         joinBetaInfoLayout.setVisibility(View.GONE);
         joinBetaLinkLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        keyboard.hideSoftInputFromWindow(email.getWindowToken(), 0);
     }
 
     @OnClick(R.id.betaLink)

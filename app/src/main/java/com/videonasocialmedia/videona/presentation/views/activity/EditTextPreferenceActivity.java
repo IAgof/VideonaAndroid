@@ -2,6 +2,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +51,10 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
         sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
+            editText.getBackground().setColorFilter(getResources().getColor(R.color.editTextBottomLine),
+                    PorterDuff.Mode.SRC_ATOP);
         editText.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {}
