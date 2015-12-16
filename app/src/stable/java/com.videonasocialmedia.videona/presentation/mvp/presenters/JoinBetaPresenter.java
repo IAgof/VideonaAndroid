@@ -40,10 +40,10 @@ public class JoinBetaPresenter {
     public void validateEmail(CharSequence email) {
         if(isValidEmail(email)) {
             EventBus.getDefault().post(new JoinBetaEvent(email.toString()));
-            joinBetaView.hideDialog();
-            joinBetaView.showMessage(R.string.valid_email);
-        } else
+            joinBetaView.goToBeta();
+        } else {
             joinBetaView.showMessage(R.string.invalid_email);
+        }
     }
 
     private boolean isValidEmail(CharSequence email) {

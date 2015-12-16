@@ -44,18 +44,9 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/edit_user_account"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeActionLabel="@string/editTextActionLabel"
-                android:singleLine="true"
-                android:autoText="false"
-                style="@style/VideonaEditText"/>
-        </LinearLayout>
-
-
+            android:layout_height="wrap_content"
+            android:imeActionLabel="Done"
+            android:singleLine="true" />
     </LinearLayout>
 
     <TextView

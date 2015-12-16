@@ -20,7 +20,7 @@
         </Preference>
     </PreferenceCategory>
 
-    <!--<PreferenceCategory
+    <PreferenceCategory
         android:title="@string/title_camera_section"
         >
 
