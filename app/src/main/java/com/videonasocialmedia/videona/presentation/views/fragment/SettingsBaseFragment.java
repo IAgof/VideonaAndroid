@@ -1,9 +1,6 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -53,11 +50,12 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
         qualityPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY);
         preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
                 sharedPreferences);
+
         exitPref = findPreference("exit");
-        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+       /* exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new AlertDialog.Builder(getActivity(), android.app.AlertDialog.THEME_HOLO_DARK)
+                new AlertDialog.Builder(getActivity())
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.exit_app_title)
                         .setMessage(R.string.exit_app_message)
@@ -76,7 +74,16 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
                         .show();
                 return true;
             }
+        }); */
+
+        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new ExitAppFragment().show(getFragmentManager(), "exitAppDialogFragment");
+            return true;
+            }
         });
+
     }
 
     @Override

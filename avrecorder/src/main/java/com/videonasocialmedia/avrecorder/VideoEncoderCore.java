@@ -38,7 +38,7 @@ import java.io.IOException;
  */
 public class VideoEncoderCore extends AndroidEncoder{
     private static final String TAG = "VideoEncoderCore";
-    private static final boolean VERBOSE = false;
+    private static final boolean VERBOSE = true;
 
     // TODO: these ought to be configurable as well
     private static final String MIME_TYPE = "video/avc";    // H.264 Advanced Video Coding

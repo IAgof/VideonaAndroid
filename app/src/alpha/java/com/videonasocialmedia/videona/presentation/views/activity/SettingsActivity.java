@@ -11,11 +11,12 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.fragment.SettingFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
 
 
 /**
@@ -30,11 +31,14 @@ public class SettingsActivity extends VideonaActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
 
         // Display the fragment as the main content.
         Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
         getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_preferences, new SettingFragment())
+                .replace(R.id.fragment_preferences, new SettingsFragment())
                 .commit();
     }
 

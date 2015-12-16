@@ -17,7 +17,8 @@ public class EmailPreferenceActivity extends EditTextPreferenceActivity {
 
         presenter = new EmailPreferencePresenter(this, sharedPreferences);
         editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        getSupportActionBar().setTitle(R.string.emailPreference);
+
+        toolbarTitle.setText(R.string.emailPreference);
     }
 
     @Override

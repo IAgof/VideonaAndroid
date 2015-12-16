@@ -42,8 +42,10 @@ public class AboutActivity extends VideonaActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+
         String version= BuildConfig.VERSION_NAME + "\n";
         versionName.setText(version);
         // Display the fragment as the main content.

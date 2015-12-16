@@ -20,7 +20,7 @@
         </Preference>
     </PreferenceCategory>
 
-    <PreferenceCategory
+<!--    <PreferenceCategory
         android:title="@string/title_camera_section">
 
         <ListPreference
@@ -34,6 +34,27 @@
             android:title="@string/quality"
             android:dialogTitle="@string/quality"
             android:defaultValue="@string/good_quality_value" />
+
+    </PreferenceCategory> -->
+
+    <PreferenceCategory
+        android:title="@string/title_camera_section">
+
+        <com.videonasocialmedia.videona.presentation.views.customviews.ChooseCameraResolutionListPreferences
+            android:key="list_preferences_resolution"
+            android:title="@string/resolution"
+            android:dialogTitle="@string/resolution"
+            android:summary="%s"
+            android:entries="@array/camera_resolution_names"
+            android:entryValues="@array/camera_resolution_values"/>
+
+        <com.videonasocialmedia.videona.presentation.views.customviews.ChooseCameraQualityListPreferences
+            android:key="list_preferences_quality"
+            android:title="@string/quality"
+            android:dialogTitle="@string/quality"
+            android:summary="%s"
+            android:entries="@array/camera_quality_names"
+            android:entryValues="@array/camera_quality_values"/>
 
     </PreferenceCategory>
 
@@ -66,7 +87,6 @@
         <Preference
             android:key="exit"
             android:title="@string/exit">
-            <intent android:action=".presentation.views.activity.LogOutActivity"/>
         </Preference>
     </PreferenceCategory>
 

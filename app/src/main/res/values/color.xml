@@ -32,13 +32,14 @@
     <color name="colorButtonAccent">#fe304b</color>
     <color name="textColorButton">#FFFFFF</color>
     <color name="textColorTitle">#0091ea</color>
-    <color name="textColorToolbar">#FFFFFF</color>
+    <color name="textColorTitleToolbar">#FFFFFF</color>
 
 
     <color name="colorControlNormal">#FFFFFF</color>
     <color name="colorControlActivated">#808080</color>
 
     <color name="colorPrimary">#0091ea</color>
+    <color name="colorSecondary">#808080</color>
     <color name="colorAccent">#fe304b</color>
 
     <color name="textColorPrimary">#808080</color>

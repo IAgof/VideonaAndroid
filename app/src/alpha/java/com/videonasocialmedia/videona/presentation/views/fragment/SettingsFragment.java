@@ -13,4 +13,4 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 /**
  * This class is used to manage the setting menu.
  */
-public class SettingFragment extends SettingsBaseFragment {}
+public class SettingsFragment extends SettingsBaseFragment {}
