@@ -15,7 +15,8 @@ public class NamePreferenceActivity extends EditTextPreferenceActivity {
         super.onCreate(savedInstanceState);
 
         presenter = new NamePreferencePresenter(this, sharedPreferences);
-        getSupportActionBar().setTitle(R.string.name);
+
+        toolbarTitle.setText(R.string.name);
     }
 
     @Override

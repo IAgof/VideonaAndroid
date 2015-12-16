@@ -34,6 +34,8 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
     ImageView editTextImage;
     @InjectView(R.id.info_field)
     TextView infoText;
+    @InjectView(R.id.toolbar_title)
+    TextView toolbarTitle;
 
     protected Context context;
     protected EditTextPreferencePresenter presenter;
@@ -74,6 +76,7 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
     private void setToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
     }

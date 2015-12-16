@@ -10,12 +10,16 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.UsernamePrefer
  */
 public class UsernamePreferenceActivity extends EditTextPreferenceActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         presenter = new UsernamePreferencePresenter(this, sharedPreferences);
-        getSupportActionBar().setTitle(R.string.username);
+
+        toolbarTitle.setText(R.string.username);
+
     }
 
     @Override

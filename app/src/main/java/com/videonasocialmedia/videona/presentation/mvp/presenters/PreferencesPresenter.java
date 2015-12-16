@@ -76,12 +76,13 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
             preferencesView.setSummary(key, data);
     }
 
+
     /**
      * Checks supported resolutions on camera
      */
     private void checkAvailableResolution() {
         ArrayList<String> resolutionNames = new ArrayList<>();
-        ArrayList<String> resolutionValues = new ArrayList<>();
+        ArrayList<String> resolutionValues =  new ArrayList<>();
         String defaultResolution = null;
         String key = ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION; //"list_preference_resolution";
         boolean isPaidApp = true;

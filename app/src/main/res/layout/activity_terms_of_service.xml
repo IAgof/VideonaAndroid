@@ -5,13 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/VideonaToolbar"
-        app:title="@string/termsOfService"
-        android:elevation="4dp" />
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/VideonaToolbar">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="@string/termsOfService"
+            android:layout_gravity="left"
+            android:id="@+id/toolbar_title"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/textColorTitleToolbar" />
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,7 +46,7 @@
                 android:layout_gravity="center_vertical|right" />
 
             <TextView
-                style="@style/Title"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/particularTermsAndConditionsOfVideonaTitle" />

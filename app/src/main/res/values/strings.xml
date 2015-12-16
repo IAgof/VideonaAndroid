@@ -114,6 +114,8 @@
     <string name="content_tutorial_section">See our tutorial</string>
     <string name="accountActions">Account actions</string>
     <string name="exit">Exit</string>
+    <string name="confirmExit">Done</string>
+    <string name="cancelSettingsCamera">Cancel</string>
 
     <!-- Activity Editor -->
     <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
@@ -243,7 +245,7 @@ limitations under the License. \n
         http://freemusicarchive.org/music/Josh_Woodward/The_Beautiful_Machine/JoshWoodward-TheLastSliceOfPecanPie-NoVox,
         icono clave de sol, CC BY 4.0\n
     </string>
-    <string name="legacyAdviceTitle"><u>Legal Notice</u></string>
+    <string name="legacyAdviceTitle">Legal Notice</string>
     <string name="legacyAdviceContent">
         1. TITULARIDAD.\n\nVIDEONA SOCIAL MEDIA, S.L (en adelante, Videona) es Videona de la aplicación móvil (en adelante, Aplicación) y del portal web www.videona.es (en adelante, el Portal) (en adelante y conjuntamente denominados, la Plataforma). Su domicilio se encuentra en c/ María Blanchard, 2 – portal 7, bajo D, 28232, Las Rozas de Madrid, España y su CIF es B87047171.
 
@@ -497,5 +499,6 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
     <string name="error">error</string>
 
+    <string name="editTextActionLabel">Done</string>
 
 </resources>
