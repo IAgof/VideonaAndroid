@@ -20,23 +20,6 @@
         </Preference>
     </PreferenceCategory>
 
-<!--    <PreferenceCategory
-        android:title="@string/title_camera_section">
-
-        <ListPreference
-            android:key="list_preferences_resolution"
-            android:title="@string/resolution"
-            android:dialogTitle="@string/resolution"
-            android:defaultValue="@string/low_resolution_value"/>
-
-        <ListPreference
-            android:key="list_preferences_quality"
-            android:title="@string/quality"
-            android:dialogTitle="@string/quality"
-            android:defaultValue="@string/good_quality_value" />
-
-    </PreferenceCategory> -->
-
     <PreferenceCategory
         android:title="@string/title_camera_section">
 
