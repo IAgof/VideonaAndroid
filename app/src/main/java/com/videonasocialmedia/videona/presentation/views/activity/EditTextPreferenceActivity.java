@@ -1,13 +1,17 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -147,6 +151,42 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
     @OnClick(R.id.info_field)
     public void removeData() {
         presenter.removeData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                goToContact();
+                return true;
+            case R.id.action_vote:
+                goToVote();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void goToContact() {
+        navigateTo("mailto:info@videona.com");
+    }
+
+    private void goToVote() {
+        navigateTo("market://details?id=com.videonasocialmedia.videona");
+    }
+
+    private void navigateTo(String url) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
 }

@@ -75,10 +75,11 @@
         <item name="android:selectable">false</item>
      </style>
 
-    <style name="VideonaEditText" parent="Base.V7.Widget.AppCompat.EditText">
+    <style name="VideonaEditText" parent="Widget.AppCompat.EditText">
 
         <item name="android:backgroundTint">@color/colorSecondary</item>
         <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textCursorDrawable">@null</item>
 
     </style>
 
