@@ -24,6 +24,7 @@ import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordBasePresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.utils.Constants;
 
@@ -39,26 +40,10 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter {
-
-    /**
-     * LOG_TAG
-     */
-    private static final String LOG_TAG = "RecordPresenter";
-    private boolean firstTimeRecording;
-    private RecordView recordView;
-    private SessionConfig config;
-    private AddVideoToProjectUseCase addVideoToProjectUseCase;
-    private AVRecorder recorder;
-    private int selectedEffect;
-    private int recordedVideosNumber;
-
-    private Context context;
-    private GLCameraEncoderView cameraPreview;
+public class RecordPresenter extends RecordBasePresenter {
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview) {
-        Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
         this.context = context;
         this.cameraPreview = cameraPreview;
@@ -66,9 +51,7 @@ public class RecordPresenter {
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         selectedEffect = Filters.FILTER_NONE;
         recordedVideosNumber = 0;
-
         initRecorder(context, cameraPreview);
-
         hideInitialsButtons();
     }
 
@@ -79,17 +62,9 @@ public class RecordPresenter {
                     .getDrawable(R.drawable.watermark720));
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
-
-
         } catch (IOException ioe) {
             Log.e("ERROR", "ERROR", ioe);
         }
-    }
-
-    private void hideInitialsButtons() {
-        recordView.hideRecordedVideoThumb();
-        recordView.hideVideosRecordedNumber();
-        recordView.hideChronometer();
     }
 
     public void onStart() {
@@ -100,112 +75,30 @@ public class RecordPresenter {
     }
 
     public void onResume() {
-        EventBus.getDefault().register(this);
-        recorder.onHostActivityResumed();
-        showThumbAndNumber();
-        Log.d(LOG_TAG, "resume presenter");
-    }
-
-    private void showThumbAndNumber() {
-        GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-        final List mediaInProject=getMediaListFromProjectUseCase.getMediaListFromProject();
-        if (mediaInProject!=null && mediaInProject.size()>0){
-            int lastItemIndex= mediaInProject.size()-1;
-            final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
-            this.recordedVideosNumber=mediaInProject.size();
-            recordView.showVideosRecordedNumber(recordedVideosNumber);
-            recordView.showRecordedVideoThumb(lastItem.getMediaPath());
-        }
-        else{
-            recordView.hideRecordedVideoThumb();
-            recordView.hideVideosRecordedNumber();
-        }
+        super.onResume();
     }
 
     public void onPause() {
-        EventBus.getDefault().unregister(this);
-        stopRecord();
-        recorder.onHostActivityPaused();
-        Log.d(LOG_TAG, "pause presenter");
+        super.onPause();
     }
 
     public void onStop() {
-        recorder.release();
+        super.onStop();
     }
 
     public void onDestroy() {
-        //recorder.release();
+        super.onDestroy();
     }
 
-
-    public void stopRecord() {
-        if (recorder.isRecording())
-            recorder.stopRecording();
-        //TODO show a gif to indicate the process is running til the video is added to the project
-    }
-
-    public void requestRecord() {
-        if (!recorder.isRecording()) {
-            if (!firstTimeRecording) {
-                try {
-                    resetRecorder();
-                } catch (IOException ioe) {
-                    //recordView.showError();
-                }
-            } else {
-                startRecord();
-            }
-        }
-    }
-
-    private void resetRecorder() throws IOException {
+    public void resetRecorder() throws IOException {
+        super.resetRecorder();
         config = new SessionConfig(Constants.PATH_APP_TEMP);
         recorder.reset(config);
     }
 
-    public void onEventMainThread(CameraEncoderResetEvent e) {
-        startRecord();
-    }
-
-    public void onEventMainThread(CameraOpenedEvent e){
-
-        Log.d(LOG_TAG, "camera opened, camera != null");
-        //Calculate orientation, rotate if needed
-        //recordView.unlockScreenRotation();
-        if(firstTimeRecording){
-            recordView.unlockScreenRotation();
-        }
-
-    }
-
-    private void startRecord() {
-        applyEffect(selectedEffect);
-        recorder.startRecording();
-        recordView.lockScreenRotation();
-        recordView.showStopButton();
-        recordView.startChronometer();
-        recordView.showChronometer();
+    public void startRecord() {
+        super.startRecord();
         recordView.hideMenuOptions();
-        recordView.hideRecordedVideoThumb();
-        recordView.hideVideosRecordedNumber();
-        firstTimeRecording = false;
-
-    }
-
-
-    public void onEventMainThread(MuxerFinishedEvent e) {
-        recordView.stopChronometer();
-        String finalPath = moveVideoToMastersFolder();
-        addVideoToProjectUseCase.addVideoToTrack(finalPath);
-    }
-
-    private String moveVideoToMastersFolder() {
-        File originalFile = new File(config.getOutputPath());
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String fileName = "VID_" + timeStamp + ".mp4";
-        File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
-        originalFile.renameTo(destinationFile);
-        return destinationFile.getAbsolutePath();
     }
 
     public void onEvent(AddMediaItemToTrackSuccessEvent e) {
@@ -216,73 +109,6 @@ public class RecordPresenter {
         recordView.showMenuOptions();
         recordView.hideChronometer();
         recordView.reStartScreenRotation();
-    }
-
-    public void changeCamera() {
-        //TODO controlar el estado del flash
-
-        int camera = recorder.requestOtherCamera();
-
-        if (camera == 0) {
-            recordView.showBackCameraSelected();
-
-        } else {
-
-            if (camera == 1) {
-                recordView.showFrontCameraSelected();
-            }
-        }
-
-        applyEffect(selectedEffect);
-
-        checkFlashSupport();
-
-    }
-
-    public void checkFlashSupport() {
-
-        // Check flash support
-        int flashSupport = recorder.checkSupportFlash(); // 0 true, 1 false, 2 ignoring, not prepared
-
-        Log.d(LOG_TAG, "checkSupportFlash flashSupport " + flashSupport);
-
-        if(flashSupport == 0){
-            recordView.showFlashSupported(true);
-            Log.d(LOG_TAG, "checkSupportFlash flash Supported camera");
-        } else {
-            if(flashSupport == 1) {
-                recordView.showFlashSupported(false);
-                Log.d(LOG_TAG, "checkSupportFlash flash NOT Supported camera");
-            }
-        }
-    }
-
-    public void setFlashOff(){
-        boolean on = recorder.setFlashOff();
-        recordView.showFlashOn(on);
-
-    }
-
-    public void toggleFlash() {
-        boolean on = recorder.toggleFlash();
-        recordView.showFlashOn(on);
-    }
-
-    public void applyEffect(int filterId) {
-        selectedEffect = filterId;
-        recorder.applyFilter(filterId);
-    }
-
-    public void rotateCamera(int rotation) {
-        recorder.rotateCamera(rotation);
-    }
-
-    public List<ShaderEffect> getDistortionEffectList() {
-        return GetEffectListUseCase.getDistortionEffectList();
-    }
-
-    public List<ShaderEffect> getColorEffectList() {
-        return GetEffectListUseCase.getColorEffectList();
     }
 
 }
