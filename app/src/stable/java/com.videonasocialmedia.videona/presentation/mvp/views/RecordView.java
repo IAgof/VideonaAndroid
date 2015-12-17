@@ -12,57 +12,11 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
-
-import java.util.List;
-
-public interface RecordView {
-
-    void showRecordButton();
-
-    void showStopButton();
+public interface RecordView extends RecordBaseView {
 
     void showSettings();
 
     void hideSettings();
-
-    void showChronometer();
-
-    void hideChronometer();
-
-    void showRecordedVideoThumb(String path);
-
-    void hideRecordedVideoThumb();
-
-    void showVideosRecordedNumber(int numberOfVideos);
-
-    void hideVideosRecordedNumber();
-
-    void startChronometer();
-
-    void stopChronometer();
-
-    void showCameraEffectFx(List<Effect> effects);
-
-    void showCameraEffectColor(List<Effect> effects);
-
-    void lockScreenRotation();
-
-    void unlockScreenRotation();
-
-    void reStartScreenRotation();
-
-    void showFlashOn(boolean on);
-
-    void showFlashSupported(boolean state);
-
-    void showFrontCameraSelected();
-
-    void showBackCameraSelected();
-
-    void showError(String errorMessage); //videonaView
-
-    void showError(int stringResourceId); //videonaView
 
     void goToShare(String videoToSharePath);
 
