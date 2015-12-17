@@ -239,8 +239,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void startExport() {
-        //editorView.showProgressDialog();
-        //check VideoList is not empty, if true exportProjectUseCase
         List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
         if (videoList.size() > 0) {
             exportProjectUseCase.export();
@@ -248,7 +246,6 @@ public class RecordPresenter implements OnExportFinishedListener {
             recordView.hideProgressDialog();
             recordView.showMessage(R.string.add_videos_to_project);
         }
-        //exportProjectUseCase.export();
     }
 
     public void removeMasterVideos() {

@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -149,5 +150,17 @@ public abstract class VideonaActivity extends AppCompatActivity {
     private void showCloseAppDialog() {
         CriticalPermissionsDeniedDialogFragment dialog = new CriticalPermissionsDeniedDialogFragment();
         dialog.show(getFragmentManager(), "closeAppBecauseOfPermissionsDialog");
+    }
+
+    protected boolean isLandscapeOriented(){
+        return getOrientation()== Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    protected boolean isPortraitOriented(){
+        return getOrientation()== Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    private int getOrientation(){
+        return getResources().getConfiguration().orientation;
     }
 }

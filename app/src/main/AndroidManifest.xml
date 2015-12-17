@@ -196,6 +196,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".presentation.views.activity.ShareVideoActivity"
+            android:label="@string/app_name"
+            />
+
     </application>
 
 </manifest>
