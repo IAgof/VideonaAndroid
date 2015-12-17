@@ -17,6 +17,7 @@
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
 
         <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
@@ -27,14 +28,13 @@
         <item name="android:scrollbarThumbHorizontal">@color/colorTransparent</item>
         <item name="android:scrollbarThumbVertical">@color/colorTransparent</item>
 
-
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@color/colorTransparent</item>
 
-         <item name="android:alertDialogTheme">@style/VideonaAlertDialog</item>
-         <item name="android:toolbarStyle">@style/VideonaToolbar</item>
+        <item name="android:alertDialogTheme">@style/VideonaAlertDialog</item>
+        <item name="android:toolbarStyle">@style/VideonaToolbar</item>
         <item name="android:preferenceCategoryStyle">@style/VideonaCategoryPreference</item>
 
 
@@ -63,7 +63,7 @@
 
     <style name="VideonaAlertDialogDark" parent="Theme.AppCompat.Dialog.Alert">
 
-        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
 
 
     </style>
@@ -77,7 +77,7 @@
 
     <style name="VideonaEditText" parent="Widget.AppCompat.EditText">
 
-        <item name="android:backgroundTint">@color/colorSecondary</item>
+        <item name="android:backgroundTint">@color/colorSecondaryLight</item>
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="android:textCursorDrawable">@null</item>
 

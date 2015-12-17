@@ -25,6 +25,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -144,10 +146,11 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.inject(this);
 
         VideonaApplication app = (VideonaApplication) getApplication();
@@ -170,7 +173,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     }
 
     private void createProgressDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaAlertDialogDark);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
         progressDialog = builder.setCancelable(false)
                 .setView(dialogView)

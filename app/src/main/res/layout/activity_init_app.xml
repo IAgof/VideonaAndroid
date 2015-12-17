@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
+        android:textColor="@color/textColorVersionSplashScreen"
         tools:text="v1.0.0"
         android:layout_alignBottom="@+id/splash_screen"
         android:layout_alignEnd="@+id/splash_screen" />
