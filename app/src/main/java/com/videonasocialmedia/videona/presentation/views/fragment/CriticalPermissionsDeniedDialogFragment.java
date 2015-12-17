@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.activity.InitAppActivity;
@@ -38,7 +38,7 @@ public class CriticalPermissionsDeniedDialogFragment extends DialogFragment {
                 .setView(dialogView)
                 .create();
 
-        Button okButton = (Button) dialogView.findViewById(R.id.ok);
+        TextView okButton = (TextView) dialogView.findViewById(R.id.ok);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

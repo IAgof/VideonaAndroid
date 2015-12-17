@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/joinBetaInfo"
         android:layout_width="match_parent"
-        android:layout_height="255dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="visible" >
 
@@ -52,7 +52,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="2dp"
                 android:layout_below="@+id/title"
-                android:background="@color/textColorPrimary" />
+                android:background="@color/colorSecondaryLight" />
 
         </RelativeLayout>
 
@@ -92,8 +92,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:hint="@string/email"
-                    android:backgroundTint="@color/editTextBottomLine"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    />
 
             </LinearLayout>
 
@@ -116,7 +116,7 @@
     <RelativeLayout
         android:id="@+id/joinBetaLink"
         android:layout_width="match_parent"
-        android:layout_height="255dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone">
 

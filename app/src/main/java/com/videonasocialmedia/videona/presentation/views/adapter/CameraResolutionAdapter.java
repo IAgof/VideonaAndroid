@@ -89,12 +89,15 @@ public class CameraResolutionAdapter extends BaseAdapter
 
         if ( sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, false) && isPaidApp) {
             ++numResolutionSupported;
+            Log.d("CameraResolutionAdapter", "CameraResolutionAdapter BACK_CAMERA_720P_SUPPORTED ");
         }
         if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, false) && isPaidApp) {
             ++numResolutionSupported;
+            Log.d("CameraResolutionAdapter", "CameraResolutionAdapter BACK_CAMERA_1080P_SUPPORTED ");
         }
         if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, false) && isPaidApp) {
             ++numResolutionSupported;
+            Log.d("CameraResolutionAdapter", "CameraResolutionAdapter BACK_CAMERA_2160P_SUPPORTED ");
         }
 
         return numResolutionSupported;

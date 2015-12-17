@@ -9,6 +9,7 @@
     <!-- AppTheme Videona -->
     <style name="VideonaTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
@@ -16,11 +17,12 @@
         <item name="colorControlActivated">@color/colorControlActivated</item>
 
         <item name="android:scrollbarThumbHorizontal">@color/colorTransparent</item>
+        <item name="android:scrollbarThumbVertical">@color/colorTransparent</item>
 
 
         <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowFullscreen">false</item>
 
         <item name="android:alertDialogTheme">@style/VideonaAlertDialog</item>
         <item name="toolbarStyle">@style/VideonaToolbar</item>
@@ -54,8 +56,8 @@
 
     <style name="VideonaAlertDialogDark" parent="Theme.AppCompat.Dialog.Alert">
 
-        <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
 

@@ -39,7 +39,7 @@ public class SimpleDialogFragment extends DialogFragment {
                 .setView(dialogView)
                 .create();
 
-        Button okButton = (Button) dialogView.findViewById(R.id.ok);
+        TextView okButton = (TextView) dialogView.findViewById(R.id.ok);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

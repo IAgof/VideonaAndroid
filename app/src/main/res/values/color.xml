@@ -22,6 +22,8 @@
     <color name="colorSpinnerCenter">#00b8f3</color>
     <color name="colorSpinnerEnd">#0091ea</color>
 
+
+    <color name="textColorVersionSplashScreen">#FFFFFF</color>
     <color name="textColorFiltersRecord">#FFFFFF</color>
     <color name="textColorGalleryTitle">#FFFFFF</color>
     <color name="textColorGalleryVideoDuration">#FFFFFF</color>
@@ -39,7 +41,9 @@
     <color name="colorControlActivated">#808080</color>
 
     <color name="colorPrimary">#0091ea</color>
+    <color name="colorPrimaryDark">#027FC6</color>
     <color name="colorSecondary">#808080</color>
+    <color name="colorSecondaryLight">#CCCCCC</color>
     <color name="colorAccent">#fe304b</color>
 
     <color name="textColorPrimary">#808080</color>
