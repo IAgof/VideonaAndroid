@@ -90,13 +90,13 @@ public class RecordPresenter extends RecordBasePresenter {
         super.onDestroy();
     }
 
-    private void resetRecorder() throws IOException {
+    public void resetRecorder() throws IOException {
         super.resetRecorder();
         config = new SessionConfig(Constants.PATH_APP_TEMP);
         recorder.reset(config);
     }
 
-    private void startRecord() {
+    public void startRecord() {
         super.startRecord();
         recordView.hideMenuOptions();
     }
