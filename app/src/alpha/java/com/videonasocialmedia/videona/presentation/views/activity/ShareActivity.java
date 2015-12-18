@@ -190,9 +190,7 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
 
     @OnClick(R.id.button_navigate_drawer)
     public void navigationDrawerListener() {
-
         drawerLayout.openDrawer(navigatorView);
-
     }
 
     //@OnClick(R.id.share_button_play)

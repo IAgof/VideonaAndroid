@@ -7,25 +7,58 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
+import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
+import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
+import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
+import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.fragment.JoinBetaDialogFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -104,7 +137,7 @@ public class RecordActivity extends RecordBaseActivity implements RecordView,
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
         mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before
-                                                   // property name
+        // property name
     }
 
     @Override
@@ -182,11 +215,14 @@ public class RecordActivity extends RecordBaseActivity implements RecordView,
     @Override
     public void goToShare(String videoToSharePath) {
         recordPresenter.removeMasterVideos();
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("video/*");
-        Uri uri = Utils.obtainUriToShare(this, videoToSharePath);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+//        Intent intent = new Intent(Intent.ACTION_SEND);
+//        intent.setType("video/*");
+//        Uri uri = Utils.obtainUriToShare(this, videoToSharePath);
+//        intent.putExtra(Intent.EXTRA_STREAM, uri);
+//        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
     }
 
     @Override
@@ -228,5 +264,7 @@ public class RecordActivity extends RecordBaseActivity implements RecordView,
         shareButton.setAlpha(0.25f);
         shareButton.setClickable(false);
     }
+
+
 
 }

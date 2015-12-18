@@ -21,8 +21,13 @@ import com.qordoba.sdk.Qordoba;
 
 public class VideonaApplication extends Application {
 
+    private static Context context;
 
     Tracker appTracker;
+
+    public static Context getAppContext() {
+        return VideonaApplication.context;
+    }
 
     /**
      * Called when the application is starting, before any activity, service,
@@ -36,6 +41,7 @@ public class VideonaApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
         setupGoogleAnalytics();
         setupQordoba();
     }
@@ -65,4 +71,5 @@ public class VideonaApplication extends Application {
     public synchronized Tracker getTracker() {
         return appTracker;
     }
+
 }

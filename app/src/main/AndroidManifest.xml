@@ -196,6 +196,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".presentation.views.activity.ShareVideoActivity"
+            android:parentActivityName=".presentation.views.activity.RecordActivity"
+            android:label="@string/share_using"
+            />
+
     </application>
 
 </manifest>
