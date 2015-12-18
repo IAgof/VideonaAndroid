@@ -16,6 +16,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -36,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import butterknife.Optional;
 
 /**
  * Created by jca on 11/12/15.
@@ -52,6 +54,9 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     Toolbar toolbar;
     @InjectView(R.id.button_more_networks)
     FloatingActionButton fab;
+    @Optional
+    @InjectView(R.id.bottom_panel)
+    RelativeLayout bottomPanel;
 
     private String videoPath;
     private ShareVideoPresenter presenter;
@@ -75,7 +80,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         }
         initVideoPreview(videoPosition, isPlaying);
         initNetworksList();
-        fab.m
+
     }
 
     private void initToolbar() {
@@ -196,8 +201,10 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     public void playVideo() {
         videoPreview.start();
         playPauseButton.setVisibility(View.GONE);
-        if (isLandscapeOriented())
+        if (isLandscapeOriented()) {
             hideToolBar();
+            hideBottomPanel();
+        }
     }
 
     private void hideToolBar() {
@@ -209,13 +216,19 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     public void pauseVideo() {
         videoPreview.pause();
         playPauseButton.setVisibility(View.VISIBLE);
-        if (isLandscapeOriented())
+        if (isLandscapeOriented()) {
             showToolbar();
+            showBottomPanel();
+        }
     }
 
-//    private void hideSocialNetworksCardView() {
-//        runTranslateAnimation(, -Math.round(view.getTranslationY()), new AccelerateInterpolator(3));
-//    }
+    private void hideBottomPanel() {
+        runTranslateAnimation(bottomPanel, -Math.round(bottomPanel.getTranslationY()), new AccelerateInterpolator(3));
+    }
+
+    private void showBottomPanel(){
+        runTranslateAnimation(bottomPanel, Math.round(bottomPanel.getTranslationY()), new AccelerateInterpolator(3));
+    }
 
 
     private void showToolbar() {

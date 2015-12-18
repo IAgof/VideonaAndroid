@@ -23,6 +23,7 @@
         android:src="@drawable/common_icon_play_on_normal" />
 
     <RelativeLayout
+        android:id="@+id/bottom_panel"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true">
@@ -54,8 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="-30dp"
-            android:layout_alignTop="@id/card_view"
+            android:layout_alignParentTop="true"
             android:layout_alignEnd="@id/card_view"
             android:src="@drawable/gatito_rules"/>
     </RelativeLayout>
