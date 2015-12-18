@@ -173,7 +173,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     }
 
     private void createProgressDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaAlertDialogDark);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
         progressDialog = builder.setCancelable(false)
                 .setView(dialogView)
