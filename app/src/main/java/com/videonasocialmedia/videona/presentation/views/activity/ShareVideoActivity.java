@@ -1,12 +1,20 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.VideoView;
 
@@ -40,6 +48,10 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     RecyclerView mainSocialNetworkList;
     @InjectView(R.id.play_pause_button)
     ImageButton playPauseButton;
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+    @InjectView(R.id.button_more_networks)
+    FloatingActionButton fab;
 
     private String videoPath;
     private ShareVideoPresenter presenter;
@@ -53,6 +65,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         ButterKnife.inject(this);
         presenter = new ShareVideoPresenter(this);
         presenter.onCreate();
+        initToolbar();
         if (videoPosition == 0)
             videoPosition = 100;
         boolean isPlaying = false;
@@ -62,12 +75,30 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         }
         initVideoPreview(videoPosition, isPlaying);
         initNetworksList();
+        fab.m
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayShowHomeEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+            if (isLandscapeOriented()) {
+                ab.setDisplayShowTitleEnabled(false);
+               toolbar.getBackground().setAlpha(0);
+            }
+            else
+                ab.setDisplayShowHomeEnabled(true);
+        }
+
     }
 
     private void initVideoPreview(final int position, final boolean playing) {
         videoPath = getIntent().getStringExtra("VIDEO_EDITED");
         if (videoPath != null) {
             videoPreview.setVideoPath(videoPath);
+            Log.d("TAG", "MESSAGE");
         }
         videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -79,7 +110,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
                 } catch (InterruptedException e) {
                     Log.d("Share", "error while preparing preview");
                 }
-                pauseVideo();
+                mediaPlayer.pause();
                 if (playing)
                     playVideo();
             }
@@ -165,12 +196,38 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     public void playVideo() {
         videoPreview.start();
         playPauseButton.setVisibility(View.GONE);
+        if (isLandscapeOriented())
+            hideToolBar();
+    }
+
+    private void hideToolBar() {
+        runTranslateAnimation(toolbar,
+                -toolbar.getHeight(), new AccelerateInterpolator(3));
     }
 
     @Override
     public void pauseVideo() {
         videoPreview.pause();
         playPauseButton.setVisibility(View.VISIBLE);
+        if (isLandscapeOriented())
+            showToolbar();
+    }
+
+//    private void hideSocialNetworksCardView() {
+//        runTranslateAnimation(, -Math.round(view.getTranslationY()), new AccelerateInterpolator(3));
+//    }
+
+
+    private void showToolbar() {
+        runTranslateAnimation(toolbar, 0, new DecelerateInterpolator(3));
+    }
+
+    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
+        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
+        slideInAnimation.setDuration(view.getContext().getResources()
+                .getInteger(android.R.integer.config_mediumAnimTime));
+        slideInAnimation.setInterpolator(interpolator);
+        slideInAnimation.start();
     }
 
     @Override
@@ -197,13 +254,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             mixpanel.track("video shared", socialNetworkProperties);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    class OnPlayerPreparedLitener implements MediaPlayer.OnPreparedListener {
-        @Override
-        public void onPrepared(MediaPlayer mediaPlayer) {
-
         }
     }
 }

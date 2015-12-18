@@ -36,8 +36,7 @@ public class SocialNetworkAppsProvider {
                     || activityName.toLowerCase().contains("twitter")) {
                 socialNetworkApp = new SocialNetworkApp("Twitter", packageName,
                         activityName, icon, "#videona");
-            } else if (packageName.toLowerCase().contains("facebook")
-                    || activityName.toLowerCase().contains("facebook")) {
+            } else if (packageName.toLowerCase().contains("facebook.katana")) {
                 socialNetworkApp = new SocialNetworkApp("Facebook", packageName,
                         activityName, icon, "");
             } else if (packageName.toLowerCase().contains("whatsapp")
@@ -49,7 +48,7 @@ public class SocialNetworkAppsProvider {
                 socialNetworkApp = new SocialNetworkApp("Youtube", packageName,
                         activityName, icon, "");
             } else if (packageName.toLowerCase().contains("plus")
-                    || activityName.toLowerCase().contains("plus")) {
+                    && activityName.toLowerCase().contains("com.google.android.libraries.social.gateway.GatewayActivity")) {
                 socialNetworkApp = new SocialNetworkApp("GooglePlus", packageName,
                         activityName, icon, "#videona");
             } else if (packageName.toLowerCase().contains("instagram")
@@ -61,6 +60,7 @@ public class SocialNetworkAppsProvider {
                         activityName, icon, "");
             }
             socialNetworkApps.add(socialNetworkApp);
+            Log.d(socialNetworkApp.getName(),socialNetworkApp.getAndroidPackageName()+"||"+socialNetworkApp.getAndroidActivityName());
         }
         return socialNetworkApps;
     }

@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="#000">
 
+
     <VideoView
         android:id="@+id/video_preview"
         android:layout_width="match_parent"
@@ -21,48 +22,51 @@
         android:background="#00000000"
         android:src="@drawable/common_icon_play_on_normal" />
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        card_view:cardCornerRadius="4dp"
         android:layout_alignParentBottom="true"
-        android:elevation="5dp"
-        android:background="#fff">
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="#fff"
+        card_view:cardCornerRadius="3dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="70dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/main_social_network_list"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="clip_horizontal|bottom"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                tools:layout_height="55dp"
-                tools:listitem="@layout/share_network_viewholder" />
-
-            <ImageButton
-                android:id="@+id/button_more_networks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/gatito_rules"
-                tools:layout_height="55dp"
-                tools:layout_width="55dp" />
-        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_social_network_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            tools:layout_height="40dp"
+            tools:listitem="@layout/share_network_viewholder" />
 
     </android.support.v7.widget.CardView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button_more_networks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="-30dp"
+            android:layout_alignTop="@id/card_view"
+            android:layout_alignEnd="@id/card_view"
+            android:src="@drawable/gatito_rules"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorTransparent"
+        android:elevation="4dp"
+        android:theme="@style/VideonaToolbar" />
 
 
 </RelativeLayout>
