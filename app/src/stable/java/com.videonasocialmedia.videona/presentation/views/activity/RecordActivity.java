@@ -50,7 +50,7 @@ public class RecordActivity extends RecordBaseActivity implements RecordView,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.record_activity);
+        setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
 
         recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
