@@ -50,12 +50,12 @@
         android:layout_marginTop="10dp"
         android:background="@android:color/darker_gray" />
 
-    <ImageButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_more_networks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/gatito_rules" />
+                android:src="@drawable/gatito_rules"/>
 
 </LinearLayout>
 

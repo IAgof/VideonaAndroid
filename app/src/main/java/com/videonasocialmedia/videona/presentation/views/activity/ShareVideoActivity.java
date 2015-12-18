@@ -2,7 +2,9 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -27,6 +29,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.ShareVideoPres
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoPlayerView;
 import com.videonasocialmedia.videona.presentation.views.adapter.SocialNetworkAdapter;
+import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +57,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     Toolbar toolbar;
     @InjectView(R.id.button_more_networks)
     FloatingActionButton fab;
+
     @Optional
     @InjectView(R.id.bottom_panel)
     RelativeLayout bottomPanel;
@@ -91,9 +95,8 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             ab.setDisplayHomeAsUpEnabled(true);
             if (isLandscapeOriented()) {
                 ab.setDisplayShowTitleEnabled(false);
-               toolbar.getBackground().setAlpha(0);
-            }
-            else
+                toolbar.getBackground().setAlpha(0);
+            } else
                 ab.setDisplayShowHomeEnabled(true);
         }
 
@@ -125,6 +128,10 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 playPauseButton.setVisibility(View.VISIBLE);
+                if (isLandscapeOriented()) {
+                    showBottomPanel();
+                    showToolbar();
+                }
             }
         });
     }
@@ -181,6 +188,32 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
 
     }
 
+    @OnClick(R.id.button_more_networks)
+    public void showMoreNetworks() {
+        trackGenericShare();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("video/*");
+        Uri uri = Utils.obtainUriToShare(this, videoPath);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+    }
+
+    private void trackGenericShare() {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("ShareVideoActivity")
+                .setAction("video shared")
+                .setLabel("Generic social network")
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+        JSONObject socialNetworkProperties = new JSONObject();
+        try {
+            socialNetworkProperties.put("Social Network", "Generic");
+            mixpanel.track("video shared", socialNetworkProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     @OnTouch(R.id.video_preview)
     public boolean togglePlayPause(MotionEvent event) {
         boolean result = false;
@@ -223,11 +256,11 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     }
 
     private void hideBottomPanel() {
-        runTranslateAnimation(bottomPanel, -Math.round(bottomPanel.getTranslationY()), new AccelerateInterpolator(3));
+        runTranslateAnimation(bottomPanel, bottomPanel.getHeight(), new AccelerateInterpolator(3));
     }
 
-    private void showBottomPanel(){
-        runTranslateAnimation(bottomPanel, Math.round(bottomPanel.getTranslationY()), new AccelerateInterpolator(3));
+    private void showBottomPanel() {
+        runTranslateAnimation(bottomPanel, 1, new AccelerateInterpolator(3));
     }
 
 
@@ -269,4 +302,5 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             e.printStackTrace();
         }
     }
+
 }
