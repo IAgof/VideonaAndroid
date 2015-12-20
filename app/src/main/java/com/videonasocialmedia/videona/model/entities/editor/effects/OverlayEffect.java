@@ -25,6 +25,12 @@ public class OverlayEffect extends Effect {
         this.resourceId = resourceId;
     }
 
+    public OverlayEffect(String identifier, String name, int iconId, int resourceId) {
+        super(identifier, name, iconId);
+        this.resourcePath = null;
+        this.resourceId = resourceId;
+    }
+
     public String getResourcePath() {
         return resourcePath;
     }

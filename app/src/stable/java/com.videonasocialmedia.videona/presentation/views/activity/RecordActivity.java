@@ -43,11 +43,10 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
-import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
-import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.fragment.JoinBetaDialogFragment;
@@ -155,7 +154,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         effectsRecycler.setAdapter(cameraDistortionEffectsAdapter);
         fxHidden = true;
 
-        cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
+        //cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
+        cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
         colorFilterRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         colorFilterRecycler.setAdapter(cameraColorEffectsAdapter);
@@ -283,8 +283,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void onEvent(JoinBetaEvent event) {
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
-        mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before
-        // property name
+        mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before// property name
     }
 
     @Override
@@ -658,11 +657,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @Override
-    public void onEffectSelected(ShaderEffect effect) {
-        recordPresenter.applyEffect(effect.getResourceId());
+    public void onEffectSelected(Effect effect) {
+        recordPresenter.applyEffect(effect);
         sendButtonTracked(effect.getIconId());
         resetOtherEffects();
         scrollEffectList(effect);
+    }
+
+    @Override
+    public void onEffectSelectionCancel(Effect effect) {
+        recordPresenter.removeEffect(effect);
     }
 
     private void resetOtherEffects() {
@@ -672,7 +676,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             cameraColorEffectsAdapter.resetSelectedEffect();
     }
 
-    private void scrollEffectList(ShaderEffect effect) {
+    private void scrollEffectList(com.videonasocialmedia.videona.model.entities.editor.effects.Effect effect) {
         if (!colorFilterHidden) {
             List effects = cameraColorEffectsAdapter.getElementList();
             int index = effects.indexOf(effect);
@@ -684,6 +688,114 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             int scroll = index > cameraDistortionEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
             effectsRecycler.scrollToPosition(index + scroll);
         }
+    }
+
+    @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_color,
+            R.id.button_camera_effect_fx, R.id.button_change_camera})
+    public void clickListener(View view) {
+        sendButtonTracked(view.getId());
+    }
+
+    private void sendButtonTracked(String label) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("RecordActivity")
+                .setAction("button clicked")
+                .setLabel(label)
+                .build());
+        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
+    }
+
+    /**
+     * Sends button clicks to Google Analytics
+     *
+     * @param id identifier of the clicked view
+     */
+    private void sendButtonTracked(int id) {
+        String label;
+        switch (id) {
+            case R.id.button_record:
+                label = "Capture ";
+                break;
+            case R.id.button_change_camera:
+                label = "Change camera";
+                break;
+            case R.id.button_toggle_flash:
+                label = "Flash camera";
+                break;
+            case R.id.button_camera_effect_fx:
+                label = "Fx filters";
+                break;
+            case R.id.button_camera_effect_color:
+                label = "Color filters";
+                break;
+            case R.drawable.common_filter_color_ad1_aqua:
+                label = "Aqua color filter AD1";
+                mixpanel.track("Aqua color filter selected AD1", null);
+                break;
+            case R.drawable.common_filter_color_ad2_posterizebw:
+                label = "Posterize bw filter AD2";
+                mixpanel.track("Posterize bw filter selected AD2", null);
+                break;
+            case R.drawable.common_filter_color_ad3_emboss:
+                label = "Emboss color filter AD3";
+                mixpanel.track("Emboss color filter selected AD3", null);
+                break;
+            case R.drawable.common_filter_color_ad4_mono:
+                label = "Mono color filter AD4";
+                mixpanel.track("Mono color filter selected AD4", null);
+                break;
+            case R.drawable.common_filter_color_ad5_negative:
+                label = "Negative color filter AD5";
+                mixpanel.track("Negative color filter selected AD5", null);
+                break;
+            case R.drawable.common_filter_color_ad6_green:
+                label = "Green color filter AD6";
+                mixpanel.track("Green color filter selected AD6", null);
+                break;
+            case R.drawable.common_filter_color_ad7_posterize:
+                label = "Posterize color filter AD7";
+                mixpanel.track("Posterize color filter selected AD7", null);
+                break;
+            case R.drawable.common_filter_color_ad8_sepia:
+                label = "Sepia color filter AD8";
+                mixpanel.track("Sepia color filter selected AD8", null);
+                break;
+            case R.drawable.common_filter_distortion_fx1_fisheye:
+                label = "Fisheye fx filter FX1";
+                mixpanel.track("Fisheye fx filter selected FX1", null);
+                break;
+            case R.drawable.common_filter_distortion_fx2_stretch:
+                label = "Stretch fx filter FX2";
+                mixpanel.track("Stretch fx filter selected FX2", null);
+                break;
+            case R.drawable.common_filter_distortion_fx3_dent:
+                label = "Dent fx filter FX3";
+                mixpanel.track("Dent fx filter selected FX3", null);
+                break;
+            case R.drawable.common_filter_distortion_fx4_mirror:
+                label = "Mirror fx filter FX4";
+                mixpanel.track("Mirror fx filter selected FX4", null);
+                break;
+            case R.drawable.common_filter_distortion_fx5_squeeze:
+                label = "Squeeze fx filter FX5";
+                mixpanel.track("Squeeze fx filter selected FX5", null);
+                break;
+            case R.drawable.common_filter_distortion_fx6_tunnel:
+                label = "Tunnel fx filter FX6";
+                mixpanel.track("Tunnel fx filter selected FX6", null);
+                break;
+            case R.drawable.common_filter_distortion_fx7_twirl:
+                label = "Twirl fx filter FX7";
+                mixpanel.track("Twirl fx filter selected FX7", null);
+                break;
+            case R.drawable.common_filter_distortion_fx8_bulge:
+                label = "Bulge filter FX8";
+                mixpanel.track("Bulge filter selected FX8", null);
+                break;
+            default:
+                label = "Other";
+        }
+        sendButtonTracked(label);
     }
 
     private class OrientationHelper extends OrientationEventListener {
@@ -804,114 +916,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
         private class NoOrientationSupportException extends Exception {
         }
-    }
-
-    @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_color,
-            R.id.button_camera_effect_fx, R.id.button_change_camera})
-    public void clickListener(View view) {
-        sendButtonTracked(view.getId());
-    }
-
-    private void sendButtonTracked(String label) {
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("RecordActivity")
-                .setAction("button clicked")
-                .setLabel(label)
-                .build());
-        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-    }
-
-    /**
-     * Sends button clicks to Google Analytics
-     *
-     * @param id identifier of the clicked view
-     */
-    private void sendButtonTracked(int id) {
-        String label;
-        switch (id) {
-            case R.id.button_record:
-                label = "Capture ";
-                break;
-            case R.id.button_change_camera:
-                label = "Change camera";
-                break;
-            case R.id.button_toggle_flash:
-                label = "Flash camera";
-                break;
-            case R.id.button_camera_effect_fx:
-                label = "Fx filters";
-                break;
-            case R.id.button_camera_effect_color:
-                label = "Color filters";
-                break;
-            case R.drawable.common_filter_color_ad1_aqua:
-                label = "Aqua color filter AD1";
-                mixpanel.track("Aqua color filter selected AD1", null);
-                break;
-            case R.drawable.common_filter_color_ad2_posterizebw:
-                label = "Posterize bw filter AD2";
-                mixpanel.track("Posterize bw filter selected AD2", null);
-                break;
-            case R.drawable.common_filter_color_ad3_emboss:
-                label = "Emboss color filter AD3";
-                mixpanel.track("Emboss color filter selected AD3", null);
-                break;
-            case R.drawable.common_filter_color_ad4_mono:
-                label = "Mono color filter AD4";
-                mixpanel.track("Mono color filter selected AD4", null);
-                break;
-            case R.drawable.common_filter_color_ad5_negative:
-                label = "Negative color filter AD5";
-                mixpanel.track("Negative color filter selected AD5", null);
-                break;
-            case R.drawable.common_filter_color_ad6_green:
-                label = "Green color filter AD6";
-                mixpanel.track("Green color filter selected AD6", null);
-                break;
-            case R.drawable.common_filter_color_ad7_posterize:
-                label = "Posterize color filter AD7";
-                mixpanel.track("Posterize color filter selected AD7", null);
-                break;
-            case R.drawable.common_filter_color_ad8_sepia:
-                label = "Sepia color filter AD8";
-                mixpanel.track("Sepia color filter selected AD8", null);
-                break;
-            case R.drawable.common_filter_distortion_fx1_fisheye:
-                label = "Fisheye fx filter FX1";
-                mixpanel.track("Fisheye fx filter selected FX1", null);
-                break;
-            case R.drawable.common_filter_distortion_fx2_stretch:
-                label = "Stretch fx filter FX2";
-                mixpanel.track("Stretch fx filter selected FX2", null);
-                break;
-            case R.drawable.common_filter_distortion_fx3_dent:
-                label = "Dent fx filter FX3";
-                mixpanel.track("Dent fx filter selected FX3", null);
-                break;
-            case R.drawable.common_filter_distortion_fx4_mirror:
-                label = "Mirror fx filter FX4";
-                mixpanel.track("Mirror fx filter selected FX4", null);
-                break;
-            case R.drawable.common_filter_distortion_fx5_squeeze:
-                label = "Squeeze fx filter FX5";
-                mixpanel.track("Squeeze fx filter selected FX5", null);
-                break;
-            case R.drawable.common_filter_distortion_fx6_tunnel:
-                label = "Tunnel fx filter FX6";
-                mixpanel.track("Tunnel fx filter selected FX6", null);
-                break;
-            case R.drawable.common_filter_distortion_fx7_twirl:
-                label = "Twirl fx filter FX7";
-                mixpanel.track("Twirl fx filter selected FX7", null);
-                break;
-            case R.drawable.common_filter_distortion_fx8_bulge:
-                label = "Bulge filter FX8";
-                mixpanel.track("Bulge filter selected FX8", null);
-                break;
-            default:
-                label = "Other";
-        }
-        sendButtonTracked(label);
     }
 
 }

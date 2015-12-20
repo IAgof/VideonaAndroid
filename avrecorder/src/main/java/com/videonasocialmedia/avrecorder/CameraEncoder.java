@@ -358,12 +358,15 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     public void removeOverlayFilter(Overlay overlay) {
-        overlayList.remove(overlay);
+
+        overlayList = null;
+        mDisplayRenderer.setOverlayList(null);
+        //overlayList.remove(overlay);
     }
 
     public void addWatermark(Drawable overlayImage,
                              int positionX, int positionY, int width, int height, boolean preview) {
-        this.watermark = new Watermark(overlayImage, positionX, positionY, width, height);
+        this.watermark = new Watermark(overlayImage, height, width, positionX, positionY);
         if (preview && mDisplayRenderer != null)
             mDisplayRenderer.setWatermark(watermark);
     }
@@ -371,6 +374,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     public void addWatermark(Drawable overlayImage, boolean preview) {
         int[] size = calculateDefaultWatermarkSize();
         int margin = calculateWatermarkDefaultPosition();
+        //addWatermark(overlayImage, 15, 15, 265, 36, preview);
         addWatermark(overlayImage, margin, margin, size[0], size[1], preview);
     }
 
@@ -569,8 +573,11 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 GLES20.glViewport(0, 0, mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight());
                 mFullScreen.drawFrame(mTextureId, mTransform);
                 drawOverlayList();
-                watermark.draw();
-//                configViewportWatermark();
+                if (watermark != null) {
+                    if (!watermark.isInitialized())
+                        watermark.initProgram();
+                    watermark.draw();
+                }
                 if (TRACE) Trace.endSection();
                 if (!mEncodedFirstFrame) {
                     mEncodedFirstFrame = true;

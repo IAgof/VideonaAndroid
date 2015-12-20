@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.adapter;
 
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,9 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 
 import java.util.List;
@@ -35,21 +35,19 @@ public class EffectAdapter
         extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
 
     private Context context;
-    private List<ShaderEffect> effects;
+    private List<Effect> effects;
     private OnEffectSelectedListener onEffectSelectedListener;
     private int selectedPosition = -1;
     private int previousSelectionPosition = -1;
-    private ShaderEffect defaultEffect;
 
     /**
      * Constructor.
      *
      * @param effects the list of the available effects
      */
-    public EffectAdapter(List<ShaderEffect> effects, OnEffectSelectedListener listener) {
+    public EffectAdapter(List<Effect> effects, OnEffectSelectedListener listener) {
         this.effects = effects;
         this.onEffectSelectedListener = listener;
-        defaultEffect = new ShaderEffect(null, "AD0", -1, Filters.FILTER_NONE);
     }
 
     /**
@@ -57,7 +55,7 @@ public class EffectAdapter
      *
      * @return
      */
-    public List<ShaderEffect> getElementList() {
+    public List<Effect> getElementList() {
         return effects;
     }
 
@@ -71,7 +69,7 @@ public class EffectAdapter
 
     @Override
     public void onBindViewHolder(cameraEffectViewHolder holder, int position) {
-        ShaderEffect selectedEffect = effects.get(position);
+        Effect selectedEffect = effects.get(position);
         Glide.with(context)
                 .load(selectedEffect.getIconId())
                 .error(R.drawable.gatito_rules)
@@ -95,7 +93,7 @@ public class EffectAdapter
      * @param position the position of the effect element
      * @return
      */
-    public ShaderEffect getEffect(int position) {
+    public Effect getEffect(int position) {
         return effects.get(position);
     }
 
@@ -114,7 +112,7 @@ public class EffectAdapter
      *
      * @param effects
      */
-    public void appendCameraEffect(List<ShaderEffect> effects) {
+    public void appendCameraEffect(List<Effect> effects) {
         this.effects.addAll(effects);
     }
 
@@ -171,8 +169,9 @@ public class EffectAdapter
                 previousSelectionPosition = selectedPosition;
                 notifyItemChanged(selectedPosition);
                 if (selectedPosition == getAdapterPosition()) {
+                    int adapterPosition= getAdapterPosition();
                     resetSelectedEffect();
-                    onClickListener.onEffectSelected(defaultEffect);
+                    onClickListener.onEffectSelectionCancel(effects.get(adapterPosition));
                 } else {
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);

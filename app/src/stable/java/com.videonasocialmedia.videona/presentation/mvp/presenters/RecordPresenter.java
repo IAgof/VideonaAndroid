@@ -1,4 +1,4 @@
-/*/*
+/*
  * Copyright (c) 2015. Videona Socialmedia SL
  * http://www.videona.com
  * info@videona.com
@@ -18,6 +18,7 @@ import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
+import com.videonasocialmedia.avrecorder.overlay.Overlay;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
@@ -28,6 +29,8 @@ import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -86,7 +89,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
-
         exportProjectUseCase = new ExportProjectUseCase(this);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         removeVideosUseCase = new RemoveVideosUseCase();
@@ -367,9 +369,32 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.showFlashOn(on);
     }
 
+    /**
+     * @deprecated
+     * @param filterId
+     */
     public void applyEffect(int filterId) {
         selectedEffect = filterId;
         recorder.applyFilter(filterId);
+    }
+
+    public void applyEffect(Effect effect){
+        if (effect instanceof OverlayEffect){
+            recorder.removeOverlay();
+            Drawable overlay= context.getResources().getDrawable(((OverlayEffect) effect).getResourceId());
+            recorder.addOverlayFilter(overlay);
+        }
+        else{
+            int shaderId= ((ShaderEffect)effect).getResourceId();
+            recorder.applyFilter(shaderId);
+        }
+    }
+
+    public void removeEffect(Effect effect) {
+        if (effect instanceof OverlayEffect)
+            recorder.removeOverlay();
+        else if (effect instanceof ShaderEffect)
+            recorder.applyFilter(Filters.FILTER_NONE);
     }
 
     public void rotateCamera(int rotation) {
@@ -389,12 +414,15 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.goToShare(exportedVideo.getMediaPath());
     }
 
-    public List<ShaderEffect> getDistortionEffectList() {
+    public List<Effect> getDistortionEffectList() {
         return GetEffectListUseCase.getDistortionEffectList();
     }
 
-    public List<ShaderEffect> getColorEffectList() {
+    public List<Effect> getColorEffectList() {
         return GetEffectListUseCase.getColorEffectList();
     }
 
+    public List<Effect> getOverlayEffects() {
+        return GetEffectListUseCase.getOverlayEffectsList();
+    }
 }
