@@ -15,6 +15,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.videonasocialmedia.avrecorder.AVRecorder;
@@ -29,6 +30,8 @@ import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
@@ -115,15 +118,14 @@ public class RecordPresenter {
 
     private void showThumbAndNumber() {
         GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-        final List mediaInProject=getMediaListFromProjectUseCase.getMediaListFromProject();
-        if (mediaInProject!=null && mediaInProject.size()>0){
-            int lastItemIndex= mediaInProject.size()-1;
-            final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
-            this.recordedVideosNumber=mediaInProject.size();
+        final List mediaInProject = getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (mediaInProject != null && mediaInProject.size() > 0) {
+            int lastItemIndex = mediaInProject.size() - 1;
+            final Video lastItem = (Video) mediaInProject.get(lastItemIndex);
+            this.recordedVideosNumber = mediaInProject.size();
             recordView.showVideosRecordedNumber(recordedVideosNumber);
             recordView.showRecordedVideoThumb(lastItem.getMediaPath());
-        }
-        else{
+        } else {
             recordView.hideRecordedVideoThumb();
             recordView.hideVideosRecordedNumber();
         }
@@ -174,12 +176,12 @@ public class RecordPresenter {
         startRecord();
     }
 
-    public void onEventMainThread(CameraOpenedEvent e){
+    public void onEventMainThread(CameraOpenedEvent e) {
 
         Log.d(LOG_TAG, "camera opened, camera != null");
         //Calculate orientation, rotate if needed
         //recordView.unlockScreenRotation();
-        if(firstTimeRecording){
+        if (firstTimeRecording) {
             recordView.unlockScreenRotation();
         }
 
@@ -253,18 +255,18 @@ public class RecordPresenter {
 
         Log.d(LOG_TAG, "checkSupportFlash flashSupport " + flashSupport);
 
-        if(flashSupport == 0){
+        if (flashSupport == 0) {
             recordView.showFlashSupported(true);
             Log.d(LOG_TAG, "checkSupportFlash flash Supported camera");
         } else {
-            if(flashSupport == 1) {
+            if (flashSupport == 1) {
                 recordView.showFlashSupported(false);
                 Log.d(LOG_TAG, "checkSupportFlash flash NOT Supported camera");
             }
         }
     }
 
-    public void setFlashOff(){
+    public void setFlashOff() {
         boolean on = recorder.setFlashOff();
         recordView.showFlashOn(on);
 
@@ -275,20 +277,44 @@ public class RecordPresenter {
         recordView.showFlashOn(on);
     }
 
+    /**
+     * @deprecated
+     * @param filterId
+     */
     public void applyEffect(int filterId) {
         selectedEffect = filterId;
         recorder.applyFilter(filterId);
     }
 
+    public void applyEffect(Effect effect){
+        if (effect instanceof OverlayEffect){
+            recorder.removeOverlay();
+            Drawable overlay= context.getResources().getDrawable(((OverlayEffect) effect).getResourceId());
+            recorder.addOverlayFilter(overlay);
+        }
+        else{
+            int shaderId= ((ShaderEffect)effect).getResourceId();
+            recorder.applyFilter(shaderId);
+        }
+    }
+
+    public void removeEffect(Effect effect) {
+        if (effect instanceof OverlayEffect)
+            recorder.removeOverlay();
+        else if (effect instanceof ShaderEffect)
+            recorder.applyFilter(Filters.FILTER_NONE);
+    }
+
+
     public void rotateCamera(int rotation) {
         recorder.rotateCamera(rotation);
     }
 
-    public List<ShaderEffect> getDistortionEffectList() {
+    public List<Effect> getDistortionEffectList() {
         return GetEffectListUseCase.getDistortionEffectList();
     }
 
-    public List<ShaderEffect> getColorEffectList() {
+    public List<Effect> getColorEffectList() {
         return GetEffectListUseCase.getColorEffectList();
     }
 

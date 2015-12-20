@@ -451,11 +451,9 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void goToShare(String videoToSharePath) {
-        //TODO share directly, without activity class
-        Intent share = new Intent();
-        share.putExtra("VIDEO_EDITED", videoToSharePath);
-        share.setClass(this, ShareActivity.class);
-        this.startActivity(share);
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
     }
 
 

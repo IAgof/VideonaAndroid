@@ -44,10 +44,9 @@ import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
-import com.videonasocialmedia.videona.presentation.views.adapter.Effect;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
@@ -539,7 +538,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
 
     @Override
-    public void showMenuOptions(){
+    public void showMenuOptions() {
         navigatorView.setVisibility(View.VISIBLE);
     }
 
@@ -597,8 +596,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    public void onEffectSelected(ShaderEffect effect) {
-        recordPresenter.applyEffect(effect.getResourceId());
+    public void onEffectSelected(Effect effect) {
+        recordPresenter.applyEffect(effect);
         sendButtonTracked(effect.getIconId());
         resetOtherEffects();
         scrollEffectList(effect);
@@ -611,7 +610,12 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             cameraColorEffectsAdapter.resetSelectedEffect();
     }
 
-    private void scrollEffectList(ShaderEffect effect) {
+    @Override
+    public void onEffectSelectionCancel(Effect effect) {
+        recordPresenter.removeEffect(effect);
+    }
+
+    private void scrollEffectList(Effect effect) {
         if (!colorFilterHidden) {
             List effects = cameraColorEffectsAdapter.getElementList();
             int index = effects.indexOf(effect);
@@ -622,121 +626,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             int index = effects.indexOf(effect);
             int scroll = index > cameraDistortionEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
             effectsRecycler.scrollToPosition(index + scroll);
-        }
-    }
-
-    private class OrientationHelper extends OrientationEventListener {
-
-        Context context;
-        private int rotationView;
-        private boolean orientationHaveChanged = false;
-        private boolean isNormalOrientation;
-
-        public OrientationHelper(Context context) {
-            super(context);
-
-            this.context = context;
-        }
-
-        /**
-         *
-         */
-        public void startMonitoringOrientation() throws NoOrientationSupportException {
-            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
-            if(rotationView == Surface.ROTATION_90){
-                isNormalOrientation = true;
-                orientationHaveChanged = false;
-            } else {
-                isNormalOrientation = false;
-            }
-            determineOrientation(rotationView);
-            if (this.canDetectOrientation()) {
-                this.enable();
-            } else {
-                this.disable();
-                throw new NoOrientationSupportException();
-            }
-        }
-
-        public void stopMonitoringOrientation() {
-            this.disable();
-        }
-
-        public void reStartMonitoringOrientation() throws NoOrientationSupportException {
-            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
-            if (rotationView == Surface.ROTATION_90) {
-                isNormalOrientation = true;
-                orientationHaveChanged = false;
-            } else {
-                isNormalOrientation = false;
-            }
-            determineOrientation(rotationView);
-        }
-
-        private void determineOrientation(int rotationView) {
-            Log.d(LOG_TAG, " determineOrientation" + " rotationView " + rotationView);
-            int rotation = -1;
-            if (rotationView == Surface.ROTATION_90) {
-                rotation = 90;
-                recordPresenter.rotateCamera(rotationView);
-            } else {
-                if (rotationView == Surface.ROTATION_270) {
-                    rotation = 270;
-                    recordPresenter.rotateCamera(rotationView);
-                }
-            }
-            Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
-                    " cameraInfoOrientation ");
-        }
-
-        @Override
-        public void onOrientationChanged(int orientation) {
-            if (orientation > 85 && orientation < 95) {
-                if (isNormalOrientation && !orientationHaveChanged) {
-                    Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
-                    recordPresenter.rotateCamera(Surface.ROTATION_270);
-                    orientationHaveChanged = true;
-                } else {
-                    if (orientationHaveChanged) {
-                        Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
-                        recordPresenter.rotateCamera(Surface.ROTATION_270);
-                        orientationHaveChanged = false;
-                    }
-                }
-            } else if (orientation > 265 && orientation < 275) {
-                if (isNormalOrientation) {
-                    if (orientationHaveChanged) {
-                        Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
-                        recordPresenter.rotateCamera(Surface.ROTATION_90);
-                        orientationHaveChanged = false;
-                    }
-                } else {
-                    if (!orientationHaveChanged) {
-                        Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
-                        recordPresenter.rotateCamera(Surface.ROTATION_90);
-                        orientationHaveChanged = true;
-                    }
-                }
-            }
-            checkShowRotateDevice(orientation);
-        }
-
-        // Show image to Rotate Device
-        private void checkShowRotateDevice(int orientation) {
-            if ((orientation > 345 || orientation < 15) && orientation != -1) {
-                rotateDeviceHint.setRotation(270);
-                rotateDeviceHint.setRotationX(0);
-                rotateDeviceHint.setVisibility(View.VISIBLE);
-            } else if (orientation > 165 && orientation < 195) {
-                rotateDeviceHint.setRotation(-270);
-                rotateDeviceHint.setRotationX(180);
-                rotateDeviceHint.setVisibility(View.VISIBLE);
-            } else {
-                rotateDeviceHint.setVisibility(View.GONE);
-            }
-        }
-
-        private class NoOrientationSupportException extends Exception {
         }
     }
 
@@ -847,6 +736,121 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                 label = "Other";
         }
         sendButtonTracked(label);
+    }
+
+    private class OrientationHelper extends OrientationEventListener {
+
+        Context context;
+        private int rotationView;
+        private boolean orientationHaveChanged = false;
+        private boolean isNormalOrientation;
+
+        public OrientationHelper(Context context) {
+            super(context);
+
+            this.context = context;
+        }
+
+        /**
+         *
+         */
+        public void startMonitoringOrientation() throws NoOrientationSupportException {
+            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+            if (rotationView == Surface.ROTATION_90) {
+                isNormalOrientation = true;
+                orientationHaveChanged = false;
+            } else {
+                isNormalOrientation = false;
+            }
+            determineOrientation(rotationView);
+            if (this.canDetectOrientation()) {
+                this.enable();
+            } else {
+                this.disable();
+                throw new NoOrientationSupportException();
+            }
+        }
+
+        public void stopMonitoringOrientation() {
+            this.disable();
+        }
+
+        public void reStartMonitoringOrientation() throws NoOrientationSupportException {
+            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+            if (rotationView == Surface.ROTATION_90) {
+                isNormalOrientation = true;
+                orientationHaveChanged = false;
+            } else {
+                isNormalOrientation = false;
+            }
+            determineOrientation(rotationView);
+        }
+
+        private void determineOrientation(int rotationView) {
+            Log.d(LOG_TAG, " determineOrientation" + " rotationView " + rotationView);
+            int rotation = -1;
+            if (rotationView == Surface.ROTATION_90) {
+                rotation = 90;
+                recordPresenter.rotateCamera(rotationView);
+            } else {
+                if (rotationView == Surface.ROTATION_270) {
+                    rotation = 270;
+                    recordPresenter.rotateCamera(rotationView);
+                }
+            }
+            Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
+                    " cameraInfoOrientation ");
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            if (orientation > 85 && orientation < 95) {
+                if (isNormalOrientation && !orientationHaveChanged) {
+                    Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
+                    recordPresenter.rotateCamera(Surface.ROTATION_270);
+                    orientationHaveChanged = true;
+                } else {
+                    if (orientationHaveChanged) {
+                        Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
+                        recordPresenter.rotateCamera(Surface.ROTATION_270);
+                        orientationHaveChanged = false;
+                    }
+                }
+            } else if (orientation > 265 && orientation < 275) {
+                if (isNormalOrientation) {
+                    if (orientationHaveChanged) {
+                        Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
+                        recordPresenter.rotateCamera(Surface.ROTATION_90);
+                        orientationHaveChanged = false;
+                    }
+                } else {
+                    if (!orientationHaveChanged) {
+                        Log.d(LOG_TAG, "onOrientationChanged  rotationView changed " + orientation);
+                        recordPresenter.rotateCamera(Surface.ROTATION_90);
+                        orientationHaveChanged = true;
+                    }
+                }
+            }
+            checkShowRotateDevice(orientation);
+        }
+
+        // Show image to Rotate Device
+        private void checkShowRotateDevice(int orientation) {
+            if ((orientation > 345 || orientation < 15) && orientation != -1) {
+                rotateDeviceHint.setRotation(270);
+                rotateDeviceHint.setRotationX(0);
+                rotateDeviceHint.setVisibility(View.VISIBLE);
+            } else if (orientation > 165 && orientation < 195) {
+                rotateDeviceHint.setRotation(-270);
+                rotateDeviceHint.setRotationX(180);
+                rotateDeviceHint.setVisibility(View.VISIBLE);
+            } else {
+                rotateDeviceHint.setVisibility(View.GONE);
+            }
+        }
+
+        private class NoOrientationSupportException extends Exception {
+        }
     }
 
 }

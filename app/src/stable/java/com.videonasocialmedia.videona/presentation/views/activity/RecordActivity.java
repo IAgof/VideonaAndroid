@@ -597,11 +597,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void goToShare(String videoToSharePath) {
         recordPresenter.removeMasterVideos();
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("video/*");
-        Uri uri = Utils.obtainUriToShare(this, videoToSharePath);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
     }
 
     @Override
