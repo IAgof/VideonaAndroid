@@ -12,39 +12,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.PowerManager;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.MediaController;
-import android.widget.VideoView;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
-import com.videonasocialmedia.videona.utils.Utils;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
-
-
+/*
 public class ShareActivity extends VideonaActivity implements ShareView, OnPreparedListener,
         DrawerLayout.DrawerListener, MediaPlayer.OnErrorListener {
 
@@ -61,9 +29,11 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
     private String videoPath;
 
 
-    /**
+    */
+/**
      * Tracker google analytics
-     */
+     *//*
+
     private Tracker tracker;
 
     @InjectView(R.id.activity_share_drawer_layout)
@@ -74,9 +44,11 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
 
     @InjectView(R.id.linear_layout_black_background)
     LinearLayout linearLayoutBlackBackground;
-    /**
+    */
+/**
      * Button navigation drawer
-     */
+     *//*
+
     @InjectView(R.id.button_navigate_drawer)
     ImageButton buttonNavigateDrawer;
 
@@ -131,9 +103,11 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
 
     }
 
-    /**
+    */
+/**
      * Shows an alert dialog if an error occurs and returns to the previous activity
-     */
+     *//*
+
     private void showError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this,
                 R.style.VideonaAlertDialogDark);
@@ -163,9 +137,11 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
         mixpanel.track("Time in Share Activity");
     }
 
-    /**
+    */
+/**
      * Releases the media player and the video view
-     */
+     *//*
+
     private void releaseVideoView() {
         videoView.stopPlayback();
         videoView.clearFocus();
@@ -217,16 +193,19 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
         pauseVideo();
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("video/*");
+        intent.setType("video*/
+/*");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
         mixpanel.track("Share Button clicked", null);
     }
 
 
-    /**
+    */
+/**
      * Use screen touches to toggle the video between playing and paused.
-     */
+     *//*
+
 //    @OnTouch(R.id.share_video_view)
 //    public boolean onTouchEvent(MotionEvent ev) {
 //        boolean result;
@@ -287,11 +266,13 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
         sendButtonTracked(view.getId());
     }
 
-    /**
+    */
+/**
      * Sends button clicks to Google Analytics
      *
      * @param id the identifier of the clicked button
-     */
+     *//*
+
     private void sendButtonTracked(int id) {
         Log.d(LOG_TAG, "sendButtonTracked");
         String label;
@@ -335,3 +316,4 @@ public class ShareActivity extends VideonaActivity implements ShareView, OnPrepa
 
     }
 }
+*/

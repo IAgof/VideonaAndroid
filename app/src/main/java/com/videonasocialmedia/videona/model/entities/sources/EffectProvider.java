@@ -79,29 +79,29 @@ public class EffectProvider {
 
     public static List<Effect> getOverlayFilterList() {
         List<Effect> overlayList = new ArrayList<>();
-        overlayList.add(new OverlayEffect("OVA", "nameA",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("AUTUMN", "AUTUMN",
+                R.drawable.common_filter_overlay_autumn,
                 R.drawable.overlay_filter_a));
-        overlayList.add(new OverlayEffect("OVB", "nameB",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("BURN", "BURN",
+                R.drawable.common_filter_overlay_burn,
                 R.drawable.overlay_filter_b));
-        overlayList.add(new OverlayEffect("OVC", "nameC",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("DARK", "DARK",
+                R.drawable.common_filter_overlay_dark,
                 R.drawable.overlay_filter_c));
-        overlayList.add(new OverlayEffect("OVD", "nameD",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("INSTANT", "INSTANT",
+                R.drawable.common_filter_overlay_instant,
                 R.drawable.overlay_filter_d));
-        overlayList.add(new OverlayEffect("OVE", "nameE",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("SUMMER", "SUMMER",
+                R.drawable.common_filter_overlay_summer,
                 R.drawable.overlay_filter_e));
-        overlayList.add(new OverlayEffect("OVF", "nameF",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("SUNSET", "SUNSET",
+                R.drawable.common_filter_overlay_sunset,
                 R.drawable.overlay_filter_f));
-        overlayList.add(new OverlayEffect("OVG", "nameG",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("WINTER", "WINTER",
+                R.drawable.common_filter_overlay_winter,
                 R.drawable.overlay_filter_g));
-        overlayList.add(new OverlayEffect("OVH", "nameH",
-                R.drawable.common_filter_distortion_fx1_fisheye,
+        overlayList.add(new OverlayEffect("WASTED", "WASTED",
+                R.drawable.common_filter_overlay_wasted,
                 R.drawable.overlay_filter_h));
         return overlayList;
     }
