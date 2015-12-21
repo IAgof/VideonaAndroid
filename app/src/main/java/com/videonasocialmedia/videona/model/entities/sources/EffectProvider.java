@@ -79,42 +79,30 @@ public class EffectProvider {
 
     public static List<Effect> getOverlayFilterList() {
         List<Effect> overlayList = new ArrayList<>();
-        overlayList.add(new OverlayEffect("OV1", "name",
+        overlayList.add(new OverlayEffect("OVA", "nameA",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_autum));
-        overlayList.add(new OverlayEffect("OV1", "name",
+                R.drawable.overlay_filter_a));
+        overlayList.add(new OverlayEffect("OVB", "nameB",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_b_w_noise));
-        overlayList.add(new OverlayEffect("OV1", "name",
+                R.drawable.overlay_filter_b));
+        overlayList.add(new OverlayEffect("OVC", "nameC",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_cold));
-        overlayList.add(new OverlayEffect("OV1", "name",
+                R.drawable.overlay_filter_c));
+        overlayList.add(new OverlayEffect("OVD", "nameD",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_hipster));
-        overlayList.add(new OverlayEffect("OV1", "name",
+                R.drawable.overlay_filter_d));
+        overlayList.add(new OverlayEffect("OVE", "nameE",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_lomo));
-        overlayList.add(new OverlayEffect("OV1", "name",
+                R.drawable.overlay_filter_e));
+        overlayList.add(new OverlayEffect("OVF", "nameF",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_mocha));
-        overlayList.add(new OverlayEffect("OV1", "name",
+                R.drawable.overlay_filter_f));
+        overlayList.add(new OverlayEffect("OVG", "nameG",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_polaroid));
-        overlayList.add(new OverlayEffect("OV1", "name",
+                R.drawable.overlay_filter_g));
+        overlayList.add(new OverlayEffect("OVH", "nameH",
                 R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_polaroid2));
-        overlayList.add(new OverlayEffect("OV1", "name",
-                R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_romantic));
-        overlayList.add(new OverlayEffect("OV1", "name",
-                R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_summer));
-        overlayList.add(new OverlayEffect("OV1", "name",
-                R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.overlay_filter_sunset));
-        overlayList.add(new OverlayEffect("OV1", "name",
-                R.drawable.common_filter_distortion_fx1_fisheye,
-                R.drawable.common_filter_color_ad1_aqua));
+                R.drawable.overlay_filter_h));
         return overlayList;
     }
 

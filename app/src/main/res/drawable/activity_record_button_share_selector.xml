@@ -7,8 +7,8 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/gatito_rules" android:state_pressed="true" />
+    <item android:drawable="@drawable/activity_record_share_pressed" android:state_pressed="true" />
     <!-- pressed state -->
-    <item android:drawable="@drawable/gatito_rules" />
+    <item android:drawable="@drawable/activity_record_share_normal" />
     <!-- default state -->
 </selector>
