@@ -150,7 +150,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         effectsRecycler.setAdapter(cameraDistortionEffectsAdapter);
         fxHidden = true;
 
-        cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
+        //cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
+        cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
         colorFilterRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         colorFilterRecycler.setAdapter(cameraColorEffectsAdapter);
