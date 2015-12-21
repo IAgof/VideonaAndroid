@@ -31,7 +31,7 @@ import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
-import com.videonasocialmedia.videona.presentation.views.activity.ShareActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.ShareVideoActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -95,10 +95,10 @@ public class NavigationDrawerFragment extends VideonaFragment {
 
             this.getActivity().onBackPressed();
 
-        } else if(this.getActivity().getClass() == ShareActivity.class) {
+        } else if(this.getActivity().getClass() == ShareVideoActivity.class) {
 
-            ShareActivity activity = (ShareActivity) this.getActivity();
-            activity.navigateToEdit();
+            ShareVideoActivity activity = (ShareVideoActivity) this.getActivity();
+           // activity.navigateToEdit();
 
         } else {
 
