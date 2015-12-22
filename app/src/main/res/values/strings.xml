@@ -84,6 +84,7 @@
     <string name="high_resolution_value">Excellent</string>
     <string name="quality">Quality</string>
     <string name="join_beta">Join Videona Beta</string>
+    <string name="leave_beta">Leave Videona Beta</string>
     <string name="thanks">Thanks!!!</string>
     <string name="joinBetaLinkInfo">Please click the link bellow to get the beta
         version</string>
