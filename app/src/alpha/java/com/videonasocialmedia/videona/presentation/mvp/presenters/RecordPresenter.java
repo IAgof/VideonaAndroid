@@ -318,6 +318,10 @@ public class RecordPresenter {
         return GetEffectListUseCase.getColorEffectList();
     }
 
+    public List<Effect> getShaderEffectList() {
+        return GetEffectListUseCase.getShaderEffectsList();
+    }
+
     public List<Effect> getOverlayEffects() {
         return GetEffectListUseCase.getOverlayEffectsList();
     }

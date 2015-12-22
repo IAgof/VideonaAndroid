@@ -18,7 +18,6 @@ import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
-import com.videonasocialmedia.avrecorder.overlay.Overlay;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
@@ -420,6 +419,10 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public List<Effect> getColorEffectList() {
         return GetEffectListUseCase.getColorEffectList();
+    }
+
+    public List<Effect> getShaderEffectList() {
+        return GetEffectListUseCase.getShaderEffectsList();
     }
 
     public List<Effect> getOverlayEffects() {
