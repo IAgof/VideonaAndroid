@@ -73,7 +73,20 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="37" />
+                    android:layout_weight="37"
+                    android:gravity="bottom|end">
+
+                    <ImageButton
+                        android:id="@+id/button_remove_filters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_weight="9"
+                        android:background="@null"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/activity_record_remove_filters"
+                        android:visibility="visible" />
+                </RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout
