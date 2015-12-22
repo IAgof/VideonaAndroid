@@ -42,6 +42,14 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="@string/title_advanced_section">
+        <Preference
+            android:key="leave_beta"
+            android:title="@string/leave_beta">
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/moreInformation">
         <Preference
             android:title="@string/aboutUsTitle">
