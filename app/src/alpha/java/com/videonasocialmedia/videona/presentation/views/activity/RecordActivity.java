@@ -144,7 +144,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     private void initEffectsRecycler() {
-        cameraDistortionEffectsAdapter = new EffectAdapter(recordPresenter.getDistortionEffectList(), this);
+
+        //cameraDistortionEffectsAdapter = new EffectAdapter(recordPresenter.getDistortionEffectList(), this);
+        cameraDistortionEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
         effectsRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         effectsRecycler.setAdapter(cameraDistortionEffectsAdapter);
