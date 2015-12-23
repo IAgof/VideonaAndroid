@@ -54,9 +54,9 @@ public interface RecordView {
 
     void stopChronometer();
 
-    void showCameraEffectFx(List<Effect> effects);
+    void showCameraEffectShader(List<Effect> effects);
 
-    void showCameraEffectColor(List<Effect> effects);
+    void showCameraEffectOverlay(List<Effect> effects);
 
     void lockScreenRotation();
 

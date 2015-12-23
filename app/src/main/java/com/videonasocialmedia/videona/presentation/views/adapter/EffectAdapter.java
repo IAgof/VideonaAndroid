@@ -134,6 +134,13 @@ public class EffectAdapter
         return previousSelectionPosition;
     }
 
+    public int getSelectionPosition() {
+        if(selectedPosition == -1) {
+            return 0;
+        }
+        return selectedPosition;
+    }
+
     /**
      * This class is used to controls an item view of cameraEffect and metadata about its place within
      * the recycler view.

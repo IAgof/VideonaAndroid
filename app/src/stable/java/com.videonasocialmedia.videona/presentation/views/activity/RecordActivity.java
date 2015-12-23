@@ -82,10 +82,10 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     ImageButton rotateCameraButton;
     @InjectView(R.id.button_navigate_edit)
     CircleImageView navigateToEditButton;
-    @InjectView(R.id.record_catalog_recycler_distortion_effects)
-    RecyclerView effectsRecycler;
-    @InjectView(R.id.record_catalog_recycler_color_effects)
-    RecyclerView colorFilterRecycler;
+    @InjectView(R.id.record_catalog_recycler_shader_effects)
+    RecyclerView shaderEffectsRecycler;
+    @InjectView(R.id.record_catalog_recycler_overlay_effects)
+    RecyclerView overlayFilterRecycler;
     @InjectView(R.id.imageRecPoint)
     ImageView recordingIndicator;
     @InjectView(R.id.chronometer_record)
@@ -94,23 +94,26 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     ImageButton buttonSettings;
     @InjectView(R.id.button_toggle_flash)
     ImageButton flashButton;
-    @InjectView(R.id.button_camera_effect_fx)
-    ImageButton buttonCameraEffectFx;
-    @InjectView(R.id.button_camera_effect_color)
-    ImageButton buttonCameraEffectColor;
+    @InjectView(R.id.button_camera_effect_shader)
+    ImageButton buttonCameraEffectShader;
+    @InjectView(R.id.button_camera_effect_overlay)
+    ImageButton buttonCameraEffectOverlay;
     @InjectView(R.id.text_view_num_videos)
     TextView numVideosRecorded;
     @InjectView(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
     @InjectView(R.id.button_share)
     ImageButton shareButton;
+    @InjectView(R.id.button_remove_filters)
+    ImageButton removeFilters;
 
     private RecordPresenter recordPresenter;
-    private EffectAdapter cameraDistortionEffectsAdapter;
-    private EffectAdapter cameraColorEffectsAdapter;
+    private EffectAdapter cameraShaderEffectsAdapter;
+    private EffectAdapter cameraOverlayEffectsAdapter;
     private boolean buttonBackPressed;
-    private boolean fxHidden;
-    private boolean colorFilterHidden;
+    private boolean shaderFilterHidden;
+    private boolean overlayFilterHidden;
+    private boolean removeFilterActivated;
     private boolean recording;
     private OrientationHelper orientationHelper;
     private AlertDialog progressDialog;
@@ -148,20 +151,20 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     private void initEffectsRecycler() {
 
-        //cameraDistortionEffectsAdapter = new EffectAdapter(recordPresenter.getDistortionEffectList(), this);
-        cameraDistortionEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
-        effectsRecycler.setLayoutManager(
+        //cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getDistortionEffectList(), this);
+        cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
+        shaderEffectsRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        effectsRecycler.setAdapter(cameraDistortionEffectsAdapter);
-        fxHidden = true;
+        shaderEffectsRecycler.setAdapter(cameraShaderEffectsAdapter);
+        shaderFilterHidden = true;
 
-        //cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
-        cameraColorEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
-        colorFilterRecycler.setLayoutManager(
+        //cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
+        cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
+        overlayFilterRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        colorFilterRecycler.setAdapter(cameraColorEffectsAdapter);
-        colorFilterHidden = false;
-        buttonCameraEffectColor.setActivated(true);
+        overlayFilterRecycler.setAdapter(cameraOverlayEffectsAdapter);
+        overlayFilterHidden = false;
+        buttonCameraEffectOverlay.setActivated(true);
     }
 
     private void configChronometer() {
@@ -333,26 +336,30 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recordingIndicator.setVisibility(View.INVISIBLE);
     }
 
-    @OnClick(R.id.button_camera_effect_fx)
-    public void onFxButtonClicked() {
-        if (!colorFilterHidden) {
-            hideColorFilters();
+    @OnClick(R.id.button_camera_effect_shader)
+    public void onShaderButtonClicked() {
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
         }
-        if (!fxHidden) {
-            hideFx();
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+            hideRemoveFilters();
         } else {
-            showCameraEffectFx(null);
+            showCameraEffectShader(null);
+            if(removeFilterActivated){
+                showRemoveFilters();
+            }
         }
     }
 
-    private void hideColorFilters() {
-        int height = calculateTranslation(colorFilterRecycler);
-        runTranslateAnimation(colorFilterRecycler, height, new DecelerateInterpolator(3));
-        colorFilterHidden = true;
-        buttonCameraEffectColor.setActivated(false);
+    private void hideOverlayFilters() {
+        int height = calculateTranslation(overlayFilterRecycler);
+        runTranslateAnimation(overlayFilterRecycler, height, new DecelerateInterpolator(3));
+        overlayFilterHidden = true;
+        buttonCameraEffectOverlay.setActivated(false);
     }
 
-    private void hideView(View view) {
+    private void hideEffectsRecyclerView(View view) {
         runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
     }
 
@@ -364,20 +371,40 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         slideInAnimation.start();
     }
 
-    private void hideFx() {
-        hideView(effectsRecycler);
-        fxHidden = true;
-        buttonCameraEffectFx.setActivated(false);
+    private void hideShaderFilters() {
+        hideEffectsRecyclerView(shaderEffectsRecycler);
+        shaderFilterHidden = true;
+        buttonCameraEffectShader.setActivated(false);
+    }
+
+    private void hideRemoveView(View view) {
+        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
+    }
+
+    private void showRemoveView(View view) {
+        int height = calculateTranslation(view);
+        int translateY = -height;;
+        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
+    }
+
+    private void hideRemoveFilters(){
+
+        hideRemoveView(removeFilters);
+    }
+
+    private void showRemoveFilters() {
+
+        showRemoveView(removeFilters);
     }
 
     @Override
-    public void showCameraEffectFx(List<Effect> effects) {
-        showEffectsRecyler(effectsRecycler);
-        fxHidden = false;
-        buttonCameraEffectFx.setActivated(true);
+    public void showCameraEffectShader(List<Effect> effects) {
+        showEffectsRecylerView(shaderEffectsRecycler);
+        shaderFilterHidden = false;
+        buttonCameraEffectShader.setActivated(true);
     }
 
-    private void showEffectsRecyler(View view) {
+    private void showEffectsRecylerView(View view) {
         int height = calculateTranslation(view);
         int translateY = -height;
         runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
@@ -397,23 +424,55 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         return height + margins;
     }
 
-    @OnClick(R.id.button_camera_effect_color)
-    public void onColorFiltersButtonClicked() {
-        if (!fxHidden) {
-            hideFx();
+    @OnClick(R.id.button_camera_effect_overlay)
+    public void onOverlayFiltersButtonClicked() {
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
         }
-        if (!colorFilterHidden) {
-            hideColorFilters();
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
+            hideRemoveFilters();
         } else {
-            showCameraEffectColor(null);
+            showCameraEffectOverlay(null);
+            if(removeFilterActivated){
+                showRemoveFilters();
+            }
         }
     }
 
     @Override
-    public void showCameraEffectColor(List<Effect> effects) {
-        runTranslateAnimation(colorFilterRecycler, 0, new AccelerateInterpolator(3));
-        colorFilterHidden = false;
-        buttonCameraEffectColor.setActivated(true);
+    public void showCameraEffectOverlay(List<Effect> effects) {
+        runTranslateAnimation(overlayFilterRecycler, 0, new AccelerateInterpolator(3));
+        overlayFilterHidden = false;
+        buttonCameraEffectOverlay.setActivated(true);
+    }
+
+    @OnClick(R.id.button_remove_filters)
+    public void onRemoveFiltersButtonClicked(){
+
+
+        Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
+        Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
+
+        onEffectSelectionCancel(effectOverlay);
+        onEffectSelectionCancel(effectShader);
+
+        // Reset background filter accent
+        cameraShaderEffectsAdapter.resetSelectedEffect();
+        cameraOverlayEffectsAdapter.resetSelectedEffect();
+
+        // Hide filters
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
+        }
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+        }
+
+        hideRemoveFilters();
+
+        removeFilterActivated = false;
+
     }
 
     @Override
@@ -659,8 +718,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void onEffectSelected(Effect effect) {
         recordPresenter.applyEffect(effect);
         sendButtonTracked(effect.getIconId());
-        resetOtherEffects();
         scrollEffectList(effect);
+        showRemoveFilters();
+        removeFilterActivated = true;
     }
 
     @Override
@@ -668,29 +728,22 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recordPresenter.removeEffect(effect);
     }
 
-    private void resetOtherEffects() {
-        if (!colorFilterHidden) {
-            cameraDistortionEffectsAdapter.resetSelectedEffect();
-        } else if (!fxHidden)
-            cameraColorEffectsAdapter.resetSelectedEffect();
-    }
-
     private void scrollEffectList(com.videonasocialmedia.videona.model.entities.editor.effects.Effect effect) {
-        if (!colorFilterHidden) {
-            List effects = cameraColorEffectsAdapter.getElementList();
+        if (!overlayFilterHidden) {
+            List effects = cameraOverlayEffectsAdapter.getElementList();
             int index = effects.indexOf(effect);
-            int scroll = index > cameraColorEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            colorFilterRecycler.scrollToPosition(index + scroll);
-        } else if (!fxHidden) {
-            List effects = cameraDistortionEffectsAdapter.getElementList();
+            int scroll = index > cameraOverlayEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            overlayFilterRecycler.scrollToPosition(index + scroll);
+        } else if (!shaderFilterHidden) {
+            List effects = cameraShaderEffectsAdapter.getElementList();
             int index = effects.indexOf(effect);
-            int scroll = index > cameraDistortionEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            effectsRecycler.scrollToPosition(index + scroll);
+            int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            shaderEffectsRecycler.scrollToPosition(index + scroll);
         }
     }
 
-    @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_color,
-            R.id.button_camera_effect_fx, R.id.button_change_camera})
+    @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_overlay,
+            R.id.button_camera_effect_shader, R.id.button_change_camera})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
     }
@@ -721,11 +774,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             case R.id.button_toggle_flash:
                 label = "Flash camera";
                 break;
-            case R.id.button_camera_effect_fx:
-                label = "Fx filters";
+            case R.id.button_camera_effect_shader:
+                label = "Shader filters";
                 break;
-            case R.id.button_camera_effect_color:
-                label = "Color filters";
+            case R.id.button_camera_effect_overlay:
+                label = "Overlay filters";
                 break;
             case R.drawable.common_filter_color_ad1_aqua:
                 label = "Aqua color filter AD1";

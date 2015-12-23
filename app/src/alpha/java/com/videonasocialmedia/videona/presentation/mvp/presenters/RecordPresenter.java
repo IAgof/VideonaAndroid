@@ -60,8 +60,10 @@ public class RecordPresenter {
     private SessionConfig config;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
-    private int selectedEffect;
     private int recordedVideosNumber;
+
+    private Effect selectedShaderEffect;
+    private Effect selectedOverlayEffect;
 
     private Context context;
     private GLCameraEncoderView cameraPreview;
@@ -74,7 +76,6 @@ public class RecordPresenter {
         this.cameraPreview = cameraPreview;
 
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
-        selectedEffect = Filters.FILTER_NONE;
         recordedVideosNumber = 0;
 
         initRecorder(context, cameraPreview);
@@ -188,7 +189,8 @@ public class RecordPresenter {
     }
 
     private void startRecord() {
-        applyEffect(selectedEffect);
+        applyEffect(selectedShaderEffect);
+        applyEffect(selectedOverlayEffect);
         recorder.startRecording();
         recordView.lockScreenRotation();
         recordView.showStopButton();
@@ -242,7 +244,8 @@ public class RecordPresenter {
             }
         }
 
-        applyEffect(selectedEffect);
+        applyEffect(selectedShaderEffect);
+        applyEffect(selectedOverlayEffect);
 
         checkFlashSupport();
 
@@ -277,32 +280,33 @@ public class RecordPresenter {
         recordView.showFlashOn(on);
     }
 
-    /**
-     * @deprecated
-     * @param filterId
-     */
-    public void applyEffect(int filterId) {
-        selectedEffect = filterId;
-        recorder.applyFilter(filterId);
-    }
 
     public void applyEffect(Effect effect){
         if (effect instanceof OverlayEffect){
             recorder.removeOverlay();
             Drawable overlay= context.getResources().getDrawable(((OverlayEffect) effect).getResourceId());
             recorder.addOverlayFilter(overlay);
+            selectedOverlayEffect = effect;
         }
         else{
-            int shaderId= ((ShaderEffect)effect).getResourceId();
-            recorder.applyFilter(shaderId);
+            if (effect instanceof ShaderEffect) {
+                int shaderId = ((ShaderEffect) effect).getResourceId();
+                recorder.applyFilter(shaderId);
+                selectedShaderEffect = effect;
+            }
         }
     }
 
     public void removeEffect(Effect effect) {
-        if (effect instanceof OverlayEffect)
+        if (effect instanceof OverlayEffect) {
             recorder.removeOverlay();
-        else if (effect instanceof ShaderEffect)
-            recorder.applyFilter(Filters.FILTER_NONE);
+            selectedOverlayEffect = null;
+        } else {
+            if (effect instanceof ShaderEffect) {
+                recorder.applyFilter(Filters.FILTER_NONE);
+                selectedShaderEffect = null;
+            }
+        }
     }
 
 

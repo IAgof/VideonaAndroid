@@ -83,6 +83,7 @@
                         android:layout_weight="9"
                         android:background="@null"
                         android:padding="12dp"
+                        android:layout_marginBottom="-80dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/activity_record_remove_filters_selector"
                         android:visibility="visible" />
@@ -96,7 +97,7 @@
                 android:gravity="bottom">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/record_catalog_recycler_distortion_effects"
+                    android:id="@+id/record_catalog_recycler_shader_effects"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
@@ -104,7 +105,7 @@
                     android:scrollbars="horizontal" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/record_catalog_recycler_color_effects"
+                    android:id="@+id/record_catalog_recycler_overlay_effects"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_alignParentBottom="true"
@@ -229,6 +230,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="24"
+                    android:alpha="0.8"
                     android:background="@drawable/activity_record_icon_rec_circle"
                     android:backgroundTint="@color/colorGreyTransparent"
                     android:backgroundTintMode="src_atop">
@@ -307,7 +309,7 @@
                                 android:padding="16dp"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/activity_record_button_share_selector"
-                                android:visibility="visible" />
+                                android:visibility="invisible" />
 
                             <ImageButton
                                 android:id="@+id/button_record"
@@ -337,7 +339,7 @@
                                 android:layout_weight="2" />
 
                             <ImageButton
-                                android:id="@+id/button_camera_effect_fx"
+                                android:id="@+id/button_camera_effect_shader"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="8"
@@ -350,7 +352,7 @@
                                 android:src="@drawable/activity_record_filter_fx_selector" />
 
                             <ImageButton
-                                android:id="@+id/button_camera_effect_color"
+                                android:id="@+id/button_camera_effect_overlay"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="8"
