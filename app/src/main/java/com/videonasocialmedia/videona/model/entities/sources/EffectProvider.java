@@ -137,28 +137,37 @@ public class EffectProvider {
         List<Effect> overlayList = new ArrayList<>();
         overlayList.add(new OverlayEffect("AUTUMN", "AUTUMN",
                 R.drawable.common_filter_overlay_autumn,
-                R.drawable.overlay_filter_a));
+                R.drawable.overlay_filter_autumn));
         overlayList.add(new OverlayEffect("BURN", "BURN",
                 R.drawable.common_filter_overlay_burn,
-                R.drawable.overlay_filter_b));
+                R.drawable.overlay_filter_burn));
         overlayList.add(new OverlayEffect("DARK", "DARK",
                 R.drawable.common_filter_overlay_dark,
-                R.drawable.overlay_filter_c));
+                R.drawable.overlay_filter_dark));
         overlayList.add(new OverlayEffect("INSTANT", "INSTANT",
                 R.drawable.common_filter_overlay_instant,
-                R.drawable.overlay_filter_d));
+                R.drawable.overlay_filter_instant));
         overlayList.add(new OverlayEffect("SUMMER", "SUMMER",
                 R.drawable.common_filter_overlay_summer,
-                R.drawable.overlay_filter_e));
+                R.drawable.overlay_filter_summer));
         overlayList.add(new OverlayEffect("SUNSET", "SUNSET",
                 R.drawable.common_filter_overlay_sunset,
-                R.drawable.overlay_filter_f));
+                R.drawable.overlay_filter_sunset));
         overlayList.add(new OverlayEffect("WINTER", "WINTER",
                 R.drawable.common_filter_overlay_winter,
-                R.drawable.overlay_filter_g));
+                R.drawable.overlay_filter_winter));
         overlayList.add(new OverlayEffect("WASTED", "WASTED",
                 R.drawable.common_filter_overlay_wasted,
-                R.drawable.overlay_filter_h));
+                R.drawable.overlay_filter_wasted));
+        overlayList.add(new OverlayEffect("CHRISTMAS", "CHRISTMAS",
+                R.drawable.common_filter_overlay_christmas,
+                R.drawable.overlay_filter_christmas));
+        overlayList.add(new OverlayEffect("NIGHT", "NIGHT",
+                R.drawable.common_filter_overlay_night,
+                R.drawable.overlay_filter_night));
+        overlayList.add(new OverlayEffect("WINTER2", "WINTER2",
+                R.drawable.common_filter_overlay_winter_dos,
+                R.drawable.overlay_filter_winter_dos));
         return overlayList;
     }
 
