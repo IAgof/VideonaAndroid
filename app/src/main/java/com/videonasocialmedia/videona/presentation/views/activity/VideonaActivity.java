@@ -8,25 +8,36 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.analytics.Tracker;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.EmptyMultiplePermissionsListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.qordoba.sdk.Qordoba;
 import com.qordoba.sdk.common.QordobaContextWrapper;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.fragment.CriticalPermissionsDeniedDialogFragment;
 import com.videonasocialmedia.videona.utils.PermissionConstants;
+
+import java.util.List;
 
 /**
  * Videona base activity.
@@ -40,6 +51,7 @@ public abstract class VideonaActivity extends AppCompatActivity {
     protected MixpanelAPI mixpanel;
     protected Tracker tracker;
     protected boolean criticalPermissionDenied = false;
+    protected MultiplePermissionsListener dialogMultiplePermissionsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +62,17 @@ public abstract class VideonaActivity extends AppCompatActivity {
         mixpanel = MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN);
         mixpanel.getPeople().identify(mixpanel.getPeople().getDistinctId());
         mixpanel.getPeople().initPushHandling(ANDROID_PUSH_SENDER_ID);
+        configPermissions();
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
+    }
+
+    private void configPermissions() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            dialogMultiplePermissionsListener =
+                    new CustomPermissionListener(this, "titulo", "mensaje", "ok", null);
+            Dexter.continuePendingRequestsIfPossible(dialogMultiplePermissionsListener);
+        }
     }
 
     @Override
@@ -81,35 +102,9 @@ public abstract class VideonaActivity extends AppCompatActivity {
     protected void checkAndRequestPermissions() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkContacts();
-            checkNotificationsPermissions();
-            checkStoragePermissions();
-            checkAudioStoragePermissions();
-            checkCameraPermissions();
-        }
-    }
-
-
-    private void checkStoragePermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_STORAGE,
-                    PermissionConstants.REQUEST_EXTERNAL_STORAGE);
-        }
-    }
-
-    private void checkCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CAMERA,
-                    PermissionConstants.REQUEST_CAMERA);
-        }
-    }
-
-    private void checkAudioStoragePermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this, PermissionConstants.PERMISSIONS_AUDIO, PermissionConstants.REQUEST_AUDIO);
+            Dexter.checkPermissions(dialogMultiplePermissionsListener, Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
 
@@ -121,46 +116,75 @@ public abstract class VideonaActivity extends AppCompatActivity {
         }
     }
 
-    private void checkNotificationsPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECEIVE_WAP_PUSH) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_NOTIFICATIONS,
-                    PermissionConstants.REQUEST_NOTIFICATIONS);
-        }
+
+    protected boolean isLandscapeOriented() {
+        return getOrientation() == Configuration.ORIENTATION_LANDSCAPE;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PermissionConstants.REQUEST_EXTERNAL_STORAGE:
-            case PermissionConstants.REQUEST_CAMERA:
-            case PermissionConstants.REQUEST_AUDIO:
-                if (!isPermissionGranted(grantResults)) {
-                    showCloseAppDialog();
-                }
-        }
+    protected boolean isPortraitOriented() {
+        return getOrientation() == Configuration.ORIENTATION_PORTRAIT;
     }
 
-    private boolean isPermissionGranted(@NonNull int[] grantResults) {
-        return grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void showCloseAppDialog() {
-        CriticalPermissionsDeniedDialogFragment dialog = new CriticalPermissionsDeniedDialogFragment();
-        dialog.show(getFragmentManager(), "closeAppBecauseOfPermissionsDialog");
-    }
-
-    protected boolean isLandscapeOriented(){
-        return getOrientation()== Configuration.ORIENTATION_LANDSCAPE;
-    }
-
-    protected boolean isPortraitOriented(){
-        return getOrientation()== Configuration.ORIENTATION_PORTRAIT;
-    }
-
-    private int getOrientation(){
+    private int getOrientation() {
         return getResources().getConfiguration().orientation;
+    }
+
+    class CustomPermissionListener extends EmptyMultiplePermissionsListener {
+
+        private final Context context;
+        private final String title;
+        private final String message;
+        private final String positiveButtonText;
+        private final Drawable icon;
+
+        private AlertDialog dialog;
+
+        private CustomPermissionListener(Context context, String title,
+                                         String message, String positiveButtonText, Drawable icon) {
+            this.context = context;
+            this.title = title;
+            this.message = message;
+            this.positiveButtonText = positiveButtonText;
+            this.icon = icon;
+        }
+
+        @Override
+        public void onPermissionsChecked(MultiplePermissionsReport report) {
+            super.onPermissionsChecked(report);
+
+            if (!report.areAllPermissionsGranted()) {
+                showDialog();
+            } else {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        }
+
+        @Override
+        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions,
+                                                       PermissionToken token) {
+            super.onPermissionRationaleShouldBeShown(permissions, token);
+            token.continuePermissionRequest();
+        }
+
+        private void showDialog() {
+            dialog = new AlertDialog.Builder(context)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                    Uri.parse("package:" + context.getPackageName()));
+                            myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
+                            myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(myAppSettings);
+                        }
+                    })
+                    .setIcon(icon)
+                    .show();
+        }
     }
 }

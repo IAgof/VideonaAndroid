@@ -20,13 +20,11 @@ import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
  */
 public class SettingsFragment extends SettingsBaseFragment implements PreferencesView {
 
-    private Preference joinBetaPref;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        joinBetaPref = findPreference("join_beta");
+        Preference joinBetaPref = findPreference("join_beta");
         joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

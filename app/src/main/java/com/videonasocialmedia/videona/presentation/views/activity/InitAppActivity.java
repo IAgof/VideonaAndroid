@@ -55,6 +55,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
     protected Handler handler = new Handler();
+    @InjectView(R.id.videona_version)
+    TextView versionName;
     private long MINIMUN_WAIT_TIME;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -62,9 +64,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private int numSupportedCameras;
     private long startTime;
     private String androidId = null;
-
-    @InjectView(R.id.videona_version)
-    TextView versionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +97,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     protected void onStart() {
         super.onStart();
         startTime = System.currentTimeMillis();
+        checkAndRequestPermissions();
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        checkAndRequestPermissions();
         SplashScreenTask splashScreenTask = new SplashScreenTask();
         splashScreenTask.execute();
         mixpanel.timeEvent("Time in Init Activity");
@@ -111,6 +110,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override

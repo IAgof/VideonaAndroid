@@ -12,11 +12,13 @@ package com.videonasocialmedia.videona;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.karumi.dexter.Dexter;
 import com.qordoba.sdk.Qordoba;
 
 public class VideonaApplication extends Application {
@@ -44,6 +46,8 @@ public class VideonaApplication extends Application {
         context = getApplicationContext();
         setupGoogleAnalytics();
         setupQordoba();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            Dexter.initialize(this);
     }
 
     private void setupQordoba() {
