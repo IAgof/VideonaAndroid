@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.VideoView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -45,7 +47,9 @@ import butterknife.Optional;
 /**
  * Created by jca on 11/12/15.
  */
-public class ShareVideoActivity extends VideonaActivity implements ShareVideoView, VideoPlayerView, SocialNetworkAdapter.OnSocialNetworkClickedListener {
+public class ShareVideoActivity extends VideonaActivity implements ShareVideoView, VideoPlayerView,
+        SocialNetworkAdapter.OnSocialNetworkClickedListener,
+        SeekBar.OnSeekBarChangeListener {
 
     @InjectView(R.id.video_preview)
     VideoView videoPreview;
@@ -57,7 +61,8 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     Toolbar toolbar;
     @InjectView(R.id.button_more_networks)
     FloatingActionButton fab;
-
+    @InjectView(R.id.seekbar)
+    SeekBar seekBar;
     @Optional
     @InjectView(R.id.bottom_panel)
     RelativeLayout bottomPanel;
@@ -66,6 +71,15 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     private ShareVideoPresenter presenter;
     private SocialNetworkAdapter mainSocialNetworkAdapter;
     private int videoPosition;
+
+    private Handler updateSeekBarTaskHandler = new Handler();
+    private boolean draggingSeekBar;
+    private Runnable updateSeekBarTask = new Runnable() {
+        @Override
+        public void run() {
+            updateSeekbar();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +97,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             isPlaying = savedInstanceState.getBoolean("videoPlaying", false);
         }
         initVideoPreview(videoPosition, isPlaying);
+
         initNetworksList();
 
     }
@@ -118,6 +133,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
                 } catch (InterruptedException e) {
                     Log.d("Share", "error while preparing preview");
                 }
+                initSeekBar(videoPreview.getCurrentPosition(), videoPreview.getDuration());
                 mediaPlayer.pause();
                 if (playing)
                     playVideo();
@@ -132,8 +148,16 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
                     showBottomPanel();
                     showToolbar();
                 }
+                seekBar.setProgress(0);
             }
         });
+    }
+
+    private void initSeekBar(int progress, int max) {
+        seekBar.setMax(max);
+        seekBar.setProgress(progress);
+        seekBar.setOnSeekBarChangeListener(this);
+        updateSeekbar();
     }
 
     private void initNetworksList() {
@@ -186,6 +210,29 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     @Override
     public void hideExtraNetworks() {
 
+    }
+
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser)
+            seekTo(progress);
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        draggingSeekBar = true;
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        draggingSeekBar = false;
+    }
+
+    private void updateSeekbar() {
+        if (!draggingSeekBar)
+            seekBar.setProgress(videoPreview.getCurrentPosition());
+        updateSeekBarTaskHandler.postDelayed(updateSeekBarTask, 20);
     }
 
     @OnClick(R.id.button_more_networks)

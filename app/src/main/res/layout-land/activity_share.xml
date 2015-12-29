@@ -22,6 +22,15 @@
         android:background="#00000000"
         android:src="@drawable/common_icon_play_on_normal" />
 
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/video_preview"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp" />
+
     <RelativeLayout
         android:id="@+id/bottom_panel"
         android:layout_width="wrap_content"
@@ -33,11 +42,11 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:background="#fff"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         card_view:cardCornerRadius="3dp">
 
         <android.support.v7.widget.RecyclerView
@@ -54,9 +63,9 @@
             android:id="@+id/button_more_networks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:layout_alignParentTop="true"
             android:layout_alignEnd="@id/card_view"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="30dp"
             android:src="@drawable/gatito_rules"/>
     </RelativeLayout>
 
