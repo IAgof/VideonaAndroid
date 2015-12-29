@@ -165,15 +165,9 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
 
     private void shareVideo(Video selectedVideo) {
         String videoPath = selectedVideo.getMediaPath();
-        Uri uri = Utils.obtainUriToShare(this, videoPath);
-        if (uri != null) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("video/*");
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
-            startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
-        } else {
-            Toast.makeText(this, R.string.shareError, Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoPath);
+        startActivity(intent);
     }
 
     @OnClick(R.id.button_cancel_gallery)
