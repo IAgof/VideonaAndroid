@@ -1,5 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -77,7 +79,25 @@ public class SettingsBaseActivity extends VideonaActivity {
     }
 
     private void goToVote() {
-        navigateTo("market://details?id=com.videonasocialmedia.videona");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaAlertDialog);
+        AlertDialog dialog = builder.setTitle("Titulo rating")
+                .setMessage("Mensaje para pedir que nos voten. O algo...")
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //TODO cambiar email
+                        navigateTo("mailto:info@videona.com");
+                    }
+                }).setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        navigateTo("market://details?id=com.videonasocialmedia.videona");
+                    }
+                })
+                .setCancelable(true)
+                .create();
+        dialog.show();
     }
 
     private void navigateTo(String url) {
