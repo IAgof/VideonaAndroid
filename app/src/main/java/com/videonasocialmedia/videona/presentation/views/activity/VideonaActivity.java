@@ -34,6 +34,7 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.qordoba.sdk.Qordoba;
 import com.qordoba.sdk.common.QordobaContextWrapper;
 import com.videonasocialmedia.videona.BuildConfig;
+import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.utils.PermissionConstants;
 
@@ -169,7 +170,7 @@ public abstract class VideonaActivity extends AppCompatActivity {
         }
 
         private void showDialog() {
-            dialog = new AlertDialog.Builder(context)
+            dialog = new AlertDialog.Builder(context, R.style.VideonaAlertDialog)
                     .setTitle(title)
                     .setMessage(message)
                     .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
