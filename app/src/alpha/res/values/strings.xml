@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="betaPreferenceText">Leave Videona Beta</string>
+    <string name="betaPreferenceText">Quit Videona Beta</string>
+    <string name="leaveBetaDialogAffirmative">Stay</string>
+    <string name="leaveBetaDialogNegative">Quit</string>
+    <string name="leaveBetaDialogTitle">Quit Videona Beta</string>
+    <string name="leaveBetaDialogMessage">Thank you very much for your support! Your opinion is really useful to improve Videona. Do you want to stay? </string>
 </resources>

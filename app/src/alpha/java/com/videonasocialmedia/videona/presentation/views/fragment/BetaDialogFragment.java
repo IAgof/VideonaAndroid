@@ -37,12 +37,17 @@ public class BetaDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    @OnClick(R.id.betaLink)
+    @OnClick(R.id.negativeButton)
     public void goToLeaveBeta() {
         String url = "https://play.google.com/apps/testing/com.videonasocialmedia.videona";
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
+    }
+
+    @OnClick(R.id.affirmativeButton)
+    public void dismissBetaDialog() {
+        this.dismiss();
     }
 
 }

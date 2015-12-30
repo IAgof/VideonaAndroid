@@ -5,70 +5,104 @@
   ~ info@videona.com
   ~ All rights reserved
   -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="8dp"
-    android:orientation="vertical">
-    >
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <LinearLayout
-        android:id="@+id/leaveBetaLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
+        android:visibility="visible">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:textSize="30sp"
-                android:layout_gravity="center_vertical|end"
-                android:text="@string/thanks"
-                />
+                android:layout_height="wrap_content">
 
-            <TextView
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/leaveBetaDialogTitle"
+                    android:textColor="@color/textColorTitle"
+                    android:textSize="23sp" />
+
+                <ImageView
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="5dp"
+                    android:src="@drawable/close_dialog_icon_normal" />
+
+            </LinearLayout>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_vertical|end"
-                android:text="@string/joinBetaLinkInfo"/>
+                android:layout_height="1dp"
+                android:layout_below="@+id/title"
+                android:layout_marginTop="2dp"
+                android:background="@color/colorSecondaryLight" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_gravity="center_vertical|end"
+            android:layout_margin="10dp"
+            android:text="@string/leaveBetaDialogMessage"
+            android:textColor="@color/textColorPrimary" />
 
-            <TextView
-                android:id="@+id/betaLink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:gravity="end"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                android:paddingTop="80dp"
-                android:text="@string/joinBetaLink"
-                android:textSize="25sp"
-                android:textColor="@color/colorPrimary"/>
-
-        </LinearLayout>
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="217dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/negativeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/leaveBetaDialogNegative"
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/affirmativeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/leaveBetaDialogAffirmative"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+
 
 </LinearLayout>
