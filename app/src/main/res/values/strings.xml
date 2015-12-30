@@ -83,8 +83,6 @@
     <string name="high_resolution_name">Excellent (4K)</string>
     <string name="high_resolution_value">Excellent</string>
     <string name="quality">Quality</string>
-    <string name="join_beta">Join Videona Beta</string>
-    <string name="leave_beta">Leave Videona Beta</string>
     <string name="thanks">Thanks!!!</string>
     <string name="joinBetaLinkInfo">Please click the link bellow to get the beta
         version</string>
@@ -103,8 +101,6 @@
     <string name="high_quality_value">Excellent</string>
     <string name="title_advanced_section">Advanced</string>
     <string name="content_advanced_section">Join Videona Beta</string>
-    <string name="content_join_beta_dialog">If you want to be part of the exclusive Beta of our app,
-        enter your email and we will show you the steps.</string>
     <string name="positive_button_join_beta_dialog">Why not, let\'s try!</string>
     <string name="negative_button_join_beta_dialog">Not now, thanks</string>
     <string name="moreInformation">More information</string>

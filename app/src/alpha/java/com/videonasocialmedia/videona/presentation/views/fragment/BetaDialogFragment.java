@@ -21,7 +21,7 @@ import com.videonasocialmedia.videona.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LeaveBetaDialogFragment extends DialogFragment {
+public class BetaDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

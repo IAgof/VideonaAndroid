@@ -48,7 +48,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
-import com.videonasocialmedia.videona.presentation.views.fragment.JoinBetaDialogFragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.BetaDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -281,7 +281,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @OnClick(R.id.button_navigate_edit)
     public void OnButtonNavigateEditClicked() {
-        new JoinBetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
+        new BetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
     }
 
     public void onEvent(JoinBetaEvent event) {

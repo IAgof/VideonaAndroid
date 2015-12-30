@@ -31,7 +31,7 @@ import butterknife.OnClick;
 /**
  * Created by Veronica Lago Fominaya on 12/11/2015.
  */
-public class JoinBetaDialogFragment extends DialogFragment implements JoinBetaView {
+public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
 
     private LinearLayout joinBetaInfoLayout;
     private RelativeLayout joinBetaLinkLayout;

@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <LinearLayout
         android:id="@+id/joinBetaInfo"
@@ -31,27 +31,27 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginTop="15dp"
-                    android:text="@string/join_beta"
-                    android:textSize="23sp"
-                    android:textColor="@color/textColorTitle"
+                    android:layout_weight="1"
                     android:gravity="left"
-                    android:layout_weight="1" />
+                    android:text="@string/joinBetaDialogTitle"
+                    android:textColor="@color/textColorTitle"
+                    android:textSize="23sp" />
 
                 <ImageView
                     android:id="@+id/cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="right"
                     android:padding="5dp"
-                    android:src="@drawable/close_dialog_icon_normal"
-                    android:gravity="right" />
+                    android:src="@drawable/close_dialog_icon_normal" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="2dp"
                 android:layout_below="@+id/title"
+                android:layout_marginTop="2dp"
                 android:background="@color/colorSecondaryLight" />
 
         </RelativeLayout>
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:layout_margin="10dp"
-            android:text="@string/content_join_beta_dialog"
+            android:text="@string/joinBetaDialogMessage"
             android:textColor="@color/textColorPrimary" />
 
         <RelativeLayout
@@ -69,8 +69,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="15dp"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -79,9 +79,9 @@
                     android:id="@+id/email_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_gravity="center"
                     android:src="@drawable/activity_settings_icon_email_add"/>
 
                 <EditText
@@ -104,12 +104,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"
-            android:gravity="end"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="5dp"
+            android:layout_marginTop="20dp"
+            android:gravity="end"
             android:text="@string/send_email"
-            android:textSize="25sp"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp" />
 
     </LinearLayout>
 
@@ -123,29 +123,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="0dp"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp">
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:textSize="30sp"
-                android:layout_gravity="center_vertical|end"
-                android:text="@string/thanks"/>
+                android:text="@string/thanks"
+                android:textSize="30sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_gravity="center_vertical|end"
                 android:text="@string/joinBetaLinkInfo"/>
 
         </LinearLayout>
@@ -159,18 +159,18 @@
                 android:id="@+id/betaLink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                android:text="@string/joinBetaLink"
-                android:textSize="25sp"
-                android:textColor="@color/colorPrimary"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="0dp"
                 android:layout_alignParentTop="true"
+                android:layout_gravity="center|end"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginLeft="0dp"
                 android:layout_marginTop="217dp"
-                android:gravity="end" />
+                android:gravity="end"
+                android:text="@string/joinBetaLink"
+                android:textColor="@color/colorPrimary"
+                android:textSize="25sp" />
 
         </LinearLayout>
 

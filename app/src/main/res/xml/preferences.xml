@@ -25,28 +25,28 @@
         android:title="@string/title_camera_section">
 
         <com.videonasocialmedia.videona.presentation.views.customviews.ChooseCameraResolutionListPreferences
-            android:key="list_preferences_resolution"
-            android:title="@string/resolution"
             android:dialogTitle="@string/resolution"
-            android:summary="@string/low_resolution_value"
             android:entries="@array/camera_resolution_names"
-            android:entryValues="@array/camera_resolution_values"/>
+            android:entryValues="@array/camera_resolution_values"
+            android:key="list_preferences_resolution"
+            android:summary="@string/low_resolution_value"
+            android:title="@string/resolution" />
 
         <com.videonasocialmedia.videona.presentation.views.customviews.ChooseCameraQualityListPreferences
-            android:key="list_preferences_quality"
-            android:title="@string/quality"
             android:dialogTitle="@string/quality"
-            android:summary="@string/good_quality_name"
             android:entries="@array/camera_quality_names"
-            android:entryValues="@array/camera_quality_values"/>
+            android:entryValues="@array/camera_quality_values"
+            android:key="list_preferences_quality"
+            android:summary="@string/good_quality_name"
+            android:title="@string/quality" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/title_advanced_section">
         <Preference
-            android:key="join_beta"
-            android:title="@string/join_beta">
+            android:key="beta"
+            android:title="@string/betaPreferenceText">
         </Preference>
     </PreferenceCategory>
 

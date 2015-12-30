@@ -83,8 +83,6 @@
     <string name="high_resolution_name">Excelente (4K)</string>
     <string name="high_resolution_value">Excelente</string>
     <string name="quality">Calidad</string>
-    <string name="join_beta">Prueba Videona Beta</string>
-    <string name="leave_beta">Volver a Videona estable</string>
     <string name="thanks">Gracias!!!</string>
     <string name="joinBetaLinkInfo">Por favor, pinche en el siguiente link para obtener
         la versión beta</string>
@@ -103,8 +101,6 @@
     <string name="high_quality_value">Excelente</string>
     <string name="title_advanced_section">Avanzado</string>
     <string name="content_advanced_section">Prueba Videona Beta</string>
-    <string name="content_join_beta_dialog">Si quieres testar en exclusiva la Beta de nuestra app,
-        introduce tu mail y te indicaremos los pasos a seguir.</string>
     <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
     <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
     <string name="moreInformation">Más información</string>

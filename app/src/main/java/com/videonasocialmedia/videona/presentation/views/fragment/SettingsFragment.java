@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Veronica Lago Fominaya on 26/11/2015.
  */
-public class SettingsBaseFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         PreferencesView {
 
     protected ListPreference resolutionPref;
@@ -52,35 +52,21 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
                 sharedPreferences);
 
         exitPref = findPreference("exit");
-       /* exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new AlertDialog.Builder(getActivity())
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.exit_app_title)
-                        .setMessage(R.string.exit_app_message)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Intent.ACTION_MAIN);
-                                intent.addCategory(Intent.CATEGORY_HOME);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                getActivity().finish();
-                                System.exit(0);
-                            }
-                        })
-                        .setNegativeButton(R.string.no, null)
-                        .show();
-                return true;
-            }
-        }); */
 
         exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new ExitAppFragment().show(getFragmentManager(), "exitAppDialogFragment");
             return true;
+            }
+        });
+
+        Preference joinBetaPref = findPreference("beta");
+        joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new BetaDialogFragment().show(getFragmentManager(), "BetaDialogFragment");
+                return true;
             }
         });
 
@@ -108,6 +94,7 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
         super.onResume();
         preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
         Qordoba.updateScreen(getActivity());
     }
 
@@ -115,6 +102,7 @@ public class SettingsBaseFragment extends PreferenceFragment implements SharedPr
     public void onPause() {
         super.onPause();
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferencesPresenter);
     }
 
     @Override

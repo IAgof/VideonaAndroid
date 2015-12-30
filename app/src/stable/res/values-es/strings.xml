@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="betaPreferenceText">Prueba Videona Beta</string>
+    <string name="joinBetaDialogTitle">Prueba Videona Beta</string>
+    <string name="joinBetaDialogMessage">Si quieres testar en exclusiva la Beta de nuestra app,
+        introduce tu mail y te indicaremos los pasos a seguir.</string>
+</resources>
