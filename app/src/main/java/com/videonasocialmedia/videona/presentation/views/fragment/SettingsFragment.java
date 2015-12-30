@@ -33,14 +33,21 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     protected Context context;
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
-    private Preference exitPref;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getActivity().getApplicationContext();
+        initPreferences();
+        preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
+                sharedPreferences);
+
+    }
+
+    private void initPreferences() {
         addPreferencesFromResource(R.xml.preferences);
 
-        context = getActivity().getApplicationContext();
         getPreferenceManager().setSharedPreferencesName(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME);
         sharedPreferences = getActivity().getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -48,10 +55,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         editor = sharedPreferences.edit();
         resolutionPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION);
         qualityPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY);
-        preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
-                sharedPreferences);
 
-        exitPref = findPreference("exit");
+        setupExitPreference();
+        setupBetaPreference();
+    }
+
+    private void setupExitPreference() {
+        Preference exitPref = findPreference("exit");
 
         exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -60,7 +70,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             return true;
             }
         });
+    }
 
+    private void setupBetaPreference() {
         Preference joinBetaPref = findPreference("beta");
         joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -69,7 +81,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 return true;
             }
         });
-
     }
 
     @Override
