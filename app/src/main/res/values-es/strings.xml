@@ -500,5 +500,8 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="exit_app_message">¿Desea salir de la aplicación?</string>
 
     <string name="editTextActionLabel">Hecho</string>
+    <string name="rateUsDialogTitle">¿Quieres valorar nuestro trabajo?</string>
+    <string name="rateUsDialogMessage">Si te gusta Videona ponle cinco estrellas y deja tu comentario. Si tienes alguna sugerencia, queja o duda, escríbenos.</string>
+    <string name="rateUsDialogNegative">Me horroriza</string>
 
 </resources>

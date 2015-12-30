@@ -79,17 +79,16 @@ public class SettingsBaseActivity extends VideonaActivity {
     }
 
     private void goToVote() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaAlertDialog);
-        AlertDialog dialog = builder.setTitle("Titulo rating")
-                .setMessage("Mensaje para pedir que nos voten. O algo...")
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+        AlertDialog dialog = builder.setTitle(R.string.rateUsDialogTitle)
+                .setMessage(R.string.rateUsDialogMessage)
+                .setNegativeButton(R.string.rateUsDialogNegative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //TODO cambiar email
                         navigateTo("mailto:info@videona.com");
                     }
-                }).setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                }).setPositiveButton(R.string.rateUsDialogAffirmative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         navigateTo("market://details?id=com.videonasocialmedia.videona");

@@ -505,5 +505,9 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="error">error</string>
 
     <string name="editTextActionLabel">Done</string>
+    <string name="rateUsDialogTitle">¿Do you want to rate us?</string>
+    <string name="rateUsDialogMessage">If you like Videona give us five stars. If you have any suggestion or doubt write us</string>
+    <string name="rateUsDialogAffirmative">Love it</string>
+    <string name="rateUsDialogNegative">Hate it</string>
 
 </resources>
