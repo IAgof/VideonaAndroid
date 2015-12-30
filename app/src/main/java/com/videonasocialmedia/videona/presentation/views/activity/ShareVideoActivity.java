@@ -97,7 +97,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             isPlaying = savedInstanceState.getBoolean("videoPlaying", false);
         }
         initVideoPreview(videoPosition, isPlaying);
-
         initNetworksList();
 
     }
@@ -304,9 +303,11 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
 
     private void hideBottomPanel() {
         runTranslateAnimation(bottomPanel, bottomPanel.getHeight(), new AccelerateInterpolator(3));
+        fab.hide();
     }
 
     private void showBottomPanel() {
+        fab.show();
         runTranslateAnimation(bottomPanel, 1, new AccelerateInterpolator(3));
     }
 

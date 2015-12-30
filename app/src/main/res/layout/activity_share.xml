@@ -47,7 +47,6 @@
         android:layout_weight="1"
         tools:listitem="@layout/share_network_viewholder" />
 
-
     <View
         android:layout_width="wrap_content"
         android:layout_height="1dp"
