@@ -144,9 +144,9 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("DARK", "DARK",
                 R.drawable.common_filter_overlay_dark,
                 R.drawable.overlay_filter_dark));
-        overlayList.add(new OverlayEffect("INSTANT", "INSTANT",
-                R.drawable.common_filter_overlay_instant,
-                R.drawable.overlay_filter_instant));
+        overlayList.add(new OverlayEffect("CRASH", "CRASH",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_crash));
         overlayList.add(new OverlayEffect("SUMMER", "SUMMER",
                 R.drawable.common_filter_overlay_summer,
                 R.drawable.overlay_filter_summer));
@@ -159,15 +159,39 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("WASTED", "WASTED",
                 R.drawable.common_filter_overlay_wasted,
                 R.drawable.overlay_filter_wasted));
-        overlayList.add(new OverlayEffect("CHRISTMAS", "CHRISTMAS",
-                R.drawable.common_filter_overlay_christmas,
-                R.drawable.overlay_filter_christmas));
-        overlayList.add(new OverlayEffect("NIGHT", "NIGHT",
-                R.drawable.common_filter_overlay_night,
-                R.drawable.overlay_filter_night));
-        overlayList.add(new OverlayEffect("WINTER2", "WINTER2",
-                R.drawable.common_filter_overlay_winter_dos,
-                R.drawable.overlay_filter_winter_dos));
+        overlayList.add(new OverlayEffect("FLORAL", "FLORAL",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_floral));
+        overlayList.add(new OverlayEffect("GAME", "GAME",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_game));
+        overlayList.add(new OverlayEffect("GRUNGE", "GRUNGE",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_grunge));
+        overlayList.add(new OverlayEffect("LOVE", "LOVE",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_love));
+        overlayList.add(new OverlayEffect("MIST", "MIST",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_mist));
+        overlayList.add(new OverlayEffect("PAPER", "PAPER",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_paper));
+        overlayList.add(new OverlayEffect("PASION", "PASION",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_passion));
+        overlayList.add(new OverlayEffect("POLAROID", "POLAROID",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_polaroid));
+        overlayList.add(new OverlayEffect("RAIN", "RAIN",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_rain));
+        overlayList.add(new OverlayEffect("SPRING", "SPRING",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_spring));
+        overlayList.add(new OverlayEffect("VHS", "VHS",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_vhs));
         return overlayList;
     }
 
