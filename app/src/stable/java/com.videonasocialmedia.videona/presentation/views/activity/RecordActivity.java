@@ -726,6 +726,10 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void onEffectSelectionCancel(Effect effect) {
         recordPresenter.removeEffect(effect);
+        if(!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()){
+            hideRemoveFilters();
+        }
     }
 
     private void scrollEffectList(com.videonasocialmedia.videona.model.entities.editor.effects.Effect effect) {

@@ -672,6 +672,11 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void onEffectSelectionCancel(Effect effect) {
         recordPresenter.removeEffect(effect);
+
+        if(!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()){
+            hideRemoveFilters();
+        }
     }
 
     private void scrollEffectList(Effect effect) {

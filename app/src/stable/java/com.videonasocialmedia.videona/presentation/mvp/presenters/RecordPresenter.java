@@ -18,7 +18,6 @@ import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
-import com.videonasocialmedia.avrecorder.overlay.Filter;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
@@ -38,7 +37,6 @@ import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
-import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 
@@ -393,7 +391,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void removeEffect(Effect effect) {
         if (effect instanceof OverlayEffect) {
             recorder.removeOverlay();
-        selectedOverlayEffect = null;
+            selectedOverlayEffect = null;
         } else {
             if (effect instanceof ShaderEffect) {
                 recorder.applyFilter(Filters.FILTER_NONE);
