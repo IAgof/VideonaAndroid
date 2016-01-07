@@ -39,6 +39,7 @@ public class EffectAdapter
     private OnEffectSelectedListener onEffectSelectedListener;
     private int selectedPosition = -1;
     private int previousSelectionPosition = -1;
+    private boolean effectSelected = false;
 
     /**
      * Constructor.
@@ -125,8 +126,18 @@ public class EffectAdapter
         return effects.isEmpty();
     }
 
+    /**
+     * Checks if some effect has been selected
+     *
+     * @return
+     */
+    public boolean isEffectSelected(){
+        return effectSelected;
+    }
+
     public void resetSelectedEffect() {
         selectedPosition = -1;
+        effectSelected = false;
         this.notifyDataSetChanged();
     }
 
@@ -180,6 +191,7 @@ public class EffectAdapter
                     resetSelectedEffect();
                     onClickListener.onEffectSelectionCancel(effects.get(adapterPosition));
                 } else {
+                    effectSelected = true;
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);
                     onClickListener.onEffectSelected(effects.get(selectedPosition));
