@@ -520,8 +520,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
 
         private void exitSplashScreen() {
-            navigate(RecordActivity.class);
-
+            if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
+                navigate(AppIntroActivity.class);
+            } else {
+                navigate(RecordActivity.class);
+            }
         }
 
         private void waitForCriticalPermissions() {
