@@ -23,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -140,6 +141,25 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
+        recButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (!recording) {
+                        recordPresenter.requestRecord();
+                        sendButtonTracked("Start recording");
+                        mixpanel.timeEvent("Time recording one video");
+                        mixpanel.track("Start recording");
+                    } else {
+                        recordPresenter.stopRecord();
+                        sendButtonTracked("Stop recording");
+                        mixpanel.track("Time recording one video");
+                        mixpanel.track("Stop recording");
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     private void initOrientationHelper() {
@@ -246,21 +266,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
-    }
-
-    @OnClick(R.id.button_record)
-    public void OnRecordButtonClicked() {
-        if (!recording) {
-            recordPresenter.requestRecord();
-            sendButtonTracked("Start recording");
-            mixpanel.timeEvent("Time recording one video");
-            mixpanel.track("Start recording");
-        } else {
-            recordPresenter.stopRecord();
-            sendButtonTracked("Stop recording");
-            mixpanel.track("Time recording one video");
-            mixpanel.track("Stop recording");
-        }
     }
 
     @Override
