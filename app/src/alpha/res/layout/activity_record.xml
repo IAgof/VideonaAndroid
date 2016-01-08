@@ -309,7 +309,7 @@
                                 android:padding="16dp"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/activity_record_button_share_selector"
-                                android:visibility="invisible" />
+                                android:visibility="visible" />
 
                             <ImageButton
                                 android:id="@+id/button_record"

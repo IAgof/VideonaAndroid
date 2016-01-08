@@ -28,11 +28,14 @@ import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -49,7 +52,7 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter {
+public class RecordPresenter implements OnExportFinishedListener {
 
     /**
      * LOG_TAG
@@ -68,6 +71,15 @@ public class RecordPresenter {
     private Context context;
     private GLCameraEncoderView cameraPreview;
 
+    /**
+     * Export project use case
+     */
+    private ExportProjectUseCase exportProjectUseCase;
+    /**
+     * Get media list from project use case
+     */
+    private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
+
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview) {
         Log.d(LOG_TAG, "constructor presenter");
@@ -76,7 +88,10 @@ public class RecordPresenter {
         this.cameraPreview = cameraPreview;
 
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        exportProjectUseCase = new ExportProjectUseCase(this);
         recordedVideosNumber = 0;
+
 
         initRecorder(context, cameraPreview);
 
@@ -100,6 +115,7 @@ public class RecordPresenter {
     private void hideInitialsButtons() {
         recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
+        recordView.disableShareButton();
         recordView.hideChronometer();
     }
 
@@ -126,9 +142,11 @@ public class RecordPresenter {
             this.recordedVideosNumber = mediaInProject.size();
             recordView.showVideosRecordedNumber(recordedVideosNumber);
             recordView.showRecordedVideoThumb(lastItem.getMediaPath());
+            recordView.enableShareButton();
         } else {
             recordView.hideRecordedVideoThumb();
             recordView.hideVideosRecordedNumber();
+            recordView.disableShareButton();
         }
     }
 
@@ -173,6 +191,19 @@ public class RecordPresenter {
         recorder.reset(config);
     }
 
+    public void startExport() {
+        //editorView.showProgressDialog();
+        //check VideoList is not empty, if true exportProjectUseCase
+        List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (videoList.size() > 0) {
+            exportProjectUseCase.export();
+        } else {
+            recordView.hideProgressDialog();
+            recordView.showMessage(R.string.add_videos_to_project);
+        }
+        //exportProjectUseCase.export();
+    }
+
     public void onEventMainThread(CameraEncoderResetEvent e) {
         startRecord();
     }
@@ -199,6 +230,7 @@ public class RecordPresenter {
         recordView.hideMenuOptions();
         recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
+        recordView.disableShareButton();
         firstTimeRecording = false;
 
     }
@@ -223,10 +255,19 @@ public class RecordPresenter {
         String path = e.videoAdded.getMediaPath();
         recordView.showRecordedVideoThumb(path);
         recordView.showRecordButton();
+        recordView.enableShareButton();
         recordView.showVideosRecordedNumber(++recordedVideosNumber);
         recordView.showMenuOptions();
         recordView.hideChronometer();
         recordView.reStartScreenRotation();
+    }
+
+    public int getProjectDuration() {
+        return Project.getInstance(null, null, null).getDuration();
+    }
+
+    public int getNumVideosOnProject() {
+        return recordedVideosNumber;
     }
 
     public void changeCamera() {
@@ -330,4 +371,16 @@ public class RecordPresenter {
         return GetEffectListUseCase.getOverlayEffectsList();
     }
 
+    @Override
+    public void onExportError(String error) {
+        recordView.hideProgressDialog();
+        //TODO modify error message
+        recordView.showError(R.string.addMediaItemToTrackError);
+    }
+
+    @Override
+    public void onExportSuccess(Video exportedVideo) {
+        recordView.hideProgressDialog();
+        recordView.goToShare(exportedVideo.getMediaPath());
+    }
 }
