@@ -1,1 +1,1 @@
-include ':app', ':androidtranscoder', ':androidmuxer', ':avrecorder'
+include ':app', ':androidtranscoder', ':androidmuxer', ':avrecorder', ':appintro'
