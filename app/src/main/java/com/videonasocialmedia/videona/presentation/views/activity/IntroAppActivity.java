@@ -1,72 +1,61 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.github.paolorotolo.appintro.AppIntro3;
+import com.github.paolorotolo.appintro.AppIntro;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp1Fragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp2Fragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp3Fragment;
-import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
- * Created by Veronica Lago Fominaya on 07/01/2016.
+ * Created by Veronica Lago Fominaya on 08/01/2016.
  */
-public class AppIntroActivity extends AppIntro3 {
-
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-
-    private IntroApp1Fragment fragment1 = new IntroApp1Fragment();
-    private IntroApp2Fragment fragment2 = new IntroApp2Fragment();
-    private IntroApp3Fragment fragment3 = new IntroApp3Fragment();
-
-    // Please DO NOT override onCreate. Use init
+public class IntroAppActivity extends AppIntro {
     @Override
     public void init(Bundle savedInstanceState) {
-
-        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
-                Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-
-        addSlide(fragment1);
-        addSlide(fragment2);
-        addSlide(fragment3);
-
-        // OPTIONAL METHODS
-        // Override bar/separator color
-        /*
-        setBarColor(Color.parseColor("#3F51B5"));
-        setSeparatorColor(Color.parseColor("#2196F3"));
-        */
-
-        // Hide Skip/Done button
-        showSkipButton(true);
-        showDoneButton(true);
-
-        // Turn vibration on and set intensity
-        // NOTE: you will probably need to ask VIBRATE permesssion in Manifest
-        //setVibrate(true);
-        //setVibrateIntensity(30);
+        addSlide(new IntroApp1Fragment());
+        addSlide(new IntroApp2Fragment());
+        addSlide(new IntroApp3Fragment());
 
         //setFadeAnimation();
         setCustomTransformer(new ZoomOutPageTransformer());
+
+        setBarColor(Color.parseColor("#00000000"));
+        setSeparatorColor(Color.parseColor("#00000000"));
+        showSkipButton(true);
+    }
+
+    private void loadMainActivity() {
+        Intent intent = new Intent(this, RecordActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onSkipPressed() {
-        editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
-        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+        loadMainActivity();
+    }
+
+    @Override
+    public void onNextPressed() {
+
     }
 
     @Override
     public void onDonePressed() {
-        editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
-        startActivity(new Intent(getApplicationContext(), RecordActivity.class));
+        loadMainActivity();
+    }
+
+    @Override
+    public void onSlideChanged() {
+
+    }
+
+    public void getStarted(View v){
+        loadMainActivity();
     }
 
     public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
@@ -106,5 +95,7 @@ public class AppIntroActivity extends AppIntro3 {
                 view.setAlpha(0);
             }
         }
+
     }
+
 }
