@@ -8,8 +8,9 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.AppIntro3;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp1Fragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp2Fragment;
+import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp3Fragment;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
@@ -20,6 +21,10 @@ public class AppIntroActivity extends AppIntro3 {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private IntroApp1Fragment fragment1 = new IntroApp1Fragment();
+    private IntroApp2Fragment fragment2 = new IntroApp2Fragment();
+    private IntroApp3Fragment fragment3 = new IntroApp3Fragment();
+
     // Please DO NOT override onCreate. Use init
     @Override
     public void init(Bundle savedInstanceState) {
@@ -28,9 +33,9 @@ public class AppIntroActivity extends AppIntro3 {
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_1));
-        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_2));
-        addSlide(AppIntroFragment.newInstance(R.layout.activity_intro_app_3));
+        addSlide(fragment1);
+        addSlide(fragment2);
+        addSlide(fragment3);
 
         // OPTIONAL METHODS
         // Override bar/separator color
