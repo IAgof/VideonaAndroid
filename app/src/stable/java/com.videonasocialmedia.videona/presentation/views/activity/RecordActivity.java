@@ -46,7 +46,6 @@ import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
-import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.fragment.BetaDialogFragment;
@@ -72,7 +71,7 @@ import de.greenrobot.event.EventBus;
  * RecordActivity manages a single live record.
  */
 public class RecordActivity extends VideonaActivity implements RecordView,
-        ShareView, OnEffectSelectedListener {
+        OnEffectSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @InjectView(R.id.button_record)
@@ -132,7 +131,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
+        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
         initEffectsRecycler();
         configChronometer();
         initOrientationHelper();
@@ -228,7 +227,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         EventBus.getDefault().register(this);
         recordPresenter.onResume();
         recording = false;
-        disableShareButton();
         hideSystemUi();
     }
 
@@ -315,7 +313,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         resetChronometer();
         chronometer.start();
         showRecordingIndicator();
-        disableShareButton();
     }
 
     private void resetChronometer() {
@@ -334,7 +331,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void stopChronometer() {
         chronometer.stop();
         hideRecordingIndicator();
-        enableShareButton();
     }
 
     private void hideRecordingIndicator() {
