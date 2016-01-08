@@ -135,39 +135,82 @@ public class EffectProvider {
 
     public static List<Effect> getOverlayFilterList() {
         List<Effect> overlayList = new ArrayList<>();
+        overlayList.add(new OverlayEffect("3D", "3D",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_3d));
         overlayList.add(new OverlayEffect("AUTUMN", "AUTUMN",
                 R.drawable.common_filter_overlay_autumn,
                 R.drawable.overlay_filter_autumn));
         overlayList.add(new OverlayEffect("BURN", "BURN",
                 R.drawable.common_filter_overlay_burn,
                 R.drawable.overlay_filter_burn));
+        overlayList.add(new OverlayEffect("CCTV", "CCTV",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_cctv));
+        overlayList.add(new OverlayEffect("CITY", "CITY",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_city));
+        overlayList.add(new OverlayEffect("CRASH", "CRASH",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_crash));
         overlayList.add(new OverlayEffect("DARK", "DARK",
                 R.drawable.common_filter_overlay_dark,
                 R.drawable.overlay_filter_dark));
-        overlayList.add(new OverlayEffect("INSTANT", "INSTANT",
-                R.drawable.common_filter_overlay_instant,
-                R.drawable.overlay_filter_instant));
+        overlayList.add(new OverlayEffect("GAME", "GAME",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_game));
+        overlayList.add(new OverlayEffect("GRUNGE", "GRUNGE",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_grunge));
+        overlayList.add(new OverlayEffect("LOVE", "LOVE",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_love));
+        overlayList.add(new OverlayEffect("MIST", "MIST",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_mist));
+        overlayList.add(new OverlayEffect("OLD", "OLD",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_old));
+        overlayList.add(new OverlayEffect("PAPER", "PAPER",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_paper));
+        overlayList.add(new OverlayEffect("PASION", "PASION",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_passion));
+        overlayList.add(new OverlayEffect("PASTEL", "PASTEL",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_pastel));
+        overlayList.add(new OverlayEffect("POLAROID", "POLAROID",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_polaroid));
+        overlayList.add(new OverlayEffect("RAIN", "RAIN",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_rain));
+        overlayList.add(new OverlayEffect("REC", "REC",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_rec));
+        overlayList.add(new OverlayEffect("RETROTV", "RETROTV",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_retrotv));
+        overlayList.add(new OverlayEffect("SPRING", "SPRING",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_spring));
         overlayList.add(new OverlayEffect("SUMMER", "SUMMER",
                 R.drawable.common_filter_overlay_summer,
                 R.drawable.overlay_filter_summer));
         overlayList.add(new OverlayEffect("SUNSET", "SUNSET",
                 R.drawable.common_filter_overlay_sunset,
                 R.drawable.overlay_filter_sunset));
-        overlayList.add(new OverlayEffect("WINTER", "WINTER",
-                R.drawable.common_filter_overlay_winter,
-                R.drawable.overlay_filter_winter));
+        overlayList.add(new OverlayEffect("TEXTURE", "TEXTURE",
+                R.drawable.gatito_rules,
+                R.drawable.overlay_filter_texture));
         overlayList.add(new OverlayEffect("WASTED", "WASTED",
                 R.drawable.common_filter_overlay_wasted,
                 R.drawable.overlay_filter_wasted));
-        overlayList.add(new OverlayEffect("CHRISTMAS", "CHRISTMAS",
-                R.drawable.common_filter_overlay_christmas,
-                R.drawable.overlay_filter_christmas));
-        overlayList.add(new OverlayEffect("NIGHT", "NIGHT",
-                R.drawable.common_filter_overlay_night,
-                R.drawable.overlay_filter_night));
-        overlayList.add(new OverlayEffect("WINTER2", "WINTER2",
-                R.drawable.common_filter_overlay_winter_dos,
-                R.drawable.overlay_filter_winter_dos));
+        overlayList.add(new OverlayEffect("WINTER", "WINTER",
+                R.drawable.common_filter_overlay_winter,
+                R.drawable.overlay_filter_winter));
+
         return overlayList;
     }
 
