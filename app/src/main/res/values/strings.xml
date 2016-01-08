@@ -101,6 +101,8 @@
     <string name="high_quality_value">Excellent</string>
     <string name="title_advanced_section">Advanced</string>
     <string name="content_advanced_section">Join Videona Beta</string>
+    <string name="positive_button_join_beta_dialog">Yes</string>
+    <string name="negative_button_join_beta_dialog">Not now, thanks</string>
     <string name="moreInformation">More information</string>
     <string name="privacyPolicy">Privacy policy</string>
     <string name="termsOfService">Terms of service</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="betaPreferenceText">Join Videona Beta</string>
-    <string name="leaveBetaDialogTitle">Join Videona Beta</string>
-    <string name="leaveBetaDialogMessage">If you want to be part of the exclusive Beta of our app,
+    <string name="joinBetaDialogTitle">Join Videona Beta</string>
+    <string name="joinBetaDialogMessage">If you want to be part of the exclusive Beta of our app,
         enter your email and we will show you the steps.</string>
 </resources>
