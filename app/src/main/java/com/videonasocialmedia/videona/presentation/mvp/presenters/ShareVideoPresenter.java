@@ -33,8 +33,10 @@ public class ShareVideoPresenter {
     }
 
     public void shareVideo(String videoPath, SocialNetworkApp appToShareWith, Context ctx) {
+
         final ComponentName name = new ComponentName(appToShareWith.getAndroidPackageName(),
                 appToShareWith.getAndroidActivityName());
+
         Uri uri = Utils.obtainUriToShare(ctx, videoPath);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -44,6 +46,7 @@ public class ShareVideoPresenter {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         intent.setComponent(name);
         ctx.startActivity(intent);
+
 
     }
 

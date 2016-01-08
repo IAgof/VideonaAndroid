@@ -3,6 +3,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -89,6 +90,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         presenter = new ShareVideoPresenter(this);
         presenter.onCreate();
         initToolbar();
+        initFloatingActionButton();
         if (videoPosition == 0)
             videoPosition = 100;
         boolean isPlaying = false;
@@ -98,7 +100,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         }
         initVideoPreview(videoPosition, isPlaying);
         initNetworksList();
-
     }
 
     private void initToolbar() {
@@ -113,7 +114,12 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             } else
                 ab.setDisplayShowHomeEnabled(true);
         }
+    }
 
+    private void initFloatingActionButton() {
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorButton)));
     }
 
     private void initVideoPreview(final int position, final boolean playing) {

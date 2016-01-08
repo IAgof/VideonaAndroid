@@ -22,6 +22,7 @@ import android.os.SystemClock;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -45,7 +46,6 @@ import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
-import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.fragment.BetaDialogFragment;
@@ -71,7 +71,7 @@ import de.greenrobot.event.EventBus;
  * RecordActivity manages a single live record.
  */
 public class RecordActivity extends VideonaActivity implements RecordView,
-        ShareView, OnEffectSelectedListener {
+        OnEffectSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
     @InjectView(R.id.button_record)
@@ -131,12 +131,31 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         SharedPreferences sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        recordPresenter = new RecordPresenter(this, this, this, cameraView, sharedPreferences);
+        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
         initEffectsRecycler();
         configChronometer();
         initOrientationHelper();
         configThumbsView();
         createProgressDialog();
+        recButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (!recording) {
+                        recordPresenter.requestRecord();
+                        sendButtonTracked("Start recording");
+                        mixpanel.timeEvent("Time recording one video");
+                        mixpanel.track("Start recording");
+                    } else {
+                        recordPresenter.stopRecord();
+                        sendButtonTracked("Stop recording");
+                        mixpanel.track("Time recording one video");
+                        mixpanel.track("Stop recording");
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     private void configThumbsView() {
@@ -208,7 +227,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         EventBus.getDefault().register(this);
         recordPresenter.onResume();
         recording = false;
-        disableShareButton();
         hideSystemUi();
     }
 
@@ -264,21 +282,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         );
     }
 
-    @OnClick(R.id.button_record)
-    public void OnRecordButtonClicked() {
-        if (!recording) {
-            recordPresenter.requestRecord();
-            sendButtonTracked("Start recording");
-            mixpanel.timeEvent("Time recording one video");
-            mixpanel.track("Start recording");
-        } else {
-            recordPresenter.stopRecord();
-            sendButtonTracked("Stop recording");
-            mixpanel.track("Time recording one video");
-            mixpanel.track("Stop recording");
-        }
-    }
-
     @OnClick(R.id.button_navigate_edit)
     public void OnButtonNavigateEditClicked() {
         new BetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
@@ -310,7 +313,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         resetChronometer();
         chronometer.start();
         showRecordingIndicator();
-        disableShareButton();
     }
 
     private void resetChronometer() {
@@ -329,7 +331,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void stopChronometer() {
         chronometer.stop();
         hideRecordingIndicator();
-        enableShareButton();
     }
 
     private void hideRecordingIndicator() {
@@ -726,6 +727,10 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void onEffectSelectionCancel(Effect effect) {
         recordPresenter.removeEffect(effect);
+        if(!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()){
+            hideRemoveFilters();
+        }
     }
 
     private void scrollEffectList(com.videonasocialmedia.videona.model.entities.editor.effects.Effect effect) {

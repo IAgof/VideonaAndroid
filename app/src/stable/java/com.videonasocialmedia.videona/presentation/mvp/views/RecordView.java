@@ -84,5 +84,8 @@ public interface RecordView {
 
     void showMessage(int stringToast);
 
+    void enableShareButton();
+
+    void disableShareButton();
 }
 

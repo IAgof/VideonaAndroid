@@ -11,6 +11,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
@@ -52,6 +54,9 @@ import com.videonasocialmedia.videona.presentation.views.customviews.CircleImage
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -76,6 +81,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     View navigatorView;
     @InjectView(R.id.button_record)
     ImageButton recButton;
+    @InjectView(R.id.button_share)
+    ImageButton shareButton;
     @InjectView(R.id.cameraPreview)
     GLCameraEncoderView cameraView;
     @InjectView(R.id.button_change_camera)
@@ -117,6 +124,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean removeFilterActivated;
     private boolean recording;
     private OrientationHelper orientationHelper;
+    private AlertDialog progressDialog;
 
     private boolean mUseImmersiveMode = true;
 
@@ -133,6 +141,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         initEffectsRecycler();
         configChronometer();
         initOrientationHelper();
+        configThumbsView();
+        createProgressDialog();
 
         buttonThumbClipRecorded.setBorderWidth(5);
         buttonThumbClipRecorded.setBorderColor(Color.WHITE);
@@ -140,10 +150,43 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
+        recButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (!recording) {
+                        recordPresenter.requestRecord();
+                        sendButtonTracked("Start recording");
+                        mixpanel.timeEvent("Time recording one video");
+                        mixpanel.track("Start recording");
+                    } else {
+                        recordPresenter.stopRecord();
+                        sendButtonTracked("Stop recording");
+                        mixpanel.track("Time recording one video");
+                        mixpanel.track("Stop recording");
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     private void initOrientationHelper() {
         orientationHelper = new OrientationHelper(this);
+    }
+
+    private void configThumbsView() {
+        buttonThumbClipRecorded.setBorderWidth(5);
+        buttonThumbClipRecorded.setBorderColorResource(R.color.textColorNumVideos);
+        numVideosRecorded.setVisibility(View.GONE);
+    }
+
+    private void createProgressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
+        progressDialog = builder.setCancelable(false)
+                .setView(dialogView)
+                .create();
     }
 
     private void initEffectsRecycler() {
@@ -246,21 +289,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
-    }
-
-    @OnClick(R.id.button_record)
-    public void OnRecordButtonClicked() {
-        if (!recording) {
-            recordPresenter.requestRecord();
-            sendButtonTracked("Start recording");
-            mixpanel.timeEvent("Time recording one video");
-            mixpanel.track("Start recording");
-        } else {
-            recordPresenter.stopRecord();
-            sendButtonTracked("Stop recording");
-            mixpanel.track("Time recording one video");
-            mixpanel.track("Stop recording");
-        }
     }
 
     @Override
@@ -598,6 +626,66 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         }
     }
 
+    @OnClick(R.id.button_share)
+    public void exportAndShare() {
+        if (!recording) {
+            showProgressDialog();
+            sendMetadataTracking();
+            startExportThread();
+        }
+    }
+
+    private void startExportThread() {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                recordPresenter.startExport();
+            }
+        };
+        t.start();
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    @Override
+    public void showMessage(final int message) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendMetadataTracking() {
+        try {
+            int projectDuration = recordPresenter.getProjectDuration();
+            int numVideosOnProject = recordPresenter.getNumVideosOnProject();
+            JSONObject props = new JSONObject();
+            props.put("Number of videos", numVideosOnProject);
+            props.put("Duration of the exported video in msec", projectDuration);
+            mixpanel.track("Exported video", props);
+        } catch (JSONException e) {
+            Log.e("TRACK_FAILED", String.valueOf(e));
+        }
+    }
+
+    @Override
+    public void goToShare(String videoToSharePath) {
+
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
+    }
+
 
     @Override
     public void showMenuOptions() {
@@ -672,6 +760,11 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void onEffectSelectionCancel(Effect effect) {
         recordPresenter.removeEffect(effect);
+
+        if(!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()){
+            hideRemoveFilters();
+        }
     }
 
     private void scrollEffectList(Effect effect) {
@@ -795,6 +888,18 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                 label = "Other";
         }
         sendButtonTracked(label);
+    }
+
+    @Override
+    public void enableShareButton() {
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
+    }
+
+    @Override
+    public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
     }
 
     private class OrientationHelper extends OrientationEventListener {

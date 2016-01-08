@@ -63,9 +63,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/fab_compat_margin"
-        android:src="@drawable/gatito_rules"
+        android:src="@drawable/common_icon_add_white"
         app:borderWidth="0dp"
-        app:rippleColor="#fff" />
+        app:rippleColor="#fff"
+        app:backgroundTint="@color/colorButton" />
 
 </LinearLayout>
 

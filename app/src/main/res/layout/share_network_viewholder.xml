@@ -36,7 +36,8 @@
         android:layout_gravity="center_vertical"
         android:text="@null"
         tools:checked="true"
-        tools:text="" />
+        tools:text=""
+        android:visibility="invisible" />
 
 
 </LinearLayout>

@@ -18,7 +18,6 @@ import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
-import com.videonasocialmedia.avrecorder.overlay.Filter;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
@@ -37,8 +36,6 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
-import com.videonasocialmedia.videona.presentation.mvp.views.ShareView;
-import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 
@@ -62,7 +59,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     private static final String LOG_TAG = "RecordPresenter";
     private boolean firstTimeRecording;
     private RecordView recordView;
-    private ShareView shareView;
     private SessionConfig config;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
@@ -84,11 +80,10 @@ public class RecordPresenter implements OnExportFinishedListener {
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private RemoveVideosUseCase removeVideosUseCase;
 
-    public RecordPresenter(Context context, RecordView recordView, ShareView shareView,
+    public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
         Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
-        this.shareView = shareView;
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
@@ -194,10 +189,12 @@ public class RecordPresenter implements OnExportFinishedListener {
             this.recordedVideosNumber=mediaInProject.size();
             recordView.showVideosRecordedNumber(recordedVideosNumber);
             recordView.showRecordedVideoThumb(lastItem.getMediaPath());
+            recordView.enableShareButton();
         }
         else{
             recordView.hideRecordedVideoThumb();
             recordView.hideVideosRecordedNumber();
+            recordView.disableShareButton();
         }
     }
 
@@ -286,6 +283,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.hideSettings();
         recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
+        recordView.disableShareButton();
         firstTimeRecording = false;
 
     }
@@ -309,6 +307,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         String path = e.videoAdded.getMediaPath();
         recordView.showRecordedVideoThumb(path);
         recordView.showRecordButton();
+        recordView.enableShareButton();
         recordView.showVideosRecordedNumber(++recordedVideosNumber);
         recordView.showSettings();
         recordView.hideChronometer();
@@ -318,8 +317,8 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onEventMainThread(VideosRemovedFromProjectEvent e) {
         recordView.hideRecordedVideoThumb();
         recordView.hideVideosRecordedNumber();
+        recordView.disableShareButton();
         recordedVideosNumber = 0;
-        shareView.disableShareButton();
     }
 
     public int getProjectDuration() {
@@ -393,7 +392,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void removeEffect(Effect effect) {
         if (effect instanceof OverlayEffect) {
             recorder.removeOverlay();
-        selectedOverlayEffect = null;
+            selectedOverlayEffect = null;
         } else {
             if (effect instanceof ShaderEffect) {
                 recorder.applyFilter(Filters.FILTER_NONE);
