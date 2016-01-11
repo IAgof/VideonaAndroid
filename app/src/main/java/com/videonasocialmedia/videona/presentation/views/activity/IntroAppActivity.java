@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.github.paolorotolo.appintro.AppIntro;
+import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp0Fragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp1Fragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp2Fragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp3Fragment;
@@ -15,13 +16,14 @@ import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp3Fragm
  * Created by Veronica Lago Fominaya on 08/01/2016.
  */
 public class IntroAppActivity extends AppIntro {
+
     @Override
     public void init(Bundle savedInstanceState) {
+        addSlide(new IntroApp0Fragment());
         addSlide(new IntroApp1Fragment());
         addSlide(new IntroApp2Fragment());
         addSlide(new IntroApp3Fragment());
 
-        //setFadeAnimation();
         setCustomTransformer(new ZoomOutPageTransformer());
 
         setBarColor(Color.parseColor("#00000000"));
