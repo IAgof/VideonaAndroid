@@ -1,70 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_settings">Settings</string>
 
+    <!-- Intro app -->
+    <string name="permissionsDeniedMessage">Videona necesita que aceptes algunos permisos para
+        grabar vídeos. Sin ellos Videona no puede funcionar y se cerrará</string>
+    <string name="CloseBecauseOfPermissionsTitle">Permisos no aceptados</string>
+
+    <!-- Record Activity -->
+    <string name="chronometerDefault">00:00</string>
     <string name="toast_exit">Pulsa otra vez para salir</string>
-    <string name="toast_exit_edit">Pulsa para salir del editor</string>
-    <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
+    <string name="please_wait">Espera por favor</string>
+    <string name="dialog_processing">Haciendo magia en tu vídeo</string>
+    <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
+
+    <!-- Share Activity -->
+    <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
+    <string name="share_using">Compartir vídeo con</string>
+
+    <!-- Editor Activity -->
     <string name="edit_title_name">Sala de edición</string>
     <string name="edit_text_fx">Trabajando en los efectos</string>
     <string name="edit_text_look">Trabajando en la magia</string>
     <string name="edit_text_special">Características especiales</string>
     <string name="edit_text_insufficient_memory">No hay memoria suficiente</string>
-    <string name="ok">Ok</string>
-    <string name="yes">Sí</string>
-    <string name="no">No</string>
-    <string name="videona_web">http://www.videona.es</string>
-    <string name="share_using">Compartir vídeo con</string>
-    <string name="please_wait">Espera por favor</string>
-    <string name="dialog_processing">Haciendo magia en tu vídeo</string>
+    <string name="toast_exit_edit">Pulsa para salir del editor</string>
+    <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
+    <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
+    <string name="confirmDeleteVideosFromProjectTitle">Papelera</string>
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta edición?</string>
+    <string name="acceptDeleteVideosFromProject">Quiero eliminarlos</string>
+    <string name="cancelDeleteVideosFromProject">Me los quedo</string>
+    <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
+    <string name="addVideosToProject">Por favor, graba o añade nuevos vídeos</string>
+    <string name="invalidRazorTime">Por favor, selecciona un instante de tiempo para cortar el vídeo</string>
+    <string name="add_videos_to_project">Por favor, añade vídeos al proyecto</string>
+    <string name="videos_removed">Videos borrados del proyecto, grabe o añada nuevos videos</string>
+    <string name="error">error</string>
+    <string name="editTextActionLabel">Hecho</string>
 
     <!-- Gallery activity -->
     <string name="confirmDeleteTitle">Eliminar</string>
     <string name="confirmDeleteTitle1">vídeo</string>
     <string name="confirmDeleteTitle2">vídeos</string>
-    <string name="confirmDeleteMessage">¿Desea eliminar estos elementos?</string>
+    <string name="confirmDeleteMessage">Elimina definitivamente estos archivos de tu terminal </string>
+    <string name="cancelDeleteMessage">Me los quedo</string>
+    <string name="galleryActivityTitle">Galería</string>
+    <string name="mastersFolderTitle">Originales</string>
+    <string name="editedFolderTitle">Editados</string>
 
     <!-- Trim fragment -->
     <string name="confirmTrim">Hecho</string>
 
-    <!-- Music genres -->
-    <string name="music_genre_rock">Rock</string>
-    <string name="music_genre_reggae">Reggae</string>
-    <string name="music_genre_hiphop">"Hip Hop"</string>
-    <string name="music_genre_jazz">"Jazz"</string>
-    <string name="music_genre_pop">"Pop"</string>
-    <string name="music_genre_country">"Country</string>
-    <string name="music_genre_electronic">"Electronic"</string>
-    <string name="music_genre_classic">Classic</string>
-    <string name="music_genre_classic_piano">Piano</string>
-    <string name="music_genre_classic_violin">"Violin</string>
-    <string name="music_genre_classic_clarinet">Clarinet</string>
-    <string name="music_genre_ambiental">Ambiental</string>
-    <string name="music_genre_caribbean">Caribbean</string>
-    <string name="music_genre_folk">"Folk"</string>
+    <!-- Video Preview Activity -->
+    <string name="invalid_video">Este vídeo no se puede reproducir. Por favor, seleccione otro</string>
 
+    <!-- VideoFullScreen Activity -->
     <string name="title_activity_video_player">Video Player</string>
 
 
-    <!-- Activity Video Preview -->
-    <string name="invalid_video">Este vídeo no se puede reproducir. Por favor, seleccione otro</string>
+    <!-- Settings Activity -->
 
-    <!-- Filters_Effects -->
-    <string name="filter_effect_sepia">"sepia"</string>
-    <string name="filter_effect_aqua">aqua</string>
-    <string name="filter_effect_emboss">emboss</string>
-    <string name="filter_effect_mono">"mono"</string>
-    <string name="filter_effect_negative">"negative"</string>
-    <string name="filter_effect_neon">"neon"</string>
-    <string name="filter_effect_none">"none"</string>
-    <string name="filter_effect_posterice">"posterice"</string>
-    <string name="filter_effect_sketch">"sketch"</string>
-    <string name="filter_effect_solarice">"solarice"</string>
-    <string name="filter_effect_whiteboard">"whiteboard"</string>
-    <string name="filter_effect_blackboard">blackboard</string>
+    <string name="action_settings">Ajustes</string>
 
-    <!-- Activity Settings -->
-    <string name="settingsTitle">Ajustes</string>
+    <!-- Rate Videona -->
+    <string name="rateUsDialogTitle">¿Te ha gustado Videona?</string>
+    <string name="rateUsDialogMessage">¡Danos cinco estrellas y déjanos tu comentario! También
+        puedes escribirnos un mail si tienes alguna queja, sugerencia o duda.</string>
+    <string name="rateUsDialogNegative">Me horroriza</string>
+    <string name="rateUsDialogAffirmative">Me encanta</string>
+    <string name="error_rate_app">Error de conexión con Google Play</string>
+    <string name="title_vote_section">Vota</string>
+    <string name="content_vote_section">Vota nuestra aplicación</string>
+
+    <!-- Exit App -->
+    <string name="exit_app_title">Apagar</string>
+    <string name="exit_app_message">¿Desea salir de la aplicación?</string>
+    <string name="acceptExit">Me marcho</string>
+    <string name="cancelExit">Me quedo</string>
+
+
+    <!-- Join/Leave beta Videona -->
+    <string name="title_advanced_section">Avanzado</string>
+    <string name="content_advanced_section">Prueba Videona Beta</string>
+    <string name="thanks">Gracias!!!</string>
+    <string name="joinBetaLinkInfo">Sigue las instrucciones de Google para ser Betatester. Cuando el
+        proceso se complete recibirás la actualización.</string>
+    <string name="joinBetaLink"><u>Pinche aquí!!!</u></string>
+    <string name="email">email</string>
+    <string name="enterEmail">Introduce un email válido</string>
+    <string name="removeEmail">Borrar email</string>
+    <string name="send_email">Enviar</string>
+    <string name="invalid_email">Por favor, añade un email válido</string>
+    <string name="valid_email">Gracias!!</string>
+    <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
+    <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
+
+
+    <!-- User info -->
     <string name="titleUserSection">Mi cuenta</string>
     <string name="name">Nombre</string>
     <string name="enterName">Introduce tu nombre</string>
@@ -74,6 +106,8 @@
     <string name="removeUsername">Borrar nombre de usuario</string>
     <string name="emailPreference">Email</string>
     <string name="save">Guardar</string>
+
+    <!-- Camera Settings -->
     <string name="title_camera_section">Cámara</string>
     <string name="resolution">Resolución</string>
     <string name="low_resolution_name">Buena (720p)</string>
@@ -83,56 +117,54 @@
     <string name="high_resolution_name">Excelente (4K)</string>
     <string name="high_resolution_value">Excelente</string>
     <string name="quality">Calidad</string>
-    <string name="thanks">Gracias!!!</string>
-    <string name="joinBetaLinkInfo">Por favor, pinche en el siguiente link para obtener
-        la versión beta</string>
-    <string name="joinBetaLink"><u>Pinche aquí!!!</u></string>
-    <string name="email">email</string>
-    <string name="enterEmail">Introduce un email válido</string>
-    <string name="removeEmail">Borrar email</string>
-    <string name="send_email">Enviar</string>
-    <string name="invalid_email">Por favor, añade un email válido</string>
-    <string name="valid_email">Gracias!!</string>
     <string name="low_quality_name">Buena (2 Mbps)</string>
     <string name="low_quality_value">Buena</string>
     <string name="good_quality_name">Muy buena (5 Mbps)</string>
     <string name="good_quality_value">Muy buena</string>
     <string name="high_quality_name">Excelente (10 Mbps)</string>
     <string name="high_quality_value">Excelente</string>
-    <string name="title_advanced_section">Avanzado</string>
-    <string name="content_advanced_section">Prueba Videona Beta</string>
-    <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
-    <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
+    <string name="cancelSettingsCamera">Cancelar</string>
+
+    <!-- More info Settings -->
+    <string name="aboutUsTitle">Sobre nosotros</string>
     <string name="moreInformation">Más información</string>
     <string name="privacyPolicy">Política de privacidad</string>
     <string name="termsOfService">Condiciones de servicio</string>
     <string name="licenses">Licencias</string>
-    <string name="title_vote_section">Vota</string>
-    <string name="content_vote_section">Vota nuestra aplicación</string>
+    <string name="legacyAdviceTitle">Aviso legal</string>
+
+    <!-- Contact Settings, not in use -->
     <string name="title_contact_section">Contacta con Videona</string>
     <string name="content_contact_section">Dinos que opinas de la aplicación</string>
+
+    <!-- Tutorial Settings, not in use -->
     <string name="title_tutorial_section">Tutorial</string>
     <string name="content_tutorial_section">Mira nuestro tutorial</string>
+
+    <!-- Accounts actions -->
     <string name="accountActions">Acciones de cuenta</string>
     <string name="exit">Salir</string>
-    <string name="confirmExit">Confirmar</string>
-    <string name="cancelSettingsCamera">Cancelar</string>
 
-    <!-- Activity Editor -->
-    <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Borrar vídeos del proyecto</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Desea eliminar estos elementos?</string>
-    <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
-    <string name="addVideosToProject">Por favor, graba o añade nuevos vídeos</string>
-    <string name="invalidRazorTime">Por favor, selecciona un instante de tiempo para cortar el vídeo</string>
+    <!-- End Settings Activity -->
 
-    <!-- Activity About -->
-    <string name="aboutUsTitle">Sobre nosotros</string>
+
+    <!-- About Activity -->
+
     <string name="aboutUsContent">
-        Graba, edita comparte&#8230;Tres sencillas cosas que querrás hacer tan pronto como tengas
-        descargada la app de Videona en tu smartphone.\nCopyright &#169; 2015. Videona Socialmedia
-        S.L. Todos los derechos reservados.\n
+        Graba, edita, comparte… Tres sencillos pasos para convertir tu vida en una película.Una
+        aventura audiovisual en la que vas a adentrarte tras instalar Videona en tu smartphone.
+        A partir de ahora dispones de la herramienta perfecta para crear vídeos con efectos y
+        filtros súper molones, añadirles música… y compartirlos con tu entorno a través de tus redes
+        sociales favoritas.\n\n
+
+        Detrás de esta aplicación hay un equipo formado por jóvenes emprendedores españoles que se
+        ha propuesto crear el mejor editor de vídeo para smartphones. Nuestra app pretende romper la
+        barrera de la edición y revolucionar el mundo audiovisual en los terminales móviles. \n\n
+
+        Copyright 2015. Videona Socialmedia S.L. Todos los derechos reservados. \n\n
+
     </string>
+    <string name="videona_web">http://www.videona.es</string>
     <string name="contactUsTitle"><u>Contacto</u></string>
     <string name="contactUsContent">Visita nuestra página web:</string>
     <string name="videonaWeb">http://www.videona.es\n</string>
@@ -141,7 +173,7 @@
     <string name="versionContent">beta </string>
     <string name="madeIn">Hecho en Madrid</string>
     <string name="licenseTitle"><u>Licencias de Software libre</u></string>
-<string name="licenseContent">
+    <string name="licenseContent">
         Copyright &#169; 2013 Jake Wharton\nLicensed under the Apache License, Version 2.0 (the
         "License"); you may not use this file except in compliance with the License.
         You may obtain a copy of the License at\n\thttp://www.apache.org/licenses/LICENSE-2.0\nUnless
@@ -246,7 +278,7 @@ limitations under the License. \n
         http://freemusicarchive.org/music/Josh_Woodward/The_Beautiful_Machine/JoshWoodward-TheLastSliceOfPecanPie-NoVox,
         icono clave de sol, CC BY 4.0\n
     </string>
-    <string name="legacyAdviceTitle">Aviso legal</string>
+
     <string name="legacyAdviceContent">
         1. TITULARIDAD.\n\nVIDEONA SOCIAL MEDIA, S.L (en adelante, Videona) es Videona de la aplicación móvil (en adelante, Aplicación) y del portal web www.videona.es (en adelante, el Portal) (en adelante y conjuntamente denominados, la Plataforma). Su domicilio se encuentra en c/ María Blanchard, 2 – portal 7, bajo D, 28232, Las Rozas de Madrid, España y su CIF es B87047171.
 
@@ -478,26 +510,10 @@ Cuando resulten de aplicación al Item, el Comprador podrá hacer uso de las gar
 Videona otorga a los Usuarios una licencia personal, revocable, no exclusiva y no transferible para cargar y utilizar el software de la Aplicación exclusivamente para el uso de los Servicios previstos en las presentes Condiciones Particulares. El software no podrá ser utilizado, copiado, reproducido, transmitido, mostrado, distribuido, vendido, licenciado, descargado o explotado en cualquier forma diferente al funcionamiento del Servicio. Queda prohibido al Usuario realizar ingeniería inversa, descompilar, desensamblar o de cualquier otra forma crear códigos fuentes a partir del software.
 Con respecto a las funcionalidades y herramientas de la Aplicación que permiten al Usuario crear Features, Videona otorga a los Usuarios una licencia para utilizarlas, reproducirlas y preparar trabajos u obras derivadas, exclusivamente para la creación y venta de Features, conforme a las presentes Condiciones Particulares.\n
     </string>
-    <string name="galleryActivityTitle">Galería</string>
-    <string name="mastersFolderTitle">Originales</string>
-    <string name="editedFolderTitle">Editados</string>
 
-
-    <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
-    <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
-    <string name="effects_chooser_title">Efectos</string>
-
-    <string name="add_videos_to_project">Por favor, añade vídeos al proyecto</string>
-    <string name="videos_removed">Videos borrados del proyecto, grabe o añada nuevos videos</string>
-
-    <!-- Drawer -->
-    <string name="error_rate_app">Error de conexión con Google Play</string>
-    <string name="exit_app_title">Apagar</string>
-    <string name="exit_app_message">¿Desea salir de la aplicación?</string>
-
-    <string name="editTextActionLabel">Hecho</string>
-    <string name="rateUsDialogTitle">¿Quieres valorar nuestro trabajo?</string>
-    <string name="rateUsDialogMessage">Si te gusta Videona ponle cinco estrellas y deja tu comentario. Si tienes alguna sugerencia, queja o duda, escríbenos.</string>
-    <string name="rateUsDialogNegative">Me horroriza</string>
+    <!-- Others -->
+    <string name="ok">Ok</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 
 </resources>
