@@ -75,7 +75,7 @@ public class EffectAdapter
                 .load(selectedEffect.getIconId())
                 .error(R.drawable.gatito_rules)
                 .into(holder.effectImage);
-        holder.effectName.setText(selectedEffect.getIdentifier());
+        holder.effectName.setText(selectedEffect.getName());
         if (position == selectedPosition) {
             holder.effect.setBackgroundResource(R.color.colorAccent);
         } else {
