@@ -3,14 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffc107"
-    tools:context=".mainActivity">
+    tools:context=".presentation.views.activity.IntroAppActivity">
 
-    <ImageView
-        android:id="@+id/image"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/intro_app_slide_3" />
+        android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="35dp">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:src="@drawable/intro_app_slide_record_image" />
+
+        <ImageView
+            android:id="@+id/character"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="5"
+            android:src="@drawable/common_character_sonora_speech_balloon" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            tools:text="holaaaaaaaaaaaaaaaa"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
