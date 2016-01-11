@@ -138,9 +138,6 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("OV1", "Burn",
                 R.drawable.common_filter_overlay_ov1_burn,
                 R.drawable.overlay_filter_burn));
-        overlayList.add(new OverlayEffect("OV2", "Rec",
-                R.drawable.common_filter_overlay_ov2_rec,
-                R.drawable.overlay_filter_rec));
         overlayList.add(new OverlayEffect("OV3", "Sunset",
                 R.drawable.common_filter_overlay_ov3_sunset,
                 R.drawable.overlay_filter_sunset));
@@ -153,24 +150,15 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("OV6", "Mist",
                 R.drawable.common_filter_overlay_ov6_mist,
                 R.drawable.overlay_filter_mist));
-        overlayList.add(new OverlayEffect("OV7", "Spring",
-                R.drawable.common_filter_overlay_ov7_spring,
-                R.drawable.overlay_filter_spring));
-        overlayList.add(new OverlayEffect("OV8", "Winter",
-                R.drawable.common_filter_overlay_ov8_winter,
-                R.drawable.overlay_filter_winter));
+        overlayList.add(new OverlayEffect("OV7", "Pride",
+                R.drawable.common_filter_overlay_ov7_pride,
+                R.drawable.overlay_filter_pride));
         overlayList.add(new OverlayEffect("OV9", "Summer",
                 R.drawable.common_filter_overlay_ov9_summer,
                 R.drawable.overlay_filter_summer));
         overlayList.add(new OverlayEffect("OV10", "CCTV",
                 R.drawable.common_filter_overlay_ov10_cctv,
                 R.drawable.overlay_filter_cctv));
-        overlayList.add(new OverlayEffect("OV11", "3D",
-                R.drawable.common_filter_overlay_ov11_3d,
-                R.drawable.overlay_filter_3d));
-        overlayList.add(new OverlayEffect("OV12", "Love",
-                R.drawable.common_filter_overlay_ov12_love,
-                R.drawable.overlay_filter_love));
         overlayList.add(new OverlayEffect("OV13", "Passion",
                 R.drawable.common_filter_overlay_ov13_passion,
                 R.drawable.overlay_filter_passion));
@@ -192,24 +180,15 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("OV19", "Old",
                 R.drawable.common_filter_overlay_ov19_old,
                 R.drawable.overlay_filter_old));
-        overlayList.add(new OverlayEffect("OV20", "Crash",
-                R.drawable.common_filter_overlay_ov20_crash,
-                R.drawable.overlay_filter_crash));
-        overlayList.add(new OverlayEffect("OV21", "Paper",
-                R.drawable.common_filter_overlay_ov21_paper,
-                R.drawable.overlay_filter_paper));
         overlayList.add(new OverlayEffect("OV22", "Rain",
                 R.drawable.common_filter_overlay_ov22_rain,
                 R.drawable.overlay_filter_rain));
         overlayList.add(new OverlayEffect("OV23", "Dark",
                 R.drawable.common_filter_overlay_ov23_dark,
                 R.drawable.overlay_filter_dark));
-        overlayList.add(new OverlayEffect("OV24", "City",
-                R.drawable.common_filter_overlay_ov24_city,
-                R.drawable.overlay_filter_city));
-        overlayList.add(new OverlayEffect("OV25", "8mm",
-                R.drawable.gatito_rules,
-                R.drawable.overlay_filter_8mm));
+        overlayList.add(new OverlayEffect("OV24", "Bokeh",
+                R.drawable.common_filter_overlay_ov24_bokeh,
+                R.drawable.overlay_filter_bokeh));
 
         return overlayList;
     }

@@ -1,6 +1,8 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -11,11 +13,15 @@ import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp0Fragm
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp1Fragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp2Fragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.IntroApp3Fragment;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 /**
  * Created by Veronica Lago Fominaya on 08/01/2016.
  */
 public class IntroAppActivity extends AppIntro {
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -23,6 +29,10 @@ public class IntroAppActivity extends AppIntro {
         addSlide(new IntroApp1Fragment());
         addSlide(new IntroApp2Fragment());
         addSlide(new IntroApp3Fragment());
+
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         setCustomTransformer(new ZoomOutPageTransformer());
 
@@ -32,6 +42,7 @@ public class IntroAppActivity extends AppIntro {
     }
 
     private void loadMainActivity() {
+        editor.putBoolean(ConfigPreferences.FIRST_TIME, false).commit();
         Intent intent = new Intent(this, RecordActivity.class);
         startActivity(intent);
     }
