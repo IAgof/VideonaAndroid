@@ -81,8 +81,7 @@
         <string name="title_advanced_section">Advanced</string>
         <string name="content_advanced_section">Join Videona Beta</string>
         <string name="thanks">Thanks!!!</string>
-        <string name="joinBetaLinkInfo">Please click the link bellow to get the beta
-            version</string>
+        <string name="joinBetaLinkInfo">Please click the link bellow to get the beta version</string>
         <string name="joinBetaLink"><u>Click here!!!</u></string>
         <string name="email">email</string>
         <string name="enterEmail">Enter a valid email</string>
@@ -152,8 +151,15 @@
 
     <string name="aboutUsContent">
         Record, edit, share…Three simple things you will like to do as soon as you have the new
-        Videona App in your smartphone.\nCopyright &#169; 2015. Videona Socialmedia S.L. All rights
-        reserved.\n
+        Videona App in your smartphone. From now you can enjoy the perfect tool to create videos
+        with super cool effects and filters, add music and share your creations with your favorites
+        socials networks. \n\n
+
+        Before Videona, there are a group of spanish young enterpreneurs with the will of building
+        the best smartphone video editor application. Our application want to break the edition
+        barrier and be a change in the audiovisual world and smartphones. \n\n
+
+        Copyright 2015. Videona Socialmedia S.L. Todos los derechos reservados. \n
     </string>
     <string name="videona_web">http://www.videona.com</string>
     <string name="contactUsTitle"><u>Contact us</u></string>
