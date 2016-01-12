@@ -71,8 +71,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         super.onCreate(savedInstanceState);
-        //remove title, mode fullscreen
 
+        //remove title, mode fullscreen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

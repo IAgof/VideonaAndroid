@@ -104,6 +104,7 @@
 
         <activity
             android:name=".presentation.views.activity.IntroAppActivity"
+            android:theme="@style/VideonaIntroTutorial"
             android:label="@string/app_name">
         </activity>
 
