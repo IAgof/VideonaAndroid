@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="betaPreferenceText">Join Videona Beta</string>
-    <string name="joinBetaDialogTitle">Join Videona Beta</string>
-    <string name="joinBetaDialogMessage">If you want to be part of the exclusive Beta of our app,
-        enter your email and we will show you the steps.</string>
+    <string name="betaPreferenceText">Participate in Beta Videona</string>
+    <string name="joinBetaDialogTitle">Participate in Beta Videona</string>
+    <string name="joinBetaDialogMessage">Become a Beta Tester for the first access to our updates.
+        You will help us create the video editor you need.</string>
 </resources>
