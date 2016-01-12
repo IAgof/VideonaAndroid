@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            android:src="@drawable/intro_app_slide_record_image" />
+            android:src="@drawable/intro_app_slide_share_image" />
 
         <ImageView
             android:id="@+id/character"
