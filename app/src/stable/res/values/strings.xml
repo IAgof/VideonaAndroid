@@ -2,6 +2,7 @@
 <resources>
     <string name="betaPreferenceText">Participate in Beta Videona</string>
     <string name="joinBetaDialogTitle">Participate in Beta Videona</string>
-    <string name="joinBetaDialogMessage">Become a Beta Tester for the first access to our updates.
-        You will help us create the video editor you need.</string>
+    <string name="joinBetaDialogMessage">Become a Beta Tester to be the first to access to the
+        updates. You will help us to create the video editor you want.\n
+        Fill the email address.</string>
 </resources>

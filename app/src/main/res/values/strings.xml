@@ -10,7 +10,7 @@
     <string name="chronometerDefault">00:00</string>
     <string name="toast_exit">Press back to exit</string>
     <string name="please_wait">Please wait</string>
-    <string name="dialog_processing">Making magic on your video</string>
+    <string name="dialog_processing">Making magic in your video</string>
     <string name="recordError">Something bad happened. Impossible to record video, try again</string>
 
     <!-- Share Activity -->
@@ -27,9 +27,10 @@
     <string name="toast_exit_edit">Press back again to exit the edit room</string>
     <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
     <string name="confirmDeleteVideosFromProjectTitle">Delete videos from project</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Do you want to delete this elements?</string>
-    <string name="acceptDeleteVideosFromProject">Yes, clear them</string>
-    <string name="cancelDeleteVideosFromProject">I want them</string>
+    <string name="confirmDeleteVideosFromProjectMessage">Want to delete the clips of this
+        edition?</string>
+    <string name="acceptDeleteVideosFromProject">Delete</string>
+    <string name="cancelDeleteVideosFromProject">Don’t Delete</string>
     <string name="deletedVideosFromProject">Deleted videos from project. Record or add new videos</string>
     <string name="addVideosToProject">Please, record or add new videos</string>
     <string name="invalidRazorTime">Please, select an instant time to razor this video</string>
@@ -42,8 +43,9 @@
     <string name="confirmDeleteTitle">Delete</string>
     <string name="confirmDeleteTitle1">video</string>
     <string name="confirmDeleteTitle2">videos</string>
-    <string name="confirmDeleteMessage">¿Do you want to delete this elements?</string>
-    <string name="cancelDeleteMessage">I want them</string>
+    <string name="confirmDeleteMessage">Definitely remove these files from your terminal</string>
+    <string name="positiveButton">Remove</string>
+    <string name="negativeButton">Don\'t Remove</string>
     <string name="galleryActivityTitle">Gallery</string>
     <string name="mastersFolderTitle">Raw</string>
     <string name="editedFolderTitle">Edited</string>
@@ -63,26 +65,28 @@
     <string name="action_settings">Settings</string>
 
         <!-- Rate Videona -->
-        <string name="rateUsDialogTitle">¿Do you want to rate us?</string>
-        <string name="rateUsDialogMessage">If you like Videona give us five stars. If you have any suggestion or doubt write us</string>
-        <string name="rateUsDialogAffirmative">Love it</string>
-        <string name="rateUsDialogNegative">Hate it</string>
+        <string name="rateUsDialogTitle">What do you think about Videona?</string>
+        <string name="rateUsDialogMessage">Rate our app and leave a comment! You can also e-mail us
+            if you have any complaints, suggestions or questions.</string>
+        <string name="rateUsDialogAffirmative">I love it</string>
+        <string name="rateUsDialogNegative">I dislike it</string>
         <string name="error_rate_app">Could not launch Google Play</string>
         <string name="title_vote_section">Vote</string>
         <string name="content_vote_section">Vote our app</string>
 
         <!-- Exit App -->
         <string name="exit_app_title">Shut down</string>
-        <string name="exit_app_message">Do you want to close the application?</string>
-        <string name="acceptExit">Done</string>
-        <string name="cancelExit">Me quedo</string>
+        <string name="exit_app_message">Do you want to exit the application?</string>
+        <string name="acceptExit">Exit</string>
+        <string name="cancelExit">Keep playing</string>
 
         <!-- Join/Leave beta Videona -->
         <string name="title_advanced_section">Advanced</string>
         <string name="content_advanced_section">Join Videona Beta</string>
         <string name="thanks">Thanks!!!</string>
-        <string name="joinBetaLinkInfo">Please click the link bellow to get the beta version</string>
-        <string name="joinBetaLink"><u>Click here!!!</u></string>
+        <string name="joinBetaLinkInfo">Follow Google’s instructions to be Beta Tester. When the
+            process is complete you will receive an update.</string>
+        <string name="joinBetaLink"><u>Go on</u></string>
         <string name="email">email</string>
         <string name="enterEmail">Enter a valid email</string>
         <string name="removeEmail">Remove email</string>
