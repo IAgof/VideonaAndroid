@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerTabStrip;
@@ -17,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -26,7 +24,6 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPr
 import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
-import com.videonasocialmedia.videona.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -194,7 +191,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle(title)
                             .setMessage(R.string.confirmDeleteMessage)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            .setPositiveButton(R.string.positiveButton, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     for (Video video : videoList) {
@@ -209,7 +206,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
                                     updateCounter();
                                 }
                             })
-                    .setNegativeButton(R.string.no, null)
+                    .setNegativeButton(R.string.negativeButton, null)
                     .show();
         }
     }

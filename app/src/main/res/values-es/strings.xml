@@ -27,7 +27,8 @@
     <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
     <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
     <string name="confirmDeleteVideosFromProjectTitle">Papelera</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta edición?</string>
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de
+        esta edición?</string>
     <string name="acceptDeleteVideosFromProject">Quiero eliminarlos</string>
     <string name="cancelDeleteVideosFromProject">Me los quedo</string>
     <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
@@ -42,8 +43,9 @@
     <string name="confirmDeleteTitle">Eliminar</string>
     <string name="confirmDeleteTitle1">vídeo</string>
     <string name="confirmDeleteTitle2">vídeos</string>
-    <string name="confirmDeleteMessage">Elimina definitivamente estos archivos de tu terminal </string>
-    <string name="cancelDeleteMessage">Me los quedo</string>
+    <string name="confirmDeleteMessage">Elimina definitivamente estos archivos de tu terminal</string>
+    <string name="positiveButton">Quiero eliminarlos</string>
+    <string name="negativeButton">Me los quedo</string>
     <string name="galleryActivityTitle">Galería</string>
     <string name="mastersFolderTitle">Originales</string>
     <string name="editedFolderTitle">Editados</string>
@@ -64,8 +66,8 @@
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">¿Te ha gustado Videona?</string>
-    <string name="rateUsDialogMessage">¡Danos cinco estrellas y déjanos tu comentario! También
-        puedes escribirnos un mail si tienes alguna queja, sugerencia o duda.</string>
+    <string name="rateUsDialogMessage">¡Valora nuestra app y déjanos tu comentario! También puedes
+        escribirnos un mail si tienes alguna queja, sugerencia o duda.</string>
     <string name="rateUsDialogNegative">Me horroriza</string>
     <string name="rateUsDialogAffirmative">Me encanta</string>
     <string name="error_rate_app">Error de conexión con Google Play</string>
@@ -74,8 +76,8 @@
 
     <!-- Exit App -->
     <string name="exit_app_title">Apagar</string>
-    <string name="exit_app_message">¿Desea salir de la aplicación?</string>
-    <string name="acceptExit">Me marcho</string>
+    <string name="exit_app_message">¿Deseas salir de la aplicación?</string>
+    <string name="acceptExit">Abandono</string>
     <string name="cancelExit">Me quedo</string>
 
 
@@ -85,7 +87,7 @@
     <string name="thanks">Gracias!!!</string>
     <string name="joinBetaLinkInfo">Sigue las instrucciones de Google para ser Betatester. Cuando el
         proceso se complete recibirás la actualización.</string>
-    <string name="joinBetaLink"><u>Pinche aquí!!!</u></string>
+    <string name="joinBetaLink"><u>Adelante</u></string>
     <string name="email">email</string>
     <string name="enterEmail">Introduce un email válido</string>
     <string name="removeEmail">Borrar email</string>
