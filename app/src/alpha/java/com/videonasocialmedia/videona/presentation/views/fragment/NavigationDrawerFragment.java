@@ -12,10 +12,8 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -123,29 +121,6 @@ public class NavigationDrawerFragment extends VideonaFragment {
         startActivity(intent);
     }
 
-    @OnClick(R.id.fragment_navigator_rate_button)
-    public void navigateToRate(){
-
-        Uri uri = Uri.parse("market://details?id=" + this.getActivity().getPackageName());
-        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            this.getActivity().startActivity(goToMarket);
-        } catch (ActivityNotFoundException e) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity(), R.style.VideonaAlertDialogDark);
-            builder.setMessage(getResources().getString(R.string.error_rate_app))
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //do things
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
-
-    }
-
     @OnClick (R.id.fragment_navigator_drawer_button)
     public void navigateToBack(){
         this.getActivity().onBackPressed();
@@ -176,8 +151,7 @@ public class NavigationDrawerFragment extends VideonaFragment {
     }
 
     @OnClick({R.id.fragment_navigator_record_button, R.id.fragment_navigator_edit_button,
-            R.id.fragment_navigator_share_button, R.id.fragment_navigator_settings_button,
-            R.id.fragment_navigator_rate_button})
+            R.id.fragment_navigator_share_button, R.id.fragment_navigator_settings_button})
     public void trackClicks(View view) {
         sendButtonTracked(view.getId());
     }
@@ -200,9 +174,6 @@ public class NavigationDrawerFragment extends VideonaFragment {
                 break;
             case R.id.fragment_navigator_share_button:
                 label = "Go to share " + this.getActivity().getLocalClassName();
-                break;
-            case R.id.fragment_navigator_rate_button:
-                label = "Go to rate " + this.getActivity().getLocalClassName();
                 break;
             case R.id.fragment_navigator_exit_button:
                 label = "Go to exit " + this.getActivity().getLocalClassName();
