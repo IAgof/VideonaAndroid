@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="betaPreferenceText">Leaving the Beta</string>
-    <string name="leaveBetaDialogAffirmative">I quit</string>
-    <string name="leaveBetaDialogNegative">I stay</string>
+    <string name="leaveBetaDialogAffirmative">I stay</string>
+    <string name="leaveBetaDialogNegative">I quit</string>
     <string name="leaveBetaDialogTitle">Leaving the Beta</string>
     <string name="leaveBetaDialogMessage">Many thanks for your time. We care about your opinion
         because you help us to improve. Would you like to stay with us?</string>

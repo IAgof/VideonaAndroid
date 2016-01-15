@@ -61,6 +61,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -137,25 +138,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         initOrientationHelper();
         configThumbsView();
         createProgressDialog();
-        recButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (!recording) {
-                        recordPresenter.requestRecord();
-                        sendButtonTracked("Start recording");
-                        mixpanel.timeEvent("Time recording one video");
-                        mixpanel.track("Start recording");
-                    } else {
-                        recordPresenter.stopRecord();
-                        sendButtonTracked("Stop recording");
-                        mixpanel.track("Time recording one video");
-                        mixpanel.track("Stop recording");
-                    }
-                }
-                return true;
-            }
-        });
     }
 
     private void configThumbsView() {
@@ -169,15 +151,12 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     private void initEffectsRecycler() {
-
-        //cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getDistortionEffectList(), this);
         cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
         shaderEffectsRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         shaderEffectsRecycler.setAdapter(cameraShaderEffectsAdapter);
         shaderFilterHidden = true;
 
-        //cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getColorEffectList(), this);
         cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
         overlayFilterRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -282,9 +261,27 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         );
     }
 
+    @OnTouch(R.id.button_record) boolean onTouch(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (!recording) {
+                recordPresenter.requestRecord();
+                sendButtonTracked("Start recording");
+                mixpanel.timeEvent("Time recording one video");
+                mixpanel.track("Start recording");
+            } else {
+                recordPresenter.stopRecord();
+                sendButtonTracked("Stop recording");
+                mixpanel.track("Time recording one video");
+                mixpanel.track("Stop recording");
+            }
+        }
+        return true;
+    }
+
     @OnClick(R.id.button_navigate_edit)
     public void OnButtonNavigateEditClicked() {
         new BetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
+        mixpanel.track("Navigate edit Button clicked in Record Activity", null);
     }
 
     public void onEvent(JoinBetaEvent event) {
@@ -771,7 +768,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         String label;
         switch (id) {
             case R.id.button_record:
-                label = "Capture ";
+                label = "Capture";
                 break;
             case R.id.button_change_camera:
                 label = "Change camera";
@@ -781,9 +778,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 break;
             case R.id.button_camera_effect_shader:
                 label = "Shader filters";
+                mixpanel.track("Shader filters button selected", null);
                 break;
             case R.id.button_camera_effect_overlay:
                 label = "Overlay filters";
+                mixpanel.track("Overlay filters button selected", null);
                 break;
             case R.drawable.common_filter_color_ad1_aqua:
                 label = "Aqua color filter AD1";
@@ -848,6 +847,77 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             case R.drawable.common_filter_distortion_fx8_bulge:
                 label = "Bulge filter FX8";
                 mixpanel.track("Bulge filter selected FX8", null);
+                break;
+            case R.drawable.common_filter_overlay_ov1_burn:
+                label = "Burn overlay filter OV1";
+                mixpanel.track("Burn overlay filter selected OV1", null);
+                break;
+            case R.drawable.common_filter_overlay_ov3_sunset:
+                label = "Sunset overlay filter OV3";
+                mixpanel.track("Sunset overlay filter selected OV3", null);
+                break;
+            case R.drawable.common_filter_overlay_ov4_retrotv:
+                label = "Retrotv overlay filter OV4";
+                mixpanel.track("Retrotv overlay filter selected OV4", null);
+                break;case R.drawable.common_filter_overlay_ov5_autumn:
+                label = "Autumn overlay filter OV5";
+                mixpanel.track("Autumn overlay filter selected OV5", null);
+                break;
+            case R.drawable.common_filter_overlay_ov6_mist:
+                label = "Mist overlay filter OV6";
+                mixpanel.track("Mist overlay filter selected OV6", null);
+                break;
+            case R.drawable.common_filter_overlay_ov7_pride:
+                label = "Pride overlay filter OV7";
+                mixpanel.track("Pride overlay filter selected OV7", null);
+                break;
+            case R.drawable.common_filter_overlay_ov9_summer:
+                label = "Summer overlay filter OV9";
+                mixpanel.track("Summer overlay filter selected OV9", null);
+                break;
+            case R.drawable.common_filter_overlay_ov10_cctv:
+                label = "CCTV overlay filter OV10";
+                mixpanel.track("CCTV overlay filter selected OV10", null);
+                break;
+            case R.drawable.common_filter_overlay_ov13_passion:
+                label = "Passion overlay filter OV13";
+                mixpanel.track("Passion overlay filter selected OV13", null);
+                break;
+            case R.drawable.common_filter_overlay_ov14_stain:
+                label = "Stain overlay filter OV14";
+                mixpanel.track("Stain overlay filter selected OV14", null);
+                break;
+            case R.drawable.common_filter_overlay_ov15_pastel:
+                label = "Pastel overlay filter OV15";
+                mixpanel.track("Pastel overlay filter selected OV15", null);
+                break;
+            case R.drawable.common_filter_overlay_ov16_game:
+                label = "Game overlay filter OV16";
+                mixpanel.track("Game overlay filter selected OV16", null);
+                break;
+            case R.drawable.common_filter_overlay_ov17_wasted:
+                label = "Wasted overlay filter OV17";
+                mixpanel.track("Wasted overlay filter selected OV17", null);
+                break;
+            case R.drawable.common_filter_overlay_ov18_polaroid:
+                label = "Polaroid overlay filter OV18";
+                mixpanel.track("Polaroid overlay filter selected OV18", null);
+                break;
+            case R.drawable.common_filter_overlay_ov19_old:
+                label = "Old overlay filter OV19";
+                mixpanel.track("Old overlay filter selected OV19", null);
+                break;
+            case R.drawable.common_filter_overlay_ov22_rain:
+                label = "Rain overlay filter OV22";
+                mixpanel.track("Rain overlay filter selected OV22", null);
+                break;
+            case R.drawable.common_filter_overlay_ov23_dark:
+                label = "Dark overlay filter OV23";
+                mixpanel.track("Dark overlay filter selected OV23", null);
+                break;
+            case R.drawable.common_filter_overlay_ov24_bokeh:
+                label = "Bokeh overlay filter OV24";
+                mixpanel.track("Bokeh overlay filter selected OV24", null);
                 break;
             default:
                 label = "Other";
