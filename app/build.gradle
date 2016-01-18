@@ -78,7 +78,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':androidtranscoder')
-    compile project(':androidmuxer')
+    compile project(':muxer')
     compile project(':avrecorder')
     debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     debugCompile 'com.google.dexmaker:dexmaker:1.0'
