@@ -45,7 +45,7 @@ public class BetaDialogFragment extends DialogFragment {
         startActivity(i);
     }
 
-    @OnClick(R.id.affirmativeButton)
+    @OnClick({R.id.affirmativeButton, R.id.cancel})
     public void dismissBetaDialog() {
         this.dismiss();
     }

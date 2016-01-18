@@ -257,13 +257,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
                 .setLabel("Generic social network")
                 .build());
         GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
-        JSONObject socialNetworkProperties = new JSONObject();
-        try {
-            socialNetworkProperties.put("Social Network", "Generic");
-            mixpanel.track("video shared", socialNetworkProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        mixpanel.track("More social networks button clicked", null);
     }
 
     @OnTouch(R.id.video_preview)
@@ -351,7 +345,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         JSONObject socialNetworkProperties = new JSONObject();
         try {
             socialNetworkProperties.put("Social Network", socialNetworkApp.getName());
-            mixpanel.track("video shared", socialNetworkProperties);
+            mixpanel.track("More social networks button clicked", socialNetworkProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
