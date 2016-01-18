@@ -1,4 +1,4 @@
-package com.example.android.androidmuxer.utils;
+package com.videonasocialmedia.muxer.utils;
 
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.authoring.Movie;
