@@ -1,4 +1,4 @@
-package com.example.android.androidmuxer;
+package com.videonasocialmedia.muxer;
 
 import android.util.Log;
 
@@ -18,9 +18,7 @@ import java.util.List;
 public class Appender {
 
     public Movie appendVideos(List<String> videoPaths, boolean addOriginalAudio) throws IOException {
-
         List<Movie> movieList = getMovieList(videoPaths);
-
         List<Track> videoTracks = new LinkedList<>();
         List<Track> audioTracks = new LinkedList<>();
 
@@ -36,7 +34,6 @@ public class Appender {
                 }
             }
         }
-
         return createMovie(audioTracks, videoTracks);
     }
 
@@ -59,25 +56,20 @@ public class Appender {
         if (audioTracks.size() > 0) {
             result.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
         }
-
         if (videoTracks.size() > 0) {
             result.addTrack(new AppendTrack(videoTracks.toArray(new Track[videoTracks.size()])));
         }
-
         return result;
     }
 
     public Movie addAudio(Movie movie, ArrayList<String> audioPaths, double movieDuration) throws IOException {
-
         ArrayList<Movie> audioList = new ArrayList<>();
         Trimmer trimer = new AudioTrimmer();
+        List<Track> audioTracks = new LinkedList<>();
 
         for (String audio : audioPaths) {
             audioList.add(trimer.trim(audio, 0, movieDuration));
         }
-
-        List<Track> audioTracks = new LinkedList<>();
-
         for (Movie m : audioList) {
             for (Track t : m.getTracks()) {
                 if (t.getHandler().equals("soun")) {
@@ -85,11 +77,9 @@ public class Appender {
                 }
             }
         }
-
         if (audioTracks.size() > 0) {
             movie.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
         }
-
         return movie;
     }
 

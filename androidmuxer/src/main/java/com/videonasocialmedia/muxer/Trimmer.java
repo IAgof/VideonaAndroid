@@ -1,6 +1,6 @@
-package com.example.android.androidmuxer;
+package com.videonasocialmedia.muxer;
 
-import com.example.android.androidmuxer.utils.Utils;
+import com.videonasocialmedia.muxer.utils.Utils;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
@@ -27,7 +27,7 @@ public abstract class Trimmer {
 
         originalMovie = MovieCreator.build(filePath);
         List<Track> tracks = originalMovie.getTracks();
-        //MP4 parser usa segundos en vez de ms
+        //MP4 parser uses seconds instead of msec
         startTime = startTime / 1000;
         endTime = endTime / 1000;
         boolean timeCorrected = false;
@@ -49,7 +49,6 @@ public abstract class Trimmer {
             long samples[] = Utils.getStartAndStopSamples(track, startTime, endTime);
             result.addTrack(new CroppedTrack(track, samples[0], samples[1]));
         }
-
         return result;
     }
 }

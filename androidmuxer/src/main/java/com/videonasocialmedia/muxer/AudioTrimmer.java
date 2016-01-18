@@ -1,4 +1,4 @@
-package com.example.android.androidmuxer;
+package com.videonasocialmedia.muxer;
 
 import com.googlecode.mp4parser.authoring.Movie;
 
