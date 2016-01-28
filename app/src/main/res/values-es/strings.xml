@@ -113,18 +113,15 @@
     <string name="title_camera_section">Cámara</string>
     <string name="resolution">Resolución</string>
     <string name="low_resolution_name">Buena (720p)</string>
-    <string name="low_resolution_value">Buena</string>
+    <string name="low_value">Buena</string>
     <string name="good_resolution_name">Muy buena (1080p)</string>
-    <string name="good_resolution_value">Muy buena</string>
+    <string name="good_value">Muy buena</string>
     <string name="high_resolution_name">Excelente (4K)</string>
-    <string name="high_resolution_value">Excelente</string>
+    <string name="high_value">Excelente</string>
     <string name="quality">Calidad</string>
     <string name="low_quality_name">Buena (2 Mbps)</string>
-    <string name="low_quality_value">Buena</string>
     <string name="good_quality_name">Muy buena (5 Mbps)</string>
-    <string name="good_quality_value">Muy buena</string>
     <string name="high_quality_name">Excelente (10 Mbps)</string>
-    <string name="high_quality_value">Excelente</string>
     <string name="cancelSettingsCamera">Cancelar</string>
 
     <!-- More info Settings -->

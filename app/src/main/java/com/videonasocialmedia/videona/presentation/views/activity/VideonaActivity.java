@@ -36,7 +36,11 @@ import com.qordoba.sdk.common.QordobaContextWrapper;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.PermissionConstants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -77,6 +81,12 @@ public abstract class VideonaActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent(AnalyticsConstants.TIME_IN_ACTIVITY);
+    }
+
+    @Override
     protected void onDestroy() {
         mixpanel.flush();
         super.onDestroy();
@@ -91,6 +101,18 @@ public abstract class VideonaActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Qordoba.updateScreen(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JSONObject activityProperties = new JSONObject();
+        try {
+            activityProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
+            mixpanel.track(AnalyticsConstants.TIME_IN_ACTIVITY, activityProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     protected final void closeApp() {

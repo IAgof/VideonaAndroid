@@ -128,10 +128,13 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
     }
 
     @Override
-    public void setPreferenceToMixpanel(String propertie, String value) {
+    public void setUserPropertyToMixpanel(String property, String value) {
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
         //Special properties in Mixpanel use $ before property name
-        mixpanel.getPeople().set(propertie, value);
+        mixpanel.getPeople().set(property, value);
+        if(property == "account_email")
+            mixpanel.getPeople().setOnce("$email", value);
+
     }
 
     @Override

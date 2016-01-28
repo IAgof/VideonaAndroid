@@ -30,7 +30,7 @@ public class EmailPreferencePresenter extends EditTextPreferencePresenter {
     public void setPreference(String text) {
         editor.putString(ConfigPreferences.EMAIL, text);
         editor.commit();
-        editTextPreferenceView.setPreferenceToMixpanel("account_email", text);
+        editTextPreferenceView.setUserPropertyToMixpanel("account_email", text);
         if(isValidEmail(text))
             editTextPreferenceView.goBack();
         else

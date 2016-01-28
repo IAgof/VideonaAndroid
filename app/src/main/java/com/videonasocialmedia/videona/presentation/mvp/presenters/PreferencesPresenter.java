@@ -90,21 +90,21 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
 
         if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_720P_SUPPORTED, false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.low_resolution_name));
-            resolutionValues.add(context.getResources().getString(R.string.low_resolution_value));
-            defaultResolution = context.getResources().getString(R.string.low_resolution_value);
+            resolutionValues.add(context.getResources().getString(R.string.low_value));
+            defaultResolution = context.getResources().getString(R.string.low_value);
         }
         if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_1080P_SUPPORTED, false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.good_resolution_name));
-            resolutionValues.add(context.getResources().getString(R.string.good_resolution_value));
+            resolutionValues.add(context.getResources().getString(R.string.good_value));
             if (defaultResolution == null) {
-                defaultResolution = context.getResources().getString(R.string.good_resolution_value);
+                defaultResolution = context.getResources().getString(R.string.good_value);
             }
         }
         if (sharedPreferences.getBoolean(ConfigPreferences.BACK_CAMERA_2160P_SUPPORTED, false) && isPaidApp) {
             resolutionNames.add(context.getResources().getString(R.string.high_resolution_name));
-            resolutionValues.add(context.getResources().getString(R.string.high_resolution_value));
+            resolutionValues.add(context.getResources().getString(R.string.high_value));
             if (defaultResolution == null) {
-                defaultResolution = context.getResources().getString(R.string.high_resolution_value);
+                defaultResolution = context.getResources().getString(R.string.high_value);
             }
         }
         if (resolutionNames.size() > 0 && defaultResolution != null) {
@@ -116,7 +116,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
             }
         } else {
             resolutionNames.add(context.getResources().getString(R.string.low_resolution_name));
-            resolutionValues.add(context.getResources().getString(R.string.low_resolution_value));
+            resolutionValues.add(context.getResources().getString(R.string.low_value));
             preferencesView.setAvailablePreferences(resolutionPref, resolutionNames, resolutionValues);
         }
     }
@@ -134,21 +134,21 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
 
         if (isPaidApp) {
             qualityNames.add(context.getResources().getString(R.string.low_quality_name));
-            qualityValues.add(context.getResources().getString(R.string.low_quality_value));
+            qualityValues.add(context.getResources().getString(R.string.low_value));
             if (defaultQuality == null) {
-                defaultQuality = context.getResources().getString(R.string.low_quality_value);
+                defaultQuality = context.getResources().getString(R.string.low_value);
             }
         }
         if (isPaidApp) {
             qualityNames.add(context.getResources().getString(R.string.good_quality_name));
-            qualityValues.add(context.getResources().getString(R.string.good_quality_value));
-            defaultQuality = context.getResources().getString(R.string.good_quality_value);
+            qualityValues.add(context.getResources().getString(R.string.good_value));
+            defaultQuality = context.getResources().getString(R.string.good_value);
         }
         if (isPaidApp) {
             qualityNames.add(context.getResources().getString(R.string.high_quality_name));
-            qualityValues.add(context.getResources().getString(R.string.high_quality_value));
+            qualityValues.add(context.getResources().getString(R.string.high_value));
             if (defaultQuality == null) {
-                defaultQuality = context.getResources().getString(R.string.high_quality_value);
+                defaultQuality = context.getResources().getString(R.string.high_value);
             }
         }
         if (qualityNames.size() > 0 && defaultQuality != null) {
@@ -160,7 +160,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
             }
         } else {
             qualityNames.add(context.getResources().getString(R.string.good_quality_name));
-            qualityValues.add(context.getResources().getString(R.string.good_quality_value));
+            qualityValues.add(context.getResources().getString(R.string.good_value));
             preferencesView.setAvailablePreferences(qualityPref, qualityNames, qualityValues);
         }
     }

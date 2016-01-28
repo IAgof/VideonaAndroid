@@ -29,7 +29,7 @@
             android:entries="@array/camera_resolution_names"
             android:entryValues="@array/camera_resolution_values"
             android:key="list_preferences_resolution"
-            android:summary="@string/low_resolution_value"
+            android:summary="@string/low_value"
             android:title="@string/resolution" />
 
         <com.videonasocialmedia.videona.presentation.views.customviews.ChooseCameraQualityListPreferences

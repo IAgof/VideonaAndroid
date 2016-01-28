@@ -38,8 +38,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
@@ -50,6 +48,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.fragment.BetaDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -265,14 +264,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!recording) {
                 recordPresenter.requestRecord();
-                sendButtonTracked("Start recording");
-                mixpanel.timeEvent("Time recording one video");
-                mixpanel.track("Start recording");
             } else {
                 recordPresenter.stopRecord();
-                sendButtonTracked("Stop recording");
-                mixpanel.track("Time recording one video");
-                mixpanel.track("Stop recording");
             }
         }
         return true;
@@ -640,13 +633,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     private void sendMetadataTracking() {
+        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        JSONObject videoExportedProperties = new JSONObject();
         try {
             int projectDuration = recordPresenter.getProjectDuration();
             int numVideosOnProject = recordPresenter.getNumVideosOnProject();
-            JSONObject props = new JSONObject();
-            props.put("Number of videos", numVideosOnProject);
-            props.put("Duration of the exported video in msec", projectDuration);
-            mixpanel.track("Exported video", props);
+            videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH, projectDuration);
+            videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
+                    recordPresenter.getResolution());
+            videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numVideosOnProject);
+            mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
         } catch (JSONException e) {
             Log.e("TRACK_FAILED", String.valueOf(e));
         }
@@ -672,12 +668,24 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @OnClick(R.id.button_settings)
     public void navigateToSettings() {
         if (!recording) {
-            mixpanel.track("Navigate settings Button clicked in Record Activity", null);
+            sendUserInteractedTracking(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
         }
 
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
 
+    private void sendUserInteractedTracking(String interaction, String result) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -714,8 +722,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void onEffectSelected(Effect effect) {
+        sendFilterSelectedTracking(effect.getName(), effect.getIdentifier());
         recordPresenter.applyEffect(effect);
-        sendButtonTracked(effect.getIconId());
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
@@ -748,15 +756,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             R.id.button_camera_effect_shader, R.id.button_change_camera})
     public void clickListener(View view) {
         sendButtonTracked(view.getId());
-    }
-
-    private void sendButtonTracked(String label) {
-        tracker.send(new HitBuilders.EventBuilder()
-                .setCategory("RecordActivity")
-                .setAction("button clicked")
-                .setLabel(label)
-                .build());
-        GoogleAnalytics.getInstance(this.getApplication().getBaseContext()).dispatchLocalHits();
     }
 
     /**
@@ -922,7 +921,19 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             default:
                 label = "Other";
         }
-        sendButtonTracked(label);
+    }
+
+    private void sendFilterSelectedTracking(String name, String code) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_COLOR);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private class OrientationHelper extends OrientationEventListener {

@@ -12,11 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
+import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     protected Context context;
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
-
+    protected MixpanelAPI mixpanel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         initPreferences();
         preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
                 sharedPreferences);
-
+        mixpanel = MixpanelAPI.getInstance(this.getActivity(), BuildConfig.MIXPANEL_TOKEN);
     }
 
     private void initPreferences() {
@@ -67,7 +69,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new ExitAppFragment().show(getFragmentManager(), "exitAppDialogFragment");
-            return true;
+                return true;
             }
         });
     }
@@ -142,6 +144,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void setPreference(ListPreference preference, String name) {
         preference.setValue(name);
         preference.setSummary(name);
+        sendUserPreferenceToMixpanel(preference.getKey(), name);
     }
 
     @Override
@@ -154,7 +157,17 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         Preference connectionPref = findPreference(key);
+        sendUserPreferenceToMixpanel(key, sharedPreferences.getString(key, ""));
         connectionPref.setSummary(sharedPreferences.getString(key, ""));
+    }
+
+    private void sendUserPreferenceToMixpanel(String key, String value) {
+        String property = null;
+        if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION))
+            property = AnalyticsConstants.RESOLUTION;
+        else if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY))
+            property = AnalyticsConstants.QUALITY;
+        mixpanel.getPeople().set(property,value.toLowerCase());
     }
 
 }

@@ -41,18 +41,6 @@ public class SettingsBaseActivity extends VideonaActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Settings Activity");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Settings Activity");
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
