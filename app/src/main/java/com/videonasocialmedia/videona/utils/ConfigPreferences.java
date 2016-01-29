@@ -32,7 +32,10 @@ public class ConfigPreferences {
     public final static String BACK_CAMERA_2160P_SUPPORTED = "back_camera_2160p_supported"; // 4K
     public final static String KEY_LIST_PREFERENCES_QUALITY = "list_preferences_quality";
     public final static String KEY_LIST_PREFERENCES_RESOLUTION = "list_preferences_resolution";
+    public final static String VIDEO_DURATION = "video_duration";
     public final static String NUMBER_OF_CLIPS = "number_of_clips";
+    public final static String RESOLUTION = "resolution";
+    public final static String QUALITY = "quality";
     public final static String TOTAL_VIDEOS_RECORDED = "total_videos_recorded";
     public final static String TOTAL_VIDEOS_SHARED = "total_videos_shared";
 }

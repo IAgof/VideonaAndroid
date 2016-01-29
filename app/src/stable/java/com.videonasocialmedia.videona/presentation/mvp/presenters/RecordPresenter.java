@@ -93,11 +93,11 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
-        Log.d(LOG_TAG, "constructor presenter");
         this.recordView = recordView;
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
+
         preferencesEditor = sharedPreferences.edit();
         exportProjectUseCase = new ExportProjectUseCase(this);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
@@ -105,7 +105,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         recordedVideosNumber = 0;
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
-
         initRecorder(context, cameraPreview, sharedPreferences);
         hideInitialsButtons();
     }
@@ -301,7 +300,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.hideVideosRecordedNumber();
         recordView.disableShareButton();
         firstTimeRecording = false;
-
     }
 
     /**
@@ -380,6 +378,20 @@ public class RecordPresenter implements OnExportFinishedListener {
         mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, 1);
         mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+        sendSuperProperties();
+    }
+
+    private void sendSuperProperties() {
+        JSONObject updateSuperProperties = new JSONObject();
+        try {
+            int numPreviousVideosRecorded =
+                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_RECORDED_VIDEOS);
+            updateSuperProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
+                    ++numPreviousVideosRecorded);
+            mixpanel.registerSuperProperties(updateSuperProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onEvent(AddMediaItemToTrackSuccessEvent e) {

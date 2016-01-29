@@ -58,6 +58,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllPro
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -183,8 +184,6 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     @Override
     protected void onStart() {
         super.onStart();
-        mixpanel.timeEvent("Time in Edit Activity");
-
         DownloadMusicTask downloadMusicTask = new DownloadMusicTask();
         downloadMusicTask.execute();
     }
@@ -199,7 +198,6 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     protected void onPause() {
         super.onPause();
         editPresenter.onPause();
-        mixpanel.track("Time in Edit Activity");
     }
 
     @Override
@@ -233,13 +231,16 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     }
 
     private void sendMetadataTracking() {
+        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        JSONObject videoExportedProperties = new JSONObject();
         try {
             int projectDuration = editPresenter.getProjectDuration();
             int numVideosOnProject = editPresenter.getNumVideosOnProject();
-            JSONObject props = new JSONObject();
-            props.put("Number of videos", numVideosOnProject);
-            props.put("Duration of the exported video in msec", projectDuration);
-            mixpanel.track("Exported video", props);
+            videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH, projectDuration);
+            videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
+                    editPresenter.getResolution());
+            videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numVideosOnProject);
+            mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
         } catch (JSONException e) {
             Log.e("TRACK_FAILED", String.valueOf(e));
         }

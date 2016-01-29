@@ -195,7 +195,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         super.onStart();
         checkAndRequestPermissions();
         recordPresenter.onStart();
-        mixpanel.timeEvent("Time in Record Activity");
     }
 
 
@@ -214,7 +213,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         EventBus.getDefault().unregister(this);
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
-        mixpanel.track("Time in Record Activity");
     }
 
     @Override
@@ -274,7 +272,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @OnClick(R.id.button_navigate_edit)
     public void OnButtonNavigateEditClicked() {
         new BetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
-        mixpanel.track("Navigate edit Button clicked in Record Activity", null);
     }
 
     public void onEvent(JoinBetaEvent event) {
@@ -336,6 +333,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             hideShaderFilters();
             hideRemoveFilters();
         } else {
+            sendUserInteractedTracking(AnalyticsConstants.SET_FILTER_GROUP,
+                    AnalyticsConstants.FILTER_GROUP_SHADER);
             showCameraEffectShader(null);
             if(removeFilterActivated){
                 showRemoveFilters();
@@ -424,6 +423,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             hideOverlayFilters();
             hideRemoveFilters();
         } else {
+            sendUserInteractedTracking(AnalyticsConstants.SET_FILTER_GROUP,
+                    AnalyticsConstants.FILTER_GROUP_OVERLAY);
             showCameraEffectOverlay(null);
             if(removeFilterActivated){
                 showRemoveFilters();
@@ -440,8 +441,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @OnClick(R.id.button_remove_filters)
     public void onRemoveFiltersButtonClicked(){
-
-
+        sendUserInteractedTracking(AnalyticsConstants.CLEAR_FILTER, null);
         Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
         Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
 
@@ -493,11 +493,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @OnClick(R.id.button_toggle_flash)
     public void toggleFlash() {
         recordPresenter.toggleFlash();
-        mixpanel.track("Toggle flash Button clicked", null);
     }
 
     @Override
     public void showFlashOn(boolean on) {
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_FLASH, String.valueOf(on));
         flashButton.setActivated(on);
     }
 
@@ -518,8 +518,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
-        mixpanel.track("Front camera selected", null);
-
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_FRONT);
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
@@ -531,8 +530,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
-        mixpanel.track("Back camera selected", null);
-
+        sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_BACK);
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
@@ -596,10 +594,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void changeCamera() {
         recordPresenter.setFlashOff();
         recordPresenter.changeCamera();
-        if (recording)
-            mixpanel.track("Change camera Button clicked while recording", null);
-        else
-            mixpanel.track("Change camera Button clicked on preview", null);
     }
 
     @OnClick(R.id.button_share)
@@ -722,11 +716,26 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void onEffectSelected(Effect effect) {
-        sendFilterSelectedTracking(effect.getName(), effect.getIdentifier());
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase());
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
+    }
+
+    private void sendFilterSelectedTracking(String type, String name, String code) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -749,190 +758,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             int index = effects.indexOf(effect);
             int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
             shaderEffectsRecycler.scrollToPosition(index + scroll);
-        }
-    }
-
-    @OnClick({R.id.button_record, R.id.button_toggle_flash, R.id.button_camera_effect_overlay,
-            R.id.button_camera_effect_shader, R.id.button_change_camera})
-    public void clickListener(View view) {
-        sendButtonTracked(view.getId());
-    }
-
-    /**
-     * Sends button clicks to Google Analytics
-     *
-     * @param id identifier of the clicked view
-     */
-    private void sendButtonTracked(int id) {
-        String label;
-        switch (id) {
-            case R.id.button_record:
-                label = "Capture";
-                break;
-            case R.id.button_change_camera:
-                label = "Change camera";
-                break;
-            case R.id.button_toggle_flash:
-                label = "Flash camera";
-                break;
-            case R.id.button_camera_effect_shader:
-                label = "Shader filters";
-                mixpanel.track("Shader filters button selected", null);
-                break;
-            case R.id.button_camera_effect_overlay:
-                label = "Overlay filters";
-                mixpanel.track("Overlay filters button selected", null);
-                break;
-            case R.drawable.common_filter_color_ad1_aqua:
-                label = "Aqua color filter AD1";
-                mixpanel.track("Aqua color filter selected AD1", null);
-                break;
-            case R.drawable.common_filter_color_ad2_posterizebw:
-                label = "Posterize bw filter AD2";
-                mixpanel.track("Posterize bw filter selected AD2", null);
-                break;
-            case R.drawable.common_filter_color_ad3_emboss:
-                label = "Emboss color filter AD3";
-                mixpanel.track("Emboss color filter selected AD3", null);
-                break;
-            case R.drawable.common_filter_color_ad4_mono:
-                label = "Mono color filter AD4";
-                mixpanel.track("Mono color filter selected AD4", null);
-                break;
-            case R.drawable.common_filter_color_ad5_negative:
-                label = "Negative color filter AD5";
-                mixpanel.track("Negative color filter selected AD5", null);
-                break;
-            case R.drawable.common_filter_color_ad6_green:
-                label = "Green color filter AD6";
-                mixpanel.track("Green color filter selected AD6", null);
-                break;
-            case R.drawable.common_filter_color_ad7_posterize:
-                label = "Posterize color filter AD7";
-                mixpanel.track("Posterize color filter selected AD7", null);
-                break;
-            case R.drawable.common_filter_color_ad8_sepia:
-                label = "Sepia color filter AD8";
-                mixpanel.track("Sepia color filter selected AD8", null);
-                break;
-            case R.drawable.common_filter_distortion_fx1_fisheye:
-                label = "Fisheye fx filter FX1";
-                mixpanel.track("Fisheye fx filter selected FX1", null);
-                break;
-            case R.drawable.common_filter_distortion_fx2_stretch:
-                label = "Stretch fx filter FX2";
-                mixpanel.track("Stretch fx filter selected FX2", null);
-                break;
-            case R.drawable.common_filter_distortion_fx3_dent:
-                label = "Dent fx filter FX3";
-                mixpanel.track("Dent fx filter selected FX3", null);
-                break;
-            case R.drawable.common_filter_distortion_fx4_mirror:
-                label = "Mirror fx filter FX4";
-                mixpanel.track("Mirror fx filter selected FX4", null);
-                break;
-            case R.drawable.common_filter_distortion_fx5_squeeze:
-                label = "Squeeze fx filter FX5";
-                mixpanel.track("Squeeze fx filter selected FX5", null);
-                break;
-            case R.drawable.common_filter_distortion_fx6_tunnel:
-                label = "Tunnel fx filter FX6";
-                mixpanel.track("Tunnel fx filter selected FX6", null);
-                break;
-            case R.drawable.common_filter_distortion_fx7_twirl:
-                label = "Twirl fx filter FX7";
-                mixpanel.track("Twirl fx filter selected FX7", null);
-                break;
-            case R.drawable.common_filter_distortion_fx8_bulge:
-                label = "Bulge filter FX8";
-                mixpanel.track("Bulge filter selected FX8", null);
-                break;
-            case R.drawable.common_filter_overlay_ov1_burn:
-                label = "Burn overlay filter OV1";
-                mixpanel.track("Burn overlay filter selected OV1", null);
-                break;
-            case R.drawable.common_filter_overlay_ov3_sunset:
-                label = "Sunset overlay filter OV3";
-                mixpanel.track("Sunset overlay filter selected OV3", null);
-                break;
-            case R.drawable.common_filter_overlay_ov4_retrotv:
-                label = "Retrotv overlay filter OV4";
-                mixpanel.track("Retrotv overlay filter selected OV4", null);
-                break;case R.drawable.common_filter_overlay_ov5_autumn:
-                label = "Autumn overlay filter OV5";
-                mixpanel.track("Autumn overlay filter selected OV5", null);
-                break;
-            case R.drawable.common_filter_overlay_ov6_mist:
-                label = "Mist overlay filter OV6";
-                mixpanel.track("Mist overlay filter selected OV6", null);
-                break;
-            case R.drawable.common_filter_overlay_ov7_pride:
-                label = "Pride overlay filter OV7";
-                mixpanel.track("Pride overlay filter selected OV7", null);
-                break;
-            case R.drawable.common_filter_overlay_ov9_summer:
-                label = "Summer overlay filter OV9";
-                mixpanel.track("Summer overlay filter selected OV9", null);
-                break;
-            case R.drawable.common_filter_overlay_ov10_cctv:
-                label = "CCTV overlay filter OV10";
-                mixpanel.track("CCTV overlay filter selected OV10", null);
-                break;
-            case R.drawable.common_filter_overlay_ov13_passion:
-                label = "Passion overlay filter OV13";
-                mixpanel.track("Passion overlay filter selected OV13", null);
-                break;
-            case R.drawable.common_filter_overlay_ov14_stain:
-                label = "Stain overlay filter OV14";
-                mixpanel.track("Stain overlay filter selected OV14", null);
-                break;
-            case R.drawable.common_filter_overlay_ov15_pastel:
-                label = "Pastel overlay filter OV15";
-                mixpanel.track("Pastel overlay filter selected OV15", null);
-                break;
-            case R.drawable.common_filter_overlay_ov16_game:
-                label = "Game overlay filter OV16";
-                mixpanel.track("Game overlay filter selected OV16", null);
-                break;
-            case R.drawable.common_filter_overlay_ov17_wasted:
-                label = "Wasted overlay filter OV17";
-                mixpanel.track("Wasted overlay filter selected OV17", null);
-                break;
-            case R.drawable.common_filter_overlay_ov18_polaroid:
-                label = "Polaroid overlay filter OV18";
-                mixpanel.track("Polaroid overlay filter selected OV18", null);
-                break;
-            case R.drawable.common_filter_overlay_ov19_old:
-                label = "Old overlay filter OV19";
-                mixpanel.track("Old overlay filter selected OV19", null);
-                break;
-            case R.drawable.common_filter_overlay_ov22_rain:
-                label = "Rain overlay filter OV22";
-                mixpanel.track("Rain overlay filter selected OV22", null);
-                break;
-            case R.drawable.common_filter_overlay_ov23_dark:
-                label = "Dark overlay filter OV23";
-                mixpanel.track("Dark overlay filter selected OV23", null);
-                break;
-            case R.drawable.common_filter_overlay_ov24_bokeh:
-                label = "Bokeh overlay filter OV24";
-                mixpanel.track("Bokeh overlay filter selected OV24", null);
-                break;
-            default:
-                label = "Other";
-        }
-    }
-
-    private void sendFilterSelectedTracking(String name, String code) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_COLOR);
-            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
-            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

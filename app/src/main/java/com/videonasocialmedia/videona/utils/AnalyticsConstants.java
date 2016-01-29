@@ -26,6 +26,8 @@ public class AnalyticsConstants {
     public final static String DATE = "date";
     public final static String TYPE_ORGANIC = "organic";
     public final static String TYPE_COLOR = "color";
+    public final static String TYPE_DISTORTION = "distortion";
+    public final static String TYPE_OVERLAY = "overlay";
     public final static String CREATED = "created";
     public final static String LOCALE = "locale";
     public final static String LANG = "lang";
@@ -34,6 +36,7 @@ public class AnalyticsConstants {
     public final static String RECORDING = "recording";
     public final static String INTERACTION = "interaction";
     public final static String INTERACTION_OPEN_SETTINGS = "settings opened";
+    public final static String INTERACTION_OPEN_DRAWER = "drawer opened";
     public final static String RESULT = "result";
     public final static String VIDEO_LENGTH = "videoLength";
     public final static String RESOLUTION = "resolution";
@@ -57,6 +60,8 @@ public class AnalyticsConstants {
     public static final String START = "start";
     public static final String STOP = "stop";
     public static final String CHANGE_CAMERA = "change camera";
+    public static final String CAMERA_BACK = "back";
+    public static final String CAMERA_FRONT = "front";
     public static final String TOTAL_SHARED_VIDEOS = "totalVideosShared";
     public static final String SOCIAL_NETWORK = "socialNetwork";
     public static final String LAST_VIDEO_SHARED = "lastVideoShared";
@@ -64,4 +69,10 @@ public class AnalyticsConstants {
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
     public static final String FIRST_TIME = "firstTime";
+    public static final String APP_USE_COUNT = "appUseCount";
+    public static final String CLEAR_FILTER = "clearFilter";
+    public static final String SET_FILTER_GROUP = "setFilterGroup";
+    public static final String FILTER_GROUP_OVERLAY = "overlay";
+    public static final String FILTER_GROUP_SHADER = "shader";
+
 }

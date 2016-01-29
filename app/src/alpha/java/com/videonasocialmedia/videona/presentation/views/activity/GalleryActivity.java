@@ -96,14 +96,12 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     @Override
     protected void onStart() {
         super.onStart();
-        mixpanel.timeEvent("Time in Gallery Activity");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         countVideosSelected = getSelectedVideos().size();
-        mixpanel.track("Time in Gallery Activity");
     }
 
 

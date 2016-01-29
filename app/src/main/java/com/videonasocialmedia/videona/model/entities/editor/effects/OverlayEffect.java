@@ -13,20 +13,23 @@ public class OverlayEffect extends Effect {
     private final String resourcePath;
     private final int resourceId;
 
-    public OverlayEffect(String identifier, String name, String iconPath, String resourcePath) {
-        super(identifier, name, iconPath);
+    public OverlayEffect(String identifier, String name, String iconPath, String resourcePath,
+                         String type) {
+        super(identifier, name, iconPath, type);
         this.resourcePath = resourcePath;
         this.resourceId = -1;
     }
 
-    public OverlayEffect(String identifier, String name, String iconPath, int resourceId) {
-        super(identifier, name, iconPath);
+    public OverlayEffect(String identifier, String name, String iconPath, int resourceId,
+                         String type) {
+        super(identifier, name, iconPath, type);
         this.resourcePath = null;
         this.resourceId = resourceId;
     }
 
-    public OverlayEffect(String identifier, String name, int iconId, int resourceId) {
-        super(identifier, name, iconId);
+    public OverlayEffect(String identifier, String name, int iconId, int resourceId,
+                         String type) {
+        super(identifier, name, iconId, type);
         this.resourcePath = null;
         this.resourceId = resourceId;
     }

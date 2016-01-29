@@ -210,6 +210,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         JSONObject firstTimeSuperProperties = new JSONObject();
         try {
             firstTimeSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
+            firstTimeSuperProperties.put(AnalyticsConstants.APP_USE_COUNT, 1);
             mixpanel.registerSuperProperties(firstTimeSuperProperties);
         } catch (JSONException e) {
             e.printStackTrace();
