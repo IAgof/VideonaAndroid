@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Videona</string>
-
     <!-- Intro app -->
     <string name="permissionsDeniedMessage">Videona needs some permissions to use the camera or
         record audio.\nWithout them Videona can\'t continue and will be closed.</string>

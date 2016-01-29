@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Videona-stable</string>
     <string name="betaPreferenceText">Participate in Beta Videona</string>
     <string name="joinBetaDialogTitle">Participate in Beta Videona</string>
     <string name="joinBetaDialogMessage">Become a Beta Tester to be the first to access to the
