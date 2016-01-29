@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Videona-alpha</string>
     <string name="betaPreferenceText">Leaving the Beta</string>
     <string name="leaveBetaDialogAffirmative">I stay</string>
     <string name="leaveBetaDialogNegative">I quit</string>

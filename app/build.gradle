@@ -15,30 +15,14 @@ android {
     }
     productFlavors {
         alpha {
-            buildTypes {
-                debug {
-                    resValue "string", "app_name", "Videona-alpha"
-                    applicationId "com.videonasocialmedia.videona.alpha"
-                }
-                release {
-                    resValue "string", "app_name", "Videona"
-                    applicationId "com.videonasocialmedia.videona"
-                }
-            }
+            applicationId "com.videonasocialmedia.videona.alpha"
             versionName "1.0-betaRC1"
+//            resValue "string", "app-name", "Videona-alpha"
         }
         stable {
-            buildTypes {
-                debug {
-                    resValue "string", "app_name", "Videona-stable"
-                    applicationId "com.videonasocialmedia.videona.stable"
-                }
-                release {
-                    resValue "string", "app_name", "videona"
-                    applicationId "com.videonasocialmedia.videona"
-                }
-            }
+            applicationId "com.videonasocialmedia.videona.stable"
             versionName "1.0RC1"
+//            resValue "string", "app-name", "Videona-stable"
         }
     }
     buildTypes {
