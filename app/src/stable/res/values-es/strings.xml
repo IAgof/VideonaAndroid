@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="betaPreferenceText">Participa en la Beta de Videona</string>
+    <string name="joinBetaDialogTitle">Participa en la Beta de Videona</string>
+    <string name="joinBetaDialogMessage">Conviértete en Betatester para ser el primero en acceder a
+        nuestras actualizaciones. Nos ayudarás a crear el editor de vídeo que necesitas.</string>
+</resources>

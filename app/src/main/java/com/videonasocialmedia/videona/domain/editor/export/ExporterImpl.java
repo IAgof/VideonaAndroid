@@ -3,10 +3,10 @@ package com.videonasocialmedia.videona.domain.editor.export;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.android.androidmuxer.Appender;
-import com.example.android.androidmuxer.AudioTrimmer;
-import com.example.android.androidmuxer.Trimmer;
-import com.example.android.androidmuxer.VideoTrimmer;
+import com.videonasocialmedia.muxer.Appender;
+import com.videonasocialmedia.muxer.AudioTrimmer;
+import com.videonasocialmedia.muxer.Trimmer;
+import com.videonasocialmedia.muxer.VideoTrimmer;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.model.entities.editor.utils.Size;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -91,7 +91,7 @@ public class ExporterImpl implements Exporter {
                 if(editedFileDuration < originalFileDuration) {
                     trimmer = new VideoTrimmer();
                     movie = trimmer.trim(medias.get(index).getMediaPath(), startTime, endTime);
-                    com.example.android.androidmuxer.utils.Utils.createFile(movie, videoTrimmedTempPath);
+                    com.videonasocialmedia.muxer.utils.Utils.createFile(movie, videoTrimmedTempPath);
                     videoTrimmedPaths.add(videoTrimmedTempPath);
                 } else {
                     videoTrimmedPaths.add(medias.get(index).getMediaPath());
@@ -155,7 +155,7 @@ public class ExporterImpl implements Exporter {
     }
 
     private Transcoder createTranscoder() {
-        Size.Resolution resolution = project.getProfile().getResolution();
+        VideoResolution.Resolution resolution = project.getProfile().getResolution();
         final File tempDir = new File (tempTranscodeDirectory);
         if (!tempDir.exists())
             tempDir.mkdirs();
@@ -241,7 +241,7 @@ public class ExporterImpl implements Exporter {
     private void saveFinalVideo(Movie result) {
         try {
             long start=System.currentTimeMillis();
-            com.example.android.androidmuxer.utils.Utils.createFile(result, pathVideoEdited);
+            com.videonasocialmedia.muxer.utils.Utils.createFile(result, pathVideoEdited);
             long spent=System.currentTimeMillis()-start;
             Log.d("WRITING VIDEO FILE", "time spent in millis: " + spent);
             onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));

@@ -10,10 +10,13 @@
 
 package com.videonasocialmedia.videona.utils;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -31,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 /**
  * Utils.
@@ -152,6 +156,17 @@ public class Utils {
         }
     }
 
+    public static void removeVideo(String path) {
+        File file = new File(path);
+        if (file != null) {
+            if (file.isDirectory()) {
+                cleanDirectory(file);
+            } else {
+                file.delete();
+            }
+        }
+    }
+
     // Glide circle imageView
     public static Bitmap getCircularBitmapImage(Bitmap source) {
         int size = Math.min(source.getWidth(), source.getHeight());
@@ -202,5 +217,84 @@ public class Utils {
         canvas.drawBitmap(bmp, borderSize, borderSize, null);
         return bmpWithBorder;
     }
+
+
+    public static String getDeviceInfo(){
+
+        StringBuilder deviceInfo = new StringBuilder();
+
+        deviceInfo.append(" ---------------------------------------------");
+        deviceInfo.append(" Brand: " + android.os.Build.BRAND);
+        deviceInfo.append(" Device: " + android.os.Build.DEVICE);
+        deviceInfo.append(" Model: " + android.os.Build.MODEL);
+        deviceInfo.append(" Hardware: " + android.os.Build.HARDWARE);
+        deviceInfo.append(" Language: " + Locale.getDefault().getLanguage());
+
+
+        return  deviceInfo.toString();
+    }
+
+    //   PackageInfo infor = getApplication().getPackageManager().getPackageInfo("com.videonasocialmedia.videona", PackageManager.GET_ACTIVITIES);
+    public static String getAppInfo(PackageInfo info){
+
+        StringBuilder appInfo = new StringBuilder();
+        appInfo.append(" ---------------------------------------------" );
+        appInfo.append(" Version name: " + info.versionName);
+        appInfo.append(" Version code: " + String.valueOf(info.versionCode));
+        appInfo.append(" Install location: " + String.valueOf(info.installLocation));
+        appInfo.append(" PackageName: " + info.packageName);
+
+
+        return appInfo.toString();
+    }
+
+    // Utils to setTheme to app, always call before every Activity setContentView.
+    // Be carefull with delay
+    /*
+    // MUST BE SET BEFORE setContentView
+		Utils.onActivityCreateSetTheme(this);
+     */
+
+    //sTheme enum from SharedPreference with value saved
+    private static int sTheme;
+
+    public final static int THEME_VIDEONA = 0;
+    public final static int THEME_VIDEONA_2 = 1;
+
+
+
+    public static void changeToTheme(Activity activity, int theme) {
+
+        sTheme = theme;
+        // Save theme in Preferences, data persistent
+
+        activity.finish();
+        activity.startActivity(new Intent(activity, activity.getClass()));
+        activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+
+    }
+
+
+    public static void onActivityCreateSetTheme(Activity activity) {
+
+        switch (sTheme) {
+
+            default:
+
+            case THEME_VIDEONA:
+
+                // Note, if theme == theme default do nothing, es quicker.
+                //activity.setTheme(R.style.VideonaTheme);
+                break;
+
+            case THEME_VIDEONA_2:
+                // If theme different from defatul, setTheme
+                //activity.setTheme(R.style.VideonaTheme);
+                break;
+        }
+
+    }
+
+
 
 }

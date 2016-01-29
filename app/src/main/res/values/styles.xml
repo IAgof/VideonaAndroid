@@ -1,27 +1,80 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
-        <!-- Customize your theme here. -->
-    </style>
-
-    <style name="Transparent">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
-        <item name="android:windowBackground">@color/grey_transparent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:colorForeground">#fff</item>
-    </style>
 
     <style name="TwoWayView">
         <item name="android:orientation">horizontal</item>
     </style>
 
-    <style name="Title">
-        <item name="android:textSize">20dp</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:layout_gravity">center_vertical</item>
+
+    <!-- AppTheme Videona -->
+    <style name="VideonaTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="colorControlActivated">@color/colorControlActivated</item>
+
+        <item name="android:scrollbarThumbHorizontal">@color/colorTransparent</item>
+        <item name="android:scrollbarThumbVertical">@color/colorTransparent</item>
+
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowFullscreen">false</item>
+
+        <item name="android:alertDialogTheme">@style/VideonaAlertDialog</item>
+        <item name="toolbarStyle">@style/VideonaToolbar</item>
+
+        <item name="android:preferenceCategoryStyle">@style/VideonaCategoryPreference</item>
+
+
+
+    </style>
+
+
+    <style name="VideonaToolbar" parent="Theme.AppCompat">
+        <!--<item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item> -->
+        <item name="android:maxHeight">@dimen/abc_text_size_title_material_toolbar</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@color/textColorTitleToolbar</item>
+        <item name ="android:textAllCaps">false</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="windowActionBar">false</item>
+
+    </style>
+
+
+    <style name="VideonaAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="textColorAlertDialogListItem">@color/textColorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name ="textAllCaps">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="VideonaAlertDialogDark" parent="Theme.AppCompat.Dialog.Alert">
+
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
+
+    <style name="VideonaCategoryPreference" parent="Theme.AppCompat.Light">
+        <item name ="android:textAllCaps">true</item>
+        <item name="android:layout">@layout/settings_category_preference</item>
+        <item name="android:shouldDisableView">false</item>
+        <item name="android:selectable">false</item>
+    </style>
+
+    <style name="VideonaIntroTutorial" parent="Theme.AppCompat.Light">
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+
     </style>
 
 </resources>

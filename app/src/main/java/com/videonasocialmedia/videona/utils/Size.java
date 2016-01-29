@@ -1,21 +1,13 @@
 package com.videonasocialmedia.videona.utils;
 
 /**
- * Created by jca on 1/6/15.
+ * Created by jca on 19/11/15.
  */
 public class Size {
-    private int width, height;
+    private final int height, width;
 
-    public Size(int width, int height) {
-        this.width = width;
+    public Size(int height, int width) {
         this.height = height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -23,7 +15,7 @@ public class Size {
         return height;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public int getWidth() {
+        return width;
     }
 }

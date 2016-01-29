@@ -167,7 +167,7 @@ public class Project {
 
     public int getDuration() {
         duration = 0;
-        for(Media video: mediaTrack.getItems()){
+        for (Media video : mediaTrack.getItems()) {
             duration = duration + video.getDuration();
         }
         return duration;

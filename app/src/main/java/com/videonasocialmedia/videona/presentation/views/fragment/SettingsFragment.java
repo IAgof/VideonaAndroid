@@ -1,23 +1,19 @@
-/*
- * Copyright (c) 2015. Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- *
- * Authors:
- * Veronica Lago Fominaya
- */
-
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.qordoba.sdk.Qordoba;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
@@ -26,33 +22,82 @@ import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import java.util.ArrayList;
 
 /**
- * This class is used to manage the setting menu.
+ * Created by Veronica Lago Fominaya on 26/11/2015.
  */
-public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener,
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
         PreferencesView {
 
-    private ListPreference resolutionPref;
-    private ListPreference qualityPref;
-    private PreferencesPresenter preferencesPresenter;
-    private Context context;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    protected ListPreference resolutionPref;
+    protected ListPreference qualityPref;
+    protected PreferencesPresenter preferencesPresenter;
+    protected Context context;
+    protected SharedPreferences sharedPreferences;
+    protected SharedPreferences.Editor editor;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        addPreferencesFromResource(R.xml.preferences);
         context = getActivity().getApplicationContext();
+        initPreferences();
+        preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
+                sharedPreferences);
+
+    }
+
+    private void initPreferences() {
+        addPreferencesFromResource(R.xml.preferences);
+
         getPreferenceManager().setSharedPreferencesName(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME);
         sharedPreferences = getActivity().getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        resolutionPref = (ListPreference) findPreference("list_preference_resolution");
-        qualityPref = (ListPreference) findPreference("list_preference_quality");
-        preferencesPresenter = new PreferencesPresenter(this, resolutionPref, qualityPref, context,
-                sharedPreferences);
+        resolutionPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION);
+        qualityPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY);
+
+        setupExitPreference();
+        setupBetaPreference();
+    }
+
+    private void setupExitPreference() {
+        Preference exitPref = findPreference("exit");
+
+        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new ExitAppFragment().show(getFragmentManager(), "exitAppDialogFragment");
+            return true;
+            }
+        });
+    }
+
+    private void setupBetaPreference() {
+        Preference joinBetaPref = findPreference("beta");
+        joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new BetaDialogFragment().show(getFragmentManager(), "BetaDialogFragment");
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.list, null);
+        ListView listView = (ListView)v.findViewById(android.R.id.list);
+
+        ViewGroup footer = (ViewGroup) inflater.inflate(R.layout.footer, listView, false);
+        listView.addFooterView(footer, null, false);
+
+        TextView footerText = (TextView)v.findViewById(R.id.footerText);
+        String text = getString(R.string.videona) + " v" + BuildConfig.VERSION_NAME + "\n" +
+                getString(R.string.madeIn);
+        footerText.setText(text);
+
+        return v;
     }
 
     @Override
@@ -60,12 +105,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         super.onResume();
         preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
+        Qordoba.updateScreen(getActivity());
     }
 
     @Override
     public void onPause() {
         super.onPause();
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferencesPresenter);
     }
 
     @Override
@@ -97,9 +145,16 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     @Override
+    public void setSummary(String key, String value) {
+        Preference preference = findPreference(key);
+        preference.setSummary(value);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         Preference connectionPref = findPreference(key);
         connectionPref.setSummary(sharedPreferences.getString(key, ""));
     }
+
 }

@@ -25,7 +25,6 @@
 -keepclasseswithmembernames class * { native <methods>; }
 -keepclassmembers enum * {public static **[] values();public static ** valueOf(java.lang.String);}
 
-
 -dontshrink
 
 -keep public class * implements com.coremedia.**
@@ -73,7 +72,6 @@
 
 #Okio
 -dontwarn okio.**
-
 -dontwarn javax.xml.bind.DatatypeConverter
 -dontwarn org.apache.commons.codec.binary.Base64
 

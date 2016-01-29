@@ -1,141 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="videona_web">http://www.videona.com</string>
-    <string name="app_name">Videona</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="toast_trim">Video Recorded trimmed in /sdcard/Movies/Videona</string>
+    <!-- Intro app -->
+    <string name="permissionsDeniedMessage">Videona needs some permissions to use the camera or
+        record audio.\nWithout them Videona can\'t continue and will be closed.</string>
+    <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
+
+    <!-- Record Activity -->
+    <string name="chronometerDefault">00:00</string>
     <string name="toast_exit">Press back to exit</string>
+    <string name="please_wait">Please wait</string>
+    <string name="dialog_processing">Making magic in your video</string>
+    <string name="recordError">Something bad happened. Impossible to record video, try again</string>
+
+    <!-- Share Activity -->
+    <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
+    <string name="share_using">"Share video using "</string>
+
+    <!-- Editor Activity -->
     <string name="edit_title_name">Edit Room</string>
     <string name="edit_text_fx">Working on effects</string>
     <string name="edit_text_look">Working on magic</string>
     <string name="edit_text_special">Special features</string>
     <string name="edit_text_insufficient_memory">Not enough memory</string>
-    <string name="toast_exit_edit">Press back again to exit the edit room</string>
     <string name="toast_add_videos">Please, add videos to project</string>
-    <string name="not_ask_again">Not ask again</string>
-    <string name="not_thanks">Not thanks</string>
-    <string name="ok">Ok</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="indiegogo">Indiegogo</string>
-    <string name="welcome">This is a beta version of the new Social Video Platform, you can help us
-to develop it just giving feedback or you can go to our crowdfunding
-campaign on Idiegogo site and support us and get some upgrades on the app.
-We will be very grateful if you spread the news in your social networks.</string>
-
-
-    <string name="text_video_name">"Video name: "</string>
-    <string name="text_video_duration">"Duration: </string>
-    <string name="text_video_description">Description: </string>
-    <string name="share_using">"Share video using "</string>
-    <string name="please_wait">Please wait</string>
-    <string name="dialog_processing">Making magic on your video</string>
-    <string name="dialog_processing_audio">"Adding audio "</string>
-    <string name="getit">"Get it"</string>
-    <string name="action_finish">"Finish"</string>
-    <string name="action_next">"Next"</string>
+    <string name="toast_exit_edit">Press back again to exit the edit room</string>
+    <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
+    <string name="confirmDeleteVideosFromProjectTitle">Delete videos from project</string>
+    <string name="confirmDeleteVideosFromProjectMessage">Want to delete the clips of this
+        edition?</string>
+    <string name="acceptDeleteVideosFromProject">Delete</string>
+    <string name="cancelDeleteVideosFromProject">Don’t Delete</string>
+    <string name="deletedVideosFromProject">Deleted videos from project. Record or add new videos</string>
+    <string name="addVideosToProject">Please, record or add new videos</string>
+    <string name="invalidRazorTime">Please, select an instant time to razor this video</string>
+    <string name="add_videos_to_project">Please, add videos to project</string>
+    <string name="videos_removed">Clear videos from project, record or add new videos</string>
+    <string name="error">error</string>
+    <string name="editTextActionLabel">Done</string>
 
     <!-- Gallery activity -->
     <string name="confirmDeleteTitle">Delete</string>
     <string name="confirmDeleteTitle1">video</string>
     <string name="confirmDeleteTitle2">videos</string>
-    <string name="confirmDeleteMessage">¿Do you want to delete this elements?</string>
+    <string name="confirmDeleteMessage">Definitely remove these files from your terminal</string>
+    <string name="positiveButton">Remove</string>
+    <string name="negativeButton">Don\'t Remove</string>
+    <string name="galleryActivityTitle">Gallery</string>
+    <string name="mastersFolderTitle">Raw</string>
+    <string name="editedFolderTitle">Edited</string>
 
     <!-- Trim fragment -->
     <string name="confirmTrim">Done</string>
 
-    <!-- Music genres -->
-    <string name="music_genre_rock">Rock</string>
-    <string name="music_genre_reggae">Reggae</string>
-    <string name="music_genre_hiphop">Hip Hop</string>
-    <string name="music_genre_jazz">Jazz</string>
-    <string name="music_genre_pop">Pop</string>
-    <string name="music_genre_country">Country</string>
-    <string name="music_genre_electronic">Electronic</string>
-    <string name="music_genre_classic">Classic</string>
-    <string name="music_genre_classic_piano">Piano</string>
-    <string name="music_genre_classic_violin">Violin</string>
-    <string name="music_genre_classic_clarinet">Clarinet</string>
-    <string name="music_genre_ambiental">Ambiental</string>
-    <string name="music_genre_caribbean">Caribbean</string>
-    <string name="music_genre_folk">Folk</string>
-
-    <!-- Activity Login -->
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="login_hint">ohvideo@videona.es</string>
-    <string name="login">Login</string>
-    <string name="sign_up">Sign up</string>
-    <string name="please_sign_up">Create a new account</string>
-    <string name="new_user_btn_content_descp">New user</string>
-    <string name="accesibility_login_with_facebook">login with facebook</string>
-    <string name="checkBox_remember_me">Remember Me</string>
-    <string name="please_login">Please login in your account</string>
-    <string name="loginError">Something was wrong. Try to login again</string>
-    <string name="signUpError">Something bad happened. Try to register again</string>
-
-    <!-- Activity Video Preview -->
+    <!-- Video Preview Activity -->
     <string name="invalid_video">This video is not valid. Please, select another one</string>
 
-    <!-- Filters_Effects -->
-    <string name="filter_effect_sepia">sepia</string>
-    <string name="filter_effect_aqua">aqua</string>
-    <string name="filter_effect_emboss">emboss</string>
-    <string name="filter_effect_mono">mono</string>
-    <string name="filter_effect_negative">negative</string>
-    <string name="filter_effect_neon">neon</string>
-    <string name="filter_effect_none">none</string>
-    <string name="filter_effect_posterice">posterice</string>
-    <string name="filter_effect_sketch">sketch</string>
-    <string name="filter_effect_solarice">solarice</string>
-    <string name="filter_effect_whiteboard">whiteboard</string>
-    <string name="filter_effect_blackboard">blackboard</string>
+    <!-- VideoFullScreen Activity -->
+    <string name="title_activity_video_player">Video Player</string>
 
-    <!-- Activity Settings -->
-    <string name="title_camera_section">Camera</string>
-    <string name="resolution">Resolution</string>
-    <string name="low_resolution_name">Good (720p)</string>
-    <string name="low_resolution_value">Good</string>
-    <string name="good_resolution_name">Very good (1080p)</string>
-    <string name="good_resolution_value">Very good</string>
-    <string name="high_resolution_name">Excellent (4K)</string>
-    <string name="high_resolution_value">Excellent</string>
-    <string name="quality">Quality</string>
-    <string name="low_quality_name">Good (2 Mbps)</string>
-    <string name="low_quality_value">Good</string>
-    <string name="good_quality_name">Very good (5 Mbps)</string>
-    <string name="good_quality_value">Very good</string>
-    <string name="high_quality_name">Excellent (10 Mbps)</string>
-    <string name="high_quality_value">Excellent</string>
-    <string name="title_about_section">About</string>
-    <string name="title_vote_section">Vote</string>
-    <string name="content_vote_section">Vote our app</string>
-    <string name="title_tutorial_section">Tutorial</string>
-    <string name="content_tutorial_section">See our tutorial</string>
-    <string name="preferences_resolution_not_supported">Incompatible device</string>
-    <string name="preferences_quality_not_supported">Incompatible device</string>
 
-    <!-- Activity Editor -->
-    <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Delete videos from project</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Do you want to delete this elements?</string>
-    <string name="deletedVideosFromProject">Deleted videos from project. Record or add new videos</string>
-    <string name="addVideosToProject">Please, record or add new videos</string>
-    <string name="invalidRazorTime">Please, select an instant time to razor this video</string>
+    <!-- Settings Activity -->
 
-    <!-- Activity About -->
-    <string name="aboutUsTitle"><u>About us</u></string>
+    <string name="action_settings">Settings</string>
+
+        <!-- Rate Videona -->
+        <string name="rateUsDialogTitle">What do you think about Videona?</string>
+        <string name="rateUsDialogMessage">Rate our app and leave a comment! You can also e-mail us
+            if you have any complaints, suggestions or questions.</string>
+        <string name="rateUsDialogAffirmative">I love it</string>
+        <string name="rateUsDialogNegative">I dislike it</string>
+        <string name="error_rate_app">Could not launch Google Play</string>
+        <string name="title_vote_section">Vote</string>
+        <string name="content_vote_section">Vote our app</string>
+
+        <!-- Exit App -->
+        <string name="exit_app_title">Shut down</string>
+        <string name="exit_app_message">Do you want to exit the application?</string>
+        <string name="acceptExit">Exit</string>
+        <string name="cancelExit">Keep playing</string>
+
+        <!-- Join/Leave beta Videona -->
+        <string name="title_advanced_section">Advanced</string>
+        <string name="content_advanced_section">Join Videona Beta</string>
+        <string name="thanks">Thanks!!!</string>
+        <string name="joinBetaLinkInfo">Follow Google’s instructions to be Beta Tester. When the
+            process is complete you will receive an update.</string>
+        <string name="joinBetaLink"><u>Go on</u></string>
+        <string name="email">email</string>
+        <string name="enterEmail">Enter a valid email</string>
+        <string name="removeEmail">Remove email</string>
+        <string name="send_email">Send</string>
+        <string name="invalid_email">Please, insert a valid email</string>
+        <string name="valid_email">Thanks!!</string>
+        <string name="positive_button_join_beta_dialog">Yes</string>
+        <string name="negative_button_join_beta_dialog">Not now, thanks</string>
+
+
+        <!-- User info -->
+        <string name="settingsTitle">Settings</string>
+        <string name="titleUserSection">My account</string>
+        <string name="name">Name</string>
+        <string name="enterName">Enter your name</string>
+        <string name="removeName">Remove name</string>
+        <string name="username">Username</string>
+        <string name="enterUsername">Enter a username</string>
+        <string name="removeUsername">Remove username</string>
+        <string name="emailPreference">Email</string>
+        <string name="save">Save</string>
+
+        <!-- Camera Settings -->
+        <string name="title_camera_section">Camera</string>
+        <string name="resolution">Resolution</string>
+        <string name="low_resolution_name">Good (720p)</string>
+        <string name="low_resolution_value">Good</string>
+        <string name="good_resolution_name">Very good (1080p)</string>
+        <string name="good_resolution_value">Very good</string>
+        <string name="high_resolution_name">Excellent (4K)</string>
+        <string name="high_resolution_value">Excellent</string>
+        <string name="quality">Quality</string>
+        <string name="low_quality_name">Good (2 Mbps)</string>
+        <string name="low_quality_value">Good</string>
+        <string name="good_quality_name">Very good (5 Mbps)</string>
+        <string name="good_quality_value">Very good</string>
+        <string name="high_quality_name">Excellent (10 Mbps)</string>
+        <string name="high_quality_value">Excellent</string>
+        <string name="cancelSettingsCamera">Cancel</string>
+
+
+        <!-- More info Settings -->
+        <string name="aboutUsTitle">About us</string>
+        <string name="moreInformation">More information</string>
+        <string name="privacyPolicy">Privacy policy</string>
+        <string name="termsOfService">Terms of service</string>
+        <string name="licenses">Licenses</string>
+        <string name="legacyAdviceTitle">Legal Notice</string>
+
+        <!-- Contact Settings, not in use -->
+        <string name="title_contact_section">Contact</string>
+        <string name="content_contact_section">Give us feedback</string>
+
+        <!-- Tutorial Settings, not in use -->
+        <string name="title_tutorial_section">Tutorial</string>
+        <string name="content_tutorial_section">See our tutorial</string>
+
+        <!-- Accounts actions -->
+        <string name="accountActions">Account actions</string>
+        <string name="exit">Exit</string>
+
+
+    <!-- End Settings Activity -->
+
+    <!-- About Activity -->
+
     <string name="aboutUsContent">
         Record, edit, share…Three simple things you will like to do as soon as you have the new
-        Videona App in your smartphone.\nCopyright &#169; 2015. Videona Socialmedia S.L. All rights
-        reserved.\n
+        Videona App in your smartphone. From now you can enjoy the perfect tool to create videos
+        with super cool effects and filters, add music and share your creations with your favorites
+        socials networks. \n\n
+
+        Before Videona, there are a group of spanish young enterpreneurs with the will of building
+        the best smartphone video editor application. Our application want to break the edition
+        barrier and be a change in the audiovisual world and smartphones. \n\n
+
+        Copyright 2015. Videona Socialmedia S.L. Todos los derechos reservados. \n
     </string>
+    <string name="videona_web">http://www.videona.com</string>
     <string name="contactUsTitle"><u>Contact us</u></string>
     <string name="contactUsContent">Visit our web page:</string>
     <string name="videonaWeb">http://www.videona.com\n</string>
     <string name="versionTitle"><u>Version</u></string>
+    <string name="videona">Videona</string>
     <string name="versionContent">beta </string>
+    <string name="madeIn">Made in Madrid</string>
     <string name="licenseTitle"><u>Free software licenses</u></string>
     <string name="licenseContent">
         Copyright &#169; 2013 Jake Wharton\nLicensed under the Apache License, Version 2.0 (the
@@ -162,6 +199,67 @@ We will be very grateful if you spread the news in your social networks.</string
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
         limitations under the License.\n
+        Copyright 2012 Mixpanel, Inc.
+
+Please see the project README file for additional information.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this work except in compliance with the License.
+You may obtain a copy of the License below, or at:
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/ \n
+        Event Bus                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/ \n
+       Qordoba  #Copyright 2015 Qordoba, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License. You may obtain a copy of the License below, or at:
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+                             Apache License
+                       Version 2.0, January 2004
+                    http://www.apache.org/licenses/ \n
+        Dexmaker        Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/ \n
+        Google-services Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/ \n
+        Kickflip        Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/ \n
+        Glide BSD, part MIT and Apache 2.0. \n
+        OkHttp      Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/ \n
+        GSon Copyright 2008 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. \n
+
+
     </string>
     <string name="licenseMusicTitle"><u>Attribution music</u></string>
     <string name="licenseMusicContent">
@@ -181,257 +279,1324 @@ We will be very grateful if you spread the news in your social networks.</string
         http://freemusicarchive.org/music/Josh_Woodward/The_Beautiful_Machine/JoshWoodward-TheLastSliceOfPecanPie-NoVox,
         icono clave de sol, CC BY 4.0\n
     </string>
-    <string name="legacyAdviceTitle"><u>Legacy Advice</u></string>
+
     <string name="legacyAdviceContent">
-        1. TITULARIDAD.\n\nVIDEONA SOCIAL MEDIA, S.L (en adelante, Videona) es Videona de la aplicación móvil (en adelante, Aplicación) y del portal web www.videona.es (en adelante, el Portal) (en adelante y conjuntamente denominados, la Plataforma). Su domicilio se encuentra en c/ María Blanchard, 2 – portal 7, bajo D, 28232, Las Rozas de Madrid, España y su CIF es B87047171.
+        1. WEBSITE OWNERSHIP\n\n
 
-Puede ponerse en contacto con Videona desde el apartado “Contacto” o a través de los siguientes medios:
+VIDEONA SOCIALMEDIA S.L. (hereinafter, Videona) is the holder of the mobile app web
 
-Telf. +34 91 449 64 81
-Email:info@videona.com
+(hereinafter, App) and the web pages www.videona.es and www.videona.com (hereinafter,
 
-El (los) nombre(s) de dominio(s) a través del cual(es) Vd. ha accedido al Portal o la Aplicación es (son) titularidad de Videona. Dicho(s) nombre(s) de dominio(s) no podrá(n) ser utilizado(s) en conexión con otros contenidos, productos y/o servicios que no sean titularidad de Videona ni de manera que puedan causar confusión entre los usuarios finales o el descrédito de
-        Videona.\n\n2. OBJETO.\n\nEl presente Aviso Legal recoge las condiciones generales que regulan el acceso, navegación y uso de la Plataforma, así como de los contenidos que la integran, y sin perjuicio de que Videona pueda establecer condiciones particulares que regulen la utilización, prestación y/o contratación de los productos o servicios que, en su caso, puedan ser ofrecidos a través de la misma.
+the Web Site and jointly referred as the Platform). Its registered office address is c/ María
 
-En caso de ser ofrecidos, a través de la Plataforma, la utilización, prestación y/o contratación de productos o servicios, el hecho de ser utilizados y/o solicitados por el Usuario implicará, asimismo, la aceptación sin reservas de las condiciones particulares que, en su caso, hayan sido establecidas al efecto, y que formarán parte integrante del presente Aviso Legal.
+Blanchard, 2 – portal 7, bajo D, 28232, Las Rozas de Madrid, Madrid (Spain) and its tax
 
-Videona se reserva la facultad de ofrecer determinados productos o servicios exclusivamente a los Usuarios registrados a través de la Plataforma y que acepten expresamente las condiciones particulares que sean aplicables.
+number is B87047171.\n\n
 
-Videona se reserva la facultad de dar por terminado, modificar, suspender o interrumpir, temporalmente o de forma indefinida, en cualquier momento y sin necesidad de preaviso, el acceso a los productos, servicios y/o contenidos de la Plataforma, así como la configuración misma de la Plataforma, prestaciones, productos, servicios y contenidos, sin posibilidad por parte del Usuario de reclamar ni exigir indemnización alguna; en particular, con motivo de operaciones de mantenimiento, reparación, actualización, mejora y/o adecuación a cambios técnicos, operativos y/o legales. Tras dicha terminación, seguirán vigentes las prohibiciones, restricciones y limitaciones contenidas en el presente Aviso Legal y/o en cualesquiera condiciones particulares que sean
-        aplicables.\n\n3. ACCESO Y USO DE LA PLATAFORMA.\n\nEl mero acceso al Portal, la descarga y/o el uso de los contenidos, aplicaciones, productos y servicios ofrecidos en los mismos, así como la cumplimentación de formularios, el envío de solicitudes de información, consultas, quejas y, en general, cualquier acto de naturaleza similar a los anteriores (es especial, si son realizados a través de la Plataforma) implicará la adquisición de la consideración de Usuario y la aceptación, sin reservas, de todas y cada una de las normas integrantes del presente Aviso Legal. En consecuencia, todo Usuario debe leer atentamente y conocer el contenido del presente Aviso Legal.
+You may contact Videona at the following contact details:\n\n
 
-Salvo que se establezca expresamente lo contrario, el acceso y uso de la Plataforma, por parte de los Usuarios, tiene carácter libre y gratuito. Ello no obstante, Videona se reserva la facultad, en exclusiva, de decidir si el acceso y uso de los productos o servicios, ofrecidos a través de la Plataforma, tendrá carácter gratuito o si, por el contrario, decide exigir contraprestación económica por ello, en cuyo caso la cuantía, forma de pago y restantes condiciones particulares que resulten de aplicación serán expresamente notificadas a los Usuarios con antelación a su entrada en vigor, de manera que el Usuario pueda desistir voluntariamente del acceso y/o uso de aquellos productos o servicios que impliquen el abono de cantidad alguna. Una vez entren en vigor las condiciones particulares correspondientes, el acceso y/o uso de los productos o servicios por parte del Usuario implicará, por parte de éste, la aceptación expresa de las condiciones particulares.
+Telf. +34 91 449 64 81\n\n
 
-La utilización, prestación y/o contratación de los productos o servicios que, en su caso, puedan ser ofrecidos por Videona puede estar sujeta a la previa observancia de requisitos formales tales como el registro previo, la cumplimentación de formularios, formalizar la suscripción a los mismos, el abono de gastos o tasas y/o la previa aceptación de las condiciones particulares que resulten de aplicación a los mismos.
+Email:info@videona.com\n\n
 
-En todo caso, el acceso, navegación y uso de la Plataforma y, en su caso, el uso o contratación de los productos o servicios que sean ofrecidos a través de la misma se hace bajo la única y exclusiva responsabilidad del Usuario, por lo que éste se compromete a observar diligente y fielmente cualquier instrucción impartida por Videona o por personal autorizado de Videona, relativa al uso de la Plataforma y sus contenidos.
+The domain(s) name(s) through which you have accessed the Web Site or the App is (are)
 
-Por lo tanto, el Usuario se obliga a usar los contenidos, productos y servicios de forma diligente, correcta y lícita, de conformidad con la legislación vigente y, en particular, se compromete a abstenerse de:\n\t(i)	Utilizarlos con fines o efectos contrarios a la ley, a la moral, a las buenas costumbres generalmente aceptadas o al orden público y a las instrucciones recibidas de Videona.\n\t(ii)	Utilizarlos con
-        fines lesivos de los legítimos derechos de terceros.\n\n4. REGISTRO EN LA PLATAFORMA\n\nSi para la utilización, prestación y/o contratación de algún producto o servicio ofrecido a través de la Plataforma, el Usuario debiera proceder a su registro, éste será responsable de aportar información veraz y lícita, garantizando la autenticidad y exactitud de todos aquellos datos que introduzca a la hora de cumplimentar los formularios preestablecidos para acceder a los productos o servicios de que se trate. Si como consecuencia del registro, el Usuario tuviera que hacer uso de una contraseña, éste se compromete a su uso diligente y a mantener la confidencialidad de la misma. En consecuencia, los Usuarios son responsables de la adecuada custodia y confidencialidad de cualesquiera identificadores y/o contraseñas que le sean suministrados por Videona, y se comprometen a no ceder su uso a terceros, ya sea temporal o permanente, ni a permitir su utilización por personas ajenas. Será responsabilidad exclusiva del Usuario la utilización y/o contratación de los productos o servicios ofrecidos en la Plataforma, por parte de cualquier tercero que, de forma ilegítima, emplee a tal efecto una contraseña o identificador suministrado al Usuario, cuando ello tenga lugar a causa de una actuación no diligente o la pérdida de la misma por el Usuario, a menos que el Usuario lo haya comunicado inmediatamente a Videona.
+held by Videona. Such domain(s) name(s) shall not be used in connection with other
 
-En virtud de lo anterior, es obligación del Usuario notificar de forma inmediata a Videona, cualquier hecho que haga posible el uso indebido de los identificadores y/o contraseñas, tales como el robo, extravío, o el acceso no autorizado a los mismos por parte de terceros, con el fin de proceder a su inmediata cancelación. Mientras no se comuniquen tales hechos, Videona quedará eximida de cualquier responsabilidad que pudiera derivarse del uso indebido de los identificadores o contraseñas por parte de terceros no
-        autorizados.\n\n5. RESPONSABILIDADES, GARANTÍAS Y RENUNCIAS DE RESPONSABILIDAD.\n\nLa Plataforma puede contener información, opiniones, consejos, advertencias, declaraciones y materiales proporcionados por diferentes fuentes de información, así como por cualquier Usuario. Videona no se hace responsable de las decisiones de los Usuarios basadas en los contenidos o en la información proporcionada a través de la Plataforma. Cualquier contenido o información publicada en la Plataforma debe entenderse hecho exclusivamente para fines generales. Videona no garantiza ni respalda la exactitud o fiabilidad de cualquier información o contenido. En consecuencia, Videona no garantiza la fiabilidad, utilidad o veracidad de los contenidos o de la información, ni tampoco la continuidad, precisión o exhaustividad de los mismos ni de los resultados obtenidos a partir del uso que se pueda dar a dichos contenidos o información y no tendrá ninguna responsabilidad respecto de los Usuarios.
+contents, products and/or services not owned by Videona nor in any way that may cause
 
-Videona no se hace responsable y, en la máxima medida permitida por la legislación aplicable, excluye cualesquiera garantías, expresas o implícitas, relativas a la mercantilidad, idoneidad para un fin concreto, no cumplimiento, exactitud, fiabilidad, integridad o actualidad de los contenidos, servicios, productos u otros elementos incluidos en la Plataforma, o los resultados obtenidos de acceder y usar la Plataforma y/o el contenido de la misma. La Plataforma y cualquier contenido, producto y/o servicio ofrecido dentro de los mismos son ofrecidos “tal cual”. El Usuario es consciente y acepta voluntariamente que el uso de la información publicada y/o suministrada con relación a los productos o servicios de la Plataforma tiene lugar bajo su única y exclusiva responsabilidad.
+confusion among end users or discredit Videona.\n\n
 
-En particular, en la máxima medida permitida por la legislación aplicable, Videona no garantiza ni se hace responsable de:\n\t(i)	La adecuación de
-        la Plataforma o de los contenidos publicados en ella a la legislación de su país de residencia o desde el que accede o utiliza la Plataforma.\n\t(ii)	La
-        continuidad de los contenidos de la Plataforma y/o la falta de disponibilidad o accesibilidad de la Plataforma o continuidad técnica de la misma;\n\t(iii)	La
-        existencia de interrupciones o errores en el acceso a la Plataforma, así como problemas técnicos o fallos que se produzcan durante la conexión a Internet;\n\t(iv)	La
-        ausencia de errores o inexactitudes en los contenidos, servicios o productos;\n\t(v)	La
-        ausencia de virus y demás componentes dañinos en la Plataforma o en el servidor que las suministra;\n\t(vi)	La
-        invulnerabilidad de la Plataforma y/o la inexpugnabilidad de las medidas de seguridad que se adopten en la misma;\n\t(vii)	La
-        fiabilidad y/o adecuación, para un propósito o fin particular, de la Plataforma, de los productos o servicios incorporados en la misma, y de la información publicada y/o suministrada con relación a dichos productos o servicios;\n\t(viii)	En
-        su caso, la falta de utilidad, beneficio o rendimiento de los contenidos o servicios de la Plataforma;\n\t(ix)	Los
-        daños o perjuicios que cause, a sí mismo o a un tercero, cualquier persona que infringiera las condiciones, normas e instrucciones que Videona establece en la Plataforma o a través de la vulneración de los sistemas de seguridad de la
-        misma;\n\t(x)	Cualesquiera otros daños que pudieran ser causados por motivos inherentes al no funcionamiento o al funcionamiento defectuoso de la Plataforma o de los sitios web o aplicaciones a los que, en su caso, se hayan podido establecer enlaces (“links”).
+2. OBJECT\n\n
 
-Ello no obstante, Videona declara que ha adoptado todas las medidas necesarias, dentro de sus posibilidades y del estado de la tecnología, para garantizar el funcionamiento de la Plataforma y evitar la existencia y/o transmisión de virus y demás componentes dañinos a los Usuarios.
+This Legal Notice contains all the terms and conditions which regulate the access,
 
-Videona realiza los máximos esfuerzos para evitar errores en los contenidos que se publican en la Plataforma. Todos los contenidos que ofrece Videona a través de la Plataforma se encuentran actualizados, reservándose Videona la facultad de poder modificarlos en cualquier momento. Videona no se responsabiliza de las consecuencias que puedan derivarse de los errores de los contenidos que puedan aparecer en la Plataforma, cuando sean proporcionados por los Usuarios u otros terceros y Videona no haya tenido conocimiento de dichos errores.
+navigation and use of the Platform and its content. Notwithstanding anything herein, the
 
-En la máxima medida permitida por la legislación aplicable, Videona no será responsable por la pérdida de beneficios, ingresos, datos, pérdidas financieras ni por daños indirectos, especiales, derivados, ejemplares o punitivos. En todo caso, la responsabilidad total de Videona por cualquier reclamación realizada bajo estas condiciones, incluida por cualquier garantía implícita, se limita al importe que el Usuario haya abonado por el uso de los productos o servicios. En ningún caso, Videona será responsable por cualquier pérdida o daño que no sean previsibles de forma
-        razonable.\n\n6. PROHIBICIONES Y RESTRICCIONES.\n\nQueda prohibida cualquier publicación, comunicación o transmisión de contenidos que infrinjan los derechos de terceros y/o cuyo contenido sea amenazante, obsceno, difamatorio, discriminatorio, pornográfico, xenófobo, atentatorio contra la dignidad de la persona o los derechos de la infancia, la legalidad vigente o cualquier conducta que incite o constituya la realización de una infracción penal.
+foregoing is without prejudice to the fact that Videona may establish particular terms and
 
-Asimismo queda prohibida la inclusión y comunicación de contenidos, por parte de los Usuarios, que sean falsos o inexactos y que induzcan o puedan inducir a error al resto de Usuarios o al personal de Videona, en particular los contenidos que se encuentren protegidos por cualesquiera derechos de propiedad intelectual, industrial, de imagen o de naturaleza similar, pertenecientes a terceras personas, cuando ello dé lugar a una vulneración de la legislación vigente, no cuenten con la autorización del titular de los derechos, menoscaben o desprestigien la fama o crédito de Videona, sean considerados como un supuesto de publicidad ilícita, engañosa o desleal y/o incorporen virus o cualquier otro elemento electrónico que pudiese dañar o impedir el funcionamiento de la Plataforma, de la red, equipos informáticos de Videona o terceros y/o el acceso a la Plataformapor parte del resto de usuarios.
+conditions which regulate the use, provision and/or contracting of products or services
 
-Si el Usuario infringe las prohibiciones/restricciones anteriores o hace uso de los contenidos, productos y/o servicios incumpliendo las Directrices de Videona, o Videona tiene o llega a tener motivos razonables para sospechar que un Usuario ha incumplido cualquiera de las mismas, Videona se reserva el derecho de suspender o cancelar en cualquier momento, de manera temporal o definitiva, la cuenta del Usuario y negarle cualquier acceso y uso, actual o futuro, de los productos, servicios y/o de la Plataforma (o cualquier parte de la misma).
+which are offered to Users through the Platform.\n\n
 
-Para ampliar esta información, consulte las Directrices de Videona.\n\n7. DERECHOS DE PROPIEDAD INTELECTUAL E INDUSTRIAL.\n\nQuedan reservados todos los derechos de propiedad intelectual e industrial sobre los contenidos de la Plataforma y, en particular, queda prohibido modificar, copiar, reproducir, comunicar públicamente, transformar o distribuir de cualquier forma la totalidad o parte de los contenidos incluidos en la Plataforma, para propósitos públicos o comerciales, si no se cuenta con la autorización previa, expresa y por escrito de Videona o, en su caso, del titular de los derechos al que correspondan.
+If the use, the provision and/or the contracting of products or services is offered through
 
-El acceso y navegación del Usuario por la Plataforma, así como el acceso y uso de los servicios o productos ofrecidos, en ningún caso se entenderá como una renuncia, transmisión, licencia o cesión total ni parcial de los derechos antes indicados por parte de Videona, excepto cuando se establezca expresamente lo contrario en las condiciones particulares que regulen la utilización, prestación y/o contratación de los productos o servicios que, en su caso, sean ofrecidos a través de la Plataforma. En consecuencia, no está permitido suprimir, eludir o manipular el aviso de derechos de autor ("copyright") y cualesquiera otros datos de identificación de los derechos de Videona o de sus titulares, incorporados a los contenidos, así como los dispositivos técnicos de protección, las huellas digitales o cualesquiera mecanismos de información y/o de identificación que pudieren contenerse en los mismos.
+the Platform, the mere fact of being used and/or requested by the User will imply, equally,
 
-Las referencias a nombres y marcas comerciales o registradas, logotipos u otros signos distintivos, ya sean titularidad de Videona o de terceras empresas, llevan implícitas la prohibición sobre su uso sin el consentimiento, previo, expreso y por escrito de Videona o de sus legítimos titulares. En ningún caso, salvo manifestación expresa en contrario, el acceso o uso de la Plataforma y/o de sus contenidos, confiere al Usuario derecho alguno sobre las marcas, logotipos y/o signos distintivos en él incorporados.
+the acceptance without reservation of the corresponding established specific conditions
 
-El uso, explotación y/o utilización no autorizada de los contenidos de la Plataforma, así como cualquier acto de similar naturaleza del que se derive una lesión de los derechos de propiedad intelectual o industrial, dará lugar a las responsabilidades legalmente
-        establecidas.\n\n8. ENLACES.\n\n8.1 Enlaces desde la Plataforma a otras aplicaciones o páginas web.\nVideona puede ofrecer enlaces, directa o indirectamente, a recursos, aplicaciones o páginas web de Internet que se encuentran fuera de la Plataforma. La presencia de estos enlaces en la Plataforma tiene una finalidad informativa, no constituyendo en ningún caso una invitación a la contratación de productos y/o servicios que se ofrezcan o puedan ofrecer en las páginas web de destino ni implica la existencia de una relación dedependencia con la entidad titular de la página web/aplicación enlazada. En estos casos, Videona no será responsable de establecer los términos y condiciones a tener en cuenta en la utilización, prestación y/o contratación de estos servicios por parte de dichos terceros y, por lo tanto, no podrá ser considerado responsable de los mismos.
+which will also form an integral part of this Legal Notice.\n\n
 
-Videona no tiene facultad ni medios humanos ni técnicos para conocer, controlar ni aprobar toda la información, contenidos, productos o servicios facilitados por otras páginas web o aplicaciones a las que se puedan establecer enlaces desde la Plataforma. En consecuencia, Videona no podrá asumir ningún tipo de responsabilidad por cualquier aspecto relativo a las páginas web o aplicaciones a las que se pudieran establecer un enlace desde laPlataforma.
+Videona reserves the right to exclusively offer certain products or services to the
 
-Ello no obstante, en caso de que Videona llegue a tener conocimiento efectivo de que la actividad o la información a la que se remite desde dichos enlaces es ilícita, constitutiva de delito o puede lesionar bienes o derechos de un tercero, actuará con la diligencia necesaria para suprimir o inutilizar el enlace correspondiente con la mayor brevedad posible.
+registered Users, subject to the acceptance of the particular conditions that may apply.
 
-Asimismo, si los Usuarios tuvieran conocimiento efectivo de la ilicitud de actividades desarrolladas a través de estas páginas web o aplicaciones de terceros, deberán comunicarlo inmediatamente a Videona a los efectos de que se proceda a analizar la situación en particular y, si procede, a deshabilitar el enlace de acceso a la misma.
+Videona reserves the right to modify, terminate, discontinue, suspend or interrupt,
 
-Para evitar cualquier género de dudas, el hecho de que al acceder a una determinada página web exista un “frame” o “marco” en cuya parte superior aparezca el nombre o logotipo de Videona, en ningún caso implica que ésta sea la propietaria o titular de dichas páginas web, siendo los propietarios y titulares de las páginas web los que aparezcan identificados como tales en las
-        mismas.\n8.2 Enlaces desde otras páginas web a la Plataforma.\nSi cualquier Usuario, entidad o página web desea establecer algún tipo de enlace con destino a la Plataforma, deberán observase los siguientes
-        requisitos:\n\t(i)	Deberá recabar la autorización previa, expresa y por escrito de Videona o estar autorizado por cualesquiera condiciones particulares de
-        Videona.\n\t(ii)	En la página web desde la que se establece el enlace no se podrá declarar de ninguna manera que Videona ha autorizado tal enlace,
-        sin que así haya sido. Si la entidad que realiza el enlace desde su página web a la Plataforma correctamente, deseara incluir en su página web la marca, denominación, nombre comercial, rótulo, logotipo, o cualquier otro signo identificativo de Videona y/o de la Plataforma, deberá contar previamente con la autorización previa, expresa y por escrito de
-        Videona.\n\t(iii)	En todo caso, Videona prohíbe el establecimiento de un enlace a la Plataforma desde aquellas páginas web que contengan materiales, información o contenidos ilícitos, ilegales, degradantes, obscenos, y en general, que contravengan la moral, el orden público, la legislación vigente, las normas sociales generalmente aceptadas, sean lesivos de los legítimos derechos de Videona o de terceros o que de cualquier forma puedan afectar o dañar la buena imagen y reputación de
-        Videona.\n\n9. POLÍTICA DE PRIVACIDAD.\n\nCuando sea necesario que el Usuario se registre o facilite datos personales, será advertido, convenientemente, de dicha necesidad.
+temporarily or permanently, at any time and without notice, the access to the products,
 
-En todo caso, la recogida y el tratamiento de los datos personales se llevará a cabo con sujeción a los principios y obligaciones de la normativa aplicable en materia de protección de datos, y de conformidad con lo previsto en la Política de Privacidad, la cual forma parte integrante de este Aviso
-        Legal.\n\n10. DURACIÓN Y MODIFICACIÓN.\n\nVideona se reserva el derecho de modificar el presente Aviso Legal y/o las condiciones particulares y directrices que, en su caso, hayan sido establecidas para la utilización y/o contratación de los productos o servicios prestados a través de la Plataforma, cuando sea necesario a los efectos de adecuarse a los cambios legislativos, de negocio y/o tecnológicos. Los textos actualizados serán válidos y surtirán efecto desde su publicación en la Plataforma o, en su caso, una vez notificados a los Usuarios en los términos previstos en la referida notificación.
+services and/or contents of the Platform, as well as to its configuration, without the User´s
 
-La vigencia temporal de este Aviso Legal coincide, por lo tanto, con el tiempo de su exposición, hasta que sea modificado total o parcialmente, momento en el cual pasarán a tener vigencia los textos
-        actualizados.\n\n11. COMUNICACIONES.\n\nPara cualquier comunicación entre Videona y el Usuario, éste deberá dirigirse a Videona a través de los medios de contacto arriba indicados, preferentemente por vía electrónica. En todo caso, y salvo que la ley determine expresamente otra cosa, las comunicaciones de Videona hacia el Usuario se realizarán preferentemente por vía electrónica, utilizando para ello los datos de contacto suministrados. El Usuario acepta expresamente la utilización del correo electrónico como procedimiento válido para el intercambio de información y la remisión de comunicaciones entre y/o con
-        Videona.\n\n12. GENERALIDADES.\n\nEste Aviso Legal incorpora los siguientes documentos:\n\t(i)	Directrices de Videona\n\t(ii)	Política de Privacidad\n\t(iii)	Condiciones Particulares\nLos encabezamientos de las distintas cláusulas son sólo informativos, y no afectarán, calificarán o modificarán la interpretación del Aviso Legal.
+right to claim or request damages of any kind; specifically, the above may be carried out
 
-En caso de existir discrepancia entre lo establecido en este Aviso Legal y las condiciones particulares que, en su caso, puedan ser establecidas respecto de los productos o servicios ofrecidos en la Plataforma, prevalecerá lo dispuesto en las condiciones particulares respecto de los productos o servicios sujetos a dichas condiciones particulares.
+as a result of business decisions, maintenance and fixing operations, update, upgrade
 
-En el caso de que cualquier disposición o disposiciones de este Aviso Legal fuera(n) considerada(s) nula(s) o inaplicable(s), en su totalidad o en parte, por cualquier Juzgado, Tribunal u órgano administrativo competente, dicha nulidad o inaplicación no afectará a las otras disposiciones del Aviso Legal ni a las condiciones particulares que, en su caso, hayan podido ser establecidas.
+and/or adjusting processes to technical, operational and/or legal changes. Upon such
 
-El no ejercicio o la no ejecución, por parte de Videona, de cualquier derecho o acción reconocida en este Aviso Legal no constituirá una renuncia al mismo, salvo reconocimiento y acuerdo por escrito por su
-        parte.\n\n13. LEGISLACIÓN APLICABLE Y TRIBUNALES COMPETENTES.\n\nEl presente Aviso Legal y cualquier relación que surja de su aceptación o se relacione con el mismo se regirá exclusivamente por la legislación española que resulte de aplicación.
+termination, the prohibitions, restrictions and limitations herein contained and/or contained
 
-Las Partes, con renuncia expresa a cualquier fuero que pudiera corresponderles, acuerdan someterse a la jurisdicción exclusiva de los tribunales de la ciudad de Madrid (España), quienes tendrán competencia exclusiva para conocer y resolver cualquier controversia que surja o se relacione con el presente Aviso Legal y/o cualquier relación derivada de la aceptación del mismo. Cada una de las partes presta, por este medio, su consentimiento en cuanto a la jurisdicción exclusiva de dichos tribunales.\n
+in any applicable particular terms and conditions will remain valid.\n\n
+
+3. WEBSITE USE AND ACCESS\n\n
+
+Any of the following acts implies the acceptance by the User without reservation of each
+
+and all the rules stated in this Legal Notice: (i) downloading the App, (ii) accessing the
+
+Platform and/or using its content, (iii) filling out forms through the Platform, (iv) sending
+
+requests for information or complaints, (v) contracting offers and (vi) in general, all acts of
+
+a similar nature to (specially with they are carried out through the Platform). You must
+
+therefore read and understand the content of this Legal Notice.\n\n
+
+Unless otherwise stated in this Legal Notice or in any particular terms and conditions, the
+
+access and use of the Platform by Users is free of charge. However, Videona reserves the
+
+right, in its sole discretion, to request any economic consideration for the access and the
+
+use of the products or services provided through the Platform. Should this occur, Videona
+
+shall provide Users with the applicable particular terms and conditions and the relevant
+
+notice, so that Users may be able to voluntarily terminate the access and/or use of those
+
+services that imply the payment of the said economic consideration. Once the applicable
+
+particular terms and conditions come into force, the access and/or use of the products or
+
+services by the User will imply the User´s acceptance, without reservation, of the
+
+respective particular terms and conditions. \n\n
+
+The use, the provision and/or the contracting of the products and services offered by
+
+Videona may be subject to the previous acceptance of formal requisites such as the filling
+
+out of corresponding forms, payment of costs and/or the previous acceptance of the
+
+specific terms and conditions which apply to it.\n\n
+
+In every case, the access, the navigation and the use of the Platform and the use or the
+
+contracting of the services or products offered through the Platform is the sole and
+
+exclusive responsibility of the User. The User is therefore bound to diligently and faithfully
+
+observe any additional instructions given by Videona or by Videona’s authorised
+
+employees in relation to the Platform and its contents’ use.\n\n
+
+The User is therefore bound to use the contents, products and services in a diligent,
+
+correct and lawful manner, complying with the current legislation. In particular, the User
+
+agrees to abstain from:\n\n
+
+(i) Using it in any manner which is against the law or that offends reasonable standards
+
+of general public morality, ethics or public order, or which is in any way contrary to
+
+the instructions of Videona.\n\n
+
+(ii) Using it in a way which harms the legitimate rights of third parties\n\n
+
+4. REGISTRATION\n\n
+
+If the User is obliged to register for using and/or contracting a product or service offered
+
+through the Platform, the User will be under an obligation to provide accurate information,
+
+guaranteeing the authenticity of all the data provided at the time of filling out the pre-
+
+established forms required to access the corresponding products or services. If, as a result
+
+of the User’s registration, a password is issued, the User thereby is bound to use it
+
+diligently and to keep such password secret. Consequently, Users shall be responsible for
+
+the adequate custody and confidentiality of all identifying data and/or passwords which are
+
+given to them by Videona, and are bound to not allow or facilitate its use by third parties,
+
+temporarily or permanently, nor to provide access to others. The use and/or contracting of
+
+products or services by illegitimate third parties acquired due to a negligent use or misuse
+
+of a password given to a third party and/or the loss of the password by the User will be
+
+entirely the responsibility of the User.\n\n
+
+
+Furthermore, it is the responsibility of the User to immediately notify Videona of any
+
+circumstances which may lead to the improper use of identifying data and/or passwords,
+
+such as theft, loss or non-authorised access, so that Videona can proceed with immediate
+
+cancellation. Until the circumstances are communicated to Videona, Videona will be
+
+exempt from any responsibility which could derive from the improper use of the identifying
+
+data or use or misuse of passwords by third parties.\n\n
+
+
+5. RESPONSIBILITIES, WARRANTIES AND DISCLAIMERS\n\n
+
+The Platform may contain information, opinions, advice, warnings, and statements
+
+provided by different information and content sources as well as any User of the Platform.
+
+Videona shall have no liability for Users´ decisions based on the information provided by or
+
+through the Platform. Any information posted on the Platform is intended for general
+
+purposes only. Videona does not represent or endorse the accuracy or reliability of any
+
+information or contents. Consequently, Videona does not warrant the timeliness, reliability,
+
+use or veracity of the information, sequence, accuracy or completeness of such
+
+information nor the results obtained from the given use of such information and shall have
+
+no liability to the User including in the event of defamatory, offensive or illicit materials,
+
+content or information.\n\n
+
+Videona makes no representations and, to the fullest extent permitted by law, disclaims all
+
+warranties, whether express or implied, related to the Platform. The Platform and any
+
+content, product and/or service contained therein is provided “as is”. The User
+
+acknowledges and voluntarily agrees that the use of the information published and/or
+
+provided with regard to the Platform products or services is carried out at his/her own risk.
+
+In detail, to the maximum extent permitted by law, Videona is not responsible and does not
+
+guarantee:\n\n
+
+(i) The adequacy of the Platform or the contents published on it to the law of your
+
+country of residence or from which you access or use the Platform.\n\n
+
+(ii) The continuity of the Platform’s contents and/or the unavailability or accessibility of
+
+the Platform or its technical continuity.\n\n
+
+(iii) The existence of interruptions or errors in accessing the Platform, as well as
+
+technical problems during connexion via the Internet.\n\n
+
+(iv) The lack of errors in its contents, services or products.\n\n
+
+(v) The absence of viruses and/or other harmful elements in the Platform or server
+
+which hosts it.\n\n
+
+(vi) The lack of vulnerability of the Platform and/or the impregnability of the security
+
+measures adopted by the same.\n\n
+
+(vii) The reliability and/or fitness for a particular purpose of the Platform, the products or
+
+services provided and the information published with regard to the products or
+
+services.\n\n
+
+(viii) The lack of usability, profit or performance of the Platform’s contents or services.\n\n
+
+(ix) The loss or damages caused to any User or third party as a result of a person
+
+breaching the conditions, terms of use or instructions given by Videona on the
+
+Platform o through the infringement of the Platform’s security measures.\n\n
+
+(x) Any other damages of any nature which may be caused by reasons pertaining to the
+
+Platform not functioning or to the defective functioning of the Platform or any other
+
+website or with regard to any links which fail.\n\n
+
+
+Notwithstanding the above, Videona declares that has adopted all reasonable measures,
+
+within its grasp and within the state of technology, in order to guarantee the Platform
+
+operation of and to avoid the existence and transmission of viruses and other damaging
+
+components which could potentially harm Users.\n\n
+
+Videona has applied all reasonable measures to avoid errors in the contents published in
+
+the Platform. All contents offered through the Platform are updated and Videona reserves
+
+the right to modify them at any time. Videona will not be held responsible for the
+
+consequences which may derive from any errors in any contents published by third parties
+
+on the Platform and that Videona has not been informed of.\n\n
+
+To the fullest extent permitted by law, Videona will not be responsible for profits lost,
+
+revenues, or data, financial losses or indirect, special, consequential, exemplary, or
+
+punitive damages. In any event, the total liability of Videona for any claims under these
+
+terms, including for any implied warranties, is limited to the amount paid, if any, by the
+
+User to use the Platform. In all cases, Videona will not be liable for any loss or damage
+
+that is not reasonably foreseeable.\n\n
+
+6. PROHIBITIONS AND RESTRICTIONS\n\n
+
+Any communication or transmission of contents to the Platform which infringes the rights of
+
+third parties and/or the content that is threatening, obscene, defamatory, pornographic,
+
+xenophobic, which undermines personal dignity or the rights of minors or which is contrary
+
+to current legislation, or any conduct of the User which incites or constitutes a criminal
+
+offence, is totally prohibited.\n\n
+
+Likewise, the inclusion and communication of contents by Users which i) are false or
+
+inaccurate or may induce error or mislead other Users or Videona’s personnel, ii)  infringe
+
+the intellectual property rights of third parties, iii) may undermine or harm the reputation or
+
+image of Videona, iv) may be considered as illegal, misleading or unfair advertising, or
+
+contain viruses or any other electronic element which may harm or hinder the functioning
+
+of the Platform, the internet, IT equipment belonging to Videona or to third parties or
+
+access to the Platform by other Users, is totally prohibited.
+
+If the User infringes the above prohibitions/restrictions or Videona has reasonable grounds
+
+to suspect that a User has infringed any of the same, Videona reserves the right to
+
+suspend or terminate the User´s account and to refuse any and all current or future use of
+
+the products, services and/or the Platform (or any portion thereof).\n\n
+
+For further information see Videona Guidelines.\n\n
+
+7. INTELLECTUAL PROPERTY RIGHTS \n\n
+
+All intellectual property rights in and to all contents within the Platform are reserved and, in
+
+particular, it is forbidden to modify, copy, reproduce, publicly communicate, transform or
+
+distribute in any way the totality or part of any contents included in the Platform for public
+
+or commercial means unless with the prior, express and written authorisation of Videona
+
+or, as the case may be, from the third party owner or rights holder of the same.\n\n
+
+
+Access to and navigation through the Platform shall in no case be understood as a
+
+relinquishment, transmission, licence or total or partial transfer of any rights by Videona
+
+howsoever, unless otherwise expressly stated within the particular conditions which
+
+regulates the use, provision and/or contracting of the products or services, if any, provided
+
+through the Platform. Consequently, it is not permitted to delete, evade or manipulate any
+
+indicators of  rights ownership (for example “copyright”, “©”, “trademark” or “™” indicators)
+
+or other identifying data, whether in favour of Videona or any other parties, and/or any
+
+technical protection mechanisms, fingerprints or whichever information or identification
+
+mechanisms may be contained in, or otherwise pertain to, any contents.\n\n
+
+Any references to names and commercial or registered brands, logos or other distinctive
+
+marks, which are owned by Videona or by others, implicitly forbid their use without the
+
+authorisation from Videona or from the owner or the rights holder. At no time, unless
+
+otherwise expressly stated, the access or use of the Platform and/or its contents shall give
+
+the User any right whatsoever to the brands, logos and/or distinctive signs included in the
+
+Platform, each of which is protected by Law.\n\n
+
+The non authorized use and exploitation of the Platform contents or any other conduct
+
+which may infringe any intellectual property rights, will lead to the legal responsibility as set
+
+out within the applicable regulation.\n\n
+
+8. LINKS\n\n
+
+8.1 Links from the Platform to other apps or websites.\n\n
+
+Videona may offer direct or indirect links to other apps or websites which are outside of the
+
+Platform. The presence of these links in the Platform have a purely informative purpose
+
+only and at no time constitute an invitation to purchase the products and/or services
+
+offered on such websites. Furthermore, no such link implies the existence of a branch
+
+relationship with the entity owning the website to which the link is offered. In any such
+
+case, Videona will not be responsible for establishing general conditions to be taken into
+
+account in the use, provision or contracting of or for any such services or products and,
+
+therefore, Videona may not be held responsible in any way in relation with it.\n\n
+
+Videona does not have the knowledge, human resources or technical means to control or
+
+approve the information, contents, products or services provided by or through other
+
+websites to which it offers a link from the Platform. Consequently, Videona will not take
+
+any responsibility for any matters relating to such third party websites linked with the
+
+Platform.\n\n
+
+Notwithstanding the above, where Videona becomes aware that the activity or the
+
+information which it links to is illegal and will lead to a crime or damage the rights or
+
+property of third parties, it will act with the necessary diligence to delete or cease from
+
+using the corresponding link at the earliest opportunity.\n\n
+
+Likewise, if Users become aware of the illegality of the activities carried out through any
+
+such third party websites, they will be under the obligation to communicate such matter to
+
+Videona at the earliest reasonable opportunity such that Videona may evaluate the same
+
+and act appropriately.\n\n
+
+For the avoidance of doubt, if a “frame” is opened when accessing a certain web site,
+
+where the logo of Videona is shown, it will not imply that Videona is the owner of the
+
+referred web sites; the owner will be the entity referred as such within the web site.
+
+8.2 Links from other web pages to the Platform.\n\n
+
+If any User, entity or webpage wishes to establish a link to the Platform of any nature, they
+
+must comply with the following conditions:\n\n
+
+(i) They will need to obtain previous, express and written authorisation from Videona or
+
+being authorised by any Videona specific conditions.\n\n
+
+(ii) On the website from which the link is established, unless with Videona’s express
+
+prior written approval, no declaration of any nature may be made to the effect that
+
+Videona has authorised the link. If the entity providing the link from its webpage to
+
+the Platform wishes to include on its own webpage any brand, denomination,
+
+commercial name, label, logo or any other sign which identifies Videona and/or the
+
+Platform, they must obtain previous, express and written authorisation from Videona.
+
+(iii) Videona forbids the link to the Platform from all those webpages which contain
+
+materials, information or contents which are illegal, degrading, obscene and, in
+
+general, which infringe upon morality, public order, current legislation, generally
+
+accepted social rules or which harm the legitimate rights of third parties.\n\n
+
+9. PRIVACY\n\n
+
+When it is required the User’s register or the collection of personal data (in order to access
+
+services, subscribe to newsletters, carry out any registration process or request
+
+information, among others), the User will be alerted as to the need to provide his/her
+
+personal data.\n\n
+
+In any event, the collection and processing of personal data will be carried out in
+
+compliance with the requirements of the applicable data protection regulations as well as
+
+the Privacy Policy which forms an integral part of this Legal Notice.\n\n
+
+10. DURATION AND MODIFICATION\n\n
+
+Videona reserves the right to modify this Legal Notice and the particular terms and
+
+conditions which may have been established for the use and/or contracting of the products
+
+and services provided through the Platform, whenever it considers it appropriate and/or in
+
+order to adapt and comply with any changes in legislation and in technology which have
+
+become effective since the last publication of the same on the Platform.\n\n
+
+The term of this Legal Notice coincides with the duration of its publication and exhibition in
+
+the Platform, until such time as it is totally or partially modified. At such moment, the
+
+modified terms and conditions will become binding.\n\n
+
+11. COMMUNICATIONS\n\n
+
+The User must contact with Videona through the postal and/or email address provided on
+
+the Platform. Communications from Videona to the User must comply with the contact
+
+information provided by the User. The User therefore expressly accepts the use of the
+
+email address provided as a valid means for the exchange of information between
+
+Videona and the User.\n\n
+
+11. MISCELLANEOUS\n\n
+
+The Legal Notice includes the following documents:\n\n
+
+(i) Videona Guidelines\n\n
+
+(ii) Privacy Policy\n\n
+
+(iii) Particular Terms And Conditions\n\n
+
+The headings of the different sections herein only have an informative nature and do not
+
+affect, qualify or modify the interpretation of this Legal Notice.\n\n
+
+Where there is any discrepancy between the effects of this Legal Notice and the particular
+
+terms and conditions which may be established in relation to any specific products or
+
+services offered in the Platform, the latter will prevail.\n\n
+
+If one of the provisions laid down in this Legal Notice is considered void or as not being
+
+totally or partially binding by a Court of Law or by a recognised Administrative body, such
+
+nullity will not affect the other provisions contained in this Legal Notice nor any other
+
+provisions which have been established.\n\n
+
+Where Videona does not exercise any of the rights contained in this Legal Notice, such
+
+event will not constitute a relinquishment of this right, unless expressly stated in writing.\n\n
+
+13. GOVERNING LAW AND JURISDICTION.\n\n
+
+This Legal Notice, and any relationship arising out of its acceptance or related hereto, shall
+
+be governed exclusively by the laws of Spain.\n\n
+
+The courts located in the city of Madrid (Spain) shall have exclusive jurisdiction to
+
+adjudicate any dispute arising out of or relating to this Legal Notice and/or any relationship
+
+arising out of its acceptance. Each party hereby irrevocably consents to the exclusive
+
+jurisdiction of such courts.\n\n
+
+© 2015 VIDEONA SOCIALMEDIA, S.L. All rights reserved.\n\n
+
     </string>
     <string name="privacyPolicyTitle"><u>Privacy Policy</u></string>
     <string name="privacyPolicyContent">
-        La Política de Privacidad forma parte integrante del Aviso Legal de la Plataforma.\nEn cumplimiento con lo dispuesto en la normativa vigente en materia de protección de datos, VIDEONA SOCIAL MEDIA, S.L (en adelante, Videona), le informa que los datos personales del Usuario, obtenidos o recabados a través de la aplicación móvil o del portal web www.videona.es (en adelante y conjuntamente denominados, la Plataforma), serán tratados por Videona de conformidad con lo dispuesto en la presente Política de
-        Privacidad.\n\n1. RECOGIDA Y USO DE DATOS\n\n1.1. Los datos recogidos por Videona podrán ser de dos tipos:\n•	Datos proporcionados por el Usuario. Los datos personales como nombre y apellidos, email, foto, dirección, etc., serán proporcionados voluntariamente por los Usuarios, durante el proceso de registro y creación de perfiles, cuando compren en la Plataforma o contacten con
-        Videona.\n•	Datos recopilados automáticamente. Algunos datos podrán serán obtenidos de forma automática durante el uso de la Plataforma por los Usuarios. Entre la información recopilada automáticamente, se encuentran, la dirección IP, la ubicación GPS del dispositivo móvil, características del dispositivo móvil y datos ofrecidos por sensores, fecha y hora de acceso a la Plataforma, el origen (URL), el tiempo de uso y las páginas vistas, así como las preferencias de cada Usuario (Ver “Cookies”
-        abajo).\n1.2. Dichos datos serán utilizados para el cumplimiento, entre otras, de las siguientes finalidades:\n•	Gestionar el proceso de registro y creación de perfiles de los
-        Usuarios.\n•	Gestionar los procesos de compraventa a través del Marketplace.\n•	Informar a los Usuariosde los servicios ofrecidos a través de la
-        Plataforma.\n•	Mostrar publicidad relevante para los intereses y preferencias de los Usuarios.\n•	Atender solicitudes de consulta, información, quejas y
-        reclamaciones.\n•	Enviar a los Usuarios notificaciones sobre la actividad que han recibido sus videos y su posicionamiento.\n•	Realizar estudios y estadísticas sobre el uso de la Plataforma.\n1.3. Además, los datos de los Usuarios serán objeto de tratamiento para remitir por vía electrónica, comunicaciones comerciales relativas a productos y servicios que pueda resultar de su interés. Si el Usuario no desea recibir dichas comunicaciones, podrá indicarlo mediante la remisión de un email a legal@videona.com, con el asunto "Privacidad" o haciendo clic en enlace de baja proporcionado en las comunicaciones comerciales enviadas por
-        email.\n1.4. Siempre que se solicite, y el Usuario facilite, una dirección de correo electrónico, teléfono móvil u otro medio de comunicación electrónica, el Usuario expresamente acepta y autoriza que dichos medios sean utilizados preferentemente como canal de comunicación, como canal para cumplir todas o alguna de las finalidades anteriormente informadas así como canal a través del cual poderle informar de cualesquiera otros cambios relevantes que se produzcan en la
-        Plataforma.\n1.5. Los Usuarios garantizan que sus datos personales aportados son verdaderos, exactos, completos y actualizados, ya que los Usuarios serán los únicos responsables de cualquier daño o perjuicio, directo o indirecto, que pudiera ocasionarse como consecuencia del incumplimiento de tal
-        obligación.\n1.6. Asimismo, a los efectos de garantizar el deber de calidad y la actualización de los datos, el Usuario deberá comunicar a Videona cualquier modificación que pudiera tener lugar en los datos
-        facilitados.\n\n2. EDAD MÍNIMA\n\nPara poder registrarse y utilizar Videona el Usuario debe ser mayor de 14 años. Videona podrá utilizar su información personal para verificar su edad y garantizar el cumplimiento de esta
-        restricción.\n\n3. COOKIES\n\n3.1. Videona hace uso de cookies propias y de terceros respecto de los Usuarios que utilizan o navegan por la Plataforma, con la finalidad de poder desarrollar labores estadísticas y analíticas. En particular, el uso de las cookies permite que el servidor de Videona reconozca la dirección IP de conexión, el origen (URL), el tiempo de uso y las páginas vistas, así como las preferencias de cada
-        Usuario.\n3.2. Videona también utiliza cookies propias, queidentifican a los Usuarios unívocamente durante una sesión para poder mostrarles información privada y/o personalizada. Estas cookies son necesarias para el funcionamiento de la
-        Plataforma.\n3.3. Videona utiliza aun cookies comportamentales, que almacenan información de los hábitos de navegación de los Usuarios, lo que lepermite elaborar un perfil específico para mostrar publicidad
-        personalizada.\n3.4. Las cookies son ficheros enviados al navegador, mediante un servidor web, con la finalidad de registrar las actividades de los Usuarios durante su tiempo de navegación e interacción con la Plataforma. El Usuario tiene la posibilidad de configurar su navegador para ser avisado de la recepción de cookies e impedir su
-        instalación.\nPor favor, consulte las instrucciones y manuales de su navegador para ampliar esta información.\n\n4. SEGURIDAD\n\nEn respuesta a su preocupación por garantizar la seguridad y confidencialidad de sus datos, Videona ha adoptado los niveles de seguridad requeridos de protección de los datos personales y ha instalado los medios técnicos a su alcance para evitar la pérdida, mal uso, alteración, acceso no autorizado y robo de los datos personales facilitados a través de la
-        Plataforma.\n\n5. CONTACTO\n\nEl Usuario tiene reconocidos los derechos de acceso, rectificación, cancelación y oposición (A.R.C.O) los cuales podrá ejercitar dirigiendo una comunicación postal, y fotocopia del DNI/Pasaporte, con el asunto “Privacidad” a la dirección de Videona indicada en el Aviso Legal o mediante el envío de un email a legal@videona.com.\n
+
+        This Privacy Policy is part of the Platform´s Legal Notice.\n\n
+
+In accordance with the current data protection regulations, VIDEONA SOCIALMEDIA,
+
+S.L. (hereinafter, Videona) informs that any personal data belonging to the User,
+
+collected and/or provided through the mobile app or the webpages www.videona.es
+
+and www.videona.com (hereinafter, the Platform) will be processed by Videona
+
+according to this Privacy Policy.\n\n
+
+1. COLLECTION AND USE OF THE PERSONAL DATA\n\n
+
+1.1 The personal data collected by Videona is classified in two groups:\n\n
+
+ Data provided by the User. Personal data such as name, email, photo,
+
+address, etc., are voluntarily provided by Users during the registration process,
+
+when buying on the Platform or contacting Videona.\n\n
+
+ Data collected automatically. Some data may be obtained automatically
+
+during the use of the Platform. Among the information collected automatically it
+
+is the IP address, the mobile GPS location, mobile device features, the data
+
+provided by sensors, the date and time of access to the Platform, the source
+
+(URL), time of use and page views and preferences of each User (see
+
+"Cookies" below).\n\n
+
+1.2. Such data will be used, among others, for the following purposes:\n\n
+
+ Managing the User´s registration process;\n\n
+
+ Managing the purchasing process in the Marketplace;\n\n
+
+ Providing Users with information about the services offered through the
+
+Platform;\n\n
+
+ Providing Users with adverts based on their interest and preferences;\n\n
+
+ Managing requests for information, complaints and claims from Users;\n\n
+
+ Sending notifications to Users about their Videos activities and positioning;\n\n
+
+ Conducting studies and statistics about the use of the Platform.\n\n
+
+1.3 In addition, Users will be provided with commercial communications sent by
+
+electronic means, with regard to products and services which may be of the User´s
+
+interest. The User can refuse the reception of the mentioned communications, notifying
+
+Videona by sending an email to legal@videona.com, with the reference “Privacy” or by
+
+clicking on the unsubscribe link available in the electronic commercial communications
+
+sent by email. \n\n
+
+1.4 If Videona requests and the User provides an email address, a mobile telephone
+
+number or any other means of electronic communication, the User expressly
+
+authorises Videona to use such means as a way of communicating with the User, as a
+
+way to fulfil the abovementioned purposes, as well as to provide the User with any
+
+relevant changes which are made on or to the Platform.\n\n
+
+1.5 Users are entirely responsible for the accuracy, authenticity, currency and
+
+completeness of the data that they provide and are entirely responsible for any loss,
+
+damages or penalties that may result from any failure by them to meet such
+
+responsibility.\n\n
+
+1.6 In addition, in order to meet the above responsibility regarding accuracy, it is also
+
+the Users’ responsibility to notify Videona of any modification or change regarding data
+
+previously provided.\n\n
+
+2. MINIMUM AGE\n\n
+
+The User must be over 14 years old to register in and use the Platform. Videona may
+
+use your personal information to verify your age and ensure compliance with this
+
+restriction.\n\n
+
+3. COOKIES\n\n
+
+3.1. Videona uses first and third parties cookies for collecting information regarding
+
+Users’ use or navigation on the Platform with the purpose to develop statistical and
+
+analytical works. In particular, the use of cookies allows Videona server recognizes IP
+
+address connections, the source (URL), time of use, page views and preferences of
+
+each user.\n\n
+
+3.2. Videona also uses first party cookies, which uniquely identify the Users during a
+
+session to show private and/or customized information. These cookies are necessary
+
+for the Platform’s operation.\n\n
+
+3.3. Videona also uses targeting cookies, which store information about browsing
+
+habits of the Users, allowing us to develop a specific profile for display advertising.\n\n
+
+3.4. Cookies are files sent to the browser by a web server in order to record users’
+
+activities during their navigation and interaction with the Platform. Users have the ability
+
+to configure their browsers to be notified of the reception of cookies and prevent their
+
+installation. If you block or disable the cookies you can still use the Platform, but the
+
+use some of its services may be limited.\n\n
+
+Please consult the instructions and manuals of your browser for more information.\n\n
+
+4. SECURITY\n\n
+
+The processing of personal data is carried out in compliance with requirements laid
+
+down by the applicable regulations and, in particular, with the obligation of keeping the
+
+data confidential and secret. Specifically, Videona ensures that the appropriate security
+
+measures have been adopted in order to avoid any change, loss or non-authorised
+
+access, as well as any harm to personal data and registered information.\n\n
+
+5. CONTACT\n\n
+
+Users are granted with the rights to access, rectify, cancel and object the process of
+
+their personal data. These rights can be exercised by sending an email
+
+legal@videona.com, attaching a copy of User’s DNI/Passport. The communication
+
+must be sent with the subject “Ref. Privacy”,\n\n
+
+© 2015 VIDEONA SOCIALMEDIA S.L. All rights reserved.
 
     </string>
     <string name="termsOfServiceTitle"><u>Terms of Service</u></string>
     <string name="termsOfServiceContent">
-        POR FAVOR, LEA DETENIDAMENTE LAS PRESENTES DIRECTRICES.\nEL USO DE LOS SERVICIOS DE VIDEONA
-        IMPLICARÁ, POR SU PARTE, LA ACEPTACIÓN PREVIA, EXPRESA Y SIN EXCEPCIONES DE LA TOTALIDAD DE
-        LAS NORMAS AQUÍ PREVISTAS.\nSI VD. NO ESTÁ CONFORME CON LAS PRESENTES DIRECTRICES, NO HAGA
-        USO DE LOS SERVICIOS.\nLAS PRESENTES DIRECTRICES FORMAN PARTE INTEGRANTE DEL AVISO LEGAL DE
-        LA PLATAFORMA.\n\n1. NORMAS GENERALES\n\nEl Usuario se obliga expresamente a hacer uso de los Servicios, respetando las siguientes normas, y asumiendo cualquier responsabilidad que pudiera derivarse del incumplimiento de las
-        mismas.\n1.	Acceso a los Servicios: El Usuario se obliga a no acceder a los Servicios por ningún otro medio que no sea la interfaz que Videona proporciona al Usuario para acceder a los
-        mismos.\n2.	Identidad del Usuario: El Usuario se obliga a no falsear su identidad haciéndose pasar por cualquier otra persona, por una persona inexistente, por miembro de cualquier entidad o mentir sobre su relación con cualquier otra persona y/o
-        entidad.\n3.	Respeto a otros Usuarios: El Usuario está obligado a no ofender,amenazar, acechar, acosar, o de algún modo hostigar a cualesquiera terceros, a no recoger o almacenar información personal sobre otros Usuarios de la Plataforma sin cumplir la legislación vigente en materia de protección de datos, así como a no poner a disposición de terceros, con cualquier finalidad, datos captados a partir de listas de
-        distribución.\nLos Usuarios conocen y aceptan que toda la información, datos, textos, música, sonidos, imágenes, gráficos, vídeos, mensajes y cualquier materia similar (en adelante, el “Contenido”), publicada y puesta a disposición de los Usuarios a través de los Servicios, es realizado bajo la única y exclusiva responsabilidad de la persona que incorpora dicho Contenido en los Servicios.
-Por lo tanto, los Usuarios son los únicos y exclusivos responsables del Contenido subido, publicado y transmitido a través de los Servicios. Bajo ninguna circunstancia Videona será responsable por el Contenido subido y publicado, por los Usuarios, en los Servicios.
-Videona no controla, supervisa ni monitoriza el Contenido subido y/o publicado por los Usuarios en los Servicios, por lo que no puede garantizar la exactitud, integridad y/o calidad del Contenido. Ello no obstante, Videona puede verse obligada a realizar dicha monitorización (p.e, en cumplimiento con una obligación legal o por mandato de la autoridad competente) y, en cualquier caso, Videona se reserva el derecho de bloquear y eliminar cualquier Contenido accesible a través de los Servicios que infrinja estas Directrices, las Condiciones Particulares o el Aviso Legal.
-El Usuario acepta y consiente que Videona puede acceder, conservar y revelar la información de su cuenta y el Contenido: (a) con el fin de administrar adecuadamente su cuenta de Usuario; y (b) si así lo requiere la ley o autoridad competente, o si dicho acceso es necesario para: (i) cumplir con un procedimiento legal, (ii) hacer cumplir el Aviso Legal y/o las Condiciones Particulares; o (iii) responder a reclamaciones de que algún Contenido infringe los derechos de
-        terceros.\n\n2. PROHIBICIONES\n\nEl Usuario se compromete a hacer un uso adecuado de los Servicios y a no utilizarlos con fines ilícitos, ilegales o contrarios a la buena fe y al orden público. En particular, queda expresamente prohibido al Usuario utilizar los Servicios para, entre otras
-        finalidades:\n\ta)	Subir, publicar, enviar o, de cualquier otro modo, transmitir Contenido ilegal, dañino, amenazador, abusivo, difamatorio, vulgar, obsceno, pornográfico, calumnioso, discriminatorio, invasivo de la privacidad, o que pueda ser rechazado por motivosraciales o
-        étnicos;\n\tb)	Dañar a menores de edad o subir, publicar, enviar o transmitir cualquier Contenido que incorpore imágenes de menores de edad sin el consentimiento de sus padres o tutores
-        legales.\n\tc)	Amenazar, acechar o acosar a otros Usuarios;\n\td)	Subir, publicar, enviar o transmitir cualquier Contenido que incite al odio o incentive la práctica de actos ilícitos, violentos o de crueldad hacia los
-        animales.\n\te)	Publicar, comunicar, extraer, recoger, tratar o almacenar datos personales de otros Usuarios;\n\tf)	Hacerse pasar por otra persona o entidad, o declarar falsamente o tergiversar su relación con una persona o
-        entidad;\n\tg)	Falsificar encabezados o manipular identificadores para disfrazar el origen de cualquier Contenido transmitido a través de los Servicios;\n\th)	Subir, publicar, enviar o transmitir cualquier Contenido sobre el que el Usuario no tiene derechos para
-        ello;\n\ti)	Subir, publicar, enviar o transmitir cualquier Contenido que infrinja cualquier derecho de propiedad intelectual o industrial, derecho u otros derechos de propiedad de cualquier
-        tercero;\n\tj)	Subir, publicar, enviar o transmitir cualquier Contenido que infrinja derechos de imagen de terceros.\n\tk)	Subir, publicar, enviar o transmitir cualquier anuncio no solicitado o no autorizado, materiales promocionales, "correo basura", "spam", "cartas en cadena", "esquemas piramidales", o cualquier otra forma similar de solicitudes no
-        autorizadas;\n\tl)	Subir, publicar, enviar o transmitir cualquier material destinado a la práctica de “phishing” o que contenga virus de software o cualquier otro código informático, archivos o programas diseñados para interrumpir, dañar, destruir o limitar la funcionalidad de cualquier software o hardware o equipo de
-        telecomunicaciones;\n\tm)	Usar o aplicar cualesquiera recursos técnicos, lógicos o tecnológicos en cuya virtud los Usuarios puedan beneficiarse, directa o indirectamente, con o sin lucro, de la explotación no autorizada de los
-        Servicios.\n\n3. DENUNCIAS\n\nLos Usuarios podrán denunciar los Contenidos que consideren que vulneran estas Directrices a través del botón "Denunciar" situado debajo de los mismos. Para denunciar perfiles y cualesquiera otros Contenidos, los Usuarios deberán remitir un emai a legal@videona.com, con el asunto "Denuncia". En ambos canales de denuncia, los Usuarios deberán indicar las razones por las cuales consideran que hay una infracción de las presentes directrices.\n
+        PLEASE READ CAREFULLY THE FOLLOWING GUIDELINES. THE USE OF THE
+
+VIDEONA SERVICES IMPLIES YOUR PRIOR, EXPRESS AND COMPLETE
+
+ACCEPTANCE OF THE TERMS AND CONDITIONS HEREIN.
+
+IF YOU DOES NOT AGREE WITH THESE GUIDELINES DO NOT USE THE
+
+SERVICES.\n\n
+
+THESE GUIDELINES ARE PART OF THE PLATFORM\´S LEGAL NOTICE.\n\n
+
+1. GENERAL RULES\n\n
+
+The User shall use the Service, according to the following rules, and assuming any
+
+responsibility arising out of their infringement\n\n
+
+1. Access to the Service: User shall not access the Service by any means other than
+
+the interface provided by Videona.\n\n
+
+2. User Identity: The User shall not misrepresent his/her identity impersonating any
+
+other person, a non-existent person or a member of any entity, nor lie about his/her
+
+affiliation with any other person and/or entity.\n\n
+
+3. Respect other Users: User shall neither stalk nor harass any third party, nor collect,
+
+store and/or assign personal data about other Users infringing the current
+
+regulation on data protection. User shall not make available to third parties for any
+
+purpose, the data captured from distribution lists.\n\n
+
+Users agree and acknowledge that all information, data, text, music, sound, images,
+
+graphics, video, messages and other materials ("Content"), publicly posted and publicly
+
+accessible to the Users via the Service, are the sole responsibility of the person who
+
+includes such Content in the Service.\n\n
+
+This means that Users are entirely and exclusively responsible for all the Content that it
+
+is uploaded, posted or otherwise transmitted through the Services. Under no
+
+circumstances Videona will be liable in any way for any Content uploaded, posted or
+
+otherwise transmitted through the Services. \n\n
+
+Videona does not control or monitor the Content posted and/or published by Users via
+
+the Services and, therefore, does not guarantee the accuracy, integrity and/or quality of
+
+such Content. However, Videona may be required to monitor such Content (i.e,
+
+required to do so by law or competent authority) and, in any case, Videona reserves
+
+the right to block and/or eliminate any Content accessible through the Service which
+
+may infringe this Guidelines, any Particular Terms and Conditions or the Legal Notice.
+
+The User agrees and consents that Videona may access, preserve, and disclose
+
+his/her account information and Content: (a) for the purpose of properly administering
+
+the User’s account; and (b) if required to do so by law or competent authority, or if such
+
+access, is reasonably necessary to: (i) comply with legal process; (ii) enforce the Legal
+
+Notice and/or the Particular Terms and Conditions; or (iii) respond to claims that any
+
+Content infringes third-parties’ rights. \n\n
+
+7. PROHIBITIONS\n\n
+
+The User agrees to properly use the Service and to not use it for illegal or unlawful
+
+purposes or purposes contrary to the good faith or the public order. In detail, User is
+
+banned from the following:\n\n
+
+a) Upload, post, send or otherwise transmit any Content that is unlawful, harmful,
+
+threatening, abusive, vulgar, obscene, pornographic, defamatory, discriminator,
+
+invasive of other\'s privacy or objectionable for  racial or ethnical reasons; \n\n
+
+b) Harm minors in any way or upload, post, send or otherwise transmit any
+
+Content that incorporates images of minors without the consent of their parents
+
+or legal guardians.\n\n
+
+c) Threatening, stalking or harassing other Users;\n\n
+
+d) Upload, post, email or otherwise transmit any Content that incites or
+
+encourages the hate or the practice of illegal, violent or animal cruelty acts.\n\n
+
+e) Publish, communicate, extract, collect, process or store personal data about
+
+other Users;\n\n
+
+f) Impersonate any person or entity or falsely state or otherwise misrepresent your
+
+affiliation with a person or entity; \n\n
+
+g) Forge headers or otherwise manipulate identifiers in order to disguise the origin
+
+of any Content transmitted through the Services; \n\n
+
+h) Upload, post, send or otherwise transmit any Content that the User does not
+
+have rights to do so; \n\n
+
+i) Upload, post, send or otherwise transmit any Content that infringes any patent,
+
+trademark, trade secret, copyright or other proprietary rights; \n\n
+
+j) Upload, post, send or otherwise transmit any Content that infringes images
+
+rights of third parties.\n\n
+
+k) Upload, post, send or otherwise transmit any unsolicited or unauthorised
+
+advertising, promotional materials, "junk mail," "spam," "chain letters," "pyramid
+
+schemes," or any other form of non-authorized solicitation; \n\n
+
+l) Upload, post, email or otherwise transmit any material destined to the practice
+
+of "phishing" or that contains software viruses or any other computer code, files
+
+or programs designed to interrupt, damage, destroy or limit the functionality of
+
+any software or hardware or telecommunications equipment; \n\n
+
+m) Use or apply any technical, software or technology resources whereby Users
+
+can benefit, directly or indirectly, with or without profit, from the unauthorized
+
+exploitation of the Service. \n\n
+
+3. REPORTING \n\n
+
+Users may denounce the Content that violates these Guidelines through the "Report"
+
+button underneath them. To report profiles and any other Content, users must send an
+
+email to legal@videona.com, with the subject "Reporting". In both reporting channels,
+
+users must indicate the reasons why they consider that there is an infringement of
+
+these Guidelines.\n\n
+
+© 2015 VIDEONA SOCIALMEDIA S.L. All rights reserved.
+
 
     </string>
     <string name="particularTermsAndConditionsOfVideonaTitle"><u>Particular Terms and
         Conditions of Videona</u></string>
     <string name="particularTermsAndConditionsOfVideonaContent">
-        POR FAVOR, LEA DETENIDAMENTE LAS PRESENTES DIRECTRICES.\nEL USO DE LOS SERVICIOS DE VIDEONA
-        IMPLICARÁ, POR SU PARTE, LA ACEPTACIÓN PREVIA, EXPRESA Y SIN EXCEPCIONES DE LA TOTALIDAD DE
-        LAS NORMAS AQUÍ PREVISTAS.\nSI VD. NO ESTÁ CONFORME CON LAS PRESENTES DIRECTRICES, NO HAGA
-        USO DE LOS SERVICIOS.\nLAS PRESENTES DIRECTRICES FORMAN PARTE INTEGRANTE DEL AVISO LEGAL.\n\n1. OBJETO.\n\nLas presentes Condiciones Particulares tienen por objeto regular las condiciones aplicables al uso de Videona, accesible en la Plataforma (en adelante, el Servicio).
+        PLEASE READ CAREFULLY THE FOLLOWING PARTICULAR TERMS AND
 
-El Servicio está destinado únicamente a Usuarios mayores de 14 años que no tengan prohibida o legalmente excluida la recepción o utilización del Servicio, en virtud de la legislación de su país de residencia o desde el que acceden o utilizan el Servicio. Si Vd. tiene más de 14 años, pero es menor de edad (según la legislación de su país), debe disponer de autorización de sus padres o tutores legales para utilizar el Servicio.
+CONDITIONS. YOUR USE OF THE SERVICES DESCRIBED BELOW WILL IMPLY
 
-Los Usuarios menores de edad o que no disponen de capacidad legal para entender y aceptar las presentes Condiciones Particulares, así como cumplir con las obligaciones aquí previstas, tendrán restringido el uso de parte del Servicio de
-        Videona.\n\n2. ALCANCE.\n\nEl uso del Servicio no exige haberse registrado previamente. Sin embargo, para llevar a cabo determinadas acciones, sí es necesario haber hecho el download de la Aplicación y/o ser Usuario registrado.
+YOUR PRIOR, EXPRESS AND COMPLETE ACCEPTANCE OF THE TERMS AND
 
-A los efectos de las presentes Condiciones Particulares:\n•	“Configuraciones de Privacidad” son los parámetros establecidos por el Usuario sobre el nivel de privacidad que su Perfil y sus Vídeos tienen en la Plataforma. Los Usuarios pueden establecer si sus Vídeos son públicos o privados, así como los Usuarios autorizados a
-        visualizarlos.\n•	“Contenidos” son los Vídeos y Features criados por los Usuarios e incorporados en la Plataforma.\n•	“Features” son paquetes de software con filtros, efectos sonoros y visuales, transiciones y otras funcionalidades extras de la Plataforma, utilizados en la creación y edición de los
-        Vídeos.\n•	“Licencias de Copyright” son las licencias de propiedad intelectual otorgadas por los Usuarios a los Vídeos incorporados en la Plataforma. Dichas licencias podrán ser configuradas para todos los Vídeos incorporados en un Perfil o ser aplicadas a cada uno de ellos
-        individualmente.•	“Marketplace” es la tienda virtual donde los Usuarios pueden adquirir Features, espacio de almacenamiento y otras funcionalidades/servicios de la Plataforma, así como anunciar y vender
-        Contenidos.\n•	“Videos” son los videos individuales que los Usuarios pueden incorporar en el Servicio.\n•	“Videopoints” son la moneda virtual de Videona, utilizada para adquirir Items en el
-        Marketplace.\n\n3. REGISTRO Y CREACIÓN DE PERFILES\n\nPara poder utilizar todas acciones en la Plataforma el Usuario debe crear un Perfil utilizando el formulario de registro o importando sus datos personales desde otras Redes Sociales.Una vez finalizado el registro, se le enviará al Usuario un email con un enlace que deberá clicar para poder confirmar su Perfil.
+CONDITIONS HEREIN.\n\n
 
-El Usuario podrá editar su Perfil en cualquier momento, modificando sus datos personales y cambiando sus opciones o preferencias. A través del Perfil el Usuario podrá modificar las Configuraciones de Privacidad y Licencias de Copyright, gestionar sus Contenidos y acceder a las estadísticas relacionadas a los
-        mismos.\n\n4. CREACIÓN, ALOJAMIENTO Y PUBLICACIÓN DE VIDEOS\n\n4.1 Alcance\nPara poder subir, editar, publicar, alojar, compartir, valorar y recomendar Vídeos los Usuarios deberán bajar la Aplicación y efectuar su registro en Videona.
+IF YOU DOES NOT AGREE WITH THESE PARTICULAR TERMS AND
 
-Para reproducir y compartir Videos no es necesario registro previo o el download de la Aplicación.\n4.2 Grabación, edición, alojamiento y publicación de Vídeos\nLos Usuarios registrados podrán grabar y editar Vídeos a través de la Aplicación, utilizando Features gratuitos o adquiridos en el Marketplace. Una vez finalizada la edición de los Vídeos, los Usuarios podrán subirlos en la Plataforma, estableciendo las Configuraciones de Privacidad, así como las Licencias de Copyright otorgadas sobre los mismos.
+CONDITIONS DO NOT USE THE SERVICES.
 
-Videona se reserva el derecho de establecer límites a la cantidad de espacio para almacenamiento de Vídeos que cada Usuario puede utilizar.
+THESE PARTICULAR TERMS AND CONDITIONS ARE PART OF THE WEBSITE´S
 
-Los Vídeos incorporados por los Usuarios y cualesquiera otros contenidos publicados por éstos deberán ser conformes a las Directrices de Videona.\n4.3 Licencias\n4.3.1. Licencia a otros Usuarios\nCada Usuario autoriza expresamente que todo o parte del Vídeo incorporado por éstos en el Servicio, pueda ser visualizado, reproducido o utilizado por otros Usuarios, bien como pueda ser incorporado en los perfiles que un Usuario pueda tener en Redes Sociales y en otros sitios web, con fines personales no comerciales. A tal efecto, cada Usuario concede una autorización expresa, con la amplitud y extensión necesaria para posibilitar que cualquier Usuario pueda llevar a cabo lo anterior.
+LEGAL NOTICE.\n\n
 
-El Usuario podrá otorgar licencias adicionales eligiendo, desde su Perfil, las Licencias de Copyright de su preferencia, a partir de un listado ofrecido por Videona. Las Licencias de Copyright proporcionadas por Videona son las del tipo Creative Commons.
+1. PURPOSE\n\n
 
-El Usuario podrá editar las Licencias de Copyright, a cualquier momento, desde su Perfil. Dicho cambio de licencia podrá tardar treinta y dos (32) horas para reflejarse públicamente en la Plataforma, por lo que se extenderá la duración de las Licencias de Copyright otorgadas previamente hasta que los cambios realizados sean públicos.
+The purpose of these Particular Terms and Conditions is to regulate the use of the
 
-El Usuario reconoce y acepta expresamente que los cambios de Licencia de Copyright no se aplicarán a los Vídeos descargados anteriormente por los Usuarios a través de la
-        Plataforma.\n4.3.2. Licencia a Videona\nCon respecto a los Vídeos incorporados y publicados a través del Servicio, el Usuario otorga a Videona una licencia mundial, libre de cánones, no exclusiva, para usar, reproducir, modificar, transformar, adaptar, crear resúmenes, crear trabajos y obras derivadas, comunicar públicamente y poner a disposición por medios electrónicos dichos Vídeos, total o parcialmente, a los efectos de (i) mostrar los Vídeos a través de la Plataforma, de acuerdo con las Configuraciones de Privacidad; (ii) mostrar los Vídeos en sitios web y aplicaciones de terceros,de acuerdo con las Configuraciones de Privacidad; (iii) permitir que los demás Usuarios reproduzcan, descarguen e incrusten los Vídeos en sitios web de terceros, de acuerdo con las Configuraciones de Privacidad; y (iv) publicitar los Servicios de Videona, de acuerdo con las Configuraciones de Privacidad y Licencias de
-        Copyright.\n4.3.3. Duración de las Licencias\nLas licencias otorgadas por el Usuario permanecerán vigentes durante el plazo de tiempo que el Usuario mantenga el Vídeo en el Servicio o hasta que el Usuario elimine su Perfil de Videona. No obstante lo anterior, Videona se reserva el derecho de conservar los Videos en caso de controversias, investigaciones y procedimientos legales o cuando pudieran derivarse responsabilidades a Videona por la prestación del
-        Servicio.\n\n5. ANUNCIO, VENTA Y DESCARGA DE VÍDEOS POR USUARIOS\n\nLos Usuarios registrados (en adelante, Anunciante) podrán ofrecer, a través de la Plataforma, la compra de Vídeos por parte de los demás Usuarios. A tal efecto, deberán disponer de la capacidad legal, licencias, autorizaciones y demás requisitos legalmente exigibles para la venta de los mismos.
+Videona platform (hereafter, the Service).\n\n
 
-Para anunciar la venta de los Vídeos, el Anunciante deberá indicar (i) el precio del Vídeo; y (ii) las Licencias de Copyright otorgadas. Dichos Vídeos serán promocionados en el Marketplace, a través del cual los Usuarios registrados podrán indicar su interés en adquirir los Vídeos y contactar con los Anunciantes.
+The Service is intended solely for Users older 14 years who are not legally prohibited
 
-Videona facilitará a los Anunciantes la posibilidad de autorizar la descarga de los Vídeos, por los Usuarios interesados, a través de la Plataforma.
+from receiving or using the Service under the laws of their country of residence or from
 
-Los Videos serán anunciados/vendidos bajo la única y exclusiva responsabilidad del Usuario, quien responderá de la veracidad y exactitud de la información publicada. El Usuario responderá de cualquier acción, reclamación o demanda relativa a la venta/anuncio del Vídeo, dejando indemne Videona en caso de que dichas acciones, reclamaciones o demandas fueran dirigidas contra Videona.
+which they access or use the Service. If you are more than 14 years old, but is a minor
 
-Videona se limita a facilitar, a los Usuarios, el uso de la Plataforma para (i) anunciar la venta de sus Vídeos, (ii) contactar con los Usuarios interesados en adquirirlos/venderlos y (iii) posibilitar la descarga de los Vídeos a los Usuarios que los adquieran. Videona no gestiona la negociación o la venta, ni intermedia entre el Anunciante y los compradores de los Vídeos, ni ejerce control o supervisión alguna de la venta en cuestión.
+(under the laws of your country), you must have permission of your parents or legal
 
-Queda expresamente prohibido el uso del servicio de venta de Vídeos para cualquier finalidad diferente de la expresamente prevista en este
-        apartado.\n\n6. CREACIÓN Y VENTA DE FEATURES POR USUARIOS\n\n6.1. Alcance\nLos Usuarios registrados podrán crear y poner en venta filtros, efectos y transiciones (en adelante, “Features de Usuarios”), utilizando las herramientas y recursos facilitados por Videona, a través de la Aplicación. A tal efecto, los Usuarios deberán ser mayores de edad y disponer de capacidad legal para entender y aceptar las presentes Condiciones Particulares, así como cumplir con las obligaciones aquí previstas (en adelante, el Vendedor).
+guardians to use the Service.\n\n
 
-Los Features de Usuarios podrán ser adquiridos únicamente por Usuarios registrados de Videona. La adquisición de los Features de Usuarios queda sujeta, asimismo, al apartado“Condiciones de Compra del Marketplace”.
+Users who are minors or who do not have the legal capacity to understand and accept
 
-Queda expresamente prohibido el uso del servicio de creación y venta de Features para cualquier finalidad diferente de la expresamente prevista en este apartado.\n6.2 Remuneración\nLos Features de Usuarios se venderán desde la Aplicación por los precios, en Videopoints, establecidos por Videona. Una vez transcurridos cinco (5) días laborables desde la fecha de compra, Videona transferirá al Vendedor el importe, en Videopoints, correspondiente a cincuenta por ciento (50%) del precio del Feature, en concepto de remuneración por la venta.
+these Terms and Conditions, as well as to fulfill the obligations herewith, have
 
-La remuneración del Vendedor se realizará exclusivamente mediante el crédito de Videopoints en su Perfil. El Vendedor renuncia expresamente a cualquier otro tipo de remuneración.
+restricted the use of part of the Service.\n\n
 
-El cierre del Perfil implica la renuncia, por el Vendedor, de la remuneración por la venta prevista en este apartado.\n6.3 Licencia\nCon respecto los Features creados y puestos en venta por el Usuario, el Usuario otorga a Videona una licencia mundial, libre de cánones, no exclusiva y con facultad de cesión a terceros, para usar, reproducir,modificar, transformar, adaptar, crear resúmenes, crear trabajos y obras derivadas, comunicar públicamente y poner a disposición por medios electrónicos dichos Features, total o parcialmente, a los efectos de hacer posible el uso de los mismos conforme a las funcionalidades propias del Servicio, sin que dichas actividades les confieran derecho de remuneración o beneficio alguno, con excepción hecha de la remuneración prevista en el punto 6.2.
+2. SCOPE\n\n
 
-Esta licencia estará vigente durante el plazo de tiempo que el Usuario mantenga los Features en venta, terminándose en el momento en el que dichos Features sean eliminados o suprimidos del Servicio o retirados de la venta. La licencia continuará vigente en el supuesto de que un Usuario se dé de baja del Servicio sin eliminar o suprimir el Contenido.
+The use of the Service does not require being previously registered. However, to
 
-La retirada de la venta podrá tardar treinta y dos (32) horas para reflejarse en el Marketplace, por lo que se extenderá la duración de la licencia hasta que los Features ya no estén públicamente disponibles. La anulación de la licencia no afectará a los derechos de los Usuarios que hayan adquirido los Features antes del cese de la misma.
+perform certain actions, it is necessary to have made the download of the application
 
-El Vendedor reconoce que Videona no tiene ninguna obligación de usar, distribuir o comercializar los Features de Usuarios. Videona se reserva el derecho de restringir o eliminar Features de Usuarios a su
-        criterio.\n\n7. ADQUISICIÓN DE VIDEOPOINTS\n\n7.1. Alcance\nLos Usuarios podrán adquirir Videopoints a través de la venta de Features, de la premiación por Videona o mediante la compra de los mismos.
+and/or be a registered User.\n\n
 
-Podrán comprar Videopoints, los Usuarios mayores de edad, que dispongan de capacidad legal para entender y aceptar las presentes Condiciones Particulares, así como cumplir con las obligaciones aquí previstas (en adelante, el
-        Comprador).\n7.2. Proceso de Compra de Videopoints\nLos Compradores podrán adquirir la cantidad de Videopoints en que estén interesados, debiendo facilitar los datos e información solicitados durante el proceso de compra.
+For the purposes of these Terms and Conditions:\n\n
 
-Completado el proceso de compra, el Comprador recibirá la confirmación del pedido a través de correo electrónico (en la dirección utilizada por el Usuario para registrarse en la Plataforma), se efectuará el cargo, del importe de la compra, en el medio de pago elegido y, finalmente, se acreditarán los Videopoints en el Saldo de Videopoints disponible en su Perfil de Usuario. El Usuario recibirá la factura de la compra efectuada a través de correo electrónico.
+  “Content” are the Videos and the Features created by Users and uploaded on
 
-El plazo para la entrega de los Videopoints variará de acuerdo al medio de pago elegido y será previamente informado al Comprador, antes de que éste formalice su pedido de
-        compra.\n7.3. Condiciones Económicas\nLos Compradores deberán abonar el precio o importe de los Videopoints. Dichos precios incluyen el IVA y/o cualesquiera impuestos que resulten de aplicación. Asimismo, en el supuesto de existir algún descuento, incremento o cargo adicional (p.e, servicios accesorios, financiación o uso de medios de pago), el Comprador será informado del precio total desglosando los importes anteriores, lo que deberá realizarse en cualquier información al Comprador, tanto en la publicidad como con carácter previo a la formalización del pedido de compra.
+the Platform.\n\n
 
-Respecto a la compra de Videopoints, no será posible su devolución.\n7.4 Política de Privacidad\nLa recogida y el tratamiento de los datos personales se llevarán a cabo con sujeción a lo previsto en la Política de Privacidad.
+ “Copyright Licenses” are the intellectual property licenses granted by Users for
 
-Adicionalmente, los datos de los Compradores podrán serán comunicados a los medios o pasarelas de pago, a fin de que la compra pueda ser concluida.\n7.5 Saldo de Videopoints\nSe denomina “Saldo de Videopoints” el saldo de Videopoints disponible en el Perfil de cada Usuario. Dicho Saldo solo se podrá utilizar para comprar Items y otros servicios o contenidos a través de la Plataforma.
+the Videos embedded in the Platform. These licenses can be configured for all
 
-El Saldo de Videopoints no es reembolsable, ni transferible, y no tiene ningún valor en efectivo.
+Videos included in a profile or be applied to each one individually.\n\n
 
-El Saldo de Videopoints no expirará mientras el Usuario mantenga su Perfil. Si un Usuario cancela su Perfil perderá el derecho a utilizar el Saldo de Videopoints y no podrá reclamar, en ningún caso, el reembolso del mismo en
-        efectivo.\n\n8.CONDICIONES DE COMPRA DEL MARKETPLACE\n\n8.1. Alcance\nLa finalidad del Servicio es permitir a los Compradores que deseen adquirir Features, espacio de almacenamiento y cualesquiera otros contenidos/servicios disponibles en el Marketplace (en adelante, Item), formalizar la compra y adquisición de los
-        mismos.\n8.2. Proceso de Adquisición de Items\nLos Compradores podrán adquirir una licencia o la descarga de un Item en el que estén interesados, canjeando sus Videopoints. Para ello, deberán seleccionar el Item deseado y seguir las instrucciones dadas durante el proceso.
+  “Features” are software packs with filters, sound and visual effects, transitions
 
-Completado el proceso de adquisición, el Comprador recibirá la confirmación del pedido a través de correo electrónico (en la dirección utilizada por el Usuario para registrarse en la Plataforma), se efectuará el cargo, del importe de la compra del Saldo de Videopoints del Perfil de Usuario y, automáticamente, se le habilitará el uso del Item.
+and other of Platform extra features, used in creating and editing videos.\n\n
 
-Respecto a la compra de Items, no será posible su devolución.
+  “Marketplace” is the online store where users can purchase Features, storage
 
-Cuando resulten de aplicación al Item, el Comprador podrá hacer uso de las garantías legales aplicables.\n\n9. LICENCIA DEL SOFTWARE\n\nPara poder acceder a la totalidad de los Servicios disponibles en la Plataforma, los Usuarios deberán proceder a la descarga e instalación de la Aplicación en su dispositivo móvil.
-Videona otorga a los Usuarios una licencia personal, revocable, no exclusiva y no transferible para cargar y utilizar el software de la Aplicación exclusivamente para el uso de los Servicios previstos en las presentes Condiciones Particulares. El software no podrá ser utilizado, copiado, reproducido, transmitido, mostrado, distribuido, vendido, licenciado, descargado o explotado en cualquier forma diferente al funcionamiento del Servicio. Queda prohibido al Usuario realizar ingeniería inversa, descompilar, desensamblar o de cualquier otra forma crear códigos fuentes a partir del software.
-Con respecto a las funcionalidades y herramientas de la Aplicación que permiten al Usuario crear Features, Videona otorga a los Usuarios una licencia para utilizarlas, reproducirlas y preparar trabajos u obras derivadas, exclusivamente para la creación y venta de Features, conforme a las presentes Condiciones Particulares.\n
+space and other Platform functionalities/services, as well as advertise and sell
+
+Content.\n\n
+
+ "Privacy Settings" are the parameters set by the user about the level of privacy
+
+that their profile and their videos are on the Platform. Users can determine
+
+whether the videos are public or private and the Users authorized to view them.\n\n
+
+  “Videos” are the individual videos that Users can upload in the Service.\n\n
+
+  “Videopoints” are the Videona virtual currency, used to purchase items in the
+
+Marketplace.\n\n
+
+
+3. REGISTRATION AND PROFILE CREATION\n\n
+
+For using all the functionalities of the Platform the User must create a profile using the
+
+registration form or importing the personal data from other social networks. After the
+
+registration, Videona will send you an email with a link you must click to confirm your
+
+Profile.\n\n
+
+The Users can edit the Profile at any time by modifying their personal data and
+
+changing their options or preferences. Through the Profile you may modify the Privacy
+
+Settings and the Copyright Licenses, manage your Content and access statistics
+
+related to them.\n\n
+
+4. CREATION, HOSTING AND POSTING VIDEOS\n\n
+
+4.1 Scope\n\n
+
+To upload, edit, publish, host, share, rate and recommend videos Users must
+
+download the Application and make its register on Videona.\n\n
+
+To play and share Videos the prior registration or the download of the Application are
+
+not necessary.\n\n
+
+4.2 Recording, editing, hosting and publishing Videos\n\n
+
+Registered users can record and edit Videos through the Application using free or
+
+purchased Features. Once finished the Video edition, Users can upload it in the
+
+Platform, establishing the Privacy Settings and the Copyright Licenses granted on it.
+
+Videona reserves the right to set limits on the amount of storage space for Videos that
+
+each User can use.\n\n
+
+The Videos uploaded by Users and any other Contents published by them must follow
+
+the Videona Guidelines.\n\n
+
+4.3 Licenses\n\n
+
+4.3.1. License to other Users\n\n
+
+Users expressly authorize that all or part of the Videos uploaded by them in the Service
+
+can be viewed, reproduced or used by other Users, as well as can be incorporated into
+
+the profiles that a User can have in social networks and other websites for personal or
+
+non-commercial purposes. This authorization is conditioned to the Privacy Settings of
+
+the Video.\n\n
+
+Users may grant additional licenses by choosing in their Profiles the Copyright License
+
+from a list provided by Videona. The Copyright Licenses provided for Videona are
+
+Creative Commons.\n\n
+
+Users can edit the Copyright Licenses at any time in their Profiles. Such license
+
+change may take two (2) business days to be reflected publicly on the Platform.
+
+Consequently, the duration of the Copyright Licenses previously granted will be
+
+extended until changes are made public.\n\n
+
+The User expressly acknowledges and accepts that changes on the Copyright
+
+Licenses shall not apply to the Videos previously downloaded by Users through the
+
+Platform.\n\n
+
+4.3.2. License to Videona\n\n
+
+With respect to the Videos uploaded and published through the Service, the Users
+
+grant to Videona a worldwide nonexclusive and free of charges license to use,
+
+reproduce, adapt, publicly perform and make available electronically these Videos in
+
+whole or in part for (i) showing the videos through the Platform; (ii) displaying videos on
+
+websites and third party applications; and (iii) allowing others Users to reproduce,
+
+download and embed videos on websites of third parties, in accordance with the
+
+Privacy Settings.\n\n
+
+4.3.3. License duration\n\n
+
+The licenses granted by the Users shall remain valid for the period of time that Users
+
+keep the Videos in the Service or until Users delete their Profiles. Notwithstanding the
+
+foregoing, Videona reserves the right to retain Videos in case of disputes,
+
+investigations and legal proceedings or when may arise responsibilities to Videona
+
+from the Service.\n\n
+
+5. ADVERTISEMENT, SALE AND DOWNLOAD OF VIDEOS FOR USERS\n\n
+
+Registered Users (hereinafter Advertiser) may offer the purchase of Videos by other
+
+Users through the Platform. The Advertiser must be of legal age or have the legal
+
+capacity, licenses, authorizations and other legal requirements applicable to the sale
+
+thereof.\n\n
+
+To announce the sale of Videos, the Advertiser shall indicate (i) the price of the Video;
+
+and (ii) the Copyright Licenses granted. The Videos will be promoted on the
+
+Marketplace, through which registered Users can indicate their interest in acquiring
+
+them and contact with the Advertisers.\n\n
+
+Videona provides to Advertisers the possibility of allowing the download of Videos for
+
+Users interested on them.\n\n
+
+Videos shall be announced/sold under the sole responsibility of the User, who
+
+guarantees the truthfulness and accuracy of the information published. Users are liable
+
+for any action, claim or demand relating to the sale/announcement of the Video, leaving
+
+unscathed Videona if such actions, claims or demands are directly against Videona.
+
+Videona merely provides to Users the use of the platform for (i) announcing the sale of
+
+their Videos, (ii) contacting the Users interested in purchasing/selling the Videos (iii)
+
+enabling the download of the Videos to Users who acquire them. Videona does not
+
+manage the trading or sale or intermediate between the Advertiser and the buyers of
+
+the Videos and does not control or supervise any of the sales.\n\n
+
+The use the Service of selling Videos for any purpose other than expressly provided in
+
+this section is prohibited.\n\n
+
+6. CREATION AND SALE OF FEATURES FOR USERS\n\n
+
+6.1. Scope\n\n
+
+Registered Users can create and selling filters, effects and transitions (hereinafter
+
+"Users Features"), using the tools and resources provided by Videona through the
+
+Application. For this purpose, Users must be of legal age and have legal capacity to
+
+understand and accept these Conditions, as well as comply with the obligations set
+
+forth herein (hereinafter the Seller).\n\n
+
+Users Features may be purchased only by registered Users. The acquisition of Users
+
+Features is subject also to the "Marketplace Purchase Conditions ".\n\n
+
+The use the Service of creation and sale of Features for any purpose other than
+
+expressly provided in this section is prohibited.\n\n
+
+6.2 Remuneration\n\n
+
+The Users Features will be sold from the Application for prices in Videopoints
+
+established by Videona. After five (5) working days from the date of the purchase,
+
+Videona shall transfer to the Seller the amount in Videopoints, corresponding to fifty
+
+percent (50%) of the price of the Feature, as a remuneration for the sale.\n\n
+
+The Profile closure implies the renunciation by the Seller of the compensation for the
+
+sales.\n\n
+
+6.3 License\n\n
+
+Regarding the Features created and offered for sale, User grant to Videona a
+
+worldwide, royalty-free, nonexclusive and transferable to third parties license to use,
+
+reproduce, modify, change, adapt, create summaries, create derivative works, publicly
+
+communicate and make available electronically such Features in whole or in part, in
+
+order to allow their use according to the specific functionalities of the Service. This
+
+license does not confer the right to compensation or any benefit, with the exception of
+
+the remuneration provided in section 6.2.\n\n
+
+This license is valid for the period of time that a User keeps the Features for sale,
+
+finishing at the time in which the Features are eliminated or suppressed from the
+
+Service or withdrawn from sale. The license shall remain in force in the event that a
+
+User is deregistered the Service without removing or deleting the Feature.\n\n
+
+The withdrawal of the sale may take two (2) business days to be reflected in the
+
+Marketplace, so the duration of the license shall be extended until the Features are no
+
+longer publicly available. The cancellation of the license does not affect the rights of
+
+Users who have purchased the Features before the cessation of it.\n\n
+
+Seller acknowledges that Videona is under no obligation to use, distribute or market the
+
+Users Features. Videona reserves the right to restrict or remove Users Features at its
+
+discretion.\n\n
+
+7. ACQUISITION OF VIDEOPOINTS\n\n
+
+7.1. Scope\n\n
+
+Users can acquire Videopoints through the selling of Features, from Videona awards or
+
+by purchasing them.\n\n
+
+In order to buy Videopoints, Users must be of legal age or have the legal capacity to
+
+understand and accept these Conditions, as well as comply with the obligations set
+
+forth herein (hereinafter the Buyer).\n\n
+
+7.2. Videopoints purchase process\n\n
+
+Buyers can purchase the amount of Videopoints in which they are interested, providing
+
+the data and the information requested during the process.\n\n
+
+Once completed the purchase process, the Buyer will receive the order confirmation
+
+via email (to the address used by the User to register), the charge of the purchase
+
+amount will be made through the payment method chosen and finally, the Videopoints
+
+will be credited in the Videopoints Balance available in the User Profile. The User will
+
+receive the purchase receipt through email.\n\n
+
+The deadline for the delivery of Videopoints may vary according to the payment
+
+method chosen and it will be previously notified to the Buyer, before the purchase order
+
+conclusion.\n\n
+
+7.3. Economic Conditions\n\n
+
+Buyers must pay the price or value of the Videopoints, which will include VAT and/or
+
+any taxes that may apply. Also, if there is any discount, price increase or additional
+
+fees (e.g., ancillary services, financing or use of payment methods), the Purchaser will
+
+be informed of the total price by breaking down the previous amounts, prior to the
+
+formalization of the purchase order.\n\n
+
+Videopoints purchases are non-refundable.\n\n
+
+7.4 Privacy Policy\n\n
+
+The collection and processing of personal data will be held according to the Privacy
+
+Policy terms.\n\n
+
+Additionally, customers’ data can be communicated to payment methods or gateways,
+
+in order to complete the purchase.\n\n
+
+7.5 Videopoints Balance\n\n
+
+The "Videopoints Balance” is the amount of Videopoints available on the User’s Profile.
+
+This balance can only be used to purchase Items and other Services or Content in the
+
+platform.\n\n
+
+The Videopoints Balance is non-refundable, non-transferable and has no cash value.
+
+The Videopoints Balance shall not expire while the User keeps his profile. If a User
+
+cancels his Profile shall loses the right to use the Videopoints Balance and cannot
+
+claim in no case reimbursement of it in cash.\n\n
+
+8. MARKETPLACE PURCHASE CONDITIONS\n\n
+
+8.1. Scope\n\n
+
+The purpose of the Service is to allow the purchase of Features, storage space and
+
+any other content/services available on the Marketplace (hereinafter, Item).\n\n
+
+8.2. Items purchase process\n\n
+
+Buyers can purchase a license or download an Item exchanging their Videopoints. In
+
+order to do it, Buyers must select the desired Item and follow the instructions during the
+
+process.\n\n
+
+Once completed the purchase process, the Buyer will receive the order confirmation
+
+via email (to the address used by the User to register in the Platform), the charge of the
+
+purchase amount will be done on the Videopoints Balance in the User’s Profile and
+
+automatically will enable the use of the Item.\n\n
+
+The Item purchases are non-refundable.\n\n
+
+Buyers may make use of legal safeguards applicable when they are applicable to the
+
+Item.\n\n
+
+9. SOFTWARE LICENSE\n\n
+
+In order to access all the Services available on the Platform, Users shall download and
+
+install the Application on their mobile device.\n\n
+
+Videona grants to Users a personal, revocable, non-exclusive and non-transferable
+
+license to download and use the Application software exclusively for the use of the
+
+Services under these Particular Terms and Conditions. The software shall not be used,
+
+copied, reproduced, transmitted, displayed, distributed, sold, licensed, downloaded or
+
+otherwise exploited in any way different from the Service’s operation. Users may not do
+
+reverse engineer, decompile, disassemble or otherwise create source codes from the
+
+software.\n\n
+
+Regarding to the Application tool and functionalities that allow Users to create
+
+Features, Videona grants to Users a license to use, reproduce and prepare derivative
+
+works exclusively for the creation and sale of Features, under these Particular Terms
+
+and Conditions.\n\n
+
+© 2015 VIDEONA SOCIALMEDIA S.L. All rights reserved.
+
     </string>
-    <string name="title_activity_video_player">Video Player</string>
-    <string name="galleryActivityTitle">Gallery</string>
-    <string name="mastersFolderTitle">Raw</string>
-    <string name="editedFolderTitle">Edited</string>
 
-    <string name="recordError">Something bad happened. Impossible to record video, try again</string>
-    <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
-
-    <string name="effects_chooser_title">Effects</string>
-
-    <string name="add_videos_to_project">Please, add videos to project</string>
-    <string name="videos_removed">Clear videos from project, record or add new videos</string>
-
-    <!-- Drawer -->
-    <string name="error_rate_app">Could not launch Google Play</string>
-    <string name="exit_app_title">Shut down</string>
-    <string name="exit_app_message">Do you want to close the application?</string>
-
-
+    <!-- Others -->
+    <string name="ok">Ok</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

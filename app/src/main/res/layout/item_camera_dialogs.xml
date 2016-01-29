@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015. Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="8dip"
+    android:paddingTop="8dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:id="@+id/linearLayoutResolutionOptions">
+
+    <RadioButton
+        android:id="@+id/custom_list_view_row_radio_button"
+        android:button="@drawable/checkbox_dialog_icon"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" />
+
+    <TextView
+        android:id="@+id/custom_list_view_row_text_view"
+        android:textSize="16sp"
+        android:textColor="@color/textColorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/resolution"/>
+
+</LinearLayout>

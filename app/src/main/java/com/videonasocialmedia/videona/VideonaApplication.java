@@ -12,16 +12,24 @@ package com.videonasocialmedia.videona;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.karumi.dexter.Dexter;
+import com.qordoba.sdk.Qordoba;
 
 public class VideonaApplication extends Application {
 
+    private static Context context;
 
-    Tracker app_tracker;
+    Tracker appTracker;
+
+    public static Context getAppContext() {
+        return VideonaApplication.context;
+    }
 
     /**
      * Called when the application is starting, before any activity, service,
@@ -35,15 +43,25 @@ public class VideonaApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
+        setupGoogleAnalytics();
+        setupQordoba();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            Dexter.initialize(this);
+    }
 
-        //Analytics setup
+    private void setupQordoba() {
+        Qordoba.init(this, BuildConfig.QORDOBA_KEY,
+                BuildConfig.QORDOBA_APP_ID);
+    }
+
+    private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        if (BuildConfig.DEBUG)
+            analytics.setDryRun(true);
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
-        app_tracker = analytics.newTracker(R.xml.app_tracker);
-        app_tracker.enableAdvertisingIdCollection(true);
-
-
-
+        appTracker = analytics.newTracker(R.xml.app_tracker);
+        appTracker.enableAdvertisingIdCollection(true);
     }
 
     protected void attachBaseContext(Context base) {
@@ -55,6 +73,7 @@ public class VideonaApplication extends Application {
      * @return google analytics tracker
      */
     public synchronized Tracker getTracker() {
-        return app_tracker;
+        return appTracker;
     }
+
 }

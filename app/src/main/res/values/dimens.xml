@@ -5,4 +5,5 @@
     <dimen name="text_big">25sp</dimen>
     <dimen name="text_small">10sp</dimen>
     <dimen name="button_margin">4dp</dimen>
+    <dimen name="fab_compat_margin">0dp</dimen>
 </resources>
