@@ -56,6 +56,7 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -118,6 +119,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean recording;
     private OrientationHelper orientationHelper;
     private AlertDialog progressDialog;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     private boolean mUseImmersiveMode = true;
 
@@ -129,9 +132,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
         cameraView.setKeepScreenOn(true);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(
+        sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
         initEffectsRecycler();
         configChronometer();
@@ -280,14 +285,33 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @OnClick(R.id.button_navigate_edit)
     public void OnButtonNavigateEditClicked() {
-        new BetaDialogFragment().show(getFragmentManager(), "joinBetaDialogFragment");
+
         mixpanel.track("Navigate edit Button clicked in Record Activity", null);
+
+        if(sharedPreferences.getBoolean(ConfigPreferences.EMAIL_BETA_DONE,false)){
+            exportAndShare();
+        } else {
+            // Every two weeks, ask for mail to join beta
+            if( (Calendar.WEEK_OF_YEAR % 2 == 1) &&
+                    sharedPreferences.getBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, false)) {
+                new BetaDialogFragment().show(getFragmentManager(), "BetaDialogFragment");
+                editor.putBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, false);
+                editor.commit();
+            } else {
+                exportAndShare();
+                editor.putBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, true);
+                editor.commit();
+            }
+        }
     }
 
     public void onEvent(JoinBetaEvent event) {
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
         mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before// property name
+
+        editor.putBoolean(ConfigPreferences.EMAIL_BETA_DONE, true);
+        editor.commit();
     }
 
     @Override

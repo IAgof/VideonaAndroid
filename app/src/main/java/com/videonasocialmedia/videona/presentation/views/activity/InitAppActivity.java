@@ -161,11 +161,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
                 // Repeat this method for security, if user delete app data miss this configs.
                 setupCameraSettings();
-
                 createUserProfile();
-
                 initSettings();
                 checkAndDeleteOldMusicSongs();
+                //TODO Delete after update to versionCode 61
+                joinBetaFortnight();
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
@@ -174,10 +174,17 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 createUserProfile();
                 initSettings();
                 checkAndDeleteOldMusicSongs();
+                joinBetaFortnight();
                 break;
             default:
                 break;
         }
+    }
+
+    // Prepare app to launch join beta daialog every 15 days
+    private void joinBetaFortnight() {
+        editor.putBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, true);
+        editor.commit();
     }
 
     private void createUserProfile() {

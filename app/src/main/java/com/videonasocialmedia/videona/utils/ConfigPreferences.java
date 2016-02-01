@@ -32,4 +32,6 @@ public class ConfigPreferences {
     public final static String BACK_CAMERA_2160P_SUPPORTED = "back_camera_2160p_supported"; // 4K
     public final static String KEY_LIST_PREFERENCES_QUALITY = "list_preferences_quality";
     public final static String KEY_LIST_PREFERENCES_RESOLUTION = "list_preferences_resolution";
+    public final static String EMAIL_BETA_DONE = "email_beta_done";
+    public final static String EMAIL_BETA_FORTNIGHT = "email_beta_fortnight";
 }
