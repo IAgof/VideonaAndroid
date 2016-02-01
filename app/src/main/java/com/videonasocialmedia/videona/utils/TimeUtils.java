@@ -38,4 +38,5 @@ public class TimeUtils {
 		int timeInt= Integer.parseInt(time);
 		return toFormattedTime(timeInt);
 	}
+
 }
