@@ -110,7 +110,7 @@
            />
 
         <activity
-            android:name=".presentation.views.activity.ShareActivity"
+            android:name=".presentation.views.activity.ShareVideoActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.EditActivity"
             android:screenOrientation="sensorLandscape" />
