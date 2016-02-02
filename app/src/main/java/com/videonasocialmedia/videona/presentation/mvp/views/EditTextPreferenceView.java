@@ -20,7 +20,7 @@ public interface EditTextPreferenceView {
      * @param propertie
      * @param value
      */
-    void setPreferenceToMixpanel(String propertie, String value);
+    void setUserPropertyToMixpanel(String propertie, String value);
 
     void showMessage(int messageId);
 

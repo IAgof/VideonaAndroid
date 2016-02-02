@@ -29,6 +29,8 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
 
+import com.coremedia.iso.IsoFile;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -293,6 +295,14 @@ public class Utils {
                 break;
         }
 
+    }
+
+    public static double getFileDuration(String filePath) throws IOException {
+        IsoFile isoFile = new IsoFile(filePath);
+        double lengthInMSeconds = (double)
+                (isoFile.getMovieBox().getMovieHeaderBox().getDuration() /
+                        isoFile.getMovieBox().getMovieHeaderBox().getTimescale()) * 1000;
+        return lengthInMSeconds;
     }
 
 

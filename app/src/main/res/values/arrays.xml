@@ -36,9 +36,9 @@
   </string-array>
 
   <string-array name="camera_resolution_values">
-    <item>@string/low_resolution_value</item>
-    <item>@string/good_resolution_value</item>
-    <item>@string/high_resolution_value</item>
+    <item>@string/low_value</item>
+    <item>@string/good_value</item>
+    <item>@string/high_value</item>
   </string-array>
 
   <string-array name="camera_quality_names">
@@ -48,9 +48,9 @@
   </string-array>
 
   <string-array name="camera_quality_values">
-    <item>@string/low_quality_value</item>
-    <item>@string/good_quality_value</item>
-    <item>@string/high_quality_value</item>
+    <item>@string/low_value</item>
+    <item>@string/good_value</item>
+    <item>@string/high_value</item>
   </string-array>
 
 </resources>

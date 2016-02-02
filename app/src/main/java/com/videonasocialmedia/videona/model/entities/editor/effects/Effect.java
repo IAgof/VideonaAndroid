@@ -30,6 +30,7 @@ public abstract class Effect {
      */
     protected final String iconPath;
     protected final int iconId;
+    protected final String type;
 
     /**
      * Constructor.
@@ -38,11 +39,12 @@ public abstract class Effect {
      * @param name                - Name of the effect
      * @param iconPath    - Path to the icon resource
      */
-    public Effect(String identifier, String name, String iconPath) {
+    public Effect(String identifier, String name, String iconPath, String type) {
         this.identifier = identifier;
         this.name = name;
         this.iconPath = iconPath;
         this.iconId = -1;
+        this.type = type;
     }
 
     /**
@@ -52,11 +54,12 @@ public abstract class Effect {
      * @param name              - Name of the effect
      * @param iconId    - Path to the icon resource
      */
-    public Effect(String identifier, String name, int iconId) {
+    public Effect(String identifier, String name, int iconId, String type) {
         this.identifier = identifier;
         this.name = name;
         this.iconPath = null;
         this.iconId = iconId;
+        this.type = type;
     }
 
     public String getIdentifier() {
@@ -74,4 +77,8 @@ public abstract class Effect {
     public int getIconId() {
         return iconId;
     }
+
+    public String getType() { return type; }
+
+
 }

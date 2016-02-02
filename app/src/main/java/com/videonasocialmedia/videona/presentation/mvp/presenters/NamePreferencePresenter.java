@@ -30,7 +30,7 @@ public class NamePreferencePresenter extends EditTextPreferencePresenter {
     public void setPreference(String text) {
         editor.putString(ConfigPreferences.NAME, text);
         editor.commit();
-        editTextPreferenceView.setPreferenceToMixpanel("$first_name", text);
+        editTextPreferenceView.setUserPropertyToMixpanel("$first_name", text);
         editTextPreferenceView.goBack();
     }
 

@@ -15,9 +15,11 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.avrecorder.AVRecorder;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.avrecorder.SessionConfig;
@@ -25,6 +27,7 @@ import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
@@ -38,7 +41,13 @@ import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.utils.AnalyticsConstants;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,10 +73,12 @@ public class RecordPresenter implements OnExportFinishedListener {
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
     private AVRecorder recorder;
     private int recordedVideosNumber;
-
+    private MixpanelAPI mixpanel;
     private Effect selectedShaderEffect;
     private Effect selectedOverlayEffect;
-
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferencesEditor;
+    private String resolution;
     private Context context;
     private GLCameraEncoderView cameraPreview;
 
@@ -81,20 +92,19 @@ public class RecordPresenter implements OnExportFinishedListener {
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
 
     public RecordPresenter(Context context, RecordView recordView,
-                           GLCameraEncoderView cameraPreview) {
-        Log.d(LOG_TAG, "constructor presenter");
+                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
         this.recordView = recordView;
         this.context = context;
         this.cameraPreview = cameraPreview;
+        this.sharedPreferences = sharedPreferences;
 
+        preferencesEditor = sharedPreferences.edit();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         exportProjectUseCase = new ExportProjectUseCase(this);
         recordedVideosNumber = 0;
-
-
+        mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
         initRecorder(context, cameraPreview);
-
         hideInitialsButtons();
     }
 
@@ -105,11 +115,13 @@ public class RecordPresenter implements OnExportFinishedListener {
                     .getDrawable(R.drawable.watermark720));
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
-
-
         } catch (IOException ioe) {
             Log.e("ERROR", "ERROR", ioe);
         }
+    }
+
+    public String getResolution() {
+        return config.getVideoWidth() + "x" + config.getVideoHeight();
     }
 
     private void hideInitialsButtons() {
@@ -167,8 +179,10 @@ public class RecordPresenter implements OnExportFinishedListener {
 
 
     public void stopRecord() {
-        if (recorder.isRecording())
+        if (recorder.isRecording()) {
+            sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.STOP);
             recorder.stopRecording();
+        }
         //TODO show a gif to indicate the process is running til the video is added to the project
     }
 
@@ -220,6 +234,8 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void startRecord() {
+        mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
+        sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.START);
         applyEffect(selectedShaderEffect);
         applyEffect(selectedOverlayEffect);
         recorder.startRecording();
@@ -232,9 +248,26 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.hideVideosRecordedNumber();
         recordView.disableShareButton();
         firstTimeRecording = false;
-
     }
 
+    /**
+     * Sends button clicks to Mixpanel Analytics
+     *
+     * @param interaction
+     * @param result
+     */
+    private void sendUserInteractedTracking(String interaction, String result) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, context.getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void onEventMainThread(MuxerFinishedEvent e) {
         recordView.stopChronometer();
@@ -248,7 +281,70 @@ public class RecordPresenter implements OnExportFinishedListener {
         String fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
         originalFile.renameTo(destinationFile);
+        int numTotalVideosRecorded = sharedPreferences
+                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
+                ++numTotalVideosRecorded);
+        preferencesEditor.commit();
+        sendSuperProperties();
+        double clipDuration = 0.0;
+        try {
+            clipDuration = Utils.getFileDuration(destinationFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sendVideoRecordedTracking(clipDuration);
         return destinationFile.getAbsolutePath();
+    }
+
+    private void sendSuperProperties() {
+        JSONObject updateSuperProperties = new JSONObject();
+        int numPreviousVideosRecorded;
+        try {
+            numPreviousVideosRecorded =
+                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_RECORDED_VIDEOS);
+        } catch (JSONException e) {
+            numPreviousVideosRecorded = 1;
+        }
+        try {
+            updateSuperProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
+                    ++numPreviousVideosRecorded);
+            mixpanel.registerSuperProperties(updateSuperProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendVideoRecordedTracking(Double clipDuration) {
+        JSONObject videoRecordedProperties = new JSONObject();
+        resolution = config.getVideoWidth() + "x" + config.getVideoHeight();
+        int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        try {
+            videoRecordedProperties.put(AnalyticsConstants.VIDEO_LENGTH, clipDuration);
+            videoRecordedProperties.put(AnalyticsConstants.RESOLUTION, resolution);
+            videoRecordedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
+                    totalVideosRecorded);
+            mixpanel.track(AnalyticsConstants.VIDEO_RECORDED, videoRecordedProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        updateUserProfileProperties();
+    }
+
+    private void updateUserProfileProperties() {
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
+                    AnalyticsConstants.RESOLUTION, resolution));
+            userProfileProperties.put(AnalyticsConstants.QUALITY,
+                    sharedPreferences.getInt(AnalyticsConstants.QUALITY, config.getVideoBitrate()));
+            mixpanel.getPeople().set(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, 1);
+        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
     }
 
     public void onEvent(AddMediaItemToTrackSuccessEvent e) {
@@ -337,6 +433,10 @@ public class RecordPresenter implements OnExportFinishedListener {
             }
         }
     }
+
+    public Effect getSelectedShaderEffect() { return selectedShaderEffect; }
+
+    public Effect getSelectedOverlayEffect() { return selectedOverlayEffect; }
 
     public void removeEffect(Effect effect) {
         if (effect instanceof OverlayEffect) {

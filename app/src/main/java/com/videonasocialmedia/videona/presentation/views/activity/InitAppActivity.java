@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,19 +19,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnInitAppEventListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.InitAppView;
+import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.AppStart;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -64,6 +73,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private int numSupportedCameras;
     private long startTime;
     private String androidId = null;
+    private String initState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +112,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SplashScreenTask splashScreenTask = new SplashScreenTask();
+        SplashScreenTask splashScreenTask = new SplashScreenTask(this);
         splashScreenTask.execute();
-        mixpanel.timeEvent("Time in Init Activity");
     }
 
     @Override
@@ -116,7 +125,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     protected void onPause() {
         super.onPause();
         releaseCamera();
-        mixpanel.track("Time in Init Activity");
     }
 
     @Override
@@ -147,15 +155,30 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         setupStartApp();
     }
 
+    private void sendStartupAppTracking() {
+        JSONObject initAppProperties = new JSONObject();
+        try {
+            initAppProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_ORGANIC);
+            initAppProperties.put(AnalyticsConstants.INIT_STATE, initState);
+            mixpanel.track(AnalyticsConstants.APP_STARTED, initAppProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setupStartApp() {
         AppStart appStart = new AppStart();
         switch (appStart.checkAppStart(this, sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
+                initState = "returning";
+                sendFirstTimeProperties(false);
                 initSettings();
                 break;
             case FIRST_TIME_VERSION:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
+                initState = "upgrade";
+                sendFirstTimeProperties(false);
                 // example: show what's new
                 // could be appear a mix panel popup with improvements.
 
@@ -169,6 +192,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
+                initState = "firstTime";
+                sendFirstTimeProperties(true);
                 // example: show a tutorial
                 setupCameraSettings();
                 createUserProfile();
@@ -187,10 +212,38 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         editor.commit();
     }
 
+    private void sendFirstTimeProperties(boolean state) {
+        JSONObject firstTimeSuperProperties = new JSONObject();
+        int appUseCount;
+        try {
+            appUseCount = mixpanel.getSuperProperties().getInt(AnalyticsConstants.APP_USE_COUNT);
+        } catch (JSONException e) {
+            appUseCount = 0;
+        }
+        try {
+            firstTimeSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
+            firstTimeSuperProperties.put(AnalyticsConstants.APP_USE_COUNT, appUseCount);
+            mixpanel.registerSuperProperties(firstTimeSuperProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createUserProfile() {
         mixpanel.identify(androidId);
         mixpanel.getPeople().identify(androidId);
-        mixpanel.getPeople().set("User Type", "Free");
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_FREE);
+            userProfileProperties.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            userProfileProperties.put(AnalyticsConstants.LOCALE,
+                    Locale.getDefault().toString());
+            userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
+            mixpanel.getPeople().setOnce(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -497,11 +550,18 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
      */
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
 
+        private Activity parentActivity;
+
+        public SplashScreenTask(Activity activity) {
+            this.parentActivity = activity;
+        }
+
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
                 waitForCriticalPermissions();
                 setup();
+                sendStartupAppTracking();
             } catch (Exception e) {
                 Log.e("SETUP", "setup failed", e);
             }
@@ -528,7 +588,13 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
             if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
                 navigate(IntroAppActivity.class);
             } else {
-                navigate(RecordActivity.class);
+                InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
+                if (notification != null) {
+                    Log.d("INAPP", "in-app notification received");
+                    mixpanel.getPeople().showGivenNotification(notification, parentActivity);
+                } else {
+                    navigate(RecordActivity.class);
+                }
             }
         }
 

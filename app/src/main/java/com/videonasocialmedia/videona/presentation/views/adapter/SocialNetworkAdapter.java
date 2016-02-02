@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.social.SocialNetworkApp;
+import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +23,10 @@ import butterknife.Optional;
  */
 public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdapter.SocialNetworkViewHolder> {
 
-    private List<SocialNetworkApp> socialNetworks;
+    private List<SocialNetwork> socialNetworks;
     private OnSocialNetworkClickedListener listener;
 
-    public SocialNetworkAdapter(List<SocialNetworkApp> socialNetworks, OnSocialNetworkClickedListener listener) {
+    public SocialNetworkAdapter(List<SocialNetwork> socialNetworks, OnSocialNetworkClickedListener listener) {
         this.socialNetworks = socialNetworks;
         this.listener = listener;
         notifyDataSetChanged();
@@ -46,7 +46,7 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
     @Override
     public void onBindViewHolder(SocialNetworkViewHolder holder, int position) {
-        SocialNetworkApp current = socialNetworks.get(position);
+        SocialNetwork current = socialNetworks.get(position);
         holder.icon.setImageDrawable(current.getIcon());
         if (holder.name != null)
             holder.name.setText(current.getName());
@@ -57,12 +57,12 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
         return socialNetworks.size();
     }
 
-    public void setSocialNetworkList(List<SocialNetworkApp> socialNetworkList) {
+    public void setSocialNetworkList(List<SocialNetwork> socialNetworkList) {
         this.socialNetworks = socialNetworkList;
     }
 
     public interface OnSocialNetworkClickedListener {
-        void onSocialNetworkClicked(SocialNetworkApp socialNetworkApp);
+        void onSocialNetworkClicked(SocialNetwork socialNetwork);
     }
 
     class SocialNetworkViewHolder extends RecyclerView.ViewHolder {

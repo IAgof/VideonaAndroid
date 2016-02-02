@@ -105,7 +105,6 @@ public class VideolistFullScreenPreviewActivity extends VideonaActivity implemen
     @Override
     protected void onStart() {
         super.onStart();
-        mixpanel.timeEvent("Time in VideolistFullScreen Activity");
     }
 
     @Override
@@ -121,7 +120,6 @@ public class VideolistFullScreenPreviewActivity extends VideonaActivity implemen
         releaseMusicPlayer();
         projectDuration = 0;
         instantTime = 0;
-        mixpanel.track("Time in VideolistFullScreen Activity");
     }
 
     @Override

@@ -34,4 +34,10 @@ public class ConfigPreferences {
     public final static String KEY_LIST_PREFERENCES_RESOLUTION = "list_preferences_resolution";
     public final static String EMAIL_BETA_DONE = "email_beta_done";
     public final static String EMAIL_BETA_FORTNIGHT = "email_beta_fortnight";
+    public final static String VIDEO_DURATION = "video_duration";
+    public final static String NUMBER_OF_CLIPS = "number_of_clips";
+    public final static String RESOLUTION = "resolution";
+    public final static String QUALITY = "quality";
+    public final static String TOTAL_VIDEOS_RECORDED = "total_videos_recorded";
+    public final static String TOTAL_VIDEOS_SHARED = "total_videos_shared";
 }

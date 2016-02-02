@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.model.entities.social.SocialNetworkApp;
+import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,8 @@ import java.util.List;
 public class SocialNetworkAppsProvider {
 
 
-    public List<SocialNetworkApp> getSocialNetworksAppsInstalled() {
-        List<SocialNetworkApp> socialNetworkApps = new ArrayList<>();
+    public List<SocialNetwork> getSocialNetworksAppsInstalled() {
+        List<SocialNetwork> socialNetworks = new ArrayList<>();
         Context context = VideonaApplication.getAppContext();
         Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
         shareIntent.setType("video/*");
@@ -31,37 +31,37 @@ public class SocialNetworkAppsProvider {
             String packageName = app.activityInfo.applicationInfo.packageName;
             String activityName = app.activityInfo.name;
             Drawable icon= app.loadIcon(pm);
-            SocialNetworkApp socialNetworkApp;
+            SocialNetwork socialNetwork;
             if (packageName.toLowerCase().contains("twitter")
                     || activityName.toLowerCase().contains("twitter")) {
-                socialNetworkApp = new SocialNetworkApp("Twitter", packageName,
+                socialNetwork = new SocialNetwork("Twitter", packageName,
                         activityName, icon, "#videona");
             } else if (packageName.toLowerCase().contains("facebook.katana")) {
-                socialNetworkApp = new SocialNetworkApp("Facebook", packageName,
+                socialNetwork = new SocialNetwork("Facebook", packageName,
                         activityName, icon, "");
             } else if (packageName.toLowerCase().contains("whatsapp")
                     || activityName.toLowerCase().contains("whatsapp")) {
-                socialNetworkApp = new SocialNetworkApp("Whatsapp", packageName,
+                socialNetwork = new SocialNetwork("Whatsapp", packageName,
                         activityName, icon, "#videona");
             } else if (packageName.toLowerCase().contains("youtube")
                     || activityName.toLowerCase().contains("youtube")) {
-                socialNetworkApp = new SocialNetworkApp("Youtube", packageName,
+                socialNetwork = new SocialNetwork("Youtube", packageName,
                         activityName, icon, "");
             } else if (packageName.toLowerCase().contains("plus")
                     && activityName.toLowerCase().contains("com.google.android.libraries.social.gateway.GatewayActivity")) {
-                socialNetworkApp = new SocialNetworkApp("GooglePlus", packageName,
+                socialNetwork = new SocialNetwork("GooglePlus", packageName,
                         activityName, icon, "#videona");
             } else if (packageName.toLowerCase().contains("instagram")
                     || activityName.toLowerCase().contains("instagram")) {
-                socialNetworkApp = new SocialNetworkApp("Instagram", packageName,
+                socialNetwork = new SocialNetwork("Instagram", packageName,
                         activityName, icon, "#videona");
             } else {
-                socialNetworkApp = new SocialNetworkApp("Generic", packageName,
+                socialNetwork = new SocialNetwork("Generic", packageName,
                         activityName, icon, "");
             }
-            socialNetworkApps.add(socialNetworkApp);
-            Log.d(socialNetworkApp.getName(),socialNetworkApp.getAndroidPackageName()+"||"+socialNetworkApp.getAndroidActivityName());
+            socialNetworks.add(socialNetwork);
+            Log.d(socialNetwork.getName(), socialNetwork.getAndroidPackageName()+"||"+ socialNetwork.getAndroidActivityName());
         }
-        return socialNetworkApps;
+        return socialNetworks;
     }
 }

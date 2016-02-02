@@ -1,6 +1,6 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
-import com.videonasocialmedia.videona.model.entities.social.SocialNetworkApp;
+import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface ShareVideoView {
 
-    void showShareNetworksAvailable(List<SocialNetworkApp> networks);
+    void showShareNetworksAvailable(List<SocialNetwork> networks);
 
     void hideShareNetworks();
 
-    void showMoreNetworks(List<SocialNetworkApp> networks);
+    void showMoreNetworks(List<SocialNetwork> networks);
 
     void hideExtraNetworks();
 }

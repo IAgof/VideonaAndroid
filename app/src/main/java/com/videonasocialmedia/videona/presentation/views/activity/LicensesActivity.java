@@ -36,16 +36,4 @@ public class LicensesActivity extends VideonaActivity {
         Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Licenses Activity");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Licenses Activity");
-    }
-
 }

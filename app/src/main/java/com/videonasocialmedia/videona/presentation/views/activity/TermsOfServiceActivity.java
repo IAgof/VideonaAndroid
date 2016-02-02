@@ -36,16 +36,4 @@ public class TermsOfServiceActivity extends VideonaActivity {
         Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent("Time in Terms Of Service Activity");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mixpanel.track("Time in Terms Of Service Activity");
-    }
-
 }

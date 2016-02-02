@@ -11,7 +11,11 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.editor.AddMusicToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.CheckIfVideoFilesExistUseCase;
@@ -28,6 +32,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -51,6 +56,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     private CheckIfVideoFilesExistUseCase checkIfVideoFilesExistUseCase;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
+    private SharedPreferences sharedPreferences;
     /**
      * Get media list from project use case
      */
@@ -69,6 +75,9 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
         checkIfVideoFilesExistUseCase = new CheckIfVideoFilesExistUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
     }
 
     /**
@@ -140,6 +149,10 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
 
     public int getNumVideosOnProject() {
         return Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject();
+    }
+
+    public String getResolution() {
+        return sharedPreferences.getString(ConfigPreferences.RESOLUTION, "1280x720");
     }
 
     @Override
