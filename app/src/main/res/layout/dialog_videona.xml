@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/titleDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        tools:text="@string/CloseBecauseOfPermissionsTitle"
+        android:textSize="18sp"
+        android:textColor="@color/textColorTitle"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="2dp"
+        android:background="@color/colorSecondaryLight" />
+
+    <TextView
+        android:id="@+id/messageDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textSize="16sp"
+        tools:text="@string/permissionsDeniedMessage"
+        android:padding="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:gravity="right">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/cancelDialog"
+            android:textSize="17sp"
+            android:text="@string/ok"
+            android:background="@color/colorTransparent"
+            android:textColor="@color/textColorTitle"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/acceptDialog"
+            android:textSize="17sp"
+            android:text="@string/ok"
+            android:background="@color/colorTransparent"
+            android:textColor="@color/textColorTitle"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+</LinearLayout>

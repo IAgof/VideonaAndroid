@@ -49,7 +49,9 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresente
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -73,7 +75,7 @@ import butterknife.OnTouch;
  * RecordActivity manages a single live record.
  */
 public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
-        RecordView, OnEffectSelectedListener {
+        RecordView, OnEffectSelectedListener, OnVideonaDialogListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -764,13 +766,33 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onEffectSelected(Effect effect) {
-        recordPresenter.applyEffect(effect);
-        scrollEffectList(effect);
-        showRemoveFilters();
-        removeFilterActivated = true;
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase());
+        final int REQUEST_CODE_DIALOG_EXIT = 1;
+        VideonaDialog dialog = new VideonaDialog().newInstance(
+                "hello",
+                "Vero rules",
+                "yes",
+                "no",
+                REQUEST_CODE_DIALOG_EXIT
+        );
+        dialog.setListener(this);
+        dialog.show(getFragmentManager(), "dialogPermission");
+//        recordPresenter.applyEffect(effect);
+//        scrollEffectList(effect);
+//        showRemoveFilters();
+//        removeFilterActivated = true;
+//        sendFilterSelectedTracking(effect.getType(),
+//                effect.getName().toLowerCase(),
+//                effect.getIdentifier().toLowerCase());
+    }
+
+    @Override
+    public void onClickAcceptDialogListener(int id) {
+        Log.d("yes", "oooooooooooook");
+    }
+
+    @Override
+    public void onClickCancelDialogListener(int id) {
+        Log.d("no", "oooooooooooook");
     }
 
     private void sendFilterSelectedTracking(String type, String name, String code) {
