@@ -55,6 +55,7 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -731,26 +732,43 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void onEffectSelected(Effect effect) {
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase());
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase());
     }
 
     private void sendFilterSelectedTracking(String type, String name, String code) {
         JSONObject userInteractionsProperties = new JSONObject();
+        List<String> effectsCombinedList = getEffectsCombinedList();
+        boolean combined = false;
+        if(effectsCombinedList.size() > 1)
+            combined = true;
         try {
             userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
             userInteractionsProperties.put(AnalyticsConstants.NAME, name);
             userInteractionsProperties.put(AnalyticsConstants.CODE, code);
             userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
             mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<String> getEffectsCombinedList() {
+        List<String> effects = new ArrayList<>();
+        Effect effect1 = recordPresenter.getSelectedShaderEffect();
+        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
+        if(effect1 != null)
+            effects.add(effect1.getName().toLowerCase());
+        if(effect2 != null)
+            effects.add(effect2.getName().toLowerCase());
+        return effects;
     }
 
     @Override
