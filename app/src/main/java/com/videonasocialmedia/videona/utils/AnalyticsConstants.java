@@ -21,7 +21,6 @@ public class AnalyticsConstants {
      * Values
      */
     public final static String TYPE = "type";
-    public final static String TYPE_PAID = "paid";
     public final static String TYPE_FREE = "free";
     public final static String DATE = "date";
     public final static String TYPE_ORGANIC = "organic";
@@ -46,16 +45,7 @@ public class AnalyticsConstants {
     public final static String TOTAL_RECORDED_VIDEOS = "totalVideosRecorded";
     public final static String LAST_VIDEO_RECORDED = "lastVideoRecorded";
     public final static String CODE = "code";
-    public final static String FILTER_NAME_SEPIA = "sepia";
-    public final static String FILTER_NAME_MONO = "mono";
-    public final static String FILTER_NAME_AQUA = "aqua";
-    public final static String FILTER_CODE_SEPIA = "ad8";
-    public final static String FILTER_CODE_MONO = "ad4";
-    public final static String FILTER_CODE_AQUA = "ad1";
-    public static final String CHANGE_SKIN = "change skin";
     public static final String CHANGE_FLASH = "change flash";
-    public static final String SKIN_WOOD = "wood";
-    public static final String SKIN_LEATHER = "leather";
     public static final String RECORD = "record";
     public static final String START = "start";
     public static final String STOP = "stop";
@@ -65,14 +55,13 @@ public class AnalyticsConstants {
     public static final String TOTAL_SHARED_VIDEOS = "totalVideosShared";
     public static final String SOCIAL_NETWORK = "socialNetwork";
     public static final String LAST_VIDEO_SHARED = "lastVideoShared";
-    public static final String SWIPE = "swipe";
-    public static final String LEFT = "left";
-    public static final String RIGHT = "right";
     public static final String FIRST_TIME = "firstTime";
     public static final String APP_USE_COUNT = "appUseCount";
     public static final String CLEAR_FILTER = "clearFilter";
     public static final String SET_FILTER_GROUP = "setFilterGroup";
     public static final String FILTER_GROUP_OVERLAY = "overlay";
     public static final String FILTER_GROUP_SHADER = "shader";
+    public static final String FILTERS_COMBINED = "filtersCombined";
+    public static final String COMBINED = "combined";
 
 }

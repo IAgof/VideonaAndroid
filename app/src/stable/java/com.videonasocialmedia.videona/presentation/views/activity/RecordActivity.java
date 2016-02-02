@@ -262,11 +262,25 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!recording) {
                 recordPresenter.requestRecord();
+                checkSelectedFilters();
             } else {
                 recordPresenter.stopRecord();
             }
         }
         return true;
+    }
+
+    private void checkSelectedFilters() {
+        Effect shaderEffect = recordPresenter.getSelectedShaderEffect();
+        Effect overlayEffect = recordPresenter.getSelectedOverlayEffect();
+        if(shaderEffect != null)
+            sendFilterSelectedTracking(shaderEffect.getType(),
+                    shaderEffect.getName().toLowerCase(),
+                    shaderEffect.getIdentifier().toLowerCase());
+        if(overlayEffect != null)
+            sendFilterSelectedTracking(overlayEffect.getType(),
+                    overlayEffect.getName().toLowerCase(),
+                    overlayEffect.getIdentifier().toLowerCase());
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -644,6 +658,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void goToShare(String videoToSharePath) {
+        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         recordPresenter.removeMasterVideos();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);

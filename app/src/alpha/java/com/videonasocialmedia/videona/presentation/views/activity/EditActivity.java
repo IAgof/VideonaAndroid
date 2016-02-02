@@ -452,6 +452,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void goToShare(String videoToSharePath) {
+        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);
         startActivity(intent);
