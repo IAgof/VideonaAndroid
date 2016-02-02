@@ -767,7 +767,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void onEffectSelected(Effect effect) {
         final int REQUEST_CODE_DIALOG_EXIT = 1;
-        VideonaDialog dialog = new VideonaDialog().newInstance(
+        VideonaDialog dialog = VideonaDialog.newInstance(
                 "hello",
                 "Vero rules",
                 "yes",
@@ -786,12 +786,12 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    public void onClickAcceptDialogListener(int id) {
+    public void onClickPositiveButton(int id) {
         Log.d("yes", "oooooooooooook");
     }
 
     @Override
-    public void onClickCancelDialogListener(int id) {
+    public void onClickNegativeButton(int id) {
         Log.d("no", "oooooooooooook");
     }
 

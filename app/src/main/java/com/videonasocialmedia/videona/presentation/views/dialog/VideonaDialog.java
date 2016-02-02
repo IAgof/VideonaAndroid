@@ -23,10 +23,10 @@ import butterknife.OnClick;
 public class VideonaDialog extends DialogFragment {
 
     private OnVideonaDialogListener listener;
-    @InjectView(R.id.acceptDialog)
-    Button acceptDialog;
-    @InjectView(R.id.cancelDialog)
-    Button cancelDialog;
+    @InjectView(R.id.positiveButton)
+    Button positiveButton;
+    @InjectView(R.id.negativeButton)
+    Button negativeButton;
     @InjectView(R.id.titleDialog)
     TextView titleDialog;
     @InjectView(R.id.messageDialog)
@@ -36,14 +36,14 @@ public class VideonaDialog extends DialogFragment {
     public VideonaDialog() {
     }
 
-    public static VideonaDialog newInstance(String title, String message, String accept,
-                                            String cancel, int idDialog) {
+    public static VideonaDialog newInstance(String title, String message, String positive,
+                                            String negative, int idDialog) {
         VideonaDialog frag = new VideonaDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("message", message);
-        args.putString("accept", accept);
-        args.putString("cancel", cancel);
+        args.putString("positiveButton", positive);
+        args.putString("negativeButton", negative);
         args.putInt("idDialog", idDialog);
         frag.setArguments(args);
         return frag;
@@ -64,9 +64,8 @@ public class VideonaDialog extends DialogFragment {
 
         setTitleDialog(getArguments().getString("title"));
         setMessageDialog(getArguments().getString("message"));
-        setAcceptDialog(getArguments().getString("accept"));
-        setCancelDialog(getArguments().getString("cancel"));
-
+        setPositiveButton(getArguments().getString("positiveButton"));
+        setNegativeButton(getArguments().getString("negativeButton"));
         idDialog = getArguments().getInt("idDialog");
 
         return builder.create();
@@ -93,31 +92,31 @@ public class VideonaDialog extends DialogFragment {
         messageDialog.setText(resMessage);
     }
 
-    private void setAcceptDialog(String resAccept) {
-        acceptDialog.setText(resAccept);
+    private void setPositiveButton(String resPositive) {
+        positiveButton.setText(resPositive);
     }
 
-    public void hideAcceptDialog() {
-        acceptDialog.setVisibility(View.GONE);
+    public void hidePositiveButton() {
+        positiveButton.setVisibility(View.GONE);
     }
 
-    private void setCancelDialog(String resCancel) {
-        cancelDialog.setText(resCancel);
+    private void setNegativeButton(String resNegative) {
+        negativeButton.setText(resNegative);
     }
 
-    public void hideCancelDialog() {
-        acceptDialog.setVisibility(View.GONE);
+    public void hideNegativeButton() {
+        negativeButton.setVisibility(View.GONE);
     }
 
 
-    @OnClick(R.id.acceptDialog)
-    public void onClickAcceptDialog() {
-        listener.onClickAcceptDialogListener(idDialog);
+    @OnClick(R.id.positiveButton)
+    public void onClickPositiveButton() {
+        listener.onClickPositiveButton(idDialog);
     }
 
-    @OnClick(R.id.cancelDialog)
-    public void onClickCancelDialog() {
-        listener.onClickCancelDialogListener(idDialog);
+    @OnClick(R.id.negativeButton)
+    public void onClickNegativeButton() {
+        listener.onClickNegativeButton(idDialog);
     }
 
 

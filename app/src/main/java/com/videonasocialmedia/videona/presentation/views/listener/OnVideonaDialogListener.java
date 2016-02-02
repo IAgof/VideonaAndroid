@@ -5,8 +5,8 @@ package com.videonasocialmedia.videona.presentation.views.listener;
  */
 public interface OnVideonaDialogListener {
 
-    void onClickAcceptDialogListener(int id);
+    void onClickPositiveButton(int id);
 
-    void onClickCancelDialogListener(int id);
+    void onClickNegativeButton(int id);
 
 }
