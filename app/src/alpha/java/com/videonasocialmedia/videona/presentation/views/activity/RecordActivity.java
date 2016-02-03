@@ -49,9 +49,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresente
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
-import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -75,7 +73,7 @@ import butterknife.OnTouch;
  * RecordActivity manages a single live record.
  */
 public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
-        RecordView, OnEffectSelectedListener, OnVideonaDialogListener {
+        RecordView, OnEffectSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -766,33 +764,13 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onEffectSelected(Effect effect) {
-        final int REQUEST_CODE_DIALOG_EXIT = 1;
-        VideonaDialog dialog = VideonaDialog.newInstance(
-                "hello",
-                "Vero rules",
-                "yes",
-                "no",
-                REQUEST_CODE_DIALOG_EXIT
-        );
-        dialog.setListener(this);
-        dialog.show(getFragmentManager(), "dialogPermission");
-//        recordPresenter.applyEffect(effect);
-//        scrollEffectList(effect);
-//        showRemoveFilters();
-//        removeFilterActivated = true;
-//        sendFilterSelectedTracking(effect.getType(),
-//                effect.getName().toLowerCase(),
-//                effect.getIdentifier().toLowerCase());
-    }
-
-    @Override
-    public void onClickPositiveButton(int id) {
-        Log.d("yes", "oooooooooooook");
-    }
-
-    @Override
-    public void onClickNegativeButton(int id) {
-        Log.d("no", "oooooooooooook");
+        recordPresenter.applyEffect(effect);
+        scrollEffectList(effect);
+        showRemoveFilters();
+        removeFilterActivated = true;
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase());
     }
 
     private void sendFilterSelectedTracking(String type, String name, String code) {

@@ -1,13 +1,15 @@
 package com.videonasocialmedia.videona.presentation.views.dialog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
@@ -23,24 +25,28 @@ import butterknife.OnClick;
 public class VideonaDialog extends DialogFragment {
 
     private OnVideonaDialogListener listener;
+    @InjectView(R.id.title)
+    TextView title;
+    @InjectView(R.id.content)
+    LinearLayout content;
+    @InjectView(R.id.image)
+    ImageView image;
+    @InjectView(R.id.message)
+    TextView message;
     @InjectView(R.id.positiveButton)
     Button positiveButton;
     @InjectView(R.id.negativeButton)
     Button negativeButton;
-    @InjectView(R.id.titleDialog)
-    TextView titleDialog;
-    @InjectView(R.id.messageDialog)
-    TextView messageDialog;
     private int idDialog;
 
-    public VideonaDialog() {
-    }
+    public VideonaDialog() {}
 
-    public static VideonaDialog newInstance(String title, String message, String positive,
+    public static VideonaDialog newInstance(String title, int image, String message, String positive,
                                             String negative, int idDialog) {
         VideonaDialog frag = new VideonaDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
+        args.putInt("image", image);
         args.putString("message", message);
         args.putString("positiveButton", positive);
         args.putString("negativeButton", negative);
@@ -62,41 +68,63 @@ public class VideonaDialog extends DialogFragment {
         builder.setView(v);
         ButterKnife.inject(this, v);
 
-        setTitleDialog(getArguments().getString("title"));
-        setMessageDialog(getArguments().getString("message"));
-        setPositiveButton(getArguments().getString("positiveButton"));
-        setNegativeButton(getArguments().getString("negativeButton"));
+        String titleText = getArguments().getString("title");
+        if(titleText == null)
+            hideTitle();
+        else
+            setTitle(titleText);
+        int imageId = getArguments().getInt("image");
+        if(imageId == 0)
+            hideImage();
+        else
+            setImage(imageId);
+        String messageText = getArguments().getString("message");
+        if(messageText == null)
+            hideMessage();
+        else
+            setMessage(messageText);
+        String positiveButtonText = getArguments().getString("positiveButton");
+        if(positiveButtonText == null)
+            hidePositiveButton();
+        else
+            setPositiveButton(positiveButtonText);
+        String negativeButtonText = getArguments().getString("negativeButton");
+        if(negativeButtonText == null)
+            hideNegativeButton();
+        else
+            setNegativeButton(negativeButtonText);
         idDialog = getArguments().getInt("idDialog");
 
         return builder.create();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void setListener(OnVideonaDialogListener listener) { this.listener = listener; }
+
+    private void setTitle(String restTitle) { title.setText(restTitle); }
+
+    private void hideTitle() {
+        title.setVisibility(View.GONE);
     }
 
-    public void setListener(OnVideonaDialogListener listener) {
-        this.listener = listener;
+    private void setImage(int resImage) { image.setImageResource(resImage); }
+
+    private void hideImage() {
+        image.setVisibility(View.GONE);
+        content.setGravity(Gravity.LEFT);
     }
 
-    public void dismissDialog() {
-        this.dismiss();
-    }
+    private void setMessage(String resMessage) { message.setText(resMessage); }
 
-    private void setTitleDialog(String restTitle) {
-        titleDialog.setText(restTitle);
-    }
-
-    private void setMessageDialog(String resMessage) {
-        messageDialog.setText(resMessage);
+    private void hideMessage() {
+        message.setVisibility(View.GONE);
+        content.setGravity(Gravity.CENTER);
     }
 
     private void setPositiveButton(String resPositive) {
         positiveButton.setText(resPositive);
     }
 
-    public void hidePositiveButton() {
+    private void hidePositiveButton() {
         positiveButton.setVisibility(View.GONE);
     }
 
@@ -104,20 +132,20 @@ public class VideonaDialog extends DialogFragment {
         negativeButton.setText(resNegative);
     }
 
-    public void hideNegativeButton() {
+    private void hideNegativeButton() {
         negativeButton.setVisibility(View.GONE);
     }
 
-
     @OnClick(R.id.positiveButton)
     public void onClickPositiveButton() {
-        listener.onClickPositiveButton(idDialog);
+        if(listener != null)
+            listener.onClickPositiveButton(idDialog);
     }
 
     @OnClick(R.id.negativeButton)
     public void onClickNegativeButton() {
-        listener.onClickNegativeButton(idDialog);
+        if(listener != null)
+            listener.onClickNegativeButton(idDialog);
     }
-
 
 }

@@ -43,12 +43,12 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.MusicGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.PreviewVideoListFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.ScissorsFxMenuFragment;
-import com.videonasocialmedia.videona.presentation.views.fragment.SimpleDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.TrimPreviewFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoTimeLineFragment;
@@ -284,12 +284,15 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void showError(final int causeTextResource) {
-        SimpleDialogFragment errorDialog= new SimpleDialogFragment();
-        errorDialog.setTitle(getString(R.string.error));
-        String message= getResources().getString(causeTextResource);
-
-        errorDialog.setMessage(message);
-        errorDialog.getDialog().show();
+        VideonaDialog dialog = VideonaDialog.newInstance(
+                getString(R.string.error),
+                0,
+                getResources().getString(causeTextResource),
+                null,
+                null,
+                0
+        );
+        dialog.show(getFragmentManager(), "errorDialog");
     }
 
     @Override
