@@ -205,8 +205,7 @@
         <activity
             android:name=".presentation.views.activity.ShareVideoActivity"
             android:parentActivityName=".presentation.views.activity.RecordActivity"
-            android:label="@string/share_using"
-            />
+            android:label="@string/app_name"/>
 
     </application>
 
