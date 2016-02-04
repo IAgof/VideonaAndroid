@@ -71,7 +71,7 @@ public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDi
     private void goToVote() {
         VideonaDialog dialog = VideonaDialog.newInstance(
                 getString(R.string.rateUsDialogTitle),
-                0,
+                R.drawable.gatito_rules_pressed,
                 getString(R.string.rateUsDialogMessage),
                 getString(R.string.rateUsDialogAffirmative),
                 getString(R.string.rateUsDialogNegative),
