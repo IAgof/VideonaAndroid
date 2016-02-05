@@ -11,8 +11,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,6 +28,8 @@ import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivit
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.ShareVideoActivity;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
+import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,7 +37,7 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the video fx menu
  */
-public class NavigationDrawerFragment extends VideonaFragment {
+public class NavigationDrawerFragment extends VideonaFragment implements OnVideonaDialogListener {
 
     /*CONFIG*/
     /**
@@ -48,7 +48,8 @@ public class NavigationDrawerFragment extends VideonaFragment {
      * LOG_TAG
      */
     private static final String LOG_TAG = "NavigationDrawerFragment";
-
+    private VideonaDialog dialog;
+    private final int REQUEST_CODE_EXIT_APP = 1;
 
     @Nullable
     @Override
@@ -129,25 +130,34 @@ public class NavigationDrawerFragment extends VideonaFragment {
     @OnClick (R.id.fragment_navigator_exit_button)
     public void navigateToExitApp(){
 
-        new AlertDialog.Builder(this.getActivity(), R.style.VideonaAlertDialogDark)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.exit_app_title)
-                .setMessage(R.string.exit_app_message)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        dialog = VideonaDialog.newInstance(
+                getString(R.string.exit_app_title),
+                R.drawable.common_icon_bobina,
+                getString(R.string.exit_app_message),
+                getString(R.string.acceptExit),
+                getString(R.string.cancelExit),
+                REQUEST_CODE_EXIT_APP
+        );
+        dialog.setListener(NavigationDrawerFragment.this);
+        dialog.show(getFragmentManager(), "exitAppDialog");
+    }
 
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_HOME);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-                        startActivity(intent);
-                        getActivity().finish();
-                        System.exit(0);
-                    }
-                })
-                .setNegativeButton(R.string.no, null)
-                .show();
+    @Override
+    public void onClickPositiveButton(int id) {
+        if(id == REQUEST_CODE_EXIT_APP) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+            startActivity(intent);
+            getActivity().finish();
+            System.exit(0);
+        }
+    }
 
+    @Override
+    public void onClickNegativeButton(int id) {
+        if(id == REQUEST_CODE_EXIT_APP)
+            dialog.dismiss();
     }
 
     @OnClick({R.id.fragment_navigator_record_button, R.id.fragment_navigator_edit_button,
@@ -155,8 +165,6 @@ public class NavigationDrawerFragment extends VideonaFragment {
     public void trackClicks(View view) {
         sendButtonTracked(view.getId());
     }
-
-
 
     /**
      * Sends button clicks to Google Analytics

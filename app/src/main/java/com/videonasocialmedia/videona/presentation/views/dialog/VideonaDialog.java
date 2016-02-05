@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -110,14 +109,12 @@ public class VideonaDialog extends DialogFragment {
 
     private void hideImage() {
         image.setVisibility(View.GONE);
-        content.setGravity(Gravity.LEFT);
     }
 
     private void setMessage(String resMessage) { message.setText(resMessage); }
 
     private void hideMessage() {
         message.setVisibility(View.GONE);
-        content.setGravity(Gravity.CENTER);
     }
 
     private void setPositiveButton(String resPositive) {

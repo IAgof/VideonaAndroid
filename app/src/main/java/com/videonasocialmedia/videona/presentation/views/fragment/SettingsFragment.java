@@ -82,11 +82,11 @@ public class SettingsFragment extends PreferenceFragment implements
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 dialog = VideonaDialog.newInstance(
-                        getString(R.string.exit_app_message),
-                        R.drawable.gatito_rules_pressed,
+                        getString(R.string.exit_app_title),
+                        R.drawable.common_icon_bobina,
                         null,
                         getString(R.string.acceptExit),
-                        null,
+                        getString(R.string.cancelExit),
                         REQUEST_CODE_EXIT_APP
                 );
                 dialog.setListener(SettingsFragment.this);
@@ -225,6 +225,8 @@ public class SettingsFragment extends PreferenceFragment implements
             i.setData(Uri.parse(url));
             startActivity(i);
         }
+        if(id == REQUEST_CODE_EXIT_APP)
+            dialog.dismiss();
     }
 
     private void sendBetaLeaveTracking() {

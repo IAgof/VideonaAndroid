@@ -523,7 +523,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     public void onRemoveAllProjectSelected() {
         dialog = VideonaDialog.newInstance(
                 getString(R.string.confirmDeleteVideosFromProjectTitle),
-                0,
+                R.drawable.common_icon_eddyt,
                 getString(R.string.confirmDeleteVideosFromProjectMessage),
                 getString(R.string.yes),
                 getString(R.string.no),

@@ -1,8 +1,6 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.AlertDialog;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -22,8 +20,10 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.GalleryPagerPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import butterknife.OnClick;
  * Created by jca on 20/5/15.
  */
 public class GalleryActivity extends VideonaActivity implements ViewPager.OnPageChangeListener,
-        GalleryPagerView, OnSelectionModeListener {
+        GalleryPagerView, OnSelectionModeListener, OnVideonaDialogListener {
 
     private final String MASTERS_FRAGMENT_TAG="MASTERS";
     private final String EDITED_FRAGMENT_TAG="EDITED";
@@ -47,6 +47,8 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     int selectedPage = 0;
     private int countVideosSelected = 0;
     GalleryPagerPresenter galleryPagerPresenter;
+    private VideonaDialog dialog;
+    private final int REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY = 1;
 
     @InjectView(R.id.button_ok_gallery)
     ImageButton okButton;
@@ -185,28 +187,40 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
                         String.valueOf(numVideosSelected) + " " +
                         getResources().getString(R.string.confirmDeleteTitle2);
             }
-            new AlertDialog.Builder(this, R.style.VideonaAlertDialogDark)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle(title)
-                            .setMessage(R.string.confirmDeleteMessage)
-                            .setPositiveButton(R.string.positiveButton, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    for (Video video : videoList) {
-                                        File file = new File(video.getMediaPath());
-                                        file.delete();
-                                    }
-                                    for (int i = 0; i < adapterViewPager.getCount(); i++) {
-                                        VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
-                                        selectedFragment.updateView();
-                                    }
-                                    countVideosSelected = 0;
-                                    updateCounter();
-                                }
-                            })
-                    .setNegativeButton(R.string.negativeButton, null)
-                    .show();
+            dialog = VideonaDialog.newInstance(
+                    title,
+                    R.drawable.common_icon_bobina,
+                    getString(R.string.confirmDeleteMessage),
+                    getString(R.string.positiveButton),
+                    getString(R.string.negativeButton),
+                    REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY
+            );
+            dialog.setListener(this);
+            dialog.show(getFragmentManager(), "removeVideosFromGalleryDialog");
         }
+    }
+
+    @Override
+    public void onClickPositiveButton(int id) {
+        if(id == REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY) {
+            final List<Video> videoList = getSelectedVideos();
+            for (Video video : videoList) {
+                File file = new File(video.getMediaPath());
+                file.delete();
+            }
+            for (int i = 0; i < adapterViewPager.getCount(); i++) {
+                VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
+                selectedFragment.updateView();
+            }
+            countVideosSelected = 0;
+            updateCounter();
+        }
+    }
+
+    @Override
+    public void onClickNegativeButton(int id) {
+        if(id == REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY)
+            dialog.dismiss();
     }
 
     @Override
