@@ -214,6 +214,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
             }
             countVideosSelected = 0;
             updateCounter();
+            dialog.dismiss();
         }
     }
 

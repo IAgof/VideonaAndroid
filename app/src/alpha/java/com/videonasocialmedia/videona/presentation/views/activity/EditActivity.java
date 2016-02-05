@@ -721,6 +721,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
                 switchFragment(previewVideoListFragment, R.id.edit_fragment_all_preview);
                 removeTrimFragment();
             }
+            dialog.dismiss();
         }
     }
 

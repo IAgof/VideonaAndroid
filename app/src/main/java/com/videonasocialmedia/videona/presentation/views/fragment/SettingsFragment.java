@@ -84,7 +84,7 @@ public class SettingsFragment extends PreferenceFragment implements
                 dialog = VideonaDialog.newInstance(
                         getString(R.string.exit_app_title),
                         R.drawable.common_icon_bobina,
-                        null,
+                        getString(R.string.exit_app_message),
                         getString(R.string.acceptExit),
                         getString(R.string.cancelExit),
                         REQUEST_CODE_EXIT_APP
@@ -105,8 +105,8 @@ public class SettingsFragment extends PreferenceFragment implements
                         getString(R.string.leaveBetaDialogTitle),
                         R.drawable.common_icon_bobina,
                         getString(R.string.leaveBetaDialogMessage),
-                        getString(R.string.leaveBetaDialogNegative),
                         getString(R.string.leaveBetaDialogAffirmative),
+                        getString(R.string.leaveBetaDialogNegative),
                         REQUEST_CODE_LEAVE_BETA
                 );
                 dialog.setListener(SettingsFragment.this);
