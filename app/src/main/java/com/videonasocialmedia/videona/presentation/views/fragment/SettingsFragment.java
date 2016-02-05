@@ -103,7 +103,7 @@ public class SettingsFragment extends PreferenceFragment implements
             public boolean onPreferenceClick(Preference preference) {
                 dialog = VideonaDialog.newInstance(
                         getString(R.string.leaveBetaDialogTitle),
-                        0,
+                        R.drawable.common_icon_bobina,
                         getString(R.string.leaveBetaDialogMessage),
                         getString(R.string.leaveBetaDialogNegative),
                         getString(R.string.leaveBetaDialogAffirmative),

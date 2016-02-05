@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="5dp"
-                tools:src="@drawable/gatito_rules_pressed" />
+                android:src="@drawable/common_icon_videona" />
 
             <TextView
                 android:id="@+id/message"
