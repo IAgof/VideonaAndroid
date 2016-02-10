@@ -129,6 +129,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private AlertDialog progressDialog;
 
     private boolean mUseImmersiveMode = true;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +139,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         drawerLayout.setDrawerListener(this);
 
         cameraView.setKeepScreenOn(true);
-        SharedPreferences sharedPreferences = getSharedPreferences(
+        sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
@@ -682,14 +683,23 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         }
     }
 
+    private void saveVideoFeaturesToConfig() {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, recordPresenter.getProjectDuration());
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, recordPresenter.getNumVideosOnProject());
+        preferencesEditor.putString(ConfigPreferences.RESOLUTION, recordPresenter.getResolution());
+        preferencesEditor.commit();
+    }
+
+
     @Override
     public void goToShare(String videoToSharePath) {
         trackVideoExported();
+        saveVideoFeaturesToConfig();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);
         startActivity(intent);
     }
-
 
     @Override
     public void showMenuOptions() {

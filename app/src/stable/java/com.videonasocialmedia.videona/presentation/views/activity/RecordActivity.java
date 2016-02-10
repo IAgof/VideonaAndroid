@@ -681,9 +681,18 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         }
     }
 
+    private void saveVideoFeaturesToConfig() {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, recordPresenter.getProjectDuration());
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, recordPresenter.getNumVideosOnProject());
+        preferencesEditor.putString(ConfigPreferences.RESOLUTION, recordPresenter.getResolution());
+        preferencesEditor.commit();
+    }
+
     @Override
     public void goToShare(String videoToSharePath) {
         trackVideoExported();
+        saveVideoFeaturesToConfig();
         recordPresenter.removeMasterVideos();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);
