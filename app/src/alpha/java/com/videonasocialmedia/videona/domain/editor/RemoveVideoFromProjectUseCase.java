@@ -12,6 +12,7 @@ package com.videonasocialmedia.videona.domain.editor;
 
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
@@ -50,6 +51,7 @@ public class RemoveVideoFromProjectUseCase implements RemoveMediaFromProjectUseC
         }
         EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
         EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
+        EventBus.getDefault().post(new VideosRemovedFromProjectEvent());
     }
 
     /**
