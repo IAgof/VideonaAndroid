@@ -371,7 +371,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             numPreviousVideosShared =
                     mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_SHARED);
         } catch (JSONException e) {
-            numPreviousVideosShared = 1;
+            numPreviousVideosShared = 0;
         }
         try {
             updateSuperProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED,
