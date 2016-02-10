@@ -356,12 +356,12 @@ public class RecordPresenter implements OnExportFinishedListener {
         int numPreviousVideosRecorded;
         try {
             numPreviousVideosRecorded =
-                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_RECORDED_VIDEOS);
+                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_RECORDED);
         } catch (JSONException e) {
             numPreviousVideosRecorded = 1;
         }
         try {
-            updateSuperProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
+            updateSuperProperties.put(AnalyticsConstants.TOTAL_VIDEOS_RECORDED,
                     ++numPreviousVideosRecorded);
             mixpanel.registerSuperProperties(updateSuperProperties);
         } catch (JSONException e) {
@@ -376,7 +376,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         try {
             videoRecordedProperties.put(AnalyticsConstants.VIDEO_LENGTH, clipDuration);
             videoRecordedProperties.put(AnalyticsConstants.RESOLUTION, resolution);
-            videoRecordedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS,
+            videoRecordedProperties.put(AnalyticsConstants.TOTAL_VIDEOS_RECORDED,
                     totalVideosRecorded);
             mixpanel.track(AnalyticsConstants.VIDEO_RECORDED, videoRecordedProperties);
         } catch (JSONException e) {
@@ -396,7 +396,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, 1);
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_RECORDED, 1);
         mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
     }

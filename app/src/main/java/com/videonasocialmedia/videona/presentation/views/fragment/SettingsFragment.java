@@ -144,7 +144,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void setPreference(ListPreference preference, String name) {
         preference.setValue(name);
         preference.setSummary(name);
-        sendUserPreferenceToMixpanel(preference.getKey(), name);
+        trackQualityAndResolutionUserTraits(preference.getKey(), name);
     }
 
     @Override
@@ -157,11 +157,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         Preference connectionPref = findPreference(key);
-        sendUserPreferenceToMixpanel(key, sharedPreferences.getString(key, ""));
+        trackQualityAndResolutionUserTraits(key, sharedPreferences.getString(key, ""));
         connectionPref.setSummary(sharedPreferences.getString(key, ""));
     }
 
-    private void sendUserPreferenceToMixpanel(String key, String value) {
+    private void trackQualityAndResolutionUserTraits(String key, String value) {
         String property = null;
         if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION))
             property = AnalyticsConstants.RESOLUTION;

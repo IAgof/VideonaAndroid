@@ -221,7 +221,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     public void okEditActivity() {
         pausePreview();
         showProgressDialog();
-        sendMetadataTracking();
+        mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
@@ -230,8 +230,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         performOnBackgroundThread(this, r);
     }
 
-    private void sendMetadataTracking() {
-        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+    private void trackVideoExported() {
         JSONObject videoExportedProperties = new JSONObject();
         try {
             int projectDuration = editPresenter.getProjectDuration();
@@ -452,7 +451,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void goToShare(String videoToSharePath) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        trackVideoExported();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);
         startActivity(intent);

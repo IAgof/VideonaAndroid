@@ -155,7 +155,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         setupStartApp();
     }
 
-    private void sendStartupAppTracking() {
+    private void trackAppStartup() {
         JSONObject initAppProperties = new JSONObject();
         try {
             initAppProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_ORGANIC);
@@ -171,20 +171,20 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         switch (appStart.checkAppStart(this, sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
-                initState = "returning";
-                sendFirstTimeProperties(false);
+                initState = AnalyticsConstants.INIT_STATE_RETURNING;
+                trackAppStartupProperties(false);
                 initSettings();
                 break;
             case FIRST_TIME_VERSION:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
-                initState = "upgrade";
-                sendFirstTimeProperties(false);
+                initState = AnalyticsConstants.INIT_STATE_UPGRADE;
+                trackAppStartupProperties(false);
                 // example: show what's new
                 // could be appear a mix panel popup with improvements.
 
                 // Repeat this method for security, if user delete app data miss this configs.
                 setupCameraSettings();
-                createUserProfile();
+                trackUserProfile();
                 initSettings();
                 checkAndDeleteOldMusicSongs();
                 //TODO Delete after update to versionCode 61
@@ -192,11 +192,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
-                initState = "firstTime";
-                sendFirstTimeProperties(true);
+                initState = AnalyticsConstants.INIT_STATE_FIRST_TIME;
+                trackAppStartupProperties(true);
                 // example: show a tutorial
                 setupCameraSettings();
-                createUserProfile();
+                trackUserProfile();
                 initSettings();
                 checkAndDeleteOldMusicSongs();
                 joinBetaFortnight();
@@ -212,8 +212,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         editor.commit();
     }
 
-    private void sendFirstTimeProperties(boolean state) {
-        JSONObject firstTimeSuperProperties = new JSONObject();
+    private void trackAppStartupProperties(boolean state) {
+        JSONObject appStartupSuperProperties = new JSONObject();
         int appUseCount;
         try {
             appUseCount = mixpanel.getSuperProperties().getInt(AnalyticsConstants.APP_USE_COUNT);
@@ -221,20 +221,25 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
             appUseCount = 0;
         }
         try {
-            firstTimeSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
-            firstTimeSuperProperties.put(AnalyticsConstants.APP_USE_COUNT, appUseCount);
-            mixpanel.registerSuperProperties(firstTimeSuperProperties);
+            appStartupSuperProperties.put(AnalyticsConstants.APP_USE_COUNT, ++appUseCount);
+            mixpanel.getPeople().set(appStartupSuperProperties);
+            appStartupSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
+            mixpanel.registerSuperProperties(appStartupSuperProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void createUserProfile() {
+    private void trackUserProfile() {
         mixpanel.identify(androidId);
         mixpanel.getPeople().identify(androidId);
         JSONObject userProfileProperties = new JSONObject();
+        String userType = AnalyticsConstants.USER_TYPE_FREE;
+        if ( BuildConfig.FLAVOR.equals("alpha") ) {
+            userType = AnalyticsConstants.USER_TYPE_BETA;
+        }
         try {
-            userProfileProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_FREE);
+            userProfileProperties.put(AnalyticsConstants.TYPE, userType);
             userProfileProperties.put(AnalyticsConstants.CREATED,
                     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
             userProfileProperties.put(AnalyticsConstants.LOCALE,
@@ -561,7 +566,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
             try {
                 waitForCriticalPermissions();
                 setup();
-                sendStartupAppTracking();
+                trackAppStartup();
             } catch (Exception e) {
                 Log.e("SETUP", "setup failed", e);
             }
@@ -592,6 +597,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 if (notification != null) {
                     Log.d("INAPP", "in-app notification received");
                     mixpanel.getPeople().showGivenNotification(notification, parentActivity);
+                    mixpanel.getPeople().trackNotificationSeen(notification);
                 } else {
                     navigate(RecordActivity.class);
                 }

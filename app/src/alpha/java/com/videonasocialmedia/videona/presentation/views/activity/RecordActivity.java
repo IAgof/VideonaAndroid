@@ -631,7 +631,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void exportAndShare() {
         if (!recording) {
             showProgressDialog();
-            sendMetadataTracking();
+            mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
             startExportThread();
         }
     }
@@ -666,8 +666,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         });
     }
 
-    private void sendMetadataTracking() {
-        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+    private void trackVideoExported() {
         JSONObject videoExportedProperties = new JSONObject();
         try {
             int projectDuration = recordPresenter.getProjectDuration();
@@ -677,6 +676,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                     recordPresenter.getResolution());
             videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numVideosOnProject);
             mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
+            Log.d("ANALYTICS", "Tracked video exported event");
         } catch (JSONException e) {
             Log.e("TRACK_FAILED", String.valueOf(e));
         }
@@ -684,7 +684,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void goToShare(String videoToSharePath) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        trackVideoExported();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);
         startActivity(intent);
@@ -736,6 +736,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
             userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
             mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+            Log.d("ANALYTICS", "Tracked User Interacted event");
         } catch (JSONException e) {
             e.printStackTrace();
         }
