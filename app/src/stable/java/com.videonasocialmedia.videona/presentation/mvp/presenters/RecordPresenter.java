@@ -340,36 +340,36 @@ public class RecordPresenter implements OnExportFinishedListener {
         preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
                 ++numTotalVideosRecorded);
         preferencesEditor.commit();
-        sendSuperProperties();
+        trackTotalVideosRecordedSuperProperty();
         double clipDuration = 0.0;
         try {
             clipDuration = Utils.getFileDuration(destinationFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sendVideoRecordedTracking(clipDuration);
+        trackVideoRecorded(clipDuration);
         return destinationFile.getAbsolutePath();
     }
 
-    private void sendSuperProperties() {
-        JSONObject updateSuperProperties = new JSONObject();
+    private void trackTotalVideosRecordedSuperProperty() {
+        JSONObject totalVideoRecordedSuperProperty = new JSONObject();
         int numPreviousVideosRecorded;
         try {
             numPreviousVideosRecorded =
                     mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_RECORDED);
         } catch (JSONException e) {
-            numPreviousVideosRecorded = 1;
+            numPreviousVideosRecorded = 0;
         }
         try {
-            updateSuperProperties.put(AnalyticsConstants.TOTAL_VIDEOS_RECORDED,
+            totalVideoRecordedSuperProperty.put(AnalyticsConstants.TOTAL_VIDEOS_RECORDED,
                     ++numPreviousVideosRecorded);
-            mixpanel.registerSuperProperties(updateSuperProperties);
+            mixpanel.registerSuperProperties(totalVideoRecordedSuperProperty);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void sendVideoRecordedTracking(Double clipDuration) {
+    private void trackVideoRecorded(Double clipDuration) {
         JSONObject videoRecordedProperties = new JSONObject();
         resolution = videoResolution.getWidth() + "x" + videoResolution.getHeight();
         int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
@@ -382,10 +382,10 @@ public class RecordPresenter implements OnExportFinishedListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        updateUserProfileProperties();
+        trackVideoRecordedUserTraits();
     }
 
-    private void updateUserProfileProperties() {
+    private void trackVideoRecordedUserTraits() {
         JSONObject userProfileProperties = new JSONObject();
         try {
             userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
