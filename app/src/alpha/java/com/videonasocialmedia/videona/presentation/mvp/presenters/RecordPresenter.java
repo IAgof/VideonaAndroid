@@ -180,7 +180,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void stopRecord() {
         if (recorder.isRecording()) {
-            sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.STOP);
+            trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.STOP);
             recorder.stopRecording();
         }
         //TODO show a gif to indicate the process is running til the video is added to the project
@@ -235,7 +235,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     private void startRecord() {
         mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
-        sendUserInteractedTracking(AnalyticsConstants.RECORD, AnalyticsConstants.START);
+        trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.START);
         applyEffect(selectedShaderEffect);
         applyEffect(selectedOverlayEffect);
         recorder.startRecording();
@@ -256,7 +256,7 @@ public class RecordPresenter implements OnExportFinishedListener {
      * @param interaction
      * @param result
      */
-    private void sendUserInteractedTracking(String interaction, String result) {
+    private void trackUserInteracted(String interaction, String result) {
         JSONObject userInteractionsProperties = new JSONObject();
         try {
             userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, context.getClass().getSimpleName());

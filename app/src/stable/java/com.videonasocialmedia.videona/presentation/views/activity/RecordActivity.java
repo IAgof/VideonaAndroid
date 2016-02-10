@@ -373,7 +373,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             hideShaderFilters();
             hideRemoveFilters();
         } else {
-            sendUserInteractedTracking(AnalyticsConstants.SET_FILTER_GROUP,
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_SHADER);
             showCameraEffectShader(null);
             if(removeFilterActivated){
@@ -463,7 +463,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             hideOverlayFilters();
             hideRemoveFilters();
         } else {
-            sendUserInteractedTracking(AnalyticsConstants.SET_FILTER_GROUP,
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_OVERLAY);
             showCameraEffectOverlay(null);
             if(removeFilterActivated){
@@ -481,7 +481,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @OnClick(R.id.button_remove_filters)
     public void onRemoveFiltersButtonClicked(){
-        sendUserInteractedTracking(AnalyticsConstants.CLEAR_FILTER, null);
+        trackUserInteracted(AnalyticsConstants.CLEAR_FILTER, null);
         Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
         Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
 
@@ -537,7 +537,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void showFlashOn(boolean on) {
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_FLASH, String.valueOf(on));
+        trackUserInteracted(AnalyticsConstants.CHANGE_FLASH, String.valueOf(on));
         flashButton.setActivated(on);
     }
 
@@ -558,7 +558,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_FRONT);
+        trackUserInteracted(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_FRONT);
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
@@ -570,7 +570,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_BACK);
+        trackUserInteracted(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_BACK);
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
@@ -711,14 +711,14 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @OnClick(R.id.button_settings)
     public void navigateToSettings() {
         if (!recording) {
-            sendUserInteractedTracking(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
+            trackUserInteracted(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
         }
 
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
-    private void sendUserInteractedTracking(String interaction, String result) {
+    private void trackUserInteracted(String interaction, String result) {
         JSONObject userInteractionsProperties = new JSONObject();
         try {
             userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
