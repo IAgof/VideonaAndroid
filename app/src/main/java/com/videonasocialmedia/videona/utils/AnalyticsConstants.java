@@ -40,6 +40,9 @@ public class AnalyticsConstants {
     /**
      * Super properties
      */
+    public static final String FIRST_TIME = "firstTime";
+    public static final String APP = "app";
+    public static final String FLAVOR = "flavor";
 
     /**
      * Values
@@ -70,7 +73,6 @@ public class AnalyticsConstants {
     public static final String CAMERA_BACK = "back";
     public static final String CAMERA_FRONT = "front";
     public static final String SOCIAL_NETWORK = "socialNetwork";
-    public static final String FIRST_TIME = "firstTime";
     public static final String CLEAR_FILTER = "clearFilter";
     public static final String SET_FILTER_GROUP = "setFilterGroup";
     public static final String FILTER_GROUP_OVERLAY = "overlay";

@@ -168,6 +168,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
     private void setupStartApp() {
         AppStart appStart = new AppStart();
+        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
         switch (appStart.checkAppStart(this, sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
@@ -222,8 +223,9 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
         try {
             appStartupSuperProperties.put(AnalyticsConstants.APP_USE_COUNT, ++appUseCount);
-            mixpanel.getPeople().set(appStartupSuperProperties);
             appStartupSuperProperties.put(AnalyticsConstants.FIRST_TIME, state);
+            appStartupSuperProperties.put(AnalyticsConstants.APP, "Videona");
+            appStartupSuperProperties.put(AnalyticsConstants.FLAVOR, BuildConfig.FLAVOR);
             mixpanel.registerSuperProperties(appStartupSuperProperties);
         } catch (JSONException e) {
             e.printStackTrace();
