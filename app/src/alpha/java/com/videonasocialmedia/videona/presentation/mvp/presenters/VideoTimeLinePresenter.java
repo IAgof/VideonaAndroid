@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ReorderMediaItemUseCase;
-import com.videonasocialmedia.videona.eventbus.events.videosretrieved.VideosRetrievedFromProjectEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.VideosRetrievedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoTimeLineView;

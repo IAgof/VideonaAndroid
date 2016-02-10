@@ -187,15 +187,15 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
                         String.valueOf(numVideosSelected) + " " +
                         getResources().getString(R.string.confirmDeleteTitle2);
             }
-            dialog = VideonaDialog.newInstance(
-                    title,
-                    R.drawable.common_icon_bobina,
-                    getString(R.string.confirmDeleteMessage),
-                    getString(R.string.positiveButton),
-                    getString(R.string.negativeButton),
-                    REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY
-            );
-            dialog.setListener(this);
+            dialog = new VideonaDialog.Builder()
+                    .withTitle(title)
+                    .withImage(R.drawable.common_icon_bobina)
+                    .withMessage(getString(R.string.confirmDeleteMessage))
+                    .withPositiveButton(getString(R.string.positiveButton))
+                    .withNegativeButton(getString(R.string.negativeButton))
+                    .withCode(REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY)
+                    .withListener(this)
+                    .create();
             dialog.show(getFragmentManager(), "removeVideosFromGalleryDialog");
         }
     }

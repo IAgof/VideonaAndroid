@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
@@ -26,8 +25,6 @@ public class VideonaDialog extends DialogFragment {
     private OnVideonaDialogListener listener;
     @InjectView(R.id.title)
     TextView title;
-    @InjectView(R.id.content)
-    LinearLayout content;
     @InjectView(R.id.image)
     ImageView image;
     @InjectView(R.id.message)
@@ -40,8 +37,8 @@ public class VideonaDialog extends DialogFragment {
 
     public VideonaDialog() {}
 
-    public static VideonaDialog newInstance(String title, int image, String message, String positive,
-                                            String negative, int idDialog) {
+    private static VideonaDialog newInstance(String title, int image, String message,
+                                               String positive, String negative, int idDialog) {
         VideonaDialog frag = new VideonaDialog();
         Bundle args = new Bundle();
         args.putString("title", title);
@@ -145,4 +142,72 @@ public class VideonaDialog extends DialogFragment {
             listener.onClickNegativeButton(idDialog);
     }
 
+    public static class Builder {
+        private String title;
+        private int image;
+        private String message;
+        private String positiveButton;
+        private String negativeButton;
+        private int idDialog;
+        private OnVideonaDialogListener listener;
+
+        public Builder() {
+            this.title = null;
+            this.image = 0;
+            this.message = null;
+            this.positiveButton = null;
+            this.negativeButton = null;
+            this.idDialog = 0;
+            this.listener = null;
+        }
+
+        public Builder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder withImage(int image) {
+            this.image = image;
+            return this;
+        }
+
+        public Builder withMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder withPositiveButton(String positiveButton) {
+            this.positiveButton = positiveButton;
+            return this;
+        }
+
+        public Builder withNegativeButton(String negativeButton) {
+            this.negativeButton = negativeButton;
+            return this;
+        }
+
+        public Builder withCode(int idDialog) {
+            this.idDialog = idDialog;
+            return this;
+        }
+
+        public Builder withListener(OnVideonaDialogListener listener) {
+            this.listener = listener;
+            return this;
+        }
+
+        public VideonaDialog create() {
+            VideonaDialog dialog = VideonaDialog.newInstance(
+                    title,
+                    image,
+                    message,
+                    positiveButton,
+                    negativeButton,
+                    idDialog
+            );
+            if(listener != null)
+                dialog.setListener(listener);
+            return dialog;
+        }
+    }
 }

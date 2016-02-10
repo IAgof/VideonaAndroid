@@ -81,15 +81,15 @@ public class SettingsFragment extends PreferenceFragment implements
         exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                dialog = VideonaDialog.newInstance(
-                        getString(R.string.exit_app_title),
-                        R.drawable.common_icon_bobina,
-                        getString(R.string.exit_app_message),
-                        getString(R.string.acceptExit),
-                        getString(R.string.cancelExit),
-                        REQUEST_CODE_EXIT_APP
-                );
-                dialog.setListener(SettingsFragment.this);
+                dialog = new VideonaDialog.Builder()
+                        .withTitle(getString(R.string.exit_app_title))
+                        .withImage(R.drawable.common_icon_bobina)
+                        .withMessage(getString(R.string.exit_app_message))
+                        .withPositiveButton(getString(R.string.acceptExit))
+                        .withNegativeButton(getString(R.string.cancelExit))
+                        .withCode(REQUEST_CODE_EXIT_APP)
+                        .withListener(SettingsFragment.this)
+                        .create();
                 dialog.show(getFragmentManager(), "exitAppDialog");
                 return true;
             }
@@ -101,15 +101,15 @@ public class SettingsFragment extends PreferenceFragment implements
         joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                dialog = VideonaDialog.newInstance(
-                        getString(R.string.leaveBetaDialogTitle),
-                        R.drawable.common_icon_bobina,
-                        getString(R.string.leaveBetaDialogMessage),
-                        getString(R.string.leaveBetaDialogAffirmative),
-                        getString(R.string.leaveBetaDialogNegative),
-                        REQUEST_CODE_LEAVE_BETA
-                );
-                dialog.setListener(SettingsFragment.this);
+                dialog = new VideonaDialog.Builder()
+                        .withTitle(getString(R.string.leaveBetaDialogTitle))
+                        .withImage(R.drawable.common_icon_bobina)
+                        .withMessage(getString(R.string.leaveBetaDialogMessage))
+                        .withPositiveButton(getString(R.string.leaveBetaDialogAffirmative))
+                        .withNegativeButton(getString(R.string.leaveBetaDialogNegative))
+                        .withCode(REQUEST_CODE_LEAVE_BETA)
+                        .withListener(SettingsFragment.this)
+                        .create();
                 dialog.show(getFragmentManager(), "leaveBetaDialog");
                 return true;
             }

@@ -129,16 +129,15 @@ public class NavigationDrawerFragment extends VideonaFragment implements OnVideo
 
     @OnClick (R.id.fragment_navigator_exit_button)
     public void navigateToExitApp(){
-
-        dialog = VideonaDialog.newInstance(
-                getString(R.string.exit_app_title),
-                R.drawable.common_icon_bobina,
-                getString(R.string.exit_app_message),
-                getString(R.string.acceptExit),
-                getString(R.string.cancelExit),
-                REQUEST_CODE_EXIT_APP
-        );
-        dialog.setListener(NavigationDrawerFragment.this);
+        dialog = new VideonaDialog.Builder()
+                .withTitle(getString(R.string.exit_app_title))
+                .withImage(R.drawable.common_icon_bobina)
+                .withMessage(getString(R.string.exit_app_message))
+                .withPositiveButton(getString(R.string.acceptExit))
+                .withNegativeButton(getString(R.string.cancelExit))
+                .withCode(REQUEST_CODE_EXIT_APP)
+                .withListener(NavigationDrawerFragment.this)
+                .create();
         dialog.show(getFragmentManager(), "exitAppDialog");
     }
 

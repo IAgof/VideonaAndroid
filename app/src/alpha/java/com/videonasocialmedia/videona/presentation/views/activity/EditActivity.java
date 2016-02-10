@@ -41,7 +41,9 @@ import com.videonasocialmedia.videona.eventbus.events.PreviewingVideoChangedEven
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.fx.ScissorsFxPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ScissorsFxView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.fragment.AudioFxMenuFragment;
 import com.videonasocialmedia.videona.presentation.views.fragment.LookFxMenuFragment;
@@ -78,10 +80,10 @@ import de.greenrobot.event.EventBus;
 /**
  * @author Juan Javier Cabanas Abascal
  */
-public class EditActivity extends VideonaActivity implements EditorView, MusicRecyclerViewClickListener
-        , VideoTimeLineRecyclerViewClickListener, OnRemoveAllProjectListener,
-        DrawerLayout.DrawerListener, OnTrimConfirmListener, DuplicateClipListener, RazorClipListener,
-        OnVideonaDialogListener {
+public class EditActivity extends VideonaActivity implements EditorView, ScissorsFxView,
+        MusicRecyclerViewClickListener, VideoTimeLineRecyclerViewClickListener,
+        OnRemoveAllProjectListener, DrawerLayout.DrawerListener, OnTrimConfirmListener,
+        DuplicateClipListener, RazorClipListener, OnVideonaDialogListener {
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
@@ -122,6 +124,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     private final int REQUEST_CODE_REMOVE_VIDEOS_FROM_PROJECT = 1;
     /*mvp*/
     private EditPresenter editPresenter;
+    private ScissorsFxPresenter scissorsFxPresenter;
     /**
      * Tracker google analytics
      */
@@ -161,6 +164,7 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
         tracker = app.getTracker();
 
         editPresenter = new EditPresenter(this);
+        scissorsFxPresenter = new ScissorsFxPresenter(this);
 
         previewVideoListFragment = new PreviewVideoListFragment();
         scissorsFxMenuFragment = new ScissorsFxMenuFragment();
@@ -195,12 +199,14 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     protected void onResume() {
         super.onResume();
         editPresenter.onResume();
+        scissorsFxPresenter.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         editPresenter.onPause();
+        scissorsFxPresenter.onPause();
     }
 
     @Override
@@ -287,14 +293,10 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void showError(final int causeTextResource) {
-        VideonaDialog dialog = VideonaDialog.newInstance(
-                getString(R.string.error),
-                0,
-                getResources().getString(causeTextResource),
-                null,
-                null,
-                0
-        );
+        VideonaDialog dialog = new VideonaDialog.Builder()
+                .withTitle(getString(R.string.error))
+                .withMessage(getResources().getString(causeTextResource))
+                .create();
         dialog.show(getFragmentManager(), "errorDialog");
     }
 
@@ -521,15 +523,15 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
 
     @Override
     public void onRemoveAllProjectSelected() {
-        dialog = VideonaDialog.newInstance(
-                getString(R.string.confirmDeleteVideosFromProjectTitle),
-                R.drawable.common_icon_eddyt,
-                getString(R.string.confirmDeleteVideosFromProjectMessage),
-                getString(R.string.yes),
-                getString(R.string.no),
-                REQUEST_CODE_REMOVE_VIDEOS_FROM_PROJECT
-        );
-        dialog.setListener(this);
+        dialog = new VideonaDialog.Builder()
+                .withTitle(getString(R.string.confirmDeleteVideosFromProjectTitle))
+                .withImage(R.drawable.common_icon_eddyt)
+                .withMessage(getString(R.string.confirmDeleteVideosFromProjectMessage))
+                .withPositiveButton(getString(R.string.yes))
+                .withNegativeButton(getString(R.string.no))
+                .withCode(REQUEST_CODE_REMOVE_VIDEOS_FROM_PROJECT)
+                .withListener(this)
+                .create();
         dialog.show(getFragmentManager(), "removeVideosFromProjectDialog");
     }
 
@@ -729,6 +731,16 @@ public class EditActivity extends VideonaActivity implements EditorView, MusicRe
     public void onClickNegativeButton(int id) {
         if(id == REQUEST_CODE_REMOVE_VIDEOS_FROM_PROJECT)
             dialog.dismiss();
+    }
+
+    @Override
+    public void habilitateTrashButton() {
+        scissorsFxMenuFragment.habilitateTrashButton();
+    }
+
+    @Override
+    public void inhabilitateTrashButton() {
+        scissorsFxMenuFragment.inhabilitateTrashButton();
     }
 
     /**

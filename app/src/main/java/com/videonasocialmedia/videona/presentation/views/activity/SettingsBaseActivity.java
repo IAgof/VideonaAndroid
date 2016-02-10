@@ -69,15 +69,15 @@ public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDi
     }
 
     private void goToVote() {
-        VideonaDialog dialog = VideonaDialog.newInstance(
-                getString(R.string.rateUsDialogTitle),
-                R.drawable.common_icon_videona,
-                getString(R.string.rateUsDialogMessage),
-                getString(R.string.rateUsDialogAffirmative),
-                getString(R.string.rateUsDialogNegative),
-                REQUEST_CODE_RATE_APP
-        );
-        dialog.setListener(this);
+        VideonaDialog dialog = new VideonaDialog.Builder()
+                .withTitle(getString(R.string.rateUsDialogTitle))
+                .withImage(R.drawable.common_icon_videona)
+                .withMessage(getString(R.string.rateUsDialogMessage))
+                .withPositiveButton(getString(R.string.rateUsDialogAffirmative))
+                .withNegativeButton(getString(R.string.rateUsDialogNegative))
+                .withCode(REQUEST_CODE_RATE_APP)
+                .withListener(this)
+                .create();
         dialog.show(getFragmentManager(), "rateAppDialog");
     }
 
