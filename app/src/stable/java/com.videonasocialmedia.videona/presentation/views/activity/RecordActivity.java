@@ -640,7 +640,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void exportAndShare() {
         if (!recording) {
             showProgressDialog();
-            sendMetadataTracking();
+            mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
             startExportThread();
         }
     }
@@ -666,8 +666,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             progressDialog.dismiss();
     }
 
-    private void sendMetadataTracking() {
-        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+    private void trackVideoExported() {
         JSONObject videoExportedProperties = new JSONObject();
         try {
             int projectDuration = recordPresenter.getProjectDuration();
@@ -684,7 +683,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void goToShare(String videoToSharePath) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        trackVideoExported();
         recordPresenter.removeMasterVideos();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);

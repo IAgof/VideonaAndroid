@@ -14,7 +14,6 @@ public class AnalyticsConstants {
     public final static String USER_INTERACTED = "User Interacted";
     public final static String FILTER_SELECTED = "Filter Selected";
     public static final String TIME_IN_ACTIVITY = "Time in Activity";
-    public final static String TIME_EXPORTING_VIDEO = "Time Exporting Video";
     public final static String BETA_LEAVED = "Beta Leaved";
 
     /**
