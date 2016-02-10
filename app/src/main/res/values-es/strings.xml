@@ -26,9 +26,9 @@
     <string name="toast_exit_edit">Pulsa para salir del editor</string>
     <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
     <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Papelera</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de
-        esta edición?</string>
+    <string name="confirmDeleteVideosFromProjectTitle">Borrar los vídeos</string>
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta
+        edición?</string>
     <string name="acceptDeleteVideosFromProject">Quiero eliminarlos</string>
     <string name="cancelDeleteVideosFromProject">Me los quedo</string>
     <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
@@ -75,10 +75,10 @@
     <string name="content_vote_section">Vota nuestra aplicación</string>
 
     <!-- Exit App -->
-    <string name="exit_app_title">¿Deseas salir de la aplicación?</string>
-    <string name="exit_app_message">¿Estás seguro?</string>
-    <string name="acceptExit">Sí</string>
-    <string name="cancelExit">No</string>
+    <string name="exit_app_title">Salir de la aplicación</string>
+    <string name="exit_app_message">¿Estás seguro de que quieres salir?</string>
+    <string name="acceptExit">Abandono</string>
+    <string name="cancelExit">Me quedo</string>
 
 
     <!-- Join/Leave beta Videona -->
@@ -94,9 +94,19 @@
     <string name="send_email">Enviar</string>
     <string name="invalid_email">Por favor, añade un email válido</string>
     <string name="valid_email">Gracias!!</string>
-    <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
-    <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
 
+    <string name="joinBetaDialogTitle">Participa en nuestra Beta</string>
+    <string name="joinBetaDialogMessage">Conviértete en Betatester para acceder a nuestras
+        actualizaciones y ayudarnos a crear el editor que necesitas.</string>
+    <string name="joinBetaDialogPositiveButton">Contar conmigo</string>
+    <string name="joinBetaDialogNegativeButton">No, gracias</string>
+
+    <string name="betaPreferenceText">Abandonar beta</string>
+    <string name="leaveBetaDialogTitle">Abandonar la beta</string>
+    <string name="leaveBetaDialogMessage">Muchas gracias por tu tiempo. Tu opinión nos ayuda a
+        mejorar. ¿Te quedas con nosotros?</string>
+    <string name="leaveBetaDialogPositiveButton">Me quedo</string>
+    <string name="leaveBetaDialogNegativeButton">Abandono</string>
 
     <!-- User info -->
     <string name="titleUserSection">Mi cuenta</string>

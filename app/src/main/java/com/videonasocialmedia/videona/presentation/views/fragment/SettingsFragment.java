@@ -105,8 +105,8 @@ public class SettingsFragment extends PreferenceFragment implements
                         .withTitle(getString(R.string.leaveBetaDialogTitle))
                         .withImage(R.drawable.common_icon_bobina)
                         .withMessage(getString(R.string.leaveBetaDialogMessage))
-                        .withPositiveButton(getString(R.string.leaveBetaDialogAffirmative))
-                        .withNegativeButton(getString(R.string.leaveBetaDialogNegative))
+                        .withPositiveButton(getString(R.string.leaveBetaDialogPositiveButton))
+                        .withNegativeButton(getString(R.string.leaveBetaDialogNegativeButton))
                         .withCode(REQUEST_CODE_LEAVE_BETA)
                         .withListener(SettingsFragment.this)
                         .create();

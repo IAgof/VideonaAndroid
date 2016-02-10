@@ -26,9 +26,9 @@
     <string name="toast_add_videos">Please, add videos to project</string>
     <string name="toast_exit_edit">Press back again to exit the edit room</string>
     <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Delete videos from project</string>
-    <string name="confirmDeleteVideosFromProjectMessage">Want to delete the clips of this
-        edition?</string>
+    <string name="confirmDeleteVideosFromProjectTitle">Delete videos</string>
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta
+        edición?</string>
     <string name="acceptDeleteVideosFromProject">Delete</string>
     <string name="cancelDeleteVideosFromProject">Don’t Delete</string>
     <string name="deletedVideosFromProject">Deleted videos from project. Record or add new videos</string>
@@ -40,7 +40,7 @@
     <string name="editTextActionLabel">Done</string>
 
     <!-- Gallery activity -->
-    <string name="confirmDeleteTitle">Delete</string>
+    <string name="confirmDeleteTitle">Eliminar</string>
     <string name="confirmDeleteTitle1">video</string>
     <string name="confirmDeleteTitle2">videos</string>
     <string name="confirmDeleteMessage">Definitely remove these files from your terminal</string>
@@ -93,9 +93,20 @@
         <string name="send_email">Send</string>
         <string name="invalid_email">Please, insert a valid email</string>
         <string name="valid_email">Thanks!!</string>
-        <string name="positive_button_join_beta_dialog">Yes</string>
-        <string name="negative_button_join_beta_dialog">Not now, thanks</string>
 
+        <string name="joinBetaDialogTitle">Participate in Beta Videona</string>
+            <string name="joinBetaDialogMessage">Become a Beta Tester to be the first to access to the
+                updates. You will help us to create the video editor you want.\n
+                Fill the email address.</string>
+        <string name="joinBetaDialogPositiveButton">Contar conmigo</string>
+        <string name="joinBetaDialogNegativeButton">No, gracias</string>
+
+        <string name="betaPreferenceText">Leaving the Beta</string>
+        <string name="leaveBetaDialogTitle">Leaving the Beta</string>
+        <string name="leaveBetaDialogMessage">Muchas gracias por tu tiempo. Tu opinión nos ayuda a
+        mejorar. ¿Te quedas con nosotros?</string>
+        <string name="leaveBetaDialogPositiveButton">I stay</string>
+        <string name="leaveBetaDialogNegativeButton">I quit</string>
 
         <!-- User info -->
         <string name="settingsTitle">Settings</string>

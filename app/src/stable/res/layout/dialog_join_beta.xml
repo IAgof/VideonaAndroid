@@ -59,7 +59,6 @@
 
         <LinearLayout
             android:id="@+id/content"
-            android:layout_below="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp">
@@ -111,24 +110,49 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:hint="@string/email"
-                    android:inputType="textEmailAddress"
-                    />
+                    android:inputType="textEmailAddress" />
 
             </LinearLayout>
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/sendEmail"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="5dp"
+            android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/negativeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:layout_alignParentStart="true"
+            android:background="@color/colorTransparent"
+            android:textColor="@color/textColorTitle"
+            android:textAllCaps="false"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
-            android:gravity="end"
-            android:text="@string/send_email"
-            android:textColor="@color/colorPrimary"
-            android:textSize="25sp" />
+            android:text="@string/joinBetaDialogNegativeButton" />
+
+
+            <TextView
+                android:id="@+id/positiveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorTransparent"
+                android:textColor="@color/textColorTitle"
+                android:textAllCaps="false"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/joinBetaDialogPositiveButton" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -137,14 +161,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="8dp"
         android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:orientation="vertical">
 
@@ -152,44 +177,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="4dp"
                 android:text="@string/thanks"
-                android:textSize="30sp" />
+                android:textColor="@color/textColorTitle"
+                android:gravity="start"
+                android:textSize="23sp" />
 
-            <TextView
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/colorSecondaryLight" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/joinBetaLinkInfo"/>
+                android:layout_margin="5dp">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/common_icon_videona" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <TextView
+                    android:id="@+id/message2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_gravity="center_vertical|end"
+                    android:text="@string/joinBetaLinkInfo"
+                    android:textColor="@color/textColorPrimary" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/betaLink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
                 android:layout_gravity="center|end"
                 android:layout_marginBottom="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="217dp"
+                android:layout_marginTop="8dp"
                 android:gravity="end"
                 android:text="@string/joinBetaLink"
                 android:textColor="@color/colorPrimary"
-                android:textSize="25sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 

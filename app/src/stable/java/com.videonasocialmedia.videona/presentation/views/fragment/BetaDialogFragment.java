@@ -92,7 +92,7 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
     }
 
     private void setPositiveButton(View v) {
-        View sendButton = v.findViewById(R.id.sendEmail);
+        View sendButton = v.findViewById(R.id.positiveButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 joinBetaPresenter.validateEmail(email.getText().toString());
@@ -105,6 +105,12 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getDialog().cancel();
+            }
+        });
+        View negativeButton = v.findViewById(R.id.negativeButton);
+        negativeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getDialog().dismiss();
             }
         });
     }
