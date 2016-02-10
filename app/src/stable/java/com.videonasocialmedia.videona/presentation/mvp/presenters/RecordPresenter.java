@@ -386,16 +386,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private void trackVideoRecordedUserTraits() {
-        JSONObject userProfileProperties = new JSONObject();
-        try {
-            userProfileProperties.put(AnalyticsConstants.RESOLUTION, sharedPreferences.getString(
-                    AnalyticsConstants.RESOLUTION, resolution));
-            userProfileProperties.put(AnalyticsConstants.QUALITY,
-                    sharedPreferences.getInt(AnalyticsConstants.QUALITY, videoBitrate));
-            mixpanel.getPeople().set(userProfileProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_RECORDED, 1);
         mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
