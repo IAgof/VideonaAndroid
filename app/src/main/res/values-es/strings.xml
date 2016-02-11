@@ -75,10 +75,10 @@
     <string name="content_vote_section">Vota nuestra aplicación</string>
 
     <!-- Exit App -->
-    <string name="exit_app_title">Apagar</string>
-    <string name="exit_app_message">¿Deseas salir de la aplicación?</string>
-    <string name="acceptExit">Abandono</string>
-    <string name="cancelExit">Me quedo</string>
+    <string name="exit_app_title">¿Deseas salir de la aplicación?</string>
+    <string name="exit_app_message">¿Estás seguro?</string>
+    <string name="acceptExit">Sí</string>
+    <string name="cancelExit">No</string>
 
 
     <!-- Join/Leave beta Videona -->

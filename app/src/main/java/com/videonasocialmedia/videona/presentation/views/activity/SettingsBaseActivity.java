@@ -1,7 +1,5 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,14 +10,18 @@ import android.view.MenuItem;
 
 import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.fragment.SettingsFragment;
+import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 
 import butterknife.ButterKnife;
 
 /**
  * Created by Veronica Lago Fominaya on 26/11/2015.
  */
-public class SettingsBaseActivity extends VideonaActivity {
+public class SettingsBaseActivity extends VideonaActivity implements OnVideonaDialogListener {
+
+    protected final int REQUEST_CODE_RATE_APP = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,24 +69,16 @@ public class SettingsBaseActivity extends VideonaActivity {
     }
 
     private void goToVote() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaAlertDialog);
-        AlertDialog dialog = builder.setTitle(R.string.rateUsDialogTitle)
-                .setMessage(R.string.rateUsDialogMessage)
-                .setNegativeButton(R.string.rateUsDialogNegative, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //TODO cambiar email
-                        navigateTo("mailto:info@videona.com");
-                    }
-                }).setPositiveButton(R.string.rateUsDialogAffirmative, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        navigateTo("market://details?id=com.videonasocialmedia.videona");
-                    }
-                })
-                .setCancelable(true)
+        VideonaDialog dialog = new VideonaDialog.Builder()
+                .withTitle(getString(R.string.rateUsDialogTitle))
+                .withImage(R.drawable.common_icon_videona)
+                .withMessage(getString(R.string.rateUsDialogMessage))
+                .withPositiveButton(getString(R.string.rateUsDialogAffirmative))
+                .withNegativeButton(getString(R.string.rateUsDialogNegative))
+                .withCode(REQUEST_CODE_RATE_APP)
+                .withListener(this)
                 .create();
-        dialog.show();
+        dialog.show(getFragmentManager(), "rateAppDialog");
     }
 
     private void navigateTo(String url) {
@@ -93,4 +87,16 @@ public class SettingsBaseActivity extends VideonaActivity {
         startActivity(i);
     }
 
+    @Override
+    public void onClickPositiveButton(int id) {
+        if(id == REQUEST_CODE_RATE_APP)
+            navigateTo("market://details?id=com.videonasocialmedia.videona");
+    }
+
+    @Override
+    public void onClickNegativeButton(int id) {
+        //TODO cambiar email
+        if(id == REQUEST_CODE_RATE_APP)
+            navigateTo("mailto:info@videona.com");
+    }
 }

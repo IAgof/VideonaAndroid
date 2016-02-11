@@ -1,7 +1,9 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -18,16 +20,24 @@ import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
+import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Veronica Lago Fominaya on 26/11/2015.
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        PreferencesView {
+public class SettingsFragment extends PreferenceFragment implements
+        SharedPreferences.OnSharedPreferenceChangeListener, PreferencesView,
+        OnVideonaDialogListener {
 
     protected ListPreference resolutionPref;
     protected ListPreference qualityPref;
@@ -36,6 +46,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
     protected MixpanelAPI mixpanel;
+    protected VideonaDialog dialog;
+    protected final int REQUEST_CODE_EXIT_APP = 1;
+    protected final int REQUEST_CODE_LEAVE_BETA = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +81,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new ExitAppFragment().show(getFragmentManager(), "exitAppDialogFragment");
+                dialog = new VideonaDialog.Builder()
+                        .withTitle(getString(R.string.exit_app_title))
+                        .withImage(R.drawable.common_icon_bobina)
+                        .withMessage(getString(R.string.exit_app_message))
+                        .withPositiveButton(getString(R.string.acceptExit))
+                        .withNegativeButton(getString(R.string.cancelExit))
+                        .withCode(REQUEST_CODE_EXIT_APP)
+                        .withListener(SettingsFragment.this)
+                        .create();
+                dialog.show(getFragmentManager(), "exitAppDialog");
                 return true;
             }
         });
@@ -79,7 +101,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new BetaDialogFragment().show(getFragmentManager(), "BetaDialogFragment");
+                dialog = new VideonaDialog.Builder()
+                        .withTitle(getString(R.string.leaveBetaDialogTitle))
+                        .withImage(R.drawable.common_icon_bobina)
+                        .withMessage(getString(R.string.leaveBetaDialogMessage))
+                        .withPositiveButton(getString(R.string.leaveBetaDialogAffirmative))
+                        .withNegativeButton(getString(R.string.leaveBetaDialogNegative))
+                        .withCode(REQUEST_CODE_LEAVE_BETA)
+                        .withListener(SettingsFragment.this)
+                        .create();
+                dialog.show(getFragmentManager(), "leaveBetaDialog");
                 return true;
             }
         });
@@ -167,7 +198,49 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             property = AnalyticsConstants.RESOLUTION;
         else if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY))
             property = AnalyticsConstants.QUALITY;
-        mixpanel.getPeople().set(property,value.toLowerCase());
+        mixpanel.getPeople().set(property, value.toLowerCase());
     }
 
+    @Override
+    public void onClickPositiveButton(int id) {
+        if(id == REQUEST_CODE_EXIT_APP) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            getActivity().finish();
+            System.exit(0);
+        }
+        if(id == REQUEST_CODE_LEAVE_BETA) {
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onClickNegativeButton(int id) {
+        if(id == REQUEST_CODE_LEAVE_BETA) {
+            sendBetaLeaveTracking();
+            String url = "https://play.google.com/apps/testing/com.videonasocialmedia.videona";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
+        if(id == REQUEST_CODE_EXIT_APP)
+            dialog.dismiss();
+    }
+
+    private void sendBetaLeaveTracking() {
+        int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        int totalVideosShared = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0);
+        JSONObject betaLeavedProperties = new JSONObject();
+        try {
+            betaLeavedProperties.put(AnalyticsConstants.DATE,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            betaLeavedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, totalVideosRecorded);
+            betaLeavedProperties.put(AnalyticsConstants.TOTAL_SHARED_VIDEOS, totalVideosShared);
+            mixpanel.track(AnalyticsConstants.BETA_LEAVED, betaLeavedProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
