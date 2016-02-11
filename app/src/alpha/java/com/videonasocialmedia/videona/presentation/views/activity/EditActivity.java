@@ -16,6 +16,8 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -61,6 +63,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialo
 import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -136,6 +139,7 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
     private AlertDialog progressDialog;
     //TODO refactor to get rid of the global variable
     private int selectedMusicIndex = 0;
+    private SharedPreferences sharedPreferences;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         final Thread t = new Thread() {
@@ -159,6 +163,9 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.inject(this);
+        sharedPreferences = getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
 
         VideonaApplication app = (VideonaApplication) getApplication();
         tracker = app.getTracker();
@@ -230,7 +237,7 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
     public void okEditActivity() {
         pausePreview();
         showProgressDialog();
-        sendMetadataTracking();
+        mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
@@ -239,8 +246,7 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
         performOnBackgroundThread(this, r);
     }
 
-    private void sendMetadataTracking() {
-        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+    private void trackVideoExported() {
         JSONObject videoExportedProperties = new JSONObject();
         try {
             int projectDuration = editPresenter.getProjectDuration();
@@ -253,6 +259,14 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
         } catch (JSONException e) {
             Log.e("TRACK_FAILED", String.valueOf(e));
         }
+    }
+
+    private void saveVideoFeaturesToConfig() {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, editPresenter.getProjectDuration());
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, editPresenter.getNumVideosOnProject());
+        preferencesEditor.putString(ConfigPreferences.RESOLUTION, editPresenter.getResolution());
+        preferencesEditor.commit();
     }
 
     @OnClick(R.id.edit_button_ok_trim_detail)
@@ -460,7 +474,8 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
 
     @Override
     public void goToShare(String videoToSharePath) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        trackVideoExported();
+        saveVideoFeaturesToConfig();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);
         startActivity(intent);

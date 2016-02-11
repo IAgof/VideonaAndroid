@@ -78,7 +78,7 @@
             </intent-filter>
         </receiver>
         <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
-     installation campaign reporting -->
+            installation campaign reporting -->
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
             android:enabled="true"
