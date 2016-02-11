@@ -101,16 +101,7 @@ public class SettingsFragment extends PreferenceFragment implements
         joinBetaPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                dialog = new VideonaDialog.Builder()
-                        .withTitle(getString(R.string.leaveBetaDialogTitle))
-                        .withImage(R.drawable.common_icon_bobina)
-                        .withMessage(getString(R.string.leaveBetaDialogMessage))
-                        .withPositiveButton(getString(R.string.leaveBetaDialogAffirmative))
-                        .withNegativeButton(getString(R.string.leaveBetaDialogNegative))
-                        .withCode(REQUEST_CODE_LEAVE_BETA)
-                        .withListener(SettingsFragment.this)
-                        .create();
-                dialog.show(getFragmentManager(), "leaveBetaDialog");
+                new BetaDialogFragment().show(getFragmentManager(), "BetaDialogFragment");
                 return true;
             }
         });
@@ -236,8 +227,8 @@ public class SettingsFragment extends PreferenceFragment implements
         try {
             betaLeavedProperties.put(AnalyticsConstants.DATE,
                     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-            betaLeavedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, totalVideosRecorded);
-            betaLeavedProperties.put(AnalyticsConstants.TOTAL_SHARED_VIDEOS, totalVideosShared);
+            betaLeavedProperties.put(AnalyticsConstants.TOTAL_VIDEOS_RECORDED, totalVideosRecorded);
+            betaLeavedProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED, totalVideosShared);
             mixpanel.track(AnalyticsConstants.BETA_LEAVED, betaLeavedProperties);
         } catch (JSONException e) {
             e.printStackTrace();
