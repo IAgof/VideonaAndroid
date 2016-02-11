@@ -198,12 +198,24 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 // example: show a tutorial
                 setupCameraSettings();
                 trackUserProfile();
+                trackCreatedSuperProperty();
                 initSettings();
                 checkAndDeleteOldMusicSongs();
                 joinBetaFortnight();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void trackCreatedSuperProperty() {
+        JSONObject createdSuperProperty = new JSONObject();
+        try {
+            createdSuperProperty.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            mixpanel.registerSuperPropertiesOnce(createdSuperProperty);
+        } catch (JSONException e) {
+            Log.e("ANALYTICS", "Error sending created super property");
         }
     }
 
