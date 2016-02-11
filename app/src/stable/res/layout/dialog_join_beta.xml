@@ -1,68 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/joinBetaInfo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible" >
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="@string/joinBetaDialogTitle"
+                android:textSize="23sp"
+                android:textColor="@color/textColorTitle" />
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="5dp"
+                android:src="@drawable/close_dialog_icon_normal" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="@string/joinBetaDialogTitle"
-                    android:textColor="@color/textColorTitle"
-                    android:textSize="23sp" />
-
-                <ImageView
-                    android:id="@+id/cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="5dp"
-                    android:src="@drawable/close_dialog_icon_normal" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/title"
-                android:layout_marginTop="2dp"
-                android:background="@color/colorSecondaryLight" />
-
-        </RelativeLayout>
+            android:layout_marginBottom="2dp"
+            android:layout_below="@+id/title"
+            android:background="@color/colorSecondaryLight" />
 
         <LinearLayout
             android:id="@+id/content"
             android:layout_below="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
 
             <ImageView
                 android:id="@+id/image"
@@ -74,22 +66,24 @@
 
             <TextView
                 android:id="@+id/message"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:layout_gravity="center_vertical|end"
-                android:text="@string/joinBetaDialogMessage"
-                android:textColor="@color/textColorPrimary" />
+                android:gravity="center"
+                android:text="@string/joinBetaDialogMessage" />
 
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="15dp"
             android:gravity="center"
+            android:layout_below="@+id/content"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -104,95 +98,122 @@
                     android:src="@drawable/activity_settings_icon_email_add"/>
 
                 <EditText
-                    android:id="@+id/email"
+                    android:id="@+id/email_text"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:hint="@string/email"
-                    android:inputType="textEmailAddress"
-                    />
+                    android:inputType="textEmailAddress" />
 
             </LinearLayout>
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/sendEmail"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="20dp"
-            android:gravity="end"
-            android:text="@string/send_email"
-            android:textColor="@color/colorPrimary"
-            android:textSize="25sp" />
+            android:layout_below="@+id/email"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/negativeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:text="@string/joinBetaDialogNegativeButton"
+                android:textAlignment="center"
+                android:layout_alignParentStart="true"
+                android:background="@color/colorTransparent"
+                android:textColor="@color/textColorTitle"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/positiveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/joinBetaDialogPositiveButton"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorTransparent"
+                android:textColor="@color/textColorTitle"
+                android:textAllCaps="false"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/joinBetaLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="8dp"
         android:visibility="gone">
 
+        <TextView
+            android:id="@+id/title2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/thanks"
+            android:textSize="23sp"
+            android:textColor="@color/textColorTitle" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="2dp"
+            android:layout_below="@+id/title2"
+            android:background="@color/colorSecondaryLight" />
+
         <LinearLayout
+            android:id="@+id/content2"
+            android:layout_below="@+id/line2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/image2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/common_icon_videona" />
 
             <TextView
+                android:id="@+id/message2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/thanks"
-                android:textSize="30sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/joinBetaLinkInfo"/>
+                android:textSize="16sp"
+                android:gravity="center"
+                android:text="@string/joinBetaLinkInfo" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/betaLink"
+            android:layout_below="@+id/content2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/betaLink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="center|end"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="217dp"
-                android:gravity="end"
-                android:text="@string/joinBetaLink"
-                android:textColor="@color/colorPrimary"
-                android:textSize="25sp" />
-
-        </LinearLayout>
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:text="@string/joinBetaLink"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorTransparent"
+            android:textColor="@color/textColorTitle"
+            android:textAllCaps="false"/>
 
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

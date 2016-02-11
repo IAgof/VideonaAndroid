@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -33,7 +32,7 @@ import butterknife.OnClick;
  */
 public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
 
-    private LinearLayout joinBetaInfoLayout;
+    private RelativeLayout joinBetaInfoLayout;
     private RelativeLayout joinBetaLinkLayout;
     private JoinBetaPresenter joinBetaPresenter;
     private EditText email;
@@ -50,7 +49,7 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         View v = inflater.inflate(R.layout.dialog_join_beta, null);
         builder.setView(v);
         ButterKnife.inject(this, v);
-        email = (EditText) v.findViewById(R.id.email);
+        email = (EditText) v.findViewById(R.id.email_text);
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
             email.getBackground().setColorFilter(getResources().getColor(R.color.editTextBottomLine),
@@ -77,7 +76,7 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         joinBetaPresenter.checkIfPreviousEmailExists();
         setNegativeButton(v);
         setPositiveButton(v);
-        joinBetaInfoLayout = (LinearLayout) v.findViewById(R.id.joinBetaInfo);
+        joinBetaInfoLayout = (RelativeLayout) v.findViewById(R.id.joinBetaInfo);
         joinBetaLinkLayout = (RelativeLayout) v.findViewById(R.id.joinBetaLink);
 
         return builder.create();
@@ -92,7 +91,7 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
     }
 
     private void setPositiveButton(View v) {
-        View sendButton = v.findViewById(R.id.sendEmail);
+        View sendButton = v.findViewById(R.id.positiveButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 joinBetaPresenter.validateEmail(email.getText().toString());
@@ -105,6 +104,12 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getDialog().cancel();
+            }
+        });
+        View negativeButton = v.findViewById(R.id.negativeButton);
+        negativeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getDialog().dismiss();
             }
         });
     }

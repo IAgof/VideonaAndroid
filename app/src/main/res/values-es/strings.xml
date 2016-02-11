@@ -26,9 +26,9 @@
     <string name="toast_exit_edit">Pulsa para salir del editor</string>
     <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
     <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Papelera</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de
-        esta edición?</string>
+    <string name="confirmDeleteVideosFromProjectTitle">Borrar los vídeos</string>
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta
+        edición?</string>
     <string name="acceptDeleteVideosFromProject">Quiero eliminarlos</string>
     <string name="cancelDeleteVideosFromProject">Me los quedo</string>
     <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
@@ -66,8 +66,8 @@
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">¿Te ha gustado Videona?</string>
-    <string name="rateUsDialogMessage">¡Valora nuestra app y déjanos tu comentario! También puedes
-        escribirnos un mail si tienes alguna queja, sugerencia o duda.</string>
+    <string name="rateUsDialogMessage">¡Valora nuestra app y déjanos tu comentario! Puedes
+        escribirnos un mail si tienes alguna queja.</string>
     <string name="rateUsDialogNegative">Me horroriza</string>
     <string name="rateUsDialogAffirmative">Me encanta</string>
     <string name="error_rate_app">Error de conexión con Google Play</string>
@@ -75,28 +75,19 @@
     <string name="content_vote_section">Vota nuestra aplicación</string>
 
     <!-- Exit App -->
-    <string name="exit_app_title">¿Deseas salir de la aplicación?</string>
-    <string name="exit_app_message">¿Estás seguro?</string>
-    <string name="acceptExit">Sí</string>
-    <string name="cancelExit">No</string>
+    <string name="exit_app_title">Salir de la aplicación</string>
+    <string name="exit_app_message">¿Seguro que quieres salir?</string>
+    <string name="acceptExit">Abandono</string>
+    <string name="cancelExit">Me quedo</string>
 
 
     <!-- Join/Leave beta Videona -->
     <string name="title_advanced_section">Avanzado</string>
-    <string name="content_advanced_section">Prueba Videona Beta</string>
-    <string name="thanks">Gracias!!!</string>
-    <string name="joinBetaLinkInfo">Sigue las instrucciones de Google para ser Betatester. Cuando el
-        proceso se complete recibirás la actualización.</string>
-    <string name="joinBetaLink"><u>Adelante</u></string>
-    <string name="email">email</string>
+
+    <!-- Email -->
     <string name="enterEmail">Introduce un email válido</string>
     <string name="removeEmail">Borrar email</string>
-    <string name="send_email">Enviar</string>
     <string name="invalid_email">Por favor, añade un email válido</string>
-    <string name="valid_email">Gracias!!</string>
-    <string name="positive_button_join_beta_dialog">Quiero probarlo!</string>
-    <string name="negative_button_join_beta_dialog">Ahora no, gracias</string>
-
 
     <!-- User info -->
     <string name="titleUserSection">Mi cuenta</string>

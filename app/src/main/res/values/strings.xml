@@ -26,9 +26,9 @@
     <string name="toast_add_videos">Please, add videos to project</string>
     <string name="toast_exit_edit">Press back again to exit the edit room</string>
     <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Delete videos from project</string>
-    <string name="confirmDeleteVideosFromProjectMessage">Want to delete the clips of this
-        edition?</string>
+    <string name="confirmDeleteVideosFromProjectTitle">Delete videos</string>
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta
+        edición?</string>
     <string name="acceptDeleteVideosFromProject">Delete</string>
     <string name="cancelDeleteVideosFromProject">Don’t Delete</string>
     <string name="deletedVideosFromProject">Deleted videos from project. Record or add new videos</string>
@@ -40,7 +40,7 @@
     <string name="editTextActionLabel">Done</string>
 
     <!-- Gallery activity -->
-    <string name="confirmDeleteTitle">Delete</string>
+    <string name="confirmDeleteTitle">Eliminar</string>
     <string name="confirmDeleteTitle1">video</string>
     <string name="confirmDeleteTitle2">videos</string>
     <string name="confirmDeleteMessage">Definitely remove these files from your terminal</string>
@@ -82,20 +82,11 @@
 
         <!-- Join/Leave beta Videona -->
         <string name="title_advanced_section">Advanced</string>
-        <string name="content_advanced_section">Join Videona Beta</string>
-        <string name="thanks">Thanks!!!</string>
-        <string name="joinBetaLinkInfo">Follow Google’s instructions to be Beta Tester. When the
-            process is complete you will receive an update.</string>
-        <string name="joinBetaLink"><u>Go on</u></string>
-        <string name="email">email</string>
+
+        <!-- Email -->
         <string name="enterEmail">Enter a valid email</string>
         <string name="removeEmail">Remove email</string>
-        <string name="send_email">Send</string>
         <string name="invalid_email">Please, insert a valid email</string>
-        <string name="valid_email">Thanks!!</string>
-        <string name="positive_button_join_beta_dialog">Yes</string>
-        <string name="negative_button_join_beta_dialog">Not now, thanks</string>
-
 
         <!-- User info -->
         <string name="settingsTitle">Settings</string>
