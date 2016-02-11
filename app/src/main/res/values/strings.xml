@@ -82,31 +82,11 @@
 
         <!-- Join/Leave beta Videona -->
         <string name="title_advanced_section">Advanced</string>
-        <string name="content_advanced_section">Join Videona Beta</string>
-        <string name="thanks">Thanks!!!</string>
-        <string name="joinBetaLinkInfo">Follow Google’s instructions to be Beta Tester. When the
-            process is complete you will receive an update.</string>
-        <string name="joinBetaLink"><u>Go on</u></string>
-        <string name="email">email</string>
+
+        <!-- Email -->
         <string name="enterEmail">Enter a valid email</string>
         <string name="removeEmail">Remove email</string>
-        <string name="send_email">Send</string>
         <string name="invalid_email">Please, insert a valid email</string>
-        <string name="valid_email">Thanks!!</string>
-
-        <string name="joinBetaDialogTitle">Participate in Beta Videona</string>
-            <string name="joinBetaDialogMessage">Become a Beta Tester to be the first to access to the
-                updates. You will help us to create the video editor you want.\n
-                Fill the email address.</string>
-        <string name="joinBetaDialogPositiveButton">Contar conmigo</string>
-        <string name="joinBetaDialogNegativeButton">No, gracias</string>
-
-        <string name="betaPreferenceText">Leaving the Beta</string>
-        <string name="leaveBetaDialogTitle">Leaving the Beta</string>
-        <string name="leaveBetaDialogMessage">Muchas gracias por tu tiempo. Tu opinión nos ayuda a
-        mejorar. ¿Te quedas con nosotros?</string>
-        <string name="leaveBetaDialogPositiveButton">I stay</string>
-        <string name="leaveBetaDialogNegativeButton">I quit</string>
 
         <!-- User info -->
         <string name="settingsTitle">Settings</string>

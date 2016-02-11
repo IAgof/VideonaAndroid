@@ -66,8 +66,8 @@
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">¿Te ha gustado Videona?</string>
-    <string name="rateUsDialogMessage">¡Valora nuestra app y déjanos tu comentario! También puedes
-        escribirnos un mail si tienes alguna queja, sugerencia o duda.</string>
+    <string name="rateUsDialogMessage">¡Valora nuestra app y déjanos tu comentario! Puedes
+        escribirnos un mail si tienes alguna queja.</string>
     <string name="rateUsDialogNegative">Me horroriza</string>
     <string name="rateUsDialogAffirmative">Me encanta</string>
     <string name="error_rate_app">Error de conexión con Google Play</string>
@@ -76,37 +76,18 @@
 
     <!-- Exit App -->
     <string name="exit_app_title">Salir de la aplicación</string>
-    <string name="exit_app_message">¿Estás seguro de que quieres salir?</string>
+    <string name="exit_app_message">¿Seguro que quieres salir?</string>
     <string name="acceptExit">Abandono</string>
     <string name="cancelExit">Me quedo</string>
 
 
     <!-- Join/Leave beta Videona -->
     <string name="title_advanced_section">Avanzado</string>
-    <string name="content_advanced_section">Prueba Videona Beta</string>
-    <string name="thanks">Gracias!!!</string>
-    <string name="joinBetaLinkInfo">Sigue las instrucciones de Google para ser Betatester. Cuando el
-        proceso se complete recibirás la actualización.</string>
-    <string name="joinBetaLink"><u>Adelante</u></string>
-    <string name="email">email</string>
+
+    <!-- Email -->
     <string name="enterEmail">Introduce un email válido</string>
     <string name="removeEmail">Borrar email</string>
-    <string name="send_email">Enviar</string>
     <string name="invalid_email">Por favor, añade un email válido</string>
-    <string name="valid_email">Gracias!!</string>
-
-    <string name="joinBetaDialogTitle">Participa en nuestra Beta</string>
-    <string name="joinBetaDialogMessage">Conviértete en Betatester para acceder a nuestras
-        actualizaciones y ayudarnos a crear el editor que necesitas.</string>
-    <string name="joinBetaDialogPositiveButton">Contar conmigo</string>
-    <string name="joinBetaDialogNegativeButton">No, gracias</string>
-
-    <string name="betaPreferenceText">Abandonar beta</string>
-    <string name="leaveBetaDialogTitle">Abandonar la beta</string>
-    <string name="leaveBetaDialogMessage">Muchas gracias por tu tiempo. Tu opinión nos ayuda a
-        mejorar. ¿Te quedas con nosotros?</string>
-    <string name="leaveBetaDialogPositiveButton">Me quedo</string>
-    <string name="leaveBetaDialogNegativeButton">Abandono</string>
 
     <!-- User info -->
     <string name="titleUserSection">Mi cuenta</string>

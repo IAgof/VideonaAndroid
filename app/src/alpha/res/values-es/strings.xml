@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="betaPreferenceText">Abandonar beta</string>
+    <string name="leaveBetaDialogTitle">Abandonar la beta</string>
+    <string name="leaveBetaDialogMessage">Muchas gracias por tu tiempo. Tu opinión nos ayuda a
+        mejorar. ¿Te quedas con nosotros?</string>
+    <string name="leaveBetaDialogPositiveButton">Me quedo</string>
+    <string name="leaveBetaDialogNegativeButton">Abandono</string>
+</resources>

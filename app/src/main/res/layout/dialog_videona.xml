@@ -83,8 +83,6 @@
             android:textColor="@color/textColorTitle"
             android:textAllCaps="false"/>
 
-
-
     </RelativeLayout>
 
 </RelativeLayout>
