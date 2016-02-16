@@ -19,6 +19,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -55,8 +56,8 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -211,6 +212,26 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
+        checkAction();
+    }
+
+    private void checkAction() {
+        if (getIntent().getAction() != null) {
+            if (getIntent().getAction().equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
+                Log.d("INTENT", "video capture");
+                // TODO change this to an activity that sends the result to intent-filter
+            } else {
+                Log.d("INTENT", "nothing");
+            }
+        }
+    }
+
+    private void setResult() {
+//        String urlStr = "hola";
+//        Uri myVideoUri = new URI(new File(urlStr)).getPath();
+//        Intent returnIntent = new Intent();
+//        returnIntent.setData(myVideoUri);
+//        setResult(RESULT_OK, returnIntent);
     }
 
     @Override
