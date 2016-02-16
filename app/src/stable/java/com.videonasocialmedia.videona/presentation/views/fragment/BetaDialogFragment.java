@@ -100,12 +100,6 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
     }
 
     private void setNegativeButton(View v) {
-        View cancelButton = v.findViewById(R.id.cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getDialog().cancel();
-            }
-        });
         View negativeButton = v.findViewById(R.id.negativeButton);
         negativeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

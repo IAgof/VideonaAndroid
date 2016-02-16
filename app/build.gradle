@@ -16,12 +16,12 @@ android {
     productFlavors {
         alpha {
             applicationId "com.videonasocialmedia.videona.alpha"
-            versionName "1.0-betaRC1"
+            versionName "1.0-beta"
             resValue "string", "app_name", "Videona-alpha"
         }
         stable {
             applicationId "com.videonasocialmedia.videona.stable"
-            versionName "1.0RC1"
+            versionName "1.0"
             resValue "string", "app_name", "Videona-stable"
         }
     }
