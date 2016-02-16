@@ -27,7 +27,7 @@
     <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
     <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
     <string name="confirmDeleteVideosFromProjectTitle">¿Descartar los siguientes clips?</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas descartar este/estos vídeos de
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas descartar estos vídeos de
         esta sesión?</string>
     <string name="acceptDeleteVideosFromProject">Sí</string>
     <string name="cancelDeleteVideosFromProject">No</string>
