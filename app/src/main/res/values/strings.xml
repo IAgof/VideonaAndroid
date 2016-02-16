@@ -70,7 +70,7 @@
         <string name="rateUsDialogMessage">Rate our app or send us an email if you have any
             suggestions.</string>
         <string name="rateUsDialogAffirmative">Rate the app</string>
-        <string name="rateUsDialogNegative">e-Mail</string>
+        <string name="rateUsDialogNegative">Email</string>
         <string name="error_rate_app">Could not launch Google Play</string>
         <string name="title_vote_section">Vote</string>
         <string name="content_vote_section">Vote our app</string>

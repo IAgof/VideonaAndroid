@@ -69,7 +69,7 @@
     <string name="rateUsDialogTitle">Contamos contigo</string>
     <string name="rateUsDialogMessage">Valora nuestra app o escríbenos un email si tienes alguna
         sugerencia.</string>
-    <string name="rateUsDialogNegative">e-Mail</string>
+    <string name="rateUsDialogNegative">Email</string>
     <string name="rateUsDialogAffirmative">Valorar la app</string>
     <string name="error_rate_app">Error de conexión con Google Play</string>
     <string name="title_vote_section">Vota</string>
