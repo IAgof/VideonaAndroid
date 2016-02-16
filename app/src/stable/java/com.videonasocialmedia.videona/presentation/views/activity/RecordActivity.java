@@ -218,6 +218,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private void checkAction() {
         if (getIntent().getAction() != null) {
             if (getIntent().getAction().equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
+                Log.d("info", String.valueOf(getIntent()));
+                Log.d("path", String.valueOf(getIntent().getClipData().getItemAt(0).getUri().toString()));
                 Log.d("INTENT", "video capture");
                 // TODO change this to an activity that sends the result to intent-filter
             } else {
