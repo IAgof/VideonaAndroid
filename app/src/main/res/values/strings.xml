@@ -26,11 +26,11 @@
     <string name="toast_add_videos">Please, add videos to project</string>
     <string name="toast_exit_edit">Press back again to exit the edit room</string>
     <string name="addMediaItemToTrackError">Oops! Something bad happened. Try to add again</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Delete videos</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta
-        edición?</string>
-    <string name="acceptDeleteVideosFromProject">Delete</string>
-    <string name="cancelDeleteVideosFromProject">Don’t Delete</string>
+    <string name="confirmDeleteVideosFromProjectTitle">Discard these clips?</string>
+    <string name="confirmDeleteVideosFromProjectMessage">Do you want to discard these videos from
+        the time line?</string>
+    <string name="acceptDeleteVideosFromProject">Yes</string>
+    <string name="cancelDeleteVideosFromProject">No</string>
     <string name="deletedVideosFromProject">Deleted videos from project. Record or add new videos</string>
     <string name="addVideosToProject">Please, record or add new videos</string>
     <string name="invalidRazorTime">Please, select an instant time to razor this video</string>
@@ -40,12 +40,13 @@
     <string name="editTextActionLabel">Done</string>
 
     <!-- Gallery activity -->
-    <string name="confirmDeleteTitle">Eliminar</string>
+    <string name="confirmDeleteTitle">Delete</string>
     <string name="confirmDeleteTitle1">video</string>
     <string name="confirmDeleteTitle2">videos</string>
-    <string name="confirmDeleteMessage">Definitely remove these files from your terminal</string>
-    <string name="positiveButton">Remove</string>
-    <string name="negativeButton">Don\'t Remove</string>
+    <string name="confirmDeleteMessage">Permanently delete this/these selected files from your
+        terminal?</string>
+    <string name="positiveButton">Yes</string>
+    <string name="negativeButton">No</string>
     <string name="galleryActivityTitle">Gallery</string>
     <string name="mastersFolderTitle">Raw</string>
     <string name="editedFolderTitle">Edited</string>
@@ -65,18 +66,18 @@
     <string name="action_settings">Settings</string>
 
         <!-- Rate Videona -->
-        <string name="rateUsDialogTitle">What do you think about Videona?</string>
-        <string name="rateUsDialogMessage">Rate our app and leave a comment! You can also e-mail us
-            if you have any complaints, suggestions or questions.</string>
-        <string name="rateUsDialogAffirmative">I love it</string>
-        <string name="rateUsDialogNegative">I dislike it</string>
+        <string name="rateUsDialogTitle">We count on you</string>
+        <string name="rateUsDialogMessage">Rate our app or send us an email if you have any
+            suggestions.</string>
+        <string name="rateUsDialogAffirmative">Rate the app</string>
+        <string name="rateUsDialogNegative">e-Mail</string>
         <string name="error_rate_app">Could not launch Google Play</string>
         <string name="title_vote_section">Vote</string>
         <string name="content_vote_section">Vote our app</string>
 
         <!-- Exit App -->
-        <string name="exit_app_title">Do you want to exit the application?</string>
-        <string name="exit_app_message">Are you sure?</string>
+        <string name="exit_app_title">Leave application?</string>
+        <string name="exit_app_message">Are you sure do you want to quit?</string>
         <string name="acceptExit">Yes</string>
         <string name="cancelExit">No</string>
 

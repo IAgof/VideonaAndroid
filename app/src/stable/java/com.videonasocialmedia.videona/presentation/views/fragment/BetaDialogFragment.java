@@ -138,12 +138,17 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         keyboard.hideSoftInputFromWindow(email.getWindowToken(), 0);
     }
 
-    @OnClick(R.id.betaLink)
+    @OnClick(R.id.betaLinkPositiveButton)
     public void goToBetaweb() {
         String url = "https://play.google.com/apps/testing/com.videonasocialmedia.videona";
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
+    }
+
+    @OnClick(R.id.betaLinkNegativeButton)
+    public void dissmissDialog() {
+        getDialog().dismiss();
     }
 
     @Override
