@@ -542,8 +542,8 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
                 .withTitle(getString(R.string.confirmDeleteVideosFromProjectTitle))
                 .withImage(R.drawable.common_icon_eddyt)
                 .withMessage(getString(R.string.confirmDeleteVideosFromProjectMessage))
-                .withPositiveButton(getString(R.string.yes))
-                .withNegativeButton(getString(R.string.no))
+                .withPositiveButton(getString(R.string.acceptDeleteVideosFromProject))
+                .withNegativeButton(getString(R.string.cancelDeleteVideosFromProject))
                 .withCode(REQUEST_CODE_REMOVE_VIDEOS_FROM_PROJECT)
                 .withListener(this)
                 .create();

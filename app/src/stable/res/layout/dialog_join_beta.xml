@@ -200,19 +200,39 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/betaLink"
-            android:layout_below="@+id/content2"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:text="@string/joinBetaLink"
-            android:layout_alignParentEnd="true"
-            android:background="@color/colorTransparent"
-            android:textColor="@color/textColorTitle"
-            android:textAllCaps="false"/>
+            android:layout_below="@+id/content2"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/betaLinkNegativeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="16sp"
+                android:text="@string/joinBetaLinkNegativeButton"
+                android:textAlignment="center"
+                android:layout_alignParentStart="true"
+                android:background="@color/colorTransparent"
+                android:textColor="@color/textColorTitle"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/betaLinkPositiveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/joinBetaLinkPositiveButton"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorTransparent"
+                android:textColor="@color/textColorTitle"
+                android:textAllCaps="false"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 
