@@ -24,7 +24,6 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,23 +31,28 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="30dp">
+        android:layout_marginEnd="20dp">
 
         <ImageView
             android:id="@+id/edit_text_preferences_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            tools:src="@drawable/activity_settings_icon_person"/>
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/activity_settings_icon_person"/>
 
         <EditText
             android:id="@+id/edit_user_account"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:backgroundTint="@color/editTextBottomLine"
             android:imeActionLabel="Done"
             android:singleLine="true" />
+
     </LinearLayout>
 
     <TextView
