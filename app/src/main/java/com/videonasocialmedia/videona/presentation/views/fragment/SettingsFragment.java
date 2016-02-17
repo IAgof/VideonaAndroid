@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -18,6 +19,8 @@ import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
+import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
@@ -26,8 +29,9 @@ import java.util.ArrayList;
 /**
  * Created by Veronica Lago Fominaya on 26/11/2015.
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener,
-        PreferencesView {
+public class SettingsFragment extends PreferenceFragment implements
+        SharedPreferences.OnSharedPreferenceChangeListener, PreferencesView,
+        OnVideonaDialogListener {
 
     protected ListPreference resolutionPref;
     protected ListPreference qualityPref;
@@ -36,6 +40,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
     protected MixpanelAPI mixpanel;
+    protected VideonaDialog dialog;
+    protected final int REQUEST_CODE_EXIT_APP = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +74,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new ExitAppFragment().show(getFragmentManager(), "exitAppDialogFragment");
+                dialog = new VideonaDialog.Builder()
+                        .withTitle(getString(R.string.exit_app_title))
+                        .withImage(R.drawable.common_icon_bobina)
+                        .withMessage(getString(R.string.exit_app_message))
+                        .withPositiveButton(getString(R.string.acceptExit))
+                        .withNegativeButton(getString(R.string.cancelExit))
+                        .withCode(REQUEST_CODE_EXIT_APP)
+                        .withListener(SettingsFragment.this)
+                        .create();
+                dialog.show(getFragmentManager(), "exitAppDialog");
                 return true;
             }
         });
@@ -144,7 +159,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void setPreference(ListPreference preference, String name) {
         preference.setValue(name);
         preference.setSummary(name);
-        sendUserPreferenceToMixpanel(preference.getKey(), name);
+        trackQualityAndResolutionUserTraits(preference.getKey(), name);
     }
 
     @Override
@@ -157,17 +172,35 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         Preference connectionPref = findPreference(key);
-        sendUserPreferenceToMixpanel(key, sharedPreferences.getString(key, ""));
+        trackQualityAndResolutionUserTraits(key, sharedPreferences.getString(key, ""));
         connectionPref.setSummary(sharedPreferences.getString(key, ""));
     }
 
-    private void sendUserPreferenceToMixpanel(String key, String value) {
+    private void trackQualityAndResolutionUserTraits(String key, String value) {
         String property = null;
         if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION))
             property = AnalyticsConstants.RESOLUTION;
         else if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY))
             property = AnalyticsConstants.QUALITY;
-        mixpanel.getPeople().set(property,value.toLowerCase());
+        mixpanel.getPeople().set(property, value.toLowerCase());
+    }
+
+    @Override
+    public void onClickPositiveButton(int id) {
+        if(id == REQUEST_CODE_EXIT_APP) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            getActivity().finish();
+            System.exit(0);
+        }
+    }
+
+    @Override
+    public void onClickNegativeButton(int id) {
+        if(id == REQUEST_CODE_EXIT_APP)
+            dialog.dismiss();
     }
 
 }

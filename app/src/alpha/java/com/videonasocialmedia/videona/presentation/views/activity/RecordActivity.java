@@ -129,6 +129,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private AlertDialog progressDialog;
 
     private boolean mUseImmersiveMode = true;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +139,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         drawerLayout.setDrawerListener(this);
 
         cameraView.setKeepScreenOn(true);
-        SharedPreferences sharedPreferences = getSharedPreferences(
+        sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
@@ -349,7 +350,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             hideShaderFilters();
             hideRemoveFilters();
         } else {
-            sendUserInteractedTracking(AnalyticsConstants.SET_FILTER_GROUP,
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_SHADER);
             showCameraEffectShader(null);
             if(removeFilterActivated){
@@ -439,7 +440,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             hideOverlayFilters();
             hideRemoveFilters();
         } else {
-            sendUserInteractedTracking(AnalyticsConstants.SET_FILTER_GROUP,
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_OVERLAY);
             showCameraEffectOverlay(null);
             if(removeFilterActivated){
@@ -458,7 +459,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @OnClick(R.id.button_remove_filters)
     public void onRemoveFiltersButtonClicked(){
-        sendUserInteractedTracking(AnalyticsConstants.CLEAR_FILTER, null);
+        trackUserInteracted(AnalyticsConstants.CLEAR_FILTER, null);
         Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
         Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
 
@@ -525,7 +526,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void showFlashOn(boolean on) {
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_FLASH, String.valueOf(on));
+        trackUserInteracted(AnalyticsConstants.CHANGE_FLASH, String.valueOf(on));
         flashButton.setActivated(on);
     }
 
@@ -546,7 +547,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void showFrontCameraSelected() {
         rotateCameraButton.setActivated(false);
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_FRONT);
+        trackUserInteracted(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_FRONT);
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
@@ -557,7 +558,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void showBackCameraSelected() {
         rotateCameraButton.setActivated(false);
-        sendUserInteractedTracking(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_BACK);
+        trackUserInteracted(AnalyticsConstants.CHANGE_CAMERA, AnalyticsConstants.CAMERA_BACK);
         try {
             orientationHelper.reStartMonitoringOrientation();
         } catch (OrientationHelper.NoOrientationSupportException e) {
@@ -631,7 +632,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void exportAndShare() {
         if (!recording) {
             showProgressDialog();
-            sendMetadataTracking();
+            mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
             startExportThread();
         }
     }
@@ -666,8 +667,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         });
     }
 
-    private void sendMetadataTracking() {
-        mixpanel.timeEvent(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+    private void trackVideoExported() {
         JSONObject videoExportedProperties = new JSONObject();
         try {
             int projectDuration = recordPresenter.getProjectDuration();
@@ -677,19 +677,29 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                     recordPresenter.getResolution());
             videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numVideosOnProject);
             mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
+            Log.d("ANALYTICS", "Tracked video exported event");
         } catch (JSONException e) {
             Log.e("TRACK_FAILED", String.valueOf(e));
         }
     }
 
+    private void saveVideoFeaturesToConfig() {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, recordPresenter.getProjectDuration());
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, recordPresenter.getNumVideosOnProject());
+        preferencesEditor.putString(ConfigPreferences.RESOLUTION, recordPresenter.getResolution());
+        preferencesEditor.commit();
+    }
+
+
     @Override
     public void goToShare(String videoToSharePath) {
-        mixpanel.track(AnalyticsConstants.TIME_EXPORTING_VIDEO);
+        trackVideoExported();
+        saveVideoFeaturesToConfig();
         Intent intent = new Intent(this, ShareVideoActivity.class);
         intent.putExtra("VIDEO_EDITED", videoToSharePath);
         startActivity(intent);
     }
-
 
     @Override
     public void showMenuOptions() {
@@ -722,13 +732,13 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_navigate_drawer)
     public void showDrawer() {
         if (!recording) {
-            sendUserInteractedTracking(AnalyticsConstants.INTERACTION_OPEN_DRAWER, null);
+            trackUserInteracted(AnalyticsConstants.INTERACTION_OPEN_DRAWER, null);
             drawerLayout.openDrawer(navigatorView);
             drawerBackground.setVisibility(View.VISIBLE);
         }
     }
 
-    private void sendUserInteractedTracking(String interaction, String result) {
+    private void trackUserInteracted(String interaction, String result) {
         JSONObject userInteractionsProperties = new JSONObject();
         try {
             userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
@@ -736,6 +746,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
             userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
             mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+            Log.d("ANALYTICS", "Tracked User Interacted event");
         } catch (JSONException e) {
             e.printStackTrace();
         }

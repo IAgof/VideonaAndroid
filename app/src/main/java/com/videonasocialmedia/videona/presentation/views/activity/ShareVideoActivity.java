@@ -343,7 +343,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     }
 
     private void trackVideoShared(SocialNetwork socialNetwork) {
-        sendSuperProperties();
+        trackVideoSharedSuperProperties();
         String socialNetworkName = null;
         if (socialNetwork != null)
             socialNetworkName = socialNetwork.getName();
@@ -353,28 +353,28 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             socialNetworkProperties.put(AnalyticsConstants.VIDEO_LENGTH, presenter.getVideoLength());
             socialNetworkProperties.put(AnalyticsConstants.RESOLUTION, presenter.getResolution());
             socialNetworkProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, presenter.getNumberOfClips());
-            socialNetworkProperties.put(AnalyticsConstants.TOTAL_SHARED_VIDEOS,
+            socialNetworkProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED,
                     sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0));
             mixpanel.track(AnalyticsConstants.VIDEO_SHARED, socialNetworkProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_SHARED_VIDEOS, 1);
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_SHARED, 1);
         mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_SHARED,
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
     }
 
-    private void sendSuperProperties() {
+    private void trackVideoSharedSuperProperties() {
         JSONObject updateSuperProperties = new JSONObject();
         int numPreviousVideosShared;
         try {
             numPreviousVideosShared =
-                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_SHARED_VIDEOS);
+                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_SHARED);
         } catch (JSONException e) {
-            numPreviousVideosShared = 1;
+            numPreviousVideosShared = 0;
         }
         try {
-            updateSuperProperties.put(AnalyticsConstants.TOTAL_SHARED_VIDEOS,
+            updateSuperProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED,
                     ++numPreviousVideosShared);
             mixpanel.registerSuperProperties(updateSuperProperties);
         } catch (JSONException e) {

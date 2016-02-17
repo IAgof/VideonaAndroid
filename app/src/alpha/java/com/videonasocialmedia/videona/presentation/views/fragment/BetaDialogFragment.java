@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BetaDialogFragment extends DialogFragment {
-
     private MixpanelAPI mixpanel;
     private SharedPreferences sharedPreferences;
 
@@ -70,19 +69,18 @@ public class BetaDialogFragment extends DialogFragment {
         try {
             betaLeavedProperties.put(AnalyticsConstants.DATE,
                     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-            betaLeavedProperties.put(AnalyticsConstants.TOTAL_RECORDED_VIDEOS, totalVideosRecorded);
-            betaLeavedProperties.put(AnalyticsConstants.TOTAL_SHARED_VIDEOS, totalVideosShared);
+            betaLeavedProperties.put(AnalyticsConstants.TOTAL_VIDEOS_RECORDED, totalVideosRecorded);
+            betaLeavedProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED, totalVideosShared);
             mixpanel.track(AnalyticsConstants.BETA_LEAVED, betaLeavedProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    @OnClick({R.id.affirmativeButton, R.id.cancel})
+    @OnClick(R.id.positiveButton)
     public void dismissBetaDialog() {
         this.dismiss();
     }
-
 }
 
 

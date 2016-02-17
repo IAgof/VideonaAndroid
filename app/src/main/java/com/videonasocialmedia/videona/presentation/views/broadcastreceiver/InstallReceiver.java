@@ -15,12 +15,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.CampaignTrackingReceiver;
+import com.mixpanel.android.mpmetrics.InstallReferrerReceiver;
 
 public class InstallReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         //handleIntent(context, intent);
+        InstallReferrerReceiver mixpanelReferrerTracking = new InstallReferrerReceiver();
+        mixpanelReferrerTracking.onReceive(context, intent);
         new CampaignTrackingReceiver().onReceive(context, intent);
     }
 

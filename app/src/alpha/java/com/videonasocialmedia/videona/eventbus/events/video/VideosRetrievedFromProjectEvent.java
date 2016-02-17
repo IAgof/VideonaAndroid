@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.eventbus.events.videosretrieved;
+package com.videonasocialmedia.videona.eventbus.events.video;
 
 import android.support.annotation.Nullable;
 
