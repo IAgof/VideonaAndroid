@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -56,6 +57,8 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -122,7 +125,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private AlertDialog progressDialog;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-
+    private String resultVideoPath;
+    private boolean externalIntent = false;
     private boolean mUseImmersiveMode = true;
 
     @Override
@@ -218,22 +222,15 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private void checkAction() {
         if (getIntent().getAction() != null) {
             if (getIntent().getAction().equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
-                Log.d("info", String.valueOf(getIntent()));
-                Log.d("path", String.valueOf(getIntent().getClipData().getItemAt(0).getUri().toString()));
-                Log.d("INTENT", "video capture");
-                // TODO change this to an activity that sends the result to intent-filter
-            } else {
-                Log.d("INTENT", "nothing");
+                if(getIntent().getClipData() != null) {
+                    resultVideoPath = getIntent().getClipData().getItemAt(0).getUri().toString();
+                    if (resultVideoPath.startsWith("file://"))
+                        resultVideoPath = resultVideoPath.replace("file://", "");
+                }
+                externalIntent = true;
+                buttonSettings.setVisibility(View.GONE);
             }
         }
-    }
-
-    private void setResult() {
-//        String urlStr = "hola";
-//        Uri myVideoUri = new URI(new File(urlStr)).getPath();
-//        Intent returnIntent = new Intent();
-//        returnIntent.setData(myVideoUri);
-//        setResult(RESULT_OK, returnIntent);
     }
 
     @Override
@@ -615,6 +612,24 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void showRecordedVideoThumb(String path) {
         navigateToEditButton.setVisibility(View.VISIBLE);
         Glide.with(this).load(path).into(navigateToEditButton);
+        if(externalIntent)
+            setResult(path);
+    }
+
+    private void setResult(String originalVideoPath) {
+        try {
+            if(resultVideoPath != null)
+                Utils.copyFile(originalVideoPath, resultVideoPath);
+            else
+                resultVideoPath = originalVideoPath;
+            Uri myVideoUri = Uri.fromFile(new File(resultVideoPath));
+            Intent returnIntent = new Intent();
+            returnIntent.setData(myVideoUri);
+            setResult(RESULT_OK, returnIntent);
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -635,7 +650,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void onBackPressed() {
-
         if (buttonBackPressed) {
             buttonBackPressed = false;
 
