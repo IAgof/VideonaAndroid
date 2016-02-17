@@ -26,11 +26,11 @@
     <string name="toast_exit_edit">Pulsa para salir del editor</string>
     <string name="toast_add_videos">Por favor, añada vídeos al proyecto</string>
     <string name="addMediaItemToTrackError">Ups! Algo no ha ido bien. Inténtalo de nuevo</string>
-    <string name="confirmDeleteVideosFromProjectTitle">Borrar los vídeos</string>
-    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas eliminar los clips de vídeo de esta
-        edición?</string>
-    <string name="acceptDeleteVideosFromProject">Quiero eliminarlos</string>
-    <string name="cancelDeleteVideosFromProject">Me los quedo</string>
+    <string name="confirmDeleteVideosFromProjectTitle">¿Descartar los siguientes clips?</string>
+    <string name="confirmDeleteVideosFromProjectMessage">¿Deseas descartar estos vídeos de
+        esta sesión?</string>
+    <string name="acceptDeleteVideosFromProject">Sí</string>
+    <string name="cancelDeleteVideosFromProject">No</string>
     <string name="deletedVideosFromProject">Vídeos borrados del proyecto. Graba o añade nuevos vídeos</string>
     <string name="addVideosToProject">Por favor, graba o añade nuevos vídeos</string>
     <string name="invalidRazorTime">Por favor, selecciona un instante de tiempo para cortar el vídeo</string>
@@ -43,9 +43,10 @@
     <string name="confirmDeleteTitle">Eliminar</string>
     <string name="confirmDeleteTitle1">vídeo</string>
     <string name="confirmDeleteTitle2">vídeos</string>
-    <string name="confirmDeleteMessage">Elimina definitivamente estos archivos de tu terminal</string>
-    <string name="positiveButton">Quiero eliminarlos</string>
-    <string name="negativeButton">Me los quedo</string>
+    <string name="confirmDeleteMessage">¿Eliminar definitivamente estos archivos seleccionados de
+        tu terminal?</string>
+    <string name="positiveButton">Sí</string>
+    <string name="negativeButton">No</string>
     <string name="galleryActivityTitle">Galería</string>
     <string name="mastersFolderTitle">Originales</string>
     <string name="editedFolderTitle">Editados</string>
@@ -65,20 +66,20 @@
     <string name="action_settings">Ajustes</string>
 
     <!-- Rate Videona -->
-    <string name="rateUsDialogTitle">¿Te ha gustado Videona?</string>
-    <string name="rateUsDialogMessage">¡Valora nuestra app y déjanos tu comentario! Puedes
-        escribirnos un mail si tienes alguna queja.</string>
-    <string name="rateUsDialogNegative">Me horroriza</string>
-    <string name="rateUsDialogAffirmative">Me encanta</string>
+    <string name="rateUsDialogTitle">Contamos contigo</string>
+    <string name="rateUsDialogMessage">Valora nuestra app o escríbenos un email si tienes alguna
+        sugerencia.</string>
+    <string name="rateUsDialogNegative">Email</string>
+    <string name="rateUsDialogAffirmative">Valorar la app</string>
     <string name="error_rate_app">Error de conexión con Google Play</string>
     <string name="title_vote_section">Vota</string>
     <string name="content_vote_section">Vota nuestra aplicación</string>
 
     <!-- Exit App -->
-    <string name="exit_app_title">Salir de la aplicación</string>
+    <string name="exit_app_title">¿Salir de la aplicación?</string>
     <string name="exit_app_message">¿Seguro que quieres salir?</string>
-    <string name="acceptExit">Abandono</string>
-    <string name="cancelExit">Me quedo</string>
+    <string name="acceptExit">Sí</string>
+    <string name="cancelExit">No</string>
 
 
     <!-- Join/Leave beta Videona -->

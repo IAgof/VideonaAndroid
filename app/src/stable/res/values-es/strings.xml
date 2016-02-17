@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="betaPreferenceText">Prueba Videona Beta</string>
-    <string name="joinBetaDialogTitle">Participa en la Beta</string>
-    <string name="joinBetaDialogMessage">Conviértete en Betatester para ayudarnos a crear el editor
-        que necesitas.</string>
-    <string name="joinBetaDialogPositiveButton">Contar conmigo</string>
+    <string name="joinBetaDialogTitle">Quiero ser embajador</string>
+    <string name="joinBetaDialogMessage">¡Conviértete en Beta Tester! Crea Videona como tú lo
+        quieres.</string>
+    <string name="joinBetaDialogPositiveButton">Contad conmigo</string>
     <string name="joinBetaDialogNegativeButton">No, gracias</string>
     <string name="email">email</string>
-    <string name="thanks">Gracias!!!</string>
-    <string name="joinBetaLinkInfo">Sigue las instrucciones de Google. Cuando el
-        proceso se complete recibirás la actualización.</string>
-    <string name="joinBetaLink">Adelante</string>
+    <string name="thanks">¡Gracias por tu tiempo!</string>
+    <string name="joinBetaLinkInfo">Sigue las instrucciones de Google. Pronto recibirás la
+        actualización.</string>
+    <string name="joinBetaLinkPositiveButton">Contar conmigo</string>
+    <string name="joinBetaLinkNegativeButton">No, gracias</string>
 </resources>
