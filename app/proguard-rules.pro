@@ -36,6 +36,9 @@
 
 -keep public class com.videonasocialmedia.videona.utils.VideoUtils
 
+# Qordoba
+-dontwarn com.qordoba.**
+
 # Mixpanel
 -dontwarn com.mixpanel.**
 -keep class com.mixpanel.android.abtesting.** { *; }
