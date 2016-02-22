@@ -622,9 +622,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 Utils.copyFile(originalVideoPath, resultVideoPath);
             else
                 resultVideoPath = originalVideoPath;
-            Uri myVideoUri = Uri.fromFile(new File(resultVideoPath));
+            Uri videoUri = Uri.fromFile(new File(resultVideoPath));
             Intent returnIntent = new Intent();
-            returnIntent.setData(myVideoUri);
+            returnIntent.setData(videoUri);
             setResult(RESULT_OK, returnIntent);
             finish();
         } catch (IOException e) {

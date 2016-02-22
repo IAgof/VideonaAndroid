@@ -17,9 +17,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +59,8 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,7 +131,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean recording;
     private OrientationHelper orientationHelper;
     private AlertDialog progressDialog;
-
+    private String resultVideoPath;
+    private boolean externalIntent = false;
     private boolean mUseImmersiveMode = true;
     private SharedPreferences sharedPreferences;
 
@@ -218,6 +223,21 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
+        checkAction();
+    }
+
+    private void checkAction() {
+        if (getIntent().getAction() != null) {
+            if (getIntent().getAction().equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
+                if(getIntent().getClipData() != null) {
+                    resultVideoPath = getIntent().getClipData().getItemAt(0).getUri().toString();
+                    if (resultVideoPath.startsWith("file://"))
+                        resultVideoPath = resultVideoPath.replace("file://", "");
+                }
+                externalIntent = true;
+                drawerButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -580,6 +600,24 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void showRecordedVideoThumb(String path) {
         buttonThumbClipRecorded.setVisibility(View.VISIBLE);
         Glide.with(this).load(path).into(buttonThumbClipRecorded);
+        if(externalIntent)
+            setResult(path);
+    }
+
+    private void setResult(String originalVideoPath) {
+        try {
+            if(resultVideoPath != null)
+                Utils.copyFile(originalVideoPath, resultVideoPath);
+            else
+                resultVideoPath = originalVideoPath;
+            Uri videoUri = Uri.fromFile(new File(resultVideoPath));
+            Intent returnIntent = new Intent();
+            returnIntent.setData(videoUri);
+            setResult(RESULT_OK, returnIntent);
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
