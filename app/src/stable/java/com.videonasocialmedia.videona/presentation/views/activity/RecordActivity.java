@@ -586,6 +586,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED);
     }
 
     @Override
