@@ -153,6 +153,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         setupPathsApp(this);
         setupStartApp();
+        trackUserProfileGeneralTraits();
     }
 
     private void trackAppStartup() {
@@ -168,7 +169,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
     private void setupStartApp() {
         AppStart appStart = new AppStart();
-        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
         switch (appStart.checkAppStart(this, sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
@@ -248,18 +248,28 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         mixpanel.identify(androidId);
         mixpanel.getPeople().identify(androidId);
         JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            mixpanel.getPeople().setOnce(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void trackUserProfileGeneralTraits() {
+        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
+        JSONObject userProfileProperties = new JSONObject();
         String userType = AnalyticsConstants.USER_TYPE_FREE;
         if ( BuildConfig.FLAVOR.equals("alpha") ) {
             userType = AnalyticsConstants.USER_TYPE_BETA;
         }
         try {
             userProfileProperties.put(AnalyticsConstants.TYPE, userType);
-            userProfileProperties.put(AnalyticsConstants.CREATED,
-                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
             userProfileProperties.put(AnalyticsConstants.LOCALE,
                     Locale.getDefault().toString());
             userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
-            mixpanel.getPeople().setOnce(userProfileProperties);
+            mixpanel.getPeople().set(userProfileProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
