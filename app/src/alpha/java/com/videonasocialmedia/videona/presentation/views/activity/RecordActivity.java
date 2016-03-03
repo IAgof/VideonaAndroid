@@ -569,6 +569,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED);
     }
 
     @Override

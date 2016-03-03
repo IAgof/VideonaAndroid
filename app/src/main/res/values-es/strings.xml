@@ -16,6 +16,8 @@
     <!-- Share Activity -->
     <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
     <string name="share_using">Compartir vídeo con</string>
+    <string name="sharedWithVideona">"Compartido con Videona"</string>
+    <string name="videonaTags">"#Videona"</string>
 
     <!-- Editor Activity -->
     <string name="edit_title_name">Sala de edición</string>

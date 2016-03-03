@@ -312,6 +312,7 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
                 .withMessage(getResources().getString(causeTextResource))
                 .create();
         dialog.show(getFragmentManager(), "errorDialog");
+        mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED);
     }
 
     @Override

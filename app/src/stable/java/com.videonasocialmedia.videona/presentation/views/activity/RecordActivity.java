@@ -126,6 +126,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("prueba", "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
@@ -198,6 +199,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     protected void onStart() {
+        Log.d("prueba", "onstart");
         super.onStart();
         checkAndRequestPermissions();
         recordPresenter.onStart();
@@ -209,6 +211,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         super.onResume();
         EventBus.getDefault().register(this);
         recordPresenter.onResume();
+//        cameraView.onResume();
         recording = false;
         hideSystemUi();
     }
@@ -217,6 +220,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+//        cameraView.setPreserveEGLContextOnPause(true);
+//        cameraView.onPause();
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
     }
@@ -225,7 +230,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     protected void onStop() {
         super.onStop();
         recordPresenter.onStop();
-        finish();
+//        finish();
     }
 
     @Override
@@ -581,6 +586,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void showError(String errorMessage) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED);
     }
 
     @Override

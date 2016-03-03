@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
+import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
@@ -46,6 +47,10 @@ public class ShareVideoPresenter {
         Uri uri = Utils.obtainUriToShare(ctx, videoPath);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+                VideonaApplication.getAppContext().getResources().getString(R.string.sharedWithVideona));
+        intent.putExtra(Intent.EXTRA_TEXT,
+                VideonaApplication.getAppContext().getResources().getString(R.string.videonaTags));
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
