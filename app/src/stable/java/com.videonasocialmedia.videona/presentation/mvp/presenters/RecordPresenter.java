@@ -183,17 +183,31 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void onStart() {
-        if (recorder.isReleased()) {
-            cameraPreview.releaseCamera();
-            initRecorder(context, cameraPreview, sharedPreferences);
-        }
+//        if (recorder.isReleased()) {
+//            cameraPreview.releaseCamera();
+//            initRecorder(context, cameraPreview, sharedPreferences);
+//        }
+    }
+
+    public void setGLSurface(GLCameraEncoderView cameraPreview) {
+        this.cameraPreview = cameraPreview;
     }
 
     public void onResume() {
         EventBus.getDefault().register(this);
-        recorder.onHostActivityResumed();
+        cameraPreview.onResume();
+//        recorder.onHostActivityResumed();
+        if (recorder.isReleased()) {
+            cameraPreview.releaseCamera();
+//            initRecorder(context, cameraPreview, sharedPreferences);
+            updateRecorder();
+        }
         showThumbAndNumber();
         Log.d(LOG_TAG, "resume presenter");
+    }
+
+    private void updateRecorder() {
+        recorder.setPreviewDisplay(cameraPreview);
     }
 
     private void showThumbAndNumber() {
@@ -216,12 +230,14 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onPause() {
         EventBus.getDefault().unregister(this);
-        stopRecord();
-        recorder.onHostActivityPaused();
+        cameraPreview.setPreserveEGLContextOnPause(true);
+        cameraPreview.onPause();
+//        recorder.onHostActivityPaused();
         Log.d(LOG_TAG, "pause presenter");
     }
 
     public void onStop() {
+        stopRecord();
         recorder.release();
     }
 
@@ -335,11 +351,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         String fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
         originalFile.renameTo(destinationFile);
-        int numTotalVideosRecorded = sharedPreferences
-                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
-        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
-                ++numTotalVideosRecorded);
-        preferencesEditor.commit();
+        updateTotalVideosRecorded();
         trackTotalVideosRecordedSuperProperty();
         double clipDuration = 0.0;
         try {
@@ -349,6 +361,14 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
         trackVideoRecorded(clipDuration);
         return destinationFile.getAbsolutePath();
+    }
+
+    private void updateTotalVideosRecorded() {
+        int numTotalVideosRecorded = sharedPreferences
+                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
+                ++numTotalVideosRecorded);
+        preferencesEditor.commit();
     }
 
     private void trackTotalVideosRecordedSuperProperty() {

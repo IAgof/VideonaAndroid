@@ -16,6 +16,8 @@
     <!-- Share Activity -->
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>
     <string name="share_using">"Share video using "</string>
+    <string name="sharedWithVideona">"Shared with Videona"</string>
+    <string name="videonaTags">"#Videona"</string>
 
     <!-- Editor Activity -->
     <string name="edit_title_name">Edit Room</string>
