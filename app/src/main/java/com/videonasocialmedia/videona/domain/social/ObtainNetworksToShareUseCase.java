@@ -54,4 +54,15 @@ public class ObtainNetworksToShareUseCase {
                 || appName.equalsIgnoreCase("Youtube")
                 || appName.equalsIgnoreCase("Instagram");
     }
+
+    public boolean checkIfSocialNetworkIsInstalled(String appName) {
+        boolean result = false;
+        List<SocialNetwork> networksList = provider.getSocialNetworksAppsInstalled();
+        for (SocialNetwork appInstalled : networksList) {
+            if ((appInstalled.getName()).toLowerCase().contains(appName)) {
+                result = true;
+            }
+        }
+        return result;
+    }
 }

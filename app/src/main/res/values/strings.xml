@@ -83,8 +83,17 @@
         <string name="acceptExit">Yes</string>
         <string name="cancelExit">No</string>
 
-        <!-- Join/Leave beta Videona -->
+        <!-- Advanced section -->
         <string name="title_advanced_section">Advanced</string>
+        <string name="kamaradaGooglePlayLink">https://play.google.com/store/apps/details?id=com.videonasocialmedia.kamarada&amp;referrer=utm_source%3DVideona%26utm_medium%3DLink_Directo%26utm_campaign%3DDownload_Kamarada_from_videona_settings</string>
+        <string name="downloadKamarada">Download Kamarada</string>
+        <string name="shareVideona">Share Videona</string>
+        <string name="whatsAppNotInstalled">Sorry, WhatsApp is not installed</string>
+        <string name="shareWith">Share with</string>
+        <string name="whatsAppSharedText">Having fun with Videona, the best app to edit videos!!!
+            Try it!!!\nhttps://goo.gl/YudZYP</string>
+        <string name="followUsInTwitter">Follow us in Twitter</string>
+        <string name="videonaTwitter">https://twitter.com/videona_eng</string>
 
         <!-- Email -->
         <string name="enterEmail">Enter a valid email</string>
