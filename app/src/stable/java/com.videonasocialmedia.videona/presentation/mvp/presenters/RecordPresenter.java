@@ -183,10 +183,10 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void onStart() {
-//        if (recorder.isReleased()) {
-//            cameraPreview.releaseCamera();
-//            initRecorder(context, cameraPreview, sharedPreferences);
-//        }
+        if (recorder.isReleased()) {
+            cameraPreview.releaseCamera();
+            initRecorder(context, cameraPreview, sharedPreferences);
+        }
     }
 
     public void setGLSurface(GLCameraEncoderView cameraPreview) {
@@ -195,19 +195,9 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onResume() {
         EventBus.getDefault().register(this);
-        cameraPreview.onResume();
-//        recorder.onHostActivityResumed();
-        if (recorder.isReleased()) {
-            cameraPreview.releaseCamera();
-//            initRecorder(context, cameraPreview, sharedPreferences);
-            updateRecorder();
-        }
+        recorder.onHostActivityResumed();
         showThumbAndNumber();
         Log.d(LOG_TAG, "resume presenter");
-    }
-
-    private void updateRecorder() {
-        recorder.setPreviewDisplay(cameraPreview);
     }
 
     private void showThumbAndNumber() {
@@ -230,14 +220,12 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onPause() {
         EventBus.getDefault().unregister(this);
-        cameraPreview.setPreserveEGLContextOnPause(true);
-        cameraPreview.onPause();
-//        recorder.onHostActivityPaused();
+        stopRecord();
+        recorder.onHostActivityPaused();
         Log.d(LOG_TAG, "pause presenter");
     }
 
     public void onStop() {
-        stopRecord();
         recorder.release();
     }
 
