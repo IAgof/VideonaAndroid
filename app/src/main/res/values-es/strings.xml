@@ -101,6 +101,7 @@
     <string name="invalid_email">Por favor, añade un email válido</string>
 
     <!-- User info -->
+    <string name="settingsTitle">Ajustes</string>
     <string name="titleUserSection">Mi cuenta</string>
     <string name="name">Nombre</string>
     <string name="enterName">Introduce tu nombre</string>
