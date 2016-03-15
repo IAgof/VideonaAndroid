@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -501,40 +500,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-    private void checkRootPathMovies() {
-        File fMovies = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES);
-        if (!fMovies.exists()) {
-            fMovies.mkdir();
-        }
-    }
-
     private void checkAndInitPath(String pathApp) {
         File fEdited = new File(pathApp);
         if (!fEdited.exists()) {
-            fEdited.mkdir();
+            fEdited.mkdirs();
         }
-    }
-
-    private void checkAndDeletePath(String pathApp) {
-        File folderTemp = new File(pathApp);
-        if (folderTemp.exists()) {
-            deleteFolderRecursive(folderTemp);
-        }
-    }
-
-    private void deleteFolderRecursive(File dir) {
-        File[] files = dir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    deleteFolderRecursive(file);
-                } else {
-                    file.delete();
-                }
-            }
-        }
-        dir.delete();
     }
 
     private void startLoadingProject(OnInitAppEventListener listener) {

@@ -15,6 +15,8 @@ public class AnalyticsConstants {
     public final static String FILTER_SELECTED = "Filter Selected";
     public static final String TIME_IN_ACTIVITY = "Time in Activity";
     public final static String BETA_LEAVED = "Beta Leaved";
+    public final static String APP_SHARED = "App Shared";
+    public final static String LINK_CLICK = "Link Click";
 
     /**
      * User Traits
@@ -47,7 +49,6 @@ public class AnalyticsConstants {
     /**
      * Values
      */
-
     public final static String DATE = "date"; // Beta Leaved event property
     public final static String TYPE_ORGANIC = "organic"; // App Started event property
 
@@ -83,4 +84,10 @@ public class AnalyticsConstants {
     public static final String INIT_STATE_FIRST_TIME = "firstTime";
     public static final String INIT_STATE_RETURNING = "returning";
     public static final String INIT_STATE_UPGRADE = "upgrade";
+    public static final String APP_SHARED_NAME = "appShared";
+    public static final String LINK = "link";
+    public static final String SOURCE_APP = "sourceApp";
+    public static final String DESTINATION = "destination";
+    public static final String SOURCE_APP_VIDEONA = "Videona";
+    public static final String DESTINATION_KAMARADA_PLAY = "Kamarada Google Play";
 }
