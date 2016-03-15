@@ -230,7 +230,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     protected void onStop() {
         super.onStop();
         recordPresenter.onStop();
-//        finish();
+        finish();
     }
 
     @Override
