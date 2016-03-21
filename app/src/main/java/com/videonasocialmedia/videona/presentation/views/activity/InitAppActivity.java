@@ -588,12 +588,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 navigate(IntroAppActivity.class);
             } else {
                 InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
+                navigate(RecordActivity.class);
                 if (notification != null) {
                     Log.d("INAPP", "in-app notification received");
                     mixpanel.getPeople().showGivenNotification(notification, parentActivity);
                     mixpanel.getPeople().trackNotificationSeen(notification);
-                } else {
-                    navigate(RecordActivity.class);
                 }
             }
         }
