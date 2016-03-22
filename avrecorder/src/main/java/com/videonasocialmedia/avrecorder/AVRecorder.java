@@ -45,7 +45,7 @@ public class AVRecorder {
         init(config);
     }
 
-    private void init(SessionConfig config) throws IOException {
+    public void init(SessionConfig config) throws IOException {
         mCamEncoder = new CameraEncoder(config);
         mMicEncoder = new MicrophoneEncoder(config);
         mConfig = config;

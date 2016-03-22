@@ -211,7 +211,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         super.onResume();
         EventBus.getDefault().register(this);
         recordPresenter.onResume();
-//        cameraView.onResume();
+        cameraView.onResume();
         recording = false;
         hideSystemUi();
     }
@@ -220,8 +220,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-//        cameraView.setPreserveEGLContextOnPause(true);
-//        cameraView.onPause();
+        cameraView.onPause();
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
     }
@@ -230,7 +229,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     protected void onStop() {
         super.onStop();
         recordPresenter.onStop();
-        finish();
+//        finish();
     }
 
     @Override

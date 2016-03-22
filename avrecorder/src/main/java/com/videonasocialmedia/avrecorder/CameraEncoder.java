@@ -39,6 +39,7 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, Runnable {
 
+    private Thread prueba;
     private static final String TAG = "CameraEncoder";
     private static final boolean TRACE = true;         // Systrace
     private static final boolean VERBOSE = true;       // Lots of logging
@@ -302,14 +303,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     public void setPreviewDisplay(GLCameraView display) {
         checkNotNull(display);
-        mDisplayRenderer = new CameraSurfaceRenderer(this);
-        // Prep GLSurfaceView and attach Renderer
-
-        display.setEGLContextClientVersion(2);
-        display.setRenderer(mDisplayRenderer);
-        //display.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR | GLSurfaceView.DEBUG_LOG_GL_CALLS);
-        display.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        display.setPreserveEGLContextOnPause(true);
+        mDisplayRenderer = ((GLCameraEncoderView) display).getRenderer();
+        mDisplayRenderer.setEncoder(this);
         mDisplayView = display;
     }
 
@@ -438,7 +433,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 return;
             }
             mRunning = true;
-            new Thread(this, "CameraEncoder").start();
+            prueba = new Thread(this, "CameraEncoder");
+            prueba.start();
             while (!mReady) {
                 try {
                     mReadyFence.wait();
@@ -645,16 +641,17 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         Log.i(TAG, "onHostActivityPaused");
         synchronized (mReadyForFrameFence) {
             // Pause the GLSurfaceView's Renderer thread
-            if (mDisplayView != null)
-                mDisplayView.onPause();
+//            if (mDisplayView != null)
+//                mDisplayView.onPause();
             // Release camera if we're not recording
-            //if (!mRecording && mSurfaceTexture != null) {
-            if (VERBOSE)
-                Log.i("CameraRelease", "Releasing camera");
-            if (mDisplayView != null)
-                releaseDisplayView();
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE_CAMERA));
-            // }
+            if (!mRecording && mSurfaceTexture != null) {
+                if (VERBOSE)
+                    Log.i("CameraRelease", "Releasing camera");
+    //            if (mDisplayView != null)
+    //                releaseDisplayView();
+                if(mHandler != null)
+                    mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE_CAMERA));
+                }
         }
     }
 
@@ -683,18 +680,18 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     public void onHostActivityResumed() {
         synchronized (mReadyForFrameFence) {
             // Resume the GLSurfaceView's Renderer thread
-            if (mDisplayView != null)
-                mDisplayView.onResume();
+//            if (mDisplayView != null)
+//                mDisplayView.onResume();
             // Re-open camera if we're not recording and the SurfaceTexture has already been created
             if (!mRecording && mSurfaceTexture != null) {
                 if (VERBOSE)
                     Log.i("CameraRelease", "Opening camera and attaching to SurfaceTexture");
-                mHandler.sendMessage(mHandler.obtainMessage(MSG_REOPEN_CAMERA));
+                if(mHandler != null)
+                    mHandler.sendMessage(mHandler.obtainMessage(MSG_REOPEN_CAMERA));
             } else {
                 Log.w("CameraRelease", "Didn't try to open camera onHAResume. rec: " + mRecording + " mSurfaceTexture ready? " + (mSurfaceTexture == null ? " no" : " yes"));
             }
         }
-
     }
 
     /**
@@ -885,85 +882,88 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                     "amera already initialized");
         }
 
-        Camera.CameraInfo info = new Camera.CameraInfo();
+//        if(mCamera == null) {
 
-        // Try to find a front-facing camera (e.g. for videoconferencing).
-        int numCameras = Camera.getNumberOfCameras();
-        int targetCameraType = requestedCameraType;
-        boolean triedAllCameras = false;
-        cameraLoop:
-        while (!triedAllCameras) {
-            for (int i = 0; i < numCameras; i++) {
-                Camera.getCameraInfo(i, info);
-                if (info.facing == targetCameraType) {
-                    mCamera = Camera.open(i);
-                    mCurrentCamera = targetCameraType;
-                    break cameraLoop;
+            Camera.CameraInfo info = new Camera.CameraInfo();
+
+            // Try to find a front-facing camera (e.g. for videoconferencing).
+            int numCameras = Camera.getNumberOfCameras();
+            int targetCameraType = requestedCameraType;
+            boolean triedAllCameras = false;
+            cameraLoop:
+            while (!triedAllCameras) {
+                for (int i = 0; i < numCameras; i++) {
+                    Camera.getCameraInfo(i, info);
+                    if (info.facing == targetCameraType) {
+                        mCamera = Camera.open(i);
+                        mCurrentCamera = targetCameraType;
+                        break cameraLoop;
+                    }
                 }
+                if (mCamera == null) {
+                    if (targetCameraType == requestedCameraType)
+                        targetCameraType = (requestedCameraType == Camera.CameraInfo.CAMERA_FACING_BACK ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
+                    else
+                        triedAllCameras = true;
+                }
+
             }
+
             if (mCamera == null) {
-                if (targetCameraType == requestedCameraType)
-                    targetCameraType = (requestedCameraType == Camera.CameraInfo.CAMERA_FACING_BACK ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK);
-                else
-                    triedAllCameras = true;
+                mCurrentCamera = -1;
+                throw new RuntimeException("Unable to open camera");
             }
 
-        }
+            initDisplayOrientation();
 
-        if (mCamera == null) {
-            mCurrentCamera = -1;
-            throw new RuntimeException("Unable to open camera");
-        }
+            Camera.Parameters parms = mCamera.getParameters();
 
-        initDisplayOrientation();
+            postCameraOpenedEvent(parms, cameraInfoOrientation);
 
-        Camera.Parameters parms = mCamera.getParameters();
+            List<String> focusModes = parms.getSupportedFocusModes();
 
-        postCameraOpenedEvent(parms, cameraInfoOrientation);
+            if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                parms.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                parms.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+            } else {
+                if (VERBOSE) Log.i(TAG, "Camera does not support autofocus");
+            }
 
-        List<String> focusModes = parms.getSupportedFocusModes();
+            List<String> flashModes = parms.getSupportedFlashModes();
+            String flashMode = (mDesiredFlash != null) ? mDesiredFlash : mCurrentFlash;
+            if (isValidFlashMode(flashModes, flashMode)) {
+                parms.setFlashMode(flashMode);
+            }
 
-        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
-            parms.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-            parms.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
-        } else {
-            if (VERBOSE) Log.i(TAG, "Camera does not support autofocus");
-        }
+            parms.setRecordingHint(true);
 
-        List<String> flashModes = parms.getSupportedFlashModes();
-        String flashMode = (mDesiredFlash != null) ? mDesiredFlash : mCurrentFlash;
-        if (isValidFlashMode(flashModes, flashMode)) {
-            parms.setFlashMode(flashMode);
-        }
+            List<int[]> fpsRanges = parms.getSupportedPreviewFpsRange();
+            int[] maxFpsRange = null;
+            // Get the maximum supported fps not to exceed 30
+            for (int x = fpsRanges.size() - 1; x >= 0; x--) {
+                maxFpsRange = fpsRanges.get(x);
+                if (maxFpsRange[1] / 1000.0 <= 30) break;
+            }
+            if (maxFpsRange != null) {
+                parms.setPreviewFpsRange(maxFpsRange[0], maxFpsRange[1]);
+            }
 
-        parms.setRecordingHint(true);
+            choosePreviewSize(parms, desiredWidth, desiredHeight);
+            // leave the frame rate set to default
+            mCamera.setParameters(parms);
 
-        List<int[]> fpsRanges = parms.getSupportedPreviewFpsRange();
-        int[] maxFpsRange = null;
-        // Get the maximum supported fps not to exceed 30
-        for (int x = fpsRanges.size() - 1; x >= 0; x--) {
-            maxFpsRange = fpsRanges.get(x);
-            if (maxFpsRange[1] / 1000.0 <= 30) break;
-        }
-        if (maxFpsRange != null) {
-            parms.setPreviewFpsRange(maxFpsRange[0], maxFpsRange[1]);
-        }
-
-        choosePreviewSize(parms, desiredWidth, desiredHeight);
-        // leave the frame rate set to default
-        mCamera.setParameters(parms);
-
-        int[] fpsRange = new int[2];
-        Camera.Size mCameraPreviewSize = parms.getPreviewSize();
-        parms.getPreviewFpsRange(fpsRange);
-        String previewFacts = mCameraPreviewSize.width + "x" + mCameraPreviewSize.height;
-        if (fpsRange[0] == fpsRange[1]) {
-            previewFacts += " @" + (fpsRange[0] / 1000.0) + "fps";
-        } else {
-            previewFacts += " @" + (fpsRange[0] / 1000.0) + " - " + (fpsRange[1] / 1000.0) + "fps";
-        }
-        if (VERBOSE) Log.i(TAG, "Camera preview set: " + previewFacts);
+            int[] fpsRange = new int[2];
+            Camera.Size mCameraPreviewSize = parms.getPreviewSize();
+            parms.getPreviewFpsRange(fpsRange);
+            String previewFacts = mCameraPreviewSize.width + "x" + mCameraPreviewSize.height;
+            if (fpsRange[0] == fpsRange[1]) {
+                previewFacts += " @" + (fpsRange[0] / 1000.0) + "fps";
+            } else {
+                previewFacts += " @" + (fpsRange[0] / 1000.0) + " - " + (fpsRange[1] / 1000.0) + "fps";
+            }
+            if (VERBOSE) Log.i(TAG, "Camera preview set: " + previewFacts);
+//        }
 
     }
 

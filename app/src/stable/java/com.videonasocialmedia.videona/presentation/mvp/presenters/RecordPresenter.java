@@ -184,7 +184,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onStart() {
         if (recorder.isReleased()) {
-            cameraPreview.releaseCamera();
+//            cameraPreview.releaseCamera();
             initRecorder(context, cameraPreview, sharedPreferences);
         }
     }
