@@ -680,8 +680,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     public void onHostActivityResumed() {
         synchronized (mReadyForFrameFence) {
             // Resume the GLSurfaceView's Renderer thread
-//            if (mDisplayView != null)
-//                mDisplayView.onResume();
+            if (mDisplayView != null)
+                mDisplayView.onResume();
             // Re-open camera if we're not recording and the SurfaceTexture has already been created
             if (!mRecording && mSurfaceTexture != null) {
                 if (VERBOSE)

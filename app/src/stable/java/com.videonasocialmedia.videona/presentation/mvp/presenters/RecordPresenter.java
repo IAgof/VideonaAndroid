@@ -184,7 +184,6 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onStart() {
         if (recorder.isReleased()) {
-//            cameraPreview.releaseCamera();
             initRecorder(context, cameraPreview, sharedPreferences);
         }
     }
@@ -225,10 +224,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         Log.d(LOG_TAG, "pause presenter");
     }
 
-    public void onStop() {
-        recorder.release();
-    }
-
     public void onDestroy() {
         //recorder.release();
     }
@@ -247,7 +242,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                 try {
                     resetRecorder();
                 } catch (IOException ioe) {
-                    //recordView.showError();
+                    // TODO recordView.showError();
                 }
             } else {
                 startRecord();
@@ -261,7 +256,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void startExport() {
-        //editorView.showProgressDialog();
+
         //check VideoList is not empty, if true exportProjectUseCase
         List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
         if (videoList.size() > 0) {
@@ -270,7 +265,6 @@ public class RecordPresenter implements OnExportFinishedListener {
             recordView.hideProgressDialog();
             recordView.showMessage(R.string.add_videos_to_project);
         }
-        //exportProjectUseCase.export();
     }
 
     public void removeMasterVideos() {

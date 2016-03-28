@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -126,7 +127,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("prueba", "oncreate");
+        Log.d(LOG_TAG, "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
@@ -199,7 +200,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     protected void onStart() {
-        Log.d("prueba", "onstart");
+        Log.d(LOG_TAG, "onstart");
         super.onStart();
         checkAndRequestPermissions();
         recordPresenter.onStart();
@@ -225,12 +226,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         orientationHelper.stopMonitoringOrientation();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        recordPresenter.onStop();
-//        finish();
-    }
 
     @Override
     protected void onDestroy() {
@@ -268,7 +263,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         );
     }
 
-    @OnTouch(R.id.button_record) boolean onTouch(MotionEvent event) {
+    @OnTouch(R.id.button_record)
+    boolean onTouch(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!recording) {
                 recordPresenter.requestRecord();
@@ -615,24 +611,24 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void onBackPressed() {
-
-        if (buttonBackPressed) {
-            buttonBackPressed = false;
-
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-            startActivity(intent);
-            finish();
-            System.exit(0);
-        } else {
-            buttonBackPressed = true;
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//        if (buttonBackPressed) {
+//            buttonBackPressed = false;
+//
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+//            startActivity(intent);
+//            finish();
+//            System.exit(0);
+//        } else {
+//            buttonBackPressed = true;
+//            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
+//                    Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
 
     @OnClick(R.id.button_change_camera)
@@ -714,10 +710,10 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @OnClick(R.id.button_settings)
-    public void navigateToSettings() {
-        if (!recording) {
-            trackUserInteracted(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
-        }
+        public void navigateToSettings() {
+            if (!recording) {
+                trackUserInteracted(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
+            }
 
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
