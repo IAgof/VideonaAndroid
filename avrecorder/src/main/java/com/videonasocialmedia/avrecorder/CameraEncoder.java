@@ -39,7 +39,6 @@ import static com.google.gson.internal.$Gson$Preconditions.checkNotNull;
  */
 public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, Runnable {
 
-    private Thread prueba;
     private static final String TAG = "CameraEncoder";
     private static final boolean TRACE = true;         // Systrace
     private static final boolean VERBOSE = true;       // Lots of logging
@@ -55,6 +54,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     private final Object mReadyForFrameFence = new Object();    // guards mReadyForFrames/mRecording
     private final Object mReadyFence = new Object();            // guards ready/running
     private final Object mChangeCameraFence = new Object();
+    private Thread prueba;
     private volatile STATE mState = STATE.UNINITIALIZED;
     private volatile STATE mStateChangeCamera = STATE.UNINITIALIZED;
     // ----- accessed exclusively by encoder thread -----
@@ -107,37 +107,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     /**
-     * Attempts to find a preview size that matches the provided width and height (which
-     * specify the dimensions of the encoded video).  If it fails to find a match it just
-     * uses the default preview size.
-     * <p/>
-     * TODO: should do a best-fit match.
-     */
-    private static void choosePreviewSize(Camera.Parameters parms, int width, int height) {
-        // We should make sure that the requested MPEG size is less than the preferred
-        // size, and has the same aspect ratio.
-        Camera.Size ppsfv = parms.getPreferredPreviewSizeForVideo();
-        if (ppsfv != null && VERBOSE) {
-            Log.d(TAG, "Camera preferred preview size for video is " +
-                    ppsfv.width + "x" + ppsfv.height);
-        }
-
-        for (Camera.Size size : parms.getSupportedPreviewSizes()) {
-            Log.d(TAG, "Camera getSupportedPreviewSizes widthXheigth: " + size.width + " X " + size.height);
-            if (size.width == width && size.height == height) {
-                parms.setPreviewSize(width, height);
-                return;
-            }
-        }
-
-        Log.w(TAG, "Unable to set preview size to " + width + "x" + height);
-        if (ppsfv != null) {
-            parms.setPreviewSize(ppsfv.width, ppsfv.height);
-        }
-        // else use whatever the default size is
-    }
-
-    /**
      * Resets per-recording state. This excludes {@link EglStateSaver},
      * which should be re-used across recordings made by this CameraEncoder instance.
      *
@@ -162,6 +131,25 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mThumbnailRequestedOnFrame = -1;
 
         mSessionConfig = checkNotNull(config);
+    }
+
+    private void startEncodingThread() {
+        synchronized (mReadyFence) {
+            if (mRunning) {
+                Log.w(TAG, "Encoder thread running when start requested");
+                return;
+            }
+            mRunning = true;
+            prueba = new Thread(this, "CameraEncoder");
+            prueba.start();
+            while (!mReady) {
+                try {
+                    mReadyFence.wait();
+                } catch (InterruptedException ie) {
+                    // ignore
+                }
+            }
+        }
     }
 
     /**
@@ -197,6 +185,33 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mState = STATE.INITIALIZED;
         if (mEventBus != null)
             mEventBus.post(new CameraEncoderResetEvent());
+    }
+
+    /**
+     * Called with the display EGLContext current, on Encoder thread
+     *
+     * @param sharedContext The display EGLContext to be shared with the Encoder Surface's context.
+     * @param width         the desired width of the encoder's video output
+     * @param height        the desired height of the encoder's video output
+     * @param bitRate       the desired bitrate of the video encoder
+     * @param muxer         the desired output muxer
+     */
+    private void prepareEncoder(EGLContext sharedContext, int width, int height, int bitRate,
+                                Muxer muxer) throws IOException {
+        mVideoEncoder = new VideoEncoderCore(width, height, bitRate, muxer);
+        if (mEglCore == null) {
+            // This is the first prepare called for this CameraEncoder instance
+            mEglCore = new EglCore(sharedContext, EglCore.FLAG_RECORDABLE);
+        }
+        if (mInputWindowSurface != null) mInputWindowSurface.release();
+        mInputWindowSurface = new WindowSurface(mEglCore, mVideoEncoder.getInputSurface());
+        mInputWindowSurface.makeCurrent();
+
+        if (mFullScreen != null) mFullScreen.release();
+        mFullScreen = new FullFrameRect(
+                new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_EXT));
+        mFullScreen.getProgram().setTexSize(width, height);
+        mIncomingSizeUpdated = true;
     }
 
     public SessionConfig getConfig() {
@@ -359,13 +374,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         //overlayList.remove(overlay);
     }
 
-    public void addWatermark(Drawable overlayImage,
-                             int positionX, int positionY, int width, int height, boolean preview) {
-        this.watermark = new Watermark(overlayImage, height, width, positionX, positionY);
-        if (preview && mDisplayRenderer != null)
-            mDisplayRenderer.setWatermark(watermark);
-    }
-
     public void addWatermark(Drawable overlayImage, boolean preview) {
         int[] size = calculateDefaultWatermarkSize();
         int margin = calculateWatermarkDefaultPosition();
@@ -381,6 +389,13 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
 
     private int calculateWatermarkDefaultPosition() {
         return (mSessionConfig.getVideoWidth() * 15) / 1280;
+    }
+
+    public void addWatermark(Drawable overlayImage,
+                             int positionX, int positionY, int width, int height, boolean preview) {
+        this.watermark = new Watermark(overlayImage, height, width, positionX, positionY);
+        if (preview && mDisplayRenderer != null)
+            mDisplayRenderer.setWatermark(watermark);
     }
 
     public void removeWaterMark() {
@@ -423,25 +438,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             mFrameNum = 0;
             mRecording = true;
             mState = STATE.RECORDING;
-        }
-    }
-
-    private void startEncodingThread() {
-        synchronized (mReadyFence) {
-            if (mRunning) {
-                Log.w(TAG, "Encoder thread running when start requested");
-                return;
-            }
-            mRunning = true;
-            prueba = new Thread(this, "CameraEncoder");
-            prueba.start();
-            while (!mReady) {
-                try {
-                    mReadyFence.wait();
-                } catch (InterruptedException ie) {
-                    // ignore
-                }
-            }
         }
     }
 
@@ -496,6 +492,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE));
     }
 
+    private void releaseEncoder() {
+        mVideoEncoder.release();
+    }
+
     private void handleRelease() {
         if (mState != STATE.RELEASING)
             throw new IllegalArgumentException("handleRelease called in invalid state");
@@ -517,6 +517,53 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     /**
+     * Release all recording-specific resources.
+     * The Encoder, EGLCore and FullFrameRect are tied to capture resolution,
+     * and other parameters.
+     */
+    private void releaseEglResources() {
+        mReadyForFrames = false;
+        if (mInputWindowSurface != null) {
+            mInputWindowSurface.release();
+            mInputWindowSurface = null;
+        }
+        if (mFullScreen != null) {
+            mFullScreen.release();
+            mFullScreen = null;
+        }
+        if (mEglCore != null) {
+            mEglCore.release();
+            mEglCore = null;
+        }
+
+        mSurfaceTexture = null;
+    }
+
+    /**
+     * Stops camera preview, and releases the camera to the system.
+     */
+    private void releaseCamera() {
+        if (mDisplayView != null)
+            releaseDisplayView();
+        if (mCamera != null) {
+            if (VERBOSE) Log.d(TAG, "releasing camera");
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
+    /**
+     * Communicate camera-released state to our display view.
+     */
+    private void releaseDisplayView() {
+        if (mDisplayView instanceof GLCameraEncoderView) {
+            ( (GLCameraEncoderView) mDisplayView ).releaseCamera();
+        } else if (mDisplayView instanceof GLCameraView)
+            ( (GLCameraView) mDisplayView ).releaseCamera();
+    }
+
+    /**
      * Called on an "arbitrary thread"
      *
      * @param surfaceTexture the SurfaceTexture initiating the call
@@ -527,6 +574,24 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         // Then Encode and display frame
         mHandler.sendMessage(mHandler.obtainMessage(MSG_FRAME_AVAILABLE, surfaceTexture));
     }
+
+//    private void configTexWatermark() {
+//        int watermarkSize[] = calculateDefaultWatermarkSize();
+//        mFullScreenOverlay.getProgram().setTexSize(watermarkSize[0], watermarkSize[1]);
+//    }
+//
+//    private int[] calculateDefaultWatermarkSize() {
+//        int width = (mSessionConfig.getVideoWidth()*265)/1280;
+//        int height = (mSessionConfig.getVideoHeight()*36)/720;
+//        return new int[] {width, height};
+//    }
+//
+//    private void configViewportWatermark() {
+//        int watermarkSize[] = calculateDefaultWatermarkSize();
+//        int watermarkPosition = calculateWatermarkDefaultPosition();
+//        GLES20.glViewport(watermarkPosition, watermarkPosition, watermarkSize[0], watermarkSize[1]);
+//        mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
+//    }
 
     /**
      * Called on Encoder thread
@@ -647,31 +712,13 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             if (!mRecording && mSurfaceTexture != null) {
                 if (VERBOSE)
                     Log.i("CameraRelease", "Releasing camera");
-    //            if (mDisplayView != null)
-    //                releaseDisplayView();
-                if(mHandler != null)
+                //            if (mDisplayView != null)
+                //                releaseDisplayView();
+                if (mHandler != null)
                     mHandler.sendMessage(mHandler.obtainMessage(MSG_RELEASE_CAMERA));
-                }
+            }
         }
     }
-
-//    private void configTexWatermark() {
-//        int watermarkSize[] = calculateDefaultWatermarkSize();
-//        mFullScreenOverlay.getProgram().setTexSize(watermarkSize[0], watermarkSize[1]);
-//    }
-//
-//    private int[] calculateDefaultWatermarkSize() {
-//        int width = (mSessionConfig.getVideoWidth()*265)/1280;
-//        int height = (mSessionConfig.getVideoHeight()*36)/720;
-//        return new int[] {width, height};
-//    }
-//
-//    private void configViewportWatermark() {
-//        int watermarkSize[] = calculateDefaultWatermarkSize();
-//        int watermarkPosition = calculateWatermarkDefaultPosition();
-//        GLES20.glViewport(watermarkPosition, watermarkPosition, watermarkSize[0], watermarkSize[1]);
-//        mFullScreenOverlay.drawFrameWatermark(mOverlayTextureId);
-//    }
 
     /**
      * Hook for Host Activity's onResume()
@@ -686,10 +733,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
             if (!mRecording && mSurfaceTexture != null) {
                 if (VERBOSE)
                     Log.i("CameraRelease", "Opening camera and attaching to SurfaceTexture");
-                if(mHandler != null)
+                if (mHandler != null)
                     mHandler.sendMessage(mHandler.obtainMessage(MSG_REOPEN_CAMERA));
             } else {
-                Log.w("CameraRelease", "Didn't try to open camera onHAResume. rec: " + mRecording + " mSurfaceTexture ready? " + (mSurfaceTexture == null ? " no" : " yes"));
+                Log.w("CameraRelease", "Didn't try to open camera onHAResume. rec: " + mRecording + " mSurfaceTexture ready? " + ( mSurfaceTexture == null ? " no" : " yes" ));
             }
         }
     }
@@ -774,78 +821,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         }
     }
 
-    @Override
-    public void run() {
-        Looper.prepare();
-        synchronized (mReadyFence) {
-            mHandler = new EncoderHandler(this);
-            mReady = true;
-            mReadyFence.notify();
-        }
-        Looper.loop();
-
-        if (VERBOSE) Log.d(TAG, "Encoder thread exiting");
-        synchronized (mReadyFence) {
-            mReady = mRunning = false;
-            mHandler = null;
-            mReadyFence.notify();
-        }
-    }
-
-    /**
-     * Called with the display EGLContext current, on Encoder thread
-     *
-     * @param sharedContext The display EGLContext to be shared with the Encoder Surface's context.
-     * @param width         the desired width of the encoder's video output
-     * @param height        the desired height of the encoder's video output
-     * @param bitRate       the desired bitrate of the video encoder
-     * @param muxer         the desired output muxer
-     */
-    private void prepareEncoder(EGLContext sharedContext, int width, int height, int bitRate,
-                                Muxer muxer) throws IOException {
-        mVideoEncoder = new VideoEncoderCore(width, height, bitRate, muxer);
-        if (mEglCore == null) {
-            // This is the first prepare called for this CameraEncoder instance
-            mEglCore = new EglCore(sharedContext, EglCore.FLAG_RECORDABLE);
-        }
-        if (mInputWindowSurface != null) mInputWindowSurface.release();
-        mInputWindowSurface = new WindowSurface(mEglCore, mVideoEncoder.getInputSurface());
-        mInputWindowSurface.makeCurrent();
-
-        if (mFullScreen != null) mFullScreen.release();
-        mFullScreen = new FullFrameRect(
-                new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_EXT));
-        mFullScreen.getProgram().setTexSize(width, height);
-        mIncomingSizeUpdated = true;
-    }
-
-    private void releaseEncoder() {
-        mVideoEncoder.release();
-    }
-
-    /**
-     * Release all recording-specific resources.
-     * The Encoder, EGLCore and FullFrameRect are tied to capture resolution,
-     * and other parameters.
-     */
-    private void releaseEglResources() {
-        mReadyForFrames = false;
-        if (mInputWindowSurface != null) {
-            mInputWindowSurface.release();
-            mInputWindowSurface = null;
-        }
-        if (mFullScreen != null) {
-            mFullScreen.release();
-            mFullScreen = null;
-        }
-        if (mEglCore != null) {
-            mEglCore.release();
-            mEglCore = null;
-        }
-
-        mSurfaceTexture = null;
-    }
-
     private void openAndAttachCameraToSurfaceTexture() {
         openCamera(mSessionConfig.getVideoWidth(), mSessionConfig.getVideoHeight(), mDesiredCamera);
         try {
@@ -878,11 +853,8 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         // with Camera.getCameraInfo().facing values. However the API specifies that Camera.open(0)
         // will always be a rear-facing camera, and CAMERA_FACING_BACK = 0.
         if (mCamera != null) {
-            throw new RuntimeException("c" +
-                    "amera already initialized");
+            throw new RuntimeException("camera already initialized");
         }
-
-//        if(mCamera == null) {
 
             Camera.CameraInfo info = new Camera.CameraInfo();
 
@@ -963,26 +935,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 previewFacts += " @" + (fpsRange[0] / 1000.0) + " - " + (fpsRange[1] / 1000.0) + "fps";
             }
             if (VERBOSE) Log.i(TAG, "Camera preview set: " + previewFacts);
-//        }
-
-    }
-
-    public Camera getCamera() {
-        return mCamera;
-    }
-
-    /**
-     * Stops camera preview, and releases the camera to the system.
-     */
-    private void releaseCamera() {
-        if (mDisplayView != null)
-            releaseDisplayView();
-        if (mCamera != null) {
-            if (VERBOSE) Log.d(TAG, "releasing camera");
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
     }
 
     /**
@@ -991,19 +943,9 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      */
     private void configureDisplayView() {
         if (mDisplayView instanceof GLCameraEncoderView)
-            ((GLCameraEncoderView) mDisplayView).setCameraEncoder(this);
+            ( (GLCameraEncoderView) mDisplayView ).setCameraEncoder(this);
         else if (mDisplayView instanceof GLCameraView)
-            ((GLCameraView) mDisplayView).setCamera(mCamera);
-    }
-
-    /**
-     * Communicate camera-released state to our display view.
-     */
-    private void releaseDisplayView() {
-        if (mDisplayView instanceof GLCameraEncoderView) {
-            ((GLCameraEncoderView) mDisplayView).releaseCamera();
-        } else if (mDisplayView instanceof GLCameraView)
-            ((GLCameraView) mDisplayView).releaseCamera();
+            ( (GLCameraView) mDisplayView ).setCamera(mCamera);
     }
 
     private void initDisplayOrientation() {
@@ -1014,7 +956,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         android.hardware.Camera.getCameraInfo(mCurrentCamera, info);
 
         int degrees = 90;
-        /*
+
         int rotation = mCurrentCameraRotation;
         switch (rotation) {
             // case Surface.ROTATION_0: degrees = 0; break;
@@ -1026,20 +968,89 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
                 degrees = 270;
                 break;
         }
-        */
+
 
 
         int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation + degrees) % 360;
-            result = (360 - result) % 360;  // compensate the mirror
+            result = ( info.orientation + degrees ) % 360;
+            result = ( 360 - result ) % 360;  // compensate the mirror
             Log.d(TAG, " front camera " + result);
         } else {  // back-facing
-            result = (info.orientation - degrees + 360) % 360;
+            result = ( info.orientation - degrees + 360 ) % 360;
             Log.d(TAG, " back camera " + result);
         }
         mCamera.setDisplayOrientation(result);
         cameraInfoOrientation = result;
+    }
+
+    private void postCameraOpenedEvent(Parameters params, int cameraInfoOrientation) {
+        if (mEventBus != null) {
+            mEventBus.post(new CameraOpenedEvent(params, cameraInfoOrientation));
+        }
+    }
+
+    /**
+     * @param flashModes
+     * @param flashMode
+     * @return returns true if flashModes aren't null AND they contain the flashMode,
+     * else returns false
+     */
+    private boolean isValidFlashMode(List<String> flashModes, String flashMode) {
+        return flashModes != null && flashModes.contains(flashMode);
+    }
+
+    /**
+     * Attempts to find a preview size that matches the provided width and height (which
+     * specify the dimensions of the encoded video).  If it fails to find a match it just
+     * uses the default preview size.
+     * <p/>
+     * TODO: should do a best-fit match.
+     */
+    private static void choosePreviewSize(Camera.Parameters parms, int width, int height) {
+        // We should make sure that the requested MPEG size is less than the preferred
+        // size, and has the same aspect ratio.
+        Camera.Size ppsfv = parms.getPreferredPreviewSizeForVideo();
+        if (ppsfv != null && VERBOSE) {
+            Log.d(TAG, "Camera preferred preview size for video is " +
+                    ppsfv.width + "x" + ppsfv.height);
+        }
+
+        for (Camera.Size size : parms.getSupportedPreviewSizes()) {
+            Log.d(TAG, "Camera getSupportedPreviewSizes widthXheigth: " + size.width + " X " + size.height);
+            if (size.width == width && size.height == height) {
+                parms.setPreviewSize(width, height);
+                return;
+            }
+        }
+
+        Log.w(TAG, "Unable to set preview size to " + width + "x" + height);
+        if (ppsfv != null) {
+            parms.setPreviewSize(ppsfv.width, ppsfv.height);
+        }
+        // else use whatever the default size is
+    }
+
+    @Override
+    public void run() {
+        Looper.prepare();
+        synchronized (mReadyFence) {
+            mHandler = new EncoderHandler(this);
+            mReady = true;
+            mReadyFence.notify();
+        }
+        Looper.loop();
+
+        if (VERBOSE) Log.d(TAG, "Encoder thread exiting");
+        synchronized (mReadyFence) {
+            mReady = mRunning = false;
+            mHandler = null;
+            mReadyFence.notify();
+        }
+    }
+
+    public Camera getCamera() {
+        return mCamera;
     }
 
     public void updateRotationDisplay(int rotationView) {
@@ -1119,6 +1130,46 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
         return on;
     }
 
+    /**
+     * Sets the requested flash mode and restarts the
+     * camera preview. This will take effect immediately
+     * or as soon as the camera preview becomes active.
+     * <p/>
+     * <p/>
+     * Called from UI thread
+     */
+    public void requestFlash(String desiredFlash) {
+        mDesiredFlash = desiredFlash;
+        /* If mCamera for some reason is null now flash mode will be applied
+         * next time the camera opens through mDesiredFlash. */
+        if (mCamera == null) {
+            Log.w(TAG, "Ignoring requestFlash: Camera isn't available now.");
+            return;
+        }
+        Parameters params = mCamera.getParameters();
+        List<String> flashModes = params.getSupportedFlashModes();
+        /* If the device doesn't have a camera flash or
+         * doesn't support our desired flash modes return */
+        if (VERBOSE) {
+            Log.i(TAG, "Trying to set flash into camera: " + mCurrentCamera);
+            Log.i(TAG, "Trying to set flash to: " + mDesiredFlash + " modes available: " + flashModes);
+        }
+
+        if (isValidFlashMode(flashModes, mDesiredFlash) && mDesiredFlash != mCurrentFlash) {
+            mCurrentFlash = mDesiredFlash;
+            mDesiredFlash = null;
+            try {
+                params.setFlashMode(mCurrentFlash);
+                mCamera.setParameters(params);
+                if (VERBOSE) {
+                    Log.i(TAG, "Changed flash successfully!");
+                }
+            } catch (RuntimeException e) {
+                Log.d(TAG, "Unable to set flash" + e);
+            }
+        }
+    }
+
     public boolean setFlashOff() {
         String flashMode = "";
         boolean on = false;
@@ -1196,63 +1247,7 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      * else returns false
      */
     private boolean isValidFocusMode(List<String> focusModes, String focusMode) {
-        if (focusModes != null && focusModes.contains(focusMode)) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Sets the requested flash mode and restarts the
-     * camera preview. This will take effect immediately
-     * or as soon as the camera preview becomes active.
-     * <p/>
-     * <p/>
-     * Called from UI thread
-     */
-    public void requestFlash(String desiredFlash) {
-        mDesiredFlash = desiredFlash;
-        /* If mCamera for some reason is null now flash mode will be applied
-         * next time the camera opens through mDesiredFlash. */
-        if (mCamera == null) {
-            Log.w(TAG, "Ignoring requestFlash: Camera isn't available now.");
-            return;
-        }
-        Parameters params = mCamera.getParameters();
-        List<String> flashModes = params.getSupportedFlashModes();
-        /* If the device doesn't have a camera flash or
-         * doesn't support our desired flash modes return */
-        if (VERBOSE) {
-            Log.i(TAG, "Trying to set flash into camera: " + mCurrentCamera);
-            Log.i(TAG, "Trying to set flash to: " + mDesiredFlash + " modes available: " + flashModes);
-        }
-
-        if (isValidFlashMode(flashModes, mDesiredFlash) && mDesiredFlash != mCurrentFlash) {
-            mCurrentFlash = mDesiredFlash;
-            mDesiredFlash = null;
-            try {
-                params.setFlashMode(mCurrentFlash);
-                mCamera.setParameters(params);
-                if (VERBOSE) {
-                    Log.i(TAG, "Changed flash successfully!");
-                }
-            } catch (RuntimeException e) {
-                Log.d(TAG, "Unable to set flash" + e);
-            }
-        }
-    }
-
-    /**
-     * @param flashModes
-     * @param flashMode
-     * @return returns true if flashModes aren't null AND they contain the flashMode,
-     * else returns false
-     */
-    private boolean isValidFlashMode(List<String> flashModes, String flashMode) {
-        if (flashModes != null && flashModes.contains(flashMode)) {
-            return true;
-        }
-        return false;
+        return focusModes != null && focusModes.contains(focusMode);
     }
 
     /**
@@ -1260,12 +1255,6 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
      */
     public String getFlashMode() {
         return (mDesiredFlash != null) ? mDesiredFlash : mCurrentFlash;
-    }
-
-    private void postCameraOpenedEvent(Parameters params, int cameraInfoOrientation) {
-        if (mEventBus != null) {
-            mEventBus.post(new CameraOpenedEvent(params, cameraInfoOrientation));
-        }
     }
 
     public void setEventBus(EventBus eventBus) {
