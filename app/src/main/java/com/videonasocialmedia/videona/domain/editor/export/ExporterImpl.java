@@ -180,8 +180,8 @@ public class ExporterImpl implements Exporter {
             File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
             ArrayList<String> audio = new ArrayList<>();
             audio.add(musicFile.getPath());
-
-            result = addAudio(merge, audio, project.getMediaTrack().getDuration());
+            double movieDuration = getMovieDuration(merge);
+            result = addAudio(merge, audio, movieDuration);
         } else {
             result = appendVideos(videoTranscoded, true);
         }
@@ -190,6 +190,13 @@ public class ExporterImpl implements Exporter {
 
     private boolean isMusicOnProject() {
         return project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size() > 0;
+    }
+
+    private double getMovieDuration(Movie mergedVideoWithoutAudio) {
+        double movieDuration = mergedVideoWithoutAudio.getTracks().get(0).getDuration();
+        double timeScale= mergedVideoWithoutAudio.getTimescale();
+        movieDuration = movieDuration/timeScale*1000;
+        return movieDuration;
     }
 
     private Movie appendVideos(ArrayList<String> videoTranscodedPaths, boolean addOriginalAudio) {
