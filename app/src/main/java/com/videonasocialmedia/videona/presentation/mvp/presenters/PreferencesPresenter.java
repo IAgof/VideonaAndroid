@@ -17,6 +17,7 @@ import android.preference.ListPreference;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
+import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
@@ -32,6 +33,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
     private PreferencesView preferencesView;
     private ListPreference resolutionPref;
     private ListPreference qualityPref;
+    private ObtainNetworksToShareUseCase obtainNetworksToShareUseCase;
 
     /**
      * Constructor
@@ -50,6 +52,7 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
         this.qualityPref = qualityPref;
         this.context = context;
         this.sharedPreferences = sharedPreferences;
+        obtainNetworksToShareUseCase = new ObtainNetworksToShareUseCase();
     }
 
     /**
@@ -190,6 +193,10 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
                 videoRemover.removeMediaItemsFromProject();
             }
         }
+    }
+
+    public boolean checkIfWhatsappIsInstalled() {
+        return obtainNetworksToShareUseCase.checkIfSocialNetworkIsInstalled("whatsapp");
     }
 
 }

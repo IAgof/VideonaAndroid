@@ -121,7 +121,7 @@
         <activity
             android:name=".presentation.views.activity.SettingsActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.InitAppActivity" />
+            android:parentActivityName=".presentation.views.activity.RecordActivity" />
 
         <activity
             android:name=".presentation.views.activity.NamePreferenceActivity"

@@ -3,6 +3,7 @@ package com.videonasocialmedia.videona.presentation.views.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.qordoba.sdk.Qordoba;
@@ -23,6 +25,9 @@ import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -66,6 +71,8 @@ public class SettingsFragment extends PreferenceFragment implements
 
         setupExitPreference();
         setupBetaPreference();
+        setupDownloadKamaradaPreference();
+        setupShareVideona();
     }
 
     private void setupExitPreference() {
@@ -98,6 +105,76 @@ public class SettingsFragment extends PreferenceFragment implements
                 return true;
             }
         });
+    }
+
+    private void setupDownloadKamaradaPreference() {
+        Preference exitPref = findPreference("downloadKamarada");
+        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                trackLinkClicked(getResources().getString(R.string.kamaradaGooglePlayLink),
+                        AnalyticsConstants.DESTINATION_KAMARADA_PLAY);
+                goToKamaradaStore();
+                return true;
+            }
+        });
+    }
+
+    private void trackLinkClicked(String uri, String destination) {
+        JSONObject linkClickedProperties = new JSONObject();
+        try {
+            linkClickedProperties.put(AnalyticsConstants.LINK, uri);
+            linkClickedProperties.put(AnalyticsConstants.SOURCE_APP,
+                    AnalyticsConstants.SOURCE_APP_VIDEONA);
+            linkClickedProperties.put(AnalyticsConstants.DESTINATION, destination);
+            mixpanel.track(AnalyticsConstants.LINK_CLICK, linkClickedProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void goToKamaradaStore() {
+        String url = getString(R.string.kamaradaGooglePlayLink);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
+
+    private void setupShareVideona() {
+        Preference exitPref = findPreference("shareVideona");
+        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                trackAppShared("Videona", "WhatsApp");
+                shareVideonaWithWhatsapp();
+                return true;
+            }
+        });
+    }
+
+    private void trackAppShared(String appName, String socialNetwork) {
+        JSONObject appSharedProperties = new JSONObject();
+        try {
+            appSharedProperties.put(AnalyticsConstants.APP_SHARED_NAME, appName);
+            appSharedProperties.put(AnalyticsConstants.SOCIAL_NETWORK, socialNetwork);
+            mixpanel.track(AnalyticsConstants.APP_SHARED, appSharedProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void shareVideonaWithWhatsapp() {
+        if(preferencesPresenter.checkIfWhatsappIsInstalled()) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.setPackage("com.whatsapp");
+            String text = getResources().getString(R.string.shareWith);
+            intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.whatsAppSharedText));
+            startActivity(Intent.createChooser(intent, text));
+        } else {
+            Toast.makeText(this.getActivity(), R.string.whatsAppNotInstalled, Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override

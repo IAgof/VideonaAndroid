@@ -189,6 +189,10 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
+    public void setGLSurface(GLCameraEncoderView cameraPreview) {
+        this.cameraPreview = cameraPreview;
+    }
+
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
@@ -335,11 +339,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         String fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
         originalFile.renameTo(destinationFile);
-        int numTotalVideosRecorded = sharedPreferences
-                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
-        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
-                ++numTotalVideosRecorded);
-        preferencesEditor.commit();
+        updateTotalVideosRecorded();
         trackTotalVideosRecordedSuperProperty();
         double clipDuration = 0.0;
         try {
@@ -349,6 +349,14 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
         trackVideoRecorded(clipDuration);
         return destinationFile.getAbsolutePath();
+    }
+
+    private void updateTotalVideosRecorded() {
+        int numTotalVideosRecorded = sharedPreferences
+                .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,
+                ++numTotalVideosRecorded);
+        preferencesEditor.commit();
     }
 
     private void trackTotalVideosRecordedSuperProperty() {

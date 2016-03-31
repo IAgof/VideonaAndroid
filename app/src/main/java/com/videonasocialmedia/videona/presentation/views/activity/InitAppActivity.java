@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -153,6 +152,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         setupPathsApp(this);
         setupStartApp();
+        trackUserProfileGeneralTraits();
     }
 
     private void trackAppStartup() {
@@ -168,7 +168,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
     private void setupStartApp() {
         AppStart appStart = new AppStart();
-        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
         switch (appStart.checkAppStart(this, sharedPreferences)) {
             case NORMAL:
                 Log.d(LOG_TAG, " AppStart State NORMAL");
@@ -248,18 +247,28 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         mixpanel.identify(androidId);
         mixpanel.getPeople().identify(androidId);
         JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            mixpanel.getPeople().setOnce(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void trackUserProfileGeneralTraits() {
+        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
+        JSONObject userProfileProperties = new JSONObject();
         String userType = AnalyticsConstants.USER_TYPE_FREE;
         if ( BuildConfig.FLAVOR.equals("alpha") ) {
             userType = AnalyticsConstants.USER_TYPE_BETA;
         }
         try {
             userProfileProperties.put(AnalyticsConstants.TYPE, userType);
-            userProfileProperties.put(AnalyticsConstants.CREATED,
-                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
             userProfileProperties.put(AnalyticsConstants.LOCALE,
                     Locale.getDefault().toString());
             userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
-            mixpanel.getPeople().setOnce(userProfileProperties);
+            mixpanel.getPeople().set(userProfileProperties);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -491,40 +500,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-    private void checkRootPathMovies() {
-        File fMovies = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES);
-        if (!fMovies.exists()) {
-            fMovies.mkdir();
-        }
-    }
-
     private void checkAndInitPath(String pathApp) {
         File fEdited = new File(pathApp);
         if (!fEdited.exists()) {
-            fEdited.mkdir();
+            fEdited.mkdirs();
         }
-    }
-
-    private void checkAndDeletePath(String pathApp) {
-        File folderTemp = new File(pathApp);
-        if (folderTemp.exists()) {
-            deleteFolderRecursive(folderTemp);
-        }
-    }
-
-    private void deleteFolderRecursive(File dir) {
-        File[] files = dir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    deleteFolderRecursive(file);
-                } else {
-                    file.delete();
-                }
-            }
-        }
-        dir.delete();
     }
 
     private void startLoadingProject(OnInitAppEventListener listener) {
@@ -608,12 +588,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 navigate(IntroAppActivity.class);
             } else {
                 InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
+                navigate(RecordActivity.class);
                 if (notification != null) {
                     Log.d("INAPP", "in-app notification received");
                     mixpanel.getPeople().showGivenNotification(notification, parentActivity);
                     mixpanel.getPeople().trackNotificationSeen(notification);
-                } else {
-                    navigate(RecordActivity.class);
                 }
             }
         }

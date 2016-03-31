@@ -77,7 +77,6 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         setNegativeButton(v);
         setPositiveButton(v);
         joinBetaInfoLayout = (RelativeLayout) v.findViewById(R.id.joinBetaInfo);
-        joinBetaLinkLayout = (RelativeLayout) v.findViewById(R.id.joinBetaLink);
 
         return builder.create();
     }
@@ -123,8 +122,8 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
     @Override
     public void goToBeta() {
         hideKeyboard();
-        joinBetaInfoLayout.setVisibility(View.GONE);
-        joinBetaLinkLayout.setVisibility(View.VISIBLE);
+        goToBetaweb();
+        dismiss();
     }
 
     private void hideKeyboard() {
@@ -132,17 +131,11 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         keyboard.hideSoftInputFromWindow(email.getWindowToken(), 0);
     }
 
-    @OnClick(R.id.betaLinkPositiveButton)
     public void goToBetaweb() {
         String url = "https://play.google.com/apps/testing/com.videonasocialmedia.videona";
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
-    }
-
-    @OnClick(R.id.betaLinkNegativeButton)
-    public void dissmissDialog() {
-        getDialog().dismiss();
     }
 
     @Override

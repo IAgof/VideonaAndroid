@@ -16,6 +16,8 @@
     <!-- Share Activity -->
     <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
     <string name="share_using">Compartir vídeo con</string>
+    <string name="sharedWithVideona">"Compartido con @videona_es"</string>
+    <string name="videonaTags">"#VideonaTime"</string>
 
     <!-- Editor Activity -->
     <string name="edit_title_name">Sala de edición</string>
@@ -81,9 +83,17 @@
     <string name="acceptExit">Sí</string>
     <string name="cancelExit">No</string>
 
-
-    <!-- Join/Leave beta Videona -->
+    <!-- Advanced section -->
     <string name="title_advanced_section">Avanzado</string>
+    <string name="downloadKamarada">Descarga Kamarada</string>
+    <string name="kamaradaGooglePlayLink">https://play.google.com/store/apps/details?id=com.videonasocialmedia.kamarada&amp;referrer=utm_source%3DVideona%26utm_medium%3DLink_Directo%26utm_campaign%3DDownload_Kamarada_from_videona_settings</string>
+    <string name="shareVideona">Comparte Videona</string>
+    <string name="whatsAppNotInstalled">Lo sentimos, WhatsApp no está instalado</string>
+    <string name="shareWith">Compartir con</string>
+    <string name="whatsAppSharedText">Divirtiéndome con Videona, la mejor app para editar vídeos!!!
+        Pruébala!!!\nhttps://goo.gl/YudZYP</string>
+    <string name="followUsInTwitter">Síguenos en Twitter</string>
+    <string name="videonaTwitter">https://twitter.com/videona_es</string>
 
     <!-- Email -->
     <string name="enterEmail">Introduce un email válido</string>
@@ -91,6 +101,7 @@
     <string name="invalid_email">Por favor, añade un email válido</string>
 
     <!-- User info -->
+    <string name="settingsTitle">Ajustes</string>
     <string name="titleUserSection">Mi cuenta</string>
     <string name="name">Nombre</string>
     <string name="enterName">Introduce tu nombre</string>
