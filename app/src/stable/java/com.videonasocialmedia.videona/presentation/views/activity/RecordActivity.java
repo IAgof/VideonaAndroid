@@ -125,9 +125,14 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private AlertDialog progressDialog;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private boolean mUseImmersiveMode = true;
+
+    /**
+     * if for result
+     **/
     private String resultVideoPath;
     private boolean externalIntent = false;
-    private boolean mUseImmersiveMode = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,14 +141,15 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         setContentView(R.layout.activity_record);
         ButterKnife.inject(this);
 
+        checkAction();
+
         cameraView.setKeepScreenOn(true);
 
         sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
+        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences, externalIntent);
         initEffectsRecycler();
         configChronometer();
         initOrientationHelper();
@@ -151,14 +157,18 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         createProgressDialog();
     }
 
-    private void configThumbsView() {
-        navigateToEditButton.setBorderWidth(5);
-        navigateToEditButton.setBorderColorResource(R.color.textColorNumVideos);
-        numVideosRecorded.setVisibility(View.GONE);
-    }
-
-    private void initOrientationHelper() {
-        orientationHelper = new OrientationHelper(this);
+    private void checkAction() {
+        if (getIntent().getAction() != null) {
+            if (getIntent().getAction().equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
+                if (getIntent().getClipData() != null) {
+                    resultVideoPath = getIntent().getClipData().getItemAt(0).getUri().toString();
+                    if (resultVideoPath.startsWith("file://"))
+                        resultVideoPath = resultVideoPath.replace("file://", "");
+                }
+                externalIntent = true;
+                buttonSettings.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initEffectsRecycler() {
@@ -182,9 +192,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             public void onChronometerTick(Chronometer chronometer) {
                 long elapsedTime = SystemClock.elapsedRealtime() - chronometer.getBase();
 
-                int h = (int) (elapsedTime / 3600000);
-                int m = (int) (elapsedTime - h * 3600000) / 60000;
-                int s = (int) (elapsedTime - h * 3600000 - m * 60000) / 1000;
+                int h = (int) ( elapsedTime / 3600000 );
+                int m = (int) ( elapsedTime - h * 3600000 ) / 60000;
+                int s = (int) ( elapsedTime - h * 3600000 - m * 60000 ) / 1000;
                 // String hh = h < 10 ? "0"+h: h+"";
                 String mm = m < 10 ? "0" + m : m + "";
                 String ss = s < 10 ? "0" + s : s + "";
@@ -192,6 +202,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 chronometer.setText(time);
             }
         });
+    }
+
+    private void initOrientationHelper() {
+        orientationHelper = new OrientationHelper(this);
+    }
+
+    private void configThumbsView() {
+        navigateToEditButton.setBorderWidth(5);
+        navigateToEditButton.setBorderColorResource(R.color.textColorNumVideos);
+        numVideosRecorded.setVisibility(View.GONE);
     }
 
     private void createProgressDialog() {
@@ -210,30 +230,20 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recordPresenter.onStart();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        recordPresenter.onDestroy();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
         recordPresenter.onResume();
-//        cameraView.onResume();
         recording = false;
         hideSystemUi();
-        checkAction();
-    }
 
-    private void checkAction() {
-        if (getIntent().getAction() != null) {
-            if (getIntent().getAction().equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
-                if(getIntent().getClipData() != null) {
-                    resultVideoPath = getIntent().getClipData().getItemAt(0).getUri().toString();
-                    if (resultVideoPath.startsWith("file://"))
-                        resultVideoPath = resultVideoPath.replace("file://", "");
-                }
-                externalIntent = true;
-                buttonSettings.setVisibility(View.GONE);
-            }
-        }
     }
 
     @Override
@@ -246,33 +256,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         orientationHelper.stopMonitoringOrientation();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        recordPresenter.onStop();
-        finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        recordPresenter.onDestroy();
-    }
-
     private void hideSystemUi() {
         if (!Utils.isKitKat() || !mUseImmersiveMode) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else if (mUseImmersiveMode) {
-            setKitKatWindowFlags();
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
             setKitKatWindowFlags();
         }
     }
@@ -289,7 +277,24 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         );
     }
 
-    @OnTouch(R.id.button_record) boolean onTouch(MotionEvent event) {
+    @Override
+    protected void onStop() {
+        super.onStop();
+        recordPresenter.onStop();
+        finish();
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
+            setKitKatWindowFlags();
+        }
+    }
+
+    @OnTouch(R.id.button_record)
+    boolean onTouch(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!recording) {
                 recordPresenter.requestRecord();
@@ -304,14 +309,44 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private void checkSelectedFilters() {
         Effect shaderEffect = recordPresenter.getSelectedShaderEffect();
         Effect overlayEffect = recordPresenter.getSelectedOverlayEffect();
-        if(shaderEffect != null)
+        if (shaderEffect != null)
             sendFilterSelectedTracking(shaderEffect.getType(),
                     shaderEffect.getName().toLowerCase(),
                     shaderEffect.getIdentifier().toLowerCase());
-        if(overlayEffect != null)
+        if (overlayEffect != null)
             sendFilterSelectedTracking(overlayEffect.getType(),
                     overlayEffect.getName().toLowerCase(),
                     overlayEffect.getIdentifier().toLowerCase());
+    }
+
+    private void sendFilterSelectedTracking(String type, String name, String code) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        List<String> effectsCombinedList = getEffectsCombinedList();
+        boolean combined = false;
+        if (effectsCombinedList.size() > 1)
+            combined = true;
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<String> getEffectsCombinedList() {
+        List<String> effects = new ArrayList<>();
+        Effect effect1 = recordPresenter.getSelectedShaderEffect();
+        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
+        if (effect1 != null)
+            effects.add(effect1.getName().toLowerCase());
+        if (effect2 != null)
+            effects.add(effect2.getName().toLowerCase());
+        return effects;
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -319,11 +354,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
         mixpanel.track("Navigate edit Button clicked in Record Activity", null);
 
-        if(sharedPreferences.getBoolean(ConfigPreferences.EMAIL_BETA_DONE,false)){
+        if (sharedPreferences.getBoolean(ConfigPreferences.EMAIL_BETA_DONE, false)) {
             exportAndShare();
         } else {
             // Every two weeks, ask for mail to join beta
-            if( (Calendar.WEEK_OF_YEAR % 2 == 1) &&
+            if (( Calendar.WEEK_OF_YEAR % 2 == 1 ) &&
                     sharedPreferences.getBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, false)) {
                 new BetaDialogFragment().show(getFragmentManager(), "BetaDialogFragment");
                 editor.putBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, false);
@@ -334,6 +369,25 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 editor.commit();
             }
         }
+    }
+
+    @OnClick(R.id.button_share)
+    public void exportAndShare() {
+        if (!recording) {
+            showProgressDialog();
+            mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
+            startExportThread();
+        }
+    }
+
+    private void startExportThread() {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                recordPresenter.startExport();
+            }
+        };
+        t.start();
     }
 
     public void onEvent(JoinBetaEvent event) {
@@ -358,6 +412,49 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recButton.setImageResource(R.drawable.activity_record_icon_stop_normal);
         recButton.setAlpha(1f);
         recording = true;
+    }
+
+    @Override
+    public void showSettings() {
+        buttonSettings.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideSettings() {
+        buttonSettings.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showChronometer() {
+        chronometer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideChronometer() {
+        chronometer.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showRecordedVideoThumb(String path) {
+        navigateToEditButton.setVisibility(View.VISIBLE);
+        Glide.with(this).load(path).into(navigateToEditButton);
+
+    }
+
+    @Override
+    public void hideRecordedVideoThumb() {
+        navigateToEditButton.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showVideosRecordedNumber(int numberOfVideos) {
+        numVideosRecorded.setVisibility(View.VISIBLE);
+        numVideosRecorded.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideVideosRecordedNumber() {
+        numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -389,112 +486,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recordingIndicator.setVisibility(View.INVISIBLE);
     }
 
-    @OnClick(R.id.button_camera_effect_shader)
-    public void onShaderButtonClicked() {
-        if (!overlayFilterHidden) {
-            hideOverlayFilters();
-        }
-        if (!shaderFilterHidden) {
-            hideShaderFilters();
-            hideRemoveFilters();
-        } else {
-            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
-                    AnalyticsConstants.FILTER_GROUP_SHADER);
-            showCameraEffectShader(null);
-            if(removeFilterActivated){
-                showRemoveFilters();
-            }
-        }
-    }
-
-    private void hideOverlayFilters() {
-        int height = calculateTranslation(overlayFilterRecycler);
-        runTranslateAnimation(overlayFilterRecycler, height, new DecelerateInterpolator(3));
-        overlayFilterHidden = true;
-        buttonCameraEffectOverlay.setActivated(false);
-    }
-
-    private void hideEffectsRecyclerView(View view) {
-        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
-    }
-
-    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
-        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
-        slideInAnimation.setDuration(view.getContext().getResources()
-                .getInteger(android.R.integer.config_mediumAnimTime));
-        slideInAnimation.setInterpolator(interpolator);
-        slideInAnimation.start();
-    }
-
-    private void hideShaderFilters() {
-        hideEffectsRecyclerView(shaderEffectsRecycler);
-        shaderFilterHidden = true;
-        buttonCameraEffectShader.setActivated(false);
-    }
-
-    private void hideRemoveView(View view) {
-        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
-    }
-
-    private void showRemoveView(View view) {
-        int height = calculateTranslation(view);
-        int translateY = -height;;
-        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
-    }
-
-    private void hideRemoveFilters(){
-
-        hideRemoveView(removeFilters);
-    }
-
-    private void showRemoveFilters() {
-
-        showRemoveView(removeFilters);
-    }
-
     @Override
     public void showCameraEffectShader(List<Effect> effects) {
         showEffectsRecylerView(shaderEffectsRecycler);
         shaderFilterHidden = false;
         buttonCameraEffectShader.setActivated(true);
-    }
-
-    private void showEffectsRecylerView(View view) {
-        int height = calculateTranslation(view);
-        int translateY = -height;
-        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
-    }
-
-    /**
-     * Takes height + margins
-     *
-     * @param view View to translate
-     * @return translation in pixels
-     */
-    private int calculateTranslation(View view) {
-        int height = view.getHeight();
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        //int margins = params.topMargin + params.bottomMargin;
-        int margins = 0;
-        return height + margins;
-    }
-
-    @OnClick(R.id.button_camera_effect_overlay)
-    public void onOverlayFiltersButtonClicked() {
-        if (!shaderFilterHidden) {
-            hideShaderFilters();
-        }
-        if (!overlayFilterHidden) {
-            hideOverlayFilters();
-            hideRemoveFilters();
-        } else {
-            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
-                    AnalyticsConstants.FILTER_GROUP_OVERLAY);
-            showCameraEffectOverlay(null);
-            if(removeFilterActivated){
-                showRemoveFilters();
-            }
-        }
     }
 
     @Override
@@ -504,45 +500,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         buttonCameraEffectOverlay.setActivated(true);
     }
 
-    @OnClick(R.id.button_remove_filters)
-    public void onRemoveFiltersButtonClicked(){
-        trackUserInteracted(AnalyticsConstants.CLEAR_FILTER, null);
-        Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
-        Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
-
-        onEffectSelectionCancel(effectOverlay);
-        onEffectSelectionCancel(effectShader);
-
-        // Reset background filter accent
-        cameraShaderEffectsAdapter.resetSelectedEffect();
-        cameraOverlayEffectsAdapter.resetSelectedEffect();
-
-        // Hide filters
-        if (!overlayFilterHidden) {
-            hideOverlayFilters();
-        }
-        if (!shaderFilterHidden) {
-            hideShaderFilters();
-        }
-
-        hideRemoveFilters();
-
-        removeFilterActivated = false;
-
-    }
-
     @Override
     public void lockScreenRotation() {
         orientationHelper.stopMonitoringOrientation();
-    }
-
-    @Override
-    public void reStartScreenRotation() {
-        try {
-            orientationHelper.startMonitoringOrientation();
-        } catch (OrientationHelper.NoOrientationSupportException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -555,9 +515,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         }
     }
 
-    @OnClick(R.id.button_toggle_flash)
-    public void toggleFlash() {
-        recordPresenter.toggleFlash();
+    @Override
+    public void reStartScreenRotation() {
+        try {
+            orientationHelper.startMonitoringOrientation();
+        } catch (OrientationHelper.NoOrientationSupportException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -615,87 +579,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @Override
-    public void showRecordedVideoThumb(String path) {
-        navigateToEditButton.setVisibility(View.VISIBLE);
-        Glide.with(this).load(path).into(navigateToEditButton);
-        if(externalIntent)
-            setResult(path);
-    }
-
-    private void setResult(String originalVideoPath) {
-        try {
-            if(resultVideoPath != null)
-                Utils.copyFile(originalVideoPath, resultVideoPath);
-            else
-                resultVideoPath = originalVideoPath;
-            Uri videoUri = Uri.fromFile(new File(resultVideoPath));
-            Intent returnIntent = new Intent();
-            returnIntent.setData(videoUri);
-            setResult(RESULT_OK, returnIntent);
-            finish();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void hideRecordedVideoThumb() {
-        navigateToEditButton.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void showVideosRecordedNumber(int numberOfVideos) {
-        numVideosRecorded.setVisibility(View.VISIBLE);
-        numVideosRecorded.setText(String.valueOf(numberOfVideos));
-    }
-
-    @Override
-    public void hideVideosRecordedNumber() {
-        numVideosRecorded.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (buttonBackPressed) {
-            buttonBackPressed = false;
-
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-            startActivity(intent);
-            finish();
-            System.exit(0);
-        } else {
-            buttonBackPressed = true;
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    @OnClick(R.id.button_change_camera)
-    public void changeCamera() {
-        recordPresenter.setFlashOff();
-        recordPresenter.changeCamera();
-    }
-
-    @OnClick(R.id.button_share)
-    public void exportAndShare() {
-        if (!recording) {
-            showProgressDialog();
-            mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
-            startExportThread();
-        }
-    }
-
-    private void startExportThread() {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                recordPresenter.startExport();
-            }
-        };
-        t.start();
+    public void goToShare(String videoToSharePath) {
+        trackVideoExported();
+        saveVideoFeaturesToConfig();
+        recordPresenter.removeMasterVideos();
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
     }
 
     @Override
@@ -707,6 +597,44 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void hideProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+
+    @Override
+    public void showMessage(final int message) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void enableShareButton() {
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
+    }
+
+    @Override
+    public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
+    }
+
+    @Override
+    public void finishActivityForResult(String originalVideoPath) {
+        try {
+            if (resultVideoPath != null)
+                Utils.copyFile(originalVideoPath, resultVideoPath);
+            else
+                resultVideoPath = originalVideoPath;
+            Uri videoUri = Uri.fromFile(new File(resultVideoPath));
+            Intent returnIntent = new Intent();
+            returnIntent.setData(videoUri);
+            setResult(RESULT_OK, returnIntent);
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void trackVideoExported() {
@@ -732,33 +660,40 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         preferencesEditor.commit();
     }
 
-    @Override
-    public void goToShare(String videoToSharePath) {
-        trackVideoExported();
-        saveVideoFeaturesToConfig();
-        recordPresenter.removeMasterVideos();
-        Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.putExtra("VIDEO_EDITED", videoToSharePath);
-        startActivity(intent);
-    }
-
-    @Override
-    public void showMessage(final int message) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @OnClick(R.id.button_settings)
-    public void navigateToSettings() {
-        if (!recording) {
-            trackUserInteracted(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
+    @OnClick(R.id.button_camera_effect_shader)
+    public void onShaderButtonClicked() {
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
         }
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+            hideRemoveFilters();
+        } else {
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
+                    AnalyticsConstants.FILTER_GROUP_SHADER);
+            showCameraEffectShader(null);
+            if (removeFilterActivated) {
+                showRemoveFilters();
+            }
+        }
+    }
 
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+    private void hideOverlayFilters() {
+        int height = calculateTranslation(overlayFilterRecycler);
+        runTranslateAnimation(overlayFilterRecycler, height, new DecelerateInterpolator(3));
+        overlayFilterHidden = true;
+        buttonCameraEffectOverlay.setActivated(false);
+    }
+
+    private void hideShaderFilters() {
+        hideEffectsRecyclerView(shaderEffectsRecycler);
+        shaderFilterHidden = true;
+        buttonCameraEffectShader.setActivated(false);
+    }
+
+    private void hideRemoveFilters() {
+
+        hideRemoveView(removeFilters);
     }
 
     private void trackUserInteracted(String interaction, String result) {
@@ -774,36 +709,135 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         }
     }
 
-    @Override
-    public void showSettings() {
-        buttonSettings.setVisibility(View.VISIBLE);
+    private void showRemoveFilters() {
+
+        showRemoveView(removeFilters);
+    }
+
+    /**
+     * Takes height + margins
+     *
+     * @param view View to translate
+     * @return translation in pixels
+     */
+    private int calculateTranslation(View view) {
+        int height = view.getHeight();
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        //int margins = params.topMargin + params.bottomMargin;
+        int margins = 0;
+        return height + margins;
+    }
+
+    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
+        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
+        slideInAnimation.setDuration(view.getContext().getResources()
+                .getInteger(android.R.integer.config_mediumAnimTime));
+        slideInAnimation.setInterpolator(interpolator);
+        slideInAnimation.start();
+    }
+
+    private void hideEffectsRecyclerView(View view) {
+        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
+    }
+
+    private void hideRemoveView(View view) {
+        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
+    }
+
+    private void showEffectsRecylerView(View view) {
+        int height = calculateTranslation(view);
+        int translateY = -height;
+        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
+    }
+
+    private void showRemoveView(View view) {
+        int height = calculateTranslation(view);
+        int translateY = -height;
+        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
+    }
+
+    @OnClick(R.id.button_camera_effect_overlay)
+    public void onOverlayFiltersButtonClicked() {
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+        }
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
+            hideRemoveFilters();
+        } else {
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
+                    AnalyticsConstants.FILTER_GROUP_OVERLAY);
+            showCameraEffectOverlay(null);
+            if (removeFilterActivated) {
+                showRemoveFilters();
+            }
+        }
+    }
+
+    @OnClick(R.id.button_remove_filters)
+    public void onRemoveFiltersButtonClicked() {
+        trackUserInteracted(AnalyticsConstants.CLEAR_FILTER, null);
+        Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
+        Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
+
+        onEffectSelectionCancel(effectOverlay);
+        onEffectSelectionCancel(effectShader);
+
+        // Reset background filter accent
+        cameraShaderEffectsAdapter.resetSelectedEffect();
+        cameraOverlayEffectsAdapter.resetSelectedEffect();
+
+        // Hide filters
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
+        }
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+        }
+
+        hideRemoveFilters();
+
+        removeFilterActivated = false;
+
+    }
+
+    @OnClick(R.id.button_toggle_flash)
+    public void toggleFlash() {
+        recordPresenter.toggleFlash();
     }
 
     @Override
-    public void hideSettings() {
-        buttonSettings.setVisibility(View.INVISIBLE);
+    public void onBackPressed() {
+        if (buttonBackPressed) {
+            buttonBackPressed = false;
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+            startActivity(intent);
+            finish();
+            System.exit(0);
+        } else {
+            buttonBackPressed = true;
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_exit),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
-    @Override
-    public void showChronometer() {
-        chronometer.setVisibility(View.VISIBLE);
+    @OnClick(R.id.button_change_camera)
+    public void changeCamera() {
+        recordPresenter.setFlashOff();
+        recordPresenter.changeCamera();
     }
 
-    @Override
-    public void hideChronometer() {
-        chronometer.setVisibility(View.INVISIBLE);
-    }
+    @OnClick(R.id.button_settings)
+    public void navigateToSettings() {
+        if (!recording) {
+            trackUserInteracted(AnalyticsConstants.INTERACTION_OPEN_SETTINGS, null);
+        }
 
-    @Override
-    public void enableShareButton() {
-        shareButton.setAlpha(1f);
-        shareButton.setClickable(true);
-    }
-
-    @Override
-    public void disableShareButton() {
-        shareButton.setAlpha(0.25f);
-        shareButton.setClickable(false);
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -817,41 +851,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 effect.getIdentifier().toLowerCase());
     }
 
-    private void sendFilterSelectedTracking(String type, String name, String code) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        List<String> effectsCombinedList = getEffectsCombinedList();
-        boolean combined = false;
-        if(effectsCombinedList.size() > 1)
-            combined = true;
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
-            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
-            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
-            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
-            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private List<String> getEffectsCombinedList() {
-        List<String> effects = new ArrayList<>();
-        Effect effect1 = recordPresenter.getSelectedShaderEffect();
-        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
-        if(effect1 != null)
-            effects.add(effect1.getName().toLowerCase());
-        if(effect2 != null)
-            effects.add(effect2.getName().toLowerCase());
-        return effects;
-    }
-
     @Override
     public void onEffectSelectionCancel(Effect effect) {
         recordPresenter.removeEffect(effect);
-        if(!cameraOverlayEffectsAdapter.isEffectSelected() &&
-                !cameraShaderEffectsAdapter.isEffectSelected()){
+        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()) {
             hideRemoveFilters();
         }
     }
@@ -888,7 +892,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
          *
          */
         public void startMonitoringOrientation() throws NoOrientationSupportException {
-            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+            rotationView = ( (Activity) context ).getWindowManager().getDefaultDisplay().getRotation();
             if (rotationView == Surface.ROTATION_90) {
                 isNormalOrientation = true;
                 orientationHaveChanged = false;
@@ -902,21 +906,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 this.disable();
                 throw new NoOrientationSupportException();
             }
-        }
-
-        public void stopMonitoringOrientation() {
-            this.disable();
-        }
-
-        public void reStartMonitoringOrientation() throws NoOrientationSupportException {
-            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
-            if (rotationView == Surface.ROTATION_90) {
-                isNormalOrientation = true;
-                orientationHaveChanged = false;
-            } else {
-                isNormalOrientation = false;
-            }
-            determineOrientation(rotationView);
         }
 
         private void determineOrientation(int rotationView) {
@@ -936,6 +925,21 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
                         " cameraInfoOrientation ");
             }
+        }
+
+        public void stopMonitoringOrientation() {
+            this.disable();
+        }
+
+        public void reStartMonitoringOrientation() throws NoOrientationSupportException {
+            rotationView = ( (Activity) context ).getWindowManager().getDefaultDisplay().getRotation();
+            if (rotationView == Surface.ROTATION_90) {
+                isNormalOrientation = true;
+                orientationHaveChanged = false;
+            } else {
+                isNormalOrientation = false;
+            }
+            determineOrientation(rotationView);
         }
 
         @Override
@@ -973,7 +977,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
         // Show image to Rotate Device
         private void checkShowRotateDevice(int orientation) {
-            if ((orientation > 345 || orientation < 15) && orientation != -1) {
+            if (( orientation > 345 || orientation < 15 ) && orientation != -1) {
                 rotateDeviceHint.setRotation(270);
                 rotateDeviceHint.setRotationX(0);
                 rotateDeviceHint.setVisibility(View.VISIBLE);

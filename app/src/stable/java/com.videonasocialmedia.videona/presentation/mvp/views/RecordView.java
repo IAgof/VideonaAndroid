@@ -87,5 +87,7 @@ public interface RecordView {
     void enableShareButton();
 
     void disableShareButton();
+
+    void finishActivityForResult(String path);
 }
 
