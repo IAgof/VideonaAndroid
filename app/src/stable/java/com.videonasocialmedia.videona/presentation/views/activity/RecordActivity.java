@@ -623,8 +623,10 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void finishActivityForResult(String originalVideoPath) {
         try {
-            if (resultVideoPath != null)
+            if (resultVideoPath != null) {
                 Utils.copyFile(originalVideoPath, resultVideoPath);
+                Utils.removeVideo(originalVideoPath);
+            }
             else
                 resultVideoPath = originalVideoPath;
             Uri videoUri = Uri.fromFile(new File(resultVideoPath));
@@ -658,6 +660,19 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, recordPresenter.getNumVideosOnProject());
         preferencesEditor.putString(ConfigPreferences.RESOLUTION, recordPresenter.getResolution());
         preferencesEditor.commit();
+    }
+
+    private void trackUserInteracted(String interaction, String result) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.button_camera_effect_shader)
@@ -694,19 +709,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private void hideRemoveFilters() {
 
         hideRemoveView(removeFilters);
-    }
-
-    private void trackUserInteracted(String interaction, String result) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
-            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
-            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showRemoveFilters() {
