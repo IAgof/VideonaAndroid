@@ -58,6 +58,7 @@ public class VideonaDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.VideonaDialog);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_videona, null);
@@ -93,6 +94,7 @@ public class VideonaDialog extends DialogFragment {
 
         return builder.create();
     }
+
 
     public void setListener(OnVideonaDialogListener listener) { this.listener = listener; }
 
@@ -141,6 +143,7 @@ public class VideonaDialog extends DialogFragment {
         if(listener != null)
             listener.onClickNegativeButton(idDialog);
     }
+
 
     public static class Builder {
         private String title;

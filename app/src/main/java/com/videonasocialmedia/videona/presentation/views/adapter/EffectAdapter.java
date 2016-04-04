@@ -98,6 +98,7 @@ public class EffectAdapter
         return effects.get(position);
     }
 
+
     /**
      * Sets the listener of the recycler view
      *
@@ -194,6 +195,9 @@ public class EffectAdapter
                     effectSelected = true;
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);
+                    if(effects.get(selectedPosition).getName() == "Gift"){
+
+                    }
                     onClickListener.onEffectSelected(effects.get(selectedPosition));
                 }
             }

@@ -135,7 +135,11 @@ public class EffectProvider {
     }
 
     public static List<Effect> getOverlayFilterList() {
+
         List<Effect> overlayList = new ArrayList<>();
+        overlayList.add(new OverlayEffect("OV26", " ",
+                R.drawable.common_filter_overlay_gift,
+                R.drawable.overlay_filter_spring, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV1", "Burn",
                 R.drawable.common_filter_overlay_ov1_burn,
                 R.drawable.overlay_filter_burn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
@@ -192,6 +196,12 @@ public class EffectProvider {
                 R.drawable.overlay_filter_bokeh, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         return overlayList;
+    }
+
+    public static Effect getOverlayEffectGift(){
+        return new OverlayEffect("OV25", "Spring",
+                R.drawable.common_filter_overlay_ov25_spring,
+                R.drawable.overlay_filter_spring, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
 }

@@ -46,6 +46,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresente
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.fragment.BetaDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
@@ -55,8 +56,8 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Calendar;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -124,6 +125,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     private boolean mUseImmersiveMode = true;
 
+    // TODO define Effects ID
+    private String OVERLAY_EFFECT_GIFT_ID = "OV26";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("prueba", "oncreate");
@@ -169,6 +173,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         overlayFilterRecycler.setAdapter(cameraOverlayEffectsAdapter);
         overlayFilterHidden = false;
         buttonCameraEffectOverlay.setActivated(true);
+
     }
 
     private void configChronometer() {
@@ -771,6 +776,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void onEffectSelected(Effect effect) {
+
+        if(effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
+                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
+            // Reset effect to remove selected background
+            cameraOverlayEffectsAdapter.resetSelectedEffect();
+            setGiftToast();
+            return;
+
+        }
+
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
@@ -778,6 +793,30 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         sendFilterSelectedTracking(effect.getType(),
                 effect.getName().toLowerCase(),
                 effect.getIdentifier().toLowerCase());
+
+    }
+
+    private void setGiftToast() {
+
+        // Create and show toast
+        VideonaToast toast = new VideonaToast.Builder(getApplicationContext())
+                .withTitle(R.string.giftOverlayDialogTitle)
+                .withMessage(R.string.giftOverlayDialogMessage)
+                .withDrawableImage(R.drawable.common_filter_overlay_gift_open)
+                .withDuration(Toast.LENGTH_LONG)
+                .build();
+
+        // Save user preferences
+        editor.putBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, true);
+        editor.commit();
+
+        // Uptade overlay effect adapter
+        cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
+        overlayFilterRecycler.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        overlayFilterRecycler.setAdapter(cameraOverlayEffectsAdapter);
+
+
     }
 
     private void sendFilterSelectedTracking(String type, String name, String code) {
@@ -832,6 +871,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             shaderEffectsRecycler.scrollToPosition(index + scroll);
         }
     }
+
 
     private class OrientationHelper extends OrientationEventListener {
 
