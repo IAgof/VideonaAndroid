@@ -243,7 +243,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
-
     }
 
     @Override
@@ -438,7 +437,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void showRecordedVideoThumb(String path) {
         navigateToEditButton.setVisibility(View.VISIBLE);
         Glide.with(this).load(path).into(navigateToEditButton);
-
     }
 
     @Override

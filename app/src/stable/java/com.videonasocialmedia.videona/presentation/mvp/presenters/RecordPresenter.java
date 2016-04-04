@@ -198,8 +198,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        showThumbAndNumber();
-        Log.d(LOG_TAG, "resume presenter");
+        if(!externalIntent)
+         showThumbAndNumber();
+        og.d(LOG_TAG, "resume presenter");
     }
 
     private void showThumbAndNumber() {
