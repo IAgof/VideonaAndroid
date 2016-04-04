@@ -90,13 +90,15 @@ public class RecordPresenter implements OnExportFinishedListener {
      */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private RemoveVideosUseCase removeVideosUseCase;
+    private boolean externalIntent;
 
     public RecordPresenter(Context context, RecordView recordView,
-                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
+                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences, boolean externalIntent) {
         this.recordView = recordView;
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
+        this.externalIntent = externalIntent;
 
         preferencesEditor = sharedPreferences.edit();
         exportProjectUseCase = new ExportProjectUseCase(this);
@@ -123,6 +125,12 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
+    private void hideInitialsButtons() {
+        recordView.hideRecordedVideoThumb();
+        recordView.hideVideosRecordedNumber();
+        recordView.hideChronometer();
+    }
+
     private SessionConfig getConfigFromPreferences(SharedPreferences sharedPreferences) {
         String destinationFolderPath = Constants.PATH_APP_TEMP;
 
@@ -140,10 +148,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         return new SessionConfig(destinationFolderPath, videoResolution.getWidth(),
                 videoResolution.getHeight(), videoBitrate, audioChannels, audioFrequency,
                 audioBitrate);
-    }
-
-    public String getResolution() {
-        return videoResolution.getWidth() + "x" + videoResolution.getHeight();
     }
 
     private VideoResolution obtainResolutionFromPreferences(SharedPreferences sharedPreferences) {
@@ -176,10 +180,8 @@ public class RecordPresenter implements OnExportFinishedListener {
         return videoQuality.getVideoBitRate();
     }
 
-    private void hideInitialsButtons() {
-        recordView.hideRecordedVideoThumb();
-        recordView.hideVideosRecordedNumber();
-        recordView.hideChronometer();
+    public String getResolution() {
+        return videoResolution.getWidth() + "x" + videoResolution.getHeight();
     }
 
     public void onStart() {
@@ -196,22 +198,22 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        showThumbAndNumber();
-        Log.d(LOG_TAG, "resume presenter");
+        if(!externalIntent)
+         showThumbAndNumber();
+        og.d(LOG_TAG, "resume presenter");
     }
 
     private void showThumbAndNumber() {
         GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-        final List mediaInProject=getMediaListFromProjectUseCase.getMediaListFromProject();
-        if (mediaInProject!=null && mediaInProject.size()>0){
-            int lastItemIndex= mediaInProject.size()-1;
-            final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
-            this.recordedVideosNumber=mediaInProject.size();
+        final List mediaInProject = getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (mediaInProject != null && mediaInProject.size() > 0) {
+            int lastItemIndex = mediaInProject.size() - 1;
+            final Video lastItem = (Video) mediaInProject.get(lastItemIndex);
+            this.recordedVideosNumber = mediaInProject.size();
             recordView.showVideosRecordedNumber(recordedVideosNumber);
             recordView.showRecordedVideoThumb(lastItem.getMediaPath());
             recordView.enableShareButton();
-        }
-        else{
+        } else {
             recordView.hideRecordedVideoThumb();
             recordView.hideVideosRecordedNumber();
             recordView.disableShareButton();
@@ -225,20 +227,39 @@ public class RecordPresenter implements OnExportFinishedListener {
         Log.d(LOG_TAG, "pause presenter");
     }
 
-    public void onStop() {
-        recorder.release();
-    }
-
-    public void onDestroy() {
-        //recorder.release();
-    }
-
     public void stopRecord() {
         if (recorder.isRecording()) {
             trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.STOP);
             recorder.stopRecording();
         }
         //TODO show a gif to indicate the process is running til the video is added to the project
+    }
+
+    /**
+     * Sends button clicks to Mixpanel Analytics
+     *
+     * @param interaction
+     * @param result
+     */
+    private void trackUserInteracted(String interaction, String result) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, context.getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onStop() {
+        recorder.release();
+    }
+
+    public void onDestroy() {
+        //recorder.release();
     }
 
     public void requestRecord() {
@@ -258,6 +279,39 @@ public class RecordPresenter implements OnExportFinishedListener {
     private void resetRecorder() throws IOException {
         config = getConfigFromPreferences(sharedPreferences);
         recorder.reset(config);
+    }
+
+    private void startRecord() {
+        mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
+        trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.START);
+        applyEffect(selectedShaderEffect);
+        applyEffect(selectedOverlayEffect);
+
+        recorder.startRecording();
+        recordView.lockScreenRotation();
+        recordView.showStopButton();
+        recordView.startChronometer();
+        recordView.showChronometer();
+        recordView.hideSettings();
+        recordView.hideRecordedVideoThumb();
+        recordView.hideVideosRecordedNumber();
+        recordView.disableShareButton();
+        firstTimeRecording = false;
+    }
+
+    public void applyEffect(Effect effect) {
+        if (effect instanceof OverlayEffect) {
+            recorder.removeOverlay();
+            Drawable overlay = context.getResources().getDrawable(( (OverlayEffect) effect ).getResourceId());
+            recorder.addOverlayFilter(overlay);
+            selectedOverlayEffect = effect;
+        } else {
+            if (effect instanceof ShaderEffect) {
+                int shaderId = ( (ShaderEffect) effect ).getResourceId();
+                recorder.applyFilter(shaderId);
+                selectedShaderEffect = effect;
+            }
+        }
     }
 
     public void startExport() {
@@ -290,47 +344,14 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
-    private void startRecord() {
-        mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
-        trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.START);
-        applyEffect(selectedShaderEffect);
-        applyEffect(selectedOverlayEffect);
-
-        recorder.startRecording();
-        recordView.lockScreenRotation();
-        recordView.showStopButton();
-        recordView.startChronometer();
-        recordView.showChronometer();
-        recordView.hideSettings();
-        recordView.hideRecordedVideoThumb();
-        recordView.hideVideosRecordedNumber();
-        recordView.disableShareButton();
-        firstTimeRecording = false;
-    }
-
-    /**
-     * Sends button clicks to Mixpanel Analytics
-     *
-     * @param interaction
-     * @param result
-     */
-    private void trackUserInteracted(String interaction, String result) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, context.getClass().getSimpleName());
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recorder.isRecording());
-            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
-            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
-            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void onEventMainThread(MuxerFinishedEvent e) {
         recordView.stopChronometer();
         String finalPath = moveVideoToMastersFolder();
-        addVideoToProjectUseCase.addVideoToTrack(finalPath);
+        if (externalIntent) {
+            recordView.finishActivityForResult(finalPath);
+        } else {
+            addVideoToProjectUseCase.addVideoToTrack(finalPath);
+        }
     }
 
     private String moveVideoToMastersFolder() {
@@ -469,25 +490,13 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.showFlashOn(on);
     }
 
-    public void applyEffect(Effect effect){
-        if (effect instanceof OverlayEffect){
-            recorder.removeOverlay();
-            Drawable overlay= context.getResources().getDrawable(((OverlayEffect) effect).getResourceId());
-            recorder.addOverlayFilter(overlay);
-            selectedOverlayEffect = effect;
-        }
-        else{
-            if (effect instanceof ShaderEffect) {
-                int shaderId = ((ShaderEffect) effect).getResourceId();
-                recorder.applyFilter(shaderId);
-                selectedShaderEffect = effect;
-            }
-        }
+    public Effect getSelectedShaderEffect() {
+        return selectedShaderEffect;
     }
 
-    public Effect getSelectedShaderEffect() { return selectedShaderEffect; }
-
-    public Effect getSelectedOverlayEffect() { return selectedOverlayEffect; }
+    public Effect getSelectedOverlayEffect() {
+        return selectedOverlayEffect;
+    }
 
     public void removeEffect(Effect effect) {
         if (effect instanceof OverlayEffect) {

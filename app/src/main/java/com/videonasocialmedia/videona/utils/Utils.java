@@ -32,10 +32,12 @@ import android.provider.MediaStore;
 import com.coremedia.iso.IsoFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.util.Locale;
 
 /**
@@ -92,6 +94,24 @@ public class Utils {
         if (!f.exists())
             f = null;
         return f;
+    }
+
+    public static void copyFile(String originalPath, String finalPath) throws IOException {
+        File originalFile = new File(originalPath);
+        File destinationFile = new File(finalPath);
+
+        if (originalFile.exists() && originalFile.isFile()) {
+            FileChannel inChannel = new FileInputStream(originalFile).getChannel();
+            FileChannel outChannel = new FileOutputStream(destinationFile).getChannel();
+            try {
+                inChannel.transferTo(0, inChannel.size(), outChannel);
+            } finally {
+                if (inChannel != null)
+                    inChannel.close();
+                if (outChannel != null)
+                    outChannel.close();
+            }
+        }
     }
 
     public static Uri obtainUriToShare(Context context, String videoPath) {
