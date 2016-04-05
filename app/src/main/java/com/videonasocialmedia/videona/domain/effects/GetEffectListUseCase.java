@@ -26,7 +26,7 @@ public class GetEffectListUseCase {
         return EffectProvider.getOverlayFilterList();
     }
 
-    public static Effect getOverlayEffectsGift() {
+    public static Effect getOverlayEffectGift() {
         return EffectProvider.getOverlayEffectGift();
     }
 }

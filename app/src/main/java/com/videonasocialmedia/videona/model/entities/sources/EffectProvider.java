@@ -137,7 +137,7 @@ public class EffectProvider {
     public static List<Effect> getOverlayFilterList() {
 
         List<Effect> overlayList = new ArrayList<>();
-        overlayList.add(new OverlayEffect("OV26", " ",
+        overlayList.add(new OverlayEffect("GIFT_OV", " ",
                 R.drawable.common_filter_overlay_gift,
                 R.drawable.overlay_filter_spring, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV1", "Burn",

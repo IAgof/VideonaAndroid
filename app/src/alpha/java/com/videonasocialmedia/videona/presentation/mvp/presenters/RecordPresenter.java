@@ -475,10 +475,15 @@ public class RecordPresenter implements OnExportFinishedListener {
         if(sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
             // Always gift in position 0
             overlayList.remove(0);
-            overlayList.add(0, GetEffectListUseCase.getOverlayEffectsGift());
+            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
         }
 
         return overlayList;
+    }
+
+    public Effect getOverlayEffectGift() {
+
+        return GetEffectListUseCase.getOverlayEffectGift();
     }
 
     @Override

@@ -56,8 +56,10 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -126,7 +128,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private boolean mUseImmersiveMode = true;
 
     // TODO define Effects ID
-    private String OVERLAY_EFFECT_GIFT_ID = "OV26";
+    private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OV";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -325,6 +327,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
         mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before// property name
+        mixpanel.getPeople().set(AnalyticsConstants.TYPE, AnalyticsConstants.USER_TYPE_BETA);
 
         editor.putBoolean(ConfigPreferences.EMAIL_BETA_DONE, true);
         editor.commit();
@@ -777,11 +780,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void onEffectSelected(Effect effect) {
 
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase());
+
         if(effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
                 !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
             // Reset effect to remove selected background
             cameraOverlayEffectsAdapter.resetSelectedEffect();
-            setGiftToast();
+            trackGiftOpened(recordPresenter.getOverlayEffectGift());
+            showGiftFilterToast();
             return;
 
         }
@@ -790,13 +798,36 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase());
 
     }
 
-    private void setGiftToast() {
+    private void trackGiftOpened(Effect overlayEffectGift) {
+
+        JSONObject giftDetails = new JSONObject();
+
+        int giftsDownloadedCount;
+        try {
+            giftsDownloadedCount = mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED);
+        } catch (JSONException e) {
+            giftsDownloadedCount = 0;
+        }
+        try {
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            String giftResourceName = overlayEffectGift.getType() + " - " + overlayEffectGift.getName() + " " +  overlayEffectGift.getIdentifier();
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED, giftResourceName);
+            mixpanel.getPeople().set(giftDetails);
+            giftDetails.put(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, ++giftsDownloadedCount);
+            mixpanel.registerSuperProperties(giftDetails);
+        } catch (JSONException e) {
+            Log.e("ANALYTICS", "Error sending created super property");
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, 1);
+
+
+    }
+
+    private void showGiftFilterToast() {
 
         // Create and show toast
         VideonaToast toast = new VideonaToast.Builder(getApplicationContext())
@@ -836,6 +867,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_FILTERS_USED, 1);
     }
 
     private List<String> getEffectsCombinedList() {
