@@ -32,11 +32,10 @@ public class SocialNetworkAppsProvider {
             String activityName = app.activityInfo.name;
             Drawable icon= app.loadIcon(pm);
             SocialNetwork socialNetwork;
-            if (packageName.toLowerCase().contains("twitter")
-                    || activityName.toLowerCase().contains("twitter")) {
+            if (activityName.equalsIgnoreCase("com.twitter.android.composer.ComposerActivity")) {
                 socialNetwork = new SocialNetwork("Twitter", packageName,
                         activityName, icon, "#videona");
-            } else if (packageName.toLowerCase().contains("facebook.katana")) {
+            } else if (activityName.equalsIgnoreCase("com.facebook.composer.shareintent.ImplicitShareIntentHandlerDefaultAlias")) {
                 socialNetwork = new SocialNetwork("Facebook", packageName,
                         activityName, icon, "");
             } else if (packageName.toLowerCase().contains("whatsapp")
