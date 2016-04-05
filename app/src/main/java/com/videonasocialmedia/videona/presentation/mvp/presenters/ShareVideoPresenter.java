@@ -40,6 +40,11 @@ public class ShareVideoPresenter {
         obtainNetworksToShare();
     }
 
+    public void obtainNetworksToShare() {
+        List networks = obtainNetworksToShareUseCase.obtainMainNetworks();
+        shareVideoView.showShareNetworksAvailable(networks);
+    }
+
     public void shareVideo(String videoPath, SocialNetwork appToShareWith, Context ctx) {
         final ComponentName name = new ComponentName(appToShareWith.getAndroidPackageName(),
                 appToShareWith.getAndroidActivityName());
@@ -52,15 +57,11 @@ public class ShareVideoPresenter {
         intent.putExtra(Intent.EXTRA_TEXT,
                 VideonaApplication.getAppContext().getResources().getString(R.string.videonaTags));
         intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-        intent.setComponent(name);
-        ctx.startActivity(intent);
-    }
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
 
-    public void obtainNetworksToShare() {
-        List networks = obtainNetworksToShareUseCase.obtainMainNetworks();
-        shareVideoView.showShareNetworksAvailable(networks);
+        intent.setComponent(name);
+
+        ctx.startActivity(intent);
     }
 
     public void obtainExtraAppsToShare() {
