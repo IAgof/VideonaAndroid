@@ -12,7 +12,6 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -42,16 +41,14 @@ import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 import com.videonasocialmedia.videona.presentation.views.customviews.RangeSeekBar;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
-
 import com.videonasocialmedia.videona.utils.Size;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.IOException;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.InjectViews;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import de.greenrobot.event.EventBus;
@@ -63,21 +60,21 @@ public class TrimPreviewFragment extends VideonaFragment implements PreviewView,
         RangeSeekBar.OnRangeSeekBarChangeListener, SeekBar.OnSeekBarChangeListener {
 
     protected Handler handler = new Handler();
-    @InjectView(R.id.edit_preview_player)
+    @Bind(R.id.edit_preview_player)
     VideoView preview;
-    @InjectView(R.id.edit_button_play)
+    @Bind(R.id.edit_button_play)
     ImageButton playButton;
-    @InjectView(R.id.edit_seek_bar)
+    @Bind(R.id.edit_seek_bar)
     SeekBar seekBar;
-    @InjectView(R.id.edit_text_start_trim)
+    @Bind(R.id.edit_text_start_trim)
     TextView startTimeTag;
-    @InjectView(R.id.edit_text_end_trim)
+    @Bind(R.id.edit_text_end_trim)
     TextView stopTimeTag;
-    @InjectView(R.id.edit_text_time_trim)
+    @Bind(R.id.edit_text_time_trim)
     TextView durationTag;
-    @InjectView(R.id.linearLayoutRangeSeekBar)
+    @Bind(R.id.linearLayoutRangeSeekBar)
     ViewGroup layoutSeekBar;
-    @InjectViews({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
+    @Bind({R.id.imageViewFrame1, R.id.imageViewFrame2, R.id.imageViewFrame3,
             R.id.imageViewFrame4, R.id.imageViewFrame5, R.id.imageViewFrame6, R.id.imageViewFrame7,
             R.id.imageViewFrame8})
     List<ImageView> videoThumbs;
@@ -122,7 +119,7 @@ public class TrimPreviewFragment extends VideonaFragment implements PreviewView,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_fragment_trim_preview, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         presenter = new TrimPreviewPresenter(this, this);
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
@@ -137,7 +134,7 @@ public class TrimPreviewFragment extends VideonaFragment implements PreviewView,
         super.onDestroyView();
         handler.removeCallbacksAndMessages(null);
         thumbCreationHandler.removeCallbacksAndMessages(null);
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override
@@ -382,7 +379,7 @@ public class TrimPreviewFragment extends VideonaFragment implements PreviewView,
     }
 
     private int getFrameTime(int videoDuration, int thumbOrder, int numberOfThumbs) {
-        return (videoDuration / numberOfThumbs) * thumbOrder * 1000;
+        return ( videoDuration / numberOfThumbs ) * thumbOrder * 1000;
     }
 
     @Override

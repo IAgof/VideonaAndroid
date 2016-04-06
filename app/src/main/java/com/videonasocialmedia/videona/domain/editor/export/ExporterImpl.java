@@ -3,13 +3,13 @@ package com.videonasocialmedia.videona.domain.editor.export;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.googlecode.mp4parser.authoring.Movie;
+import com.googlecode.mp4parser.authoring.Track;
+import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
 import com.videonasocialmedia.muxer.Appender;
 import com.videonasocialmedia.muxer.AudioTrimmer;
 import com.videonasocialmedia.muxer.Trimmer;
 import com.videonasocialmedia.muxer.VideoTrimmer;
-import com.googlecode.mp4parser.authoring.Movie;
-import com.googlecode.mp4parser.authoring.Track;
-import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -107,70 +107,6 @@ public class ExporterImpl implements Exporter {
         return videoTrimmedPaths;
     }
 
-    private void transcode(ArrayList<String> videoPaths) {
-        final long startTime = SystemClock.uptimeMillis();
-        videoTranscoded = new ArrayList<>();
-        transcoder = createTranscoder();
-        Transcoder.Listener listener = new Transcoder.Listener() {
-            @Override
-            public void onTranscodeProgress(double progress) {}
-
-            @Override
-            public void onTranscodeCompleted(String path) {
-                Log.d(TAG, "transcoding finished listener");
-                Log.d(TAG, "transcoding took " + (SystemClock.uptimeMillis() - startTime) + "ms");
-                videoTranscoded.add(path);
-            }
-
-            @Override
-            public void onTranscodeFinished() {
-                numFilesTranscoded++;
-                if (numFilesTranscoded == numFilesToTranscoder) {
-                    Movie result = appendFiles(videoTranscoded);
-                    if(result != null) {
-                        saveFinalVideo(result);
-                    }
-                    numFilesTranscoded = 0;
-                }
-            }
-
-            @Override
-            public void onTranscodeFailed(Exception exception) {
-                transcodeCorrect = false;
-                numFilesTranscoded = 0;
-                videoTranscoded = null;
-                onExportEndedListener.onExportError(String.valueOf(exception));
-            }
-        };
-        int index = 0;
-        do {
-            String video = videoPaths.get(index);
-            try {
-                transcoder.transcodeFile(video, listener);
-            } catch (IOException | NullPointerException e) {
-                Log.d(TAG, String.valueOf(e));
-            }
-            index++;
-        } while(transcodeCorrect && videoPaths.size() > index);
-    }
-
-    private Transcoder createTranscoder() {
-        VideoResolution.Resolution resolution = project.getProfile().getResolution();
-        final File tempDir = new File (tempTranscodeDirectory);
-        if (!tempDir.exists())
-            tempDir.mkdirs();
-        switch (resolution) {
-            case HD720:
-                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
-            case HD1080:
-                return new Transcoder(Transcoder.Resolution.HD1080, tempTranscodeDirectory);
-            case HD4K:
-                return new Transcoder(Transcoder.Resolution.HD4K, tempTranscodeDirectory);
-            default:
-                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
-        }
-    }
-
     private Movie appendFiles(ArrayList<String> videoTranscoded) {
         Movie result;
         if (isMusicOnProject()) {
@@ -188,15 +124,20 @@ public class ExporterImpl implements Exporter {
         return result;
     }
 
-    private boolean isMusicOnProject() {
-        return project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size() > 0;
+    private void saveFinalVideo(Movie result) {
+        try {
+            long start = System.currentTimeMillis();
+            com.videonasocialmedia.muxer.utils.Utils.createFile(result, pathVideoEdited);
+            long spent = System.currentTimeMillis() - start;
+            Log.d("WRITING VIDEO FILE", "time spent in millis: " + spent);
+            onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
+        } catch (IOException | NullPointerException e) {
+            onExportEndedListener.onExportError(String.valueOf(e));
+        }
     }
 
-    private double getMovieDuration(Movie mergedVideoWithoutAudio) {
-        double movieDuration = mergedVideoWithoutAudio.getTracks().get(0).getDuration();
-        double timeScale= mergedVideoWithoutAudio.getTimescale();
-        movieDuration = movieDuration/timeScale*1000;
-        return movieDuration;
+    private boolean isMusicOnProject() {
+        return project.getAudioTracks().size() > 0 && project.getAudioTracks().get(0).getItems().size() > 0;
     }
 
     private Movie appendVideos(ArrayList<String> videoTranscodedPaths, boolean addOriginalAudio) {
@@ -209,6 +150,13 @@ public class ExporterImpl implements Exporter {
             onExportEndedListener.onExportError(String.valueOf(e));
         }
         return merge;
+    }
+
+    private double getMovieDuration(Movie mergedVideoWithoutAudio) {
+        double movieDuration = mergedVideoWithoutAudio.getTracks().get(0).getDuration();
+        double timeScale = mergedVideoWithoutAudio.getTimescale();
+        movieDuration = movieDuration / timeScale * 1000;
+        return movieDuration;
     }
 
     private Movie addAudio(Movie movie, ArrayList<String> audioPaths, double movieDuration) {
@@ -245,15 +193,68 @@ public class ExporterImpl implements Exporter {
         return movie;
     }
 
-    private void saveFinalVideo(Movie result) {
-        try {
-            long start=System.currentTimeMillis();
-            com.videonasocialmedia.muxer.utils.Utils.createFile(result, pathVideoEdited);
-            long spent=System.currentTimeMillis()-start;
-            Log.d("WRITING VIDEO FILE", "time spent in millis: " + spent);
-            onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
-        } catch (IOException | NullPointerException e) {
-            onExportEndedListener.onExportError(String.valueOf(e));
+    private void transcode(ArrayList<String> videoPaths) {
+        final long startTime = SystemClock.uptimeMillis();
+        videoTranscoded = new ArrayList<>();
+        transcoder = createTranscoder();
+        Transcoder.Listener listener = new Transcoder.Listener() {
+            @Override
+            public void onTranscodeProgress(double progress) {
+            }
+
+            @Override
+            public void onTranscodeCompleted(String path) {
+                Log.d(TAG, "transcoding finished listener");
+                Log.d(TAG, "transcoding took " + ( SystemClock.uptimeMillis() - startTime ) + "ms");
+                videoTranscoded.add(path);
+            }
+
+            @Override
+            public void onTranscodeFinished() {
+                numFilesTranscoded++;
+                if (numFilesTranscoded == numFilesToTranscoder) {
+                    Movie result = appendFiles(videoTranscoded);
+                    if (result != null) {
+                        saveFinalVideo(result);
+                    }
+                    numFilesTranscoded = 0;
+                }
+            }
+
+            @Override
+            public void onTranscodeFailed(Exception exception) {
+                transcodeCorrect = false;
+                numFilesTranscoded = 0;
+                videoTranscoded = null;
+                onExportEndedListener.onExportError(String.valueOf(exception));
+            }
+        };
+        int index = 0;
+        do {
+            String video = videoPaths.get(index);
+            try {
+                transcoder.transcodeFile(video, listener);
+            } catch (IOException | NullPointerException e) {
+                Log.d(TAG, String.valueOf(e));
+            }
+            index++;
+        } while (transcodeCorrect && videoPaths.size() > index);
+    }
+
+    private Transcoder createTranscoder() {
+        VideoResolution.Resolution resolution = project.getProfile().getResolution();
+        final File tempDir = new File(tempTranscodeDirectory);
+        if (!tempDir.exists())
+            tempDir.mkdirs();
+        switch (resolution) {
+            case HD720:
+                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
+            case HD1080:
+                return new Transcoder(Transcoder.Resolution.HD1080, tempTranscodeDirectory);
+            case HD4K:
+                return new Transcoder(Transcoder.Resolution.HD4K, tempTranscodeDirectory);
+            default:
+                return new Transcoder(Transcoder.Resolution.HD720, tempTranscodeDirectory);
         }
     }
 }

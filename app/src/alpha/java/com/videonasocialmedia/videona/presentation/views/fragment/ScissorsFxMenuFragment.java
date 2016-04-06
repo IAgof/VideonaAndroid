@@ -31,8 +31,8 @@ import com.videonasocialmedia.videona.presentation.views.listener.DuplicateClipL
 import com.videonasocialmedia.videona.presentation.views.listener.OnRemoveAllProjectListener;
 import com.videonasocialmedia.videona.presentation.views.listener.RazorClipListener;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -42,7 +42,7 @@ public class ScissorsFxMenuFragment extends VideonaFragment {
 
     private final String LOG_TAG = "ScissorsFxMenuFragment";
 
-    @InjectView(R.id.edit_fragment_scissors_button_trash)
+    @Bind(R.id.edit_fragment_scissors_button_trash)
     ImageButton trashButton;
 
     /*CONFIG*/
@@ -69,7 +69,7 @@ public class ScissorsFxMenuFragment extends VideonaFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_fragment_scissors, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
         return view;
@@ -120,7 +120,7 @@ public class ScissorsFxMenuFragment extends VideonaFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @OnClick({R.id.edit_fragment_scissors_button_razor, R.id.edit_fragment_scissors_button_duplicate,

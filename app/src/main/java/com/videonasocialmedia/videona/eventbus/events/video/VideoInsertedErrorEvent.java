@@ -1,6 +1,6 @@
 package com.videonasocialmedia.videona.eventbus.events.video;
 
-import com.videonasocialmedia.videona.eventbus.events.error.*;
+import com.videonasocialmedia.videona.eventbus.events.error.ErrorEvent;
 
 /**
  * Created by Veronica Lago Fominaya on 26/08/2015.

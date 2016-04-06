@@ -29,8 +29,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -50,13 +50,13 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     private VideonaDialog dialog;
     private final int REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY = 1;
 
-    @InjectView(R.id.button_ok_gallery)
+    @Bind(R.id.button_ok_gallery)
     ImageButton okButton;
-    @InjectView(R.id.gallery_count_selected_videos)
+    @Bind(R.id.gallery_count_selected_videos)
     TextView videoCounter;
-    @InjectView(R.id.gallery_image_view_clips)
+    @Bind(R.id.gallery_image_view_clips)
     ImageView galleryImageViewClips;
-    @InjectView(R.id.selection_mode)
+    @Bind(R.id.selection_mode)
     LinearLayout selectionMode;
 
     @Override
@@ -67,7 +67,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
         setContentView(R.layout.activity_gallery);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         Log.d("GALLERY ACTIVITY", "Creating Activity");
         sharing = this.getIntent().getBooleanExtra("SHARE", true);

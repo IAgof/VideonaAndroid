@@ -8,7 +8,6 @@
 package com.videonasocialmedia.videona.presentation.views.listener;
 
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 
 /**
  * Created by Veronica Lago Fominaya on 03/11/2015.

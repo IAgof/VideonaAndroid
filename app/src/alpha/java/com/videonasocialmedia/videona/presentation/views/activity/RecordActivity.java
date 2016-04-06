@@ -64,8 +64,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
@@ -81,43 +81,43 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     private final String LOG_TAG = getClass().getSimpleName();
 
-    @InjectView(R.id.activity_record_drawer_layout)
+    @Bind(R.id.activity_record_drawer_layout)
     DrawerLayout drawerLayout;
-    @InjectView(R.id.activity_record_navigation_drawer)
+    @Bind(R.id.activity_record_navigation_drawer)
     View navigatorView;
-    @InjectView(R.id.button_record)
+    @Bind(R.id.button_record)
     ImageButton recButton;
-    @InjectView(R.id.button_share)
+    @Bind(R.id.button_share)
     ImageButton shareButton;
-    @InjectView(R.id.cameraPreview)
+    @Bind(R.id.cameraPreview)
     GLCameraEncoderView cameraView;
-    @InjectView(R.id.button_change_camera)
+    @Bind(R.id.button_change_camera)
     ImageButton rotateCameraButton;
-    @InjectView(R.id.button_navigate_edit)
+    @Bind(R.id.button_navigate_edit)
     CircleImageView buttonThumbClipRecorded;
-    @InjectView(R.id.record_catalog_recycler_shader_effects)
+    @Bind(R.id.record_catalog_recycler_shader_effects)
     RecyclerView shaderEffectsRecycler;
-    @InjectView(R.id.record_catalog_recycler_overlay_effects)
+    @Bind(R.id.record_catalog_recycler_overlay_effects)
     RecyclerView overlayFilterRecycler;
-    @InjectView(R.id.imageRecPoint)
+    @Bind(R.id.imageRecPoint)
     ImageView recordingIndicator;
-    @InjectView(R.id.chronometer_record)
+    @Bind(R.id.chronometer_record)
     Chronometer chronometer;
-    @InjectView(R.id.button_toggle_flash)
+    @Bind(R.id.button_toggle_flash)
     ImageButton flashButton;
-    @InjectView(R.id.button_camera_effect_shader)
+    @Bind(R.id.button_camera_effect_shader)
     ImageButton buttonCameraEffectShader;
-    @InjectView(R.id.button_camera_effect_overlay)
+    @Bind(R.id.button_camera_effect_overlay)
     ImageButton buttonCameraEffectOverlay;
-    @InjectView(R.id.button_navigate_drawer)
+    @Bind(R.id.button_navigate_drawer)
     ImageButton drawerButton;
-    @InjectView(R.id.text_view_num_videos)
+    @Bind(R.id.text_view_num_videos)
     TextView numVideosRecorded;
-    @InjectView(R.id.rotateDeviceHint)
+    @Bind(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
-    @InjectView(R.id.drawer_full_background)
+    @Bind(R.id.drawer_full_background)
     ImageView drawerBackground;
-    @InjectView(R.id.button_remove_filters)
+    @Bind(R.id.button_remove_filters)
     ImageButton removeFilters;
 
     private RecordPresenter recordPresenter;
@@ -144,7 +144,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         drawerLayout.setDrawerListener(this);
 
         checkAction();

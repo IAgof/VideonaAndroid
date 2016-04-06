@@ -10,7 +10,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,15 +27,15 @@ import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerV
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * This class is used to show the music gallery.
  */
 public class MusicGalleryFragment extends VideonaFragment implements MusicGalleryView {
 
-    @InjectView(R.id.catalog_recycler)
+    @Bind(R.id.catalog_recycler)
     RecyclerView recyclerView;
 
     private MusicGalleryAdapter musicGalleryAdapter;
@@ -46,7 +45,7 @@ public class MusicGalleryFragment extends VideonaFragment implements MusicGaller
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.edit_fragment_catalog, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         if (musicGalleryPresenter == null)
             musicGalleryPresenter = new MusicGalleryPresenter(this);
         RecyclerView.LayoutManager layoutManager= new GridLayoutManager(this.getActivity(), 1, GridLayoutManager.HORIZONTAL, false);
@@ -78,7 +77,7 @@ public class MusicGalleryFragment extends VideonaFragment implements MusicGaller
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

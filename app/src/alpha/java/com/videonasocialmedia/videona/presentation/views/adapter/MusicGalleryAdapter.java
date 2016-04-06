@@ -26,8 +26,8 @@ import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerV
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * This class is used to show the music gallery.
@@ -127,13 +127,13 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
 
         MusicRecyclerViewClickListener onClickListener;
 
-        @InjectView(R.id.gallery_thumb)
+        @Bind(R.id.gallery_thumb)
         ImageView thumb;
 
-        @InjectView(R.id.gallery_overlay)
+        @Bind(R.id.gallery_overlay)
         RelativeLayout overlay;
 
-        @InjectView(R.id.gallery_overlay_icon)
+        @Bind(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
         /**
@@ -144,7 +144,7 @@ public class MusicGalleryAdapter extends RecyclerView.Adapter<MusicGalleryAdapte
          */
         public MusicViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             thumb.setOnTouchListener(this);
             this.onClickListener = onClickListener;
         }
