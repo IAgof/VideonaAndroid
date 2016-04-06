@@ -63,8 +63,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import de.greenrobot.event.EventBus;
@@ -80,37 +80,37 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         OnEffectSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    @InjectView(R.id.button_record)
+    @Bind(R.id.button_record)
     ImageButton recButton;
-    @InjectView(R.id.cameraPreview)
+    @Bind(R.id.cameraPreview)
     GLCameraEncoderView cameraView;
-    @InjectView(R.id.button_change_camera)
+    @Bind(R.id.button_change_camera)
     ImageButton rotateCameraButton;
-    @InjectView(R.id.button_navigate_edit)
+    @Bind(R.id.button_navigate_edit)
     CircleImageView navigateToEditButton;
-    @InjectView(R.id.record_catalog_recycler_shader_effects)
+    @Bind(R.id.record_catalog_recycler_shader_effects)
     RecyclerView shaderEffectsRecycler;
-    @InjectView(R.id.record_catalog_recycler_overlay_effects)
+    @Bind(R.id.record_catalog_recycler_overlay_effects)
     RecyclerView overlayFilterRecycler;
-    @InjectView(R.id.imageRecPoint)
+    @Bind(R.id.imageRecPoint)
     ImageView recordingIndicator;
-    @InjectView(R.id.chronometer_record)
+    @Bind(R.id.chronometer_record)
     Chronometer chronometer;
-    @InjectView(R.id.button_settings)
+    @Bind(R.id.button_settings)
     ImageButton buttonSettings;
-    @InjectView(R.id.button_toggle_flash)
+    @Bind(R.id.button_toggle_flash)
     ImageButton flashButton;
-    @InjectView(R.id.button_camera_effect_shader)
+    @Bind(R.id.button_camera_effect_shader)
     ImageButton buttonCameraEffectShader;
-    @InjectView(R.id.button_camera_effect_overlay)
+    @Bind(R.id.button_camera_effect_overlay)
     ImageButton buttonCameraEffectOverlay;
-    @InjectView(R.id.text_view_num_videos)
+    @Bind(R.id.text_view_num_videos)
     TextView numVideosRecorded;
-    @InjectView(R.id.rotateDeviceHint)
+    @Bind(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
-    @InjectView(R.id.button_share)
+    @Bind(R.id.button_share)
     ImageButton shareButton;
-    @InjectView(R.id.button_remove_filters)
+    @Bind(R.id.button_remove_filters)
     ImageButton removeFilters;
 
     private RecordPresenter recordPresenter;
@@ -139,7 +139,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         Log.d("prueba", "oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         checkAction();
 
@@ -223,17 +223,19 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @Override
-    protected void onStart() {
-        Log.d("prueba", "onstart");
-        super.onStart();
-        checkAndRequestPermissions();
-        recordPresenter.onStart();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         recordPresenter.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+//        cameraView.setPreserveEGLContextOnPause(true);
+//        cameraView.onPause();
+        recordPresenter.onPause();
+        orientationHelper.stopMonitoringOrientation();
     }
 
     @Override
@@ -246,13 +248,11 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        EventBus.getDefault().unregister(this);
-//        cameraView.setPreserveEGLContextOnPause(true);
-//        cameraView.onPause();
-        recordPresenter.onPause();
-        orientationHelper.stopMonitoringOrientation();
+    protected void onStart() {
+        Log.d("prueba", "onstart");
+        super.onStart();
+        checkAndRequestPermissions();
+        recordPresenter.onStart();
     }
 
     private void hideSystemUi() {

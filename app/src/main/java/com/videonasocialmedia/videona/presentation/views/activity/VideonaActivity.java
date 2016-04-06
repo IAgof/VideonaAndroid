@@ -81,12 +81,6 @@ public abstract class VideonaActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mixpanel.timeEvent(AnalyticsConstants.TIME_IN_ACTIVITY);
-    }
-
-    @Override
     protected void onDestroy() {
         mixpanel.flush();
         super.onDestroy();
@@ -95,12 +89,6 @@ public abstract class VideonaActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(new QordobaContextWrapper(this, newBase));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Qordoba.updateScreen(this);
     }
 
     @Override
@@ -113,6 +101,18 @@ public abstract class VideonaActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Qordoba.updateScreen(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mixpanel.timeEvent(AnalyticsConstants.TIME_IN_ACTIVITY);
     }
 
     protected final void closeApp() {
@@ -144,12 +144,12 @@ public abstract class VideonaActivity extends AppCompatActivity {
         return getOrientation() == Configuration.ORIENTATION_LANDSCAPE;
     }
 
-    protected boolean isPortraitOriented() {
-        return getOrientation() == Configuration.ORIENTATION_PORTRAIT;
-    }
-
     private int getOrientation() {
         return getResources().getConfiguration().orientation;
+    }
+
+    protected boolean isPortraitOriented() {
+        return getOrientation() == Configuration.ORIENTATION_PORTRAIT;
     }
 
     class CustomPermissionListener extends EmptyMultiplePermissionsListener {

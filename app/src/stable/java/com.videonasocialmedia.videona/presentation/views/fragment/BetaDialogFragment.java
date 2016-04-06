@@ -25,7 +25,6 @@ import com.videonasocialmedia.videona.presentation.mvp.views.JoinBetaView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Veronica Lago Fominaya on 12/11/2015.
@@ -48,7 +47,7 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_join_beta, null);
         builder.setView(v);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         email = (EditText) v.findViewById(R.id.email_text);
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
@@ -56,9 +55,6 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
                     PorterDuff.Mode.SRC_ATOP);
         emailIcon = (ImageView) v.findViewById(R.id.email_icon);
         email.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-            }
 
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -71,6 +67,9 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
                 } else {
                     putIconForEditTextIsNull();
                 }
+            }
+
+            public void afterTextChanged(Editable s) {
             }
         });
         joinBetaPresenter.checkIfPreviousEmailExists();
@@ -89,15 +88,6 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         emailIcon.setImageResource(R.drawable.activity_settings_icon_email_add);
     }
 
-    private void setPositiveButton(View v) {
-        View sendButton = v.findViewById(R.id.positiveButton);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                joinBetaPresenter.validateEmail(email.getText().toString());
-            }
-        });
-    }
-
     private void setNegativeButton(View v) {
         View negativeButton = v.findViewById(R.id.negativeButton);
         negativeButton.setOnClickListener(new View.OnClickListener() {
@@ -107,16 +97,30 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         });
     }
 
-    @Override
-    public void setEmail(String text) {
-        email.setText(text);
-        putIconForEditTextIsNotNull();
+    private void setPositiveButton(View v) {
+        View sendButton = v.findViewById(R.id.positiveButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                joinBetaPresenter.validateEmail(email.getText().toString());
+            }
+        });
     }
 
     @Override
     public void showMessage(int messageId) {
         Toast.makeText(getActivity().getApplicationContext(), getString(messageId),
                 Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void hideDialog() {
+        getDialog().cancel();
+    }
+
+    @Override
+    public void setEmail(String text) {
+        email.setText(text);
+        putIconForEditTextIsNotNull();
     }
 
     @Override
@@ -136,10 +140,5 @@ public class BetaDialogFragment extends DialogFragment implements JoinBetaView {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
-    }
-
-    @Override
-    public void hideDialog() {
-        getDialog().cancel();
     }
 }

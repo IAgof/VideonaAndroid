@@ -19,8 +19,8 @@ import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -31,14 +31,14 @@ import butterknife.OnClick;
  */
 public class AboutActivity extends VideonaActivity {
 
-    @InjectView(R.id.videona_version)
+    @Bind(R.id.videona_version)
     TextView versionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

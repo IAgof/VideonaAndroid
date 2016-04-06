@@ -19,8 +19,8 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.EditTextPrefer
 import com.videonasocialmedia.videona.presentation.mvp.views.EditTextPreferenceView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -29,25 +29,24 @@ import butterknife.OnClick;
 public abstract class EditTextPreferenceActivity extends VideonaActivity implements
         EditTextPreferenceView {
 
-    @InjectView(R.id.edit_user_account)
-    EditText editText;
-    @InjectView(R.id.edit_text_preferences_icon)
-    ImageView editTextImage;
-    @InjectView(R.id.info_field)
-    TextView infoText;
-    @InjectView(R.id.toolbar_title)
-    TextView toolbarTitle;
-
     protected Context context;
     protected EditTextPreferencePresenter presenter;
     protected SharedPreferences sharedPreferences;
     protected SharedPreferences.Editor editor;
+    @Bind(R.id.edit_user_account)
+    EditText editText;
+    @Bind(R.id.edit_text_preferences_icon)
+    ImageView editTextImage;
+    @Bind(R.id.info_field)
+    TextView infoText;
+    @Bind(R.id.toolbar_title)
+    TextView toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_edit_text);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         context = getApplicationContext();
         sharedPreferences = getSharedPreferences(
@@ -58,8 +57,6 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
             editText.getBackground().setColorFilter(getResources().getColor(R.color.editTextBottomLine),
                     PorterDuff.Mode.SRC_ATOP);
         editText.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
 
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {}
@@ -72,18 +69,13 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
                     putIconForEditTextIsNull();
                 }
             }
+
+            public void afterTextChanged(Editable s) {
+            }
         });
         setToolbar();
         // Display the fragment as the main content.
         Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
-    }
-
-    private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -108,17 +100,12 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
 
     protected void putIconForEditTextIsNull() {}
 
-    @Override
-    public void showInfoText() {}
-
-    @Override
-    public void hideInfoText() {
-        infoText.setText(null);
-    }
-
-    @Override
-    public void removeEditText() {
-        editText.setText(null);
+    private void setToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @OnClick(R.id.save)
@@ -137,14 +124,28 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
 
     }
 
-    @Override
-    public void goBack() {
-        finish();
-    }
-
     public void showMessage(int messageId) {
         Toast.makeText(getApplicationContext(), getString(messageId),
                 Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showInfoText() {
+    }
+
+    @Override
+    public void hideInfoText() {
+        infoText.setText(null);
+    }
+
+    @Override
+    public void removeEditText() {
+        editText.setText(null);
+    }
+
+    @Override
+    public void goBack() {
+        finish();
     }
 
     @OnClick(R.id.info_field)

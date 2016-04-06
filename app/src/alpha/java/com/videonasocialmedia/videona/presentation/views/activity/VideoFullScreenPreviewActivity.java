@@ -27,8 +27,8 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -36,7 +36,7 @@ import butterknife.OnClick;
  */
 public class VideoFullScreenPreviewActivity extends VideonaActivity implements OnPreparedListener, OnErrorListener {
 
-    @InjectView(R.id.videoView)
+    @Bind(R.id.videoView)
     VideoView videoView;
 
     private final String LOG_TAG = "VIDEO PREVIEW ACTIVITY";
@@ -51,7 +51,7 @@ public class VideoFullScreenPreviewActivity extends VideonaActivity implements O
         setContentView(R.layout.activity_video_preview);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
         videoPath = bundle.getString("VIDEO_PATH");

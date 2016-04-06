@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
@@ -154,14 +154,14 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     }
 
     class VideoViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.timelinevideo_thumb)
+        @Bind(R.id.timelinevideo_thumb)
         ImageView thumb;
-        @InjectView(R.id.container)
+        @Bind(R.id.container)
         RelativeLayout container;
 
         public VideoViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
         }
 
         @OnClick(R.id.timelinevideo_thumb)

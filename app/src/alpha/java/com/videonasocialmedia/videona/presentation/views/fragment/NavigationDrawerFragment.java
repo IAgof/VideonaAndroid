@@ -56,7 +56,7 @@ public class NavigationDrawerFragment extends VideonaFragment implements OnVideo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.common_fragment_navigator, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
@@ -67,7 +67,7 @@ public class NavigationDrawerFragment extends VideonaFragment implements OnVideo
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
 

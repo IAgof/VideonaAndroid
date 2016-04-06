@@ -200,7 +200,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         recorder.onHostActivityResumed();
         if(!externalIntent)
          showThumbAndNumber();
-        og.d(LOG_TAG, "resume presenter");
+        Log.d(LOG_TAG, "resume presenter");
     }
 
     private void showThumbAndNumber() {

@@ -15,8 +15,8 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -74,8 +74,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
@@ -90,29 +90,29 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
 
     private final String LOG_TAG = "EDIT ACTIVITY";
     //protected Handler handler = new Handler();
-    @InjectView(R.id.edit_button_scissor)
+    @Bind(R.id.edit_button_scissor)
     ImageButton scissorButton;
-    @InjectView(R.id.edit_button_audio)
+    @Bind(R.id.edit_button_audio)
     ImageButton audioFxButton;
-    @InjectView(R.id.project_duration)
+    @Bind(R.id.project_duration)
     TextView projectDuration;
-    @InjectView(R.id.num_videos)
+    @Bind(R.id.num_videos)
     TextView numVideos;
-    @InjectView(R.id.edit_button_ok)
+    @Bind(R.id.edit_button_ok)
     ImageButton buttonOkEditActivity;
-    @InjectView(R.id.edit_button_ok_trim_detail)
+    @Bind(R.id.edit_button_ok_trim_detail)
     ImageButton buttonOkTrimDetail;
-    @InjectView(R.id.activity_edit_drawer_layout)
+    @Bind(R.id.activity_edit_drawer_layout)
     DrawerLayout drawerLayout;
-    @InjectView(R.id.activity_edit_navigation_drawer)
+    @Bind(R.id.activity_edit_navigation_drawer)
     View navigatorView;
 
-    @InjectView(R.id.linear_layout_black_background)
+    @Bind(R.id.linear_layout_black_background)
     LinearLayout linearLayoutBlackBackground;
     /**
      * Button navigation drawer
      */
-    @InjectView(R.id.button_navigate_drawer)
+    @Bind(R.id.button_navigate_drawer)
     ImageButton buttonNavigateDrawer;
     /*Navigation*/
     private PreviewVideoListFragment previewVideoListFragment;
@@ -162,7 +162,7 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
         setContentView(R.layout.activity_edit);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);

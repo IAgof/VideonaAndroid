@@ -11,7 +11,6 @@
 
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -43,7 +42,7 @@ public class VideoFxMenuFragment extends VideonaFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_fragment_fx, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
@@ -54,7 +53,7 @@ public class VideoFxMenuFragment extends VideonaFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
 
