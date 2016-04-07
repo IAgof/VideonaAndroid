@@ -9,11 +9,12 @@
 
     <TextView
         android:id="@+id/titleToast"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         tools:text="@string/CloseBecauseOfPermissionsTitle"
         android:textSize="23sp"
+        android:gravity="center"
         android:textColor="@color/textColorTitle" />
 
     <View
