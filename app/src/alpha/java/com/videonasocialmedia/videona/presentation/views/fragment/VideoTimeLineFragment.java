@@ -1,6 +1,6 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
-import android.app.Fragment;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,8 +22,8 @@ import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineR
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -31,7 +31,7 @@ import de.greenrobot.event.EventBus;
  */
 public class VideoTimeLineFragment extends VideonaFragment implements VideoTimeLineView {
 
-    @InjectView(R.id.catalog_recycler)
+    @Bind(R.id.catalog_recycler)
     RecyclerView recyclerView;
 
     private ItemTouchHelper touchHelper;
@@ -44,7 +44,7 @@ public class VideoTimeLineFragment extends VideonaFragment implements VideoTimeL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.edit_fragment_catalog, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         if (presenter == null)
             presenter = new VideoTimeLinePresenter(this);
         initRecycler();
@@ -101,7 +101,7 @@ public class VideoTimeLineFragment extends VideonaFragment implements VideoTimeL
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     public Video getCurrentVideo() {

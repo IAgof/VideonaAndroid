@@ -20,8 +20,8 @@ import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelecti
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -119,16 +119,16 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         MusicRecyclerViewClickListener onClickListener;
         OnTransitionClickListener onTransitionClickListener;
 
-        @InjectView(R.id.gallery_thumb)
+        @Bind(R.id.gallery_thumb)
         ImageView thumb;
 
-        @InjectView(R.id.gallery_duration)
+        @Bind(R.id.gallery_duration)
         TextView duration;
 
-        @InjectView(R.id.gallery_overlay)
+        @Bind(R.id.gallery_overlay)
         RelativeLayout overlay;
 
-        @InjectView(R.id.gallery_overlay_icon)
+        @Bind(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
         public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
@@ -138,7 +138,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener,
                                OnTransitionClickListener onTransitionClickListener) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             this.onClickListener = onClickListener;
             this.onTransitionClickListener = onTransitionClickListener;
 

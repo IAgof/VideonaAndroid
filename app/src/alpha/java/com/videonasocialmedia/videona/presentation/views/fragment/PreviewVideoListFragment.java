@@ -53,8 +53,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 import de.greenrobot.event.EventBus;
@@ -65,20 +65,20 @@ import de.greenrobot.event.EventBus;
 public class PreviewVideoListFragment extends VideonaFragment implements PreviewView,
         SeekBar.OnSeekBarChangeListener {
 
-    @InjectView(R.id.edit_preview_player)
+    @Bind(R.id.edit_preview_player)
     VideoView preview;
-    @InjectView(R.id.edit_button_play)
+    @Bind(R.id.edit_button_play)
     ImageButton playButton;
-    @InjectView(R.id.edit_seek_bar)
+    @Bind(R.id.edit_seek_bar)
     SeekBar seekBar;
-    @InjectView(R.id.edit_text_start_trim)
+    @Bind(R.id.edit_text_start_trim)
     TextView startTimeTag;
-    @InjectView(R.id.edit_text_end_trim)
+    @Bind(R.id.edit_text_end_trim)
     TextView stopTimeTag;
 
     //Hide relativeLayout, needed to show trimming bar
     //TODO change with EventBus
-    @InjectView(R.id.relativeLayoutPreviewVideo)
+    @Bind(R.id.relativeLayoutPreviewVideo)
     RelativeLayout relativeLayoutPreviewVideoTrim;
 
     protected Handler handler = new Handler();
@@ -111,7 +111,7 @@ public class PreviewVideoListFragment extends VideonaFragment implements Preview
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_fragment_all_preview, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         VideonaApplication app = (VideonaApplication) getActivity().getApplication();
         tracker = app.getTracker();
         previewPresenter = new PreviewPresenter(this);
@@ -128,7 +128,7 @@ public class PreviewVideoListFragment extends VideonaFragment implements Preview
     public void onDestroyView() {
         super.onDestroyView();
         handler.removeCallbacksAndMessages(null);
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @Override

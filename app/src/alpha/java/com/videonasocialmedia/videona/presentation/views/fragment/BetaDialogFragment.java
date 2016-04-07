@@ -48,7 +48,7 @@ public class BetaDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.dialog_leave_beta, null);
         builder.setView(v);
 
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         return builder.create();
     }
