@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,11 +44,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
-import butterknife.Optional;
 
 /**
  * Created by jca on 11/12/15.
@@ -56,20 +56,20 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         SocialNetworkAdapter.OnSocialNetworkClickedListener,
         SeekBar.OnSeekBarChangeListener {
 
-    @InjectView(R.id.video_preview)
+    @Bind(R.id.video_preview)
     VideoView videoPreview;
-    @InjectView(R.id.main_social_network_list)
+    @Bind(R.id.main_social_network_list)
     RecyclerView mainSocialNetworkList;
-    @InjectView(R.id.play_pause_button)
+    @Bind(R.id.play_pause_button)
     ImageButton playPauseButton;
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.button_more_networks)
+    @Bind(R.id.button_more_networks)
     FloatingActionButton fab;
-    @InjectView(R.id.seekbar)
+    @Bind(R.id.seekbar)
     SeekBar seekBar;
-    @Optional
-    @InjectView(R.id.bottom_panel)
+    @Nullable
+    @Bind(R.id.bottom_panel)
     RelativeLayout bottomPanel;
 
     private String videoPath;
@@ -91,7 +91,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         sharedPreferences =
                 getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                         Context.MODE_PRIVATE);
@@ -167,13 +167,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         });
     }
 
-    private void initSeekBar(int progress, int max) {
-        seekBar.setMax(max);
-        seekBar.setProgress(progress);
-        seekBar.setOnSeekBarChangeListener(this);
-        updateSeekbar();
-    }
-
     private void initNetworksList() {
         mainSocialNetworkAdapter = new SocialNetworkAdapter(this);
 
@@ -184,6 +177,72 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         mainSocialNetworkList.setLayoutManager(
                 new LinearLayoutManager(this, orientation, false));
         mainSocialNetworkList.setAdapter(mainSocialNetworkAdapter);
+    }
+
+    private void initSeekBar(int progress, int max) {
+        seekBar.setMax(max);
+        seekBar.setProgress(progress);
+        seekBar.setOnSeekBarChangeListener(this);
+        updateSeekbar();
+    }
+
+    @OnClick(R.id.play_pause_button)
+    @Override
+    public void playVideo() {
+        videoPreview.start();
+        playPauseButton.setVisibility(View.GONE);
+        if (isLandscapeOriented()) {
+            hideToolBar();
+            hideBottomPanel();
+        }
+    }
+
+    @Override
+    public void pauseVideo() {
+        videoPreview.pause();
+        playPauseButton.setVisibility(View.VISIBLE);
+        if (isLandscapeOriented()) {
+            showToolbar();
+            showBottomPanel();
+        }
+    }
+
+    @Override
+    public void seekTo(int millisecond) {
+        videoPreview.seekTo(millisecond);
+    }
+
+    private void showBottomPanel() {
+        fab.show();
+        runTranslateAnimation(bottomPanel, 1, new AccelerateInterpolator(3));
+    }
+
+    private void showToolbar() {
+        runTranslateAnimation(toolbar, 0, new DecelerateInterpolator(3));
+    }
+
+    private void updateSeekbar() {
+        if (!draggingSeekBar)
+            seekBar.setProgress(videoPreview.getCurrentPosition());
+        updateSeekBarTaskHandler.postDelayed(updateSeekBarTask, 20);
+    }
+
+    private void hideToolBar() {
+        runTranslateAnimation(toolbar,
+                -toolbar.getHeight(), new AccelerateInterpolator(3));
+    }
+
+    private void hideBottomPanel() {
+        runTranslateAnimation(bottomPanel, bottomPanel.getHeight(), new AccelerateInterpolator(3));
+        fab.hide();
+    }
+
+    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
+        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
+        slideInAnimation.setDuration(view.getContext().getResources()
+                .getInteger(android.R.integer.config_mediumAnimTime));
+        slideInAnimation.setInterpolator(interpolator);
+        slideInAnimation.start();
     }
 
     @Override
@@ -226,7 +285,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
 
     }
 
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser)
@@ -243,12 +301,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         draggingSeekBar = false;
     }
 
-    private void updateSeekbar() {
-        if (!draggingSeekBar)
-            seekBar.setProgress(videoPreview.getCurrentPosition());
-        updateSeekBarTaskHandler.postDelayed(updateSeekBarTask, 20);
-    }
-
     @OnClick(R.id.button_more_networks)
     public void showMoreNetworks() {
         updateNumTotalVideosShared();
@@ -258,82 +310,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         Uri uri = Utils.obtainUriToShare(this, videoPath);
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         startActivity(Intent.createChooser(intent, getString(R.string.share_using)));
-    }
-
-    @OnTouch(R.id.video_preview)
-    public boolean togglePlayPause(MotionEvent event) {
-        boolean result = false;
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (videoPreview.isPlaying()) {
-                pauseVideo();
-                result = true;
-            } else {
-                playVideo();
-                result = false;
-            }
-        }
-        return result;
-    }
-
-    @OnClick(R.id.play_pause_button)
-    @Override
-    public void playVideo() {
-        videoPreview.start();
-        playPauseButton.setVisibility(View.GONE);
-        if (isLandscapeOriented()) {
-            hideToolBar();
-            hideBottomPanel();
-        }
-    }
-
-    private void hideToolBar() {
-        runTranslateAnimation(toolbar,
-                -toolbar.getHeight(), new AccelerateInterpolator(3));
-    }
-
-    @Override
-    public void pauseVideo() {
-        videoPreview.pause();
-        playPauseButton.setVisibility(View.VISIBLE);
-        if (isLandscapeOriented()) {
-            showToolbar();
-            showBottomPanel();
-        }
-    }
-
-    private void hideBottomPanel() {
-        runTranslateAnimation(bottomPanel, bottomPanel.getHeight(), new AccelerateInterpolator(3));
-        fab.hide();
-    }
-
-    private void showBottomPanel() {
-        fab.show();
-        runTranslateAnimation(bottomPanel, 1, new AccelerateInterpolator(3));
-    }
-
-
-    private void showToolbar() {
-        runTranslateAnimation(toolbar, 0, new DecelerateInterpolator(3));
-    }
-
-    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
-        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
-        slideInAnimation.setDuration(view.getContext().getResources()
-                .getInteger(android.R.integer.config_mediumAnimTime));
-        slideInAnimation.setInterpolator(interpolator);
-        slideInAnimation.start();
-    }
-
-    @Override
-    public void seekTo(int millisecond) {
-        videoPreview.seekTo(millisecond);
-    }
-
-    @Override
-    public void onSocialNetworkClicked(SocialNetwork socialNetwork) {
-        presenter.shareVideo(videoPath, socialNetwork, this);
-        updateNumTotalVideosShared();
-        trackVideoShared(socialNetwork);
     }
 
     private void updateNumTotalVideosShared() {
@@ -380,6 +356,28 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @OnTouch(R.id.video_preview)
+    public boolean togglePlayPause(MotionEvent event) {
+        boolean result = false;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (videoPreview.isPlaying()) {
+                pauseVideo();
+                result = true;
+            } else {
+                playVideo();
+                result = false;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void onSocialNetworkClicked(SocialNetwork socialNetwork) {
+        presenter.shareVideo(videoPath, socialNetwork, this);
+        updateNumTotalVideosShared();
+        trackVideoShared(socialNetwork);
     }
 
 }

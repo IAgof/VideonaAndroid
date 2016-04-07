@@ -38,8 +38,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
@@ -49,15 +49,15 @@ import butterknife.OnTouch;
 public class VideolistFullScreenPreviewActivity extends VideonaActivity implements PreviewView,
         SeekBar.OnSeekBarChangeListener {
 
-    @InjectView(R.id.edit_preview_player)
+    @Bind(R.id.edit_preview_player)
     VideoView preview;
-    @InjectView(R.id.edit_button_play)
+    @Bind(R.id.edit_button_play)
     ImageButton playButton;
-    @InjectView(R.id.edit_seek_bar)
+    @Bind(R.id.edit_seek_bar)
     SeekBar seekBar;
-    @InjectView(R.id.edit_text_start_trim)
+    @Bind(R.id.edit_text_start_trim)
     TextView startTimeTag;
-    @InjectView(R.id.edit_text_end_trim)
+    @Bind(R.id.edit_text_end_trim)
     TextView stopTimeTag;
 
     private final String LOG_TAG = "VIDEO LIST PREVIEW ACTIVITY";
@@ -88,7 +88,7 @@ public class VideolistFullScreenPreviewActivity extends VideonaActivity implemen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_videolist_preview);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
         instantTime = bundle.getInt("TIME");
@@ -131,7 +131,7 @@ public class VideolistFullScreenPreviewActivity extends VideonaActivity implemen
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
     }
 
     @OnTouch(R.id.edit_preview_player)

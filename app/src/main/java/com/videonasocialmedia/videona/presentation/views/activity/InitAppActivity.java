@@ -40,8 +40,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * InitAppActivity.
@@ -63,7 +63,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
      */
     private final String LOG_TAG = this.getClass().getSimpleName();
     protected Handler handler = new Handler();
-    @InjectView(R.id.videona_version)
+    @Bind(R.id.videona_version)
     TextView versionName;
     private long MINIMUN_WAIT_TIME;
     private SharedPreferences sharedPreferences;
@@ -86,7 +86,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_init_app);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         setVersionCode();
         if (BuildConfig.DEBUG) {
@@ -103,6 +103,23 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releaseCamera();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         startTime = System.currentTimeMillis();
@@ -113,28 +130,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SplashScreenTask splashScreenTask = new SplashScreenTask(this);
         splashScreenTask.execute();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        releaseCamera();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
     }
 
     /**
@@ -148,6 +143,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
     private void setup() {
         androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         setupPathsApp(this);
@@ -155,14 +155,17 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         trackUserProfileGeneralTraits();
     }
 
-    private void trackAppStartup() {
-        JSONObject initAppProperties = new JSONObject();
+    /**
+     * Checks the paths of the app
+     *
+     * @param listener
+     */
+    private void setupPathsApp(OnInitAppEventListener listener) {
         try {
-            initAppProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_ORGANIC);
-            initAppProperties.put(AnalyticsConstants.INIT_STATE, initState);
-            mixpanel.track(AnalyticsConstants.APP_STARTED, initAppProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            initPaths();
+            listener.onCheckPathsAppSuccess();
+        } catch (IOException e) {
+            Log.e("CHECK PATH", "error", e);
         }
     }
 
@@ -186,8 +189,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 setupCameraSettings();
                 trackUserProfile();
                 initSettings();
-                checkAndDeleteOldMusicSongs();
-                //TODO Delete after update to versionCode 61
                 joinBetaFortnight();
                 break;
             case FIRST_TIME:
@@ -199,7 +200,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 trackUserProfile();
                 trackCreatedSuperProperty();
                 initSettings();
-                checkAndDeleteOldMusicSongs();
                 joinBetaFortnight();
                 break;
             default:
@@ -207,21 +207,39 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-    private void trackCreatedSuperProperty() {
-        JSONObject createdSuperProperty = new JSONObject();
+    private void trackUserProfileGeneralTraits() {
+        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
+        JSONObject userProfileProperties = new JSONObject();
+        String userType = AnalyticsConstants.USER_TYPE_FREE;
+        if (BuildConfig.FLAVOR.equals("alpha")) {
+            userType = AnalyticsConstants.USER_TYPE_BETA;
+        }
         try {
-            createdSuperProperty.put(AnalyticsConstants.CREATED,
-                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-            mixpanel.registerSuperPropertiesOnce(createdSuperProperty);
+            userProfileProperties.put(AnalyticsConstants.TYPE, userType);
+            userProfileProperties.put(AnalyticsConstants.LOCALE,
+                    Locale.getDefault().toString());
+            userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
+            mixpanel.getPeople().set(userProfileProperties);
         } catch (JSONException e) {
-            Log.e("ANALYTICS", "Error sending created super property");
+            e.printStackTrace();
         }
     }
 
-    // Prepare app to launch join beta daialog every 15 days
-    private void joinBetaFortnight() {
-        editor.putBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, true);
-        editor.commit();
+    /**
+     * Check Videona app paths, PATH_APP, pathVideoTrim, pathVideoMusic, ...
+     *
+     * @throws IOException
+     */
+    private void initPaths() throws IOException {
+        checkAndInitPath(Constants.PATH_APP);
+        checkAndInitPath(Constants.PATH_APP_TEMP);
+        checkAndInitPath(Constants.PATH_APP_MASTERS);
+        checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
+
+
+        File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
+        String privatePath = privateDataFolderModel.getAbsolutePath();
+        editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
     }
 
     private void trackAppStartupProperties(boolean state) {
@@ -243,37 +261,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-    private void trackUserProfile() {
-        mixpanel.identify(androidId);
-        mixpanel.getPeople().identify(androidId);
-        JSONObject userProfileProperties = new JSONObject();
-        try {
-            userProfileProperties.put(AnalyticsConstants.CREATED,
-                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-            mixpanel.getPeople().setOnce(userProfileProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void trackUserProfileGeneralTraits() {
-        mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
-        JSONObject userProfileProperties = new JSONObject();
-        String userType = AnalyticsConstants.USER_TYPE_FREE;
-        if ( BuildConfig.FLAVOR.equals("alpha") ) {
-            userType = AnalyticsConstants.USER_TYPE_BETA;
-        }
-        try {
-            userProfileProperties.put(AnalyticsConstants.TYPE, userType);
-            userProfileProperties.put(AnalyticsConstants.LOCALE,
-                    Locale.getDefault().toString());
-            userProfileProperties.put(AnalyticsConstants.LANG, Locale.getDefault().getISO3Language());
-            mixpanel.getPeople().set(userProfileProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Initializes the camera id parameter in shared preferences to back camera
      */
@@ -289,6 +276,43 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         checkAvailableCameras();
         checkFlashMode();
         checkCameraVideoSize();
+    }
+
+    private void trackUserProfile() {
+        mixpanel.identify(androidId);
+        mixpanel.getPeople().identify(androidId);
+        JSONObject userProfileProperties = new JSONObject();
+        try {
+            userProfileProperties.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            mixpanel.getPeople().setOnce(userProfileProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Prepare app to launch join beta daialog every 15 days
+    private void joinBetaFortnight() {
+        editor.putBoolean(ConfigPreferences.EMAIL_BETA_FORTNIGHT, true);
+        editor.commit();
+    }
+
+    private void trackCreatedSuperProperty() {
+        JSONObject createdSuperProperty = new JSONObject();
+        try {
+            createdSuperProperty.put(AnalyticsConstants.CREATED,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            mixpanel.registerSuperPropertiesOnce(createdSuperProperty);
+        } catch (JSONException e) {
+            Log.e("ANALYTICS", "Error sending created super property");
+        }
+    }
+
+    private void checkAndInitPath(String pathApp) {
+        File fEdited = new File(pathApp);
+        if (!fEdited.exists()) {
+            fEdited.mkdirs();
+        }
     }
 
     /**
@@ -446,82 +470,31 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         return c;
     }
 
-    /**
-     * Checks the paths of the app
-     *
-     * @param listener
-     */
-    private void setupPathsApp(OnInitAppEventListener listener) {
+    private void trackAppStartup() {
+        JSONObject initAppProperties = new JSONObject();
         try {
-            initPaths();
-            listener.onCheckPathsAppSuccess();
-        } catch (IOException e) {
-            Log.e("CHECK PATH", "error", e);
+            initAppProperties.put(AnalyticsConstants.TYPE, AnalyticsConstants.TYPE_ORGANIC);
+            initAppProperties.put(AnalyticsConstants.INIT_STATE, initState);
+            mixpanel.track(AnalyticsConstants.APP_STARTED, initAppProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Check Videona app paths, PATH_APP, pathVideoTrim, pathVideoMusic, ...
-     *
-     * @throws IOException
-     */
-    private void initPaths() throws IOException {
-        checkAndInitPath(Constants.PATH_APP);
-        checkAndInitPath(Constants.PATH_APP_TEMP);
-        checkAndInitPath(Constants.PATH_APP_MASTERS);
-        checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
-
-
-        File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
-        String privatePath = privateDataFolderModel.getAbsolutePath();
-        editor.putString(ConfigPreferences.PRIVATE_PATH, privatePath).commit();
-    }
-
-    //TODO Delete this method, only util after release v0.3.23.
-    // Clean old music files and temp folder.
-    private void checkAndDeleteOldMusicSongs() {
-        deleteMusicResources();
-    }
-
-    // Don't exist music resource ids in app
-    // Delete one by one every song
-    // Cannot delete folder temp and after create, app crash coming back from settings :(
-    private void deleteMusicResources() {
-        int musicId[] = {2131099648, 2131099650, 2131099651, 2131099653, 2131099654, 2131099655};
-
-        for (int i = 0; i < musicId.length; i++) {
-            Log.d(LOG_TAG, " deleteMusicResources " + musicId[i]);
-            String nameFile = Constants.PATH_APP_TEMP + File.separator + musicId[i] + ".m4a";
-            Log.d(LOG_TAG, " deleteMusicResources nameFile " + nameFile);
-            File file = new File(nameFile);
-            if (file.exists()) {
-                file.delete();
-            }
-        }
-    }
-
-    private void checkAndInitPath(String pathApp) {
-        File fEdited = new File(pathApp);
-        if (!fEdited.exists()) {
-            fEdited.mkdirs();
-        }
+    @Override
+    public void onCheckPathsAppSuccess() {
+        startLoadingProject(this);
     }
 
     private void startLoadingProject(OnInitAppEventListener listener) {
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
         Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
-        //listener.onLoadingProjectSuccess();
     }
 
     //TODO Check user profile, by default 720p free
     private Profile checkProfile() {
         return Profile.getInstance(Profile.ProfileType.free);
-    }
-
-    @Override
-    public void onCheckPathsAppSuccess() {
-        startLoadingProject(this);
     }
 
     @Override

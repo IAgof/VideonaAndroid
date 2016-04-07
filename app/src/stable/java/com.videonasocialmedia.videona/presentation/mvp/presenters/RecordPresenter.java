@@ -90,13 +90,15 @@ public class RecordPresenter implements OnExportFinishedListener {
      */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private RemoveVideosUseCase removeVideosUseCase;
+    private boolean externalIntent;
 
     public RecordPresenter(Context context, RecordView recordView,
-                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
+                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences, boolean externalIntent) {
         this.recordView = recordView;
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
+        this.externalIntent = externalIntent;
 
         preferencesEditor = sharedPreferences.edit();
         exportProjectUseCase = new ExportProjectUseCase(this);
@@ -184,6 +186,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void onStart() {
         if (recorder.isReleased()) {
+            cameraPreview.releaseCamera();
             initRecorder(context, cameraPreview, sharedPreferences);
         }
     }
@@ -195,22 +198,22 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        showThumbAndNumber();
+        if(!externalIntent)
+         showThumbAndNumber();
         Log.d(LOG_TAG, "resume presenter");
     }
 
     private void showThumbAndNumber() {
         GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-        final List mediaInProject=getMediaListFromProjectUseCase.getMediaListFromProject();
-        if (mediaInProject!=null && mediaInProject.size()>0){
-            int lastItemIndex= mediaInProject.size()-1;
-            final Video lastItem= (Video)mediaInProject.get(lastItemIndex);
-            this.recordedVideosNumber=mediaInProject.size();
+        final List mediaInProject = getMediaListFromProjectUseCase.getMediaListFromProject();
+        if (mediaInProject != null && mediaInProject.size() > 0) {
+            int lastItemIndex = mediaInProject.size() - 1;
+            final Video lastItem = (Video) mediaInProject.get(lastItemIndex);
+            this.recordedVideosNumber = mediaInProject.size();
             recordView.showVideosRecordedNumber(recordedVideosNumber);
             recordView.showRecordedVideoThumb(lastItem.getMediaPath());
             recordView.enableShareButton();
-        }
-        else{
+        } else {
             recordView.hideRecordedVideoThumb();
             recordView.hideVideosRecordedNumber();
             recordView.disableShareButton();
@@ -220,9 +223,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onPause() {
         EventBus.getDefault().unregister(this);
         stopRecord();
-        recordView.stopChronometer();
-        recordView.hideChronometer();
-        recordView.showRecordButton();
         recorder.onHostActivityPaused();
         Log.d(LOG_TAG, "pause presenter");
     }
@@ -254,6 +254,13 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
+    public void onStop() {
+        //recorder.release();
+    }
+
+    public void onDestroy() {
+        //recorder.release();
+    }
 
     public void requestRecord() {
         if (!recorder.isRecording()) {
@@ -261,7 +268,7 @@ public class RecordPresenter implements OnExportFinishedListener {
                 try {
                     resetRecorder();
                 } catch (IOException ioe) {
-                    // TODO recordView.showError();
+                    //recordView.showError();
                 }
             } else {
                 startRecord();
@@ -308,7 +315,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void startExport() {
-
+        //editorView.showProgressDialog();
         //check VideoList is not empty, if true exportProjectUseCase
         List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
         if (videoList.size() > 0) {
@@ -317,6 +324,7 @@ public class RecordPresenter implements OnExportFinishedListener {
             recordView.hideProgressDialog();
             recordView.showMessage(R.string.add_videos_to_project);
         }
+        //exportProjectUseCase.export();
     }
 
     public void removeMasterVideos() {
@@ -339,7 +347,11 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onEventMainThread(MuxerFinishedEvent e) {
         recordView.stopChronometer();
         String finalPath = moveVideoToMastersFolder();
-        addVideoToProjectUseCase.addVideoToTrack(finalPath);
+        if (externalIntent) {
+            recordView.finishActivityForResult(finalPath);
+        } else {
+            addVideoToProjectUseCase.addVideoToTrack(finalPath);
+        }
     }
 
     private String moveVideoToMastersFolder() {
@@ -478,9 +490,13 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.showFlashOn(on);
     }
 
-    public Effect getSelectedShaderEffect() { return selectedShaderEffect; }
+    public Effect getSelectedShaderEffect() {
+        return selectedShaderEffect;
+    }
 
-    public Effect getSelectedOverlayEffect() { return selectedOverlayEffect; }
+    public Effect getSelectedOverlayEffect() {
+        return selectedOverlayEffect;
+    }
 
     public void removeEffect(Effect effect) {
         if (effect instanceof OverlayEffect) {
@@ -520,10 +536,26 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public List<Effect> getShaderEffectList() {
+
         return GetEffectListUseCase.getShaderEffectsList();
     }
 
     public List<Effect> getOverlayEffects() {
-        return GetEffectListUseCase.getOverlayEffectsList();
+
+        List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
+
+        if(sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
+            // Always gift in position 0
+            overlayList.remove(0);
+            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
+        }
+
+        return overlayList;
     }
+
+    public Effect getOverlayEffectGift() {
+
+        return GetEffectListUseCase.getOverlayEffectGift();
+    }
+
 }

@@ -32,8 +32,8 @@ import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelecti
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by jca on 14/5/15.
@@ -44,7 +44,7 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
     public static final int SELECTION_MODE_SINGLE = 0;
     public static final int SELECTION_MODE_MULTIPLE = 1;
 
-    @InjectView(R.id.catalog_recycler)
+    @Bind(R.id.catalog_recycler)
     RecyclerView recyclerView;
     protected TimeChangesHandler timeChangesHandler = new TimeChangesHandler();
     protected VideoGalleryAdapter videoGalleryAdapter;
@@ -79,7 +79,7 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.edit_fragment_catalog, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         if (videoGalleryPresenter == null)
             videoGalleryPresenter = new VideoGalleryPresenter(this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 6,
@@ -167,7 +167,7 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.reset(this);
+        ButterKnife.unbind(this);
         timeChangesHandler.removeCallbacksAndMessages(null);
     }
 

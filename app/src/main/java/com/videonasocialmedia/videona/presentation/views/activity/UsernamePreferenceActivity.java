@@ -15,11 +15,8 @@ public class UsernamePreferenceActivity extends EditTextPreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         presenter = new UsernamePreferencePresenter(this, sharedPreferences);
-
         toolbarTitle.setText(R.string.username);
-
     }
 
     @Override

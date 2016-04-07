@@ -25,8 +25,8 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelect
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * This class is used to show the camera effects gallery.
@@ -98,6 +98,7 @@ public class EffectAdapter
         return effects.get(position);
     }
 
+
     /**
      * Sets the listener of the recycler view
      *
@@ -160,11 +161,11 @@ public class EffectAdapter
 
         OnEffectSelectedListener onClickListener;
 
-        @InjectView(R.id.effectViewHolder)
+        @Bind(R.id.effectViewHolder)
         LinearLayout effect;
-        @InjectView(R.id.effectImage)
+        @Bind(R.id.effectImage)
         ImageView effectImage;
-        @InjectView(R.id.effectName)
+        @Bind(R.id.effectName)
         TextView effectName;
 
         /**
@@ -176,7 +177,7 @@ public class EffectAdapter
         public cameraEffectViewHolder(View itemView,
                                       OnEffectSelectedListener onClickListener) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             effect.setOnTouchListener(this);
             this.onClickListener = onClickListener;
         }
@@ -194,6 +195,9 @@ public class EffectAdapter
                     effectSelected = true;
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);
+                    if (effects.get(selectedPosition).getName() == "Gift") {
+
+                    }
                     onClickListener.onEffectSelected(effects.get(selectedPosition));
                 }
             }

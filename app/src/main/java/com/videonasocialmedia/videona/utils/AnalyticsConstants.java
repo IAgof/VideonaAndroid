@@ -38,6 +38,10 @@ public class AnalyticsConstants {
      */
     public final static String USER_TYPE_FREE = "free";
     public final static String USER_TYPE_BETA = "beta user";
+    public static final String LAST_GIFT_DOWNLOADED = "lastGiftDownloaded";
+    public static final String LAST_GIFT_DOWNLOADED_DATE = "lastGiftDownloadedDate";
+    public static final String TOTAL_GIFTS_DOWNLOADED = "totalGiftsDownloaded";
+    public static final String TOTAL_FILTERS_USED = "totalFiltersUsed";
 
     /**
      * Super properties
@@ -90,4 +94,6 @@ public class AnalyticsConstants {
     public static final String DESTINATION = "destination";
     public static final String SOURCE_APP_VIDEONA = "Videona";
     public static final String DESTINATION_KAMARADA_PLAY = "Kamarada Google Play";
+
+
 }

@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -22,17 +22,17 @@ import butterknife.OnClick;
  */
 public class VideonaDialog extends DialogFragment {
 
-    private OnVideonaDialogListener listener;
-    @InjectView(R.id.title)
+    @Bind(R.id.title)
     TextView title;
-    @InjectView(R.id.image)
+    @Bind(R.id.image)
     ImageView image;
-    @InjectView(R.id.message)
+    @Bind(R.id.message)
     TextView message;
-    @InjectView(R.id.positiveButton)
+    @Bind(R.id.positiveButton)
     Button positiveButton;
-    @InjectView(R.id.negativeButton)
+    @Bind(R.id.negativeButton)
     Button negativeButton;
+    private OnVideonaDialogListener listener;
     private int idDialog;
 
     public VideonaDialog() {}
@@ -62,7 +62,7 @@ public class VideonaDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_videona, null);
         builder.setView(v);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         String titleText = getArguments().getString("title");
         if(titleText == null)
@@ -94,40 +94,48 @@ public class VideonaDialog extends DialogFragment {
         return builder.create();
     }
 
-    public void setListener(OnVideonaDialogListener listener) { this.listener = listener; }
-
-    private void setTitle(String restTitle) { title.setText(restTitle); }
-
     private void hideTitle() {
         title.setVisibility(View.GONE);
     }
 
-    private void setImage(int resImage) { image.setImageResource(resImage); }
+    private void setTitle(String restTitle) {
+        title.setText(restTitle);
+    }
 
     private void hideImage() {
         image.setVisibility(View.GONE);
     }
 
-    private void setMessage(String resMessage) { message.setText(resMessage); }
+    private void setImage(int resImage) {
+        image.setImageResource(resImage);
+    }
 
     private void hideMessage() {
         message.setVisibility(View.GONE);
     }
 
-    private void setPositiveButton(String resPositive) {
-        positiveButton.setText(resPositive);
+    private void setMessage(String resMessage) {
+        message.setText(resMessage);
     }
 
     private void hidePositiveButton() {
         positiveButton.setVisibility(View.GONE);
     }
 
-    private void setNegativeButton(String resNegative) {
-        negativeButton.setText(resNegative);
+    private void setPositiveButton(String resPositive) {
+        positiveButton.setText(resPositive);
     }
 
     private void hideNegativeButton() {
         negativeButton.setVisibility(View.GONE);
+    }
+
+    private void setNegativeButton(String resNegative) {
+        negativeButton.setText(resNegative);
+    }
+
+    public void setListener(OnVideonaDialogListener listener) {
+        this.listener = listener;
     }
 
     @OnClick(R.id.positiveButton)

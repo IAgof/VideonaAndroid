@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="vertical">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
 
     <RelativeLayout
         android:id="@+id/joinBetaInfo"
@@ -17,26 +16,26 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="@string/joinBetaDialogTitle"
-            android:textSize="23sp"
-            android:textColor="@color/textColorTitle" />
+            android:textColor="@color/textColorTitle"
+            android:textSize="23sp"/>
 
         <View
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="2dp"
             android:layout_below="@+id/title"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="5dp"
             android:background="@color/colorSecondaryLight" />
 
         <LinearLayout
             android:id="@+id/content"
-            android:layout_below="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_below="@+id/line"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/image"
@@ -50,9 +49,9 @@
                 android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
                 android:gravity="center"
-                android:text="@string/joinBetaDialogMessage" />
+                android:text="@string/joinBetaDialogMessage"
+                android:textSize="16sp"/>
 
         </LinearLayout>
 
@@ -60,10 +59,10 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="15dp"
             android:gravity="center"
-            android:layout_below="@+id/content"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -103,27 +102,27 @@
                 android:id="@+id/negativeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="16sp"
-                android:text="@string/joinBetaDialogNegativeButton"
-                android:textAlignment="center"
                 android:layout_alignParentStart="true"
                 android:background="@color/colorTransparent"
+                android:padding="10dp"
+                android:text="@string/joinBetaDialogNegativeButton"
+                android:textAlignment="center"
+                android:textAllCaps="false"
                 android:textColor="@color/textColorTitle"
-                android:textAllCaps="false"/>
+                android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/positiveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:text="@string/joinBetaDialogPositiveButton"
                 android:layout_alignParentEnd="true"
                 android:background="@color/colorTransparent"
+                android:padding="10dp"
+                android:text="@string/joinBetaDialogPositiveButton"
+                android:textAlignment="center"
+                android:textAllCaps="false"
                 android:textColor="@color/textColorTitle"
-                android:textAllCaps="false"/>
+                android:textSize="16sp"/>
 
         </RelativeLayout>
 

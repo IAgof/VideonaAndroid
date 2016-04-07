@@ -13,8 +13,8 @@ package com.videonasocialmedia.videona.domain.editor;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.preview.UpdateSeekBarDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
-import com.videonasocialmedia.videona.eventbus.events.video.VideoAddedToTrackEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
+import com.videonasocialmedia.videona.eventbus.events.video.VideoAddedToTrackEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideoInsertedErrorEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideoInsertedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -46,6 +46,19 @@ public class AddVideoToProjectUseCase {
         addVideoToTrack(videoToAdd);
     }
 
+    public void addVideoToTrack(Video video) {
+        try {
+            MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
+            mediaTrack.insertItem(video);
+            EventBus.getDefault().post(new AddMediaItemToTrackSuccessEvent(video));
+            EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
+            EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
+            EventBus.getDefault().post(new VideoAddedToTrackEvent());
+        } catch (IllegalItemOnTrack illegalItemOnTrack) {
+            //TODO manejar error
+        }
+    }
+
     /**
      * @param videoPath
      * @param listener
@@ -71,19 +84,6 @@ public class AddVideoToProjectUseCase {
             EventBus.getDefault().post(new VideoAddedToTrackEvent());
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             listener.onAddMediaItemToTrackError();
-        }
-    }
-
-    public void addVideoToTrack(Video video) {
-        try {
-            MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
-            mediaTrack.insertItem(video);
-            EventBus.getDefault().post(new AddMediaItemToTrackSuccessEvent(video));
-            EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
-            EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
-            EventBus.getDefault().post(new VideoAddedToTrackEvent());
-        } catch (IllegalItemOnTrack illegalItemOnTrack) {
-            //TODO manejar error
         }
     }
 

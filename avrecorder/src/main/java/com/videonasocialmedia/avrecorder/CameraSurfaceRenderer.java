@@ -16,7 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * @hide
  */
-public class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
+class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "CameraSurfaceRenderer";
     private static final boolean VERBOSE = false;
     private final float[] mSTMatrix = new float[16];
@@ -40,21 +40,6 @@ public class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
     private List<Overlay> overlayList;
     private Watermark watermark;
 
-    public CameraSurfaceRenderer() {
-
-        mCameraTextureId = -1;
-        mFrameCount = -1;
-
-//        mIncomingWidth = config.getVideoWidth();
-//        mIncomingHeight = config.getVideoHeight();
-        mIncomingSizeUpdated = true;        // Force texture size update on next onDrawFrame
-
-        mCurrentFilter = -1;
-        mNewFilter = Filters.FILTER_NONE;
-
-        mRecordingEnabled = false;
-    }
-
     /**
      * Constructs CameraSurfaceRenderer.
      * <p/>
@@ -76,17 +61,6 @@ public class CameraSurfaceRenderer implements GLSurfaceView.Renderer {
         mNewFilter = Filters.FILTER_NONE;
 
         mRecordingEnabled = false;
-    }
-
-    public void setEncoder(CameraEncoder recorder) {
-        mCameraEncoder = recorder;
-        SessionConfig config = recorder.getConfig();
-        mIncomingWidth = config.getVideoWidth();
-        mIncomingHeight = config.getVideoHeight();
-        if(mCameraTextureId != -1) {
-            mCameraEncoder.onSurfaceCreated(mCameraTextureId);
-//            mFrameCount = 0;
-        }
     }
 
     public void setOverlayList(List<Overlay> overlayList) {

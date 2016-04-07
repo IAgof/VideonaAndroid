@@ -1,5 +1,6 @@
 package com.videonasocialmedia.videona.presentation.views.adapter;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,8 @@ import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.Optional;
 
 /**
  * Created by jca on 14/12/15.
@@ -67,18 +67,18 @@ public class SocialNetworkAdapter extends RecyclerView.Adapter<SocialNetworkAdap
 
     class SocialNetworkViewHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.icon)
+        @Bind(R.id.icon)
         ImageView icon;
-        @Optional
-        @InjectView(R.id.name)
+        @Nullable
+        @Bind(R.id.name)
         TextView name;
-        @Optional
-        @InjectView(R.id.checkbox)
+        @Nullable
+        @Bind(R.id.checkbox)
         CheckBox checkBox;
 
         public SocialNetworkViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

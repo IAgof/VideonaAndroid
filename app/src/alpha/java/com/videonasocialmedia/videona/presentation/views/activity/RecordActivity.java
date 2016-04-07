@@ -17,9 +17,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +51,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresente
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
@@ -57,11 +60,15 @@ import com.videonasocialmedia.videona.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
@@ -77,43 +84,43 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     private final String LOG_TAG = getClass().getSimpleName();
 
-    @InjectView(R.id.activity_record_drawer_layout)
+    @Bind(R.id.activity_record_drawer_layout)
     DrawerLayout drawerLayout;
-    @InjectView(R.id.activity_record_navigation_drawer)
+    @Bind(R.id.activity_record_navigation_drawer)
     View navigatorView;
-    @InjectView(R.id.button_record)
+    @Bind(R.id.button_record)
     ImageButton recButton;
-    @InjectView(R.id.button_share)
+    @Bind(R.id.button_share)
     ImageButton shareButton;
-    @InjectView(R.id.cameraPreview)
+    @Bind(R.id.cameraPreview)
     GLCameraEncoderView cameraView;
-    @InjectView(R.id.button_change_camera)
+    @Bind(R.id.button_change_camera)
     ImageButton rotateCameraButton;
-    @InjectView(R.id.button_navigate_edit)
+    @Bind(R.id.button_navigate_edit)
     CircleImageView buttonThumbClipRecorded;
-    @InjectView(R.id.record_catalog_recycler_shader_effects)
+    @Bind(R.id.record_catalog_recycler_shader_effects)
     RecyclerView shaderEffectsRecycler;
-    @InjectView(R.id.record_catalog_recycler_overlay_effects)
+    @Bind(R.id.record_catalog_recycler_overlay_effects)
     RecyclerView overlayFilterRecycler;
-    @InjectView(R.id.imageRecPoint)
+    @Bind(R.id.imageRecPoint)
     ImageView recordingIndicator;
-    @InjectView(R.id.chronometer_record)
+    @Bind(R.id.chronometer_record)
     Chronometer chronometer;
-    @InjectView(R.id.button_toggle_flash)
+    @Bind(R.id.button_toggle_flash)
     ImageButton flashButton;
-    @InjectView(R.id.button_camera_effect_shader)
+    @Bind(R.id.button_camera_effect_shader)
     ImageButton buttonCameraEffectShader;
-    @InjectView(R.id.button_camera_effect_overlay)
+    @Bind(R.id.button_camera_effect_overlay)
     ImageButton buttonCameraEffectOverlay;
-    @InjectView(R.id.button_navigate_drawer)
+    @Bind(R.id.button_navigate_drawer)
     ImageButton drawerButton;
-    @InjectView(R.id.text_view_num_videos)
+    @Bind(R.id.text_view_num_videos)
     TextView numVideosRecorded;
-    @InjectView(R.id.rotateDeviceHint)
+    @Bind(R.id.rotateDeviceHint)
     ImageView rotateDeviceHint;
-    @InjectView(R.id.drawer_full_background)
+    @Bind(R.id.drawer_full_background)
     ImageView drawerBackground;
-    @InjectView(R.id.button_remove_filters)
+    @Bind(R.id.button_remove_filters)
     ImageButton removeFilters;
 
     private RecordPresenter recordPresenter;
@@ -127,22 +134,34 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean recording;
     private OrientationHelper orientationHelper;
     private AlertDialog progressDialog;
-
     private boolean mUseImmersiveMode = true;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+    /**
+     * if for result
+     **/
+    private String resultVideoPath;
+    private boolean externalIntent = false;
+
+    // TODO define Effects ID
+    private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OV";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         drawerLayout.setDrawerListener(this);
+
+        checkAction();
 
         cameraView.setKeepScreenOn(true);
         sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
-        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences);
+        editor = sharedPreferences.edit();
+        recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences, externalIntent);
 
         initEffectsRecycler();
         configChronometer();
@@ -155,22 +174,18 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         numVideosRecorded.setVisibility(View.GONE);
     }
 
-    private void initOrientationHelper() {
-        orientationHelper = new OrientationHelper(this);
-    }
-
-    private void configThumbsView() {
-        buttonThumbClipRecorded.setBorderWidth(5);
-        buttonThumbClipRecorded.setBorderColorResource(R.color.textColorNumVideos);
-        numVideosRecorded.setVisibility(View.GONE);
-    }
-
-    private void createProgressDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
-        progressDialog = builder.setCancelable(false)
-                .setView(dialogView)
-                .create();
+    private void checkAction() {
+        if (getIntent().getAction() != null) {
+            if (getIntent().getAction().equals(MediaStore.ACTION_VIDEO_CAPTURE)) {
+                if (getIntent().getClipData() != null) {
+                    resultVideoPath = getIntent().getClipData().getItemAt(0).getUri().toString();
+                    if (resultVideoPath.startsWith("file://"))
+                        resultVideoPath = resultVideoPath.replace("file://", "");
+                }
+                externalIntent = true;
+                drawerButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initEffectsRecycler() {
@@ -194,9 +209,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             public void onChronometerTick(Chronometer chronometer) {
                 long elapsedTime = SystemClock.elapsedRealtime() - chronometer.getBase();
 
-                int h = (int) (elapsedTime / 3600000);
-                int m = (int) (elapsedTime - h * 3600000) / 60000;
-                int s = (int) (elapsedTime - h * 3600000 - m * 60000) / 1000;
+                int h = (int) ( elapsedTime / 3600000 );
+                int m = (int) ( elapsedTime - h * 3600000 ) / 60000;
+                int s = (int) ( elapsedTime - h * 3600000 - m * 60000 ) / 1000;
                 // String hh = h < 10 ? "0"+h: h+"";
                 String mm = m < 10 ? "0" + m : m + "";
                 String ss = s < 10 ? "0" + s : s + "";
@@ -206,10 +221,35 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         });
     }
 
+    private void initOrientationHelper() {
+        orientationHelper = new OrientationHelper(this);
+    }
+
+    private void configThumbsView() {
+        buttonThumbClipRecorded.setBorderWidth(5);
+        buttonThumbClipRecorded.setBorderColorResource(R.color.textColorNumVideos);
+        numVideosRecorded.setVisibility(View.GONE);
+    }
+
+    private void createProgressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
+        progressDialog = builder.setCancelable(false)
+                .setView(dialogView)
+                .create();
+    }
+
     @Override
-    protected void onStart() {
-        super.onStart();
-        recordPresenter.onStart();
+    protected void onDestroy() {
+        super.onDestroy();
+        recordPresenter.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        recordPresenter.onPause();
+        orientationHelper.stopMonitoringOrientation();
     }
 
     @Override
@@ -221,23 +261,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        recordPresenter.onPause();
-        orientationHelper.stopMonitoringOrientation();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        recordPresenter.onStop();
-        finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        recordPresenter.onDestroy();
+    protected void onStart() {
+        super.onStart();
+        recordPresenter.onStart();
     }
 
     private void hideSystemUi() {
@@ -245,15 +271,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else if (mUseImmersiveMode) {
-            setKitKatWindowFlags();
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
             setKitKatWindowFlags();
         }
     }
@@ -268,6 +285,21 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        recordPresenter.onStop();
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (Utils.isKitKat() && hasFocus && mUseImmersiveMode) {
+            setKitKatWindowFlags();
+        }
     }
 
     @OnTouch(R.id.button_record) boolean onTouch(MotionEvent event) {
@@ -295,6 +327,37 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                     overlayEffect.getIdentifier().toLowerCase());
     }
 
+    private void sendFilterSelectedTracking(String type, String name, String code) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        List<String> effectsCombinedList = getEffectsCombinedList();
+        boolean combined = false;
+        if (effectsCombinedList.size() > 1)
+            combined = true;
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_FILTERS_USED, 1);
+    }
+
+    private List<String> getEffectsCombinedList() {
+        List<String> effects = new ArrayList<>();
+        Effect effect1 = recordPresenter.getSelectedShaderEffect();
+        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
+        if (effect1 != null)
+            effects.add(effect1.getName().toLowerCase());
+        if (effect2 != null)
+            effects.add(effect2.getName().toLowerCase());
+        return effects;
+    }
+
     @Override
     public void showRecordButton() {
         recButton.setImageResource(R.drawable.activity_record_icon_rec_normal);
@@ -310,6 +373,48 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recButton.setAlpha(1f);
         recording = true;
         lockNavigator();
+    }
+
+    @Override
+    public void showMenuOptions() {
+        navigatorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideMenuOptions() {
+        navigatorView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showChronometer() {
+        chronometer.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideChronometer() {
+        chronometer.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void hideRecordedVideoThumb() {
+        buttonThumbClipRecorded.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showRecordedVideoThumb(String path) {
+        buttonThumbClipRecorded.setVisibility(View.VISIBLE);
+        Glide.with(this).load(path).into(buttonThumbClipRecorded);
+    }
+
+    @Override
+    public void showVideosRecordedNumber(int numberOfVideos) {
+        numVideosRecorded.setVisibility(View.VISIBLE);
+        numVideosRecorded.setText(String.valueOf(numberOfVideos));
+    }
+
+    @Override
+    public void hideVideosRecordedNumber() {
+        numVideosRecorded.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -341,112 +446,11 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recordingIndicator.setVisibility(View.INVISIBLE);
     }
 
-    @OnClick(R.id.button_camera_effect_shader)
-    public void onShaderButtonClicked() {
-        if (!overlayFilterHidden) {
-            hideOverlayFilters();
-        }
-        if (!shaderFilterHidden) {
-            hideShaderFilters();
-            hideRemoveFilters();
-        } else {
-            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
-                    AnalyticsConstants.FILTER_GROUP_SHADER);
-            showCameraEffectShader(null);
-            if(removeFilterActivated){
-                showRemoveFilters();
-            }
-        }
-    }
-
-    private void hideOverlayFilters() {
-        int height = calculateTranslation(overlayFilterRecycler);
-        runTranslateAnimation(overlayFilterRecycler, height, new DecelerateInterpolator(3));
-        overlayFilterHidden = true;
-        buttonCameraEffectOverlay.setActivated(false);
-    }
-
-    private void hideEffectsRecyclerView(View view) {
-        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
-    }
-
-    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
-        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
-        slideInAnimation.setDuration(view.getContext().getResources()
-                .getInteger(android.R.integer.config_mediumAnimTime));
-        slideInAnimation.setInterpolator(interpolator);
-        slideInAnimation.start();
-    }
-
-    private void hideShaderFilters() {
-        hideEffectsRecyclerView(shaderEffectsRecycler);
-        shaderFilterHidden = true;
-        buttonCameraEffectShader.setActivated(false);
-    }
-
-    private void hideRemoveView(View view) {
-        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
-    }
-
-    private void showRemoveView(View view) {
-        int height = calculateTranslation(view);
-        int translateY = -height;;
-        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
-    }
-
-    private void hideRemoveFilters(){
-
-        hideRemoveView(removeFilters);
-    }
-
-    private void showRemoveFilters() {
-
-        showRemoveView(removeFilters);
-    }
-
     @Override
     public void showCameraEffectShader(List<Effect> effects) {
         showEffectsRecylerView(shaderEffectsRecycler);
         shaderFilterHidden = false;
         buttonCameraEffectShader.setActivated(true);
-    }
-
-    private void showEffectsRecylerView(View view) {
-        int height = calculateTranslation(view);
-        int translateY = -height;
-        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
-    }
-
-    /**
-     * Takes height + margins
-     *
-     * @param view View to translate
-     * @return translation in pixels
-     */
-    private int calculateTranslation(View view) {
-        int height = view.getHeight();
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        //int margins = params.topMargin + params.bottomMargin;
-        int margins = 0;
-        return height + margins;
-    }
-
-    @OnClick(R.id.button_camera_effect_overlay)
-    public void onOverlayFiltersButtonClicked() {
-        if (!shaderFilterHidden) {
-            hideShaderFilters();
-        }
-        if (!overlayFilterHidden) {
-            hideOverlayFilters();
-            hideRemoveFilters();
-        } else {
-            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
-                    AnalyticsConstants.FILTER_GROUP_OVERLAY);
-            showCameraEffectOverlay(null);
-            if(removeFilterActivated){
-                showRemoveFilters();
-            }
-        }
     }
 
     @Override
@@ -456,46 +460,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         buttonCameraEffectOverlay.setActivated(true);
     }
 
-
-    @OnClick(R.id.button_remove_filters)
-    public void onRemoveFiltersButtonClicked(){
-        trackUserInteracted(AnalyticsConstants.CLEAR_FILTER, null);
-        Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
-        Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
-
-        onEffectSelectionCancel(effectOverlay);
-        onEffectSelectionCancel(effectShader);
-
-        // Reset background filter accent
-        cameraShaderEffectsAdapter.resetSelectedEffect();
-        cameraOverlayEffectsAdapter.resetSelectedEffect();
-
-        // Hide filters
-        if (!overlayFilterHidden) {
-            hideOverlayFilters();
-        }
-        if (!shaderFilterHidden) {
-            hideShaderFilters();
-        }
-
-        hideRemoveFilters();
-
-        removeFilterActivated = false;
-
-    }
-
     @Override
     public void lockScreenRotation() {
         orientationHelper.stopMonitoringOrientation();
-    }
-
-    @Override
-    public void reStartScreenRotation() {
-        try {
-            orientationHelper.startMonitoringOrientation();
-        } catch (OrientationHelper.NoOrientationSupportException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -508,20 +475,23 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         }
     }
 
+    @Override
+    public void reStartScreenRotation() {
+        try {
+            orientationHelper.startMonitoringOrientation();
+        } catch (OrientationHelper.NoOrientationSupportException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void lockNavigator() {
         drawerButton.setVisibility(View.INVISIBLE);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-
     public void unLockNavigator() {
         drawerButton.setVisibility(View.VISIBLE);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
-
-    @OnClick(R.id.button_toggle_flash)
-    public void toggleFlash() {
-        recordPresenter.toggleFlash();
     }
 
     @Override
@@ -578,20 +548,233 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    public void showRecordedVideoThumb(String path) {
-        buttonThumbClipRecorded.setVisibility(View.VISIBLE);
-        Glide.with(this).load(path).into(buttonThumbClipRecorded);
+    public void goToShare(String videoToSharePath) {
+        trackVideoExported();
+        saveVideoFeaturesToConfig();
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        startActivity(intent);
     }
 
     @Override
-    public void showVideosRecordedNumber(int numberOfVideos) {
-        numVideosRecorded.setVisibility(View.VISIBLE);
-        numVideosRecorded.setText(String.valueOf(numberOfVideos));
+    public void showProgressDialog() {
+        progressDialog.show();
     }
 
     @Override
-    public void hideVideosRecordedNumber() {
-        numVideosRecorded.setVisibility(View.INVISIBLE);
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    @Override
+    public void showMessage(final int message) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void enableShareButton() {
+        shareButton.setAlpha(1f);
+        shareButton.setClickable(true);
+    }
+
+    @Override
+    public void disableShareButton() {
+        shareButton.setAlpha(0.25f);
+        shareButton.setClickable(false);
+    }
+
+    @Override
+    public void finishActivityForResult(String originalVideoPath) {
+        try {
+            if (resultVideoPath != null) {
+                Utils.copyFile(originalVideoPath, resultVideoPath);
+                Utils.removeVideo(originalVideoPath);
+            } else
+                resultVideoPath = originalVideoPath;
+            Uri videoUri = Uri.fromFile(new File(resultVideoPath));
+            Intent returnIntent = new Intent();
+            returnIntent.setData(videoUri);
+            setResult(RESULT_OK, returnIntent);
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void trackVideoExported() {
+        JSONObject videoExportedProperties = new JSONObject();
+        try {
+            int projectDuration = recordPresenter.getProjectDuration();
+            int numVideosOnProject = recordPresenter.getNumVideosOnProject();
+            videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH, projectDuration);
+            videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
+                    recordPresenter.getResolution());
+            videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numVideosOnProject);
+            mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
+            Log.d("ANALYTICS", "Tracked video exported event");
+        } catch (JSONException e) {
+            Log.e("TRACK_FAILED", String.valueOf(e));
+        }
+    }
+
+    private void saveVideoFeaturesToConfig() {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, recordPresenter.getProjectDuration());
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, recordPresenter.getNumVideosOnProject());
+        preferencesEditor.putString(ConfigPreferences.RESOLUTION, recordPresenter.getResolution());
+        preferencesEditor.commit();
+    }
+
+    private void trackUserInteracted(String interaction, String result) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
+            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
+            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
+            Log.d("ANALYTICS", "Tracked User Interacted event");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnClick(R.id.button_camera_effect_shader)
+    public void onShaderButtonClicked() {
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
+        }
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+            hideRemoveFilters();
+        } else {
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
+                    AnalyticsConstants.FILTER_GROUP_SHADER);
+            showCameraEffectShader(null);
+            if (removeFilterActivated) {
+                showRemoveFilters();
+            }
+        }
+    }
+
+    private void hideOverlayFilters() {
+        int height = calculateTranslation(overlayFilterRecycler);
+        runTranslateAnimation(overlayFilterRecycler, height, new DecelerateInterpolator(3));
+        overlayFilterHidden = true;
+        buttonCameraEffectOverlay.setActivated(false);
+    }
+
+    private void hideShaderFilters() {
+        hideEffectsRecyclerView(shaderEffectsRecycler);
+        shaderFilterHidden = true;
+        buttonCameraEffectShader.setActivated(false);
+    }
+
+    private void hideRemoveFilters() {
+
+        hideRemoveView(removeFilters);
+    }
+
+    private void showRemoveFilters() {
+
+        showRemoveView(removeFilters);
+    }
+
+    /**
+     * Takes height + margins
+     *
+     * @param view View to translate
+     * @return translation in pixels
+     */
+    private int calculateTranslation(View view) {
+        int height = view.getHeight();
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        //int margins = params.topMargin + params.bottomMargin;
+        int margins = 0;
+        return height + margins;
+    }
+
+    private void runTranslateAnimation(View view, int translateY, Interpolator interpolator) {
+        Animator slideInAnimation = ObjectAnimator.ofFloat(view, "translationY", translateY);
+        slideInAnimation.setDuration(view.getContext().getResources()
+                .getInteger(android.R.integer.config_mediumAnimTime));
+        slideInAnimation.setInterpolator(interpolator);
+        slideInAnimation.start();
+    }
+
+    private void hideEffectsRecyclerView(View view) {
+        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
+    }
+
+    private void hideRemoveView(View view) {
+        runTranslateAnimation(view, -Math.round(view.getTranslationY()), new DecelerateInterpolator(3));
+    }
+
+    private void showEffectsRecylerView(View view) {
+        int height = calculateTranslation(view);
+        int translateY = -height;
+        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
+    }
+
+    private void showRemoveView(View view) {
+        int height = calculateTranslation(view);
+        int translateY = -height;
+        runTranslateAnimation(view, translateY, new AccelerateInterpolator(3));
+    }
+
+    @OnClick(R.id.button_camera_effect_overlay)
+    public void onOverlayFiltersButtonClicked() {
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+        }
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
+            hideRemoveFilters();
+        } else {
+            trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
+                    AnalyticsConstants.FILTER_GROUP_OVERLAY);
+            showCameraEffectOverlay(null);
+            if (removeFilterActivated) {
+                showRemoveFilters();
+            }
+        }
+    }
+
+    @OnClick(R.id.button_remove_filters)
+    public void onRemoveFiltersButtonClicked() {
+        trackUserInteracted(AnalyticsConstants.CLEAR_FILTER, null);
+        Effect effectOverlay = cameraOverlayEffectsAdapter.getEffect(cameraOverlayEffectsAdapter.getSelectionPosition());
+        Effect effectShader = cameraShaderEffectsAdapter.getEffect(cameraShaderEffectsAdapter.getSelectionPosition());
+
+        onEffectSelectionCancel(effectOverlay);
+        onEffectSelectionCancel(effectShader);
+
+        // Reset background filter accent
+        cameraShaderEffectsAdapter.resetSelectedEffect();
+        cameraOverlayEffectsAdapter.resetSelectedEffect();
+
+        // Hide filters
+        if (!overlayFilterHidden) {
+            hideOverlayFilters();
+        }
+        if (!shaderFilterHidden) {
+            hideShaderFilters();
+        }
+
+        hideRemoveFilters();
+
+        removeFilterActivated = false;
+
+    }
+
+    @OnClick(R.id.button_toggle_flash)
+    public void toggleFlash() {
+        recordPresenter.toggleFlash();
     }
 
     @Override
@@ -612,7 +795,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                     Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @OnClick(R.id.button_change_camera)
     public void changeCamera() {
@@ -648,108 +830,12 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         t.start();
     }
 
-    @Override
-    public void showProgressDialog() {
-        progressDialog.show();
-    }
-
-    @Override
-    public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing())
-            progressDialog.dismiss();
-    }
-
-    @Override
-    public void showMessage(final int message) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void trackVideoExported() {
-        JSONObject videoExportedProperties = new JSONObject();
-        try {
-            int projectDuration = recordPresenter.getProjectDuration();
-            int numVideosOnProject = recordPresenter.getNumVideosOnProject();
-            videoExportedProperties.put(AnalyticsConstants.VIDEO_LENGTH, projectDuration);
-            videoExportedProperties.put(AnalyticsConstants.RESOLUTION,
-                    recordPresenter.getResolution());
-            videoExportedProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numVideosOnProject);
-            mixpanel.track(AnalyticsConstants.VIDEO_EXPORTED, videoExportedProperties);
-            Log.d("ANALYTICS", "Tracked video exported event");
-        } catch (JSONException e) {
-            Log.e("TRACK_FAILED", String.valueOf(e));
-        }
-    }
-
-    private void saveVideoFeaturesToConfig() {
-        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
-        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, recordPresenter.getProjectDuration());
-        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, recordPresenter.getNumVideosOnProject());
-        preferencesEditor.putString(ConfigPreferences.RESOLUTION, recordPresenter.getResolution());
-        preferencesEditor.commit();
-    }
-
-
-    @Override
-    public void goToShare(String videoToSharePath) {
-        trackVideoExported();
-        saveVideoFeaturesToConfig();
-        Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.putExtra("VIDEO_EDITED", videoToSharePath);
-        startActivity(intent);
-    }
-
-    @Override
-    public void showMenuOptions() {
-        navigatorView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideMenuOptions() {
-        navigatorView.setVisibility(View.INVISIBLE);
-    }
-
-
-    @Override
-    public void showChronometer() {
-        chronometer.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideChronometer() {
-        chronometer.setVisibility(View.INVISIBLE);
-    }
-
-
-    @Override
-    public void hideRecordedVideoThumb() {
-        buttonThumbClipRecorded.setVisibility(View.INVISIBLE);
-    }
-
-
     @OnClick(R.id.button_navigate_drawer)
     public void showDrawer() {
         if (!recording) {
             trackUserInteracted(AnalyticsConstants.INTERACTION_OPEN_DRAWER, null);
             drawerLayout.openDrawer(navigatorView);
             drawerBackground.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void trackUserInteracted(String interaction, String result) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.ACTIVITY, getClass().getSimpleName());
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.INTERACTION, interaction);
-            userInteractionsProperties.put(AnalyticsConstants.RESULT, result);
-            mixpanel.track(AnalyticsConstants.USER_INTERACTED, userInteractionsProperties);
-            Log.d("ANALYTICS", "Tracked User Interacted event");
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
@@ -776,52 +862,75 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onEffectSelected(Effect effect) {
+
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase());
+
+        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
+                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
+            // Reset effect to remove selected background
+            cameraOverlayEffectsAdapter.resetSelectedEffect();
+            trackGiftOpened(recordPresenter.getOverlayEffectGift());
+            showGiftFilterToast();
+            return;
+
+        }
+
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase());
+
     }
 
-    private void sendFilterSelectedTracking(String type, String name, String code) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        List<String> effectsCombinedList = getEffectsCombinedList();
-        boolean combined = false;
-        if(effectsCombinedList.size() > 1)
-            combined = true;
+    private void trackGiftOpened(Effect overlayEffectGift) {
+
+        JSONObject giftDetails = new JSONObject();
+
+        int giftsDownloadedCount;
         try {
-            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
-            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
-            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
-            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
-            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+            giftsDownloadedCount = mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED);
         } catch (JSONException e) {
-            e.printStackTrace();
+            giftsDownloadedCount = 0;
         }
+        try {
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            String giftResourceName = overlayEffectGift.getType() + " - " + overlayEffectGift.getName() + " " + overlayEffectGift.getIdentifier();
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED, giftResourceName);
+            mixpanel.getPeople().set(giftDetails);
+            giftDetails.put(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, ++giftsDownloadedCount);
+            mixpanel.registerSuperProperties(giftDetails);
+        } catch (JSONException e) {
+            Log.e("ANALYTICS", "Error sending created super property");
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, 1);
+
+
     }
 
-    private List<String> getEffectsCombinedList() {
-        List<String> effects = new ArrayList<>();
-        Effect effect1 = recordPresenter.getSelectedShaderEffect();
-        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
-        if(effect1 != null)
-            effects.add(effect1.getName().toLowerCase());
-        if(effect2 != null)
-            effects.add(effect2.getName().toLowerCase());
-        return effects;
-    }
+    private void showGiftFilterToast() {
 
-    @Override
-    public void onEffectSelectionCancel(Effect effect) {
-        recordPresenter.removeEffect(effect);
-        if(!cameraOverlayEffectsAdapter.isEffectSelected() &&
-                !cameraShaderEffectsAdapter.isEffectSelected()){
-            hideRemoveFilters();
-        }
+        // Create and show toast
+        VideonaToast toast = new VideonaToast.Builder(getApplicationContext())
+                .withTitle(R.string.giftOverlayDialogTitle)
+                .withMessage(R.string.giftOverlayDialogMessage)
+                .withDrawableImage(R.drawable.common_filter_overlay_gift_open)
+                .withDuration(Toast.LENGTH_LONG)
+                .build();
+
+        // Save user preferences
+        editor.putBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, true);
+        editor.commit();
+
+        // Uptade overlay effect adapter
+        cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
+        overlayFilterRecycler.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        overlayFilterRecycler.setAdapter(cameraOverlayEffectsAdapter);
+
+
     }
 
     private void scrollEffectList(Effect effect) {
@@ -839,15 +948,12 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    public void enableShareButton() {
-        shareButton.setAlpha(1f);
-        shareButton.setClickable(true);
-    }
-
-    @Override
-    public void disableShareButton() {
-        shareButton.setAlpha(0.25f);
-        shareButton.setClickable(false);
+    public void onEffectSelectionCancel(Effect effect) {
+        recordPresenter.removeEffect(effect);
+        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()) {
+            hideRemoveFilters();
+        }
     }
 
     private class OrientationHelper extends OrientationEventListener {
@@ -883,21 +989,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             }
         }
 
-        public void stopMonitoringOrientation() {
-            this.disable();
-        }
-
-        public void reStartMonitoringOrientation() throws NoOrientationSupportException {
-            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
-            if (rotationView == Surface.ROTATION_90) {
-                isNormalOrientation = true;
-                orientationHaveChanged = false;
-            } else {
-                isNormalOrientation = false;
-            }
-            determineOrientation(rotationView);
-        }
-
         private void determineOrientation(int rotationView) {
             Log.d(LOG_TAG, " determineOrientation" + " rotationView " + rotationView);
             int rotation = -1;
@@ -912,6 +1003,21 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             }
             Log.d(LOG_TAG, "determineOrientation rotationPreview " + rotation +
                     " cameraInfoOrientation ");
+        }
+
+        public void stopMonitoringOrientation() {
+            this.disable();
+        }
+
+        public void reStartMonitoringOrientation() throws NoOrientationSupportException {
+            rotationView = ((Activity) context).getWindowManager().getDefaultDisplay().getRotation();
+            if (rotationView == Surface.ROTATION_90) {
+                isNormalOrientation = true;
+                orientationHaveChanged = false;
+            } else {
+                isNormalOrientation = false;
+            }
+            determineOrientation(rotationView);
         }
 
         @Override
