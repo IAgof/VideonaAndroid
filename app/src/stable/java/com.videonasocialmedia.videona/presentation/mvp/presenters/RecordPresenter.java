@@ -255,7 +255,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void onStop() {
-        recorder.release();
+        //recorder.release();
     }
 
     public void onDestroy() {
@@ -536,10 +536,26 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public List<Effect> getShaderEffectList() {
+
         return GetEffectListUseCase.getShaderEffectsList();
     }
 
     public List<Effect> getOverlayEffects() {
-        return GetEffectListUseCase.getOverlayEffectsList();
+
+        List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
+
+        if(sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
+            // Always gift in position 0
+            overlayList.remove(0);
+            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
+        }
+
+        return overlayList;
     }
+
+    public Effect getOverlayEffectGift() {
+
+        return GetEffectListUseCase.getOverlayEffectGift();
+    }
+
 }

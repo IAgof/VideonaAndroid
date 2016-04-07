@@ -51,6 +51,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresente
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
@@ -61,7 +62,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -133,12 +136,16 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private AlertDialog progressDialog;
     private boolean mUseImmersiveMode = true;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     /**
      * if for result
      **/
     private String resultVideoPath;
     private boolean externalIntent = false;
+
+    // TODO define Effects ID
+    private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OV";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +160,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         recordPresenter = new RecordPresenter(this, this, cameraView, sharedPreferences, externalIntent);
 
         initEffectsRecycler();
@@ -232,15 +240,16 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        recordPresenter.onStart();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         recordPresenter.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        recordPresenter.onPause();
+        orientationHelper.stopMonitoringOrientation();
     }
 
     @Override
@@ -252,10 +261,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        recordPresenter.onPause();
-        orientationHelper.stopMonitoringOrientation();
+    protected void onStart() {
+        super.onStart();
+        recordPresenter.onStart();
     }
 
     private void hideSystemUi() {
@@ -283,7 +291,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     protected void onStop() {
         super.onStop();
         recordPresenter.onStop();
-        finish();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -337,6 +344,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_FILTERS_USED, 1);
     }
 
     private List<String> getEffectsCombinedList() {
@@ -854,22 +862,75 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onEffectSelected(Effect effect) {
+
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase());
+
+        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
+                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
+            // Reset effect to remove selected background
+            cameraOverlayEffectsAdapter.resetSelectedEffect();
+            trackGiftOpened(recordPresenter.getOverlayEffectGift());
+            showGiftFilterToast();
+            return;
+
+        }
+
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase());
+
     }
 
-    @Override
-    public void onEffectSelectionCancel(Effect effect) {
-        recordPresenter.removeEffect(effect);
-        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
-                !cameraShaderEffectsAdapter.isEffectSelected()) {
-            hideRemoveFilters();
+    private void trackGiftOpened(Effect overlayEffectGift) {
+
+        JSONObject giftDetails = new JSONObject();
+
+        int giftsDownloadedCount;
+        try {
+            giftsDownloadedCount = mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED);
+        } catch (JSONException e) {
+            giftsDownloadedCount = 0;
         }
+        try {
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            String giftResourceName = overlayEffectGift.getType() + " - " + overlayEffectGift.getName() + " " + overlayEffectGift.getIdentifier();
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED, giftResourceName);
+            mixpanel.getPeople().set(giftDetails);
+            giftDetails.put(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, ++giftsDownloadedCount);
+            mixpanel.registerSuperProperties(giftDetails);
+        } catch (JSONException e) {
+            Log.e("ANALYTICS", "Error sending created super property");
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, 1);
+
+
+    }
+
+    private void showGiftFilterToast() {
+
+        // Create and show toast
+        VideonaToast toast = new VideonaToast.Builder(getApplicationContext())
+                .withTitle(R.string.giftOverlayDialogTitle)
+                .withMessage(R.string.giftOverlayDialogMessage)
+                .withDrawableImage(R.drawable.common_filter_overlay_gift_open)
+                .withDuration(Toast.LENGTH_LONG)
+                .build();
+
+        // Save user preferences
+        editor.putBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, true);
+        editor.commit();
+
+        // Uptade overlay effect adapter
+        cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
+        overlayFilterRecycler.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        overlayFilterRecycler.setAdapter(cameraOverlayEffectsAdapter);
+
+
     }
 
     private void scrollEffectList(Effect effect) {
@@ -883,6 +944,15 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             int index = effects.indexOf(effect);
             int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
             shaderEffectsRecycler.scrollToPosition(index + scroll);
+        }
+    }
+
+    @Override
+    public void onEffectSelectionCancel(Effect effect) {
+        recordPresenter.removeEffect(effect);
+        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()) {
+            hideRemoveFilters();
         }
     }
 

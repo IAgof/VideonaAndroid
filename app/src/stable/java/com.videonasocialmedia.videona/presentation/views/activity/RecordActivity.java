@@ -48,6 +48,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresente
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.fragment.BetaDialogFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
@@ -59,8 +60,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -133,6 +137,9 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private String resultVideoPath;
     private boolean externalIntent = false;
 
+
+    // TODO define Effects ID
+    private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OV";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +258,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     protected void onStart() {
         Log.d("prueba", "onstart");
         super.onStart();
-        checkAndRequestPermissions();
         recordPresenter.onStart();
     }
 
@@ -280,7 +286,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     protected void onStop() {
         super.onStop();
         recordPresenter.onStop();
-        finish();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -316,36 +321,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             sendFilterSelectedTracking(overlayEffect.getType(),
                     overlayEffect.getName().toLowerCase(),
                     overlayEffect.getIdentifier().toLowerCase());
-    }
-
-    private void sendFilterSelectedTracking(String type, String name, String code) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        List<String> effectsCombinedList = getEffectsCombinedList();
-        boolean combined = false;
-        if (effectsCombinedList.size() > 1)
-            combined = true;
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
-            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
-            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
-            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
-            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private List<String> getEffectsCombinedList() {
-        List<String> effects = new ArrayList<>();
-        Effect effect1 = recordPresenter.getSelectedShaderEffect();
-        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
-        if (effect1 != null)
-            effects.add(effect1.getName().toLowerCase());
-        if (effect2 != null)
-            effects.add(effect2.getName().toLowerCase());
-        return effects;
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -393,6 +368,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         String email = event.email;
         mixpanel.getPeople().identify(mixpanel.getDistinctId());
         mixpanel.getPeople().set("$email", email); //Special properties in Mixpanel use $ before// property name
+        mixpanel.getPeople().set(AnalyticsConstants.TYPE, AnalyticsConstants.USER_TYPE_BETA);
 
         editor.putBoolean(ConfigPreferences.EMAIL_BETA_DONE, true);
         editor.commit();
@@ -842,13 +818,106 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     @Override
     public void onEffectSelected(Effect effect) {
+
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase());
+
+        if(effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
+                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
+            // Reset effect to remove selected background
+            cameraOverlayEffectsAdapter.resetSelectedEffect();
+            trackGiftOpened(recordPresenter.getOverlayEffectGift());
+            showGiftFilterToast();
+            return;
+
+        }
+
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase());
+
+    }
+
+    private void trackGiftOpened(Effect overlayEffectGift) {
+
+        JSONObject giftDetails = new JSONObject();
+
+        int giftsDownloadedCount;
+        try {
+            giftsDownloadedCount = mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED);
+        } catch (JSONException e) {
+            giftsDownloadedCount = 0;
+        }
+        try {
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+            String giftResourceName = overlayEffectGift.getType() + " - " + overlayEffectGift.getName() + " " +  overlayEffectGift.getIdentifier();
+            giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED, giftResourceName);
+            mixpanel.getPeople().set(giftDetails);
+            giftDetails.put(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, ++giftsDownloadedCount);
+            mixpanel.registerSuperProperties(giftDetails);
+        } catch (JSONException e) {
+            Log.e("ANALYTICS", "Error sending created super property");
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, 1);
+
+
+    }
+
+    private void showGiftFilterToast() {
+
+        // Create and show toast
+        VideonaToast toast = new VideonaToast.Builder(getApplicationContext())
+                .withTitle(R.string.giftOverlayDialogTitle)
+                .withMessage(R.string.giftOverlayDialogMessage)
+                .withDrawableImage(R.drawable.common_filter_overlay_gift_open)
+                .withDuration(Toast.LENGTH_LONG)
+                .build();
+
+        // Save user preferences
+        editor.putBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, true);
+        editor.commit();
+
+        // Uptade overlay effect adapter
+        cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
+        overlayFilterRecycler.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        overlayFilterRecycler.setAdapter(cameraOverlayEffectsAdapter);
+
+
+    }
+
+    private void sendFilterSelectedTracking(String type, String name, String code) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        List<String> effectsCombinedList = getEffectsCombinedList();
+        boolean combined = false;
+        if(effectsCombinedList.size() > 1)
+            combined = true;
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_FILTERS_USED, 1);
+    }
+
+    private List<String> getEffectsCombinedList() {
+        List<String> effects = new ArrayList<>();
+        Effect effect1 = recordPresenter.getSelectedShaderEffect();
+        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
+        if(effect1 != null)
+            effects.add(effect1.getName().toLowerCase());
+        if(effect2 != null)
+            effects.add(effect2.getName().toLowerCase());
+        return effects;
     }
 
     @Override
@@ -873,6 +942,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             shaderEffectsRecycler.scrollToPosition(index + scroll);
         }
     }
+
 
     private class OrientationHelper extends OrientationEventListener {
 
