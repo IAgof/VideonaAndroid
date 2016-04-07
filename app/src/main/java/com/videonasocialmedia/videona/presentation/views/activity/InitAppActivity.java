@@ -189,8 +189,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 setupCameraSettings();
                 trackUserProfile();
                 initSettings();
-                checkAndDeleteOldMusicSongs();
-                //TODO Delete after update to versionCode 61
                 joinBetaFortnight();
                 break;
             case FIRST_TIME:
@@ -202,7 +200,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 trackUserProfile();
                 trackCreatedSuperProperty();
                 initSettings();
-                checkAndDeleteOldMusicSongs();
                 joinBetaFortnight();
                 break;
             default:
@@ -292,12 +289,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    //TODO Delete this method, only util after release v0.3.23.
-    // Clean old music files and temp folder.
-    private void checkAndDeleteOldMusicSongs() {
-        deleteMusicResources();
     }
 
     // Prepare app to launch join beta daialog every 15 days
@@ -463,23 +454,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         releaseCamera();
     }
 
-    // Don't exist music resource ids in app
-    // Delete one by one every song
-    // Cannot delete folder temp and after create, app crash coming back from settings :(
-    private void deleteMusicResources() {
-        int musicId[] = {2131099648, 2131099650, 2131099651, 2131099653, 2131099654, 2131099655};
-
-        for (int i = 0; i < musicId.length; i++) {
-            Log.d(LOG_TAG, " deleteMusicResources " + musicId[i]);
-            String nameFile = Constants.PATH_APP_TEMP + File.separator + musicId[i] + ".m4a";
-            Log.d(LOG_TAG, " deleteMusicResources nameFile " + nameFile);
-            File file = new File(nameFile);
-            if (file.exists()) {
-                file.delete();
-            }
-        }
-    }
-
     /**
      * Gets an instance of the camera object
      *
@@ -516,7 +490,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
         Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
-        //listener.onLoadingProjectSuccess();
     }
 
     //TODO Check user profile, by default 720p free
