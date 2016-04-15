@@ -13,4 +13,6 @@ package com.videonasocialmedia.videona.presentation.views.listener;
 public interface VideoTimeLineRecyclerViewClickListener {
 
     void onVideoClicked(int position);
+
+    void onVideoRemoveClicked(int position);
 }

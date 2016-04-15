@@ -530,7 +530,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            try {
+
+           try {
                 waitForCriticalPermissions();
                 setup();
                 trackAppStartup();
@@ -568,6 +569,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                     mixpanel.getPeople().trackNotificationSeen(notification);
                 }
             }
+
         }
 
         private void waitForCriticalPermissions() {

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.views.activity.EditorRoomActivity"
+    >
+
+
+    <item
+        android:id="@+id/action_more"
+        android:icon="@drawable/activity_settings_icon_email"
+        android:title="More"
+        android:orderInCategory="100"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_settings_edit_options"
+                android:icon="@drawable/activity_record_icon_flash_camera_pressed"
+                android:title="Options"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/action_settings_edit_gallery"
+                android:icon="@android:drawable/ic_media_play"
+                android:title="Gallery"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/action_settings_edit_tutorial"
+                android:icon="@android:drawable/ic_media_play"
+                android:title="Tutorial"
+                app:showAsAction="never"/>
+
+        </menu>
+
+    </item>
+
+</menu>

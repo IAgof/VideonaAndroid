@@ -523,6 +523,11 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
         //scissorsFxMenuFragment.inhabilitateTrashButton();
     }
 
+    @Override
+    public void onVideoRemoveClicked(int position) {
+
+    }
+
     private boolean isAlreadySelected(int musicPosition) {
         return selectedMusicIndex == musicPosition;
     }
