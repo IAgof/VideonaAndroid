@@ -71,7 +71,7 @@
                 tools:layout_height="200dp" />
 
             <ImageButton
-                android:id="@+id/button_play_pause"
+                android:id="@+id/button_editor_play_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -79,7 +79,7 @@
                 android:src="@drawable/common_icon_play_on_normal" />
 
             <SeekBar
-                android:id="@+id/seekbar"
+                android:id="@+id/seekbar_editor_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/video_editor_preview"

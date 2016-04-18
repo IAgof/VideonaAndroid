@@ -92,7 +92,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             notifyDataSetChanged();
     }
 
-    private void updateSelection(int positionSelected) {
+    public void updateSelection(int positionSelected) {
         notifyItemChanged(selectedVideoPosition);
         selectedVideoPosition = positionSelected;
         notifyItemChanged(selectedVideoPosition);
