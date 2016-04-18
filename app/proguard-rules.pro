@@ -52,7 +52,7 @@
 # Butterknife
 -dontwarn butterknife.internal.**
 -keep class butterknife.** { *; }
--keep class **$$ViewInjector { *; }
+-keep class **$$ViewBinder { *; }
 
 -keepclasseswithmembernames class * {
     @butterknife.* <fields>;
