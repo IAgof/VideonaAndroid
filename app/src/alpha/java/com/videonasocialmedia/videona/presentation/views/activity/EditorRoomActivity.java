@@ -32,7 +32,6 @@ import android.widget.ImageButton;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -45,6 +44,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoTimeLineView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
+import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
@@ -66,7 +66,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
         SeekBar.OnSeekBarChangeListener{
 
     @Bind(R.id.video_editor_preview)
-    VideoView videoPreview;
+    AspectRatioVideoView videoPreview;
     @Bind(R.id.seekbar_editor_preview)
     SeekBar seekBar;
     @Bind (R.id.button_editor_play_pause)
@@ -100,22 +100,19 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
     private VideoTimeLinePresenter timeLinePresenter;
     private VideoTimeLineAdapter timeLineAdapter;
-    private final int NUM_COLUMNS_GRID_TIMELINE = 4;
+    private final int NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL = 3;
+    private final int NUM_COLUMNS_GRID_TIMELINE_VERTICAL = 4;
     private ItemTouchHelper touchHelper;
     private ItemTouchHelper.Callback callback;
 
     protected ItemClickSupport clickSupport;
     protected ItemSelectionSupport selectionSupport;
 
-    protected int selectionMode;
-
-    public static final int SELECTION_MODE_SINGLE = 0;
-    public static final int SELECTION_MODE_MULTIPLE = 1;
 
     private VideonaDialog dialogRemoveVideoSelected;
     private final int REQUEST_CODE_REMOVE_VIDEO_SELECTED = 0;
     private int selectedVideoRemovePosition;
-    private int positionTimeLine = 0;
+
 
 
     @Override
@@ -131,17 +128,20 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
+        initVideoPreview();
 
         timeLinePresenter = new VideoTimeLinePresenter(this);
 
         initVideoListRecycler();
 
-        initVideoPreview();
+
     }
 
     private void initVideoPreview() {
 
         previewPresenter = new VideoPreviewPresenter(this);
+
+        updateVideoList();
 
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
@@ -152,7 +152,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
 
         seekBar.setProgress(0);
-        updateVideoList();
+
     }
 
 
@@ -195,6 +195,13 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit_room, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent record = new Intent(this, RecordActivity.class);
+        startActivity(record);
     }
 
     @Override
@@ -298,6 +305,9 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                this.onBackPressed();
+                return true;
             case KeyEvent.KEYCODE_VOLUME_UP:
                 audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
                         AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
@@ -337,11 +347,15 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
         timeLineAdapter.setClickListener(this);
 
         int orientation = LinearLayoutManager.VERTICAL;
-        if (isLandscapeOriented())
-            orientation = LinearLayoutManager.HORIZONTAL;
+        RecyclerView.LayoutManager layoutManager;
+        if (isLandscapeOriented()) {
+            layoutManager = new GridLayoutManager(this, NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL,
+                    orientation, false);
+        } else {
+            layoutManager = new GridLayoutManager(this, NUM_COLUMNS_GRID_TIMELINE_VERTICAL,
+                    orientation, false);
+        }
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, NUM_COLUMNS_GRID_TIMELINE,
-                orientation, false);
 
         videoListRecyclerView.setHasFixedSize(true);
         videoListRecyclerView.setLayoutManager(layoutManager);
@@ -373,13 +387,24 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
             onClickPlayPauseButton();
         } else {
             currentVideoIndex = position;
-            //seekBar.setProgress(videoStartTimeInProject.get(currentVideoIndex));
-            //onProgressChanged(seekBar,0,true);
-            //onClickPlayPauseButton();
+
+            int timeInMsec = videoList.get(position).getFileStartTime();
+
+            if (videoPlayer != null) {
+                playNextVideo(videoList.get(position), timeInMsec);
+            } else {
+                initVideoPlayer(videoList.get(position), timeInMsec);
+            }
         }
 
 
     }
+
+    @Override
+    public void onVideoLongClicked() {
+        onClickPlayPauseButton();
+    }
+
 
     @Override
     public void onVideoRemoveClicked(int position) {
@@ -482,7 +507,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
                 Video video = getVideoByProgress(progress);
                 int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
                         videoList.get(currentVideoIndex).getFileStartTime();
-                //EventBus.getDefault().post(new PreviewingVideoChangedEvent(currentVideoIndex,false));
+
                 if (videoPlayer != null) {
                     playNextVideo(video, timeInMsec);
                 } else {
@@ -758,7 +783,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
                     if (isEndOfVideo()) {
                         currentVideoIndex++;
                         if (hasNextVideoToPlay()) {
-                           // EventBus.getDefault().post(new PreviewingVideoChangedEvent(currentVideoIndex,false));
+
                             playNextVideo(videoList.get(currentVideoIndex),
                                     videoList.get(currentVideoIndex).getFileStartTime());
                         } else {

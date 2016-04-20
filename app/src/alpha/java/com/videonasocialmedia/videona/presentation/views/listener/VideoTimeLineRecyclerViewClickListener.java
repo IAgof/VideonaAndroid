@@ -14,5 +14,7 @@ public interface VideoTimeLineRecyclerViewClickListener {
 
     void onVideoClicked(int position);
 
+    void onVideoLongClicked();
+
     void onVideoRemoveClicked(int position);
 }

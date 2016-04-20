@@ -8,12 +8,9 @@ import com.videonasocialmedia.videona.eventbus.events.video.VideosRetrievedFromP
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoTimeLineView;
-import com.videonasocialmedia.videona.utils.Constants;
 
-import java.io.File;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by jca on 6/7/15.
@@ -34,16 +31,6 @@ public class VideoTimeLinePresenter implements OnVideosRetrieved, OnReorderMedia
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
 
-
-        String path = Constants.PATH_APP + File.separator + "InputVideo.mp4";
-
-        videoList.add(new Video(path));
-        videoList.add(new Video(path));
-        videoList.add(new Video(path));
-        videoList.add(new Video(path));
-        videoList.add(new Video(path));
-        videoList.add(new Video(path));
-
         timelineView.showVideoList(videoList);
     }
 
@@ -61,12 +48,11 @@ public class VideoTimeLinePresenter implements OnVideosRetrieved, OnReorderMedia
     }
 
     public void start() {
-        EventBus.getDefault().register(this);
         obtainVideos();
     }
 
     public void pause() {
-        EventBus.getDefault().unregister(this);
+
     }
 
     public void moveItem(Media videoToMove, int toPositon){

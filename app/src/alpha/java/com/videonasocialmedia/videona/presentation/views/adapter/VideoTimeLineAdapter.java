@@ -111,7 +111,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.fragment_videotimeline_video_item, parent, false);
+                .inflate(R.layout.videotimeline_video_item, parent, false);
         return new VideoViewHolder(view);
     }
 
@@ -170,6 +170,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         @OnLongClick(R.id.timeline_video_thumb)
         public boolean videoOnLongClick() {
             thumb.setRotation(20);
+            clickListener.onVideoLongClicked();
             return true;
         }
 

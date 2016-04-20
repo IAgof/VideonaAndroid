@@ -61,14 +61,16 @@
         </LinearLayout>
 
         <RelativeLayout
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <VideoView
+            <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
                 android:id="@+id/video_editor_preview"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:layout_height="200dp" />
+                android:layout_gravity="center"
+                app:aspect="sixteen_nine"/>
 
             <ImageButton
                 android:id="@+id/button_editor_play_pause"
@@ -136,6 +138,7 @@
             android:id="@+id/recyclerview_editor_timeline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="horizontal"
            />
 
     </LinearLayout>
@@ -144,7 +147,8 @@
         android:id="@+id/fabEditorRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        app:layout_anchor="@id/coordinatorLayout"
+        app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_btn_speak_now" />
 

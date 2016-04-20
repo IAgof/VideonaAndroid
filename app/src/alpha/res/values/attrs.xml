@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="AspectRatioVideoView">
+        <attr name="aspect" format="enum" >
+            <enum name="four_three" value="1" />
+            <enum name="sixteen_nine" value="2" />
+        </attr>
+    </declare-styleable>
+
+</resources>

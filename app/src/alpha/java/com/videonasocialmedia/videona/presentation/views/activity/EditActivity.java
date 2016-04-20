@@ -524,6 +524,11 @@ public class EditActivity extends VideonaActivity implements EditorView, Scissor
     }
 
     @Override
+    public void onVideoLongClicked() {
+
+    }
+
+    @Override
     public void onVideoRemoveClicked(int position) {
 
     }

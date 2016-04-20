@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+            <android.support.v7.widget.Toolbar
+                android:id="@id/toolbar"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:layout_scrollFlags="scroll|enterAlways" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp">
+                    <ImageButton
+                        android:id="@+id/button_editor_room_navigator"
+                        android:layout_width="0dp"
+                        android:layout_height="?attr/actionBarSize"
+                        android:src="@drawable/common_icon_help_white"
+                        android:layout_weight="1"
+                        style="@style/Widget.AppCompat.ActionButton" />
+                    <ImageButton
+                        android:id="@+id/button_music_room_navigator"
+                        android:layout_width="0dp"
+                        android:layout_height="?attr/actionBarSize"
+                        android:src="@drawable/common_icon_star_border_white"
+                        android:layout_weight="1"
+                        style="@style/Widget.AppCompat.ActionButton" />
+                    <ImageButton
+                        android:id="@+id/button_share_room_navigator"
+                        android:layout_width="0dp"
+                        android:layout_height="?attr/actionBarSize"
+                        android:src="@drawable/common_icon_help_white"
+                        android:layout_weight="1"
+                        style="@style/Widget.AppCompat.ActionButton" />
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:orientation="vertical" >
+                <RelativeLayout
+                    android:id="@+id/video_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    ​
+                    <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
+                        android:id="@+id/video_editor_preview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:aspect="sixteen_nine"
+                        />
+                    ​
+                    <ImageButton
+                        android:id="@+id/button_editor_play_pause"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:background="#00000000"
+                        android:src="@drawable/common_icon_play_on_normal" />
+                    ​
+                    <SeekBar
+                        android:id="@+id/seekbar_editor_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/video_editor_preview"
+                        android:layout_marginBottom="4dp" />
+                    ​
+                    <ImageButton
+                        android:id="@+id/button_editor_room_fullscreen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/common_icon_fullscreen_out_normal"
+                        android:layout_alignTop="@+id/video_editor_preview"
+                        android:layout_alignEnd="@+id/video_editor_preview"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@null"
+                        android:scaleType="fitCenter"/>
+                    ​
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutEditorRoom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp" >
+                    ​
+                    <ImageButton
+                        android:id="@+id/button_editor_room_duplicate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:src="@android:drawable/ic_menu_gallery" />
+                    ​
+                    <ImageButton
+                        android:id="@+id/button_editor_room_trim"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:src="@android:drawable/ic_media_play"/>
+                    ​
+                    <ImageButton
+                        android:id="@+id/button_editor_room_split"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:src="@android:drawable/ic_menu_myplaces"/>
+                    ​
+                </LinearLayout>
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_editor_timeline"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+    </LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabEditorRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/common_icon_add_white"
+        app:layout_anchor="@id/video_view"
+        app:layout_anchorGravity="bottom|right|end"
+        app:backgroundTint="@color/colorButton" />
+</android.support.design.widget.CoordinatorLayout>
