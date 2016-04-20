@@ -261,7 +261,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
     @OnClick (R.id.button_editor_room_trim)
     public void onClickEditorRoomTrim(){
-        // navigateTo(Activity.class)
+         navigateTo(VideoTrimActivity.class);
     }
 
     @OnClick (R.id.button_editor_room_split)

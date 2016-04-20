@@ -7,8 +7,6 @@ public interface TrimView {
 
     void showTrimBar(int videoDuration, int leftMarkerPosition, int RightMarkerPosition);
 
-    void createAndPaintVideoThumbs(String videoPath, int videoDuration);
-
     void refreshDurationTag(int duration);
     void refreshStartTimeTag(int startTime);
     void refreshStopTimeTag(int stopTime);

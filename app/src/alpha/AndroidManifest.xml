@@ -39,6 +39,11 @@
             android:parentActivityName=".presentation.views.activity.RecordActivity"
             android:label="@string/app_name" />
 
+        <activity
+            android:name=".presentation.views.activity.VideoTrimActivity"
+            android:parentActivityName=".presentation.views.activity.EditorRoomActivity"
+            android:label="@string/app_name" />
+
     </application>
 
 </manifest>

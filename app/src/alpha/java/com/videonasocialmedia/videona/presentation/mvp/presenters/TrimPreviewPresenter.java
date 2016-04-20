@@ -18,8 +18,6 @@ import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
-
 /**
  * Created by vlf on 7/7/15.
  */
@@ -64,11 +62,11 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
     }
 
     public void onResume(){
-        EventBus.getDefault().register(this);
+
     }
 
     public void onPause(){
-        EventBus.getDefault().unregister(this);
+
     }
 
 
@@ -77,7 +75,6 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
         previewView.showPreview(videoList);
         Video video = videoList.get(0);
         trimView.showTrimBar(video.getFileDuration(), video.getFileStartTime(), video.getFileStopTime());
-        trimView.createAndPaintVideoThumbs(video.getMediaPath(), video.getFileDuration());
         showTimeTags(video);
     }
 

@@ -331,7 +331,7 @@ public class TrimPreviewFragment extends VideonaFragment implements PreviewView,
         durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
-    @Override
+
     public void createAndPaintVideoThumbs(final String videoPath, final int videoDuration) {
         Thread t = new Thread(new Runnable() {
             @Override
