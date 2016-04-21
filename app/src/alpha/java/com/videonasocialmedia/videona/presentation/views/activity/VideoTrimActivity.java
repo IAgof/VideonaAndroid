@@ -112,15 +112,8 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
 
-
         Intent intent = getIntent();
         videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX,0);
-
-
-        if (savedInstanceState != null) {
-            videoIndexOnTrack = savedInstanceState.getInt(Constants.CURRENT_VIDEO_INDEX);
-        }
-
     }
 
     @Override
@@ -134,7 +127,6 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         super.onPause();
         presenter.onPause();
         releaseVideoView();
-
     }
 
     @Override
@@ -142,7 +134,6 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         super.onResume();
         presenter.init(videoIndexOnTrack);
         presenter.onResume();
-
     }
 
     @Override
@@ -153,7 +144,6 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     @Override
     protected void onStop() {
         super.onStop();
-
     }
 
     @Override
@@ -226,11 +216,19 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         presenter.modifyVideoStartTime(startTimeMs);
         presenter.modifyVideoFinishTime(finishTimeMs);
         finish();
+        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_trim_cancel)
     public void onClickTrimCancel(){
         finish();
+        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+    }
+
+    private void navigateTo(Class cls,  int currentVideoIndex) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        startActivity(intent);
     }
 
     @Override

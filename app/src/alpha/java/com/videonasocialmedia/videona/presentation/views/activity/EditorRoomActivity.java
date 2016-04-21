@@ -178,6 +178,23 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
         super.onResume();
         timeLinePresenter.start();
         previewPresenter.onResume();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null) {
+            if(bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {
+                currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
+                if(videoPlayer != null)
+                    instantTime = videoPlayer.getCurrentPosition() +
+                            videoStartTimeInProject.get(currentVideoIndex) -
+                            videoList.get(currentVideoIndex).getFileStartTime();
+                else
+                    instantTime = videoStartTimeInProject.get(currentVideoIndex) -
+                            videoList.get(currentVideoIndex).getFileStartTime();
+                initVideoPlayer(videoList.get(currentVideoIndex), instantTime);
+                timeLineAdapter.updateSelection(currentVideoIndex);
+                seekBar.setProgress(instantTime);
+            }
+        }
     }
 
     @Override
@@ -272,12 +289,10 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
     public void navigateTo(Class cls) {
         Intent intent = new Intent(getApplicationContext(), cls);
-
         startActivity(intent);
     }
 
     public void navigateTo(Class cls, int currentVideoIndex) {
-
         Intent intent = new Intent(this, cls);
         intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
         startActivity(intent);
