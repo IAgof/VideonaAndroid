@@ -71,12 +71,12 @@
             android:id="@+id/rangeSeekBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            custom:bar_color="#88c14c"
-            custom:bar_height="50dp"
-            custom:background_color="#3c3f41"
-            custom:selected_bar_color="#e77e2c"
-            custom:thumb_image="@drawable/ic_slider"
-            custom:thumb_image_max="@drawable/ic_slider"
+            app:bar_color="#88c14c"
+            app:bar_height="50dp"
+            app:background_color="#3c3f41"
+            app:selected_bar_color="#e77e2c"
+            app:thumb_image="@drawable/activity_edit_icon_thumb_left_normal"
+            app:thumb_image_max="@drawable/activity_edit_icon_thumb_left_normal"
             android:layout_centerVertical="true"/>
 
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="00:00"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:gravity="center"
             android:layout_below="@+id/rangeSeekBar"
             android:layout_alignParentLeft="true"/>
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:text="00:00"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:gravity="center"
             android:layout_below="@+id/rangeSeekBar"
             android:layout_alignParentRight="true"/>
@@ -108,12 +108,27 @@
             android:layout_height="wrap_content"
             android:text="00:00"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:visibility="visible"
             android:gravity="center_vertical|center_horizontal"
             android:layout_alignParentBottom="false"
             android:layout_marginBottom="4dp"
             android:layout_above="@+id/rangeSeekBar"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:id="@+id/trim_text_info_trim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recorta tu clip"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/black"
+            android:visibility="visible"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_alignParentBottom="false"
+            android:layout_marginBottom="16dp"
+            android:layout_above="@+id/trim_text_time_trim"
             android:layout_centerHorizontal="true"
             />
 
