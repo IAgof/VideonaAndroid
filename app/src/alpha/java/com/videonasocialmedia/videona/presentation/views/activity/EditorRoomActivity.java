@@ -48,6 +48,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatio
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.GridSpacingItemDecoration;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
@@ -261,7 +262,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
     @OnClick (R.id.button_editor_room_trim)
     public void onClickEditorRoomTrim(){
-         navigateTo(VideoTrimActivity.class);
+         navigateTo(VideoTrimActivity.class, currentVideoIndex);
     }
 
     @OnClick (R.id.button_editor_room_split)
@@ -270,7 +271,16 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
     }
 
     public void navigateTo(Class cls) {
-        startActivity(new Intent(getApplicationContext(), cls));
+        Intent intent = new Intent(getApplicationContext(), cls);
+
+        startActivity(intent);
+    }
+
+    public void navigateTo(Class cls, int currentVideoIndex) {
+
+        Intent intent = new Intent(this, cls);
+        intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        startActivity(intent);
     }
 
     @OnClick (R.id.button_editor_play_pause)

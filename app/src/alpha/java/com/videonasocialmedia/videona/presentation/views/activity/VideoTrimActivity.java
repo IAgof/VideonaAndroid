@@ -37,6 +37,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.OnRangeChan
 import com.videonasocialmedia.videona.presentation.views.customviews.RangeSeekBar;
 import com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBar;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
 import java.io.IOException;
@@ -110,8 +111,16 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         seekBar.setOnSeekBarChangeListener(this);
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
-        videoIndexOnTrack = 0;
-        //videoIndexOnTrack = getArguments().getInt("VIDEO_INDEX", 0);
+
+
+        Intent intent = getIntent();
+        videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX,0);
+
+
+        if (savedInstanceState != null) {
+            videoIndexOnTrack = savedInstanceState.getInt(Constants.CURRENT_VIDEO_INDEX);
+        }
+
     }
 
     @Override
