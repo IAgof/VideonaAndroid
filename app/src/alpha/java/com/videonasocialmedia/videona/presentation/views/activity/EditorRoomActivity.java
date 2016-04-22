@@ -183,14 +183,9 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
         if (bundle!=null) {
             if(bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {
                 currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
-                if(videoPlayer != null)
-                    instantTime = videoPlayer.getCurrentPosition() +
-                            videoStartTimeInProject.get(currentVideoIndex) -
-                            videoList.get(currentVideoIndex).getFileStartTime();
-                else
-                    instantTime = videoStartTimeInProject.get(currentVideoIndex) -
-                            videoList.get(currentVideoIndex).getFileStartTime();
-                initVideoPlayer(videoList.get(currentVideoIndex), instantTime);
+                instantTime = videoStartTimeInProject.get(currentVideoIndex);
+                initVideoPlayer(videoList.get(currentVideoIndex),
+                        videoList.get(currentVideoIndex).getFileStartTime());
                 timeLineAdapter.updateSelection(currentVideoIndex);
                 seekBar.setProgress(instantTime);
             }
