@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.presentation.views.customviews;
+package com.videonasocialmedia.videona.presentation.views.listener;
 /*
  * Copyright (C) 2015 Videona Socialmedia SL
  * http://www.videona.com

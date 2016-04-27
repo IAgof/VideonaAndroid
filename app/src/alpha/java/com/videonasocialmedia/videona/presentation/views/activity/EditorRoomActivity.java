@@ -774,6 +774,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
                     videoList.get(currentVideoIndex).getFileStartTime() + 100);
         seekBar.setProgress(0);
         instantTime = 0;
+        timeLineAdapter.updateSelection(currentVideoIndex);
         if (musicPlayer != null && musicPlayer.isPlaying()) {
             musicPlayer.pause();
             releaseMusicPlayer();
