@@ -320,9 +320,6 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         double rangeSeekBarMax = (double) rightMarkerPosition / videoDuration;
 
         rangeSeekBar.setInitializedPosition(rangeSeekBarMin,rangeSeekBarMax);
-
-        Log.d(TAG, "rangeSeekBarInit " + rangeSeekBarMin + "-" + rangeSeekBarMax);
-
     }
 
 

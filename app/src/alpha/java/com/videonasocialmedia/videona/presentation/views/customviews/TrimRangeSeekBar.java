@@ -402,64 +402,11 @@ public class TrimRangeSeekBar extends FrameLayout implements View.OnTouchListene
         this.mRangeChangeListener = rangeChangeListener;
     }
 
-    /**
-     * Function to set minimum position and maximum position.
-     *
-     * @param minPosition double 0 - 100
-     * @param maxPosition double 0 - 100
-     **/
-    public void setRange(double minPosition, double maxPosition) {
-        //  int viewLeftMargin = (int)((minPosition * baseLineWidth) / 100);
-        //  int viewRightMargin = (int)((maxPosition * baseLineWidth) / 100);
-       /* resetViewPosition(ivMinThumb,viewLeftMargin,true);
-        resetViewPosition(ivMaxThumb,viewRightMargin,true);*/
-        setPositionFor(ivMinThumb, (int) minPosition);
-        setPositionFor(ivMaxThumb, (int) maxPosition);
-
-        mRangeChangeListener.setRangeChangeListener(viewGroupParent, minPosition, maxPosition);
-    }
-
-
     public void setInitializedPosition(double left, double right){
         isVideoInitialized = true;
         initLeftSeekBar = Math.round(left*100)/100.0d;
         initRightSeekBar = Math.round(right*100)/100.0d;;
     }
 
-    /**
-     * Function to set position for the given image
-     *
-     * @param leftMargin int
-     */
-    public void setPositionForLeftThumb(int leftMargin) {
-        try {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) ivMinThumb.getLayoutParams();
-            layoutParams.leftMargin = leftMargin;
-            ivMinThumb.setLayoutParams(layoutParams);
-            resetViewPosition(ivMinThumb, leftMargin, false);
-            viewGroupParent.invalidate();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * Function to set position for the given image
-     *
-     * @param rightMargin int
-     */
-    public void setPositionForRightThumb(int rightMargin) {
-        try {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) ivMaxThumb.getLayoutParams();
-            layoutParams.rightMargin = rightMargin;
-            ivMaxThumb.setLayoutParams(layoutParams);
-            resetViewPosition(ivMaxThumb, rightMargin, false);
-            viewGroupParent.invalidate();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 }

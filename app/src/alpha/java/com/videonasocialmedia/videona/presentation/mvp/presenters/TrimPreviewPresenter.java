@@ -94,8 +94,6 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
         modifyVideoDurationUseCase.modifyVideoStartTime(videoToEdit, startTime);
     }
 
-
-
     public void modifyVideoFinishTime(int finishTime) {
         modifyVideoDurationUseCase.modifyVideoFinishTime(videoToEdit, finishTime);
     }
