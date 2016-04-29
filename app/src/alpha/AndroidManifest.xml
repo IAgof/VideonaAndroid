@@ -44,6 +44,11 @@
             android:parentActivityName=".presentation.views.activity.EditorRoomActivity"
             android:label="@string/app_name" />
 
+        <activity
+            android:name=".presentation.views.activity.VideoSplitActivity"
+            android:parentActivityName=".presentation.views.activity.EditorRoomActivity"
+            android:label="@string/app_name" />
+
     </application>
 
 </manifest>

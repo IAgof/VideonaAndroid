@@ -280,6 +280,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
     @OnClick (R.id.button_editor_room_split)
     public void onClickEditorRoomSplit(){
         // navigateTo(Activity.class)
+        navigateTo(VideoSplitActivity.class, currentVideoIndex);
     }
 
     public void navigateTo(Class cls) {

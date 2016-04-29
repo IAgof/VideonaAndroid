@@ -1,0 +1,470 @@
+package com.videonasocialmedia.videona.presentation.views.activity;
+/*
+ * Copyright (C) 2015 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ *
+ * Authors:
+ * Álvaro Martínez Marco
+ *
+ */
+
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.MediaController;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.SplitPreviewPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.views.SplitView;
+import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
+import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
+import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.TimeUtils;
+
+import java.io.IOException;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTouch;
+
+public class VideoSplitActivity extends VideonaActivity implements PreviewView, SplitView,
+        SeekBar.OnSeekBarChangeListener {
+
+    @Bind(R.id.video_split_preview)
+    AspectRatioVideoView preview;
+    @Bind(R.id.button_split_play_pause)
+    ImageButton playButton;
+    @Bind(R.id.seekbar_split_preview)
+    SeekBar seekBar;
+
+    @Bind(R.id.split_text_time_split)
+    TextView timeTag;
+
+    @Bind(R.id.splitSeekBar)
+    SeekBar splitSeekBar;
+    @Bind (R.id.overSeekBar)
+    SeekBar overSplitSeekBar;
+
+    int videoIndexOnTrack;
+    private SplitPreviewPresenter presenter;
+
+    private MediaController mediaController;
+    private MediaPlayer videoPlayer;
+    private OnTrimConfirmListener onTrimConfirmListener;
+    private Video video;
+    protected Handler handler = new Handler();
+    private final Runnable updateTimeTask = new Runnable() {
+        @Override
+        public void run() {
+            updateSeekBarProgress();
+        }
+    };
+    private int startTimeMs = 0;
+    private int finishTimeMs = 1;
+    private boolean afterSplitting = false;
+    private String TAG = "VideoSplitActivity";
+    private double timeCorrector;
+    private double seekBarMin;
+    private double seekBarMax;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_video_split);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        ButterKnife.bind(this);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        presenter = new SplitPreviewPresenter(this, this);
+
+        splitSeekBar.setProgress(0);
+        splitSeekBar.setOnSeekBarChangeListener(this);
+        overSplitSeekBar.setProgress(0);
+        overSplitSeekBar.setOnSeekBarChangeListener(this);
+
+        seekBar.setProgress(0);
+        seekBar.setOnSeekBarChangeListener(this);
+        mediaController = new MediaController(this);
+        mediaController.setVisibility(View.INVISIBLE);
+
+        Intent intent = getIntent();
+        videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX,0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.onPause();
+        releaseVideoView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        presenter.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.init(videoIndexOnTrack);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_edit_room, menu);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent record = new Intent(this, RecordActivity.class);
+        startActivity(record);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()){
+            case R.id.action_settings_edit_options:
+                navigateTo(SettingsActivity.class);
+                return true;
+            case R.id.action_settings_edit_gallery:
+                navigateTo(GalleryActivity.class);
+                return true;
+            case R.id.action_settings_edit_tutorial:
+                //navigateTo(TutorialActivity.class);
+                return true;
+            default:
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateTo(Class cls) {
+        startActivity(new Intent(getApplicationContext(), cls));
+    }
+
+    @OnTouch(R.id.video_split_preview)
+    public boolean onTouchPreview(MotionEvent event) {
+        boolean result;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            onClickPlayPausePreview();
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    @OnClick(R.id.button_split_play_pause)
+    public void onClickPlayPausePreview(){
+        if (videoPlayer != null) {
+            if (videoPlayer.isPlaying()) {
+                pausePreview();
+            } else {
+                playPreview();
+            }
+            updateSeekBarProgress();
+        }
+    }
+
+    @OnClick(R.id.button_split_accept)
+    public void onClickSplitAccept(){
+       // presenter.modifyVideoStartTime(startTimeMs);
+       // presenter.modifyVideoFinishTime(finishTimeMs);
+        finish();
+        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+    }
+
+    @OnClick(R.id.button_split_cancel)
+    public void onClickSplitCancel(){
+        finish();
+        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+    }
+
+    private void navigateTo(Class cls,  int currentVideoIndex) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (fromUser) {
+
+            if (videoPlayer.isPlaying()) {
+                videoPlayer.seekTo(progress + video.getFileStartTime());
+            } else {
+                videoPlayer.seekTo(progress + video.getFileStartTime());
+                videoPlayer.pause();
+            }
+
+            splitSeekBar.setProgress(progress);
+            overSplitSeekBar.setProgress(progress);
+            timeTag.setText(TimeUtils.toFormattedTime(progress));
+
+            afterSplitting = false;
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void playPreview() {
+        if (videoPlayer != null) {
+            if (afterSplitting) {
+                videoPlayer.seekTo((int) Math.round(splitSeekBar.getMinimumHeight()));
+                afterSplitting = false;
+            }
+            videoPlayer.start();
+            playButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override
+    public void pausePreview() {
+        if (videoPlayer != null && videoPlayer.isPlaying())
+            videoPlayer.pause();
+        playButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void seekTo(int timeInMsec) {
+        if(videoPlayer!=null)
+        videoPlayer.seekTo(timeInMsec);
+    }
+
+    @Override
+    public void updateVideoList() {
+
+    }
+
+    @Override
+    public void showPreview(List<Video> movieList) {
+        video = movieList.get(0);
+        int maxSeekBar = video.getFileDuration();
+        seekBar.setMax(maxSeekBar);
+        initVideoPlayer(video.getMediaPath());
+
+        splitSeekBar.setMax(maxSeekBar);
+        overSplitSeekBar.setMax(maxSeekBar);
+
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public void updateSeekBarDuration(int projectDuration) {
+
+    }
+
+    @Override
+    public void updateSeekBarSize() {
+
+        int maxSeekBar = video.getFileDuration();
+
+        seekBar.setProgress(0);
+        seekBar.setMax(maxSeekBar);
+
+        splitSeekBar.setMax(maxSeekBar);
+        splitSeekBar.setProgress(maxSeekBar/2);
+        overSplitSeekBar.setMax(maxSeekBar);
+        overSplitSeekBar.setProgress(maxSeekBar/2);
+    }
+
+   // @Override
+    public void showTrimBar(int videoDuration, int leftMarkerPosition, int rightMarkerPosition) {
+
+        startTimeMs = leftMarkerPosition;
+        finishTimeMs = rightMarkerPosition;
+
+        timeCorrector = videoDuration / 100;
+
+        double rangeSeekBarMin = (double) leftMarkerPosition / videoDuration;
+        double rangeSeekBarMax = (double) rightMarkerPosition / videoDuration;
+
+       // rangeSeekBar.setInitializedPosition(rangeSeekBarMin,rangeSeekBarMax);
+    }
+
+
+
+   // @Override
+    public void setRangeChangeListener(View view, double minPosition, double maxPosition) {
+        Log.d(TAG," setRangeChangeListener " + minPosition + " - " + maxPosition);
+
+        startTimeMs = (int) (minPosition*timeCorrector);
+        finishTimeMs = (int) (maxPosition*timeCorrector);
+
+    //    startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
+   //     stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
+    //    durationTag.setText(TimeUtils.toFormattedTime((finishTimeMs - startTimeMs)));
+
+
+
+        if(seekBarMin != minPosition){
+            seekTo(startTimeMs);
+            seekBarMin = minPosition;
+            seekBarMax = maxPosition;
+            seekBar.setProgress(startTimeMs);
+            return;
+        }
+
+        if(seekBarMax != maxPosition){
+            seekTo(finishTimeMs);
+            seekBarMin = minPosition;
+            seekBarMax = maxPosition;
+            seekBar.setProgress(finishTimeMs);
+            return;
+        }
+    }
+
+
+
+    private void releaseVideoView() {
+        preview.stopPlayback();
+        preview.clearFocus();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            videoPlayer = null;
+        }
+    }
+
+    private void updateSeekBarProgress() {
+        if (videoPlayer != null) {
+            if (videoPlayer.isPlaying()) {
+                seekBar.setProgress(videoPlayer.getCurrentPosition());
+                refreshStartTimeTag(videoPlayer.getCurrentPosition());
+                if (isEndOfVideo()) {
+                    videoPlayer.pause();
+                    playButton.setVisibility(View.VISIBLE);
+                    refreshStartTimeTag(video.getFileStartTime());
+                    seekBar.setProgress(0);
+                    videoPlayer.seekTo(video.getFileStartTime());
+                }
+            }
+            handler.postDelayed(updateTimeTask, 20);
+        }
+    }
+
+    private void refreshStartTimeTag(int fileStartTime) {
+    }
+
+    private boolean isEndOfVideo() {
+        return seekBar.getProgress() >= video.getFileDuration();
+    }
+
+    private void initVideoPlayer(final String videoPath) {
+        if (videoPlayer == null) {
+            preview.setVideoPath(videoPath);
+            preview.setMediaController(mediaController);
+            preview.canSeekBackward();
+            preview.canSeekForward();
+            preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    videoPlayer = mp;
+                    seekBar.setProgress(videoPlayer.getCurrentPosition());
+                    videoPlayer.setVolume(0.5f, 0.5f);
+                    videoPlayer.setLooping(false);
+                    videoPlayer.start();
+                    videoPlayer.seekTo(100 + video.getFileStartTime());
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    videoPlayer.pause();
+                    pausePreview();
+                    updateSeekBarProgress();
+                }
+            });
+            preview.requestFocus();
+
+        } else {
+            preview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    seekBar.setProgress(videoPlayer.getCurrentPosition());
+                    videoPlayer.setVolume(0.5f, 0.5f);
+                    videoPlayer.setLooping(false);
+                    updateSeekBarProgress();
+                }
+            });
+
+            try {
+                videoPlayer.reset();
+                videoPlayer.setDataSource(videoPath);
+                videoPlayer.prepare();
+                videoPlayer.start();
+            } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void showSplitBar(int videoDuration, int MarkerPosition) {
+
+    }
+
+    @Override
+    public void refreshTimeTag(int duration) {
+
+    }
+}

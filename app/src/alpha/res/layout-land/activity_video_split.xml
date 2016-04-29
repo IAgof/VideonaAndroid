@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/VideonaTheme.AppBarOverlay">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/VideonaTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4" >
+            <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
+                android:id="@+id/video_split_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:aspect="sixteen_nine"/>
+            <ImageButton
+                android:id="@+id/button_split_play_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="#00000000"
+                android:src="@drawable/common_icon_play_on_normal" />
+            <SeekBar
+                android:id="@+id/seekbar_split_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/video_split_preview"
+                android:layout_marginBottom="4dp" />
+            <ImageButton
+                android:id="@+id/button_split_room_fullscreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/common_icon_fullscreen_out_normal"
+                android:layout_alignTop="@+id/video_split_preview"
+                android:layout_alignEnd="@+id/video_split_preview"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:scaleType="fitCenter"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
+            <SeekBar
+                android:id="@+id/overSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/activity_edit_icon_thumb_left_normal"
+                android:progressDrawable="@android:color/transparent"
+                android:layout_above="@+id/splitSeekBar"
+                android:layout_centerHorizontal="true"/>
+
+            <SeekBar
+                android:id="@+id/splitSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="50dp"
+                android:progressDrawable="@color/colorPrimary"
+                android:thumb="@drawable/activity_edit_icon_thumb_left_normal"
+                android:layout_centerVertical="true"/>
+
+
+            <TextView
+                android:id="@+id/split_text_time_split"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@android:color/black"
+                android:visibility="visible"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_alignParentBottom="false"
+                android:layout_marginBottom="4dp"
+                android:layout_below="@+id/splitSeekBar"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:id="@+id/split_text_info_split"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recorta tu clip"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textColor="@android:color/black"
+                android:visibility="visible"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_alignParentBottom="false"
+                android:layout_marginBottom="16dp"
+                android:layout_above="@+id/overSeekBar"
+                android:layout_centerHorizontal="true"
+                />
+
+        </RelativeLayout>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/button_split_cancel"
+            android:background="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/edit_activity_button_cancel_selector"/>
+        <ImageButton
+            android:id="@+id/button_split_accept"
+            android:background="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/common_icon_ok_normal"/>
+    </RelativeLayout>
+</LinearLayout>
