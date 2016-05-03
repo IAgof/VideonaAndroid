@@ -7,8 +7,8 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
-import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
@@ -34,7 +34,7 @@ public class SplitPreviewPresenter implements OnVideosRetrieved{
      */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
 
-    private ModifyVideoDurationUseCase modifyVideoDurationUseCase;
+    private AddVideoToProjectUseCase addVideoToProjectUseCase;
 
     /**
      * Preview View
@@ -47,7 +47,7 @@ public class SplitPreviewPresenter implements OnVideosRetrieved{
         this.previewView = previewView;
         this.splitView = splitView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-        modifyVideoDurationUseCase = new ModifyVideoDurationUseCase();
+        addVideoToProjectUseCase = new AddVideoToProjectUseCase();
     }
 
     public void init(int videoToTrimIndex) {
@@ -83,12 +83,11 @@ public class SplitPreviewPresenter implements OnVideosRetrieved{
     }
 
 
-    public void modifyVideoStartTime(int startTime) {
-        modifyVideoDurationUseCase.modifyVideoStartTime(videoToEdit, startTime);
-    }
-
-    public void modifyVideoFinishTime(int finishTime) {
-        modifyVideoDurationUseCase.modifyVideoFinishTime(videoToEdit, finishTime);
+    public void splitVideo(Video video, int positionInAdapter, int timeMs) {
+        Video copyVideo = new Video(video);
+        video.setFileStopTime(timeMs);
+        copyVideo.setFileStartTime(timeMs);
+        addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);
     }
 
 }

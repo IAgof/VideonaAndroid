@@ -239,8 +239,8 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
 
     @OnClick(R.id.button_split_accept)
     public void onClickSplitAccept(){
-       // presenter.modifyVideoStartTime(startTimeMs);
-       // presenter.modifyVideoFinishTime(finishTimeMs);
+
+        presenter.splitVideo(video, videoIndexOnTrack, currentPosition);
         finish();
         navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
     }
