@@ -5,7 +5,6 @@ package com.videonasocialmedia.videona.presentation.mvp.views;
  */
 public interface SplitView {
 
-    void showSplitBar(int videoDuration, int MarkerPosition);
+    void initSplitView(int maxSeekBar);
 
-    void refreshTimeTag(int duration);
 }

@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -48,12 +47,14 @@ import butterknife.OnTouch;
 public class VideoSplitActivity extends VideonaActivity implements PreviewView, SplitView,
         SeekBar.OnSeekBarChangeListener {
 
+    private static final String SPLIT_POSITION = "split_position";
+
     @Bind(R.id.video_split_preview)
     AspectRatioVideoView preview;
     @Bind(R.id.button_split_play_pause)
     ImageButton playButton;
     @Bind(R.id.seekbar_split_preview)
-    SeekBar seekBar;
+    SeekBar videoSeekBar;
 
     @Bind(R.id.split_text_time_split)
     TextView timeTag;
@@ -77,13 +78,11 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
             updateSeekBarProgress();
         }
     };
-    private int startTimeMs = 0;
-    private int finishTimeMs = 1;
     private boolean afterSplitting = false;
     private String TAG = "VideoSplitActivity";
-    private double timeCorrector;
-    private double seekBarMin;
-    private double seekBarMax;
+    private int currentPosition = 0;
+    private boolean isInstanceState;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,14 +103,19 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
         splitSeekBar.setOnSeekBarChangeListener(this);
         overSplitSeekBar.setProgress(0);
         overSplitSeekBar.setOnSeekBarChangeListener(this);
-
-        seekBar.setProgress(0);
-        seekBar.setOnSeekBarChangeListener(this);
+        timeTag.setText(TimeUtils.toFormattedTime(0));
+        videoSeekBar.setProgress(0);
+        videoSeekBar.setOnSeekBarChangeListener(this);
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
 
         Intent intent = getIntent();
         videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX,0);
+
+        if(savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(SPLIT_POSITION,0);
+            isInstanceState = true;
+        }
     }
 
     @Override
@@ -132,18 +136,41 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
         super.onResume();
 
         presenter.onResume();
+        presenter.init(videoIndexOnTrack);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.init(videoIndexOnTrack);
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(SPLIT_POSITION,currentPosition);
+        super.onSaveInstanceState(outState);
+
+    }
+
+
+    private void initSplitBar(){
+
+        videoSeekBar.setProgress(currentPosition);
+        splitSeekBar.setProgress(currentPosition);
+        overSplitSeekBar.setProgress(currentPosition);
+        timeTag.setText(TimeUtils.toFormattedTime(currentPosition));
+        if(videoPlayer!= null) {
+            videoPlayer.seekTo(currentPosition + video.getFileStartTime());
+            videoPlayer.pause();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -241,6 +268,8 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
                 videoPlayer.pause();
             }
 
+            currentPosition = videoPlayer.getCurrentPosition();
+            videoSeekBar.setProgress(progress);
             splitSeekBar.setProgress(progress);
             overSplitSeekBar.setProgress(progress);
             timeTag.setText(TimeUtils.toFormattedTime(progress));
@@ -262,10 +291,6 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
     @Override
     public void playPreview() {
         if (videoPlayer != null) {
-            if (afterSplitting) {
-                videoPlayer.seekTo((int) Math.round(splitSeekBar.getMinimumHeight()));
-                afterSplitting = false;
-            }
             videoPlayer.start();
             playButton.setVisibility(View.INVISIBLE);
         }
@@ -293,11 +318,21 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
         int maxSeekBar = video.getFileDuration();
-        seekBar.setMax(maxSeekBar);
-        initVideoPlayer(video.getMediaPath());
+        videoSeekBar.setMax(maxSeekBar);
+        initVideoPlayer(currentPosition, video.getMediaPath());
+
+
+    }
+
+    @Override
+    public void initSplitView(int maxSeekBar){
 
         splitSeekBar.setMax(maxSeekBar);
         overSplitSeekBar.setMax(maxSeekBar);
+
+        if(isInstanceState){
+            initSplitBar();
+        }
 
     }
 
@@ -316,62 +351,14 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
 
         int maxSeekBar = video.getFileDuration();
 
-        seekBar.setProgress(0);
-        seekBar.setMax(maxSeekBar);
+        videoSeekBar.setProgress(0);
+        videoSeekBar.setMax(maxSeekBar);
 
         splitSeekBar.setMax(maxSeekBar);
-        splitSeekBar.setProgress(maxSeekBar/2);
+        splitSeekBar.setProgress(0);
         overSplitSeekBar.setMax(maxSeekBar);
-        overSplitSeekBar.setProgress(maxSeekBar/2);
+        overSplitSeekBar.setProgress(0);
     }
-
-   // @Override
-    public void showTrimBar(int videoDuration, int leftMarkerPosition, int rightMarkerPosition) {
-
-        startTimeMs = leftMarkerPosition;
-        finishTimeMs = rightMarkerPosition;
-
-        timeCorrector = videoDuration / 100;
-
-        double rangeSeekBarMin = (double) leftMarkerPosition / videoDuration;
-        double rangeSeekBarMax = (double) rightMarkerPosition / videoDuration;
-
-       // rangeSeekBar.setInitializedPosition(rangeSeekBarMin,rangeSeekBarMax);
-    }
-
-
-
-   // @Override
-    public void setRangeChangeListener(View view, double minPosition, double maxPosition) {
-        Log.d(TAG," setRangeChangeListener " + minPosition + " - " + maxPosition);
-
-        startTimeMs = (int) (minPosition*timeCorrector);
-        finishTimeMs = (int) (maxPosition*timeCorrector);
-
-    //    startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
-   //     stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
-    //    durationTag.setText(TimeUtils.toFormattedTime((finishTimeMs - startTimeMs)));
-
-
-
-        if(seekBarMin != minPosition){
-            seekTo(startTimeMs);
-            seekBarMin = minPosition;
-            seekBarMax = maxPosition;
-            seekBar.setProgress(startTimeMs);
-            return;
-        }
-
-        if(seekBarMax != maxPosition){
-            seekTo(finishTimeMs);
-            seekBarMin = minPosition;
-            seekBarMax = maxPosition;
-            seekBar.setProgress(finishTimeMs);
-            return;
-        }
-    }
-
-
 
     private void releaseVideoView() {
         preview.stopPlayback();
@@ -385,13 +372,18 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
-                seekBar.setProgress(videoPlayer.getCurrentPosition());
-                refreshStartTimeTag(videoPlayer.getCurrentPosition());
+                currentPosition = videoPlayer.getCurrentPosition();
+                videoSeekBar.setProgress(currentPosition);
+                splitSeekBar.setProgress(currentPosition);
+                overSplitSeekBar.setProgress(currentPosition);
+                refreshTimeTag(currentPosition);
                 if (isEndOfVideo()) {
                     videoPlayer.pause();
                     playButton.setVisibility(View.VISIBLE);
-                    refreshStartTimeTag(video.getFileStartTime());
-                    seekBar.setProgress(0);
+                    refreshTimeTag(video.getFileStartTime());
+                    videoSeekBar.setProgress(0);
+                    splitSeekBar.setProgress(0);
+                    overSplitSeekBar.setProgress(0);
                     videoPlayer.seekTo(video.getFileStartTime());
                 }
             }
@@ -399,14 +391,17 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
         }
     }
 
-    private void refreshStartTimeTag(int fileStartTime) {
+    private void refreshTimeTag(int currentPosition) {
+
+        timeTag.setText(TimeUtils.toFormattedTime(currentPosition));
     }
+
 
     private boolean isEndOfVideo() {
-        return seekBar.getProgress() >= video.getFileDuration();
+        return videoSeekBar.getProgress() >= video.getFileDuration();
     }
 
-    private void initVideoPlayer(final String videoPath) {
+    private void initVideoPlayer(final int position, final String videoPath) {
         if (videoPlayer == null) {
             preview.setVideoPath(videoPath);
             preview.setMediaController(mediaController);
@@ -417,11 +412,13 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     videoPlayer = mp;
-                    seekBar.setProgress(videoPlayer.getCurrentPosition());
+                    videoSeekBar.setProgress(position);
+                    splitSeekBar.setProgress(position);
+                    overSplitSeekBar.setProgress(position);
                     videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
                     videoPlayer.start();
-                    videoPlayer.seekTo(100 + video.getFileStartTime());
+                    videoPlayer.seekTo(100 + position + video.getFileStartTime());
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
@@ -439,7 +436,9 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
 
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    seekBar.setProgress(videoPlayer.getCurrentPosition());
+                    videoSeekBar.setProgress(position);
+                    splitSeekBar.setProgress(position);
+                    overSplitSeekBar.setProgress(position);
                     videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
                     updateSeekBarProgress();
@@ -458,13 +457,4 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
         }
     }
 
-    @Override
-    public void showSplitBar(int videoDuration, int MarkerPosition) {
-
-    }
-
-    @Override
-    public void refreshTimeTag(int duration) {
-
-    }
 }

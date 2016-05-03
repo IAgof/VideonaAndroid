@@ -67,7 +67,6 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     @Bind(R.id.rangeSeekBar)
     TrimRangeSeekBar rangeSeekBar;
 
-    //RangeSeekBar<Double> trimBar;
     int videoIndexOnTrack;
     private TrimPreviewPresenter presenter;
 
@@ -75,6 +74,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     private MediaPlayer videoPlayer;
     private OnTrimConfirmListener onTrimConfirmListener;
     private Video video;
+    private int videoDuration = 1;
     protected Handler handler = new Handler();
     private final Runnable updateTimeTask = new Runnable() {
         @Override
@@ -83,12 +83,20 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         }
     };
     private int startTimeMs = 0;
-    private int finishTimeMs = 1;
+    private int finishTimeMs = 100;
     private boolean afterTrimming = false;
     private String TAG = "VideoTrimActivity";
-    private double timeCorrector;
-    private double seekBarMin;
-    private double seekBarMax;
+    private double timeCorrector = 1;
+    private double seekBarMin = 0;
+    private double seekBarMax = 1;
+    private int currentPosition = 0;
+    private String VIDEO_POSITION = "video_position";
+    private String TRIMMINGBAR_MIN = "trimming_bar_min";
+    private String TRIMMINGBAR_MAX = "trimming_bar_max";
+    private String START_TIME_TAG = "start_time_tag";
+    private String STOP_TIME_TAG = "stop_time_tag";
+    private String DURATION_TIME_TAG = "duration_time_tag";
+    private boolean isInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +112,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         ab.setDisplayHomeAsUpEnabled(true);
 
         presenter = new TrimPreviewPresenter(this, this);
+
         rangeSeekBar.setOnRangeListener(this);
 
         seekBar.setProgress(0);
@@ -113,6 +122,17 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
 
         Intent intent = getIntent();
         videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX,0);
+
+        if(savedInstanceState != null){
+
+            currentPosition = savedInstanceState.getInt(VIDEO_POSITION,0);
+            seekBarMin = savedInstanceState.getDouble(TRIMMINGBAR_MIN);
+            seekBarMax = savedInstanceState.getDouble(TRIMMINGBAR_MAX);
+            startTimeMs = savedInstanceState.getInt(START_TIME_TAG);
+            finishTimeMs = savedInstanceState.getInt(STOP_TIME_TAG);
+
+            isInstanceState = true;
+        }
     }
 
     @Override
@@ -133,17 +153,31 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         super.onResume();
 
         presenter.onResume();
+        presenter.init(videoIndexOnTrack);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.init(videoIndexOnTrack);
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(VIDEO_POSITION,currentPosition);
+        outState.putDouble(TRIMMINGBAR_MIN, seekBarMin);
+        outState.putDouble(TRIMMINGBAR_MAX, seekBarMax);
+        outState.putInt(START_TIME_TAG, startTimeMs);
+        outState.putInt(STOP_TIME_TAG, finishTimeMs);
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
@@ -287,8 +321,10 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
-        seekBar.setMax(video.getFileDuration());
-        initVideoPlayer(video.getMediaPath());
+        videoDuration = video.getFileDuration();
+        timeCorrector = videoDuration / 100;
+        seekBar.setMax(videoDuration);
+        initVideoPlayer(currentPosition, video.getMediaPath());
 
     }
 
@@ -305,19 +341,28 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     @Override
     public void updateSeekBarSize() {
         seekBar.setProgress(0);
-        seekBar.setMax(video.getFileDuration());
+        seekBar.setMax(videoDuration);
     }
 
     @Override
-    public void showTrimBar(int videoDuration, int leftMarkerPosition, int rightMarkerPosition) {
+    public void showTrimBar(int videoFileDuration, int leftMarkerPosition, int rightMarkerPosition) {
+
+        if(isInstanceState){
+
+            initTrimmingBars();
+
+            return;
+        }
 
         startTimeMs = leftMarkerPosition;
         finishTimeMs = rightMarkerPosition;
 
-        timeCorrector = videoDuration / 100;
+        videoDuration = videoFileDuration;
 
-        double rangeSeekBarMin = (double) leftMarkerPosition / videoDuration;
-        double rangeSeekBarMax = (double) rightMarkerPosition / videoDuration;
+        timeCorrector = videoFileDuration / 100;
+
+        double rangeSeekBarMin = (double) leftMarkerPosition / videoFileDuration;
+        double rangeSeekBarMax = (double) rightMarkerPosition / videoFileDuration;
 
         rangeSeekBar.setInitializedPosition(rangeSeekBarMin,rangeSeekBarMax);
     }
@@ -369,6 +414,15 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     }
 
 
+    private void initTrimmingBars(){
+
+        startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
+        stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
+        durationTag.setText(TimeUtils.toFormattedTime((finishTimeMs - startTimeMs)));
+
+        rangeSeekBar.setInitializedPosition(seekBarMin/100,seekBarMax/100);
+
+    }
 
     private void releaseVideoView() {
         preview.stopPlayback();
@@ -382,12 +436,13 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
-                seekBar.setProgress(videoPlayer.getCurrentPosition());
-                refreshStartTimeTag(videoPlayer.getCurrentPosition());
+                currentPosition = videoPlayer.getCurrentPosition();
+                seekBar.setProgress(currentPosition);
+
                 if (isEndOfVideo()) {
                     videoPlayer.pause();
                     playButton.setVisibility(View.VISIBLE);
-                    refreshStartTimeTag(video.getFileStartTime());
+
                     seekBar.setProgress(0);
                     videoPlayer.seekTo(video.getFileStartTime());
                 }
@@ -400,7 +455,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         return seekBar.getProgress() >= video.getFileDuration();
     }
 
-    private void initVideoPlayer(final String videoPath) {
+    private void initVideoPlayer(final int position, final String videoPath) {
         if (videoPlayer == null) {
             preview.setVideoPath(videoPath);
             preview.setMediaController(mediaController);
@@ -411,11 +466,11 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     videoPlayer = mp;
-                    seekBar.setProgress(videoPlayer.getCurrentPosition());
+                    seekBar.setProgress(position);
                     videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
                     videoPlayer.start();
-                    videoPlayer.seekTo(100 + video.getFileStartTime());
+                    videoPlayer.seekTo(100 + position + video.getFileStartTime());
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
@@ -433,7 +488,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
 
                 @Override
                 public void onPrepared(MediaPlayer mp) {
-                    seekBar.setProgress(videoPlayer.getCurrentPosition());
+                    seekBar.setProgress(position);
                     videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
                     updateSeekBarProgress();

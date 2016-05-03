@@ -801,7 +801,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
                     seekBar.setProgress(videoPlayer.getCurrentPosition() +
                             videoStartTimeInProject.get(currentVideoIndex) -
                             videoList.get(currentVideoIndex).getFileStartTime());
-                   // refreshStartTimeTag(seekBar.getProgress());
+                   // refreshStartTimeTag(videoSeekBar.getProgress());
                     if (isEndOfVideo()) {
                         currentVideoIndex++;
                         if (hasNextVideoToPlay()) {
