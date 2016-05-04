@@ -133,7 +133,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
         timeLinePresenter = new VideoTimeLinePresenter(this);
 
-        initVideoListRecycler();
+      //  initVideoListRecycler();
 
 
     }
@@ -195,6 +195,8 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
     @Override
     protected void onStart() {
         super.onStart();
+
+        initVideoListRecycler();
     }
 
     @Override

@@ -317,8 +317,9 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
     @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
-        int maxSeekBar = video.getFileDuration();
+        int maxSeekBar = (video.getFileStopTime() - video.getFileStartTime());
         videoSeekBar.setMax(maxSeekBar);
+        //currentPosition = video.getFileStartTime();
         initVideoPlayer(currentPosition, video.getMediaPath());
 
 
@@ -349,7 +350,7 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
     @Override
     public void updateSeekBarSize() {
 
-        int maxSeekBar = video.getFileDuration();
+        int maxSeekBar =  (video.getFileStopTime() - video.getFileStartTime());
 
         videoSeekBar.setProgress(0);
         videoSeekBar.setMax(maxSeekBar);
@@ -372,7 +373,7 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
-                currentPosition = videoPlayer.getCurrentPosition();
+                currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
                 videoSeekBar.setProgress(currentPosition);
                 splitSeekBar.setProgress(currentPosition);
                 overSplitSeekBar.setProgress(currentPosition);
@@ -380,7 +381,7 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
                 if (isEndOfVideo()) {
                     videoPlayer.pause();
                     playButton.setVisibility(View.VISIBLE);
-                    refreshTimeTag(video.getFileStartTime());
+                    refreshTimeTag(0);
                     videoSeekBar.setProgress(0);
                     splitSeekBar.setProgress(0);
                     overSplitSeekBar.setProgress(0);
@@ -398,7 +399,7 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
 
 
     private boolean isEndOfVideo() {
-        return videoSeekBar.getProgress() >= video.getFileDuration();
+        return videoSeekBar.getProgress() >=  (video.getFileStopTime() - video.getFileStartTime());
     }
 
     private void initVideoPlayer(final int position, final String videoPath) {

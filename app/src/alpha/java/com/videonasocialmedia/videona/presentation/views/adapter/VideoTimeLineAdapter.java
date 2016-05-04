@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.FileDescriptorBitmapDecoder;
+import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
@@ -119,10 +123,20 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public void onBindViewHolder(VideoViewHolder holder, int position) {
 
         Video current = videoList.get(position);
+
+        int microSecond = current.getFileStartTime()*1000;
+        BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
+        FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
+                new VideoBitmapDecoder(microSecond),
+                bitmapPool,
+                DecodeFormat.PREFER_ARGB_8888);
+
         String path = current.getIconPath() != null
                 ? current.getIconPath() : current.getMediaPath();
         Glide.with(context)
                 .load(path)
+                .asBitmap()
+                .videoDecoder(decoder)
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
