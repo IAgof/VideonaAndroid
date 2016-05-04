@@ -248,7 +248,7 @@ public class TrimRangeSeekBar extends FrameLayout implements View.OnTouchListene
                         minThumbPosition = position;
                         viewBaseLineUnselected.setLayoutParams(lpUnselectedView);
                     }
-                    if (mRangeChangeListener != null) {
+                    if (mRangeChangeListener != null && isVideoInitialized) {
                         double minPosition = getMinPositionValue();
                         double maxPosition = getMaxPositionValue();
                         mRangeChangeListener.setRangeChangeListener(viewGroupParent, minPosition, maxPosition);
@@ -408,5 +408,8 @@ public class TrimRangeSeekBar extends FrameLayout implements View.OnTouchListene
         initRightSeekBar = Math.round(right*100)/100.0d;;
     }
 
+    public void setIsVideonInitialized(){
+        isVideoInitialized = false;
+    }
 
 }

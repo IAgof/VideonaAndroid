@@ -133,7 +133,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
         timeLinePresenter = new VideoTimeLinePresenter(this);
 
-        initVideoListRecycler();
+      //  initVideoListRecycler();
 
 
     }
@@ -195,6 +195,8 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
     @Override
     protected void onStart() {
         super.onStart();
+
+        initVideoListRecycler();
     }
 
     @Override
@@ -280,6 +282,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
     @OnClick (R.id.button_editor_room_split)
     public void onClickEditorRoomSplit(){
         // navigateTo(Activity.class)
+        navigateTo(VideoSplitActivity.class, currentVideoIndex);
     }
 
     public void navigateTo(Class cls) {
@@ -800,7 +803,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
                     seekBar.setProgress(videoPlayer.getCurrentPosition() +
                             videoStartTimeInProject.get(currentVideoIndex) -
                             videoList.get(currentVideoIndex).getFileStartTime());
-                   // refreshStartTimeTag(seekBar.getProgress());
+                   // refreshStartTimeTag(videoSeekBar.getProgress());
                     if (isEndOfVideo()) {
                         currentVideoIndex++;
                         if (hasNextVideoToPlay()) {

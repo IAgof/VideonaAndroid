@@ -368,10 +368,10 @@ public class VideolistFullScreenPreviewActivity extends VideonaActivity implemen
     }
 
     /**
-     * Listener seekBar, videoPlayer
+     * Listener videoSeekBar, videoPlayer
      *
-     * @param seekBar  the seekBar of the event
-     * @param progress the new progress of the seekBar
+     * @param seekBar  the videoSeekBar of the event
+     * @param progress the new progress of the videoSeekBar
      * @param fromUser true if the event was caused by an action from the user. False otherwise
      */
     @Override

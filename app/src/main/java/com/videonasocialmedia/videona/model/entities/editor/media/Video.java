@@ -34,6 +34,11 @@ public class Video extends Media {
      * The total duration of the file media resource
      */
     private int fileDuration;
+    /**
+     * Define if a video has been splitted before
+     */
+    private boolean isSplitted;
+
 
     /**
      * Constructor of minimum number of parameters. Default constructor.
@@ -75,10 +80,12 @@ public class Video extends Media {
             fileDuration = duration;
             fileStartTime = 0;
             fileStopTime = duration;
+            isSplitted = false;
         } catch (Exception e) {
             fileDuration = 0;
             duration = 0;
             fileStopTime = 0;
+            isSplitted = false;
         }
     }
 
@@ -100,6 +107,14 @@ public class Video extends Media {
 
     public void setFileDuration(int fileDuration) {
         this.fileDuration = fileDuration;
+    }
+
+    public boolean getIsSplitted() {
+        return isSplitted;
+    }
+
+    public void setIsSplitted(boolean isSplitted){
+        this.isSplitted = isSplitted;
     }
 
 }
