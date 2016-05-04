@@ -309,8 +309,12 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
 
     @Override
     public void seekTo(int timeInMsec) {
-        if(videoPlayer!=null)
-        videoPlayer.seekTo(timeInMsec);
+        if(videoPlayer!=null) {
+            if(video.getIsSplit()){
+                timeInMsec = timeInMsec + video.getFileStartTime();
+            }
+            videoPlayer.seekTo(timeInMsec);
+        }
     }
 
     @Override
@@ -321,7 +325,11 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
-        videoDuration = video.getFileDuration();
+        if(video.getIsSplit()){
+            videoDuration = video.getFileStopTime() - video.getFileStartTime();
+        } else {
+            videoDuration = video.getFileDuration();
+        }
         timeCorrector = videoDuration / 100;
         seekBar.setMax(videoDuration);
         initVideoPlayer(currentPosition, video.getMediaPath());
@@ -436,7 +444,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
-                currentPosition = videoPlayer.getCurrentPosition();
+                currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();;
                 seekBar.setProgress(currentPosition);
 
                 if (isEndOfVideo()) {
@@ -452,7 +460,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     }
 
     private boolean isEndOfVideo() {
-        return seekBar.getProgress() >= video.getFileDuration();
+        return seekBar.getProgress() >= videoDuration;
     }
 
     private void initVideoPlayer(final int position, final String videoPath) {

@@ -37,7 +37,7 @@ public class Video extends Media {
     /**
      * Define if a video has been splitted before
      */
-    private boolean isSplitted;
+    private boolean isSplit;
 
 
     /**
@@ -80,12 +80,12 @@ public class Video extends Media {
             fileDuration = duration;
             fileStartTime = 0;
             fileStopTime = duration;
-            isSplitted = false;
+            isSplit = false;
         } catch (Exception e) {
             fileDuration = 0;
             duration = 0;
             fileStopTime = 0;
-            isSplitted = false;
+            isSplit = false;
         }
     }
 
@@ -109,12 +109,12 @@ public class Video extends Media {
         this.fileDuration = fileDuration;
     }
 
-    public boolean getIsSplitted() {
-        return isSplitted;
+    public boolean getIsSplit() {
+        return isSplit;
     }
 
-    public void setIsSplitted(boolean isSplitted){
-        this.isSplitted = isSplitted;
+    public void setIsSplit(boolean isSplit){
+        this.isSplit = isSplit;
     }
 
 }
