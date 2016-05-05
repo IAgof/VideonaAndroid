@@ -45,8 +45,8 @@
             android:layout_height="24dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/edit_activity_button_trash_selector"
-            android:background="#f90606"
+            android:src="@drawable/activity_edit_clip_delete"
+            android:background="@color/colorAccent"
             android:padding="3dp"
             android:visibility="gone"
             />

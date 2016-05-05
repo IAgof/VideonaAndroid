@@ -8,7 +8,7 @@
 
     <item
         android:id="@+id/action_more"
-        android:icon="@drawable/activity_settings_icon_email"
+        android:icon="@drawable/activity_edit_menu"
         android:title="More"
         android:orderInCategory="100"
         app:showAsAction="always">
@@ -17,17 +17,17 @@
 
             <item
                 android:id="@+id/action_settings_edit_options"
-                android:icon="@drawable/activity_record_icon_flash_camera_pressed"
-                android:title="Options"
+                android:icon="@drawable/menu_settings"
+                android:title="Settings"
                 app:showAsAction="never"/>
             <item
                 android:id="@+id/action_settings_edit_gallery"
-                android:icon="@android:drawable/ic_media_play"
+                android:icon="@drawable/menu_gallery"
                 android:title="Gallery"
                 app:showAsAction="never"/>
             <item
                 android:id="@+id/action_settings_edit_tutorial"
-                android:icon="@android:drawable/ic_media_play"
+                android:icon="@drawable/menu_tutorial"
                 android:title="Tutorial"
                 app:showAsAction="never"/>
 

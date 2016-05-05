@@ -38,20 +38,22 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="#00000000"
-            android:src="@drawable/common_icon_play_on_normal" />
+            android:src="@drawable/common_icon_play" />
 
         <SeekBar
             android:id="@+id/seekbar_trim_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/video_trim_preview"
+            android:progressDrawable="@color/colorAccent"
+            android:maxHeight="1dp"
             android:layout_marginBottom="4dp" />
 
         <ImageButton
             android:id="@+id/button_trim_room_fullscreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/common_icon_fullscreen_out_normal"
+            android:src="@drawable/common_icon_expand"
             android:layout_alignTop="@+id/video_trim_preview"
             android:layout_alignRight="@+id/video_trim_preview"
             android:layout_marginRight="8dp"

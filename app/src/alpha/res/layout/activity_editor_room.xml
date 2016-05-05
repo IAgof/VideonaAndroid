@@ -40,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/activity_record_icon_flash_camera_pressed" />
+                android:src="@drawable/activity_edit_clip_pressed"
+                android:clickable="false"/>
 
             <ImageButton
                 android:id="@+id/button_music_room_navigator"
@@ -48,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@android:drawable/ic_menu_compass"/>
+                android:src="@drawable/activity_edit_music"/>
 
             <ImageButton
                 android:id="@+id/button_share_room_navigator"
@@ -56,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@android:drawable/ic_menu_edit"/>
+                android:src="@drawable/activity_edit_share"/>
 
         </LinearLayout>
 
@@ -78,20 +79,22 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="#00000000"
-                android:src="@drawable/common_icon_play_on_normal" />
+                android:src="@drawable/common_icon_play" />
 
             <SeekBar
                 android:id="@+id/seekbar_editor_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/video_editor_preview"
+                android:progressDrawable="@color/colorAccent"
+                android:maxHeight="1dp"
                 android:layout_marginBottom="4dp" />
 
             <ImageButton
                 android:id="@+id/button_editor_room_fullscreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/common_icon_fullscreen_out_normal"
+                android:src="@drawable/common_icon_expand"
                 android:layout_alignTop="@+id/video_editor_preview"
                 android:layout_alignRight="@+id/video_editor_preview"
                 android:layout_marginRight="8dp"
@@ -114,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@android:drawable/ic_menu_gallery" />
+                android:src="@drawable/activity_edit_clip_duplicate" />
 
             <ImageButton
                 android:id="@+id/button_editor_room_trim"
@@ -122,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@android:drawable/ic_media_play"/>
+                android:src="@drawable/activity_edit_clip_trim"/>
 
             <ImageButton
                 android:id="@+id/button_editor_room_split"
@@ -130,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@android:drawable/ic_menu_myplaces"/>
+                android:src="@drawable/activity_edit_clip_divide"/>
 
         </LinearLayout>
 
@@ -150,6 +153,7 @@
         app:layout_anchor="@id/coordinatorLayout"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_btn_speak_now" />
+        android:src="@drawable/common_icon_add_white"
+        app:backgroundTint="@color/colorAccent"/>
 
 </android.support.design.widget.CoordinatorLayout>
