@@ -71,8 +71,8 @@
 
                 <ImageView
                     android:id="@+id/imageThumbDuplicateVideoLeft"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="72dp"
+                    android:layout_height="50dp"
                     android:src="@drawable/gatito_rules"/>
                 <TextView
                     android:id="@+id/textViewDuplicateNumIncrement"
@@ -83,8 +83,8 @@
                     android:paddingRight="20dp"/>
                 <ImageView
                     android:id="@+id/imageThumbDuplicateVideoRight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="72dp"
+                    android:layout_height="50dp"
                     android:src="@drawable/gatito_rules"/>
 
             </LinearLayout>

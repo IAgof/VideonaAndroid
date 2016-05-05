@@ -28,6 +28,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.FileDescriptorBitmapDecoder;
+import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.DuplicatePreviewPresenter;
@@ -47,7 +52,6 @@ import butterknife.OnTouch;
 public class VideoDuplicateActivity extends VideonaActivity implements PreviewView, DuplicateView,
         SeekBar.OnSeekBarChangeListener {
 
-    private static final String DUPLICATE_VIDEO_POSITION = "split_position";
 
     @Bind(R.id.video_duplicate_preview)
     AspectRatioVideoView preview;
@@ -85,6 +89,11 @@ public class VideoDuplicateActivity extends VideonaActivity implements PreviewVi
     private String TAG = "VideoDuplicateActivity";
     private int currentPosition = 0;
 
+    private int numDuplicateVideos = 2;
+
+
+    private static final String DUPLICATE_VIDEO_POSITION = "duplicate_video_position";
+    private String NUM_DUPLICATE_VIDEOS = "num_duplicate_videos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +120,10 @@ public class VideoDuplicateActivity extends VideonaActivity implements PreviewVi
 
         if(savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(DUPLICATE_VIDEO_POSITION,0);
+            numDuplicateVideos = savedInstanceState.getInt(NUM_DUPLICATE_VIDEOS, 2);
         }
+
+        textNumDuplicates.setText("x" + numDuplicateVideos);
     }
 
     @Override
@@ -150,6 +162,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements PreviewVi
     protected void onSaveInstanceState(Bundle outState) {
 
         outState.putInt(DUPLICATE_VIDEO_POSITION,currentPosition);
+        outState.putInt(NUM_DUPLICATE_VIDEOS, numDuplicateVideos);
         super.onSaveInstanceState(outState);
 
     }
@@ -220,16 +233,16 @@ public class VideoDuplicateActivity extends VideonaActivity implements PreviewVi
         }
     }
 
-    @OnClick(R.id.button_split_accept)
-    public void onClickSplitAccept(){
+    @OnClick(R.id.button_duplicate_accept)
+    public void onClickDuplicateAccept(){
 
-        presenter.duplicateVideo(video, videoIndexOnTrack, 1);
+        presenter.duplicateVideo(video, videoIndexOnTrack, numDuplicateVideos);
         finish();
         navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
     }
 
-    @OnClick(R.id.button_split_cancel)
-    public void onClickSplitCancel(){
+    @OnClick(R.id.button_duplicate_cancel)
+    public void onClickDuplicateCancel(){
         finish();
         navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
     }
@@ -405,18 +418,45 @@ public class VideoDuplicateActivity extends VideonaActivity implements PreviewVi
     @Override
     public void initDuplicateView(String path) {
         decrementVideoButton.setVisibility(View.GONE);
-        Glide.with(this).load(path).into(imageThumbLeft);
-        Glide.with(this).load(path).into(imageThumbRight);
+        showThumVideo(imageThumbLeft);
+        showThumVideo(imageThumbRight);
+    }
 
+    private void showThumVideo(ImageView imageThumbLeft) {
+
+        int microSecond = video.getFileStartTime()*1000;
+        BitmapPool bitmapPool = Glide.get(this).getBitmapPool();
+        FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
+                new VideoBitmapDecoder(microSecond),
+                bitmapPool,
+                DecodeFormat.PREFER_ARGB_8888);
+
+        String path = video.getIconPath() != null
+                ? video.getIconPath() : video.getMediaPath();
+        Glide.with(this)
+                .load(path)
+                .asBitmap()
+                .videoDecoder(decoder)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .centerCrop()
+                .error(R.drawable.fragment_gallery_no_image)
+                .into(imageThumbLeft);
     }
 
     @OnClick(R.id.buttonDuplicateIncrementVideo)
     public void onClickIncrementVideo(){
-
+        numDuplicateVideos++;
+        decrementVideoButton.setVisibility(View.VISIBLE);
+        textNumDuplicates.setText("x" + numDuplicateVideos);
     }
 
     @OnClick (R.id.buttonDuplicateDecrementVideo)
     public void onClickDecrementVideo(){
+        numDuplicateVideos--;
+        if(numDuplicateVideos <= 2)
+            decrementVideoButton.setVisibility(View.GONE);
+        textNumDuplicates.setText("x" + numDuplicateVideos);
 
     }
 

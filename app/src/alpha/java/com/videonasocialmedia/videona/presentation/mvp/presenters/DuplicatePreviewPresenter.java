@@ -84,6 +84,10 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved{
 
 
     public void duplicateVideo(Video video, int positionInAdapter, int numDuplicates) {
+        for(int duplicates = 1;duplicates<numDuplicates; duplicates++){
+            addVideoToProjectUseCase.addVideoToProjectAtPosition(video,positionInAdapter);
+        }
+
 
     }
 
