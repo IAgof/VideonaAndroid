@@ -23,7 +23,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.EditorRoomActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
@@ -90,7 +90,7 @@ public class NavigationDrawerFragment extends VideonaFragment implements OnVideo
 
         // In ShareActivity, Edit goBack to editActivity, not to GalleryActivity.
         // In EditActivity go back to editActivity
-        if(this.getActivity().getClass() == EditActivity.class){
+        if(this.getActivity().getClass() == EditorRoomActivity.class){
 
             this.getActivity().onBackPressed();
 
