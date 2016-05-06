@@ -10,11 +10,6 @@
         android:theme="@style/VideonaTheme">
 
         <activity
-            android:name=".presentation.views.activity.EditActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
             android:name=".presentation.views.activity.ShareVideoActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.EditActivity"
@@ -26,32 +21,23 @@
             android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name=".presentation.views.activity.VideoFullScreenPreviewActivity"
-            android:label="@string/title_activity_video_player"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".presentation.views.activity.VideolistFullScreenPreviewActivity"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".presentation.views.activity.EditorRoomActivity"
+            android:name=".presentation.views.activity.EditActivity"
             android:parentActivityName=".presentation.views.activity.RecordActivity"
             android:label="@string/app_name" />
 
         <activity
             android:name=".presentation.views.activity.VideoTrimActivity"
-            android:parentActivityName=".presentation.views.activity.EditorRoomActivity"
+            android:parentActivityName=".presentation.views.activity.EditActivity"
             android:label="@string/app_name" />
 
         <activity
             android:name=".presentation.views.activity.VideoSplitActivity"
-            android:parentActivityName=".presentation.views.activity.EditorRoomActivity"
+            android:parentActivityName=".presentation.views.activity.EditActivity"
             android:label="@string/app_name" />
 
         <activity
             android:name=".presentation.views.activity.VideoDuplicateActivity"
-            android:parentActivityName=".presentation.views.activity.EditorRoomActivity"
+            android:parentActivityName=".presentation.views.activity.EditActivity"
             android:label="@string/app_name" />
 
     </application>

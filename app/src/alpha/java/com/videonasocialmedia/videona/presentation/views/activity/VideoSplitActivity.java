@@ -29,10 +29,10 @@ import android.widget.TextView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.SplitPreviewPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.SplitView;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
-import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnSplitConfirmListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 
@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class VideoSplitActivity extends VideonaActivity implements PreviewView, SplitView,
+public class VideoSplitActivity extends VideonaActivity implements VideoPreviewView, SplitView,
         SeekBar.OnSeekBarChangeListener {
 
     private static final String SPLIT_POSITION = "split_position";
@@ -69,7 +69,7 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
 
     private MediaController mediaController;
     private MediaPlayer videoPlayer;
-    private OnTrimConfirmListener onTrimConfirmListener;
+    private OnSplitConfirmListener onSplitConfirmListener;
     private Video video;
     protected Handler handler = new Handler();
     private final Runnable updateTimeTask = new Runnable() {
@@ -175,7 +175,7 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_room, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
 
@@ -242,13 +242,13 @@ public class VideoSplitActivity extends VideonaActivity implements PreviewView, 
 
         presenter.splitVideo(video, videoIndexOnTrack, currentPosition);
         finish();
-        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_split_cancel)
     public void onClickSplitCancel(){
         finish();
-        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     private void navigateTo(Class cls,  int currentVideoIndex) {

@@ -12,7 +12,7 @@ import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.eventbus.events.VideoDurationModifiedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 
 import java.util.ArrayList;
@@ -40,12 +40,12 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
     /**
      * Preview View
      */
-    private PreviewView previewView;
+    private VideoPreviewView videoPreviewView;
 
     private TrimView trimView;
 
-    public TrimPreviewPresenter(PreviewView previewView, TrimView trimView) {
-        this.previewView = previewView;
+    public TrimPreviewPresenter(VideoPreviewView videoPreviewView, TrimView trimView) {
+        this.videoPreviewView = videoPreviewView;
         this.trimView = trimView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         modifyVideoDurationUseCase = new ModifyVideoDurationUseCase();
@@ -72,7 +72,7 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        previewView.showPreview(videoList);
+        videoPreviewView.showPreview(videoList);
         Video video = videoList.get(0);
         if(video.getIsSplit()){
             showTimeSplittedTags(video);
@@ -97,7 +97,7 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     @Override
     public void onNoVideosRetrieved() {
-        previewView.showError("No videos");
+        videoPreviewView.showError("No videos");
     }
 
 
@@ -111,7 +111,7 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     public void onEvent (VideoDurationModifiedEvent event){
         Video modifiedVideo= event.video;
-        previewView.updateSeekBarSize();
+        videoPreviewView.updateSeekBarSize();
         showTimeTags(modifiedVideo);
     }
 

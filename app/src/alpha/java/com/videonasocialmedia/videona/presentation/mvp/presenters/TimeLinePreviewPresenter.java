@@ -7,7 +7,7 @@ import com.videonasocialmedia.videona.domain.editor.ReorderMediaItemUseCase;
 import com.videonasocialmedia.videona.eventbus.events.video.VideosRetrievedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoTimeLineView;
+import com.videonasocialmedia.videona.presentation.mvp.views.TimeLineView;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import java.util.List;
 /**
  * Created by jca on 6/7/15.
  */
-public class VideoTimeLinePresenter implements OnVideosRetrieved, OnReorderMediaListener {
+public class TimeLinePreviewPresenter implements OnVideosRetrieved, OnReorderMediaListener {
 
-    private VideoTimeLineView timelineView;
+    private TimeLineView timelineView;
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private ReorderMediaItemUseCase reorderMediaItemUseCase;
 
-    public VideoTimeLinePresenter(VideoTimeLineView timelineView) {
+    public TimeLinePreviewPresenter(TimeLineView timelineView) {
         this.timelineView = timelineView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         reorderMediaItemUseCase= new ReorderMediaItemUseCase();

@@ -805,7 +805,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_navigate_edit)
     public void navigateToEdit() {
         if (!recording) {
-            Intent edit = new Intent(this, EditorRoomActivity.class);
+            Intent edit = new Intent(this, EditActivity.class);
             //edit.putExtra("SHARE", false);
             startActivity(edit);
         }

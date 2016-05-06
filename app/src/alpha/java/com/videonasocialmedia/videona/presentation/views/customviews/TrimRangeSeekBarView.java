@@ -23,9 +23,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.listener.OnRangeChangeListener;
+import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBarChangeListener;
 
-public class TrimRangeSeekBar extends FrameLayout implements View.OnTouchListener {
+public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchListener {
 
     private final String TAG = "RangeSeekbar";
     private final String IMAGE_VIEW_TAG_MIN = "image_view_tag_selected";
@@ -43,23 +43,23 @@ public class TrimRangeSeekBar extends FrameLayout implements View.OnTouchListene
     private int thumbImage;
     private int thumbMaxImage;
 
-    private OnRangeChangeListener mRangeChangeListener;
+    private OnRangeSeekBarChangeListener mRangeChangeListener;
     private int xDelta;
 
     private boolean isVideoInitialized;
     private double initLeftSeekBar;
     private double initRightSeekBar;
 
-    public TrimRangeSeekBar(Context context) {
+    public TrimRangeSeekBarView(Context context) {
         super(context);
     }
 
-    public TrimRangeSeekBar(Context context, AttributeSet attrs) {
+    public TrimRangeSeekBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initializeComponents(context, attrs);
     }
 
-    public TrimRangeSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TrimRangeSeekBarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initializeComponents(context, attrs);
     }
@@ -71,7 +71,7 @@ public class TrimRangeSeekBar extends FrameLayout implements View.OnTouchListene
      * @param attrs   AttributeSet
      */
     private void initializeComponents(Context context, AttributeSet attrs) {
-        view = LayoutInflater.from(context).inflate(R.layout.trim_range_seek_bar, this);
+        view = LayoutInflater.from(context).inflate(R.layout.edit_trim_range_seek_bar, this);
         viewGroupParent = (ViewGroup) findViewById(R.id.parent);
         ivMaxThumb = (ImageView) view.findViewById(R.id.ivMaxThumb);
         ivMinThumb = (ImageView) view.findViewById(R.id.ivMinThumb);
@@ -398,7 +398,7 @@ public class TrimRangeSeekBar extends FrameLayout implements View.OnTouchListene
      *
      * @param rangeChangeListener OnRangeChangeListener
      */
-    public void setOnRangeListener(OnRangeChangeListener rangeChangeListener) {
+    public void setOnRangeListener(OnRangeSeekBarChangeListener rangeChangeListener) {
         this.mRangeChangeListener = rangeChangeListener;
     }
 

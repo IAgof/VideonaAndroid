@@ -228,7 +228,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     public void navigate() {
         if (!sharing) {
             Intent intent;
-            intent = new Intent(this, EditorRoomActivity.class);
+            intent = new Intent(this, EditActivity.class);
             startActivity(intent);
         }
     }

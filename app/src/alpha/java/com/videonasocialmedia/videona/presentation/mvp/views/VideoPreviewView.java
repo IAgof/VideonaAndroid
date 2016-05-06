@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by vlf on 7/7/15.
  */
-public interface PreviewView {
+public interface VideoPreviewView {
 
     void playPreview();
 

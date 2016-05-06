@@ -7,12 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.listener;
 
-/**
- * Created by jca on 23/3/15.
- */
-public interface OnEffectMenuSelectedListener {
+public interface OnDuplicateConfirmListener {
 
-    void onEffectMenuSelected();
-
-    void onEffectTrimMenuSelected();
+    public void onDuplicateConfirmed();
 }

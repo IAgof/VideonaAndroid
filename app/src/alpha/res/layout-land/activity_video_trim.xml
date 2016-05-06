@@ -63,7 +63,7 @@
             android:layout_weight="3"
             android:orientation="vertical">
 
-            <com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBar
+            <com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBarView
                 android:id="@+id/rangeSeekBar"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"

@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * Created by jca on 6/7/15.
  */
-public interface VideoTimeLineView {
+public interface TimeLineView {
     void showVideoList(List<Video> videoList);
 }

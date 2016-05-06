@@ -39,9 +39,9 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoPreviewPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoTimeLinePresenter;
-import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoTimeLineView;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.TimeLinePreviewPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.views.TimeLineView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
@@ -62,8 +62,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class EditorRoomActivity extends VideonaActivity implements VideoTimeLineView,
-        VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener, PreviewView,
+public class EditActivity extends VideonaActivity implements TimeLineView,
+        VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener, VideoPreviewView,
         SeekBar.OnSeekBarChangeListener{
 
     @Bind(R.id.video_editor_preview)
@@ -99,7 +99,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
     private VideoPreviewPresenter previewPresenter;
 
-    private VideoTimeLinePresenter timeLinePresenter;
+    private TimeLinePreviewPresenter timeLinePresenter;
     private VideoTimeLineAdapter timeLineAdapter;
     private final int NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL = 3;
     private final int NUM_COLUMNS_GRID_TIMELINE_VERTICAL = 4;
@@ -131,7 +131,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
 
         initVideoPreview();
 
-        timeLinePresenter = new VideoTimeLinePresenter(this);
+        timeLinePresenter = new TimeLinePreviewPresenter(this);
 
       //  initVideoListRecycler();
 
@@ -208,7 +208,7 @@ public class EditorRoomActivity extends VideonaActivity implements VideoTimeLine
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_room, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
 

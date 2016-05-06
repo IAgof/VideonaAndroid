@@ -1,17 +1,13 @@
 package com.videonasocialmedia.videona.presentation.views.fragment;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +17,6 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
-import com.videonasocialmedia.videona.presentation.views.activity.VideoFullScreenPreviewActivity;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
@@ -270,7 +265,7 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
     public void onClick(View transitionOrigin, int positionOnAdapter) {
         selectedVideo = videoGalleryAdapter.getVideo(positionOnAdapter);
         String videoPath = selectedVideo.getMediaPath();
-        Intent i = new Intent(getActivity(), VideoFullScreenPreviewActivity.class);
+       /* Intent i = new Intent(getActivity(), VideoFullScreenPreviewActivity.class);
         i.putExtra("VIDEO_PATH", videoPath);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options = ActivityOptions
@@ -279,7 +274,7 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
             startActivity(i, options.toBundle());
         } else {
             startActivity(i);
-        }
+        }*/
     }
 
     protected class TimeChangesHandler extends Handler {

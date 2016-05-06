@@ -30,11 +30,11 @@ import android.widget.TextView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
-import com.videonasocialmedia.videona.presentation.views.listener.OnRangeChangeListener;
-import com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBar;
+import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBarChangeListener;
+import com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBarView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
@@ -47,8 +47,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class VideoTrimActivity extends VideonaActivity implements PreviewView, TrimView,
-        SeekBar.OnSeekBarChangeListener, OnRangeChangeListener {
+public class VideoTrimActivity extends VideonaActivity implements VideoPreviewView, TrimView,
+        SeekBar.OnSeekBarChangeListener, OnRangeSeekBarChangeListener {
 
     @Bind(R.id.video_trim_preview)
     AspectRatioVideoView preview;
@@ -65,7 +65,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     TextView durationTag;
 
     @Bind(R.id.rangeSeekBar)
-    TrimRangeSeekBar rangeSeekBar;
+    TrimRangeSeekBarView rangeSeekBar;
 
     int videoIndexOnTrack;
     private TrimPreviewPresenter presenter;
@@ -183,7 +183,7 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_room, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
 
@@ -250,13 +250,13 @@ public class VideoTrimActivity extends VideonaActivity implements PreviewView, T
         presenter.modifyVideoStartTime(startTimeMs);
         presenter.modifyVideoFinishTime(finishTimeMs);
         finish();
-        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_trim_cancel)
     public void onClickTrimCancel(){
         finish();
-        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     private void navigateTo(Class cls,  int currentVideoIndex) {

@@ -37,7 +37,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.DuplicatePreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.DuplicateView;
-import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
 import com.videonasocialmedia.videona.utils.Constants;
 
@@ -49,7 +49,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class VideoDuplicateActivity extends VideonaActivity implements PreviewView, DuplicateView,
+public class VideoDuplicateActivity extends VideonaActivity implements VideoPreviewView, DuplicateView,
         SeekBar.OnSeekBarChangeListener {
 
 
@@ -171,7 +171,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements PreviewVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_room, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
 
@@ -238,13 +238,13 @@ public class VideoDuplicateActivity extends VideonaActivity implements PreviewVi
 
         presenter.duplicateVideo(video, videoIndexOnTrack, numDuplicateVideos);
         finish();
-        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_duplicate_cancel)
     public void onClickDuplicateCancel(){
         finish();
-        navigateTo(EditorRoomActivity.class, videoIndexOnTrack);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     private void navigateTo(Class cls,  int currentVideoIndex) {

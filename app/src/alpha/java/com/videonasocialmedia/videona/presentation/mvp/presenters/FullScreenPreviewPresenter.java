@@ -13,7 +13,7 @@ import com.videonasocialmedia.videona.eventbus.events.music.MusicRemovedFromProj
 import com.videonasocialmedia.videona.eventbus.events.preview.UpdateSeekBarDurationEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by vlf on 7/7/15.
  */
-public class PreviewPresenter implements OnVideosRetrieved {
+public class FullScreenPreviewPresenter implements OnVideosRetrieved {
 
     /**
      * LOG_TAG
@@ -37,10 +37,10 @@ public class PreviewPresenter implements OnVideosRetrieved {
     /**
      * Preview View
      */
-    private PreviewView previewView;
+    private VideoPreviewView videoPreviewView;
 
-     public PreviewPresenter(PreviewView previewView) {
-        this.previewView = previewView;
+     public FullScreenPreviewPresenter(VideoPreviewView videoPreviewView) {
+        this.videoPreviewView = videoPreviewView;
         getGetMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
     }
 
@@ -61,7 +61,7 @@ public class PreviewPresenter implements OnVideosRetrieved {
     }
 
     public void onEvent(UpdateSeekBarDurationEvent event){
-        previewView.updateSeekBarDuration(event.projectDuration);
+        videoPreviewView.updateSeekBarDuration(event.projectDuration);
     }
 
     public void init() {
@@ -78,11 +78,11 @@ public class PreviewPresenter implements OnVideosRetrieved {
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        previewView.showPreview(videoList);
+        videoPreviewView.showPreview(videoList);
     }
 
     @Override
     public void onNoVideosRetrieved() {
-        previewView.showError("No videos");
+        videoPreviewView.showError("No videos");
     }
 }
