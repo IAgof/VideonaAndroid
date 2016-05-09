@@ -17,6 +17,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,8 +39,8 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.TimeLinePreviewPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoPreviewPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
+import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TimeLineView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
@@ -61,7 +62,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class EditActivity extends VideonaActivity implements TimeLineView,
+public class EditActivity extends VideonaActivity implements TimeLineView, EditorView,
         VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener, VideoPreviewView,
         SeekBar.OnSeekBarChangeListener{
 
@@ -96,9 +97,8 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
     };
     protected Handler handler = new Handler();
 
-    private VideoPreviewPresenter previewPresenter;
+    private EditPresenter editPresenter;
 
-    private TimeLinePreviewPresenter timeLinePresenter;
     private VideoTimeLineAdapter timeLineAdapter;
     private final int NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL = 3;
     private final int NUM_COLUMNS_GRID_TIMELINE_VERTICAL = 4;
@@ -112,7 +112,23 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
     private VideonaDialog dialogRemoveVideoSelected;
     private final int REQUEST_CODE_REMOVE_VIDEO_SELECTED = 0;
     private int selectedVideoRemovePosition;
+    private String videoToSharePath;
 
+    private AlertDialog progressDialog;
+
+    public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
+        final Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    runnable.run();
+                } finally {
+                }
+            }
+        };
+        t.start();
+        return t;
+    }
 
 
     @Override
@@ -130,13 +146,13 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
 
         initVideoPreview();
 
-        timeLinePresenter = new TimeLinePreviewPresenter(this);
+        editPresenter = new EditPresenter(this);
+
+        createProgressDialog();
 
     }
 
     private void initVideoPreview() {
-
-        previewPresenter = new VideoPreviewPresenter(this);
 
         updateVideoList();
 
@@ -162,7 +178,6 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
     @Override
     protected void onPause() {
         super.onPause();
-        previewPresenter.onPause();
         releaseVideoView();
         releaseMusicPlayer();
         projectDuration = 0;
@@ -172,8 +187,7 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
     @Override
     protected void onResume() {
         super.onResume();
-        timeLinePresenter.start();
-        previewPresenter.onResume();
+        editPresenter.obtainVideos();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null) {
@@ -245,38 +259,42 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_edit_navigator)
-    public void onClickEditorRoomNavigator(){
-        // navigateTo(Activity.class)
-    }
-
     @OnClick (R.id.button_music_navigator)
-    public void onClickMusicRoomNavigator(){
+    public void onClickMusicNavigator(){
         // navigateTo(Activity.class)
     }
 
     @OnClick (R.id.button_share_navigator)
-    public void onClickShareRoomNavigator(){
-        // navigateTo(Activity.class)
+    public void onClickShareNavigator(){
+       // navigateTo(ShareVideoActivity.class, videoToSharePath);
+        pausePreview();
+        showProgressDialog();
+        final Runnable r = new Runnable() {
+            public void run() {
+                editPresenter.startExport();
+            }
+        };
+        performOnBackgroundThread(this, r);
+
     }
 
     @OnClick (R.id.button_edit_fullscreen)
-    public void onClickEditorRoomFullscreen(){
+    public void onClickEditFullscreen(){
         // navigateTo(Activity.class)
     }
 
     @OnClick (R.id.button_editor_duplicate)
-    public void onClickEditorRoomDuplicate(){
+    public void onClickEditDuplicate(){
         navigateTo(VideoDuplicateActivity.class, currentVideoIndex);
     }
 
     @OnClick (R.id.button_edit_trim)
-    public void onClickEditorRoomTrim(){
+    public void onClickEditTrim(){
          navigateTo(VideoTrimActivity.class, currentVideoIndex);
     }
 
     @OnClick (R.id.button_edit_split)
-    public void onClickEditorRoomSplit(){
+    public void onClickEditSplit(){
         navigateTo(VideoSplitActivity.class, currentVideoIndex);
     }
 
@@ -290,6 +308,13 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
         intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
         startActivity(intent);
     }
+
+    public void navigateTo(Class cls, String videoToSharePath) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
+        startActivity(intent);
+    }
+
 
     @OnClick (R.id.button_editor_play_pause)
     public void onClickPlayPauseButton(){
@@ -340,7 +365,7 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
     }
 
     private boolean isVideosOnProject() {
-        List<Media> list = previewPresenter.checkVideosOnProject();
+        List<Media> list = editPresenter.checkVideosOnProject();
         return list.size() > 0;
     }
 
@@ -447,6 +472,7 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
         if(id == REQUEST_CODE_REMOVE_VIDEO_SELECTED){
             timeLineAdapter.remove(selectedVideoRemovePosition);
             dialogRemoveVideoSelected.dismiss();
+            editPresenter.removeVideoFromProject(videoList.get(selectedVideoRemovePosition));
         }
     }
 
@@ -485,7 +511,7 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
 
     @Override
     public void updateVideoList() {
-        previewPresenter.update();
+        editPresenter.obtainVideos();
     }
 
     @Override
@@ -818,5 +844,48 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
         return seekBar.getProgress() >= videoStopTimeInProject.get(currentVideoIndex);
     }
 
+
+    private void createProgressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
+        progressDialog = builder.setCancelable(false)
+                .setView(dialogView)
+                .create();
+    }
+
+
+    @Override
+    public void goToShare(String videoToSharePath) {
+        navigateTo(ShareVideoActivity.class, videoToSharePath);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    @Override
+    public void showError(int causeTextResource) {
+        VideonaDialog dialog = new VideonaDialog.Builder()
+                .withTitle(getString(R.string.error))
+                .withMessage(getResources().getString(causeTextResource))
+                .create();
+        dialog.show(getFragmentManager(), "errorDialog");
+    }
+
+    @Override
+    public void showMessage(final int stringToast) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(getApplicationContext(), stringToast, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

@@ -53,4 +53,5 @@ public class Constants {
 
     // EXTRAS INTENT EDIT
     final public static String CURRENT_VIDEO_INDEX = "current_video_index";
+    final public static String VIDEO_TO_SHARE_PATH = "video_to_share_path";
 }
