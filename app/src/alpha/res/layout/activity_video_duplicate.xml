@@ -50,7 +50,7 @@
             android:layout_marginBottom="4dp" />
 
         <ImageButton
-            android:id="@+id/button_duplicate_room_fullscreen"
+            android:id="@+id/button_duplicate_fullscreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/common_icon_expand"
@@ -69,7 +69,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linearLayoutDuplicate"
+            android:id="@+id/linear_layout_duplicate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -78,12 +78,12 @@
             android:padding="10dp">
 
             <ImageView
-                android:id="@+id/imageThumbDuplicateVideoLeft"
+                android:id="@+id/image_thumb_duplicate_video_left"
                 android:layout_width="72dp"
                 android:layout_height="50dp"
                 android:src="@drawable/gatito_rules"/>
             <TextView
-                android:id="@+id/textViewDuplicateNumIncrement"
+                android:id="@+id/textView_duplicate_num_increment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="x2"
@@ -91,7 +91,7 @@
                 android:paddingRight="20dp"
                 android:textSize="24sp"/>
             <ImageView
-                android:id="@+id/imageThumbDuplicateVideoRight"
+                android:id="@+id/image_thumb_duplicate_video_right"
                 android:layout_width="72dp"
                 android:layout_height="50dp"
                 android:src="@drawable/gatito_rules"/>
@@ -100,21 +100,21 @@
 
 
         <ImageButton
-            android:id="@+id/buttonDuplicateIncrementVideo"
+            android:id="@+id/button_duplicate_increment_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/gatito_rules"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/linearLayoutDuplicate"/>
+            android:layout_below="@+id/linear_layout_duplicate"/>
 
         <ImageButton
-            android:id="@+id/buttonDuplicateDecrementVideo"
+            android:id="@+id/button_duplicate_decrement_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/gatito_rules"
-            android:layout_toLeftOf="@+id/buttonDuplicateIncrementVideo"
+            android:layout_toLeftOf="@+id/button_duplicate_increment_video"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/linearLayoutDuplicate"
+            android:layout_below="@+id/linear_layout_duplicate"
             />
 
         <TextView
@@ -129,7 +129,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:layout_alignParentBottom="false"
             android:layout_marginBottom="16dp"
-            android:layout_above="@+id/linearLayoutDuplicate"
+            android:layout_above="@+id/linear_layout_duplicate"
             android:layout_centerHorizontal="true"
             />
 

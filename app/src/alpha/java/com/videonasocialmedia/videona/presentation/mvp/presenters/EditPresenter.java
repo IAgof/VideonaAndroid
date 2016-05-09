@@ -23,7 +23,6 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
-import com.videonasocialmedia.videona.eventbus.events.music.ErrorAddingMusicToProjectEvent;
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -129,10 +128,6 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
 
     public void addMusic(Music music) {
         addMusicToProjectUseCase.addMusicToTrack(music, 0);
-    }
-
-    public void onEvent(ErrorAddingMusicToProjectEvent event){
-        editorView.showError(R.string.addMediaItemToTrackError);
     }
 
     public void removeMusic(Music music) {

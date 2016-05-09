@@ -60,16 +60,16 @@ public class VideoDuplicateActivity extends VideonaActivity implements VideoPrev
     @Bind(R.id.seekbar_duplicate_preview)
     SeekBar videoSeekBar;
 
-    @Bind(R.id.imageThumbDuplicateVideoLeft)
+    @Bind(R.id.image_thumb_duplicate_video_left)
     ImageView imageThumbLeft;
-    @Bind(R.id.imageThumbDuplicateVideoRight)
+    @Bind(R.id.image_thumb_duplicate_video_right)
     ImageView imageThumbRight;
-    @Bind(R.id.textViewDuplicateNumIncrement)
+    @Bind(R.id.textView_duplicate_num_increment)
     TextView textNumDuplicates;
 
-    @Bind(R.id.buttonDuplicateIncrementVideo)
+    @Bind(R.id.button_duplicate_increment_video)
     ImageButton incrementVideoButton;
-    @Bind(R.id.buttonDuplicateDecrementVideo)
+    @Bind(R.id.button_duplicate_decrement_video)
     ImageButton decrementVideoButton;
 
 
@@ -444,14 +444,14 @@ public class VideoDuplicateActivity extends VideonaActivity implements VideoPrev
                 .into(imageThumbLeft);
     }
 
-    @OnClick(R.id.buttonDuplicateIncrementVideo)
+    @OnClick(R.id.button_duplicate_increment_video)
     public void onClickIncrementVideo(){
         numDuplicateVideos++;
         decrementVideoButton.setVisibility(View.VISIBLE);
         textNumDuplicates.setText("x" + numDuplicateVideos);
     }
 
-    @OnClick (R.id.buttonDuplicateDecrementVideo)
+    @OnClick (R.id.button_duplicate_decrement_video)
     public void onClickDecrementVideo(){
         numDuplicateVideos--;
         if(numDuplicateVideos <= 2)

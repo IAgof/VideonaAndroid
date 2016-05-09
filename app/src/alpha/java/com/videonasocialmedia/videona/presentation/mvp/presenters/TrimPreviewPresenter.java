@@ -9,7 +9,6 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
-import com.videonasocialmedia.videona.eventbus.events.VideoDurationModifiedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
@@ -107,12 +106,6 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     public void modifyVideoFinishTime(int finishTime) {
         modifyVideoDurationUseCase.modifyVideoFinishTime(videoToEdit, finishTime);
-    }
-
-    public void onEvent (VideoDurationModifiedEvent event){
-        Video modifiedVideo= event.video;
-        videoPreviewView.updateSeekBarSize();
-        showTimeTags(modifiedVideo);
     }
 
 }

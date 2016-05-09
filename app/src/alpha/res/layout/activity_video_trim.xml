@@ -50,7 +50,7 @@
             android:layout_marginBottom="4dp" />
 
         <ImageButton
-            android:id="@+id/button_trim_room_fullscreen"
+            android:id="@+id/button_trim_fullscreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/common_icon_expand"
@@ -70,7 +70,7 @@
 
 
         <com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBarView
-            android:id="@+id/rangeSeekBar"
+            android:id="@+id/trim_rangeSeekBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:bar_color="#88c14c"
@@ -83,29 +83,29 @@
 
 
         <TextView
-            android:id="@+id/trim_text_start_trim"
+            android:id="@+id/text_start_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="@android:color/black"
             android:gravity="center"
-            android:layout_below="@+id/rangeSeekBar"
+            android:layout_below="@+id/trim_rangeSeekBar"
             android:layout_alignParentLeft="true"/>
 
         <TextView
-            android:id="@+id/trim_text_end_trim"
+            android:id="@+id/text_end_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="@android:color/black"
             android:gravity="center"
-            android:layout_below="@+id/rangeSeekBar"
+            android:layout_below="@+id/trim_rangeSeekBar"
             android:layout_alignParentRight="true"/>
 
         <TextView
-            android:id="@+id/trim_text_time_trim"
+            android:id="@+id/text_time_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
@@ -115,12 +115,12 @@
             android:gravity="center_vertical|center_horizontal"
             android:layout_alignParentBottom="false"
             android:layout_marginBottom="4dp"
-            android:layout_above="@+id/rangeSeekBar"
+            android:layout_above="@+id/trim_rangeSeekBar"
             android:layout_centerHorizontal="true"
             />
 
         <TextView
-            android:id="@+id/trim_text_info_trim"
+            android:id="@+id/text_info_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Recorta tu clip"
@@ -130,7 +130,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:layout_alignParentBottom="false"
             android:layout_marginBottom="16dp"
-            android:layout_above="@+id/trim_text_time_trim"
+            android:layout_above="@+id/text_time_trim"
             android:layout_centerHorizontal="true"
             />
 

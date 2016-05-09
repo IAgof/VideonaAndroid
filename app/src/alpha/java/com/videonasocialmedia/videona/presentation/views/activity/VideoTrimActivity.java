@@ -57,14 +57,14 @@ public class VideoTrimActivity extends VideonaActivity implements VideoPreviewVi
     @Bind(R.id.seekbar_trim_preview)
     SeekBar seekBar;
 
-    @Bind(R.id.trim_text_start_trim)
+    @Bind(R.id.text_start_trim)
     TextView startTimeTag;
-    @Bind(R.id.trim_text_end_trim)
+    @Bind(R.id.text_end_trim)
     TextView stopTimeTag;
-    @Bind(R.id.trim_text_time_trim)
+    @Bind(R.id.text_time_trim)
     TextView durationTag;
 
-    @Bind(R.id.rangeSeekBar)
+    @Bind(R.id.trim_rangeSeekBar)
     TrimRangeSeekBarView rangeSeekBar;
 
     int videoIndexOnTrack;
@@ -95,7 +95,6 @@ public class VideoTrimActivity extends VideonaActivity implements VideoPreviewVi
     private String TRIMMINGBAR_MAX = "trimming_bar_max";
     private String START_TIME_TAG = "start_time_tag";
     private String STOP_TIME_TAG = "stop_time_tag";
-    private String DURATION_TIME_TAG = "duration_time_tag";
     private boolean isInstanceState;
 
     @Override

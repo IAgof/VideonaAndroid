@@ -35,7 +35,7 @@
             android:padding="10dp">
 
             <ImageButton
-                android:id="@+id/button_editor_room_navigator"
+                android:id="@+id/button_edit_navigator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -44,7 +44,7 @@
                 android:clickable="false"/>
 
             <ImageButton
-                android:id="@+id/button_music_room_navigator"
+                android:id="@+id/button_music_navigator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -52,7 +52,7 @@
                 android:src="@drawable/activity_edit_music"/>
 
             <ImageButton
-                android:id="@+id/button_share_room_navigator"
+                android:id="@+id/button_share_navigator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -91,7 +91,7 @@
                 android:layout_marginBottom="4dp" />
 
             <ImageButton
-                android:id="@+id/button_editor_room_fullscreen"
+                android:id="@+id/button_edit_fullscreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/common_icon_expand"
@@ -105,14 +105,14 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayoutEditorRoom"
+            android:id="@+id/linear_layout_edit_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
 
             <ImageButton
-                android:id="@+id/button_editor_room_duplicate"
+                android:id="@+id/button_editor_duplicate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -120,7 +120,7 @@
                 android:src="@drawable/activity_edit_clip_duplicate" />
 
             <ImageButton
-                android:id="@+id/button_editor_room_trim"
+                android:id="@+id/button_edit_trim"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -128,7 +128,7 @@
                 android:src="@drawable/activity_edit_clip_trim"/>
 
             <ImageButton
-                android:id="@+id/button_editor_room_split"
+                android:id="@+id/button_edit_split"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -147,7 +147,7 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabEditorRoom"
+        android:id="@+id/fab_edit_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/coordinatorLayout"

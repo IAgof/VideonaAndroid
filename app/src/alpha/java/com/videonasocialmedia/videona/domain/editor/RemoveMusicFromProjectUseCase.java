@@ -13,7 +13,6 @@ package com.videonasocialmedia.videona.domain.editor;
 
 import android.util.Log;
 
-import com.videonasocialmedia.videona.eventbus.events.music.MusicRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
@@ -23,8 +22,6 @@ import com.videonasocialmedia.videona.model.entities.editor.track.AudioTrack;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnRemoveMediaFinishedListener;
 
 import java.util.List;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to removed videos from the project.
@@ -66,7 +63,6 @@ public class RemoveMusicFromProjectUseCase {
             if (audio.equals(music)) {
                 try {
                     audioTrack.deleteItemAt(musicIndex);
-                    EventBus.getDefault().post(new MusicRemovedFromProjectEvent());
                 } catch (IllegalItemOnTrack | IllegalOrphanTransitionOnTrack exception) {
                     //TODO treat exception properly
                 }
@@ -95,7 +91,6 @@ public class RemoveMusicFromProjectUseCase {
             List<AudioTrack> audioTracks = Project.getInstance(null, null, null).getAudioTracks();
             audioTracks.remove(trackIndex);
             audioTracks.add(new AudioTrack());
-            EventBus.getDefault().post(new MusicRemovedFromProjectEvent());
         } catch (Exception exception) {
             Log.e("REMOVE MUSIC", "removeAllMusic", exception);
         }

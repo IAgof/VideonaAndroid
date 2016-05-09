@@ -56,12 +56,12 @@ public class VideoSplitActivity extends VideonaActivity implements VideoPreviewV
     @Bind(R.id.seekbar_split_preview)
     SeekBar videoSeekBar;
 
-    @Bind(R.id.split_text_time_split)
+    @Bind(R.id.text_time_split)
     TextView timeTag;
 
-    @Bind(R.id.splitSeekBar)
+    @Bind(R.id.seekBar_split)
     SeekBar splitSeekBar;
-    @Bind (R.id.overSeekBar)
+    @Bind (R.id.seekBar_over)
     SeekBar overSplitSeekBar;
 
     int videoIndexOnTrack;

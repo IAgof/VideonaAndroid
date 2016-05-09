@@ -10,16 +10,11 @@
 
 package com.videonasocialmedia.videona.domain.editor;
 
-
-import com.videonasocialmedia.videona.eventbus.events.music.ErrorAddingMusicToProjectEvent;
-import com.videonasocialmedia.videona.eventbus.events.music.MusicAddedToProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.track.AudioTrack;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFinishedListener;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * This class is used to add a new videos to the project.
@@ -49,10 +44,8 @@ public class AddMusicToProjectUseCase {
         AudioTrack audioTrack = obtainAudioTrack(trackIndex);
         try {
             audioTrack.insertItem(music);
-            EventBus.getDefault().post(new MusicAddedToProjectEvent(music));
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             illegalItemOnTrack.printStackTrace();
-            EventBus.getDefault().post(new ErrorAddingMusicToProjectEvent(music));
         }
     }
 

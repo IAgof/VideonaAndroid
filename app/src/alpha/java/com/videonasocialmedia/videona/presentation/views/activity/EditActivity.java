@@ -38,10 +38,10 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TimeLinePreviewPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.TimeLineView;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
@@ -49,7 +49,6 @@ import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.GridSpacingItemDecoration;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
@@ -119,7 +118,7 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editor_room);
+        setContentView(R.layout.activity_edit);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
 
@@ -132,9 +131,6 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
         initVideoPreview();
 
         timeLinePresenter = new TimeLinePreviewPresenter(this);
-
-      //  initVideoListRecycler();
-
 
     }
 
@@ -244,42 +240,42 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
 
     ///// GO TO ANOTHER ACTIVITY
 
-    @OnClick(R.id.fabEditorRoom)
+    @OnClick(R.id.fab_edit_room)
     public void onClickFabEditor(){
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_editor_room_navigator)
+    @OnClick (R.id.button_edit_navigator)
     public void onClickEditorRoomNavigator(){
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_music_room_navigator)
+    @OnClick (R.id.button_music_navigator)
     public void onClickMusicRoomNavigator(){
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_share_room_navigator)
+    @OnClick (R.id.button_share_navigator)
     public void onClickShareRoomNavigator(){
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_editor_room_fullscreen)
+    @OnClick (R.id.button_edit_fullscreen)
     public void onClickEditorRoomFullscreen(){
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_editor_room_duplicate)
+    @OnClick (R.id.button_editor_duplicate)
     public void onClickEditorRoomDuplicate(){
         navigateTo(VideoDuplicateActivity.class, currentVideoIndex);
     }
 
-    @OnClick (R.id.button_editor_room_trim)
+    @OnClick (R.id.button_edit_trim)
     public void onClickEditorRoomTrim(){
          navigateTo(VideoTrimActivity.class, currentVideoIndex);
     }
 
-    @OnClick (R.id.button_editor_room_split)
+    @OnClick (R.id.button_edit_split)
     public void onClickEditorRoomSplit(){
         navigateTo(VideoSplitActivity.class, currentVideoIndex);
     }
@@ -381,9 +377,6 @@ public class EditActivity extends VideonaActivity implements TimeLineView,
 
         videoListRecyclerView.setHasFixedSize(true);
         videoListRecyclerView.setLayoutManager(layoutManager);
-
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.grid_layout_margin);
-        videoListRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, spacingInPixels, true, 0));
 
         videoListRecyclerView.setAdapter(timeLineAdapter);
 

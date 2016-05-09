@@ -140,7 +140,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
                 .videoDecoder(decoder)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(false)
+                .skipMemoryCache(true)
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
         holder.thumb.setSelected(position == selectedVideoPosition);

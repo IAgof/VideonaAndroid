@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ReorderMediaItemUseCase;
-import com.videonasocialmedia.videona.eventbus.events.video.VideosRetrievedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.TimeLineView;
@@ -39,12 +38,6 @@ public class TimeLinePreviewPresenter implements OnVideosRetrieved, OnReorderMed
     public void onNoVideosRetrieved() {
         //TODO show error in view??
         Log.d("VIDEOTIMELINEPRESENTER", "No videos retrieved from project");
-    }
-
-    public void onEvent(VideosRetrievedFromProjectEvent event){
-        if (event.videoList!=null)
-            timelineView.showVideoList(event.videoList);
-        //TODO if there is no list notify the user
     }
 
     public void start() {

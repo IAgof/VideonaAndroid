@@ -49,7 +49,7 @@
             android:layout_marginBottom="4dp" />
 
         <ImageButton
-            android:id="@+id/button_split_room_fullscreen"
+            android:id="@+id/button_split_fullscreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/common_icon_expand"
@@ -69,16 +69,16 @@
 
 
         <SeekBar
-            android:id="@+id/overSeekBar"
+            android:id="@+id/seekBar_over"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:thumb="@drawable/activity_edit_icon_thumb_left_normal"
             android:progressDrawable="@android:color/transparent"
-            android:layout_above="@+id/splitSeekBar"
+            android:layout_above="@+id/seekBar_split"
             android:layout_centerHorizontal="true"/>
 
         <SeekBar
-            android:id="@+id/splitSeekBar"
+            android:id="@+id/seekBar_split"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxHeight="50dp"
@@ -88,7 +88,7 @@
 
 
         <TextView
-            android:id="@+id/split_text_time_split"
+            android:id="@+id/text_time_split"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
@@ -98,12 +98,12 @@
             android:gravity="center_vertical|center_horizontal"
             android:layout_alignParentBottom="false"
             android:layout_marginBottom="4dp"
-            android:layout_below="@+id/splitSeekBar"
+            android:layout_below="@+id/seekBar_split"
             android:layout_centerHorizontal="true"
             />
 
         <TextView
-            android:id="@+id/split_text_info_split"
+            android:id="@+id/text_info_split"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Recorta tu clip"
@@ -113,7 +113,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:layout_alignParentBottom="false"
             android:layout_marginBottom="16dp"
-            android:layout_above="@+id/overSeekBar"
+            android:layout_above="@+id/seekBar_over"
             android:layout_centerHorizontal="true"
             />
 
