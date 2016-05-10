@@ -37,7 +37,6 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.DuplicatePreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.DuplicateView;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
 import com.videonasocialmedia.videona.utils.Constants;
 
@@ -49,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class VideoDuplicateActivity extends VideonaActivity implements VideoPreviewView, DuplicateView,
+public class VideoDuplicateActivity extends VideonaActivity implements DuplicateView,
         SeekBar.OnSeekBarChangeListener {
 
 
@@ -108,7 +107,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements VideoPrev
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new DuplicatePreviewPresenter(this, this);
+        presenter = new DuplicatePreviewPresenter(this);
 
         videoSeekBar.setProgress(0);
         videoSeekBar.setOnSeekBarChangeListener(this);
@@ -294,15 +293,9 @@ public class VideoDuplicateActivity extends VideonaActivity implements VideoPrev
         playButton.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void seekTo(int timeInMsec) {
+    private void seekTo(int timeInMsec) {
         if(videoPlayer!=null)
         videoPlayer.seekTo(timeInMsec);
-    }
-
-    @Override
-    public void updateVideoList() {
-
     }
 
     @Override
@@ -310,6 +303,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements VideoPrev
         video = movieList.get(0);
         int maxSeekBar = (video.getFileStopTime() - video.getFileStartTime());
         videoSeekBar.setMax(maxSeekBar);
+        videoSeekBar.setProgress(0);
         initVideoPlayer(currentPosition, video.getMediaPath());
 
     }
@@ -317,20 +311,6 @@ public class VideoDuplicateActivity extends VideonaActivity implements VideoPrev
     @Override
     public void showError(String message) {
 
-    }
-
-    @Override
-    public void updateSeekBarDuration(int projectDuration) {
-
-    }
-
-    @Override
-    public void updateSeekBarSize() {
-
-        int maxSeekBar =  (video.getFileStopTime() - video.getFileStartTime());
-
-        videoSeekBar.setProgress(0);
-        videoSeekBar.setMax(maxSeekBar);
     }
 
     private void releaseVideoView() {

@@ -66,7 +66,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
      */
     public void startExport() {
         //check VideoList is not empty, if true exportProjectUseCase
-        getMediaListFromProjectUseCase.getMediaListFromProject(this);
+        //getMediaListFromProjectUseCase.getMediaListFromProject(this);
         exportProjectUseCase.export();
     }
 
@@ -104,7 +104,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
 
     @Override
     public void onRemoveMediaItemFromTrackSuccess() {
-
+        editorView.updateProject();
     }
 
     @Override
@@ -117,12 +117,13 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onExportSuccess(Video exportedVideo) {
         editorView.hideProgressDialog();
-        editorView.goToShare(exportedVideo.getMediaPath());
+      //  editorView.goToShare(exportedVideo.getMediaPath());
     }
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        exportProjectUseCase.export();
+       // exportProjectUseCase.export();
+        editorView.showTimeLine(videoList);
     }
 
     @Override
@@ -140,6 +141,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onMediaReordered(Media media, int newPosition) {
         //If everything was right the UI is already updated since the user did the reordering
+        editorView.pausePreview();
     }
 
     @Override

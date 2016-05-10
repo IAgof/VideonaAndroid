@@ -41,8 +41,6 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
-import com.videonasocialmedia.videona.presentation.mvp.views.TimeLineView;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
@@ -62,8 +60,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class EditActivity extends VideonaActivity implements TimeLineView, EditorView,
-        VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener, VideoPreviewView,
+public class EditActivity extends VideonaActivity implements EditorView,
+        VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener,
         SeekBar.OnSeekBarChangeListener{
 
     @Bind(R.id.video_editor_preview)
@@ -154,15 +152,12 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
 
     private void initVideoPreview() {
 
-        updateVideoList();
-
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
         mediaController = new MediaController(this);
         mediaController.setVisibility(View.INVISIBLE);
         audio = (AudioManager) getApplicationContext()
                 .getSystemService(Context.AUDIO_SERVICE);
-
 
         seekBar.setProgress(0);
 
@@ -411,20 +406,12 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
 
     }
 
-    ///// VIDEO TIME LINE VIEW
-    @Override
-    public void showVideoList(List<Video> videoList) {
-
-        timeLineAdapter.setVideoList(videoList);
-        timeLineAdapter.notifyDataSetChanged();
-    }
-
     ////// RECYCLER VIDEO TIME LINE
     @Override
     public void onVideoClicked(int position) {
         //update player to this video
         if(position == currentVideoIndex){
-            onClickPlayPauseButton();
+           onClickPlayPauseButton();
         } else {
             currentVideoIndex = position;
 
@@ -436,8 +423,6 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
                 initVideoPlayer(videoList.get(position), timeInMsec);
             }
         }
-
-
     }
 
     @Override
@@ -451,7 +436,7 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
 
         dialogRemoveVideoSelected = new VideonaDialog.Builder()
                 .withTitle("Quitar clip de video")
-                .withImage(R.drawable.common_icon_eddyt)
+                //.withImage(R.drawable.common_icon_eddyt)
                 .withMessage(" ")
                 .withPositiveButton("SI")
                 .withNegativeButton("NO")
@@ -463,6 +448,12 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
 
         selectedVideoRemovePosition = position;
 
+    }
+
+    @Override
+    public void onVideoMoved(int toPosition) {
+        editPresenter.moveItem(videoList.get(currentVideoIndex), toPosition);
+        initPreview();
     }
 
     ////////// VIDEONA DIALOG
@@ -489,8 +480,12 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
 
     @Override
     public void playPreview() {
-        updateVideoList();
+
+        initPreviewLists(videoList);
+        seekBar.setMax(projectDuration);
+        initPreview();
         playButton.setVisibility(View.INVISIBLE);
+
 
     }
 
@@ -510,34 +505,19 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
     }
 
     @Override
-    public void updateVideoList() {
-        editPresenter.obtainVideos();
-    }
-
-    @Override
-    public void showPreview(List<Video> videoList) {
+    public void showTimeLine(List<Video> videoList) {
         initPreviewLists(videoList);
         seekBar.setMax(projectDuration);
         initPreview();
+        timeLineAdapter.setVideoList(videoList);
+        timeLineAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void showError(String message) {
-        releaseVideoView();
-        releaseMusicPlayer();
-        Toast.makeText(getApplicationContext(), getString(R.string.toast_add_videos),
-                Toast.LENGTH_SHORT).show();
+    public void updateProject() {
+        editPresenter.obtainVideos();
     }
 
-    @Override
-    public void updateSeekBarDuration(int projectDuration) {
-        seekBar.setMax(projectDuration);
-    }
-
-    @Override
-    public void updateSeekBarSize() {
-
-    }
 
     ///////// SEEKBAR_LISTENER
 
@@ -856,7 +836,7 @@ public class EditActivity extends VideonaActivity implements TimeLineView, Edito
 
     @Override
     public void goToShare(String videoToSharePath) {
-        navigateTo(ShareVideoActivity.class, videoToSharePath);
+        //navigateTo(ShareVideoActivity.class, videoToSharePath);
     }
 
     @Override

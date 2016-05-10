@@ -30,11 +30,10 @@ import android.widget.TextView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
-import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBarChangeListener;
 import com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBarView;
+import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBarChangeListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
@@ -47,7 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class VideoTrimActivity extends VideonaActivity implements VideoPreviewView, TrimView,
+public class VideoTrimActivity extends VideonaActivity implements TrimView,
         SeekBar.OnSeekBarChangeListener, OnRangeSeekBarChangeListener {
 
     @Bind(R.id.video_trim_preview)
@@ -110,7 +109,7 @@ public class VideoTrimActivity extends VideonaActivity implements VideoPreviewVi
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new TrimPreviewPresenter(this, this);
+        presenter = new TrimPreviewPresenter(this);
 
         rangeSeekBar.setOnRangeListener(this);
 
@@ -317,11 +316,6 @@ public class VideoTrimActivity extends VideonaActivity implements VideoPreviewVi
     }
 
     @Override
-    public void updateVideoList() {
-
-    }
-
-    @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
         if(video.getIsSplit()){
@@ -338,17 +332,6 @@ public class VideoTrimActivity extends VideonaActivity implements VideoPreviewVi
     @Override
     public void showError(String message) {
 
-    }
-
-    @Override
-    public void updateSeekBarDuration(int projectDuration) {
-
-    }
-
-    @Override
-    public void updateSeekBarSize() {
-        seekBar.setProgress(0);
-        seekBar.setMax(videoDuration);
     }
 
     @Override

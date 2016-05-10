@@ -11,7 +11,6 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 
 import java.util.ArrayList;
@@ -36,15 +35,9 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     private ModifyVideoDurationUseCase modifyVideoDurationUseCase;
 
-    /**
-     * Preview View
-     */
-    private VideoPreviewView videoPreviewView;
-
     private TrimView trimView;
 
-    public TrimPreviewPresenter(VideoPreviewView videoPreviewView, TrimView trimView) {
-        this.videoPreviewView = videoPreviewView;
+    public TrimPreviewPresenter(TrimView trimView) {
         this.trimView = trimView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         modifyVideoDurationUseCase = new ModifyVideoDurationUseCase();
@@ -71,7 +64,7 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        videoPreviewView.showPreview(videoList);
+        trimView.showPreview(videoList);
         Video video = videoList.get(0);
         if(video.getIsSplit()){
             showTimeSplittedTags(video);
@@ -96,7 +89,7 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     @Override
     public void onNoVideosRetrieved() {
-        videoPreviewView.showError("No videos");
+        trimView.showError("No videos");
     }
 
 

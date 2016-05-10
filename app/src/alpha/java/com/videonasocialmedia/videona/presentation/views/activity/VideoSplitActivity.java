@@ -30,7 +30,6 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.SplitPreviewPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.SplitView;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSplitConfirmListener;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -44,7 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class VideoSplitActivity extends VideonaActivity implements VideoPreviewView, SplitView,
+public class VideoSplitActivity extends VideonaActivity implements SplitView,
         SeekBar.OnSeekBarChangeListener {
 
     private static final String SPLIT_POSITION = "split_position";
@@ -97,7 +96,7 @@ public class VideoSplitActivity extends VideonaActivity implements VideoPreviewV
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new SplitPreviewPresenter(this, this);
+        presenter = new SplitPreviewPresenter(this);
 
         splitSeekBar.setProgress(0);
         splitSeekBar.setOnSeekBarChangeListener(this);
@@ -127,7 +126,6 @@ public class VideoSplitActivity extends VideonaActivity implements VideoPreviewV
     @Override
     protected void onPause() {
         super.onPause();
-        presenter.onPause();
         releaseVideoView();
     }
 
@@ -135,7 +133,6 @@ public class VideoSplitActivity extends VideonaActivity implements VideoPreviewV
     protected void onResume() {
         super.onResume();
 
-        presenter.onResume();
         presenter.init(videoIndexOnTrack);
     }
 
@@ -303,22 +300,26 @@ public class VideoSplitActivity extends VideonaActivity implements VideoPreviewV
         playButton.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void seekTo(int timeInMsec) {
+
+    private void seekTo(int timeInMsec) {
         if(videoPlayer!=null)
         videoPlayer.seekTo(timeInMsec);
     }
 
-    @Override
-    public void updateVideoList() {
-
-    }
 
     @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
         int maxSeekBar = (video.getFileStopTime() - video.getFileStartTime());
+
+        videoSeekBar.setProgress(0);
         videoSeekBar.setMax(maxSeekBar);
+
+        splitSeekBar.setMax(maxSeekBar);
+        splitSeekBar.setProgress(0);
+        overSplitSeekBar.setMax(maxSeekBar);
+        overSplitSeekBar.setProgress(0);
+
         //currentPosition = video.getFileStartTime();
         initVideoPlayer(currentPosition, video.getMediaPath());
 
@@ -342,24 +343,6 @@ public class VideoSplitActivity extends VideonaActivity implements VideoPreviewV
 
     }
 
-    @Override
-    public void updateSeekBarDuration(int projectDuration) {
-
-    }
-
-    @Override
-    public void updateSeekBarSize() {
-
-        int maxSeekBar =  (video.getFileStopTime() - video.getFileStartTime());
-
-        videoSeekBar.setProgress(0);
-        videoSeekBar.setMax(maxSeekBar);
-
-        splitSeekBar.setMax(maxSeekBar);
-        splitSeekBar.setProgress(0);
-        overSplitSeekBar.setMax(maxSeekBar);
-        overSplitSeekBar.setProgress(0);
-    }
 
     private void releaseVideoView() {
         preview.stopPlayback();

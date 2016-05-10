@@ -12,7 +12,6 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.DuplicateView;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +35,9 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved{
 
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
 
-    /**
-     * Preview View
-     */
-    private VideoPreviewView videoPreviewView;
-
     private DuplicateView duplicateView;
 
-    public DuplicatePreviewPresenter(VideoPreviewView videoPreviewView, DuplicateView duplicateView) {
-        this.videoPreviewView = videoPreviewView;
+    public DuplicatePreviewPresenter(DuplicateView duplicateView) {
         this.duplicateView = duplicateView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
@@ -72,14 +65,14 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved{
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        videoPreviewView.showPreview(videoList);
+        duplicateView.showPreview(videoList);
         duplicateView.initDuplicateView(videoList.get(0).getMediaPath());
 
     }
 
     @Override
     public void onNoVideosRetrieved() {
-        videoPreviewView.showError("No videos");
+        duplicateView.showError("No videos");
     }
 
 

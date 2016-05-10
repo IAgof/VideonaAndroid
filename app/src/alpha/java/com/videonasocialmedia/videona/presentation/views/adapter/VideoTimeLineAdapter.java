@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.FileDescriptorBitmapDecoder;
 import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
@@ -70,6 +69,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             Collections.swap(videoList, fromPositon, toPosition);
             selectedVideoPosition = toPosition;
             notifyItemMoved(fromPositon, toPosition);
+            clickListener.onVideoMoved(toPosition);
         }
     }
 
@@ -139,8 +139,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
                 .asBitmap()
                 .videoDecoder(decoder)
                 .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(holder.thumb);
         holder.thumb.setSelected(position == selectedVideoPosition);
