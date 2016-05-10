@@ -11,7 +11,6 @@ import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.views.VideoPreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.SplitView;
 
 import java.util.ArrayList;
@@ -36,15 +35,9 @@ public class SplitPreviewPresenter implements OnVideosRetrieved{
 
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
 
-    /**
-     * Preview View
-     */
-    private VideoPreviewView videoPreviewView;
-
     private SplitView splitView;
 
-    public SplitPreviewPresenter(VideoPreviewView videoPreviewView, SplitView splitView) {
-        this.videoPreviewView = videoPreviewView;
+    public SplitPreviewPresenter(SplitView splitView) {
         this.splitView = splitView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
@@ -61,26 +54,16 @@ public class SplitPreviewPresenter implements OnVideosRetrieved{
 
     }
 
-    public void onResume(){
-
-    }
-
-    public void onPause(){
-
-    }
-
-
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        videoPreviewView.showPreview(videoList);
+        splitView.showPreview(videoList);
         Video video = videoList.get(0);
         splitView.initSplitView(video.getFileStopTime() - video.getFileStartTime());
-        videoPreviewView.updateSeekBarSize();
     }
 
     @Override
     public void onNoVideosRetrieved() {
-        videoPreviewView.showError("No videos");
+        splitView.showError("No videos");
     }
 
 
