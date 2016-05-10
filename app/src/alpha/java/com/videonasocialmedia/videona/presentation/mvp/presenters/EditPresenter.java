@@ -68,6 +68,10 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         //check VideoList is not empty, if true exportProjectUseCase
         //getMediaListFromProjectUseCase.getMediaListFromProject(this);
         exportProjectUseCase.export();
+
+        editorView.pausePreview();
+        editorView.showProgressDialog();
+
     }
 
     public String getResolution() {
@@ -117,12 +121,11 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onExportSuccess(Video exportedVideo) {
         editorView.hideProgressDialog();
-      //  editorView.goToShare(exportedVideo.getMediaPath());
+        editorView.goToShare(exportedVideo.getMediaPath());
     }
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-       // exportProjectUseCase.export();
         editorView.showTimeLine(videoList);
     }
 

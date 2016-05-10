@@ -262,8 +262,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @OnClick (R.id.button_share_navigator)
     public void onClickShareNavigator(){
        // navigateTo(ShareVideoActivity.class, videoToSharePath);
-        pausePreview();
-        showProgressDialog();
+       // pausePreview();
+       // showProgressDialog();
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
@@ -475,8 +475,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         }
 
     }
-
-    ////////// PREVIEW
 
     @Override
     public void playPreview() {
@@ -836,7 +834,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void goToShare(String videoToSharePath) {
-        //navigateTo(ShareVideoActivity.class, videoToSharePath);
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
+        startActivity(intent);
     }
 
     @Override
