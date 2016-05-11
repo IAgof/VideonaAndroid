@@ -11,6 +11,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
  */
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -435,19 +436,25 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     public void onVideoRemoveClicked(int position) {
 
-        dialogRemoveVideoSelected = new VideonaDialog.Builder()
-                .withTitle("Quitar clip de video")
-                //.withImage(R.drawable.common_icon_eddyt)
-                .withMessage(" ")
-                .withPositiveButton("SI")
-                .withNegativeButton("NO")
-                .withCode(REQUEST_CODE_REMOVE_VIDEO_SELECTED)
-                .withListener(this)
-                .create();
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        timeLineAdapter.remove(selectedVideoRemovePosition);
+                        break;
 
-        dialogRemoveVideoSelected.show(getFragmentManager(), "removeVideoSelectedFromTimeline");
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
 
-        selectedVideoRemovePosition = position;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_edit_remove_message).setPositiveButton(R.string.dialog_edit_remove_accept, dialogClickListener)
+                .setNegativeButton(R.string.dialog_edit_remove_cancel, dialogClickListener).show();
 
     }
 
@@ -461,19 +468,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void onClickPositiveButton(int id) {
-        if(id == REQUEST_CODE_REMOVE_VIDEO_SELECTED){
-            timeLineAdapter.remove(selectedVideoRemovePosition);
-            dialogRemoveVideoSelected.dismiss();
-            editPresenter.removeVideoFromProject(videoList.get(selectedVideoRemovePosition));
-        }
+
     }
 
     @Override
     public void onClickNegativeButton(int id) {
-
-        if(id == REQUEST_CODE_REMOVE_VIDEO_SELECTED){
-            dialogRemoveVideoSelected.dismiss();
-        }
 
     }
 

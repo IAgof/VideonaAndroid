@@ -6,4 +6,8 @@
         abandonarnos?</string>
     <string name="leaveBetaDialogPositiveButton">No</string>
     <string name="leaveBetaDialogNegativeButton">Sí</string>
+
+    <string name="dialog_edit_remove_message">Quitar clip de vídeo</string>
+    <string name="dialog_edit_remove_accept">Si</string>
+    <string name="dialog_edit_remove_cancel">No</string>
 </resources>

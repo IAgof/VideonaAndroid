@@ -6,4 +6,9 @@
             leave us?</string>
     <string name="leaveBetaDialogPositiveButton">No</string>
     <string name="leaveBetaDialogNegativeButton">Yes</string>
+
+    <string name="dialog_edit_remove_message">Remove clip</string>
+    <string name="dialog_edit_remove_accept">Yes</string>
+    <string name="dialog_edit_remove_cancel">No</string>
+
 </resources>
