@@ -192,6 +192,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 initVideoPlayer(videoList.get(currentVideoIndex),
                         videoList.get(currentVideoIndex).getFileStartTime());
                 timeLineAdapter.updateSelection(currentVideoIndex);
+                videoListRecyclerView.scrollToPosition(currentVideoIndex);
                 seekBar.setProgress(instantTime);
             }
         }
@@ -673,6 +674,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     private void playNextVideo(final Video video, final int instantToStart) {
 
         timeLineAdapter.updateSelection(currentVideoIndex);
+        videoListRecyclerView.scrollToPosition(currentVideoIndex);
 
         videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -774,6 +776,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         seekBar.setProgress(0);
         instantTime = 0;
         timeLineAdapter.updateSelection(currentVideoIndex);
+        videoListRecyclerView.scrollToPosition(currentVideoIndex);
         if (musicPlayer != null && musicPlayer.isPlaying()) {
             musicPlayer.pause();
             releaseMusicPlayer();
