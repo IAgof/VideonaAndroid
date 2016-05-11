@@ -73,20 +73,21 @@
 
                 <ImageView
                     android:id="@+id/image_thumb_duplicate_video_left"
-                    android:layout_width="72dp"
-                    android:layout_height="50dp"
+                    android:layout_width="90dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/gatito_rules"/>
                 <TextView
                     android:id="@+id/textView_duplicate_num_increment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="24sp"
                     tools:text="x2"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"/>
                 <ImageView
                     android:id="@+id/image_thumb_duplicate_video_right"
-                    android:layout_width="72dp"
-                    android:layout_height="50dp"
+                    android:layout_width="90dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/gatito_rules"/>
 
             </LinearLayout>
@@ -96,7 +97,9 @@
                 android:id="@+id/button_duplicate_increment_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/gatito_rules"
+                android:padding="5dp"
+                android:background="@null"
+                android:src="@drawable/activity_edit_clip_duplicate_increment"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/linear_layout_duplicate"/>
 
@@ -104,7 +107,9 @@
                 android:id="@+id/button_duplicate_decrement_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/gatito_rules"
+                android:padding="5dp"
+                android:background="@null"
+                android:src="@drawable/activity_edit_clip_duplicate_decrement"
                 android:layout_toLeftOf="@+id/button_duplicate_increment_video"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/linear_layout_duplicate"
@@ -114,10 +119,8 @@
                 android:id="@+id/duplicate_text_info_duplicate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                tools:text="Clona tu clip de video"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="@android:color/black"
+                android:text="@string/text_edit_info_duplicate"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:visibility="visible"
                 android:gravity="center_vertical|center_horizontal"
                 android:layout_alignParentBottom="false"
@@ -138,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/edit_activity_button_cancel_selector"/>
+            android:src="@drawable/activity_edit_common_icon_cancel"/>
         <ImageButton
             android:id="@+id/button_duplicate_accept"
             android:background="@null"
@@ -146,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/common_icon_ok_normal"
+            android:src="@drawable/activity_edit_common_icon_accept"
             />
     </RelativeLayout>
 </LinearLayout>
