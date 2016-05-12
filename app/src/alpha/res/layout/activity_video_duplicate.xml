@@ -47,7 +47,8 @@
             android:layout_alignBottom="@+id/video_duplicate_preview"
             android:progressDrawable="@color/colorAccent"
             android:maxHeight="1dp"
-            android:layout_marginBottom="4dp" />
+            android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
+            android:layout_marginBottom="12dp"/>
 
         <ImageButton
             android:id="@+id/button_duplicate_fullscreen"
@@ -87,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="x2"
+                android:textColor="@color/colorAccent"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textSize="24sp"/>
@@ -144,7 +146,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/activity_edit_common_icon_cancel"/>
+            android:src="@drawable/activity_edit_common_icon_cancel"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="12dp"/>
 
         <ImageButton
             android:id="@+id/button_duplicate_accept"
@@ -153,7 +157,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:background="@null"
-            android:src="@drawable/activity_edit_common_icon_accept"/>
+            android:src="@drawable/activity_edit_common_icon_accept"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="12dp"/>
 
     </RelativeLayout>
 

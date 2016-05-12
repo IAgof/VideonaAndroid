@@ -88,7 +88,8 @@
                 android:layout_alignBottom="@+id/video_editor_preview"
                 android:progressDrawable="@color/colorAccent"
                 android:maxHeight="1dp"
-                android:layout_marginBottom="4dp" />
+                android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
+                android:layout_marginBottom="12dp" />
 
             <ImageButton
                 android:id="@+id/button_edit_fullscreen"

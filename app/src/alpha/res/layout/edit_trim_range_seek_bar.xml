@@ -30,7 +30,7 @@
     <ImageView
         android:id="@+id/ivMinThumb"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/activity_edit_icon_thumb_left_normal"
+        android:src="@drawable/button_edit_thumb_seekbar_trim_pressed"
         android:scaleType="fitXY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -39,7 +39,7 @@
         android:scaleType="fitXY"
         android:id="@+id/ivMaxThumb"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/activity_edit_icon_thumb_left_normal"
+        android:src="@drawable/button_edit_thumb_seekbar_trim_pressed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

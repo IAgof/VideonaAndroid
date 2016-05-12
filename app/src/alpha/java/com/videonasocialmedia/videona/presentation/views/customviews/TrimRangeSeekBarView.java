@@ -100,11 +100,11 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
         TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.RangeSeekbar, 0, 0);
         try {
             backgroundColor = typedArray.getColor(R.styleable.RangeSeekbar_background_color, getResources().getColor(R.color.colorTransparent));
-            barColor = typedArray.getColor(R.styleable.RangeSeekbar_bar_color, getResources().getColor(R.color.colorSpinnerCenter));
-            barColorSelected = typedArray.getColor(R.styleable.RangeSeekbar_selected_bar_color, getResources().getColor(R.color.colorSpinnerEnd));
+            barColor = typedArray.getColor(R.styleable.RangeSeekbar_bar_color, getResources().getColor(R.color.colorPrimaryLight));
+            barColorSelected = typedArray.getColor(R.styleable.RangeSeekbar_selected_bar_color, getResources().getColor(R.color.colorDivider));
             barHeight = typedArray.getDimension(R.styleable.RangeSeekbar_bar_height, getResources().getDimension(R.dimen.defaultbarHeight));
-            thumbImage = typedArray.getResourceId(R.styleable.RangeSeekbar_thumb_image, R.drawable.activity_edit_icon_thumb_left_normal);
-            thumbMaxImage = typedArray.getResourceId(R.styleable.RangeSeekbar_thumb_image_max, R.drawable.activity_edit_icon_thumb_left_normal);
+            thumbImage = typedArray.getResourceId(R.styleable.RangeSeekbar_thumb_image, R.drawable.button_edit_thumb_seekbar_trim_normal);
+            thumbMaxImage = typedArray.getResourceId(R.styleable.RangeSeekbar_thumb_image_max, R.drawable.button_edit_thumb_seekbar_trim_normal);
         } finally {
             typedArray.recycle();
         }

@@ -85,7 +85,8 @@
                         android:layout_alignBottom="@+id/video_editor_preview"
                         android:progressDrawable="@color/colorAccent"
                         android:maxHeight="1dp"
-                        android:layout_marginBottom="4dp" />
+                        android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
+                        android:layout_marginBottom="12dp"/>
                     ​
                     <ImageButton
                         android:id="@+id/button_edit_fullscreen"
@@ -103,12 +104,13 @@
                 <LinearLayout
                     android:id="@+id/linear_layout_edit_options"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="30dp"
-                    android:layout_marginEnd="30dp" >
+                    android:layout_marginEnd="30dp"
+                    >
                     ​
                     <ImageButton
                         android:id="@+id/button_editor_duplicate"

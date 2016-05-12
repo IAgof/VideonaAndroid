@@ -47,7 +47,8 @@
             android:layout_alignBottom="@+id/video_trim_preview"
             android:progressDrawable="@color/colorAccent"
             android:maxHeight="1dp"
-            android:layout_marginBottom="4dp" />
+            android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
+            android:layout_marginBottom="12dp" />
 
         <ImageButton
             android:id="@+id/button_trim_fullscreen"
@@ -74,12 +75,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:bar_color="@color/colorPrimaryLight"
-            app:bar_height="50dp"
+            app:bar_height="48dp"
             app:background_color="@null"
-            app:selected_bar_color="@color/colorPrimaryLight"
+            app:selected_bar_color="@color/colorDivider"
             app:thumb_image="@drawable/activity_edit_clip_trim_thumb_seekbar"
             app:thumb_image_max="@drawable/activity_edit_clip_trim_thumb_seekbar"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"/>
 
 
         <TextView
@@ -146,7 +149,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:background="@null"
-            android:src="@drawable/activity_edit_common_icon_cancel"/>
+            android:src="@drawable/activity_edit_common_icon_cancel"
+            android:layout_marginLeft="12dp"
+            android:layout_marginBottom="12dp"/>
 
         <ImageButton
             android:id="@+id/button_trim_accept"
@@ -155,7 +160,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:background="@null"
-            android:src="@drawable/activity_edit_common_icon_accept"/>
+            android:src="@drawable/activity_edit_common_icon_accept"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="12dp"/>
 
     </RelativeLayout>
 
