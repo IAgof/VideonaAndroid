@@ -72,6 +72,17 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Bind (R.id.button_editor_play_pause)
     ImageButton playButton;
 
+    @Bind(R.id.button_music_navigator)
+    ImageButton musicNavigatorButton;
+    @Bind(R.id.button_share_navigator)
+    ImageButton shareNavigatorButton;
+    @Bind(R.id.button_edit_duplicate)
+    ImageButton editDuplicateButton;
+    @Bind(R.id.button_edit_trim)
+    ImageButton editTrimButton;
+    @Bind(R.id.button_edit_split)
+    ImageButton editSplitButton;
+
     @Bind(R.id.recyclerview_editor_timeline)
     RecyclerView videoListRecyclerView;
 
@@ -181,6 +192,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     protected void onResume() {
         super.onResume();
+
         editPresenter.obtainVideos();
 
         Bundle bundle = getIntent().getExtras();
@@ -256,14 +268,14 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @OnClick (R.id.button_music_navigator)
     public void onClickMusicNavigator(){
-        // navigateTo(Activity.class)
+        if(!musicNavigatorButton.isEnabled())
+            return;
     }
 
     @OnClick (R.id.button_share_navigator)
     public void onClickShareNavigator(){
-       // navigateTo(ShareVideoActivity.class, videoToSharePath);
-       // pausePreview();
-       // showProgressDialog();
+        if(!shareNavigatorButton.isEnabled())
+            return;
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
@@ -278,18 +290,24 @@ public class EditActivity extends VideonaActivity implements EditorView,
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_editor_duplicate)
+    @OnClick (R.id.button_edit_duplicate)
     public void onClickEditDuplicate(){
+        if(!editDuplicateButton.isEnabled())
+            return;
         navigateTo(VideoDuplicateActivity.class, currentVideoIndex);
     }
 
     @OnClick (R.id.button_edit_trim)
     public void onClickEditTrim(){
-         navigateTo(VideoTrimActivity.class, currentVideoIndex);
+        if(!editTrimButton.isEnabled())
+            return;
+        navigateTo(VideoTrimActivity.class, currentVideoIndex);
     }
 
     @OnClick (R.id.button_edit_split)
     public void onClickEditSplit(){
+        if(!editSplitButton.isEnabled())
+            return;
         navigateTo(VideoSplitActivity.class, currentVideoIndex);
     }
 
@@ -443,6 +461,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
                         timeLineAdapter.remove(selectedVideoRemovePosition);
+                        updateProject();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -500,6 +519,29 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void seekTo(int timeInMsec) {
         if (videoPlayer != null)
             videoPlayer.seekTo(timeInMsec);
+    }
+
+    @Override
+    public void enableEditActions() {
+
+        musicNavigatorButton.setEnabled(true);
+        shareNavigatorButton.setEnabled(true);
+
+        editTrimButton.setEnabled(true);
+        editSplitButton.setEnabled(true);
+        editDuplicateButton.setEnabled(true);
+
+    }
+
+    @Override
+    public void disableEditActions() {
+        musicNavigatorButton.setEnabled(false);
+        shareNavigatorButton.setEnabled(false);
+
+        editTrimButton.setEnabled(false);
+        editSplitButton.setEnabled(false);
+        editDuplicateButton.setEnabled(false);
+
     }
 
     @Override
