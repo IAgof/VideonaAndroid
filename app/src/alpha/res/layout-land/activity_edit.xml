@@ -23,32 +23,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="50dp"
                     android:layout_marginEnd="50dp">
-                    <ImageButton
-                        android:id="@+id/button_edit_navigator"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:src="@drawable/activity_edit_clip_normal"
-                        android:layout_weight="1"
-                        style="@style/Widget.AppCompat.ActionButton"
-                        />
-                    <ImageButton
-                        android:id="@+id/button_music_navigator"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/activity_edit_music_normal"
-                        android:layout_weight="1"
-                        style="@style/Widget.AppCompat.ActionButton"
-                        />
-                    <ImageButton
-                        android:id="@+id/button_share_navigator"
-                        android:layout_width="0dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/activity_edit_share_normal"
-                        android:layout_weight="1"
-                        style="@style/Widget.AppCompat.ActionButton"
-                        />
+                    <include layout="@layout/edit_activities_navigation_buttons" />
                 </LinearLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
@@ -61,50 +36,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="vertical" >
-                <RelativeLayout
-                    android:id="@+id/video_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    ​
-                    <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
-                        android:id="@+id/video_editor_preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        app:aspect="sixteen_nine"
-                        />
-                    ​
-                    <ImageButton
-                        android:id="@+id/button_editor_play_pause"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:background="#00000000"
-                        android:src="@drawable/common_icon_play" />
-                    ​
-                    <SeekBar
-                        android:id="@+id/seekbar_editor_preview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/video_editor_preview"
-                        android:progressDrawable="@color/colorAccent"
-                        android:maxHeight="1dp"
-                        android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
-                        android:layout_marginBottom="12dp"/>
-                    ​
-                    <ImageButton
-                        android:id="@+id/button_edit_fullscreen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/common_icon_expand"
-                        android:layout_alignTop="@+id/video_editor_preview"
-                        android:layout_alignEnd="@+id/video_editor_preview"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@null"
-                        android:scaleType="fitCenter"/>
-                    ​
-                </RelativeLayout>
+                <include layout="@layout/video_preview" android:id="@id/video_view" />
+
                 <LinearLayout
                     android:id="@+id/linear_layout_edit_options"
                     android:layout_width="match_parent"
@@ -115,34 +48,7 @@
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
                     >
-                    ​
-                    <ImageButton
-                        android:id="@+id/button_edit_duplicate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/activity_edit_clip_duplicate_normal"
-                        />
-                    ​
-                    <ImageButton
-                        android:id="@+id/button_edit_trim"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/activity_edit_clip_trim_normal"
-                        />
-                    ​
-                    <ImageButton
-                        android:id="@+id/button_edit_split"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/activity_edit_clip_divide_normal"
-                        />
-                    ​
+                    <include layout="@layout/edit_activity_options_buttons" />
                 </LinearLayout>
             </LinearLayout>
             <android.support.v7.widget.RecyclerView
