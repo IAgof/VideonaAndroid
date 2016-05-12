@@ -11,6 +11,7 @@ package com.videonasocialmedia.videona.presentation.views.activity;
  */
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -71,6 +72,17 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Bind (R.id.button_editor_play_pause)
     ImageButton playButton;
 
+    @Bind(R.id.button_music_navigator)
+    ImageButton musicNavigatorButton;
+    @Bind(R.id.button_share_navigator)
+    ImageButton shareNavigatorButton;
+    @Bind(R.id.button_edit_duplicate)
+    ImageButton editDuplicateButton;
+    @Bind(R.id.button_edit_trim)
+    ImageButton editTrimButton;
+    @Bind(R.id.button_edit_split)
+    ImageButton editSplitButton;
+
     @Bind(R.id.recyclerview_editor_timeline)
     RecyclerView videoListRecyclerView;
 
@@ -107,12 +119,10 @@ public class EditActivity extends VideonaActivity implements EditorView,
     protected ItemSelectionSupport selectionSupport;
 
 
-    private VideonaDialog dialogRemoveVideoSelected;
-    private final int REQUEST_CODE_REMOVE_VIDEO_SELECTED = 0;
-    private int selectedVideoRemovePosition;
     private String videoToSharePath;
 
     private AlertDialog progressDialog;
+    private int selectedVideoRemovePosition;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         final Thread t = new Thread() {
@@ -182,6 +192,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     protected void onResume() {
         super.onResume();
+
         editPresenter.obtainVideos();
 
         Bundle bundle = getIntent().getExtras();
@@ -192,6 +203,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 initVideoPlayer(videoList.get(currentVideoIndex),
                         videoList.get(currentVideoIndex).getFileStartTime());
                 timeLineAdapter.updateSelection(currentVideoIndex);
+                videoListRecyclerView.scrollToPosition(currentVideoIndex);
                 seekBar.setProgress(instantTime);
             }
         }
@@ -256,14 +268,14 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @OnClick (R.id.button_music_navigator)
     public void onClickMusicNavigator(){
-        // navigateTo(Activity.class)
+        if(!musicNavigatorButton.isEnabled())
+            return;
     }
 
     @OnClick (R.id.button_share_navigator)
     public void onClickShareNavigator(){
-       // navigateTo(ShareVideoActivity.class, videoToSharePath);
-       // pausePreview();
-       // showProgressDialog();
+        if(!shareNavigatorButton.isEnabled())
+            return;
         final Runnable r = new Runnable() {
             public void run() {
                 editPresenter.startExport();
@@ -278,18 +290,24 @@ public class EditActivity extends VideonaActivity implements EditorView,
         // navigateTo(Activity.class)
     }
 
-    @OnClick (R.id.button_editor_duplicate)
+    @OnClick (R.id.button_edit_duplicate)
     public void onClickEditDuplicate(){
+        if(!editDuplicateButton.isEnabled())
+            return;
         navigateTo(VideoDuplicateActivity.class, currentVideoIndex);
     }
 
     @OnClick (R.id.button_edit_trim)
     public void onClickEditTrim(){
-         navigateTo(VideoTrimActivity.class, currentVideoIndex);
+        if(!editTrimButton.isEnabled())
+            return;
+        navigateTo(VideoTrimActivity.class, currentVideoIndex);
     }
 
     @OnClick (R.id.button_edit_split)
     public void onClickEditSplit(){
+        if(!editSplitButton.isEnabled())
+            return;
         navigateTo(VideoSplitActivity.class, currentVideoIndex);
     }
 
@@ -434,19 +452,28 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     public void onVideoRemoveClicked(int position) {
 
-        dialogRemoveVideoSelected = new VideonaDialog.Builder()
-                .withTitle("Quitar clip de video")
-                //.withImage(R.drawable.common_icon_eddyt)
-                .withMessage(" ")
-                .withPositiveButton("SI")
-                .withNegativeButton("NO")
-                .withCode(REQUEST_CODE_REMOVE_VIDEO_SELECTED)
-                .withListener(this)
-                .create();
-
-        dialogRemoveVideoSelected.show(getFragmentManager(), "removeVideoSelectedFromTimeline");
-
         selectedVideoRemovePosition = position;
+
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        timeLineAdapter.remove(selectedVideoRemovePosition);
+                        updateProject();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaDialog);
+        builder.setMessage(R.string.dialog_edit_remove_message).setPositiveButton(R.string.dialog_edit_remove_accept, dialogClickListener)
+                .setNegativeButton(R.string.dialog_edit_remove_cancel, dialogClickListener).show();
 
     }
 
@@ -460,19 +487,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void onClickPositiveButton(int id) {
-        if(id == REQUEST_CODE_REMOVE_VIDEO_SELECTED){
-            timeLineAdapter.remove(selectedVideoRemovePosition);
-            dialogRemoveVideoSelected.dismiss();
-            editPresenter.removeVideoFromProject(videoList.get(selectedVideoRemovePosition));
-        }
+
     }
 
     @Override
     public void onClickNegativeButton(int id) {
-
-        if(id == REQUEST_CODE_REMOVE_VIDEO_SELECTED){
-            dialogRemoveVideoSelected.dismiss();
-        }
 
     }
 
@@ -500,6 +519,29 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void seekTo(int timeInMsec) {
         if (videoPlayer != null)
             videoPlayer.seekTo(timeInMsec);
+    }
+
+    @Override
+    public void enableEditActions() {
+
+        musicNavigatorButton.setEnabled(true);
+        shareNavigatorButton.setEnabled(true);
+
+        editTrimButton.setEnabled(true);
+        editSplitButton.setEnabled(true);
+        editDuplicateButton.setEnabled(true);
+
+    }
+
+    @Override
+    public void disableEditActions() {
+        musicNavigatorButton.setEnabled(false);
+        shareNavigatorButton.setEnabled(false);
+
+        editTrimButton.setEnabled(false);
+        editSplitButton.setEnabled(false);
+        editDuplicateButton.setEnabled(false);
+
     }
 
     @Override
@@ -673,6 +715,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     private void playNextVideo(final Video video, final int instantToStart) {
 
         timeLineAdapter.updateSelection(currentVideoIndex);
+        videoListRecyclerView.scrollToPosition(currentVideoIndex);
 
         videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -774,6 +817,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         seekBar.setProgress(0);
         instantTime = 0;
         timeLineAdapter.updateSelection(currentVideoIndex);
+        videoListRecyclerView.scrollToPosition(currentVideoIndex);
         if (musicPlayer != null && musicPlayer.isPlaying()) {
             musicPlayer.pause();
             releaseMusicPlayer();

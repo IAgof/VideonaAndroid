@@ -5,4 +5,6 @@
     <color name="default_blue">#FF33B5E5</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
+
+    <color name="textColorTitle">#CDDC39</color>
 </resources>

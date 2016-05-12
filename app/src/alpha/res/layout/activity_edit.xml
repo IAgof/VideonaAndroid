@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@drawable/activity_edit_clip_pressed"
-                android:clickable="false"/>
+                />
 
             <ImageButton
                 android:id="@+id/button_music_navigator"
@@ -49,7 +49,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/activity_edit_music"/>
+                android:src="@drawable/activity_edit_music"
+                />
 
             <ImageButton
                 android:id="@+id/button_share_navigator"
@@ -57,7 +58,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/activity_edit_share"/>
+                android:src="@drawable/activity_edit_share"
+                />
 
         </LinearLayout>
 
@@ -112,12 +114,13 @@
             android:padding="10dp">
 
             <ImageButton
-                android:id="@+id/button_editor_duplicate"
+                android:id="@+id/button_edit_duplicate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/activity_edit_clip_duplicate" />
+                android:src="@drawable/activity_edit_clip_duplicate"
+                />
 
             <ImageButton
                 android:id="@+id/button_edit_trim"
@@ -125,7 +128,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/activity_edit_clip_trim"/>
+                android:src="@drawable/activity_edit_clip_trim"
+                />
 
             <ImageButton
                 android:id="@+id/button_edit_split"
@@ -133,7 +137,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/activity_edit_clip_divide"/>
+                android:src="@drawable/activity_edit_clip_divide"
+                />
 
         </LinearLayout>
 
