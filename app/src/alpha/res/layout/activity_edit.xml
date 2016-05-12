@@ -48,8 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/activity_edit_music"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/activity_edit_music_normal"
                 />
 
             <ImageButton
@@ -57,8 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/activity_edit_share"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/activity_edit_share_normal"
                 />
 
         </LinearLayout>
@@ -119,8 +119,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/activity_edit_clip_duplicate"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/activity_edit_clip_duplicate_normal"
                 />
 
             <ImageButton
@@ -128,8 +128,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/activity_edit_clip_trim"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/activity_edit_clip_trim_normal"
                 />
 
             <ImageButton
@@ -137,8 +137,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
-                android:src="@drawable/activity_edit_clip_divide"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/activity_edit_clip_divide_normal"
                 />
 
         </LinearLayout>

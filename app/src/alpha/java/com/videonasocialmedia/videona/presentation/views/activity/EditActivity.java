@@ -13,10 +13,14 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -73,9 +77,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
     ImageButton playButton;
 
     @Bind(R.id.button_music_navigator)
-    ImageButton musicNavigatorButton;
+    ImageButton navigateToMusicButton;
     @Bind(R.id.button_share_navigator)
-    ImageButton shareNavigatorButton;
+    ImageButton navigateToShareButton;
     @Bind(R.id.button_edit_duplicate)
     ImageButton editDuplicateButton;
     @Bind(R.id.button_edit_trim)
@@ -145,6 +149,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         setContentView(R.layout.activity_edit);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
+        tintEditButtons();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -268,13 +273,13 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @OnClick (R.id.button_music_navigator)
     public void onClickMusicNavigator(){
-        if(!musicNavigatorButton.isEnabled())
+        if(!navigateToMusicButton.isEnabled())
             return;
     }
 
     @OnClick (R.id.button_share_navigator)
     public void onClickShareNavigator(){
-        if(!shareNavigatorButton.isEnabled())
+        if(!navigateToShareButton.isEnabled())
             return;
         final Runnable r = new Runnable() {
             public void run() {
@@ -524,8 +529,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     public void enableEditActions() {
 
-        musicNavigatorButton.setEnabled(true);
-        shareNavigatorButton.setEnabled(true);
+        navigateToMusicButton.setEnabled(true);
+        navigateToShareButton.setEnabled(true);
 
         editTrimButton.setEnabled(true);
         editSplitButton.setEnabled(true);
@@ -535,8 +540,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void disableEditActions() {
-        musicNavigatorButton.setEnabled(false);
-        shareNavigatorButton.setEnabled(false);
+        navigateToMusicButton.setEnabled(false);
+        navigateToShareButton.setEnabled(false);
 
         editTrimButton.setEnabled(false);
         editSplitButton.setEnabled(false);
@@ -910,6 +915,21 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 Toast.makeText(getApplicationContext(), stringToast, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void tintEditButtons() {
+        tintButton(navigateToMusicButton);
+        tintButton(navigateToShareButton);
+        tintButton(editDuplicateButton);
+        tintButton(editSplitButton);
+        tintButton(editTrimButton);
+    }
+
+    public static void tintButton(@NonNull ImageButton button) {
+        ColorStateList editButtonsColors = button.getResources().getColorStateList(R.color.button_color);
+        Drawable button_image = DrawableCompat.wrap(button.getDrawable());
+        DrawableCompat.setTintList(button_image, editButtonsColors);
+        button.setImageDrawable(button_image);
     }
 
 }
