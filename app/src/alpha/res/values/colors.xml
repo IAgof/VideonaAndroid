@@ -21,6 +21,10 @@
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#727272</color>
 
+    <color name="button">@color/colorPrimary</color>
+    <color name="button_disabled">#E4E4E4</color>
+    <color name="button_pressed">@color/colorAccent</color>
+    <color name="button_selected">@color/colorAccent</color>
 
     <!--
     <color name="textColorPrimary">#808080</color>

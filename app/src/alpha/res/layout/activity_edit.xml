@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@drawable/activity_edit_clip_pressed"
+                android:src="@drawable/activity_edit_clip_normal"
                 />
 
             <ImageButton

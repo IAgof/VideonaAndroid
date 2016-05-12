@@ -76,6 +76,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Bind (R.id.button_editor_play_pause)
     ImageButton playButton;
 
+    @Bind(R.id.button_edit_navigator)
+    ImageButton navigateToEditButton;
     @Bind(R.id.button_music_navigator)
     ImageButton navigateToMusicButton;
     @Bind(R.id.button_share_navigator)
@@ -149,6 +151,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         setContentView(R.layout.activity_edit);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
+        navigateToEditButton.setSelected(true);
         tintEditButtons();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -918,6 +921,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     private void tintEditButtons() {
+        tintButton(navigateToEditButton);
         tintButton(navigateToMusicButton);
         tintButton(navigateToShareButton);
         tintButton(editDuplicateButton);

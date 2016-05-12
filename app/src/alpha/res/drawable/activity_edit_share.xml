@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/activity_edit_share_pressed" android:state_pressed="true" />
-    <!-- pressed state -->
-    <item android:drawable="@drawable/activity_edit_share_normal" android:state_enabled="false" />
-    <!-- disable state -->
-    <item android:drawable="@drawable/activity_edit_share_normal" />
-    <!-- default state -->
-</selector>

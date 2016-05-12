@@ -27,7 +27,7 @@
                         android:id="@+id/button_edit_navigator"
                         android:layout_width="0dp"
                         android:layout_height="?attr/actionBarSize"
-                        android:src="@drawable/activity_edit_clip_pressed"
+                        android:src="@drawable/activity_edit_clip_normal"
                         android:layout_weight="1"
                         style="@style/Widget.AppCompat.ActionButton"
                         />
@@ -35,7 +35,8 @@
                         android:id="@+id/button_music_navigator"
                         android:layout_width="0dp"
                         android:layout_height="?attr/actionBarSize"
-                        android:src="@drawable/activity_edit_music"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/activity_edit_music_normal"
                         android:layout_weight="1"
                         style="@style/Widget.AppCompat.ActionButton"
                         />
@@ -43,7 +44,8 @@
                         android:id="@+id/button_share_navigator"
                         android:layout_width="0dp"
                         android:layout_height="?attr/actionBarSize"
-                        android:src="@drawable/activity_edit_share"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/activity_edit_share_normal"
                         android:layout_weight="1"
                         style="@style/Widget.AppCompat.ActionButton"
                         />
@@ -119,8 +121,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@null"
-                        android:src="@drawable/activity_edit_clip_duplicate"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/activity_edit_clip_duplicate_normal"
                         />
                     ​
                     <ImageButton
@@ -128,8 +130,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@null"
-                        android:src="@drawable/activity_edit_clip_trim"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/activity_edit_clip_trim_normal"
                         />
                     ​
                     <ImageButton
@@ -137,8 +139,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@null"
-                        android:src="@drawable/activity_edit_clip_divide"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/activity_edit_clip_divide_normal"
                         />
                     ​
                 </LinearLayout>
