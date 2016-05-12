@@ -36,5 +36,8 @@ public interface EditorView {
 
     void seekTo(int timeInMsec);
 
+    void enableEditActions();
+
+    void disableEditActions();
 
 }

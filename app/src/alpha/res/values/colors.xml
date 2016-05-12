@@ -24,5 +24,8 @@
 
     <!--
     <color name="textColorPrimary">#808080</color>
-    <color name="textColorSecondary">#0091ea</color> -->
+    <color name="textColorSecondary">#0091ea</color>
+    <color name="transparent">#00FFFFFF</color>-->
+
+    <color name="textColorTitle">#CDDC39</color>
 </resources>
