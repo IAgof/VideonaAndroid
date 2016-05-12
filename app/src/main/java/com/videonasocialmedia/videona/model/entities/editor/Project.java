@@ -172,4 +172,8 @@ public class Project {
         }
         return duration;
     }
+
+    public void clear() {
+        INSTANCE = new Project(null, null, null);
+    }
 }
