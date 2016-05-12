@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/common_video_seekbar_advance_pressed" android:state_pressed="true" />
+    <!-- pressed state -->
+    <item android:drawable="@drawable/common_video_seekbar_advance_normal" />
+    <!-- default state -->
+</selector>
