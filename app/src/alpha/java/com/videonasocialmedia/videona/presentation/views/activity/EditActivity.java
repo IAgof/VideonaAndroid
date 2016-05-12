@@ -108,12 +108,10 @@ public class EditActivity extends VideonaActivity implements EditorView,
     protected ItemSelectionSupport selectionSupport;
 
 
-    private VideonaDialog dialogRemoveVideoSelected;
-    private final int REQUEST_CODE_REMOVE_VIDEO_SELECTED = 0;
-    private int selectedVideoRemovePosition;
     private String videoToSharePath;
 
     private AlertDialog progressDialog;
+    private int selectedVideoRemovePosition;
 
     public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
         final Thread t = new Thread() {
@@ -436,6 +434,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     public void onVideoRemoveClicked(int position) {
 
+        selectedVideoRemovePosition = position;
+
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -452,7 +452,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaDialog);
         builder.setMessage(R.string.dialog_edit_remove_message).setPositiveButton(R.string.dialog_edit_remove_accept, dialogClickListener)
                 .setNegativeButton(R.string.dialog_edit_remove_cancel, dialogClickListener).show();
 
