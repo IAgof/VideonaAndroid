@@ -493,8 +493,26 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void onVideoMoved(int toPosition) {
+
         editPresenter.moveItem(videoList.get(currentVideoIndex), toPosition);
-        initPreview();
+
+        currentVideoIndex = toPosition;
+
+        int progress = videoStartTimeInProject.get(currentVideoIndex) -
+                videoList.get(currentVideoIndex).getFileStartTime();
+
+        instantTime = progress;
+        seekBar.setProgress(progress);
+
+        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
+                videoList.get(currentVideoIndex).getFileStartTime();
+
+        if (videoPlayer != null) {
+            seekToNextVideo(videoList.get(currentVideoIndex), timeInMsec);
+        } else {
+            initVideoPlayer(videoList.get(currentVideoIndex), timeInMsec);
+        }
+
     }
 
     ////////// VIDEONA DIALOG
