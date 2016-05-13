@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--
-    <color name="gray">#FFC5C5C5</color>
-    <color name="blue">#FF66CFF6</color>
-    <color name="default_blue">#FF33B5E5</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="transparent">#00FFFFFF</color> -->
-
+    
     <color name="colorPrimary">#9E9E9E</color>
     <color name="colorPrimaryDark">#616161</color>
     <color name="colorPrimaryLight">#F5F5F5</color>
@@ -26,10 +20,6 @@
     <color name="button_pressed">@color/colorAccent</color>
     <color name="button_selected">@color/colorAccent</color>
 
-    <!--
-    <color name="textColorPrimary">#808080</color>
-    <color name="textColorSecondary">#0091ea</color>
-    <color name="transparent">#00FFFFFF</color>-->
+    <color name="textColorTitle">@color/textColorPrimary</color>
 
-    <color name="textColorTitle">#CDDC39</color>
 </resources>

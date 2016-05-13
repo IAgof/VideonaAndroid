@@ -273,6 +273,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @OnClick(R.id.fab_edit_room)
     public void onClickFabEditor(){
         // navigateTo(Activity.class)
+        navigateTo(GalleryActivity.class);
     }
 
     @OnClick (R.id.button_music_navigator)
@@ -332,6 +333,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     public void navigateTo(Class cls) {
         Intent intent = new Intent(getApplicationContext(), cls);
+        if(cls == GalleryActivity.class){
+            intent.putExtra("SHARE", false);
+        }
         startActivity(intent);
     }
 

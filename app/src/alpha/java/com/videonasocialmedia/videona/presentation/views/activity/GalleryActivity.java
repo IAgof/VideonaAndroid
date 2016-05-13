@@ -43,7 +43,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     private final String EDITED_FRAGMENT_TAG="EDITED";
 
     MyPagerAdapter adapterViewPager;
-    boolean sharing;
+    boolean sharing = false;
     int selectedPage = 0;
     private int countVideosSelected = 0;
     GalleryPagerPresenter galleryPagerPresenter;
