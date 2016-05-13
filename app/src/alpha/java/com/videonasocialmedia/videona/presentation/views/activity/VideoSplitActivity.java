@@ -222,6 +222,19 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,
         return result;
     }
 
+    @OnClick(R.id.seekBar_over)
+    public void onClickSeekbarOver(){
+        if (videoPlayer != null && videoPlayer.isPlaying()){
+                pausePreview();
+            updateSeekBarProgress();
+        }
+    }
+
+    @OnClick(R.id.seekBar_split)
+    public void onClickSeekbarSplit(){
+        onClickPlayPausePreview();
+    }
+
     @OnClick(R.id.button_split_play_pause)
     public void onClickPlayPausePreview(){
         if (videoPlayer != null) {
@@ -258,12 +271,10 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
 
-            if (videoPlayer.isPlaying()) {
-                videoPlayer.seekTo(progress + video.getFileStartTime());
-            } else {
-                videoPlayer.seekTo(progress + video.getFileStartTime());
-                videoPlayer.pause();
-            }
+            videoPlayer.seekTo(progress + video.getFileStartTime());
+            videoPlayer.pause();
+
+            playButton.setVisibility(View.VISIBLE);
 
             currentPosition = videoPlayer.getCurrentPosition();
             videoSeekBar.setProgress(progress);

@@ -65,12 +65,8 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
      * Ok edit button click listener
      */
     public void startExport() {
-        //check VideoList is not empty, if true exportProjectUseCase
-        //getMediaListFromProjectUseCase.getMediaListFromProject(this);
-        exportProjectUseCase.export();
 
-        editorView.pausePreview();
-        editorView.showProgressDialog();
+        exportProjectUseCase.export();
 
     }
 

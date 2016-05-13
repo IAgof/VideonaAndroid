@@ -279,19 +279,29 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void onClickMusicNavigator(){
         if(!navigateToMusicButton.isEnabled())
             return;
+
     }
 
     @OnClick (R.id.button_share_navigator)
     public void onClickShareNavigator(){
-        if(!navigateToShareButton.isEnabled())
+        if(!navigateToShareButton.isEnabled() || videoList.size() == 0)
             return;
-        final Runnable r = new Runnable() {
+
+        pausePreview();
+        showProgressDialog();
+        startExportThread();
+
+
+    }
+
+    private void startExportThread() {
+        final Thread t = new Thread() {
+            @Override
             public void run() {
                 editPresenter.startExport();
             }
         };
-        performOnBackgroundThread(this, r);
-
+        t.start();
     }
 
     @OnClick (R.id.button_edit_fullscreen)
