@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -567,12 +568,17 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void disableEditActions() {
+
         navigateToMusicButton.setEnabled(false);
         navigateToShareButton.setEnabled(false);
 
         editTrimButton.setEnabled(false);
         editSplitButton.setEnabled(false);
         editDuplicateButton.setEnabled(false);
+
+        releaseView();
+
+        videoPreview.setBackgroundColor(Color.BLACK);
 
     }
 
