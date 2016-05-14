@@ -47,11 +47,13 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
+import com.videonasocialmedia.videona.presentation.views.listener.ProjectPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
@@ -66,7 +68,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class EditActivity extends VideonaActivity implements EditorView,
+public class EditActivity extends VideonaActivity implements EditorView, ProjectPlayerView, ProjectPlayerListener,
         VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener,
         SeekBar.OnSeekBarChangeListener{
 
@@ -152,8 +154,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         setContentView(R.layout.activity_edit);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
-        navigateToEditButton.setSelected(true);
-        tintEditButtons();
+        setupActivityButtons();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -163,25 +164,10 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
         initVideoPreview();
 
-        editPresenter = new EditPresenter(this);
+        editPresenter = new EditPresenter(this, this);
 
         createProgressDialog();
-
     }
-
-    private void initVideoPreview() {
-
-        seekBar.setProgress(0);
-        seekBar.setOnSeekBarChangeListener(this);
-        mediaController = new MediaController(this);
-        mediaController.setVisibility(View.INVISIBLE);
-        audio = (AudioManager) getApplicationContext()
-                .getSystemService(Context.AUDIO_SERVICE);
-
-        seekBar.setProgress(0);
-
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -351,10 +337,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
         startActivity(intent);
     }
 
-
     @OnClick (R.id.button_editor_play_pause)
     public void onClickPlayPauseButton(){
-        if (isVideosOnProject()) {
+        if (projectHasVideos()) {
             if (videoPlayer != null) {
                 if (videoPlayer.isPlaying()) {
                     pausePreview();
@@ -369,6 +354,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
             seekBar.setProgress(0);
         }
     }
+
 
     @OnTouch(R.id.video_editor_preview)
     public boolean onTouchPreview(MotionEvent event) {
@@ -400,7 +386,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         }
     }
 
-    private boolean isVideosOnProject() {
+    private boolean projectHasVideos() {
         List<Media> list = editPresenter.checkVideosOnProject();
         return list.size() > 0;
     }
@@ -477,7 +463,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         onClickPlayPauseButton();
     }
 
-
     @Override
     public void onVideoRemoveClicked(int position) {
 
@@ -505,6 +490,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 .setNegativeButton(R.string.dialog_edit_remove_cancel, dialogClickListener).show();
 
     }
+
 
     @Override
     public void onVideoMoved(int toPosition) {
@@ -541,6 +527,27 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void onClickNegativeButton(int id) {
 
     }
+    /*
+        * ********************************
+        * Video preview
+        * ********************************
+        * */
+    private void initVideoPreview() {
+        seekBar.setProgress(0);
+        seekBar.setOnSeekBarChangeListener(this);
+        mediaController = new MediaController(this);
+        mediaController.setVisibility(View.INVISIBLE);
+        audio = (AudioManager) getApplicationContext()
+                .getSystemService(Context.AUDIO_SERVICE);
+
+        seekBar.setProgress(0);
+    }
+
+    /*
+    * ********************************
+    * End of Video preview
+    * ********************************
+    * */
 
     @Override
     public void playPreview() {
@@ -610,13 +617,13 @@ public class EditActivity extends VideonaActivity implements EditorView,
         editPresenter.obtainVideos();
     }
 
-
     ///////// SEEKBAR_LISTENER
+
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            if (isVideosOnProject()) {
+            if (projectHasVideos()) {
                 Video video = getVideoByProgress(progress);
                 int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
                         videoList.get(currentVideoIndex).getFileStartTime();
@@ -643,8 +650,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     }
 
-
-
     private void initPreviewLists(List<Video> videoList) {
         projectDuration = 0;
         this.videoList = videoList;
@@ -656,6 +661,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
             videoStopTimeInProject.add(projectDuration);
         }
     }
+
+
 
     private void initPreview() {
         if (videoList.size() > 0) {
@@ -1012,7 +1019,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         return seekBar.getProgress() >= videoStopTimeInProject.get(currentVideoIndex);
     }
 
-
     private void createProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
@@ -1028,6 +1034,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
         startActivity(intent);
     }
+
 
     @Override
     public void showProgressDialog() {
@@ -1058,6 +1065,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
         });
     }
 
+    private void setupActivityButtons() {
+        navigateToEditButton.setSelected(true);
+        tintEditButtons();
+    }
+
     private void tintEditButtons() {
         tintButton(navigateToEditButton);
         tintButton(navigateToMusicButton);
@@ -1074,4 +1086,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
         button.setImageDrawable(button_image);
     }
 
+    @Override
+    public void newClipPlayed(int currentClipIndex) {
+        timeLineAdapter.updateSelection(currentVideoIndex);
+        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+    }
 }

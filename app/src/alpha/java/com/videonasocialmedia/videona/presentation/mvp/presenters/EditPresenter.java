@@ -23,6 +23,7 @@ import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
@@ -47,9 +48,11 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
      * Editor View
      */
     private EditorView editorView;
+    private ProjectPlayerView projectPlayerView;
 
-    public EditPresenter(EditorView editorView) {
+    public EditPresenter(EditorView editorView, ProjectPlayerView projectPlayerView) {
         this.editorView = editorView;
+        this.projectPlayerView = projectPlayerView;
 
         exportProjectUseCase = new ExportProjectUseCase(this);
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
@@ -67,6 +70,9 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     public void startExport() {
 
         exportProjectUseCase.export();
+
+        projectPlayerView.pausePreview();
+        editorView.showProgressDialog();
 
     }
 
@@ -142,7 +148,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onMediaReordered(Media media, int newPosition) {
         //If everything was right the UI is already updated since the user did the reordering
-        editorView.pausePreview();
+        projectPlayerView.pausePreview();
     }
 
     @Override

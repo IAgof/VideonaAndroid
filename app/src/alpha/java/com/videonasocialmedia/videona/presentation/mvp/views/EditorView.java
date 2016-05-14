@@ -30,12 +30,6 @@ public interface EditorView {
 
     void updateProject();
 
-    void playPreview();
-
-    void pausePreview();
-
-    void seekTo(int timeInMsec);
-
     void enableEditActions();
 
     void disableEditActions();
