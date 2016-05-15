@@ -10,16 +10,11 @@ package com.videonasocialmedia.videona.presentation.views.activity;
  *
  */
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
@@ -32,12 +27,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.MediaController;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
@@ -50,7 +42,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
-import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView;
+import com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
 import com.videonasocialmedia.videona.presentation.views.listener.ProjectPlayerListener;
@@ -59,25 +51,16 @@ import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
-public class EditActivity extends VideonaActivity implements EditorView, ProjectPlayerView, ProjectPlayerListener,
-        VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener,
-        SeekBar.OnSeekBarChangeListener{
-
-    @Bind(R.id.video_editor_preview)
-    AspectRatioVideoView videoPreview;
-    @Bind(R.id.seekbar_editor_preview)
-    SeekBar seekBar;
-    @Bind (R.id.button_editor_play_pause)
-    ImageButton playButton;
+public class EditActivity extends VideonaActivity implements EditorView,
+        ProjectPlayerListener,
+//        ProjectPlayerView, SeekBar.OnSeekBarChangeListener,
+        VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener {
 
     @Bind(R.id.button_edit_navigator)
     ImageButton navigateToEditButton;
@@ -95,29 +78,31 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
     @Bind(R.id.recyclerview_editor_timeline)
     RecyclerView videoListRecyclerView;
 
-    private MediaController mediaController;
-    private MediaPlayer videoPlayer;
-    private MediaPlayer musicPlayer;
-    private AudioManager audio;
-    private int projectDuration = 0;
+//    private MediaController mediaController;
+//    private MediaPlayer videoPlayer;
+//    private MediaPlayer musicPlayer;
+//    private AudioManager audio;
+//    private int projectDuration = 0;
     private List<Video> videoList;
-    private List<Integer> videoStartTimeInProject;
-    private List<Integer> videoStopTimeInProject;
+//    private List<Integer> videoStartTimeInProject;
+//    private List<Integer> videoStopTimeInProject;
     private int currentVideoIndex = 0;
-    private int instantTime = 0;
+//    private int instantTime = 0;
     private boolean isFullScreenBack = false;
     private Project project;
     private Music music;
-    private final Runnable updateTimeTask = new Runnable() {
-        @Override
-        public void run() {
-            updateSeekBarProgress();
-        }
-    };
-    protected Handler handler = new Handler();
+//    private final Runnable updateTimeTask = new Runnable() {
+//        @Override
+//        public void run() {
+//            updateSeekBarProgress();
+//        }
+//    };
+//    protected Handler handler = new Handler();
 
     private EditPresenter editPresenter;
 
+    @Bind(R.id.project_player)
+    ProjectPlayer projectPlayer;
     private VideoTimeLineAdapter timeLineAdapter;
     private final int NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL = 3;
     private final int NUM_COLUMNS_GRID_TIMELINE_VERTICAL = 4;
@@ -162,9 +147,11 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        initVideoPreview();
+        project = Project.getInstance(null, null, null);
+        projectPlayer.initVideoPreview(project, this);
+//        initVideoPreview();
 
-        editPresenter = new EditPresenter(this, this);
+        editPresenter = new EditPresenter(this, projectPlayer);
 
         createProgressDialog();
     }
@@ -172,16 +159,18 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
+        projectPlayer.destroy();
+//        handler.removeCallbacksAndMessages(null);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        releaseVideoView();
-        releaseMusicPlayer();
-        projectDuration = 0;
-        instantTime = 0;
+        projectPlayer.pause();
+//        releaseVideoView();
+//        releaseMusicPlayer();
+//        projectDuration = 0;
+//        instantTime = 0;
     }
 
     @Override
@@ -193,15 +182,21 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null) {
             if(bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {
-                currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
-                instantTime = videoStartTimeInProject.get(currentVideoIndex);
-                initVideoPlayer(videoList.get(currentVideoIndex),
-                        videoList.get(currentVideoIndex).getFileStartTime());
-                timeLineAdapter.updateSelection(currentVideoIndex);
-                videoListRecyclerView.scrollToPosition(currentVideoIndex);
-                seekBar.setProgress(instantTime);
+                restoreStateFromNavigationBack();
             }
         }
+    }
+
+    private void restoreStateFromNavigationBack() {
+        currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
+        timeLineAdapter.updateSelection(currentVideoIndex);
+        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+        // TODO: check if this make the same of above
+        projectPlayer.seekToClip(currentVideoIndex);
+//        initVideoPlayer(videoList.get(currentVideoIndex),
+//                videoList.get(currentVideoIndex).getFileStartTime());
+//        instantTime = videoStartTimeInProject.get(currentVideoIndex);
+//        seekBar.setProgress(instantTime);
     }
 
     @Override
@@ -274,7 +269,7 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
         if(!navigateToShareButton.isEnabled() || videoList.size() == 0)
             return;
 
-        pausePreview();
+        projectPlayer.pausePreview();
         showProgressDialog();
         startExportThread();
 
@@ -337,50 +332,50 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
         startActivity(intent);
     }
 
-    @OnClick (R.id.button_editor_play_pause)
-    public void onClickPlayPauseButton(){
-        if (projectHasVideos()) {
-            if (videoPlayer != null) {
-                if (videoPlayer.isPlaying()) {
-                    pausePreview();
-                    instantTime = seekBar.getProgress();
-                } else {
-                    playPreview();
-                }
-            } else {
-                playPreview();
-            }
-        } else {
-            seekBar.setProgress(0);
-        }
-    }
+//    @OnClick (R.id.button_editor_play_pause)
+//    public void onClickPlayPauseButton(){
+//        if (projectHasVideos()) {
+//            if (videoPlayer != null) {
+//                if (videoPlayer.isPlaying()) {
+//                    pausePreview();
+//                    instantTime = seekBar.getProgress();
+//                } else {
+//                    playPreview();
+//                }
+//            } else {
+//                playPreview();
+//            }
+//        } else {
+//            seekBar.setProgress(0);
+//        }
+//    }
 
 
-    @OnTouch(R.id.video_editor_preview)
-    public boolean onTouchPreview(MotionEvent event) {
-        boolean result;
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            onClickPlayPauseButton();
-            result = true;
-        } else {
-            result = false;
-        }
-        return result;
-    }
+//    @OnTouch(R.id.video_editor_preview)
+//    public boolean onTouchPreview(MotionEvent event) {
+//        boolean result;
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            onClickPlayPauseButton();
+//            result = true;
+//        } else {
+//            result = false;
+//        }
+//        return result;
+//    }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 this.onBackPressed();
                 return true;
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                        AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-                        AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
-                return true;
+//            case KeyEvent.KEYCODE_VOLUME_UP:
+//                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+//                        AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+//                return true;
+//            case KeyEvent.KEYCODE_VOLUME_DOWN:
+//                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+//                        AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+//                return true;
             default:
                 return false;
         }
@@ -409,7 +404,7 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
 
         timeLineAdapter = new VideoTimeLineAdapter();
         timeLineAdapter.setSelectionSupport(selectionSupport);
-        timeLineAdapter.setClickListener(this);
+        timeLineAdapter.setVideoTimeLineListener(this);
 
         int orientation = LinearLayoutManager.VERTICAL;
         RecyclerView.LayoutManager layoutManager;
@@ -436,31 +431,32 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
     ////// RECYCLER VIDEO TIME LINE
     @Override
     public void onVideoClicked(int position) {
-
-        currentVideoIndex = position;
-
-        int progress = videoStartTimeInProject.get(currentVideoIndex) -
-                videoList.get(currentVideoIndex).getFileStartTime();
-
-        instantTime = progress;
-        seekBar.setProgress(progress);
-
-        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
-                videoList.get(currentVideoIndex).getFileStartTime();
-
-        if (videoPlayer != null) {
-            seekToNextVideo(videoList.get(position), timeInMsec);
-        } else {
-            initVideoPlayer(videoList.get(position), timeInMsec);
-        }
-
-        playButton.setVisibility(View.VISIBLE);
+        projectPlayer.seekToClip(position);
+//        currentVideoIndex = position;
+//
+//        int progress = videoStartTimeInProject.get(currentVideoIndex) -
+//                videoList.get(currentVideoIndex).getFileStartTime();
+//
+//        instantTime = progress;
+//        seekBar.setProgress(progress);
+//
+//        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
+//                videoList.get(currentVideoIndex).getFileStartTime();
+//
+//        if (videoPlayer != null) {
+//            seekToNextVideo(videoList.get(position), timeInMsec);
+//        } else {
+//            initVideoPlayer(videoList.get(position), timeInMsec);
+//        }
+//
+//        playButton.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onVideoLongClicked() {
-        onClickPlayPauseButton();
+//    TODO(jliarte - 20160514): is this still needed?
+//        onClickPlayPauseButton();
     }
 
     @Override
@@ -496,23 +492,22 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
     public void onVideoMoved(int toPosition) {
 
         editPresenter.moveItem(videoList.get(currentVideoIndex), toPosition);
-
         currentVideoIndex = toPosition;
-
-        int progress = videoStartTimeInProject.get(currentVideoIndex) -
-                videoList.get(currentVideoIndex).getFileStartTime();
-
-        instantTime = progress;
-        seekBar.setProgress(progress);
-
-        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
-                videoList.get(currentVideoIndex).getFileStartTime();
-
-        if (videoPlayer != null) {
-            seekToNextVideo(videoList.get(currentVideoIndex), timeInMsec);
-        } else {
-            initVideoPlayer(videoList.get(currentVideoIndex), timeInMsec);
-        }
+        projectPlayer.seekToClip(currentVideoIndex);
+//        int progress = videoStartTimeInProject.get(currentVideoIndex) -
+//                videoList.get(currentVideoIndex).getFileStartTime();
+//
+//        instantTime = progress;
+//        seekBar.setProgress(progress);
+//
+//        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
+//                videoList.get(currentVideoIndex).getFileStartTime();
+//
+//        if (videoPlayer != null) {
+//            seekToNextVideo(videoList.get(currentVideoIndex), timeInMsec);
+//        } else {
+//            initVideoPlayer(videoList.get(currentVideoIndex), timeInMsec);
+//        }
 
     }
 
@@ -532,16 +527,16 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
         * Video preview
         * ********************************
         * */
-    private void initVideoPreview() {
-        seekBar.setProgress(0);
-        seekBar.setOnSeekBarChangeListener(this);
-        mediaController = new MediaController(this);
-        mediaController.setVisibility(View.INVISIBLE);
-        audio = (AudioManager) getApplicationContext()
-                .getSystemService(Context.AUDIO_SERVICE);
-
-        seekBar.setProgress(0);
-    }
+//    private void initVideoPreview() {
+//        seekBar.setProgress(0);
+//        seekBar.setOnSeekBarChangeListener(this);
+//        mediaController = new MediaController(this);
+//        mediaController.setVisibility(View.INVISIBLE);
+//        audio = (AudioManager) getApplicationContext()
+//                .getSystemService(Context.AUDIO_SERVICE);
+//
+//        seekBar.setProgress(0);
+//    }
 
     /*
     * ********************************
@@ -549,31 +544,31 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
     * ********************************
     * */
 
-    @Override
-    public void playPreview() {
+//    @Override
+//    public void playPreview() {
+//
+//        initPreviewLists(videoList);
+//        seekBar.setMax(projectDuration);
+//        initPreview();
+//        playButton.setVisibility(View.INVISIBLE);
+//
+//
+//    }
 
-        initPreviewLists(videoList);
-        seekBar.setMax(projectDuration);
-        initPreview();
-        playButton.setVisibility(View.INVISIBLE);
+//    @Override
+//    public void pausePreview() {
+//        if (videoPlayer != null && videoPlayer.isPlaying())
+//            videoPlayer.pause();
+//        if (musicPlayer != null && musicPlayer.isPlaying())
+//            musicPlayer.pause();
+//        playButton.setVisibility(View.VISIBLE);
+//    }
 
-
-    }
-
-    @Override
-    public void pausePreview() {
-        if (videoPlayer != null && videoPlayer.isPlaying())
-            videoPlayer.pause();
-        if (musicPlayer != null && musicPlayer.isPlaying())
-            musicPlayer.pause();
-        playButton.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void seekTo(int timeInMsec) {
-        if (videoPlayer != null)
-            videoPlayer.seekTo(timeInMsec);
-    }
+//    @Override
+//    public void seekTo(int timeInMsec) {
+//        if (videoPlayer != null)
+//            videoPlayer.seekTo(timeInMsec);
+//    }
 
     @Override
     public void enableEditActions() {
@@ -597,17 +592,22 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
         editSplitButton.setEnabled(false);
         editDuplicateButton.setEnabled(false);
 
-        releaseView();
-
-        videoPreview.setBackgroundColor(Color.BLACK);
+        projectPlayer.releaseView();
+        projectPlayer.setBlackBackgroundColor();
+//        releaseView();
+//        videoPreview.setBackgroundColor(Color.BLACK);
 
     }
 
     @Override
     public void showTimeLine(List<Video> videoList) {
-        initPreviewLists(videoList);
-        seekBar.setMax(projectDuration);
-        initPreview();
+        this.videoList = videoList;
+        projectPlayer.initPreviewLists(videoList);
+        projectPlayer.setProjectDuration();
+        projectPlayer.initPreview();
+//        initPreviewLists(videoList);
+//        seekBar.setMax(projectDuration);
+//        initPreview();
         timeLineAdapter.setVideoList(videoList);
         timeLineAdapter.notifyDataSetChanged();
     }
@@ -620,404 +620,403 @@ public class EditActivity extends VideonaActivity implements EditorView, Project
     ///////// SEEKBAR_LISTENER
 
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (fromUser) {
-            if (projectHasVideos()) {
-                Video video = getVideoByProgress(progress);
-                int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
-                        videoList.get(currentVideoIndex).getFileStartTime();
+//    @Override
+//    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//        if (fromUser) {
+//            if (projectHasVideos()) {
+//                Video video = getVideoByProgress(progress);
+//                int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
+//                        videoList.get(currentVideoIndex).getFileStartTime();
+//
+//                if (videoPlayer != null) {
+//                    playNextVideo(video, timeInMsec);
+//                } else {
+//                    initVideoPlayer(video, timeInMsec);
+//                }
+//                playButton.setVisibility(View.INVISIBLE);
+//            } else {
+//                seekBar.setProgress(0);
+//            }
+//        }
+//    }
 
-                if (videoPlayer != null) {
-                    playNextVideo(video, timeInMsec);
-                } else {
-                    initVideoPlayer(video, timeInMsec);
-                }
-                playButton.setVisibility(View.INVISIBLE);
-            } else {
-                seekBar.setProgress(0);
-            }
-        }
-    }
+//    @Override
+//    public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//    }
+//
+//    @Override
+//    public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//    }
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
+//    private void initPreviewLists(List<Video> videoList) {
+//        projectDuration = 0;
+//        this.videoList = videoList;
+//        videoStartTimeInProject = new ArrayList<>();
+//        videoStopTimeInProject = new ArrayList<>();
+//        for (Video video : videoList) {
+//            videoStartTimeInProject.add(projectDuration);
+//            projectDuration = projectDuration + video.getDuration();
+//            videoStopTimeInProject.add(projectDuration);
+//        }
+//    }
+//
+//
+//
+//    private void initPreview() {
+//        if (videoList.size() > 0) {
+//            Video video = getVideoByProgress(instantTime);
+//            currentVideoIndex = getPositionVideo(video);
+//            int timeInMsec = instantTime - videoStartTimeInProject.get(currentVideoIndex) +
+//                    videoList.get(currentVideoIndex).getFileStartTime();
+//            if (isFullScreenBack) {
+//                if (playButton.getVisibility() == View.INVISIBLE)
+//                    playButton.setVisibility(View.VISIBLE);
+//                initVideoPlayer(video, timeInMsec);
+//                isFullScreenBack = false;
+//            } else {
+//                if (videoPlayer == null) {
+//                    initVideoPlayer(video, timeInMsec);
+//                } else {
+//                    playNextVideo(video, timeInMsec);
+//                }
+//            }
+//        } else {
+//            seekBar.setProgress(0);
+//            playButton.setVisibility(View.VISIBLE);
+//            currentVideoIndex = 0;
+//            instantTime = 0;
+//        }
+//    }
 
-    }
+//    private Video getVideoByProgress(int progress) {
+//        int result = -1;
+//        if (0 <= progress && progress < videoStopTimeInProject.get(0)) {
+//            currentVideoIndex = 0;
+//        } else {
+//            for (int i = 0; i < videoStopTimeInProject.size(); i++) {
+//                if (i < videoStopTimeInProject.size() - 1) {
+//                    boolean inRange = videoStopTimeInProject.get(i) <= progress &&
+//                            progress < videoStopTimeInProject.get(i + 1);
+//                    if (inRange) {
+//                        result = i + 1;
+//                    }
+//                }
+//            }
+//            if (result == -1) {
+//                currentVideoIndex = videoStopTimeInProject.size() - 1;
+//            } else {
+//                currentVideoIndex = result;
+//            }
+//        }
+//        return videoList.get(currentVideoIndex);
+//    }
+//
+//    private int getPositionVideo(Video seekVideo) {
+//        int position = 0;
+//        for (Video video : videoList) {
+//            if (video == seekVideo) {
+//                position = videoList.indexOf(video);
+//            }
+//        }
+//        return position;
+//    }
+//
+//    private void initVideoPlayer(final Video video, final int startTime) {
+//
+//        videoPreview.setVideoPath(video.getMediaPath());
+//        videoPreview.setMediaController(mediaController);
+//        videoPreview.canSeekBackward();
+//        videoPreview.canSeekForward();
+//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                videoPlayer = mp;
+//                videoPlayer.setVolume(0.5f, 0.5f);
+//                videoPlayer.setLooping(false);
+//                videoPlayer.start();
+//                videoPlayer.seekTo(startTime);
+//                try {
+//                    Thread.sleep(10);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                videoPlayer.pause();
+//                updateSeekBarProgress();
+//            }
+//        });
+//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+//            @Override
+//            public boolean onError(MediaPlayer mp, int what, int extra) {
+//                videoPlayer.reset();
+//                initVideoPlayer(video, instantTime);
+//                return false;
+//            }
+//        });
+//        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                currentVideoIndex++;
+//                if (hasNextVideoToPlay()) {
+//                    playNextVideo(videoList.get(currentVideoIndex),
+//                            videoList.get(currentVideoIndex).getFileStartTime());
+//                }
+//            }
+//        });
+//        videoPreview.requestFocus();
+//    }
 
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
+//    private boolean hasNextVideoToPlay() {
+//        return currentVideoIndex < videoList.size();
+//    }
 
-    }
+//    private void playNextVideo(final Video video, final int instantToStart) {
+//
+//        timeLineAdapter.updateSelection(currentVideoIndex);
+//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+//
+//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                try {
+//                    videoPlayer.setLooping(false);
+//                    videoPlayer.start();
+//                    if (playButton.getVisibility() == View.VISIBLE)
+//                        playButton.setVisibility(View.INVISIBLE);
+//                    videoPlayer.seekTo(instantToStart);
+//                    if (isMusicOnProject()) {
+//                        muteVideo();
+//                        playMusicSyncWithVideo();
+//                    } else {
+//                        releaseMusicPlayer();
+//                        videoPlayer.setVolume(0.5f, 0.5f);
+//                    }
+//                } catch (Exception e) {
+//                    // TODO don't force media player. Media player must be null here
+//                    seekBar.setProgress(0);
+//                    playButton.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+//            @Override
+//            public boolean onError(MediaPlayer mp, int what, int extra) {
+//                videoPlayer.reset();
+//                initVideoPlayer(video, instantTime);
+//                return false;
+//            }
+//        });
+//        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                currentVideoIndex++;
+//                if (hasNextVideoToPlay()) {
+//                    playNextVideo(videoList.get(currentVideoIndex),
+//                            videoList.get(currentVideoIndex).getFileStartTime());
+//                } else {
+//                    releaseView();
+//                }
+//            }
+//        });
+//        try {
+//            videoPlayer.reset();
+//            videoPlayer.setDataSource(video.getMediaPath());
+//            videoPlayer.prepare();
+//        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+//            e.printStackTrace();
+//        }
+//        videoPreview.requestFocus();
+//    }
 
-    private void initPreviewLists(List<Video> videoList) {
-        projectDuration = 0;
-        this.videoList = videoList;
-        videoStartTimeInProject = new ArrayList<>();
-        videoStopTimeInProject = new ArrayList<>();
-        for (Video video : videoList) {
-            videoStartTimeInProject.add(projectDuration);
-            projectDuration = projectDuration + video.getDuration();
-            videoStopTimeInProject.add(projectDuration);
-        }
-    }
+//    private void playNextVideoClicked(final Video video, final int instantToStart) {
+//
+//        timeLineAdapter.updateSelection(currentVideoIndex);
+//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+//
+//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                try {
+//                    videoPlayer.setLooping(false);
+//                    videoPlayer.start();
+//                    videoPlayer.seekTo(instantToStart);
+//                    if (isMusicOnProject()) {
+//                        muteVideo();
+//                        playMusicSyncWithVideo();
+//                    } else {
+//                        releaseMusicPlayer();
+//                        videoPlayer.setVolume(0.5f, 0.5f);
+//                    }
+//                    videoPlayer.pause();
+//                } catch (Exception e) {
+//                    // TODO don't force media player. Media player must be null here
+//                    seekBar.setProgress(0);
+//                    playButton.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+//            @Override
+//            public boolean onError(MediaPlayer mp, int what, int extra) {
+//                videoPlayer.reset();
+//                initVideoPlayer(video, instantTime);
+//                return false;
+//            }
+//        });
+//        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                currentVideoIndex++;
+//                if (hasNextVideoToPlay()) {
+//                    playNextVideo(videoList.get(currentVideoIndex),
+//                            videoList.get(currentVideoIndex).getFileStartTime());
+//                } else {
+//                    releaseView();
+//                }
+//            }
+//        });
+//        try {
+//            videoPlayer.reset();
+//            videoPlayer.setDataSource(video.getMediaPath());
+//            videoPlayer.prepare();
+//        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+//            e.printStackTrace();
+//        }
+//        videoPreview.requestFocus();
+//    }
 
+//    private void seekToNextVideo(final Video video, final int instantToStart) {
+//
+//        timeLineAdapter.updateSelection(currentVideoIndex);
+//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+//
+//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                try {
+//                    videoPlayer.seekTo(instantToStart);
+//                } catch (Exception e) {
+//                    // TODO don't force media player. Media player must be null here
+//                    seekBar.setProgress(0);
+//                    playButton.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+//            @Override
+//            public boolean onError(MediaPlayer mp, int what, int extra) {
+//                videoPlayer.reset();
+//                initVideoPlayer(video, instantTime);
+//                return false;
+//            }
+//        });
+//        try {
+//            videoPlayer.reset();
+//            videoPlayer.setDataSource(video.getMediaPath());
+//            videoPlayer.prepare();
+//            videoPlayer.seekTo(instantToStart);
+//            videoPlayer.start();
+//            videoPlayer.pause();
+//        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
+//    private boolean isMusicOnProject() {
+//        return project.getAudioTracks().size() > 0 &&
+//                project.getAudioTracks().get(0).getItems().size() > 0;
+//    }
+//
+//    private void muteVideo() {
+//        videoPlayer.setVolume(0, 0);
+//    }
+//
+//    private void playMusicSyncWithVideo() {
+//        releaseMusicPlayer();
+//        initMusicPlayer();
+//        if (musicPlayer.isPlaying()) {
+//            musicPlayer.seekTo(seekBar.getProgress());
+//        } else {
+//            musicPlayer.start();
+//            musicPlayer.seekTo(seekBar.getProgress());
+//        }
+//    }
+//
+//    private void releaseMusicPlayer() {
+//        if (musicPlayer != null) {
+//            musicPlayer.stop();
+//            musicPlayer.release();
+//            musicPlayer = null;
+//        }
+//    }
+//
+//    private void initMusicPlayer() {
+//        if (musicPlayer == null) {
+//            music = (Music) project.getAudioTracks().get(0).getItems().get(0);
+//            musicPlayer = MediaPlayer.create(this, music.getMusicResourceId());
+//            musicPlayer.setVolume(0.5f, 0.5f);
+//        }
+//    }
+//
+//    private void releaseView() {
+//        playButton.setVisibility(View.VISIBLE);
+//        releaseVideoView();
+//        currentVideoIndex = 0;
+//        if (videoList.size() > 0)
+//            initVideoPlayer(videoList.get(currentVideoIndex),
+//                    videoList.get(currentVideoIndex).getFileStartTime() + 100);
+//        seekBar.setProgress(0);
+//        instantTime = 0;
+//        timeLineAdapter.updateSelection(currentVideoIndex);
+//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+//        if (musicPlayer != null && musicPlayer.isPlaying()) {
+//            musicPlayer.pause();
+//            releaseMusicPlayer();
+//        }
+//    }
 
-    private void initPreview() {
-        if (videoList.size() > 0) {
-            Video video = getVideoByProgress(instantTime);
-            currentVideoIndex = getPositionVideo(video);
-            int timeInMsec = instantTime - videoStartTimeInProject.get(currentVideoIndex) +
-                    videoList.get(currentVideoIndex).getFileStartTime();
-            if (isFullScreenBack) {
-                if (playButton.getVisibility() == View.INVISIBLE)
-                    playButton.setVisibility(View.VISIBLE);
-                initVideoPlayer(video, timeInMsec);
-                isFullScreenBack = false;
-            } else {
-                if (videoPlayer == null) {
-                    initVideoPlayer(video, timeInMsec);
-                } else {
-                    playNextVideo(video, timeInMsec);
-                }
-            }
-        } else {
-            seekBar.setProgress(0);
-            playButton.setVisibility(View.VISIBLE);
-            currentVideoIndex = 0;
-            instantTime = 0;
-        }
-    }
+//    /**
+//     * Releases the media player and the video view
+//     */
+//    private void releaseVideoView() {
+//        videoPreview.stopPlayback();
+//        videoPreview.clearFocus();
+//        if (videoPlayer != null) {
+//            videoPlayer.release();
+//            videoPlayer = null;
+//        }
+//    }
 
-    private Video getVideoByProgress(int progress) {
-        int result = -1;
-        if (0 <= progress && progress < videoStopTimeInProject.get(0)) {
-            currentVideoIndex = 0;
-        } else {
-            for (int i = 0; i < videoStopTimeInProject.size(); i++) {
-                if (i < videoStopTimeInProject.size() - 1) {
-                    boolean inRange = videoStopTimeInProject.get(i) <= progress &&
-                            progress < videoStopTimeInProject.get(i + 1);
-                    if (inRange) {
-                        result = i + 1;
-                    }
-                }
-            }
-            if (result == -1) {
-                currentVideoIndex = videoStopTimeInProject.size() - 1;
-            } else {
-                currentVideoIndex = result;
-            }
-        }
-        return videoList.get(currentVideoIndex);
-    }
-
-    private int getPositionVideo(Video seekVideo) {
-        int position = 0;
-        for (Video video : videoList) {
-            if (video == seekVideo) {
-                position = videoList.indexOf(video);
-            }
-        }
-        return position;
-    }
-
-    private void initVideoPlayer(final Video video, final int startTime) {
-
-        videoPreview.setVideoPath(video.getMediaPath());
-        videoPreview.setMediaController(mediaController);
-        videoPreview.canSeekBackward();
-        videoPreview.canSeekForward();
-        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                videoPlayer = mp;
-                videoPlayer.setVolume(0.5f, 0.5f);
-                videoPlayer.setLooping(false);
-                videoPlayer.start();
-                videoPlayer.seekTo(startTime);
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                videoPlayer.pause();
-                updateSeekBarProgress();
-            }
-        });
-        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                videoPlayer.reset();
-                initVideoPlayer(video, instantTime);
-                return false;
-            }
-        });
-        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                currentVideoIndex++;
-                if (hasNextVideoToPlay()) {
-                    playNextVideo(videoList.get(currentVideoIndex),
-                            videoList.get(currentVideoIndex).getFileStartTime());
-                }
-            }
-        });
-        videoPreview.requestFocus();
-    }
-
-    private boolean hasNextVideoToPlay() {
-        return currentVideoIndex < videoList.size();
-    }
-
-    private void playNextVideo(final Video video, final int instantToStart) {
-
-        timeLineAdapter.updateSelection(currentVideoIndex);
-        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-
-        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                try {
-                    videoPlayer.setLooping(false);
-                    videoPlayer.start();
-                    if (playButton.getVisibility() == View.VISIBLE)
-                        playButton.setVisibility(View.INVISIBLE);
-                    videoPlayer.seekTo(instantToStart);
-                    if (isMusicOnProject()) {
-                        muteVideo();
-                        playMusicSyncWithVideo();
-                    } else {
-                        releaseMusicPlayer();
-                        videoPlayer.setVolume(0.5f, 0.5f);
-                    }
-                } catch (Exception e) {
-                    // TODO don't force media player. Media player must be null here
-                    seekBar.setProgress(0);
-                    playButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                videoPlayer.reset();
-                initVideoPlayer(video, instantTime);
-                return false;
-            }
-        });
-        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                currentVideoIndex++;
-                if (hasNextVideoToPlay()) {
-                    playNextVideo(videoList.get(currentVideoIndex),
-                            videoList.get(currentVideoIndex).getFileStartTime());
-                } else {
-                    releaseView();
-                }
-            }
-        });
-        try {
-            videoPlayer.reset();
-            videoPlayer.setDataSource(video.getMediaPath());
-            videoPlayer.prepare();
-        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
-            e.printStackTrace();
-        }
-        videoPreview.requestFocus();
-    }
-
-    private void playNextVideoClicked(final Video video, final int instantToStart) {
-
-        timeLineAdapter.updateSelection(currentVideoIndex);
-        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-
-        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                try {
-                    videoPlayer.setLooping(false);
-                    videoPlayer.start();
-                    videoPlayer.seekTo(instantToStart);
-                    if (isMusicOnProject()) {
-                        muteVideo();
-                        playMusicSyncWithVideo();
-                    } else {
-                        releaseMusicPlayer();
-                        videoPlayer.setVolume(0.5f, 0.5f);
-                    }
-                    videoPlayer.pause();
-                } catch (Exception e) {
-                    // TODO don't force media player. Media player must be null here
-                    seekBar.setProgress(0);
-                    playButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                videoPlayer.reset();
-                initVideoPlayer(video, instantTime);
-                return false;
-            }
-        });
-        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                currentVideoIndex++;
-                if (hasNextVideoToPlay()) {
-                    playNextVideo(videoList.get(currentVideoIndex),
-                            videoList.get(currentVideoIndex).getFileStartTime());
-                } else {
-                    releaseView();
-                }
-            }
-        });
-        try {
-            videoPlayer.reset();
-            videoPlayer.setDataSource(video.getMediaPath());
-            videoPlayer.prepare();
-        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
-            e.printStackTrace();
-        }
-        videoPreview.requestFocus();
-    }
-
-    private void seekToNextVideo(final Video video, final int instantToStart) {
-
-        timeLineAdapter.updateSelection(currentVideoIndex);
-        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-
-        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                try {
-                    videoPlayer.seekTo(instantToStart);
-                } catch (Exception e) {
-                    // TODO don't force media player. Media player must be null here
-                    seekBar.setProgress(0);
-                    playButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                videoPlayer.reset();
-                initVideoPlayer(video, instantTime);
-                return false;
-            }
-        });
-        try {
-            videoPlayer.reset();
-            videoPlayer.setDataSource(video.getMediaPath());
-            videoPlayer.prepare();
-            videoPlayer.seekTo(instantToStart);
-            videoPlayer.start();
-            videoPlayer.pause();
-        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean isMusicOnProject() {
-        project = Project.getInstance(null, null, null);
-        return project.getAudioTracks().size() > 0 &&
-                project.getAudioTracks().get(0).getItems().size() > 0;
-    }
-
-    private void muteVideo() {
-        videoPlayer.setVolume(0, 0);
-    }
-
-    private void playMusicSyncWithVideo() {
-        releaseMusicPlayer();
-        initMusicPlayer();
-        if (musicPlayer.isPlaying()) {
-            musicPlayer.seekTo(seekBar.getProgress());
-        } else {
-            musicPlayer.start();
-            musicPlayer.seekTo(seekBar.getProgress());
-        }
-    }
-
-    private void releaseMusicPlayer() {
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer.release();
-            musicPlayer = null;
-        }
-    }
-
-    private void initMusicPlayer() {
-        if (musicPlayer == null) {
-            music = (Music) project.getAudioTracks().get(0).getItems().get(0);
-            musicPlayer = MediaPlayer.create(this, music.getMusicResourceId());
-            musicPlayer.setVolume(0.5f, 0.5f);
-        }
-    }
-
-    private void releaseView() {
-        playButton.setVisibility(View.VISIBLE);
-        releaseVideoView();
-        currentVideoIndex = 0;
-        if (videoList.size() > 0)
-            initVideoPlayer(videoList.get(currentVideoIndex),
-                    videoList.get(currentVideoIndex).getFileStartTime() + 100);
-        seekBar.setProgress(0);
-        instantTime = 0;
-        timeLineAdapter.updateSelection(currentVideoIndex);
-        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-        if (musicPlayer != null && musicPlayer.isPlaying()) {
-            musicPlayer.pause();
-            releaseMusicPlayer();
-        }
-    }
-
-    /**
-     * Releases the media player and the video view
-     */
-    private void releaseVideoView() {
-        videoPreview.stopPlayback();
-        videoPreview.clearFocus();
-        if (videoPlayer != null) {
-            videoPlayer.release();
-            videoPlayer = null;
-        }
-    }
-
-    private void updateSeekBarProgress() {
-        if (videoPlayer != null) {
-            try {
-                if (videoPlayer.isPlaying() && currentVideoIndex < videoList.size()) {
-                    seekBar.setProgress(videoPlayer.getCurrentPosition() +
-                            videoStartTimeInProject.get(currentVideoIndex) -
-                            videoList.get(currentVideoIndex).getFileStartTime());
-
-                    if (isEndOfVideo()) {
-                        currentVideoIndex++;
-                        if (hasNextVideoToPlay()) {
-
-                            playNextVideo(videoList.get(currentVideoIndex),
-                                    videoList.get(currentVideoIndex).getFileStartTime());
-                        } else {
-                            releaseView();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-
-            }
-            handler.postDelayed(updateTimeTask, 20);
-        }
-    }
-
-    private boolean isEndOfVideo() {
-        return seekBar.getProgress() >= videoStopTimeInProject.get(currentVideoIndex);
-    }
+//    private void updateSeekBarProgress() {
+//        if (videoPlayer != null) {
+//            try {
+//                if (videoPlayer.isPlaying() && currentVideoIndex < videoList.size()) {
+//                    seekBar.setProgress(videoPlayer.getCurrentPosition() +
+//                            videoStartTimeInProject.get(currentVideoIndex) -
+//                            videoList.get(currentVideoIndex).getFileStartTime());
+//
+//                    if (isEndOfVideo()) {
+//                        currentVideoIndex++;
+//                        if (hasNextVideoToPlay()) {
+//
+//                            playNextVideo(videoList.get(currentVideoIndex),
+//                                    videoList.get(currentVideoIndex).getFileStartTime());
+//                        } else {
+//                            releaseView();
+//                        }
+//                    }
+//                }
+//            } catch (Exception e) {
+//
+//            }
+//            handler.postDelayed(updateTimeTask, 20);
+//        }
+//    }
+//
+//    private boolean isEndOfVideo() {
+//        return seekBar.getProgress() >= videoStopTimeInProject.get(currentVideoIndex);
+//    }
 
     private void createProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

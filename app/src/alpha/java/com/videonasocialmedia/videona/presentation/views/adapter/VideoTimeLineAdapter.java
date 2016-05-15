@@ -37,7 +37,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     private Context context;
     private List<Video> videoList;
 
-    private VideoTimeLineRecyclerViewClickListener clickListener;
+    private VideoTimeLineRecyclerViewClickListener videoTimeLineListener;
 
     private ItemSelectionSupport selectionSupport;
 
@@ -51,8 +51,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         this.videoList = new ArrayList<>();
     }
 
-    public void setClickListener(VideoTimeLineRecyclerViewClickListener clickListener) {
-        this.clickListener = clickListener;
+    public void setVideoTimeLineListener(VideoTimeLineRecyclerViewClickListener videoTimeLineListener) {
+        this.videoTimeLineListener = videoTimeLineListener;
     }
 
     public void setSelectionSupport(ItemSelectionSupport selectionSupport) {
@@ -69,7 +69,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             Collections.swap(videoList, fromPositon, toPosition);
             selectedVideoPosition = toPosition;
             notifyItemMoved(fromPositon, toPosition);
-            clickListener.onVideoMoved(toPosition);
+            videoTimeLineListener.onVideoMoved(toPosition);
         }
     }
 
@@ -179,19 +179,19 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         public void videoClick() {
 
             updateSelection(getAdapterPosition());
-            clickListener.onVideoClicked(getAdapterPosition());
+            videoTimeLineListener.onVideoClicked(getAdapterPosition());
         }
 
         @OnLongClick(R.id.timeline_video_thumb)
         public boolean videoOnLongClick() {
             thumb.setRotation(20);
-            clickListener.onVideoLongClicked();
+            videoTimeLineListener.onVideoLongClicked();
             return true;
         }
 
         @OnClick (R.id.image_remove_video)
         public void onClickRemoveVideoTimeline(){
-            clickListener.onVideoRemoveClicked(getAdapterPosition());
+            videoTimeLineListener.onVideoRemoveClicked(getAdapterPosition());
         }
     }
 }

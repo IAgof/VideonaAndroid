@@ -35,7 +35,12 @@
             android:padding="10dp">
             <include layout="@layout/edit_activities_navigation_buttons" />
         </LinearLayout>
-        <include layout="@layout/video_preview" android:id="@+id/video_view" />
+        <!--<include layout="@layout/video_preview" android:id="@+id/video_view" />-->
+        <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
+            android:id="@+id/project_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
 
         <LinearLayout
             android:id="@+id/linear_layout_edit_options"

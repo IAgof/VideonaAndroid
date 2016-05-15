@@ -2,10 +2,13 @@ package com.videonasocialmedia.videona.presentation.views.customviews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.MediaController;
@@ -26,19 +29,21 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * Created by jliarte on 13/05/16.
  */
 public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, SeekBar.OnSeekBarChangeListener {
 
-    private final ProjectPlayerListener projectPlayerListener;
+    private ProjectPlayerListener projectPlayerListener;
     private final Context context;
     @Bind(R.id.video_editor_preview) AspectRatioVideoView videoPreview;
     @Bind(R.id.seekbar_editor_preview) SeekBar seekBar;
     @Bind(R.id.button_editor_play_pause) ImageButton playButton;
 
-    private final View projectPlayerView;
+    private View projectPlayerView;
     private MediaController mediaController;
     private AudioManager audio;
     private Project videonaProject;
@@ -60,35 +65,31 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         }
     };
 
-    public ProjectPlayer(Context context, ProjectPlayerListener projectPlayerListener, Project videonaProject) {
+    public ProjectPlayer(Context context) {
         super(context);
         this.context = context;
-        this.projectPlayerListener = projectPlayerListener;
         this.projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, projectPlayerView);
-        initVideoPreview(null, 0, videonaProject);
     }
 
-    public ProjectPlayer(Context context, AttributeSet attrs, ProjectPlayerListener projectPlayerListener, Project videonaProject) {
+    public ProjectPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        this.projectPlayerListener = projectPlayerListener;
-        projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, projectPlayerView);
-        initVideoPreview(attrs, 0, videonaProject);
     }
 
-    public ProjectPlayer(Context context, AttributeSet attrs, int defStyle, ProjectPlayerListener projectPlayerListener, Project videonaProject) {
+    public ProjectPlayer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
-        this.projectPlayerListener = projectPlayerListener;
-        projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, projectPlayerView);
-        initVideoPreview(attrs, defStyle, videonaProject);
     }
 
-    private void initVideoPreview(AttributeSet attrs, int defStyle, Project videonaProject) {
+    public void initVideoPreview(Project videonaProject, ProjectPlayerListener projectPlayerListener) {
         this.videonaProject = videonaProject;
+        this.videoList = new ArrayList<>();
+        setListener(projectPlayerListener);
         seekBar.setProgress(0);
         seekBar.setOnSeekBarChangeListener(this);
         mediaController = new MediaController(context);
@@ -97,6 +98,10 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
                 .getSystemService(Context.AUDIO_SERVICE);
 
         seekBar.setProgress(0);
+    }
+
+    public void setListener(ProjectPlayerListener projectPlayerListener) {
+        this.projectPlayerListener = projectPlayerListener;
     }
 
 
@@ -158,7 +163,7 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
             videoPlayer.seekTo(timeInMsec);
     }
 
-    private void initPreview() {
+    public void initPreview() {
         if (videoList.size() > 0) {
             Video video = getVideoByProgress(instantTime);
             currentVideoIndex = getPositionVideo(video);
@@ -184,7 +189,7 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         }
     }
 
-    private void initPreviewLists(List<Video> videoList) {
+    public void initPreviewLists(List<Video> videoList) {
         projectDuration = 0;
         this.videoList = videoList;
         videoStartTimeInProject = new ArrayList<>();
@@ -330,6 +335,64 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         videoPreview.requestFocus();
     }
 
+    private void playNextVideoClicked(final Video video, final int instantToStart) {
+        projectPlayerListener.newClipPlayed(currentVideoIndex);
+//        timeLineAdapter.updateSelection(currentVideoIndex);
+//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+
+        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                try {
+                    videoPlayer.setLooping(false);
+                    videoPlayer.start();
+                    videoPlayer.seekTo(instantToStart);
+                    if (isMusicOnProject()) {
+                        muteVideo();
+                        playMusicSyncWithVideo();
+                    } else {
+                        releaseMusicPlayer();
+                        videoPlayer.setVolume(0.5f, 0.5f);
+                    }
+                    videoPlayer.pause();
+                } catch (Exception e) {
+                    // TODO don't force media player. Media player must be null here
+                    seekBar.setProgress(0);
+                    playButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                videoPlayer.reset();
+                initVideoPlayer(video, instantTime);
+                return false;
+            }
+        });
+        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                currentVideoIndex++;
+                if (hasNextVideoToPlay()) {
+                    playNextVideo(videoList.get(currentVideoIndex),
+                            videoList.get(currentVideoIndex).getFileStartTime());
+                } else {
+                    releaseView();
+                }
+            }
+        });
+        try {
+            videoPlayer.reset();
+            videoPlayer.setDataSource(video.getMediaPath());
+            videoPlayer.prepare();
+        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
+            e.printStackTrace();
+        }
+        videoPreview.requestFocus();
+    }
+
+
     private void seekToNextVideo(final Video video, final int instantToStart) {
         projectPlayerListener.newClipPlayed(currentVideoIndex);
 //        timeLineAdapter.updateSelection(currentVideoIndex);
@@ -437,7 +500,7 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         return seekBar.getProgress() >= videoStopTimeInProject.get(currentVideoIndex);
     }
 
-    private void releaseView() {
+    public void releaseView() {
         playButton.setVisibility(View.VISIBLE);
         releaseVideoView();
         currentVideoIndex = 0;
@@ -467,4 +530,88 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         }
     }
 
+    @OnClick(R.id.button_editor_play_pause)
+    public void onClickPlayPauseButton(){
+        if (projectHasVideos()) {
+            if (videoPlayer != null) {
+                if (videoPlayer.isPlaying()) {
+                    pausePreview();
+                    instantTime = seekBar.getProgress();
+                } else {
+                    playPreview();
+                }
+            } else {
+                playPreview();
+            }
+        } else {
+            seekBar.setProgress(0);
+        }
+    }
+
+    @OnTouch(R.id.video_editor_preview)
+    public boolean onTouchPreview(MotionEvent event) {
+        boolean result;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            onClickPlayPauseButton();
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                        AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                        AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public void destroy() {
+        handler.removeCallbacksAndMessages(null);
+    }
+
+    public void pause() {
+        releaseVideoView();
+        releaseMusicPlayer();
+        projectDuration = 0;
+        instantTime = 0;
+    }
+
+    public void seekToClip(int position) {
+        currentVideoIndex = position;
+
+        int progress = videoStartTimeInProject.get(currentVideoIndex) -
+                videoList.get(currentVideoIndex).getFileStartTime();
+
+        instantTime = progress;
+        seekBar.setProgress(progress);
+
+        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
+                videoList.get(currentVideoIndex).getFileStartTime();
+
+        if (videoPlayer != null) {
+            seekToNextVideo(videoList.get(position), timeInMsec);
+        } else {
+            initVideoPlayer(videoList.get(position), timeInMsec);
+        }
+
+        playButton.setVisibility(View.VISIBLE);
+    }
+
+    public void setBlackBackgroundColor() {
+        videoPreview.setBackgroundColor(Color.BLACK);
+    }
+
+    public void setProjectDuration() {
+        seekBar.setMax(projectDuration);
+    }
 }
