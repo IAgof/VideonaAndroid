@@ -1,7 +1,7 @@
 package com.videonasocialmedia.videona.domain.social;
 
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
-import com.videonasocialmedia.videona.model.entities.sources.SocialNetworkAppsProvider;
+import com.videonasocialmedia.videona.model.sources.SocialNetworkAppsProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +34,16 @@ public class ObtainNetworksToShareUseCase {
         return mainNetworksList;
     }
 
+    private boolean isMainNetwork(SocialNetwork app) {
+        String appName = app.getName();
+        return appName.equalsIgnoreCase("Twitter")
+                || appName.equalsIgnoreCase("Facebook")
+                || appName.equalsIgnoreCase("Whatsapp")
+                || appName.equalsIgnoreCase("GooglePlus")
+                || appName.equalsIgnoreCase("Youtube")
+                || appName.equalsIgnoreCase("Instagram");
+    }
+
     public List<SocialNetwork> obtainSecondaryNetworks() {
         List<SocialNetwork> networksList = provider.getSocialNetworksAppsInstalled();
         List<SocialNetwork> secondaryNetworksList = new ArrayList<>();
@@ -43,16 +53,6 @@ public class ObtainNetworksToShareUseCase {
             }
         }
         return secondaryNetworksList;
-    }
-
-    private boolean isMainNetwork(SocialNetwork app) {
-        String appName = app.getName();
-        return appName.equalsIgnoreCase("Twitter")
-                || appName.equalsIgnoreCase("Facebook")
-                || appName.equalsIgnoreCase("Whatsapp")
-                || appName.equalsIgnoreCase("GooglePlus")
-                || appName.equalsIgnoreCase("Youtube")
-                || appName.equalsIgnoreCase("Instagram");
     }
 
     public boolean checkIfSocialNetworkIsInstalled(String appName) {

@@ -17,9 +17,10 @@ public class Music extends Audio {
     private int colorResourceId;
     //TODO refactorizar nombre
     private String nameResourceId;
+    private String author;
     private int iconResourceId;
 
-    public Music(int iconResourceId, String nameResourceId, int musicResourceId, int colorResourceId) {
+    public Music(int iconResourceId, String nameResourceId, int musicResourceId, int colorResourceId, String author) {
         super("", "", "", 0, 0, null, null);
         this.musicResourceId = musicResourceId;
         this.colorResourceId = colorResourceId;
@@ -43,12 +44,12 @@ public class Music extends Audio {
         this.colorResourceId = colorResourceId;
     }
 
-    public void setNameResourceId(String name) {
-        this.nameResourceId = name;
-    }
-
     public String getNameResourceId() {
         return nameResourceId;
+    }
+
+    public void setNameResourceId(String name) {
+        this.nameResourceId = name;
     }
 
     public int getIconResourceId() {

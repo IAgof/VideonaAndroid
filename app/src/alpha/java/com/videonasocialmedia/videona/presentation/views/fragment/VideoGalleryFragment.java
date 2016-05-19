@@ -18,9 +18,9 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
@@ -34,24 +34,21 @@ import butterknife.ButterKnife;
  * Created by jca on 14/5/15.
  */
 public class VideoGalleryFragment extends VideonaFragment implements VideoGalleryView,
-        MusicRecyclerViewClickListener, OnTransitionClickListener {
+        RecyclerViewClickListener, OnTransitionClickListener {
 
     public static final int SELECTION_MODE_SINGLE = 0;
     public static final int SELECTION_MODE_MULTIPLE = 1;
-
-    @Bind(R.id.catalog_recycler)
-    RecyclerView recyclerView;
     protected TimeChangesHandler timeChangesHandler = new TimeChangesHandler();
     protected VideoGalleryAdapter videoGalleryAdapter;
     protected VideoGalleryPresenter videoGalleryPresenter;
     protected Video selectedVideo;
     protected int folder;
     protected OnSelectionModeListener onSelectionModeListener;
-
     protected ItemClickSupport clickSupport;
     protected ItemSelectionSupport selectionSupport;
-
     protected int selectionMode;
+    @Bind(R.id.catalog_recycler)
+    RecyclerView recyclerView;
 
     public static VideoGalleryFragment newInstance(int folder, int selectionMode) {
         VideoGalleryFragment videoGalleryFragment = new VideoGalleryFragment();
@@ -60,6 +57,12 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
         args.putInt("SELECTION_MODE", selectionMode);
         videoGalleryFragment.setArguments(args);
         return videoGalleryFragment;
+    }
+
+    @Override
+    public void onAttach(Activity a) {
+        super.onAttach(a);
+        onSelectionModeListener = (OnSelectionModeListener) a;
     }
 
     // Store instance variables based on arguments passed
@@ -81,12 +84,6 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
                 GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         return v;
-    }
-
-    @Override
-    public void onAttach(Activity a) {
-        super.onAttach(a);
-        onSelectionModeListener = (OnSelectionModeListener) a;
     }
 
     @Override
@@ -145,11 +142,6 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
     }
@@ -164,6 +156,11 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
         super.onDestroyView();
         ButterKnife.unbind(this);
         timeChangesHandler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -202,27 +199,6 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
 
     }
 
-    @Override
-    public void onClick(int position) {
-        selectedVideo = videoGalleryAdapter.getVideo(position);
-        //videoGalleryAdapter.notifyDataSetChanged();
-    }
-
-    public Video getSelectedVideo() {
-        return selectedVideo;
-    }
-
-    public List<Video> getSelectedVideoList() {
-        List<Video> result=new ArrayList<>();
-        SparseBooleanArray selectedElements=selectionSupport.getCheckedItemPositions();
-        for (int i=0; selectedElements!=null&&i<videoGalleryAdapter.getItemCount();i++){
-            if (selectedElements.get(i)){
-                result.add(videoGalleryAdapter.getVideo(i));
-            }
-        }
-        return result;
-    }
-
     private void showTimeTag(final List<Video> videoList) {
         Runnable updateVideoTime = new Runnable() {
             @Override
@@ -251,6 +227,16 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
         thread.start();
     }
 
+    @Override
+    public void onClick(int position) {
+        selectedVideo = videoGalleryAdapter.getVideo(position);
+        //videoGalleryAdapter.notifyDataSetChanged();
+    }
+
+    public Video getSelectedVideo() {
+        return selectedVideo;
+    }
+
     public void updateView() {
         List<Video> selectedVideos = getSelectedVideoList();
         if(selectedVideos.size() > 0) {
@@ -259,6 +245,17 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
             }
             videoGalleryAdapter.clearView();
         }
+    }
+
+    public List<Video> getSelectedVideoList() {
+        List<Video> result = new ArrayList<>();
+        SparseBooleanArray selectedElements = selectionSupport.getCheckedItemPositions();
+        for (int i = 0; selectedElements != null && i < videoGalleryAdapter.getItemCount(); i++) {
+            if (selectedElements.get(i)) {
+                result.add(videoGalleryAdapter.getVideo(i));
+            }
+        }
+        return result;
     }
 
     @Override

@@ -7,10 +7,12 @@
 
 package com.videonasocialmedia.videona.presentation.views.listener;
 
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+
 /**
  * Created by jca on 25/3/15.
  */
 public interface MusicRecyclerViewClickListener {
 
-    void onClick(int position);
+    void onClick(Music music);
 }
