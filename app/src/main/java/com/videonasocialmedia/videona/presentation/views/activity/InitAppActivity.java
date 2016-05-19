@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -89,6 +90,10 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         ButterKnife.bind(this);
 
         setVersionCode();
+
+        SplashScreenTask splashScreenTask = new SplashScreenTask(this);
+        splashScreenTask.execute();
+
         if (BuildConfig.DEBUG) {
             //Wait longer while debug so we can start qordoba sandbox mode on splash screen
             MINIMUN_WAIT_TIME = 10000;
@@ -117,6 +122,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override
@@ -128,8 +134,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SplashScreenTask splashScreenTask = new SplashScreenTask(this);
-        splashScreenTask.execute();
     }
 
     /**
@@ -182,9 +186,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
                 initState = AnalyticsConstants.INIT_STATE_UPGRADE;
                 trackAppStartupProperties(false);
-                // example: show what's new
-                // could be appear a mix panel popup with improvements.
-
                 // Repeat this method for security, if user delete app data miss this configs.
                 setupCameraSettings();
                 trackUserProfile();
@@ -195,7 +196,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
                 initState = AnalyticsConstants.INIT_STATE_FIRST_TIME;
                 trackAppStartupProperties(true);
-                // example: show a tutorial
                 setupCameraSettings();
                 trackUserProfile();
                 trackCreatedSuperProperty();
@@ -204,6 +204,59 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 break;
             default:
                 break;
+        }
+    }
+
+    private void moveVideonaToDcim() {
+
+        String pathVideonaOld = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES) + File.separator + Constants.FOLDER_VIDEONA;
+        String pathVideonaTempOld = pathVideonaOld + File.separator + Constants.FOLDER_VIDEONA_TEMP;
+
+        String pathVideonaMasterOld = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES) + File.separator + Constants.FOLDER_VIDEONA_MASTERS;
+
+        File videonaOldDirectory = new File(pathVideonaOld);
+        if(videonaOldDirectory.exists()){
+            for(File f: videonaOldDirectory.listFiles()){
+                if(f.isDirectory()){
+                    for(File fTemp: f.listFiles()) {
+                        File newF = new File(Constants.PATH_APP_TEMP, fTemp.getName());
+                        if(!newF.exists())
+                            fTemp.renameTo(newF);
+                    }
+                } else {
+                    File newF = new File(Constants.PATH_APP, f.getName());
+                    if(!newF.exists())
+                        f.renameTo(newF);
+                }
+
+            }
+
+        }
+
+        File videonaOldMasterDirectory = new File(pathVideonaMasterOld);
+        if(videonaOldMasterDirectory.exists()){
+            for(File fMaster: videonaOldMasterDirectory.listFiles()){
+                File newF = new File(Constants.PATH_APP_MASTERS, fMaster.getName());
+                if(!newF.exists())
+                    fMaster.renameTo(newF);
+            }
+
+        }
+
+
+        File videonaTempOld = new File (pathVideonaTempOld);
+        if(videonaTempOld.exists() && videonaTempOld.listFiles().length == 0){
+            videonaTempOld.delete();
+        }
+
+        if(videonaOldDirectory.exists() && videonaOldDirectory.listFiles().length == 0){
+            videonaOldDirectory.delete();
+        }
+
+        if(videonaOldMasterDirectory.exists() && videonaOldMasterDirectory.listFiles().length == 0){
+            videonaOldMasterDirectory.delete();
         }
     }
 
@@ -234,8 +287,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
         checkAndInitPath(Constants.PATH_APP_MASTERS);
-        checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
-
 
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
@@ -484,6 +535,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     public void onCheckPathsAppSuccess() {
         startLoadingProject(this);
+        moveVideonaToDcim();
     }
 
     private void startLoadingProject(OnInitAppEventListener listener) {
