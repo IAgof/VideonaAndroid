@@ -10,6 +10,7 @@
 
 package com.videonasocialmedia.videona.domain.editor;
 
+
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -23,7 +24,7 @@ public class AddMusicToProjectUseCase {
 
 
     /**
-     * @deprecated use instead the the method withoutlistener and register your listener using event bus
+     * @deprecated use instead the the method without listener and register your listener using event bus
      * @param music
      * @param trackIndex
      * @param listener
@@ -41,11 +42,12 @@ public class AddMusicToProjectUseCase {
     }
 
     public void addMusicToTrack(Music music, int trackIndex) {
-        AudioTrack audioTrack = obtainAudioTrack(trackIndex);
+        AudioTrack audioTrack = null;
         try {
+            audioTrack = obtainAudioTrack(trackIndex);
             audioTrack.insertItem(music);
-        } catch (IllegalItemOnTrack illegalItemOnTrack) {
-            illegalItemOnTrack.printStackTrace();
+        } catch (IndexOutOfBoundsException | IllegalItemOnTrack exception) {
+            exception.printStackTrace();
         }
     }
 
