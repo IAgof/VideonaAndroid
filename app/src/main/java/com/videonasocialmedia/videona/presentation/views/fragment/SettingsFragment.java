@@ -22,7 +22,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
@@ -36,7 +36,7 @@ import java.util.ArrayList;
  */
 public class SettingsFragment extends PreferenceFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener, PreferencesView,
-        OnVideonaDialogListener {
+        VideonaDialogListener {
 
     protected ListPreference resolutionPref;
     protected ListPreference qualityPref;

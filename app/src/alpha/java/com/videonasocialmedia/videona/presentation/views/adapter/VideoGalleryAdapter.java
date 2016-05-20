@@ -15,7 +15,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
-import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.MultiItemSelectionSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
     private List<Video> videoList;
     private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
     private OnTransitionClickListener onTransitionClickListener;
-    private ItemSelectionSupport selectionSupport;
+    private MultiItemSelectionSupport selectionSupport;
 
     private int selectedVideoPosition = -1;
 
@@ -90,7 +90,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
     }
 
-    public void setSelectionSupport(ItemSelectionSupport selectionSupport) {
+    public void setSelectionSupport(MultiItemSelectionSupport selectionSupport) {
         this.selectionSupport = selectionSupport;
     }
 
@@ -146,7 +146,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
         @OnClick(R.id.video_item)
         public void startVideoPreview(View v) {
-            if(selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.NONE) {
+            if(selectionSupport.getChoiceMode() == MultiItemSelectionSupport.ChoiceMode.NONE) {
                 if(onTransitionClickListener != null)
                     onTransitionClickListener.onClick(itemView, getPosition());
             }

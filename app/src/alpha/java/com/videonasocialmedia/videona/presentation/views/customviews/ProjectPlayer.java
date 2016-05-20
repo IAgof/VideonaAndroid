@@ -190,8 +190,13 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
     }
 
     public void initPreviewLists(List<Video> videoList) {
-        projectDuration = 0;
         this.videoList = videoList;
+        this.updatePreviewTimeLists();
+        this.setProjectDuration();
+    }
+
+    public void updatePreviewTimeLists() {
+        projectDuration = 0;
         videoStartTimeInProject = new ArrayList<>();
         videoStopTimeInProject = new ArrayList<>();
         for (Video video : videoList) {

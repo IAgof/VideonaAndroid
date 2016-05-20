@@ -34,22 +34,17 @@ import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.model.entities.editor.media.Media;
-import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
-import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
 import com.videonasocialmedia.videona.presentation.views.listener.ProjectPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
-import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 
 import java.util.List;
 
@@ -60,7 +55,7 @@ import butterknife.OnClick;
 public class EditActivity extends VideonaActivity implements EditorView,
         ProjectPlayerListener,
 //        ProjectPlayerView, SeekBar.OnSeekBarChangeListener,
-        VideoTimeLineRecyclerViewClickListener, OnVideonaDialogListener {
+        VideoTimeLineRecyclerViewClickListener {
 
     @Bind(R.id.button_edit_navigator)
     ImageButton navigateToEditButton;
@@ -78,26 +73,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Bind(R.id.recyclerview_editor_timeline)
     RecyclerView videoListRecyclerView;
 
-//    private MediaController mediaController;
-//    private MediaPlayer videoPlayer;
-//    private MediaPlayer musicPlayer;
-//    private AudioManager audio;
-//    private int projectDuration = 0;
     private List<Video> videoList;
-//    private List<Integer> videoStartTimeInProject;
-//    private List<Integer> videoStopTimeInProject;
     private int currentVideoIndex = 0;
-//    private int instantTime = 0;
-    private boolean isFullScreenBack = false;
     private Project project;
-    private Music music;
-//    private final Runnable updateTimeTask = new Runnable() {
-//        @Override
-//        public void run() {
-//            updateSeekBarProgress();
-//        }
-//    };
-//    protected Handler handler = new Handler();
 
     private EditPresenter editPresenter;
 
@@ -106,32 +84,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
     private VideoTimeLineAdapter timeLineAdapter;
     private final int NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL = 3;
     private final int NUM_COLUMNS_GRID_TIMELINE_VERTICAL = 4;
-    private ItemTouchHelper touchHelper;
-    private ItemTouchHelper.Callback callback;
-
-    protected ItemClickSupport clickSupport;
-    protected ItemSelectionSupport selectionSupport;
-
 
     private String videoToSharePath;
 
     private AlertDialog progressDialog;
     private int selectedVideoRemovePosition;
-
-    public Thread performOnBackgroundThread(EditActivity parent, final Runnable runnable) {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    runnable.run();
-                } finally {
-                }
-            }
-        };
-        t.start();
-        return t;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +111,10 @@ public class EditActivity extends VideonaActivity implements EditorView,
         editPresenter = new EditPresenter(this, projectPlayer);
 
         createProgressDialog();
+        if (savedInstanceState != null) {
+            this.currentVideoIndex = savedInstanceState.getInt(Constants.CURRENT_VIDEO_INDEX);
+        }
+
     }
 
     @Override
@@ -177,22 +138,23 @@ public class EditActivity extends VideonaActivity implements EditorView,
     protected void onResume() {
         super.onResume();
 
-        editPresenter.obtainVideos();
-
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null) {
             if(bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {
-                restoreStateFromNavigationBack();
+                this.currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
             }
         }
+        editPresenter.obtainVideos();
+//        restoreStateFromNavigationBack(currentVideoIndex);
     }
 
-    private void restoreStateFromNavigationBack() {
-        currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
+    private void restoreStateFromNavigationBack(int selectedClip) {
+//        currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
+//        projectPlayer.seekToClip(currentVideoIndex);
+        this.setSelectedClip(selectedClip);
         timeLineAdapter.updateSelection(currentVideoIndex);
         videoListRecyclerView.scrollToPosition(currentVideoIndex);
         // TODO: check if this make the same of above
-        projectPlayer.seekToClip(currentVideoIndex);
 //        initVideoPlayer(videoList.get(currentVideoIndex),
 //                videoList.get(currentVideoIndex).getFileStartTime());
 //        instantTime = videoStartTimeInProject.get(currentVideoIndex);
@@ -210,6 +172,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     protected void onStop() {
         super.onStop();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -332,138 +300,56 @@ public class EditActivity extends VideonaActivity implements EditorView,
         startActivity(intent);
     }
 
-//    @OnClick (R.id.button_editor_play_pause)
-//    public void onClickPlayPauseButton(){
-//        if (projectHasVideos()) {
-//            if (videoPlayer != null) {
-//                if (videoPlayer.isPlaying()) {
-//                    pausePreview();
-//                    instantTime = seekBar.getProgress();
-//                } else {
-//                    playPreview();
-//                }
-//            } else {
-//                playPreview();
-//            }
-//        } else {
-//            seekBar.setProgress(0);
-//        }
-//    }
-
-
-//    @OnTouch(R.id.video_editor_preview)
-//    public boolean onTouchPreview(MotionEvent event) {
-//        boolean result;
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            onClickPlayPauseButton();
-//            result = true;
-//        } else {
-//            result = false;
-//        }
-//        return result;
-//    }
-
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 this.onBackPressed();
                 return true;
-//            case KeyEvent.KEYCODE_VOLUME_UP:
-//                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-//                        AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
-//                return true;
-//            case KeyEvent.KEYCODE_VOLUME_DOWN:
-//                audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-//                        AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
-//                return true;
             default:
                 return false;
         }
     }
 
-    private boolean projectHasVideos() {
-        List<Media> list = editPresenter.checkVideosOnProject();
-        return list.size() > 0;
-    }
-
     private void initVideoListRecycler() {
-
-        clickSupport = ItemClickSupport.addTo(videoListRecyclerView);
-        clickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClick(RecyclerView parent, View view, int position, long id) {
-
-                selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-
-                selectionSupport.setItemChecked(position, true);
-
-            }
-        });
-
-        selectionSupport = ItemSelectionSupport.addTo(videoListRecyclerView);
-
-        timeLineAdapter = new VideoTimeLineAdapter();
-        timeLineAdapter.setSelectionSupport(selectionSupport);
-        timeLineAdapter.setVideoTimeLineListener(this);
-
         int orientation = LinearLayoutManager.VERTICAL;
-        RecyclerView.LayoutManager layoutManager;
+        int num_grid_columns = NUM_COLUMNS_GRID_TIMELINE_VERTICAL;
         if (isLandscapeOriented()) {
-            layoutManager = new GridLayoutManager(this, NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL,
-                    orientation, false);
-        } else {
-            layoutManager = new GridLayoutManager(this, NUM_COLUMNS_GRID_TIMELINE_VERTICAL,
-                    orientation, false);
+            num_grid_columns = NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL;
         }
-
-
-        videoListRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, num_grid_columns,
+                orientation, false);
         videoListRecyclerView.setLayoutManager(layoutManager);
 
+        timeLineAdapter = new VideoTimeLineAdapter(this);
         videoListRecyclerView.setAdapter(timeLineAdapter);
 
-        callback = new ItemTouchHelperCallback(timeLineAdapter);
-        touchHelper = new ItemTouchHelper(callback);
+        ItemTouchHelperCallback callback = new ItemTouchHelperCallback(timeLineAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(videoListRecyclerView);
 
     }
 
+    public void setSelectedClip(int position) {
+        currentVideoIndex = position;
+        projectPlayer.seekToClip(position);
+    }
+
     ////// RECYCLER VIDEO TIME LINE
     @Override
-    public void onVideoClicked(int position) {
-        projectPlayer.seekToClip(position);
-//        currentVideoIndex = position;
-//
-//        int progress = videoStartTimeInProject.get(currentVideoIndex) -
-//                videoList.get(currentVideoIndex).getFileStartTime();
-//
-//        instantTime = progress;
-//        seekBar.setProgress(progress);
-//
-//        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
-//                videoList.get(currentVideoIndex).getFileStartTime();
-//
-//        if (videoPlayer != null) {
-//            seekToNextVideo(videoList.get(position), timeInMsec);
-//        } else {
-//            initVideoPlayer(videoList.get(position), timeInMsec);
-//        }
-//
-//        playButton.setVisibility(View.VISIBLE);
-
+    public void onClipClicked(int position) {
+        setSelectedClip(position);
     }
 
     @Override
-    public void onVideoLongClicked() {
+    public void onClipLongClicked() {
+        projectPlayer.pausePreview();
 //    TODO(jliarte - 20160514): is this still needed?
 //        onClickPlayPauseButton();
     }
 
     @Override
-    public void onVideoRemoveClicked(int position) {
-
+    public void onClipRemoveClicked(int position) {
         selectedVideoRemovePosition = position;
-
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -484,91 +370,17 @@ public class EditActivity extends VideonaActivity implements EditorView,
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaDialog);
         builder.setMessage(R.string.dialog_edit_remove_message).setPositiveButton(R.string.dialog_edit_remove_accept, dialogClickListener)
                 .setNegativeButton(R.string.dialog_edit_remove_cancel, dialogClickListener).show();
-
     }
 
 
     @Override
-    public void onVideoMoved(int toPosition) {
-
+    public void onClipMoved(int toPosition) {
         editPresenter.moveItem(videoList.get(currentVideoIndex), toPosition);
-        currentVideoIndex = toPosition;
-        projectPlayer.seekToClip(currentVideoIndex);
-//        int progress = videoStartTimeInProject.get(currentVideoIndex) -
-//                videoList.get(currentVideoIndex).getFileStartTime();
-//
-//        instantTime = progress;
-//        seekBar.setProgress(progress);
-//
-//        int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
-//                videoList.get(currentVideoIndex).getFileStartTime();
-//
-//        if (videoPlayer != null) {
-//            seekToNextVideo(videoList.get(currentVideoIndex), timeInMsec);
-//        } else {
-//            initVideoPlayer(videoList.get(currentVideoIndex), timeInMsec);
-//        }
-
+        projectPlayer.updatePreviewTimeLists();
+        this.setSelectedClip(toPosition);
+//        currentVideoIndex = toPosition;
+//        projectPlayer.seekToClip(currentVideoIndex);
     }
-
-    ////////// VIDEONA DIALOG
-
-    @Override
-    public void onClickPositiveButton(int id) {
-
-    }
-
-    @Override
-    public void onClickNegativeButton(int id) {
-
-    }
-    /*
-        * ********************************
-        * Video preview
-        * ********************************
-        * */
-//    private void initVideoPreview() {
-//        seekBar.setProgress(0);
-//        seekBar.setOnSeekBarChangeListener(this);
-//        mediaController = new MediaController(this);
-//        mediaController.setVisibility(View.INVISIBLE);
-//        audio = (AudioManager) getApplicationContext()
-//                .getSystemService(Context.AUDIO_SERVICE);
-//
-//        seekBar.setProgress(0);
-//    }
-
-    /*
-    * ********************************
-    * End of Video preview
-    * ********************************
-    * */
-
-//    @Override
-//    public void playPreview() {
-//
-//        initPreviewLists(videoList);
-//        seekBar.setMax(projectDuration);
-//        initPreview();
-//        playButton.setVisibility(View.INVISIBLE);
-//
-//
-//    }
-
-//    @Override
-//    public void pausePreview() {
-//        if (videoPlayer != null && videoPlayer.isPlaying())
-//            videoPlayer.pause();
-//        if (musicPlayer != null && musicPlayer.isPlaying())
-//            musicPlayer.pause();
-//        playButton.setVisibility(View.VISIBLE);
-//    }
-
-//    @Override
-//    public void seekTo(int timeInMsec) {
-//        if (videoPlayer != null)
-//            videoPlayer.seekTo(timeInMsec);
-//    }
 
     @Override
     public void enableEditActions() {
@@ -600,15 +412,20 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    public void showTimeLine(List<Video> videoList) {
+    public void bindVideoList(List<Video> videoList) {
         this.videoList = videoList;
         projectPlayer.initPreviewLists(videoList);
-        projectPlayer.setProjectDuration();
+//        projectPlayer.setProjectDuration();
         projectPlayer.initPreview();
+        this.setSelectedClip(currentVideoIndex);
+
 //        initPreviewLists(videoList);
 //        seekBar.setMax(projectDuration);
 //        initPreview();
         timeLineAdapter.setVideoList(videoList);
+        timeLineAdapter.updateSelection(currentVideoIndex); // TODO: check this flow and previous updateSelection(0); in setVideoList
+        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+
         timeLineAdapter.notifyDataSetChanged();
     }
 
@@ -617,406 +434,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
         editPresenter.obtainVideos();
     }
 
-    ///////// SEEKBAR_LISTENER
-
-
-//    @Override
-//    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//        if (fromUser) {
-//            if (projectHasVideos()) {
-//                Video video = getVideoByProgress(progress);
-//                int timeInMsec = progress - videoStartTimeInProject.get(currentVideoIndex) +
-//                        videoList.get(currentVideoIndex).getFileStartTime();
-//
-//                if (videoPlayer != null) {
-//                    playNextVideo(video, timeInMsec);
-//                } else {
-//                    initVideoPlayer(video, timeInMsec);
-//                }
-//                playButton.setVisibility(View.INVISIBLE);
-//            } else {
-//                seekBar.setProgress(0);
-//            }
-//        }
-//    }
-
-//    @Override
-//    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//    }
-//
-//    @Override
-//    public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//    }
-
-//    private void initPreviewLists(List<Video> videoList) {
-//        projectDuration = 0;
-//        this.videoList = videoList;
-//        videoStartTimeInProject = new ArrayList<>();
-//        videoStopTimeInProject = new ArrayList<>();
-//        for (Video video : videoList) {
-//            videoStartTimeInProject.add(projectDuration);
-//            projectDuration = projectDuration + video.getDuration();
-//            videoStopTimeInProject.add(projectDuration);
-//        }
-//    }
-//
-//
-//
-//    private void initPreview() {
-//        if (videoList.size() > 0) {
-//            Video video = getVideoByProgress(instantTime);
-//            currentVideoIndex = getPositionVideo(video);
-//            int timeInMsec = instantTime - videoStartTimeInProject.get(currentVideoIndex) +
-//                    videoList.get(currentVideoIndex).getFileStartTime();
-//            if (isFullScreenBack) {
-//                if (playButton.getVisibility() == View.INVISIBLE)
-//                    playButton.setVisibility(View.VISIBLE);
-//                initVideoPlayer(video, timeInMsec);
-//                isFullScreenBack = false;
-//            } else {
-//                if (videoPlayer == null) {
-//                    initVideoPlayer(video, timeInMsec);
-//                } else {
-//                    playNextVideo(video, timeInMsec);
-//                }
-//            }
-//        } else {
-//            seekBar.setProgress(0);
-//            playButton.setVisibility(View.VISIBLE);
-//            currentVideoIndex = 0;
-//            instantTime = 0;
-//        }
-//    }
-
-//    private Video getVideoByProgress(int progress) {
-//        int result = -1;
-//        if (0 <= progress && progress < videoStopTimeInProject.get(0)) {
-//            currentVideoIndex = 0;
-//        } else {
-//            for (int i = 0; i < videoStopTimeInProject.size(); i++) {
-//                if (i < videoStopTimeInProject.size() - 1) {
-//                    boolean inRange = videoStopTimeInProject.get(i) <= progress &&
-//                            progress < videoStopTimeInProject.get(i + 1);
-//                    if (inRange) {
-//                        result = i + 1;
-//                    }
-//                }
-//            }
-//            if (result == -1) {
-//                currentVideoIndex = videoStopTimeInProject.size() - 1;
-//            } else {
-//                currentVideoIndex = result;
-//            }
-//        }
-//        return videoList.get(currentVideoIndex);
-//    }
-//
-//    private int getPositionVideo(Video seekVideo) {
-//        int position = 0;
-//        for (Video video : videoList) {
-//            if (video == seekVideo) {
-//                position = videoList.indexOf(video);
-//            }
-//        }
-//        return position;
-//    }
-//
-//    private void initVideoPlayer(final Video video, final int startTime) {
-//
-//        videoPreview.setVideoPath(video.getMediaPath());
-//        videoPreview.setMediaController(mediaController);
-//        videoPreview.canSeekBackward();
-//        videoPreview.canSeekForward();
-//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                videoPlayer = mp;
-//                videoPlayer.setVolume(0.5f, 0.5f);
-//                videoPlayer.setLooping(false);
-//                videoPlayer.start();
-//                videoPlayer.seekTo(startTime);
-//                try {
-//                    Thread.sleep(10);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                videoPlayer.pause();
-//                updateSeekBarProgress();
-//            }
-//        });
-//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-//            @Override
-//            public boolean onError(MediaPlayer mp, int what, int extra) {
-//                videoPlayer.reset();
-//                initVideoPlayer(video, instantTime);
-//                return false;
-//            }
-//        });
-//        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                currentVideoIndex++;
-//                if (hasNextVideoToPlay()) {
-//                    playNextVideo(videoList.get(currentVideoIndex),
-//                            videoList.get(currentVideoIndex).getFileStartTime());
-//                }
-//            }
-//        });
-//        videoPreview.requestFocus();
-//    }
-
-//    private boolean hasNextVideoToPlay() {
-//        return currentVideoIndex < videoList.size();
-//    }
-
-//    private void playNextVideo(final Video video, final int instantToStart) {
-//
-//        timeLineAdapter.updateSelection(currentVideoIndex);
-//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-//
-//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                try {
-//                    videoPlayer.setLooping(false);
-//                    videoPlayer.start();
-//                    if (playButton.getVisibility() == View.VISIBLE)
-//                        playButton.setVisibility(View.INVISIBLE);
-//                    videoPlayer.seekTo(instantToStart);
-//                    if (isMusicOnProject()) {
-//                        muteVideo();
-//                        playMusicSyncWithVideo();
-//                    } else {
-//                        releaseMusicPlayer();
-//                        videoPlayer.setVolume(0.5f, 0.5f);
-//                    }
-//                } catch (Exception e) {
-//                    // TODO don't force media player. Media player must be null here
-//                    seekBar.setProgress(0);
-//                    playButton.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-//            @Override
-//            public boolean onError(MediaPlayer mp, int what, int extra) {
-//                videoPlayer.reset();
-//                initVideoPlayer(video, instantTime);
-//                return false;
-//            }
-//        });
-//        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                currentVideoIndex++;
-//                if (hasNextVideoToPlay()) {
-//                    playNextVideo(videoList.get(currentVideoIndex),
-//                            videoList.get(currentVideoIndex).getFileStartTime());
-//                } else {
-//                    releaseView();
-//                }
-//            }
-//        });
-//        try {
-//            videoPlayer.reset();
-//            videoPlayer.setDataSource(video.getMediaPath());
-//            videoPlayer.prepare();
-//        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
-//            e.printStackTrace();
-//        }
-//        videoPreview.requestFocus();
-//    }
-
-//    private void playNextVideoClicked(final Video video, final int instantToStart) {
-//
-//        timeLineAdapter.updateSelection(currentVideoIndex);
-//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-//
-//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                try {
-//                    videoPlayer.setLooping(false);
-//                    videoPlayer.start();
-//                    videoPlayer.seekTo(instantToStart);
-//                    if (isMusicOnProject()) {
-//                        muteVideo();
-//                        playMusicSyncWithVideo();
-//                    } else {
-//                        releaseMusicPlayer();
-//                        videoPlayer.setVolume(0.5f, 0.5f);
-//                    }
-//                    videoPlayer.pause();
-//                } catch (Exception e) {
-//                    // TODO don't force media player. Media player must be null here
-//                    seekBar.setProgress(0);
-//                    playButton.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-//            @Override
-//            public boolean onError(MediaPlayer mp, int what, int extra) {
-//                videoPlayer.reset();
-//                initVideoPlayer(video, instantTime);
-//                return false;
-//            }
-//        });
-//        videoPreview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//            @Override
-//            public void onCompletion(MediaPlayer mp) {
-//                currentVideoIndex++;
-//                if (hasNextVideoToPlay()) {
-//                    playNextVideo(videoList.get(currentVideoIndex),
-//                            videoList.get(currentVideoIndex).getFileStartTime());
-//                } else {
-//                    releaseView();
-//                }
-//            }
-//        });
-//        try {
-//            videoPlayer.reset();
-//            videoPlayer.setDataSource(video.getMediaPath());
-//            videoPlayer.prepare();
-//        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
-//            e.printStackTrace();
-//        }
-//        videoPreview.requestFocus();
-//    }
-
-//    private void seekToNextVideo(final Video video, final int instantToStart) {
-//
-//        timeLineAdapter.updateSelection(currentVideoIndex);
-//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-//
-//        videoPreview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                try {
-//                    videoPlayer.seekTo(instantToStart);
-//                } catch (Exception e) {
-//                    // TODO don't force media player. Media player must be null here
-//                    seekBar.setProgress(0);
-//                    playButton.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//        videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-//            @Override
-//            public boolean onError(MediaPlayer mp, int what, int extra) {
-//                videoPlayer.reset();
-//                initVideoPlayer(video, instantTime);
-//                return false;
-//            }
-//        });
-//        try {
-//            videoPlayer.reset();
-//            videoPlayer.setDataSource(video.getMediaPath());
-//            videoPlayer.prepare();
-//            videoPlayer.seekTo(instantToStart);
-//            videoPlayer.start();
-//            videoPlayer.pause();
-//        } catch (IllegalArgumentException | IllegalStateException | IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    private boolean isMusicOnProject() {
-//        return project.getAudioTracks().size() > 0 &&
-//                project.getAudioTracks().get(0).getItems().size() > 0;
-//    }
-//
-//    private void muteVideo() {
-//        videoPlayer.setVolume(0, 0);
-//    }
-//
-//    private void playMusicSyncWithVideo() {
-//        releaseMusicPlayer();
-//        initMusicPlayer();
-//        if (musicPlayer.isPlaying()) {
-//            musicPlayer.seekTo(seekBar.getProgress());
-//        } else {
-//            musicPlayer.start();
-//            musicPlayer.seekTo(seekBar.getProgress());
-//        }
-//    }
-//
-//    private void releaseMusicPlayer() {
-//        if (musicPlayer != null) {
-//            musicPlayer.stop();
-//            musicPlayer.release();
-//            musicPlayer = null;
-//        }
-//    }
-//
-//    private void initMusicPlayer() {
-//        if (musicPlayer == null) {
-//            music = (Music) project.getAudioTracks().get(0).getItems().get(0);
-//            musicPlayer = MediaPlayer.create(this, music.getMusicResourceId());
-//            musicPlayer.setVolume(0.5f, 0.5f);
-//        }
-//    }
-//
-//    private void releaseView() {
-//        playButton.setVisibility(View.VISIBLE);
-//        releaseVideoView();
-//        currentVideoIndex = 0;
-//        if (videoList.size() > 0)
-//            initVideoPlayer(videoList.get(currentVideoIndex),
-//                    videoList.get(currentVideoIndex).getFileStartTime() + 100);
-//        seekBar.setProgress(0);
-//        instantTime = 0;
-//        timeLineAdapter.updateSelection(currentVideoIndex);
-//        videoListRecyclerView.scrollToPosition(currentVideoIndex);
-//        if (musicPlayer != null && musicPlayer.isPlaying()) {
-//            musicPlayer.pause();
-//            releaseMusicPlayer();
-//        }
-//    }
-
-//    /**
-//     * Releases the media player and the video view
-//     */
-//    private void releaseVideoView() {
-//        videoPreview.stopPlayback();
-//        videoPreview.clearFocus();
-//        if (videoPlayer != null) {
-//            videoPlayer.release();
-//            videoPlayer = null;
-//        }
-//    }
-
-//    private void updateSeekBarProgress() {
-//        if (videoPlayer != null) {
-//            try {
-//                if (videoPlayer.isPlaying() && currentVideoIndex < videoList.size()) {
-//                    seekBar.setProgress(videoPlayer.getCurrentPosition() +
-//                            videoStartTimeInProject.get(currentVideoIndex) -
-//                            videoList.get(currentVideoIndex).getFileStartTime());
-//
-//                    if (isEndOfVideo()) {
-//                        currentVideoIndex++;
-//                        if (hasNextVideoToPlay()) {
-//
-//                            playNextVideo(videoList.get(currentVideoIndex),
-//                                    videoList.get(currentVideoIndex).getFileStartTime());
-//                        } else {
-//                            releaseView();
-//                        }
-//                    }
-//                }
-//            } catch (Exception e) {
-//
-//            }
-//            handler.postDelayed(updateTimeTask, 20);
-//        }
-//    }
-//
-//    private boolean isEndOfVideo() {
-//        return seekBar.getProgress() >= videoStopTimeInProject.get(currentVideoIndex);
-//    }
+    @Override
+    public void goToShare(String videoToSharePath) {
+        Intent intent = new Intent(this, ShareVideoActivity.class);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
+        startActivity(intent);
+    }
 
     private void createProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1025,15 +448,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 .setView(dialogView)
                 .create();
     }
-
-
-    @Override
-    public void goToShare(String videoToSharePath) {
-        Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
-        startActivity(intent);
-    }
-
 
     @Override
     public void showProgressDialog() {
@@ -1087,7 +501,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void newClipPlayed(int currentClipIndex) {
-        timeLineAdapter.updateSelection(currentVideoIndex);
-        videoListRecyclerView.scrollToPosition(currentVideoIndex);
+        currentVideoIndex = currentClipIndex;
+        timeLineAdapter.updateSelection(currentClipIndex);
+        videoListRecyclerView.scrollToPosition(currentClipIndex);
     }
 }

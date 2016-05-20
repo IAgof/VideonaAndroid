@@ -23,7 +23,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import butterknife.OnClick;
  * Created by jca on 20/5/15.
  */
 public class GalleryActivity extends VideonaActivity implements ViewPager.OnPageChangeListener,
-        GalleryPagerView, OnSelectionModeListener, OnVideonaDialogListener {
+        GalleryPagerView, OnSelectionModeListener, VideonaDialogListener {
 
     private final String MASTERS_FRAGMENT_TAG="MASTERS";
     private final String EDITED_FRAGMENT_TAG="EDITED";

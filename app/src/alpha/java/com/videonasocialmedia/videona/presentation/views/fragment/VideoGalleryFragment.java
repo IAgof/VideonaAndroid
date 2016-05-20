@@ -21,8 +21,8 @@ import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAda
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
-import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemClickSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
+import com.videonasocialmedia.videona.utils.recyclerselectionsupport.MultiItemSelectionSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +48,8 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
     protected int folder;
     protected OnSelectionModeListener onSelectionModeListener;
 
-    protected ItemClickSupport clickSupport;
-    protected ItemSelectionSupport selectionSupport;
+    protected ItemSelectionSupport clickSupport;
+    protected MultiItemSelectionSupport selectionSupport;
 
     protected int selectionMode;
 
@@ -92,11 +92,11 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        clickSupport = ItemClickSupport.addTo(recyclerView);
-        clickSupport.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+        clickSupport = ItemSelectionSupport.addTo(recyclerView);
+        clickSupport.setOnItemClickListener(new ItemSelectionSupport.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView parent, View view, int position, long id) {
-                if (selectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.MULTIPLE)
+                if (selectionSupport.getChoiceMode() == MultiItemSelectionSupport.ChoiceMode.MULTIPLE)
                     if (selectionSupport.isItemChecked(position)) {
                         selectionSupport.setItemChecked(position, true);
                         onSelectionModeListener.onItemUnchecked();
@@ -106,20 +106,20 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
                     }
             }
         });
-        clickSupport.setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+        clickSupport.setOnItemLongClickListener(new ItemSelectionSupport.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(RecyclerView parent, View view, int position, long id) {
                 if (selectionMode == SELECTION_MODE_MULTIPLE)
-                    selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.MULTIPLE);
+                    selectionSupport.setChoiceMode(MultiItemSelectionSupport.ChoiceMode.MULTIPLE);
                 else
-                    selectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+                    selectionSupport.setChoiceMode(MultiItemSelectionSupport.ChoiceMode.SINGLE);
 
                 selectionSupport.setItemChecked(position, true);
                 onSelectionModeListener.onItemChecked();
                 return true;
             }
         });
-        selectionSupport = ItemSelectionSupport.addTo(recyclerView);
+        selectionSupport = MultiItemSelectionSupport.addTo(recyclerView);
     }
 
     /*

@@ -26,7 +26,7 @@ public interface EditorView {
 
     void showMessage(int stringToast);
 
-    void showTimeLine(List<Video> movieList);
+    void bindVideoList(List<Video> movieList);
 
     void updateProject();
 

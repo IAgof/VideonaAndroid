@@ -129,7 +129,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
         editorView.enableEditActions();
-        editorView.showTimeLine(videoList);
+        editorView.bindVideoList(videoList);
     }
 
     @Override
