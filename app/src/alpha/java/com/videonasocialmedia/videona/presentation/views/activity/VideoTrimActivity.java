@@ -188,8 +188,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     @Override
     public void onBackPressed() {
         finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @Override
@@ -256,6 +255,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
+
+
 
     private void navigateTo(Class cls,  int currentVideoIndex) {
         Intent intent = new Intent(this, cls);

@@ -177,8 +177,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     @Override
     public void onBackPressed() {
         finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @Override
