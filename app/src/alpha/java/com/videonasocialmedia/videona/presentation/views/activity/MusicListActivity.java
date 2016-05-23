@@ -34,7 +34,6 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         setContentView(R.layout.activity_music_list);
         ButterKnife.bind(this);
         presenter = new MusicListPresenter(this);
-
         initVideoListRecycler();
     }
 
@@ -50,14 +49,13 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
 
     @Override
     public void showVideoList(List<Music> musicList) {
-
         musicAdapter.setMusicList(musicList);
     }
 
     @Override
     public void onClick(Music music) {
         Intent i = new Intent(this, MusicDetailActivity.class);
-        i.putExtra(MusicDetailActivity.MUSIC_EXTRAS_KEY, music.getMusicResourceId());
+        i.putExtra(MusicDetailActivity.MUSIC_ID_EXTRAS_KEY, music.getMusicResourceId());
         i.putExtra(MusicDetailActivity.AUTHOR_EXTRAS_KEY, music.getTitle());
         i.putExtra(MusicDetailActivity.TITLE_EXTRAS_KEY, music.getTitle());
         i.putExtra(MusicDetailActivity.IMAGE_EXTRAS_KEY, music.getIconResourceId());

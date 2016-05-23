@@ -26,6 +26,7 @@ public class Music extends Audio {
         this.colorResourceId = colorResourceId;
         this.nameResourceId = nameResourceId;
         this.iconResourceId = iconResourceId;
+        this.author = author;
     }
 
     public int getMusicResourceId() {

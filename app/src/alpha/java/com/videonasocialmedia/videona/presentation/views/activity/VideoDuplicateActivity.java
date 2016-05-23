@@ -52,46 +52,38 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         SeekBar.OnSeekBarChangeListener {
 
 
+    private static final String DUPLICATE_VIDEO_POSITION = "duplicate_video_position";
+    protected Handler handler = new Handler();
     @Bind(R.id.video_duplicate_preview)
     AspectRatioVideoView preview;
     @Bind(R.id.button_duplicate_play_pause)
     ImageButton playButton;
     @Bind(R.id.seekbar_duplicate_preview)
     SeekBar videoSeekBar;
-
     @Bind(R.id.image_thumb_duplicate_video_left)
     ImageView imageThumbLeft;
     @Bind(R.id.image_thumb_duplicate_video_right)
     ImageView imageThumbRight;
     @Bind(R.id.textView_duplicate_num_increment)
     TextView textNumDuplicates;
-
     @Bind(R.id.button_duplicate_increment_video)
     ImageButton incrementVideoButton;
     @Bind(R.id.button_duplicate_decrement_video)
     ImageButton decrementVideoButton;
-
-
     int videoIndexOnTrack;
     private DuplicatePreviewPresenter presenter;
-
     private MediaController mediaController;
     private MediaPlayer videoPlayer;
     private Video video;
-    protected Handler handler = new Handler();
+    private String TAG = "VideoDuplicateActivity";
+    private int currentPosition = 0;
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekBarProgress();
         }
     };
-    private String TAG = "VideoDuplicateActivity";
-    private int currentPosition = 0;
-
     private int numDuplicateVideos = 2;
-
-
-    private static final String DUPLICATE_VIDEO_POSITION = "duplicate_video_position";
     private String NUM_DUPLICATE_VIDEOS = "num_duplicate_videos";
 
     @Override
@@ -152,20 +144,19 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
 
     }
 
+    private void releaseVideoView() {
+        preview.stopPlayback();
+        preview.clearFocus();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            videoPlayer = null;
+        }
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-
-        outState.putInt(DUPLICATE_VIDEO_POSITION,currentPosition);
-        outState.putInt(NUM_DUPLICATE_VIDEOS, numDuplicateVideos);
-        super.onSaveInstanceState(outState);
-
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,19 +166,12 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     @Override
-    public void onBackPressed() {
-        finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings_edit_options:
                 navigateTo(SettingsActivity.class);
                 return true;
@@ -206,6 +190,22 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
 
     public void navigateTo(Class cls) {
         startActivity(new Intent(getApplicationContext(), cls));
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent record = new Intent(this, RecordActivity.class);
+        startActivity(record);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(DUPLICATE_VIDEO_POSITION, currentPosition);
+        outState.putInt(NUM_DUPLICATE_VIDEOS, numDuplicateVideos);
+        super.onSaveInstanceState(outState);
+
     }
 
     @OnTouch(R.id.video_duplicate_preview)
@@ -232,6 +232,26 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         }
     }
 
+    private void updateSeekBarProgress() {
+        if (videoPlayer != null) {
+            if (videoPlayer.isPlaying()) {
+                currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
+                videoSeekBar.setProgress(currentPosition);
+                if (isEndOfVideo()) {
+                    videoPlayer.pause();
+                    playButton.setVisibility(View.VISIBLE);
+                    videoSeekBar.setProgress(0);
+                    videoPlayer.seekTo(video.getFileStartTime());
+                }
+            }
+            handler.postDelayed(updateTimeTask, 20);
+        }
+    }
+
+    private boolean isEndOfVideo() {
+        return videoSeekBar.getProgress() >= ( video.getFileStopTime() - video.getFileStartTime() );
+    }
+
     @OnClick(R.id.button_duplicate_accept)
     public void onClickDuplicateAccept(){
 
@@ -240,16 +260,16 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
-    @OnClick(R.id.button_duplicate_cancel)
-    public void onClickDuplicateCancel(){
-        finish();
-        navigateTo(EditActivity.class, videoIndexOnTrack);
-    }
-
     private void navigateTo(Class cls,  int currentVideoIndex) {
         Intent intent = new Intent(this, cls);
         intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.button_duplicate_cancel)
+    public void onClickDuplicateCancel() {
+        finish();
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @Override
@@ -278,6 +298,18 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
 
     }
 
+    private void seekTo(int timeInMsec) {
+        if(videoPlayer!=null)
+        videoPlayer.seekTo(timeInMsec);
+    }
+
+    @Override
+    public void initDuplicateView(String path) {
+        decrementVideoButton.setVisibility(View.GONE);
+        showThumVideo(imageThumbLeft);
+        showThumVideo(imageThumbRight);
+    }
+
     @Override
     public void playPreview() {
         if (videoPlayer != null) {
@@ -293,15 +325,10 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         playButton.setVisibility(View.VISIBLE);
     }
 
-    private void seekTo(int timeInMsec) {
-        if(videoPlayer!=null)
-        videoPlayer.seekTo(timeInMsec);
-    }
-
     @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
-        int maxSeekBar = (video.getFileStopTime() - video.getFileStartTime());
+        int maxSeekBar = ( video.getFileStopTime() - video.getFileStartTime() );
         videoSeekBar.setMax(maxSeekBar);
         videoSeekBar.setProgress(0);
         initVideoPlayer(currentPosition, video.getMediaPath());
@@ -311,36 +338,6 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     @Override
     public void showError(String message) {
 
-    }
-
-    private void releaseVideoView() {
-        preview.stopPlayback();
-        preview.clearFocus();
-        if (videoPlayer != null) {
-            videoPlayer.release();
-            videoPlayer = null;
-        }
-    }
-
-    private void updateSeekBarProgress() {
-        if (videoPlayer != null) {
-            if (videoPlayer.isPlaying()) {
-                currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
-                videoSeekBar.setProgress(currentPosition);
-                if (isEndOfVideo()) {
-                    videoPlayer.pause();
-                    playButton.setVisibility(View.VISIBLE);
-                    videoSeekBar.setProgress(0);
-                    videoPlayer.seekTo(video.getFileStartTime());
-                }
-            }
-            handler.postDelayed(updateTimeTask, 20);
-        }
-    }
-
-
-    private boolean isEndOfVideo() {
-        return videoSeekBar.getProgress() >=  (video.getFileStopTime() - video.getFileStartTime());
     }
 
     private void initVideoPlayer(final int position, final String videoPath) {
@@ -393,13 +390,6 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void initDuplicateView(String path) {
-        decrementVideoButton.setVisibility(View.GONE);
-        showThumVideo(imageThumbLeft);
-        showThumVideo(imageThumbRight);
     }
 
     private void showThumVideo(ImageView imageThumbLeft) {

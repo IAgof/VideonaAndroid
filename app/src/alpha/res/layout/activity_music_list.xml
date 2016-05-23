@@ -35,13 +35,20 @@
             android:orientation="horizontal"
             android:padding="10dp">
 
-            <include layout="@layout/edit_activities_navigation_buttons"/>
+            <include
+                layout="@layout/edit_activities_navigation_buttons"
+                app:layout_behavior="com.videonasocialmedia.videona.presentation.views.custombehaviors.VideoViewSlideUpBehavior"/>
         </LinearLayout>
 
         <include
             android:id="@+id/video_view"
-            layout="@layout/video_preview"/>
+            layout="@layout/video_preview"
+            />
 
+        <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.videonasocialmedia.videona.presentation.views.custombehaviors.VideoViewSlideUpBehavior"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/music_list"
             android:layout_width="match_parent"

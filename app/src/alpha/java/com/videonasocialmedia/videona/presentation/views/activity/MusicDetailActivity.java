@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicDetailPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
 
 import butterknife.Bind;
@@ -20,7 +21,7 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
     public static String AUTHOR_EXTRAS_KEY = "AUTHOR_EXTRAS_KEY";
     public static String TITLE_EXTRAS_KEY = "TITLE_EXTRAS_KEY";
     public static String IMAGE_EXTRAS_KEY = "IMAGE_EXTRAS_KEY";
-    public static String MUSIC_EXTRAS_KEY = "MUSIC_EXTRAS_KEY";
+    public static String MUSIC_ID_EXTRAS_KEY = "MUSIC_ID_EXTRAS_KEY";
 
 
     @Bind(R.id.music_title)
@@ -32,33 +33,39 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
     @Bind(R.id.select_music)
     ImageButton selectMusic;
 
+    private MusicDetailPresenter musicDetailPresenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_detail);
         ButterKnife.bind(this);
+        initToolbar();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        musicDetailPresenter = new MusicDetailPresenter();
+
         try {
             Bundle extras = this.getIntent().getExtras();
             String author = extras.getString(AUTHOR_EXTRAS_KEY);
             String title = extras.getString(TITLE_EXTRAS_KEY);
             int imageId = extras.getInt(IMAGE_EXTRAS_KEY);
-            int musicId = extras.getInt(MUSIC_EXTRAS_KEY);
+            int musicId = extras.getInt(MUSIC_ID_EXTRAS_KEY);
 
-            showAuthor(author);
-            showTitle(title);
-            showImage(imageId);
+            musicDetailPresenter.onCreate(musicId);
 
         } catch (Exception e) {
             //TODO show snackbar with error message
             selectMusic.setEnabled(false);
         }
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -73,7 +80,6 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
 
     @Override
     public void showImage(String imagePath) {
-
         Glide.with(this).load(imagePath).into(musicImage);
     }
 

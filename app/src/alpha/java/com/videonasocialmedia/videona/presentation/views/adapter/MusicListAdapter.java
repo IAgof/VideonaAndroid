@@ -90,11 +90,8 @@ class MusicListItemViewHolder extends RecyclerView.ViewHolder {
 
 
     @OnClick({R.id.music_title, R.id.music_image})
-    public void onTouch(/*View v, MotionEvent event*/) {
-        //if (event.getAction() == MotionEvent.ACTION_UP) {
+    public void onClick() {
         Music music = musicList.get(getAdapterPosition());
         clickListener.onClick(music);
-        // }
-        //return false;
     }
 }
