@@ -207,59 +207,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         }
     }
 
-    private void moveVideonaToDcim() {
-
-        String pathVideonaOld = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES) + File.separator + Constants.FOLDER_VIDEONA;
-        String pathVideonaTempOld = pathVideonaOld + File.separator + Constants.FOLDER_VIDEONA_TEMP;
-
-        String pathVideonaMasterOld = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_MOVIES) + File.separator + Constants.FOLDER_VIDEONA_MASTERS;
-
-        File videonaOldDirectory = new File(pathVideonaOld);
-        if(videonaOldDirectory.exists()){
-            for(File f: videonaOldDirectory.listFiles()){
-                if(f.isDirectory()){
-                    for(File fTemp: f.listFiles()) {
-                        File newF = new File(Constants.PATH_APP_TEMP, fTemp.getName());
-                        if(!newF.exists())
-                            fTemp.renameTo(newF);
-                    }
-                } else {
-                    File newF = new File(Constants.PATH_APP, f.getName());
-                    if(!newF.exists())
-                        f.renameTo(newF);
-                }
-
-            }
-
-        }
-
-        File videonaOldMasterDirectory = new File(pathVideonaMasterOld);
-        if(videonaOldMasterDirectory.exists()){
-            for(File fMaster: videonaOldMasterDirectory.listFiles()){
-                File newF = new File(Constants.PATH_APP_MASTERS, fMaster.getName());
-                if(!newF.exists())
-                    fMaster.renameTo(newF);
-            }
-
-        }
-
-
-        File videonaTempOld = new File (pathVideonaTempOld);
-        if(videonaTempOld.exists() && videonaTempOld.listFiles().length == 0){
-            videonaTempOld.delete();
-        }
-
-        if(videonaOldDirectory.exists() && videonaOldDirectory.listFiles().length == 0){
-            videonaOldDirectory.delete();
-        }
-
-        if(videonaOldMasterDirectory.exists() && videonaOldMasterDirectory.listFiles().length == 0){
-            videonaOldMasterDirectory.delete();
-        }
-    }
-
     private void trackUserProfileGeneralTraits() {
         mixpanel.getPeople().increment(AnalyticsConstants.APP_USE_COUNT, 1);
         JSONObject userProfileProperties = new JSONObject();
@@ -544,6 +491,59 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
     }
 
+    private void moveVideonaToDcim() {
+
+        String pathVideonaOld = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES) + File.separator + Constants.FOLDER_VIDEONA;
+        String pathVideonaTempOld = pathVideonaOld + File.separator + Constants.FOLDER_VIDEONA_TEMP;
+
+        String pathVideonaMasterOld = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_MOVIES) + File.separator + Constants.FOLDER_VIDEONA_MASTERS;
+
+        File videonaOldDirectory = new File(pathVideonaOld);
+        if (videonaOldDirectory.exists()) {
+            for (File f : videonaOldDirectory.listFiles()) {
+                if (f.isDirectory()) {
+                    for (File fTemp : f.listFiles()) {
+                        File newF = new File(Constants.PATH_APP_TEMP, fTemp.getName());
+                        if (!newF.exists())
+                            fTemp.renameTo(newF);
+                    }
+                } else {
+                    File newF = new File(Constants.PATH_APP, f.getName());
+                    if (!newF.exists())
+                        f.renameTo(newF);
+                }
+
+            }
+
+        }
+
+        File videonaOldMasterDirectory = new File(pathVideonaMasterOld);
+        if (videonaOldMasterDirectory.exists()) {
+            for (File fMaster : videonaOldMasterDirectory.listFiles()) {
+                File newF = new File(Constants.PATH_APP_MASTERS, fMaster.getName());
+                if (!newF.exists())
+                    fMaster.renameTo(newF);
+            }
+
+        }
+
+
+        File videonaTempOld = new File(pathVideonaTempOld);
+        if (videonaTempOld.exists() && videonaTempOld.listFiles().length == 0) {
+            videonaTempOld.delete();
+        }
+
+        if (videonaOldDirectory.exists() && videonaOldDirectory.listFiles().length == 0) {
+            videonaOldDirectory.delete();
+        }
+
+        if (videonaOldMasterDirectory.exists() && videonaOldMasterDirectory.listFiles().length == 0) {
+            videonaOldMasterDirectory.delete();
+        }
+    }
+
     //TODO Check user profile, by default 720p free
     private Profile checkProfile() {
         return Profile.getInstance(Profile.ProfileType.free);
@@ -582,6 +582,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
 
         @Override
         protected Boolean doInBackground(Void... voids) {
+
             try {
                 waitForCriticalPermissions();
                 setup();
@@ -620,6 +621,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                     mixpanel.getPeople().trackNotificationSeen(notification);
                 }
             }
+
         }
 
         private void waitForCriticalPermissions() {

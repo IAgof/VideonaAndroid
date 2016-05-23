@@ -17,10 +17,13 @@ public class ReorderMediaItemUseCase {
         MediaTrack videoTrack= project.getMediaTrack();
         try {
             videoTrack.moveItemTo(toPositon,media);
+            listener.onMediaReordered(media, toPositon);
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             illegalItemOnTrack.printStackTrace();
+            listener.onErrorReorderingMedia();
         } catch (IllegalOrphanTransitionOnTrack illegalOrphanTransitionOnTrack) {
             illegalOrphanTransitionOnTrack.printStackTrace();
+            listener.onErrorReorderingMedia();
         }
     }
 }

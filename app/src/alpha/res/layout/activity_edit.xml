@@ -1,397 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout android:id="@+id/coordinatorLayout"
+                                                 xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true"
+                                                 tools:context=".presentation.views.activity.EditActivity">
 
-<!--
-~ Copyright (c) 2015. Videona Socialmedia SL
-~ http://www.videona.com
-~ info@videona.com
-~ All rights reserved
--->
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/VideonaTheme.AppBarOverlay">
 
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_edit_drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/VideonaTheme.PopupOverlay"/>
 
-    <RelativeLayout
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-            <RelativeLayout
-                android:id="@+id/edit_left_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="9">
+            <include layout="@layout/edit_activities_navigation_buttons"/>
+        </LinearLayout>
+        <!--<include layout="@layout/video_preview" android:id="@+id/video_view" />-->
+        <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
+            android:id="@+id/project_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="visible">
+        <LinearLayout
+            android:id="@+id/linear_layout_edit_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="9">
-
-                        <ImageButton
-                            android:id="@+id/button_navigate_drawer"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:background="@android:color/transparent"
-                            android:padding="20dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/common_icon_drawer_selector" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="36">
-
-                        <LinearLayout
-                            android:id="@+id/edit_left_panel"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="9">
-
-                                <ImageButton
-                                    android:id="@+id/edit_button_scissor"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="fill_parent"
-                                    android:background="@null"
-                                    android:padding="16dp"
-                                    android:scaleType="fitCenter"
-                                    android:src="@drawable/edit_activity_button_scissor_selector" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="9">
-
-                                <ImageButton
-                                    android:id="@+id/edit_button_audio"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:background="@null"
-                                    android:padding="16dp"
-                                    android:scaleType="fitCenter"
-                                    android:src="@drawable/edit_activity_button_audio_selector" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="9">
-
-                                <ImageButton
-                                    android:id="@+id/edit_button_fx"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:alpha="0.2"
-                                    android:background="@null"
-                                    android:padding="16dp"
-                                    android:scaleType="fitCenter"
-                                    android:src="@drawable/activity_edit_icon_fx_normal" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="9">
-
-                                <ImageButton
-                                    android:id="@+id/edit_button_look"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:alpha="0.2"
-                                    android:background="@null"
-                                    android:padding="16dp"
-                                    android:scaleType="fitCenter"
-                                    android:src="@drawable/activity_edit_icon_look_normal" />
-                            </RelativeLayout>
-                        </LinearLayout>
-                    </RelativeLayout>
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/edit_middle_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="62">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:id="@+id/edit_top_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="4">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="9">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:orientation="horizontal">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@android:color/black"
-                                        android:src="@drawable/edit_activity_icon_timer" />
-
-                                    <TextView
-                                        android:id="@+id/project_duration"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center_horizontal"
-                                        android:text="00:00"
-                                        android:textColor="@android:color/white" />
-                                </LinearLayout>
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/edit_top_layout_text"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="44">
-
-                                <TextView
-                                    android:id="@+id/edit_title_text_view"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_centerVertical="true"
-                                    android:text="@string/edit_title_name"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:textColor="@color/colorPrimary" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="9"><![CDATA[
-
-                                android:layout_weight="9" >
-
-                                ]]>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:orientation="horizontal">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@android:color/black"
-                                        android:src="@drawable/icon_number_clips" />
-
-                                    <TextView
-                                        android:id="@+id/num_videos"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="4dp"
-                                        android:gravity="right"
-                                        android:text="0"
-                                        android:textColor="@android:color/white" />
-
-                                </LinearLayout>
-                            </RelativeLayout>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/edit_center_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="41">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <RelativeLayout
-                                android:id="@+id/edit_center_left"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="9">
-
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/relativeLayout"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="44">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="vertical">
-
-                                    <RelativeLayout
-                                        android:id="@+id/edit_center_center_layout"
-                                        android:layout_width="fill_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_weight="32">
-
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent">
-
-                                            <FrameLayout
-                                                android:id="@+id/edit_fragment_trim_preview"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:layout_gravity="center_horizontal"
-                                                android:visibility="visible" />
-
-                                        </LinearLayout>
-
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:orientation="vertical">
-
-                                            <FrameLayout
-                                                android:id="@+id/edit_fragment_all_preview"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:visibility="visible" />
-                                        </LinearLayout>
-                                    </RelativeLayout>
-
-                                    <RelativeLayout
-                                        android:id="@+id/edit_center_bottom_layout"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0dp"
-                                        android:layout_marginBottom="8dp"
-                                        android:layout_weight="9">
-
-                                        <FrameLayout
-                                            android:id="@+id/edit_bottom_panel"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent" />
-
-                                    </RelativeLayout>
-                                </LinearLayout>
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:id="@+id/edit_center_right"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="9">
-
-                            </RelativeLayout>
-                        </LinearLayout>
-                    </RelativeLayout>
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/edit_right_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="9">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="9">
-
-                        <ImageButton
-                            android:id="@+id/edit_button_ok"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/transparent"
-                            android:padding="14dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/edit_activity_icon_save_selector" />
-
-                        <ImageButton
-                            android:id="@+id/edit_button_ok_trim_detail"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/transparent"
-                            android:padding="20dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/edit_activity_button_trim_ok_selector"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="36">
-
-                        <FrameLayout
-                            android:id="@+id/edit_right_panel"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-
-                            />
-                    </RelativeLayout>
-                </LinearLayout>
-            </RelativeLayout>
+            <include layout="@layout/edit_activity_options_buttons"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_layout_black_background"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_editor_timeline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"></LinearLayout>
+            android:scrollbars="horizontal"
+            />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <!-- Left Drawer -->
-    <fragment
-        android:id="@+id/activity_edit_navigation_drawer"
-        android:name="com.videonasocialmedia.videona.presentation.views.fragment.NavigationDrawerFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        tools:layout="@layout/common_fragment_navigator" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_edit_room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/common_icon_add_white"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_anchor="@id/coordinatorLayout"
+        app:layout_anchorGravity="bottom|right|end"/>
 
-</android.support.v4.widget.DrawerLayout>
+</android.support.design.widget.CoordinatorLayout>

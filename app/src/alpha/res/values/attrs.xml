@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="AspectRatioVideoView">
+        <attr name="aspect" format="enum">
+            <enum name="four_three" value="1"/>
+            <enum name="sixteen_nine" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="RangeSeekbar">
+        <attr name="background_color" format="reference|color"/>
+        <attr name="bar_color" format="reference|color"/>
+        <attr name="bar_height" format="dimension"/>
+        <attr name="selected_bar_color" format="reference|color"/>
+        <attr name="thumb_image" format="reference"/>
+        <attr name="thumb_image_max" format="reference"/>
+    </declare-styleable>
+
+</resources>

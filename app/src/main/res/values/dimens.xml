@@ -6,4 +6,6 @@
     <dimen name="text_small">10sp</dimen>
     <dimen name="button_margin">4dp</dimen>
     <dimen name="fab_compat_margin">0dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="grid_layout_margin">3dp</dimen>
 </resources>

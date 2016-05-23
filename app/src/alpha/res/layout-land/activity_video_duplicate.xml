@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/VideonaTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/VideonaTheme.PopupOverlay"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4">
+
+            <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
+                android:id="@+id/video_duplicate_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:aspect="sixteen_nine"/>
+
+            <ImageButton
+                android:id="@+id/button_duplicate_play_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="#00000000"
+                android:src="@drawable/common_icon_play"/>
+
+            <SeekBar
+                android:id="@+id/seekbar_duplicate_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/video_duplicate_preview"
+                android:layout_marginBottom="12dp"
+                android:maxHeight="1dp"
+                android:progressDrawable="@color/colorAccent"
+                android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"/>
+
+            <ImageButton
+                android:id="@+id/button_duplicate_fullscreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/video_duplicate_preview"
+                android:layout_alignTop="@+id/video_duplicate_preview"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/common_icon_expand"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linear_layout_duplicate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/image_thumb_duplicate_video_left"
+                    android:layout_width="90dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/gatito_rules"/>
+
+                <TextView
+                    android:id="@+id/textView_duplicate_num_increment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    tools:text="x2"/>
+
+                <ImageView
+                    android:id="@+id/image_thumb_duplicate_video_right"
+                    android:layout_width="90dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/gatito_rules"/>
+
+            </LinearLayout>
+
+
+            <ImageButton
+                android:id="@+id/button_duplicate_increment_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linear_layout_duplicate"
+                android:layout_centerHorizontal="true"
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/activity_edit_clip_duplicate_increment"/>
+
+            <ImageButton
+                android:id="@+id/button_duplicate_decrement_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linear_layout_duplicate"
+                android:layout_centerHorizontal="true"
+                android:layout_toLeftOf="@+id/button_duplicate_increment_video"
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/activity_edit_clip_duplicate_decrement"
+                />
+
+            <TextView
+                android:id="@+id/duplicate_text_info_duplicate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/linear_layout_duplicate"
+                android:layout_alignParentBottom="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/text_edit_info_duplicate"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
+                />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <ImageButton
+            android:id="@+id/button_duplicate_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:background="@null"
+            android:src="@drawable/activity_edit_common_icon_cancel"
+            />
+
+        <ImageButton
+            android:id="@+id/button_duplicate_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:background="@null"
+            android:src="@drawable/activity_edit_common_icon_accept"
+            />
+    </RelativeLayout>
+</LinearLayout>

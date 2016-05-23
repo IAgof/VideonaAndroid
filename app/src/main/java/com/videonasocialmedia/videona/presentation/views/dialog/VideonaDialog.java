@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,7 +32,7 @@ public class VideonaDialog extends DialogFragment {
     Button positiveButton;
     @Bind(R.id.negativeButton)
     Button negativeButton;
-    private OnVideonaDialogListener listener;
+    private VideonaDialogListener listener;
     private int idDialog;
 
     public VideonaDialog() {}
@@ -134,7 +134,7 @@ public class VideonaDialog extends DialogFragment {
         negativeButton.setText(resNegative);
     }
 
-    public void setListener(OnVideonaDialogListener listener) {
+    public void setListener(VideonaDialogListener listener) {
         this.listener = listener;
     }
 
@@ -157,7 +157,7 @@ public class VideonaDialog extends DialogFragment {
         private String positiveButton;
         private String negativeButton;
         private int idDialog;
-        private OnVideonaDialogListener listener;
+        private VideonaDialogListener listener;
 
         public Builder() {
             this.title = null;
@@ -199,7 +199,7 @@ public class VideonaDialog extends DialogFragment {
             return this;
         }
 
-        public Builder withListener(OnVideonaDialogListener listener) {
+        public Builder withListener(VideonaDialogListener listener) {
             this.listener = listener;
             return this;
         }

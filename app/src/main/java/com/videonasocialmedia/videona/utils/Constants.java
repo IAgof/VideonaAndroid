@@ -23,19 +23,6 @@ public class Constants {
     public static final String OAUTH_CLIENT_ID = "4_6c1bbez44j0okk8sckcssk4wocsgks044wsw0sogkw4gwc8gg0";
     public static final String OAUTH_CLIENT_SECRET = "64a2br3oixwk0kkw4wwscoocssss0cwg0og8g0ssggcs80owww";
 
-    // Color Effects
-    final public static String COLOR_EFFECT_NONE = "none";
-    final public static String COLOR_EFFECT_MONO = "mono";
-    final public static String COLOR_EFFECT_NEGATIVE = "negative";
-    final public static String COLOR_EFFECT_SOLARIZE = "solarize";
-    final public static String COLOR_EFFECT_SEPIA = "sepia";
-    final public static String COLOR_EFFECT_POSTERIZE = "posterize";
-    final public static String COLOR_EFFECT_WHITEBOARD = "whiteboard";
-    final public static String COLOR_EFFECT_BLACKBOARD = "blackboard";
-    final public static String COLOR_EFFECT_AQUA = "aqua";
-    final public static String COLOR_EFFECT_EMBOSS = "emboss";
-    final public static String COLOR_EFFECT_SKETCH = "sketch";
-    final public static String COLOR_EFFECT_NEON = "neon";
 
     // Folders
     final public static String FOLDER_VIDEONA_MASTERS = "Videona_Masters";
@@ -59,4 +46,8 @@ public class Constants {
     //TODO define this values
     final public static String PROJECT_TITLE = "model";
     final public static String FOLDER_VIDEONA_PRIVATE_MODEL = "model";
+
+    // EXTRAS INTENT EDIT
+    final public static String CURRENT_VIDEO_INDEX = "current_video_index";
+    final public static String VIDEO_TO_SHARE_PATH = "video_to_share_path";
 }

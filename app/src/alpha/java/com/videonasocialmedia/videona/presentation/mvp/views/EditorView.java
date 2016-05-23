@@ -7,6 +7,10 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
+import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+
+import java.util.List;
+
 /**
  * @author Juan Javier Cabanas Abascal
  */
@@ -22,8 +26,12 @@ public interface EditorView {
 
     void showMessage(int stringToast);
 
-    void updateProjectDuration(int projectDuration);
+    void bindVideoList(List<Video> movieList);
 
-    void updateNumVideosInProject(int numVideos);
+    void updateProject();
+
+    void enableEditActions();
+
+    void disableEditActions();
 
 }

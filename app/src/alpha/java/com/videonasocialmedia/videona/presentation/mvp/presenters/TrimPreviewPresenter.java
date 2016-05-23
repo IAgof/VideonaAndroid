@@ -9,16 +9,12 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ModifyVideoDurationUseCase;
-import com.videonasocialmedia.videona.eventbus.events.VideoDurationModifiedEvent;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.mvp.views.PreviewView;
 import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * Created by vlf on 7/7/15.
@@ -39,15 +35,9 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     private ModifyVideoDurationUseCase modifyVideoDurationUseCase;
 
-    /**
-     * Preview View
-     */
-    private PreviewView previewView;
-
     private TrimView trimView;
 
-    public TrimPreviewPresenter(PreviewView previewView, TrimView trimView) {
-        this.previewView = previewView;
+    public TrimPreviewPresenter(TrimView trimView) {
         this.trimView = trimView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         modifyVideoDurationUseCase = new ModifyVideoDurationUseCase();
@@ -63,22 +53,23 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
         }
     }
 
-    public void onResume(){
-        EventBus.getDefault().register(this);
-    }
-
-    public void onPause(){
-        EventBus.getDefault().unregister(this);
-    }
-
-
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
-        previewView.showPreview(videoList);
+        trimView.showPreview(videoList);
         Video video = videoList.get(0);
-        trimView.showTrimBar(video.getFileDuration(), video.getFileStartTime(), video.getFileStopTime());
-        trimView.createAndPaintVideoThumbs(video.getMediaPath(), video.getFileDuration());
-        showTimeTags(video);
+        if (video.getIsSplit()) {
+            showTimeSplittedTags(video);
+            trimView.showTrimBar(( video.getFileStopTime() - video.getFileStartTime() ), 0, ( video.getFileStopTime() - video.getFileStartTime() ));
+        } else {
+            showTimeTags(video);
+            trimView.showTrimBar(video.getFileDuration(), video.getFileStartTime(), video.getFileStopTime());
+        }
+    }
+
+    private void showTimeSplittedTags(Video video) {
+        trimView.refreshDurationTag(video.getFileStopTime() - video.getFileStartTime());
+        trimView.refreshStartTimeTag(0);
+        trimView.refreshStopTimeTag(video.getFileStopTime() - video.getFileStartTime());
     }
 
     private void showTimeTags(Video video) {
@@ -89,24 +80,23 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
 
     @Override
     public void onNoVideosRetrieved() {
-        previewView.showError("No videos");
+        trimView.showError("No videos");
     }
 
+    public void onResume() {
+
+    }
+
+    public void onPause() {
+
+    }
 
     public void modifyVideoStartTime(int startTime) {
         modifyVideoDurationUseCase.modifyVideoStartTime(videoToEdit, startTime);
     }
 
-
-
     public void modifyVideoFinishTime(int finishTime) {
         modifyVideoDurationUseCase.modifyVideoFinishTime(videoToEdit, finishTime);
-    }
-
-    public void onEvent (VideoDurationModifiedEvent event){
-        Video modifiedVideo= event.video;
-        previewView.updateSeekBarSize();
-        showTimeTags(modifiedVideo);
     }
 
 }
