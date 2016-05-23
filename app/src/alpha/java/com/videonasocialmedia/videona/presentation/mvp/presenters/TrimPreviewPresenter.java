@@ -83,14 +83,6 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
         trimView.showError("No videos");
     }
 
-    public void onResume() {
-
-    }
-
-    public void onPause() {
-
-    }
-
     public void modifyVideoStartTime(int startTime) {
         modifyVideoDurationUseCase.modifyVideoStartTime(videoToEdit, startTime);
     }

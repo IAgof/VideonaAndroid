@@ -138,7 +138,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     @Override
     protected void onPause() {
         super.onPause();
-        presenter.onPause();
         releaseVideoView();
     }
 
@@ -146,7 +145,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     protected void onResume() {
         super.onResume();
 
-        presenter.onResume();
         presenter.init(videoIndexOnTrack);
 
     }
@@ -299,6 +297,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
                 videoPlayer.pause();
             }
             afterTrimming = false;
+
+            currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
         }
     }
 
@@ -464,6 +464,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     public void setRangeChangeListener(View view, double minPosition, double maxPosition) {
         Log.d(TAG, " setRangeChangeListener " + minPosition + " - " + maxPosition);
 
+        pausePreview();
+
         startTimeMs = (int) ( minPosition * timeCorrector );
         finishTimeMs = (int) ( maxPosition * timeCorrector );
 
@@ -471,20 +473,21 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
         durationTag.setText(TimeUtils.toFormattedTime(( finishTimeMs - startTimeMs )));
 
-
         if (seekBarMin != minPosition) {
-            seekTo(startTimeMs);
             seekBarMin = minPosition;
             seekBarMax = maxPosition;
             seekBar.setProgress(startTimeMs);
+            seekTo(startTimeMs + video.getFileStartTime());
+            currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
             return;
         }
 
         if (seekBarMax != maxPosition) {
-            seekTo(finishTimeMs);
             seekBarMin = minPosition;
             seekBarMax = maxPosition;
             seekBar.setProgress(finishTimeMs);
+            seekTo(finishTimeMs + video.getFileStartTime());
+            currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
             return;
         }
     }
