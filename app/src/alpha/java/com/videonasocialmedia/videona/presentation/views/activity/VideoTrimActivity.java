@@ -263,6 +263,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
                     seekBar.setProgress(0);
                     videoPlayer.seekTo(video.getFileStartTime());
+                    currentPosition = video.getFileStartTime();
                 }
             }
             handler.postDelayed(updateTimeTask, 20);
@@ -478,7 +479,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
             seekBarMax = maxPosition;
             seekBar.setProgress(startTimeMs);
             seekTo(startTimeMs + video.getFileStartTime());
-            currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
+            currentPosition = videoPlayer.getCurrentPosition();
             return;
         }
 
@@ -487,7 +488,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
             seekBarMax = maxPosition;
             seekBar.setProgress(finishTimeMs);
             seekTo(finishTimeMs + video.getFileStartTime());
-            currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
+            currentPosition = videoPlayer.getCurrentPosition();
             return;
         }
     }

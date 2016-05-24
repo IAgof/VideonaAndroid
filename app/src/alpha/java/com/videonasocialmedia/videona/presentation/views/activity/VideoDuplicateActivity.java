@@ -247,6 +247,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
                     playButton.setVisibility(View.VISIBLE);
                     videoSeekBar.setProgress(0);
                     videoPlayer.seekTo(video.getFileStartTime());
+                    currentPosition = video.getFileStartTime();
                 }
             }
             handler.postDelayed(updateTimeTask, 20);
