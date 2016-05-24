@@ -519,5 +519,6 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="ok">Ok</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
+    <string name="comingSoon">Próximamente</string>
 
 </resources>
