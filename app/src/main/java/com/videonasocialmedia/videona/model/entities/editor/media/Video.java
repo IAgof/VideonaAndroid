@@ -97,16 +97,12 @@ public class Video extends Media {
     public Video(Video video) {
         super(null, null, video.getMediaPath(), video.getFileStartTime(),
                 video.getDuration(), null, null);
-        fileDuration = video.getFileDuration();
+        fileDuration = video.getDuration();
         fileStopTime = video.getFileStopTime();
     }
 
     public int getFileDuration() {
         return fileDuration;
-    }
-
-    public void setFileDuration(int fileDuration) {
-        this.fileDuration = fileDuration;
     }
 
     public boolean getIsSplit() {

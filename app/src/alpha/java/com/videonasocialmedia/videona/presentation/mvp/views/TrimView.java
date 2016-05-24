@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface TrimView {
 
-    void showTrimBar(int videoDuration, int leftMarkerPosition, int RightMarkerPosition);
+    void showTrimBar(int leftMarkerPosition, int RightMarkerPosition);
 
     void refreshDurationTag(int duration);
 

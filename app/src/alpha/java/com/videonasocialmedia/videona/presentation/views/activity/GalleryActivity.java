@@ -24,6 +24,7 @@ import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
+import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -160,7 +161,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     private void shareVideo(Video selectedVideo) {
         String videoPath = selectedVideo.getMediaPath();
         Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.putExtra("VIDEO_EDITED", videoPath);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoPath);
         startActivity(intent);
     }
 

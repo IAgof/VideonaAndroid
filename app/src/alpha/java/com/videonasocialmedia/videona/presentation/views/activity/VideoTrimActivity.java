@@ -314,7 +314,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     }
 
     @Override
-    public void showTrimBar(int videoFileDuration, int leftMarkerPosition, int rightMarkerPosition) {
+    public void showTrimBar(int leftMarkerPosition, int rightMarkerPosition) {
 
         if (isInstanceState) {
 
@@ -326,12 +326,9 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         startTimeMs = leftMarkerPosition;
         finishTimeMs = rightMarkerPosition;
 
-        videoDuration = videoFileDuration;
 
-        timeCorrector = videoFileDuration / 100;
-
-        double rangeSeekBarMin = (double) leftMarkerPosition / videoFileDuration;
-        double rangeSeekBarMax = (double) rightMarkerPosition / videoFileDuration;
+        double rangeSeekBarMin = (double) leftMarkerPosition / videoDuration;
+        double rangeSeekBarMax = (double) rightMarkerPosition / videoDuration;
 
         rangeSeekBar.setInitializedPosition(rangeSeekBarMin, rangeSeekBarMax);
     }
@@ -391,7 +388,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         timeCorrector = videoDuration / 100;
         seekBar.setMax(videoDuration);
         initVideoPlayer(currentPosition, video.getMediaPath());
-
     }
 
     @Override
@@ -414,7 +410,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
                     videoPlayer.setVolume(0.5f, 0.5f);
                     videoPlayer.setLooping(false);
                     videoPlayer.start();
-                    videoPlayer.seekTo(100 + position + video.getFileStartTime());
+                    videoPlayer.seekTo(100 + position);
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
