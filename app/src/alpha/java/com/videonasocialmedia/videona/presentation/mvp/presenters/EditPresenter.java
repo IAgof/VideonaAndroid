@@ -68,12 +68,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
      * Ok edit button click listener
      */
     public void startExport() {
-
         exportProjectUseCase.export();
-
-        projectPlayerView.pausePreview();
-        editorView.showProgressDialog();
-
     }
 
     public String getResolution() {

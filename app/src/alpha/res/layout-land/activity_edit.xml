@@ -43,11 +43,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="vertical">
-                <!--<include layout="@layout/video_preview" android:id="@id/video_view" />-->
+
                 <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
                     android:id="@+id/project_player"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     />
 
                 <LinearLayout
@@ -69,8 +70,10 @@
                 android:id="@+id/recyclerview_editor_timeline"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
                 android:layout_weight="3"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical"
+                />
         </LinearLayout>
     </LinearLayout>
 
