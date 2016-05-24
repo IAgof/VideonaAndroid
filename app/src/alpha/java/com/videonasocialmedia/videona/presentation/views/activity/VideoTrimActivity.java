@@ -254,16 +254,15 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
-                currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
+                currentPosition = videoPlayer.getCurrentPosition();
                 seekBar.setProgress(currentPosition);
 
                 if (isEndOfVideo()) {
                     videoPlayer.pause();
                     playButton.setVisibility(View.VISIBLE);
-
                     seekBar.setProgress(0);
                     videoPlayer.seekTo(video.getFileStartTime());
-                    currentPosition = video.getFileStartTime();
+                    currentPosition = 0;
                 }
             }
             handler.postDelayed(updateTimeTask, 20);
@@ -292,14 +291,14 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
             if (videoPlayer.isPlaying()) {
-                videoPlayer.seekTo(progress + video.getFileStartTime());
+                videoPlayer.seekTo(progress);
             } else {
-                videoPlayer.seekTo(progress + video.getFileStartTime());
+                videoPlayer.seekTo(progress);
                 videoPlayer.pause();
             }
             afterTrimming = false;
 
-            currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
+            currentPosition = videoPlayer.getCurrentPosition();
         }
     }
 
@@ -314,7 +313,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     }
 
     @Override
-    public void showTrimBar(int leftMarkerPosition, int rightMarkerPosition) {
+    public void showTrimBar(int videoStartTime, int videoStopTime, int videoFileDuration) {
 
         if (isInstanceState) {
 
@@ -323,12 +322,12 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
             return;
         }
 
-        startTimeMs = leftMarkerPosition;
-        finishTimeMs = rightMarkerPosition;
+        startTimeMs = videoStartTime;
+        finishTimeMs = videoStopTime;
 
 
-        double rangeSeekBarMin = (double) leftMarkerPosition / videoDuration;
-        double rangeSeekBarMax = (double) rightMarkerPosition / videoDuration;
+        double rangeSeekBarMin = (double) videoStartTime / videoFileDuration;
+        double rangeSeekBarMax = (double) videoStopTime / videoFileDuration;
 
         rangeSeekBar.setInitializedPosition(rangeSeekBarMin, rangeSeekBarMax);
     }
@@ -380,11 +379,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
-        if (video.getIsSplit()) {
-            videoDuration = video.getFileStopTime() - video.getFileStartTime();
-        } else {
-            videoDuration = video.getFileDuration();
-        }
+        videoDuration = video.getFileDuration();
         timeCorrector = videoDuration / 100;
         seekBar.setMax(videoDuration);
         initVideoPlayer(currentPosition, video.getMediaPath());
