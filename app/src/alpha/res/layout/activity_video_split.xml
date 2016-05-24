@@ -67,30 +67,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <SeekBar
-            android:id="@+id/seekBar_over"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/seekBar_split"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="1dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:paddingTop="12dp"
-            android:progressDrawable="@android:color/transparent"
-            android:thumb="@drawable/activity_edit_clip_divide_indicator_seekbar"/>
-
         <SeekBar
             android:id="@+id/seekBar_split"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginBottom="0dp"
+            android:paddingBottom="0dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:maxHeight="50dp"
+            android:background="@null"
             android:progressDrawable="@color/colorAccent"
-            android:thumb="@drawable/button_edit_thumb_seekbar_over_advance_split"/>
+            android:thumb="@drawable/activity_edit_clip_divide_indicator_seekbar"
+            android:splitTrack="false"
+
+            />
 
 
         <TextView
