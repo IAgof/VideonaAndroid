@@ -16,6 +16,7 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -169,18 +169,18 @@ public class EditActivity extends VideonaActivity implements EditorView,
         tintEditButtons();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        super.onSaveInstanceState(outState);
-    }
-
     private void createProgressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_export_progress, null);
         progressDialog = builder.setCancelable(false)
                 .setView(dialogView)
                 .create();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        super.onSaveInstanceState(outState);
     }
 
     private void tintEditButtons() {
@@ -192,21 +192,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
         tintButton(editTrimButton);
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
-    }
-
     public static void tintButton(@NonNull ImageButton button) {
         ColorStateList editButtonsColors = button.getResources().getColorStateList(R.color.button_color);
         Drawable button_image = DrawableCompat.wrap(button.getDrawable());
         DrawableCompat.setTintList(button_image, editButtonsColors);
         button.setImageDrawable(button_image);
     }
-
-    ///// GO TO ANOTHER ACTIVITY
 
     @Override
     protected void onStop() {
@@ -215,11 +206,20 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+        Intent record = new Intent(this, RecordActivity.class);
+        startActivity(record);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
+
+    ///// GO TO ANOTHER ACTIVITY
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -260,9 +260,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @OnClick(R.id.button_music_navigator)
     public void onClickMusicNavigator() {
-        if (!navigateToMusicButton.isEnabled())
-            return;
-
+        showMessage(R.string.comingSoon);
     }
 
     @OnClick(R.id.button_share_navigator)
@@ -312,16 +310,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         navigateTo(VideoTrimActivity.class, currentVideoIndex);
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                this.onBackPressed();
-                return true;
-            default:
-                return false;
-        }
-    }
-
     @OnClick(R.id.button_edit_split)
     public void onClickEditSplit() {
         if (!editSplitButton.isEnabled())
@@ -339,6 +327,16 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     public void onClipClicked(int position) {
         setSelectedClip(position);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                this.onBackPressed();
+                return true;
+            default:
+                return false;
+        }
     }
 
     public void setSelectedClip(int position) {
@@ -414,11 +412,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void showMessage(final int stringToast) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(getApplicationContext(), stringToast, Toast.LENGTH_SHORT).show();
-            }
-        });
+        Snackbar snackbar = Snackbar.make(projectPlayer, stringToast, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
@@ -479,6 +474,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
         timeLineAdapter.updateSelection(currentClipIndex);
         videoListRecyclerView.scrollToPosition(currentClipIndex);
     }
+
+
+
+
+
+
 
 
 }

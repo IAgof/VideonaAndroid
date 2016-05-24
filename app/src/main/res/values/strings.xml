@@ -1605,5 +1605,6 @@ and Conditions.\n\n
     <string name="ok">Ok</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="comingSoon">Coming Soon</string>
 
 </resources>
