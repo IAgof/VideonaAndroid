@@ -14,7 +14,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
@@ -24,6 +27,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +48,7 @@ import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.ProjectPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.Utils;
 
 import java.util.List;
 

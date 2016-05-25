@@ -75,7 +75,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     private int finishTimeMs = 100;
     private boolean afterTrimming = false;
     private String TAG = "VideoTrimActivity";
-    private double timeCorrector = 1;
+    private int timeCorrector = 1;
     private double seekBarMin = 0;
     private double seekBarMax = 1;
     private int currentPosition = 0;
@@ -91,6 +91,9 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     private String START_TIME_TAG = "start_time_tag";
     private String STOP_TIME_TAG = "stop_time_tag";
     private boolean isInstanceState;
+    private boolean isTrimminBarsInitialized;
+    private boolean isLeftTimeTagUpdated;
+    private boolean isRightTimeTagUpdated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,35 +319,40 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     public void showTrimBar(int videoStartTime, int videoStopTime, int videoFileDuration) {
 
         if (isInstanceState) {
-
             initTrimmingBars();
-
             return;
         }
 
         startTimeMs = videoStartTime;
         finishTimeMs = videoStopTime;
 
-
         double rangeSeekBarMin = (double) videoStartTime / videoFileDuration;
         double rangeSeekBarMax = (double) videoStopTime / videoFileDuration;
+        rangeSeekBar.setInitializedPosition(rangeSeekBarMin,rangeSeekBarMax);
 
-        rangeSeekBar.setInitializedPosition(rangeSeekBarMin, rangeSeekBarMax);
     }
 
     @Override
     public void refreshDurationTag(int duration) {
-
+        durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
     @Override
     public void refreshStartTimeTag(int startTime) {
-
+        startTimeTag.setText(TimeUtils.toFormattedTime(startTime));
     }
 
     @Override
     public void refreshStopTimeTag(int stopTime) {
+        stopTimeTag.setText(TimeUtils.toFormattedTime(stopTime));
+    }
 
+    private void updateTrimingTextTags() {
+        startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
+        stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
+
+        int duration = ((finishTimeMs/1000) - (startTimeMs/1000))*1000;
+        durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
     @Override
@@ -444,12 +452,9 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
     private void initTrimmingBars() {
 
-        startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
-        stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
-        durationTag.setText(TimeUtils.toFormattedTime(( finishTimeMs - startTimeMs )));
-
+        updateTrimingTextTags();
+        isTrimminBarsInitialized = true;
         rangeSeekBar.setInitializedPosition(seekBarMin / 100, seekBarMax / 100);
-
     }
 
     @Override
@@ -458,30 +463,52 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
         pausePreview();
 
-        startTimeMs = (int) ( minPosition * timeCorrector );
-        finishTimeMs = (int) ( maxPosition * timeCorrector );
+        int startTime = (int) ( minPosition * timeCorrector );
+        int finishTime = (int) ( maxPosition * timeCorrector );
 
-        startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
-        stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
-        durationTag.setText(TimeUtils.toFormattedTime(( finishTimeMs - startTimeMs )));
 
         if (seekBarMin != minPosition) {
             seekBarMin = minPosition;
             seekBarMax = maxPosition;
-            seekBar.setProgress(startTimeMs);
-            seekTo(startTimeMs + video.getFileStartTime());
-            currentPosition = videoPlayer.getCurrentPosition();
+            seekBar.setProgress(startTime);
+            seekTo(startTime);
+            if(!isTrimminBarsInitialized) {
+                startTimeMs = startTime;
+                updateTrimingTextTags();
+            }
             return;
         }
 
         if (seekBarMax != maxPosition) {
             seekBarMin = minPosition;
             seekBarMax = maxPosition;
-            seekBar.setProgress(finishTimeMs);
-            seekTo(finishTimeMs + video.getFileStartTime());
-            currentPosition = videoPlayer.getCurrentPosition();
+            seekBar.setProgress(finishTime);
+            seekTo(finishTime);
+            if(!isTrimminBarsInitialized) {
+                finishTimeMs = finishTime;
+                updateTrimingTextTags();
+            }
             return;
         }
+    }
+
+    @Override
+    public void setUpdateFinishTimeTag() {
+        isRightTimeTagUpdated = true;
+        setUpdateTimeTags();
+    }
+
+    @Override
+    public void setUpdateStartTimeTag() {
+        isLeftTimeTagUpdated = true;
+        setUpdateTimeTags();
+    }
+
+
+    public void setUpdateTimeTags() {
+        Log.d(TAG, " setUpdateTimeTags ");
+        if(isLeftTimeTagUpdated && isRightTimeTagUpdated)
+            isTrimminBarsInitialized = false;
     }
 
 }
