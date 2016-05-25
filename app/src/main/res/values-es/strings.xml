@@ -2,8 +2,12 @@
 <resources>
 
     <!-- Intro app -->
+    <!-- Android Permissions requests -->
+    <string name="permissionsDeniedTitle">Se necesitan permisos para continuar</string>
     <string name="permissionsDeniedMessage">Videona necesita que aceptes algunos permisos para
         grabar vídeos. Sin ellos Videona no puede funcionar y se cerrará</string>
+    <string name="permissions_denied_snackbar_message">Necesitamos esos permisos para grabar vídeos alucinantes con Videona!</string>
+    <string name="permissions_denied_go_to_settings_button">Ir a ajustes</string>
     <string name="CloseBecauseOfPermissionsTitle">Permisos no aceptados</string>
 
     <!-- Record Activity -->

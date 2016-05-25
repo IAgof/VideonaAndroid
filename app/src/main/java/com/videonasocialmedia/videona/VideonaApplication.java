@@ -45,15 +45,15 @@ public class VideonaApplication extends Application {
         super.onCreate();
         context = getApplicationContext();
         setupGoogleAnalytics();
-        setupQordoba();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            Dexter.initialize(this);
+//        setupQordoba();
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        Dexter.initialize(this);
     }
 
-    private void setupQordoba() {
-        Qordoba.init(this, BuildConfig.QORDOBA_KEY,
-                BuildConfig.QORDOBA_APP_ID);
-    }
+//    private void setupQordoba() {
+//        Qordoba.init(this, BuildConfig.QORDOBA_KEY,
+//                BuildConfig.QORDOBA_APP_ID);
+//    }
 
     private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
