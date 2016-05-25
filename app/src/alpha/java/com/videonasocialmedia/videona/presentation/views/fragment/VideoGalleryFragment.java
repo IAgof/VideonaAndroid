@@ -213,7 +213,6 @@ public class VideoGalleryFragment extends VideonaFragment implements VideoGaller
                                 MediaMetadataRetriever.METADATA_KEY_DURATION);
                         int durationInt = Integer.parseInt(duration);
                         video.setDuration(durationInt);
-                        video.setFileDuration(durationInt);
                         video.setFileStopTime(durationInt);
                         timeChangesHandler.sendEmptyMessage(index);
                     } catch (Exception e) {

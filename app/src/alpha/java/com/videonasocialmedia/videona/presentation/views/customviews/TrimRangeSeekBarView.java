@@ -27,7 +27,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBar
 
 public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchListener {
 
-    private final String TAG = "RangeSeekbar";
+    private final String TAG = "TrimRangeSeekBarView";
     private final String IMAGE_VIEW_TAG_MIN = "image_view_tag_selected";
     private final String IMAGE_VIEW_TAG_MAX = "image_view_tag_unselected";
     private int minThumbWidth, maxThumbWidth, baseLineWidth, minEdgePosition, maxEdgePosition, minThumbPosition, maxThumbPosition;
@@ -154,7 +154,9 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
             Log.i(TAG, "maxEdgePosition " + maxEdgePosition);
             if (isVideoInitialized) {
                 setPositionFor(ivMinThumb, (int) ( initLeftSeekBar * maxEdgePosition ));
+                mRangeChangeListener.setUpdateStartTimeTag();
                 setPositionFor(ivMaxThumb, (int) ( initRightSeekBar * maxEdgePosition ));
+                mRangeChangeListener.setUpdateFinishTimeTag();
             } else {
                 setPositionFor(ivMinThumb, minEdgePosition);
                 setPositionFor(ivMaxThumb, maxEdgePosition);
@@ -406,10 +408,6 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
         isVideoInitialized = true;
         initLeftSeekBar = Math.round(left * 100) / 100.0d;
         initRightSeekBar = Math.round(right * 100) / 100.0d;
-    }
-
-    public void setIsVideonInitialized() {
-        isVideoInitialized = false;
     }
 
 }

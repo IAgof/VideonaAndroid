@@ -239,6 +239,7 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,
                     videoSeekBar.setProgress(0);
                     splitSeekBar.setProgress(0);
                     videoPlayer.seekTo(video.getFileStartTime());
+                    currentPosition = video.getFileStartTime();
                 }
             }
             handler.postDelayed(updateTimeTask, 20);

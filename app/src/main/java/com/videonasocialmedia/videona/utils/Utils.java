@@ -325,6 +325,4 @@ public class Utils {
         return lengthInMSeconds;
     }
 
-
-
 }
