@@ -21,7 +21,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:baselineAligned="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -76,10 +76,10 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:layout_below="@id/duplicate_text_info_duplicate"
                 android:id="@+id/linear_layout_duplicate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -132,11 +132,11 @@
                 />
 
             <TextView
+                android:layout_marginTop="24dp"
                 android:id="@+id/duplicate_text_info_duplicate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/linear_layout_duplicate"
-                android:layout_alignParentBottom="false"
+
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="16dp"
                 android:gravity="center_vertical|center_horizontal"

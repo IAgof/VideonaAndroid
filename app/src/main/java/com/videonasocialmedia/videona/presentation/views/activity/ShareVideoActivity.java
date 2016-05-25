@@ -126,6 +126,8 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         }
     }
 
+
+
     private void initFloatingActionButton() {
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
@@ -202,10 +204,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     public void pauseVideo() {
         videoPreview.pause();
         playPauseButton.setVisibility(View.VISIBLE);
-        if (isLandscapeOriented()) {
-            showToolbar();
-            showBottomPanel();
-        }
     }
 
     @Override
