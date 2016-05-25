@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.videonasocialmedia.videona">
+<manifest package="com.videonasocialmedia.videona"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:name=".VideonaApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/VideonaTheme">
-
-        <activity
-            android:name=".presentation.views.activity.EditActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape" />
 
         <activity
             android:name=".presentation.views.activity.ShareVideoActivity"
@@ -26,13 +21,24 @@
             android:screenOrientation="sensorLandscape" />
 
         <activity
-            android:name=".presentation.views.activity.VideoFullScreenPreviewActivity"
-            android:label="@string/title_activity_video_player"
-            android:screenOrientation="sensorLandscape" />
+            android:name=".presentation.views.activity.EditActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
         <activity
-            android:name=".presentation.views.activity.VideolistFullScreenPreviewActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:name=".presentation.views.activity.VideoTrimActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"/>
+
+        <activity
+            android:name=".presentation.views.activity.VideoSplitActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"/>
+
+        <activity
+            android:name=".presentation.views.activity.VideoDuplicateActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"/>
 
     </application>
 

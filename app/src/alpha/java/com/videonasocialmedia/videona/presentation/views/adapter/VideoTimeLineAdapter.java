@@ -6,18 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.FileDescriptorBitmapDecoder;
+import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.eventbus.events.PreviewingVideoChangedEvent;
-import com.videonasocialmedia.videona.eventbus.events.preview.UpdateSeekBarDurationEvent;
-import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
-import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
-import com.videonasocialmedia.videona.eventbus.events.video.VideoInsertedEvent;
-import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
-import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperViewHolder;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.MovableItemsAdapter;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 
@@ -28,38 +26,28 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 /**
  * @author Juan Javier Cabanas Abascal
  */
 public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdapter.VideoViewHolder>
         implements MovableItemsAdapter {
-
-    private final int TYPE_VIDEO = 0;
-    private final int TYPE_ADD_BUTTON = 1;
-
     private Context context;
+    private VideoTimeLineRecyclerViewClickListener videoTimeLineListener;
     private List<Video> videoList;
-
-    private VideoTimeLineRecyclerViewClickListener clickListener;
-
     private int selectedVideoPosition = -1;
 
     public VideoTimeLineAdapter(List<Video> videoList) {
         this.videoList = videoList;
     }
 
-    public VideoTimeLineAdapter() {
+    public VideoTimeLineAdapter(VideoTimeLineRecyclerViewClickListener listener) {
         this.videoList = new ArrayList<>();
+        this.setVideoTimeLineListener(listener);
     }
 
-    public void setClickListener(VideoTimeLineRecyclerViewClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public void onEvent(VideoInsertedEvent event){
-        notifyItemInserted(event.position);
+    public void setVideoTimeLineListener(VideoTimeLineRecyclerViewClickListener videoTimeLineListener) {
+        this.videoTimeLineListener = videoTimeLineListener;
     }
 
     @Override
@@ -68,7 +56,14 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             Collections.swap(videoList, fromPositon, toPosition);
             selectedVideoPosition = toPosition;
             notifyItemMoved(fromPositon, toPosition);
+            videoTimeLineListener.onClipMoved(toPosition);
         }
+    }
+
+    @Override
+    public void finishMovement(int newPosition) {
+        if (newPosition != -1)
+            notifyDataSetChanged();
     }
 
     @Override
@@ -76,11 +71,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         int newPosition = recalculateSelectedVideoPosition(itemPosition);
         videoList.remove(itemPosition);
         notifyItemRemoved(itemPosition);
-        EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
-        EventBus.getDefault().post(new UpdateSeekBarDurationEvent(Project.getInstance(null, null, null).getDuration()));
-        EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
-        if(videoList.isEmpty())
-            EventBus.getDefault().post(new VideosRemovedFromProjectEvent());
         updateSelection(newPosition);
     }
 
@@ -94,24 +84,12 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         return newPosition;
     }
 
-    @Override
-    public void finishMovement(int newPosition) {
-        if (newPosition != -1)
-            notifyDataSetChanged();
-        EventBus.getDefault().post(new PreviewingVideoChangedEvent(selectedVideoPosition, true));
-    }
-
-    private void updateSelection(int positionSelected) {
+    public void updateSelection(int positionSelected) {
+        if (positionSelected == selectedVideoPosition)
+            return;
         notifyItemChanged(selectedVideoPosition);
         selectedVideoPosition = positionSelected;
         notifyItemChanged(selectedVideoPosition);
-        EventBus.getDefault().post(new PreviewingVideoChangedEvent(selectedVideoPosition, true));
-    }
-
-    public void onEvent (PreviewingVideoChangedEvent event){
-        if (!event.fromUser){
-            updateSelection(event.previewingVideoIndex);
-        }
     }
 
     public void setVideoList(List<Video> videoList) {
@@ -127,21 +105,42 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.fragment_videotimeline_video_item, parent, false);
+                .inflate(R.layout.edit_videotimeline_video_item, parent, false);
         return new VideoViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(VideoViewHolder holder, int position) {
         Video current = videoList.get(position);
+        drawVideoThumbnail(holder.thumb, current);
+        holder.thumb.setSelected(position == selectedVideoPosition);
+        holder.thumbOrder.setText(String.valueOf(position + 1));
+        if (position == selectedVideoPosition) {
+            holder.showDeleteIcon();
+        } else {
+            holder.hideDeleteIcon();
+        }
+
+    }
+
+    public void drawVideoThumbnail(ImageView thumbnailView, Video current) {
+        int microSecond = current.getFileStartTime() * 1000;
+        BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
+        //TODO, review Glide and how to manage cache thumbs
+        FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
+                new VideoBitmapDecoder(microSecond),
+                bitmapPool,
+                DecodeFormat.PREFER_ARGB_8888);
+
         String path = current.getIconPath() != null
                 ? current.getIconPath() : current.getMediaPath();
         Glide.with(context)
                 .load(path)
+               // .asBitmap()
+               // .videoDecoder(decoder)
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
-                .into(holder.thumb);
-        holder.thumb.setSelected(position == selectedVideoPosition);
+                .into(thumbnailView);
     }
 
     @Override
@@ -153,21 +152,60 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         return videoList.get(position);
     }
 
-    class VideoViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.timelinevideo_thumb)
+
+    /**
+     * Video ViewHolder class
+     */
+    class VideoViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+        @Bind(R.id.timeline_video_thumb)
         ImageView thumb;
-        @Bind(R.id.container)
-        RelativeLayout container;
+        @Bind(R.id.text_clip_order)
+        TextView thumbOrder;
+        @Bind(R.id.image_remove_video)
+        ImageView removeVideo;
+
 
         public VideoViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        @OnClick(R.id.timelinevideo_thumb)
-        public void videoClick() {
-            updateSelection(getAdapterPosition());
-            clickListener.onVideoClicked(getAdapterPosition());
+        @OnClick(R.id.timeline_video_thumb)
+        public void onClipClick() {
+            int position = getAdapterPosition();
+            showDeleteIcon();
+            updateSelection(position);
+            videoTimeLineListener.onClipClicked(position);
+        }
+
+        public void showDeleteIcon() {
+            removeVideo.setVisibility(View.VISIBLE);
+        }
+
+        public void hideDeleteIcon() {
+            removeVideo.setVisibility(View.GONE);
+        }
+
+//        @OnLongClick(R.id.timeline_video_thumb)
+//        public boolean videoOnLongClick() {
+//            thumb.setRotation(20);
+//            videoTimeLineListener.onClipLongClicked();
+//            return true;
+//        }
+
+        @OnClick(R.id.image_remove_video)
+        public void onClickRemoveVideoTimeline() {
+            videoTimeLineListener.onClipRemoveClicked(getAdapterPosition());
+        }
+
+        @Override
+        public void onItemSelected() {
+            thumb.setRotation(20);
+        }
+
+        @Override
+        public void onItemClear() {
+            thumb.setRotation(0);
         }
     }
 }

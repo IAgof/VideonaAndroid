@@ -9,7 +9,7 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 72 // 18/04/2016
+        versionCode 73 // 18/04/2016
         // Enabling multidex support.
         multiDexEnabled true
     }
@@ -66,9 +66,6 @@ dependencies {
     compile project(':androidtranscoder')
     compile project(':muxer')
     compile project(':avrecorder')
-    debugCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
-    debugCompile 'com.google.dexmaker:dexmaker:1.0'
-    debugCompile 'org.mockito:mockito-core:1.10.17'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
@@ -82,12 +79,29 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.mixpanel.android:mixpanel-android:4.6.4'
     compile 'com.qordoba.sdk:qordoba-sdk:1.3.77@aar'
-    compile 'com.google.android.gms:play-services-ads:8.3.0'
+//    compile 'com.google.android.gms:play-services-ads:8.3.0'
     compile 'com.google.android.gms:play-services-identity:8.3.0'
     compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
     compile 'com.android.support:design:23.1.1'
     compile 'com.github.paolorotolo:appintro:3.3.0'
 
-    compile 'com.karumi:dexter:2.1.4'
+    compile 'com.karumi:dexter:2.2.2'
+//    debugCompile 'org.mockito:mockito-core:1.10.19'
+//    debugCompile 'com.google.dexmaker:dexmaker:1.2'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
+    testCompile 'org.mockito:mockito-core:1.9.+'
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.1'
+    testCompile 'org.powermock:powermock-module-junit4-rule-agent:1.6.1'
+    testCompile 'org.powermock:powermock-module-junit4-rule:1.6.1'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.1'
+
+//    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'org.mockito:mockito-core:1.9.+'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+
 }

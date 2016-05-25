@@ -34,6 +34,11 @@ public class Video extends Media {
      * The total duration of the file media resource
      */
     private int fileDuration;
+    /**
+     * Define if a video has been splitted before
+     */
+    private boolean isSplit;
+
 
     /**
      * Constructor of minimum number of parameters. Default constructor.
@@ -43,7 +48,7 @@ public class Video extends Media {
     public Video(String identifier, String iconPath, String mediaPath, int fileStartTime,
                  int duration, ArrayList<User> authors, License license) {
         super(identifier, iconPath, mediaPath, fileStartTime, duration, authors, license);
-        fileDuration = duration;
+        fileDuration = getFileDuration(mediaPath);
     }
 
     /**
@@ -57,7 +62,7 @@ public class Video extends Media {
                  License license) {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, fileStartTime, duration,
                 opening, ending, metadata, authors, license);
-        fileDuration = duration;
+        fileDuration = getFileDuration(mediaPath);
     }
 
     /**
@@ -75,22 +80,24 @@ public class Video extends Media {
             fileDuration = duration;
             fileStartTime = 0;
             fileStopTime = duration;
+            isSplit = false;
         } catch (Exception e) {
             fileDuration = 0;
             duration = 0;
             fileStopTime = 0;
+            isSplit = false;
         }
     }
 
     public Video(String mediaPath, int fileStartTime, int duration) {
         super(null, null, mediaPath, fileStartTime, duration, null, null);
-        fileDuration = duration;
+        fileDuration = getFileDuration(mediaPath);
     }
 
     public Video(Video video) {
         super(null, null, video.getMediaPath(), video.getFileStartTime(),
                 video.getDuration(), null, null);
-        fileDuration = video.getFileDuration();
+        fileDuration = getFileDuration(video.getMediaPath());
         fileStopTime = video.getFileStopTime();
     }
 
@@ -98,8 +105,19 @@ public class Video extends Media {
         return fileDuration;
     }
 
-    public void setFileDuration(int fileDuration) {
-        this.fileDuration = fileDuration;
+    public boolean getIsSplit() {
+        return isSplit;
+    }
+
+    public void setIsSplit(boolean isSplit) {
+        this.isSplit = isSplit;
+    }
+
+    private int getFileDuration(String path){
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(path);
+        return Integer.parseInt(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_DURATION));
     }
 
 }

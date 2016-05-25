@@ -2,8 +2,12 @@
 <resources>
 
     <!-- Intro app -->
+    <!-- Android Permissions requests -->
+    <string name="permissionsDeniedTitle">We need some permissions to continue</string>
     <string name="permissionsDeniedMessage">Videona needs some permissions to use the camera or
         record audio.\nWithout them Videona can\'t continue and will be closed.</string>
+    <string name="permissions_denied_snackbar_message">We need those permissions to take awesome videos with Videona!</string>
+    <string name="permissions_denied_go_to_settings_button">Go to settings</string>
     <string name="CloseBecauseOfPermissionsTitle">Permissions not granted</string>
 
     <!-- Record Activity -->
@@ -22,6 +26,11 @@
     <string name="videonaTags">"#VideonaTime"</string>
 
     <!-- Editor Activity -->
+
+    <string name="tab_edit">Edit</string>
+    <string name="tab_music">Music</string>
+    <string name="tab_share">Share</string>
+
     <string name="edit_title_name">Edit Room</string>
     <string name="edit_text_fx">Working on effects</string>
     <string name="edit_text_look">Working on magic</string>
@@ -1600,5 +1609,6 @@ and Conditions.\n\n
     <string name="ok">Ok</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="comingSoon">Coming Soon</string>
 
 </resources>

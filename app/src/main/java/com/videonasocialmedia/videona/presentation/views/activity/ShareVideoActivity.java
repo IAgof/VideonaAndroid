@@ -35,6 +35,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.VideoPlayerView;
 import com.videonasocialmedia.videona.presentation.views.adapter.SocialNetworkAdapter;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -125,6 +126,8 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         }
     }
 
+
+
     private void initFloatingActionButton() {
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
@@ -132,7 +135,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     }
 
     private void initVideoPreview(final int position, final boolean playing) {
-        videoPath = getIntent().getStringExtra("VIDEO_EDITED");
+        videoPath = getIntent().getStringExtra(Constants.VIDEO_TO_SHARE_PATH);
         if (videoPath != null) {
             videoPreview.setVideoPath(videoPath);
             Log.d("TAG", "MESSAGE");
@@ -201,10 +204,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     public void pauseVideo() {
         videoPreview.pause();
         playPauseButton.setVisibility(View.VISIBLE);
-        if (isLandscapeOriented()) {
-            showToolbar();
-            showBottomPanel();
-        }
     }
 
     @Override

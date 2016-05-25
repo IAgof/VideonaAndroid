@@ -33,6 +33,10 @@
 
     </style>
 
+    <style name="VideonaTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="VideonaTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
 
     <style name="VideonaToolbar" parent="Theme.AppCompat">
         <!--<item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item> -->

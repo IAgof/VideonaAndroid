@@ -1,23 +1,36 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.CompositeMultiplePermissionsListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener;
 import com.mixpanel.android.mpmetrics.InAppNotification;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
@@ -65,6 +78,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     protected Handler handler = new Handler();
     @Bind(R.id.videona_version)
     TextView versionName;
+    @Bind(R.id.init_root_view)
+    ViewGroup initRootView;
     private long MINIMUN_WAIT_TIME;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -73,12 +88,11 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private long startTime;
     private String androidId = null;
     private String initState;
+    private CompositeMultiplePermissionsListener compositePermissionsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         super.onCreate(savedInstanceState);
 
         //remove title, mode fullscreen
@@ -89,12 +103,38 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         ButterKnife.bind(this);
 
         setVersionCode();
+        createPermissionListeners();
+        Dexter.continuePendingRequestsIfPossible(compositePermissionsListener);
+
         if (BuildConfig.DEBUG) {
             //Wait longer while debug so we can start qordoba sandbox mode on splash screen
             MINIMUN_WAIT_TIME = 10000;
         } else {
             MINIMUN_WAIT_TIME = 900;
         }
+    }
+
+    private void requestPermissionsAndPerformSetup() {
+        Dexter.checkPermissions(compositePermissionsListener, Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.GET_ACCOUNTS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    private void startSplashThread() {
+        SplashScreenTask splashScreenTask = new SplashScreenTask(this);
+        splashScreenTask.execute();
+    }
+
+    private void createPermissionListeners() {
+        SnackbarOnAnyDeniedMultiplePermissionsListener snackBarPermissionsDeniedListenerWithSettings =
+                SnackbarOnAnyDeniedMultiplePermissionsListener.Builder
+                        .with(initRootView, R.string.permissions_denied_snackbar_message)
+                        .withOpenSettingsButton(R.string.permissions_denied_go_to_settings_button)
+                        .build();
+        MultiplePermissionsListener corePermissionsListener = new CorePermissionListener(this);
+        compositePermissionsListener = new CompositeMultiplePermissionsListener(corePermissionsListener,
+                snackBarPermissionsDeniedListenerWithSettings);
     }
 
     private void setVersionCode() {
@@ -117,19 +157,19 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         startTime = System.currentTimeMillis();
-        checkAndRequestPermissions();
+//        checkAndRequestPermissions();
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        SplashScreenTask splashScreenTask = new SplashScreenTask(this);
-        splashScreenTask.execute();
+        requestPermissionsAndPerformSetup();
     }
 
     /**
@@ -182,9 +222,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME_VERSION");
                 initState = AnalyticsConstants.INIT_STATE_UPGRADE;
                 trackAppStartupProperties(false);
-                // example: show what's new
-                // could be appear a mix panel popup with improvements.
-
                 // Repeat this method for security, if user delete app data miss this configs.
                 setupCameraSettings();
                 trackUserProfile();
@@ -195,7 +232,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
                 initState = AnalyticsConstants.INIT_STATE_FIRST_TIME;
                 trackAppStartupProperties(true);
-                // example: show a tutorial
                 setupCameraSettings();
                 trackUserProfile();
                 trackCreatedSuperProperty();
@@ -234,8 +270,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         checkAndInitPath(Constants.PATH_APP);
         checkAndInitPath(Constants.PATH_APP_TEMP);
         checkAndInitPath(Constants.PATH_APP_MASTERS);
-        checkAndInitPath(Constants.VIDEO_MUSIC_TEMP_FILE);
-
 
         File privateDataFolderModel = getDir(Constants.FOLDER_VIDEONA_PRIVATE_MODEL, Context.MODE_PRIVATE);
         String privatePath = privateDataFolderModel.getAbsolutePath();
@@ -484,12 +518,51 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     @Override
     public void onCheckPathsAppSuccess() {
         startLoadingProject(this);
+        moveVideonaVideosToDcim();
     }
 
     private void startLoadingProject(OnInitAppEventListener listener) {
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
         Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
+    }
+
+    private void moveVideonaVideosToDcim() {
+        String moviesPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + File.separator;
+        String pathVideonaOld       = moviesPath + Constants.FOLDER_VIDEONA;
+        String pathVideonaMasterOld = moviesPath + Constants.FOLDER_VIDEONA_MASTERS;
+        String pathVideonaTempOld = pathVideonaOld + File.separator + Constants.FOLDER_VIDEONA_TEMP;
+
+        moveFolderContentsToNewFolder(pathVideonaOld, Constants.PATH_APP);
+        moveFolderContentsToNewFolder(pathVideonaMasterOld, Constants.PATH_APP_MASTERS);
+
+        removeFolderIfExistsAndEmpty(pathVideonaTempOld);
+        removeFolderIfExistsAndEmpty(pathVideonaOld);
+        removeFolderIfExistsAndEmpty(pathVideonaMasterOld);
+    }
+
+    private void removeFolderIfExistsAndEmpty(String folderPath) {
+        File targetFolder = new File(folderPath);
+        if (targetFolder.exists() && targetFolder.listFiles().length == 0) {
+            targetFolder.delete();
+        }
+    }
+
+    @NonNull
+    private File moveFolderContentsToNewFolder(String sourcePath, String destinationPath) {
+        File sourceDirectory = new File(sourcePath);
+        if (sourceDirectory.exists()) {
+            for (File f : sourceDirectory.listFiles()) {
+                if (f.isDirectory()) {
+                    moveFolderContentsToNewFolder(f.getPath(), destinationPath + File.separator + f.getName());
+                } else {
+                    File destinationFile = new File(destinationPath, f.getName());
+                    if (!destinationFile.exists())
+                        f.renameTo(destinationFile);
+                }
+            }
+        }
+        return sourceDirectory;
     }
 
     //TODO Check user profile, by default 720p free
@@ -517,23 +590,37 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         startActivity(new Intent(getApplicationContext(), cls));
     }
 
+    private void exitSplashScreen() {
+        if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
+            navigate(IntroAppActivity.class);
+        } else {
+            InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
+            navigate(RecordActivity.class);
+            if (notification != null) {
+                Log.d("INAPP", "in-app notification received");
+                mixpanel.getPeople().showGivenNotification(notification, this);
+                mixpanel.getPeople().trackNotificationSeen(notification);
+            }
+        }
+    }
+
     /**
      * Shows the splash screen
      */
     class SplashScreenTask extends AsyncTask<Void, Void, Boolean> {
 
-        private Activity parentActivity;
+        private InitAppActivity initActivity;
 
-        public SplashScreenTask(Activity activity) {
-            this.parentActivity = activity;
+        public SplashScreenTask(InitAppActivity activity) {
+            this.initActivity = activity;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
+
             try {
                 waitForCriticalPermissions();
-                setup();
-                trackAppStartup();
+                initActivity.setupAndTrackInit();
             } catch (Exception e) {
                 Log.e("SETUP", "setup failed", e);
             }
@@ -556,20 +643,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
             }
         }
 
-        private void exitSplashScreen() {
-            if(sharedPreferences.getBoolean(ConfigPreferences.FIRST_TIME, true)) {
-                navigate(IntroAppActivity.class);
-            } else {
-                InAppNotification notification = mixpanel.getPeople().getNotificationIfAvailable();
-                navigate(RecordActivity.class);
-                if (notification != null) {
-                    Log.d("INAPP", "in-app notification received");
-                    mixpanel.getPeople().showGivenNotification(notification, parentActivity);
-                    mixpanel.getPeople().trackNotificationSeen(notification);
-                }
-            }
-        }
-
         private void waitForCriticalPermissions() {
             while (!areCriticalPermissionsGranted()) {
                 //just wait
@@ -586,5 +659,54 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                             Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
             return granted;
         }
+    }
+
+    private class CorePermissionListener implements MultiplePermissionsListener {
+        private final InitAppActivity activity;
+
+        public CorePermissionListener(InitAppActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onPermissionsChecked(MultiplePermissionsReport report) {
+            if (report.areAllPermissionsGranted()) {
+                activity.startSplashThread();
+            }
+        }
+
+        @Override
+        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+            activity.showPermissionRationale(token);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void showPermissionRationale(final PermissionToken token) {
+        new AlertDialog.Builder(this).setTitle(R.string.permissionsDeniedTitle)
+                .setMessage(R.string.permissionsDeniedMessage)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        token.cancelPermissionRequest();
+                    }
+                })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        token.continuePermissionRequest();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override public void onDismiss(DialogInterface dialog) {
+                        token.cancelPermissionRequest();
+                    }
+                })
+                .show();
+    }
+
+    private void setupAndTrackInit() {
+        setup();
+        trackAppStartup();
     }
 }

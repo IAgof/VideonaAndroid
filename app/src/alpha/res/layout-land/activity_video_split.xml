@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/VideonaTheme.PopupOverlay"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="4">
+
+            <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
+                android:id="@+id/video_split_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:aspect="sixteen_nine"/>
+
+            <ImageButton
+                android:id="@+id/button_split_play_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="#00000000"
+                android:src="@drawable/common_icon_play"/>
+
+            <SeekBar
+                android:id="@+id/seekbar_split_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/video_split_preview"
+                android:layout_marginBottom="12dp"
+                android:maxHeight="1dp"
+                android:progressDrawable="@color/colorAccent"
+                android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"/>
+
+            <ImageButton
+                android:id="@+id/button_split_fullscreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/video_split_preview"
+                android:layout_alignTop="@+id/video_split_preview"
+                android:layout_margin="8dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/common_icon_expand"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_weight="3">
+
+            <SeekBar
+                android:id="@+id/seekBar_split"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@null"
+                android:maxHeight="50dp"
+                android:progressDrawable="@color/colorAccent"
+                android:layout_below="@id/text_info_split"
+                android:splitTrack="false"
+                android:thumb="@drawable/activity_edit_clip_divide_indicator_seekbar"
+                />
+
+
+            <TextView
+                android:id="@+id/text_time_split"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_below="@+id/seekBar_split"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="4dp"
+                android:gravity="center_vertical|center_horizontal"
+
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
+                tools:text="00:00"
+                />
+
+            <TextView
+                android:id="@+id/text_info_split"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/text_edit_info_split"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
+                />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/button_split_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/activity_edit_common_icon_cancel"
+        />
+
+    <ImageButton
+        android:id="@+id/button_split_accept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/activity_edit_common_icon_accept"
+        />
+
+</android.support.design.widget.CoordinatorLayout>

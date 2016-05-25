@@ -6,4 +6,13 @@
             leave us?</string>
     <string name="leaveBetaDialogPositiveButton">No</string>
     <string name="leaveBetaDialogNegativeButton">Yes</string>
+
+    <string name="text_edit_info_duplicate">Clone your clip</string>
+    <string name="text_edit_info_trim">Trim your clip</string>
+    <string name="text_edit_info_split">Split your clip</string>
+
+    <string name="dialog_edit_remove_message">Remove clip</string>
+    <string name="dialog_edit_remove_accept">Yes</string>
+    <string name="dialog_edit_remove_cancel">No</string>
+
 </resources>

@@ -28,6 +28,7 @@ import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.DialogOnAnyDeniedMultiplePermissionsListener;
 import com.karumi.dexter.listener.multi.EmptyMultiplePermissionsListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -74,8 +75,13 @@ public abstract class VideonaActivity extends AppCompatActivity {
 
     private void configPermissions() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            dialogMultiplePermissionsListener =
-                    new CustomPermissionListener(this, "titulo", "mensaje", "ok", null);
+            dialogMultiplePermissionsListener = DialogOnAnyDeniedMultiplePermissionsListener.Builder
+                            .withContext(this)
+                            .withTitle("Camera & audio permission")
+                            .withMessage("Both camera and audio permission are needed to take awsome videos with Videona")
+                            .withButtonText(android.R.string.ok)
+                            .build();
+//            new CustomPermissionListener(this, "titulo", "mensaje", "ok", null);
             Dexter.continuePendingRequestsIfPossible(dialogMultiplePermissionsListener);
         }
     }
@@ -86,10 +92,10 @@ public abstract class VideonaActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(new QordobaContextWrapper(this, newBase));
-    }
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        super.attachBaseContext(new QordobaContextWrapper(this, newBase));
+//    }
 
     @Override
     protected void onPause() {
@@ -106,7 +112,7 @@ public abstract class VideonaActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Qordoba.updateScreen(this);
+//        Qordoba.updateScreen(this);
     }
 
     @Override
@@ -124,20 +130,21 @@ public abstract class VideonaActivity extends AppCompatActivity {
 
     protected void checkAndRequestPermissions() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkContacts();
+//            checkContacts();
             Dexter.checkPermissions(dialogMultiplePermissionsListener, Manifest.permission.CAMERA,
                     Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_CONTACTS);
         }
     }
 
-    private void checkContacts() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CONTACTS,
-                    PermissionConstants.REQUEST_CONTACTS);
-        }
-    }
+//    private void checkContacts() {
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, PermissionConstants.PERMISSIONS_CONTACTS,
+//                    PermissionConstants.REQUEST_CONTACTS);
+//        }
+//    }
 
 
     protected boolean isLandscapeOriented() {

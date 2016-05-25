@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/video_view"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+    <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
+        android:id="@+id/video_editor_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:aspect="sixteen_nine"
+        />
+
+    <ImageButton
+        android:id="@+id/button_editor_play_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#00000000"
+        android:src="@drawable/common_icon_play"
+        />
+
+    <SeekBar
+        android:id="@+id/seekbar_editor_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/video_editor_preview"
+        android:layout_marginBottom="12dp"
+        android:maxHeight="1dp"
+        android:progressDrawable="@color/colorAccent"
+        android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
+        />
+
+    <ImageButton
+        android:id="@+id/button_edit_fullscreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/video_editor_preview"
+        android:layout_alignRight="@+id/video_editor_preview"
+        android:layout_alignTop="@+id/video_editor_preview"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_icon_expand"
+        android:visibility="gone"
+        />
+
+
+</RelativeLayout>

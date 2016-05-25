@@ -53,6 +53,7 @@ import com.videonasocialmedia.videona.presentation.views.fragment.BetaDialogFrag
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -62,7 +63,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -558,7 +558,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         saveVideoFeaturesToConfig();
         recordPresenter.removeMasterVideos();
         Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.putExtra("VIDEO_EDITED", videoToSharePath);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
         startActivity(intent);
     }
 
