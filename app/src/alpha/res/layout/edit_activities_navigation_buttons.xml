@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
+
     <ImageButton
         android:id="@+id/button_edit_navigator"
+        style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/activity_edit_clip_normal"
-        style="@style/Widget.AppCompat.ActionButton"
         />
 
     <ImageButton
         android:id="@+id/button_music_navigator"
+        style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_music_normal"
-        style="@style/Widget.AppCompat.ActionButton"
         />
 
     <ImageButton
         android:id="@+id/button_share_navigator"
+        style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_share_normal"
-        style="@style/Widget.AppCompat.ActionButton"
         />
 
 </merge>

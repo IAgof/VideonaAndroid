@@ -53,26 +53,12 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
         }
     }
 
-    public void onResume(){
-
-    }
-
-    public void onPause(){
-
-    }
-
-
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
         trimView.showPreview(videoList);
         Video video = videoList.get(0);
-        if(video.getIsSplit()){
-            showTimeSplittedTags(video);
-            trimView.showTrimBar((video.getFileStopTime() - video.getFileStartTime()),0, (video.getFileStopTime() - video.getFileStartTime()) );
-        } else {
-            showTimeTags(video);
-            trimView.showTrimBar(video.getFileDuration(), video.getFileStartTime(), video.getFileStopTime());
-        }
+        //showTimeTags(video);
+        trimView.showTrimBar(video.getFileStartTime(), video.getFileStopTime(), video.getFileDuration());
     }
 
     private void showTimeTags(Video video) {
@@ -81,17 +67,10 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
         trimView.refreshStopTimeTag(video.getFileStopTime());
     }
 
-    private void showTimeSplittedTags(Video video) {
-        trimView.refreshDurationTag(video.getFileStopTime() - video.getFileStartTime());
-        trimView.refreshStartTimeTag(0);
-        trimView.refreshStopTimeTag(video.getFileStopTime() - video.getFileStartTime());
-    }
-
     @Override
     public void onNoVideosRetrieved() {
         trimView.showError("No videos");
     }
-
 
     public void modifyVideoStartTime(int startTime) {
         modifyVideoDurationUseCase.modifyVideoStartTime(videoToEdit, startTime);

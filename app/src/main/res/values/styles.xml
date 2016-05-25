@@ -33,9 +33,9 @@
 
     </style>
 
-    <style name="VideonaTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="VideonaTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="VideonaTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="VideonaTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 
     <style name="VideonaToolbar" parent="Theme.AppCompat">

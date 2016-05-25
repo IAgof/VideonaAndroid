@@ -1,63 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/VideonaTheme.AppBarOverlay">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/VideonaTheme.PopupOverlay" />
+            app:popupTheme="@style/VideonaTheme.PopupOverlay"/>
     </android.support.design.widget.AppBarLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false">
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4" >
+            android:layout_weight="4">
+
             <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
                 android:id="@+id/video_split_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:aspect="sixteen_nine"/>
+
             <ImageButton
                 android:id="@+id/button_split_play_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="#00000000"
-                android:src="@drawable/common_icon_play" />
+                android:src="@drawable/common_icon_play"/>
+
             <SeekBar
                 android:id="@+id/seekbar_split_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/video_split_preview"
-                android:progressDrawable="@color/colorAccent"
+                android:layout_marginBottom="12dp"
                 android:maxHeight="1dp"
-                android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
-                android:layout_marginBottom="12dp" />
+                android:progressDrawable="@color/colorAccent"
+                android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"/>
+
             <ImageButton
                 android:id="@+id/button_split_fullscreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/common_icon_expand"
-                android:layout_alignTop="@+id/video_split_preview"
                 android:layout_alignEnd="@+id/video_split_preview"
+                android:layout_alignTop="@+id/video_split_preview"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@null"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                android:src="@drawable/common_icon_expand"/>
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -68,25 +77,25 @@
                 android:id="@+id/seekBar_over"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:thumb="@drawable/activity_edit_clip_divide_indicator_seekbar"
-                android:progressDrawable="@android:color/transparent"
                 android:layout_above="@+id/seekBar_split"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="1dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginBottom="1dp"/>
+                android:paddingTop="10dp"
+                android:progressDrawable="@android:color/transparent"
+                android:thumb="@drawable/activity_edit_clip_divide_indicator_seekbar"/>
 
             <SeekBar
                 android:id="@+id/seekBar_split"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="50dp"
-                android:progressDrawable="@color/colorAccent"
-                android:thumb="@drawable/button_edit_thumb_seekbar_over_advance_split"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:maxHeight="50dp"
+                android:progressDrawable="@color/colorAccent"
+                android:thumb="@drawable/button_edit_thumb_seekbar_over_advance_split"
                 />
 
 
@@ -94,56 +103,59 @@
                 android:id="@+id/text_time_split"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                tools:text="00:00"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:visibility="visible"
-                android:gravity="center_vertical|center_horizontal"
                 android:layout_alignParentBottom="false"
-                android:layout_marginBottom="4dp"
                 android:layout_below="@+id/seekBar_split"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="4dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingTop="10dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:visibility="visible"
+                tools:text="00:00"
                 />
 
             <TextView
                 android:id="@+id/text_info_split"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/seekBar_over"
+                android:layout_alignParentBottom="false"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical|center_horizontal"
                 android:text="@string/text_edit_info_split"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:visibility="visible"
-                android:gravity="center_vertical|center_horizontal"
-                android:layout_alignParentBottom="false"
-                android:layout_above="@+id/seekBar_over"
-                android:layout_centerHorizontal="true"
                 />
 
         </RelativeLayout>
     </LinearLayout>
+
     <RelativeLayout
+        android:id="@+id/relative_layout_edit_split_validate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/relative_layout_edit_split_validate"
         android:layout_marginBottom="12dp">
+
         <ImageButton
             android:id="@+id/button_split_cancel"
-            android:background="@null"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/activity_edit_common_icon_cancel"
             android:layout_marginStart="12dp"
+            android:background="@null"
+            android:src="@drawable/activity_edit_common_icon_cancel"
             />
+
         <ImageButton
             android:id="@+id/button_split_accept"
-            android:background="@null"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/activity_edit_common_icon_accept"
             android:layout_marginEnd="12dp"
+            android:background="@null"
+            android:src="@drawable/activity_edit_common_icon_accept"
             />
     </RelativeLayout>
 </LinearLayout>

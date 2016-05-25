@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.videonasocialmedia.videona">
+<manifest package="com.videonasocialmedia.videona"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:name=".VideonaApplication"
@@ -22,23 +22,23 @@
 
         <activity
             android:name=".presentation.views.activity.EditActivity"
-            android:parentActivityName=".presentation.views.activity.RecordActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
         <activity
             android:name=".presentation.views.activity.VideoTrimActivity"
-            android:parentActivityName=".presentation.views.activity.EditActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"/>
 
         <activity
             android:name=".presentation.views.activity.VideoSplitActivity"
-            android:parentActivityName=".presentation.views.activity.EditActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"/>
 
         <activity
             android:name=".presentation.views.activity.VideoDuplicateActivity"
-            android:parentActivityName=".presentation.views.activity.EditActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"/>
 
     </application>
 

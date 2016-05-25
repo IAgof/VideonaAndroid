@@ -48,7 +48,7 @@ public class Video extends Media {
     public Video(String identifier, String iconPath, String mediaPath, int fileStartTime,
                  int duration, ArrayList<User> authors, License license) {
         super(identifier, iconPath, mediaPath, fileStartTime, duration, authors, license);
-        fileDuration = duration;
+        fileDuration = getFileDuration(mediaPath);
     }
 
     /**
@@ -62,7 +62,7 @@ public class Video extends Media {
                  License license) {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, fileStartTime, duration,
                 opening, ending, metadata, authors, license);
-        fileDuration = duration;
+        fileDuration = getFileDuration(mediaPath);
     }
 
     /**
@@ -91,13 +91,13 @@ public class Video extends Media {
 
     public Video(String mediaPath, int fileStartTime, int duration) {
         super(null, null, mediaPath, fileStartTime, duration, null, null);
-        fileDuration = duration;
+        fileDuration = getFileDuration(mediaPath);
     }
 
     public Video(Video video) {
         super(null, null, video.getMediaPath(), video.getFileStartTime(),
                 video.getDuration(), null, null);
-        fileDuration = video.getFileDuration();
+        fileDuration = getFileDuration(video.getMediaPath());
         fileStopTime = video.getFileStopTime();
     }
 
@@ -105,16 +105,19 @@ public class Video extends Media {
         return fileDuration;
     }
 
-    public void setFileDuration(int fileDuration) {
-        this.fileDuration = fileDuration;
-    }
-
     public boolean getIsSplit() {
         return isSplit;
     }
 
-    public void setIsSplit(boolean isSplit){
+    public void setIsSplit(boolean isSplit) {
         this.isSplit = isSplit;
+    }
+
+    private int getFileDuration(String path){
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(path);
+        return Integer.parseInt(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_DURATION));
     }
 
 }

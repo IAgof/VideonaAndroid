@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/VideonaTheme.PopupOverlay" />
+            app:popupTheme="@style/VideonaTheme.PopupOverlay"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -38,107 +38,107 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="#00000000"
-            android:src="@drawable/common_icon_play" />
+            android:src="@drawable/common_icon_play"/>
 
         <SeekBar
             android:id="@+id/seekbar_trim_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/video_trim_preview"
-            android:progressDrawable="@color/colorAccent"
+            android:layout_marginBottom="12dp"
             android:maxHeight="1dp"
-            android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"
-            android:layout_marginBottom="12dp" />
+            android:progressDrawable="@color/colorAccent"
+            android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"/>
 
         <ImageButton
             android:id="@+id/button_trim_fullscreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/common_icon_expand"
-            android:layout_alignTop="@+id/video_trim_preview"
             android:layout_alignRight="@+id/video_trim_preview"
+            android:layout_alignTop="@+id/video_trim_preview"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@null"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/common_icon_expand"/>
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
         <com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBarView
             android:id="@+id/trim_rangeSeekBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:bar_color="@color/colorPrimaryLight"
-            app:bar_height="48dp"
-            app:background_color="@null"
-            app:selected_bar_color="@color/colorDivider"
-            app:thumb_image="@drawable/activity_edit_clip_trim_thumb_seekbar"
-            app:thumb_image_max="@drawable/activity_edit_clip_trim_thumb_seekbar"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"/>
+            android:layout_marginRight="12dp"
+            app:background_color="@null"
+            app:bar_color="@color/colorPrimaryLight"
+            app:bar_height="48dp"
+            app:selected_bar_color="@color/colorDivider"
+            app:thumb_image="@drawable/activity_edit_clip_trim_thumb_seekbar"
+            app:thumb_image_max="@drawable/activity_edit_clip_trim_thumb_seekbar"/>
 
 
         <TextView
             android:id="@+id/text_start_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/trim_rangeSeekBar"
+            android:gravity="center"
             android:paddingLeft="12dp"
-            tools:text="00:00"
+            android:paddingTop="12dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="@color/colorAccent"
-            android:gravity="center"
-            android:layout_below="@+id/trim_rangeSeekBar"
-            android:layout_alignParentLeft="true"/>
+            tools:text="00:00"/>
 
         <TextView
             android:id="@+id/text_end_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/trim_rangeSeekBar"
+            android:gravity="center"
             android:paddingRight="12dp"
-            tools:text="00:00"
+            android:paddingTop="12dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:textColor="@color/colorAccent"
-            android:gravity="center"
-            android:layout_below="@+id/trim_rangeSeekBar"
-            android:layout_alignParentRight="true"/>
+            tools:text="00:00"/>
 
         <TextView
             android:id="@+id/text_time_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
+            android:layout_above="@+id/trim_rangeSeekBar"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="4dp"
+            android:gravity="center_vertical|center_horizontal"
             android:paddingBottom="12dp"
-            tools:text="00:00"
+            android:paddingTop="12dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
             android:visibility="visible"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_alignParentBottom="false"
-            android:layout_marginBottom="4dp"
-            android:layout_above="@+id/trim_rangeSeekBar"
-            android:layout_centerHorizontal="true"
+            tools:text="00:00"
             />
 
         <TextView
             android:id="@+id/text_info_trim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/text_time_trim"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical|center_horizontal"
             android:paddingTop="12dp"
             android:text="@string/text_edit_info_trim"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:visibility="visible"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_alignParentBottom="false"
-            android:layout_above="@+id/text_time_trim"
-            android:layout_centerHorizontal="true"
             />
 
 
@@ -148,10 +148,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:background="@null"
-            android:src="@drawable/activity_edit_common_icon_cancel"
+            android:layout_marginBottom="12dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginBottom="12dp"/>
+            android:background="@null"
+            android:src="@drawable/activity_edit_common_icon_cancel"/>
 
         <ImageButton
             android:id="@+id/button_trim_accept"
@@ -159,13 +159,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:background="@null"
-            android:src="@drawable/activity_edit_common_icon_accept"
             android:layout_marginBottom="12dp"
-            android:layout_marginRight="12dp"/>
+            android:layout_marginRight="12dp"
+            android:background="@null"
+            android:src="@drawable/activity_edit_common_icon_accept"/>
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

@@ -3,7 +3,7 @@ package com.videonasocialmedia.videona.presentation.views.adapter.helper;
 /**
  * Notifies a View Holder of relevant callbacks from
  * {@link ItemTouchHelper.Callback}.
- *
+ * <p/>
  * Created by jliarte on 19/05/16.
  */
 public interface ItemTouchHelperViewHolder {

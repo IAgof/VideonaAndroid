@@ -37,13 +37,13 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     private int selectedVideoPosition = -1;
 
-    public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
-        this.onTransitionClickListener = onTransitionClickListener;
-    }
-
     public VideoGalleryAdapter(List<Video> videoList) {
         this.videoList = videoList;
 
+    }
+
+    public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
+        this.onTransitionClickListener = onTransitionClickListener;
     }
 
     @Override
@@ -131,10 +131,6 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         @Bind(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
-        public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
-            this.onTransitionClickListener = onTransitionClickListener;
-        }
-
         public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener,
                                OnTransitionClickListener onTransitionClickListener) {
             super(itemView);
@@ -144,9 +140,13 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
         }
 
+        public void setOnTransitionClickListener(OnTransitionClickListener onTransitionClickListener) {
+            this.onTransitionClickListener = onTransitionClickListener;
+        }
+
         @OnClick(R.id.video_item)
         public void startVideoPreview(View v) {
-            if(selectionSupport.getChoiceMode() == MultiItemSelectionSupport.ChoiceMode.NONE) {
+            if (selectionSupport.getChoiceMode() == MultiItemSelectionSupport.ChoiceMode.NONE) {
                 if(onTransitionClickListener != null)
                     onTransitionClickListener.onClick(itemView, getPosition());
             }
