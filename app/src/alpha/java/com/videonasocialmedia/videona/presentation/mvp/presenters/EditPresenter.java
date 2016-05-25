@@ -57,7 +57,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         exportProjectUseCase = new ExportProjectUseCase(this);
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
-        reorderMediaItemUseCase = new ReorderMediaItemUseCase();
+        reorderMediaItemUseCase= new ReorderMediaItemUseCase();
 
         sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -85,8 +85,12 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         return getMediaListFromProjectUseCase.getMediaListFromProject();
     }
 
-    public void moveItem(Media videoToMove, int toPositon) {
-        reorderMediaItemUseCase.moveMediaItem(videoToMove, toPositon, this);
+    public void obtainVideos(){
+        getMediaListFromProjectUseCase.getMediaListFromProject(this);
+    }
+
+    public void moveItem(Media videoToMove, int toPositon){
+        reorderMediaItemUseCase.moveMediaItem(videoToMove,toPositon,this);
     }
 
     @Override
@@ -151,9 +155,5 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     public void onErrorReorderingMedia() {
         //The reordering went wrong so we ask the project for the actual video list
         obtainVideos();
-    }
-
-    public void obtainVideos() {
-        getMediaListFromProjectUseCase.getMediaListFromProject(this);
     }
 }

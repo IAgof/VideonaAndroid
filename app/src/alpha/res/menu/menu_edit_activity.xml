@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".presentation.views.activity.EditActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.views.activity.EditActivity"
     >
 
 
     <item
         android:id="@+id/action_more"
         android:icon="@drawable/activity_edit_menu_normal"
-        android:orderInCategory="100"
         android:title="More"
+        android:orderInCategory="100"
         app:showAsAction="always">
 
         <menu>

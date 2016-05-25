@@ -37,15 +37,12 @@ import butterknife.OnTouch;
  */
 public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, SeekBar.OnSeekBarChangeListener {
 
-    private final Context context;
-    protected Handler handler = new Handler();
-    @Bind(R.id.video_editor_preview)
-    AspectRatioVideoView videoPreview;
-    @Bind(R.id.seekbar_editor_preview)
-    SeekBar seekBar;
-    @Bind(R.id.button_editor_play_pause)
-    ImageButton playButton;
     private ProjectPlayerListener projectPlayerListener;
+    private final Context context;
+    @Bind(R.id.video_editor_preview) AspectRatioVideoView videoPreview;
+    @Bind(R.id.seekbar_editor_preview) SeekBar seekBar;
+    @Bind(R.id.button_editor_play_pause) ImageButton playButton;
+
     private View projectPlayerView;
     private MediaController mediaController;
     private AudioManager audio;
@@ -59,32 +56,33 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
     private boolean isFullScreenBack = false;
     private List<Integer> videoStartTimeInProject;
     private List<Integer> videoStopTimeInProject;
+    private Music music;
+    protected Handler handler = new Handler();
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekBarProgress();
         }
     };
-    private Music music;
 
     public ProjectPlayer(Context context) {
         super(context);
         this.context = context;
-        this.projectPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, projectPlayerView);
     }
 
     public ProjectPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        this.projectPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, projectPlayerView);
     }
 
     public ProjectPlayer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
-        this.projectPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.projectPlayerView = ((Activity)getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, projectPlayerView);
     }
 
@@ -487,6 +485,14 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         }
     }
 
+    private void releaseMusicPlayer() {
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer.release();
+            musicPlayer = null;
+        }
+    }
+
     private void initMusicPlayer() {
         if (musicPlayer == null) {
             music = (Music) videonaProject.getAudioTracks().get(0).getItems().get(0);
@@ -517,8 +523,20 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         }
     }
 
+    /**
+     * Releases the media player and the video view
+     */
+    private void releaseVideoView() {
+        videoPreview.stopPlayback();
+        videoPreview.clearFocus();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            videoPlayer = null;
+        }
+    }
+
     @OnClick(R.id.button_editor_play_pause)
-    public void onClickPlayPauseButton() {
+    public void onClickPlayPauseButton(){
         if (projectHasVideos()) {
             if (videoPlayer != null) {
                 if (videoPlayer.isPlaying()) {
@@ -571,26 +589,6 @@ public class ProjectPlayer extends RelativeLayout implements ProjectPlayerView, 
         releaseMusicPlayer();
         projectDuration = 0;
         instantTime = 0;
-    }
-
-    /**
-     * Releases the media player and the video view
-     */
-    private void releaseVideoView() {
-        videoPreview.stopPlayback();
-        videoPreview.clearFocus();
-        if (videoPlayer != null) {
-            videoPlayer.release();
-            videoPlayer = null;
-        }
-    }
-
-    private void releaseMusicPlayer() {
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer.release();
-            musicPlayer = null;
-        }
     }
 
     public void seekToClip(int position) {

@@ -18,17 +18,27 @@ import static android.os.Build.VERSION_CODES.HONEYCOMB;
 
 public class MultiItemSelectionSupport {
     public static final int INVALID_POSITION = -1;
-    private static final String STATE_KEY_CHOICE_MODE = "choiceMode";
-    private static final String STATE_KEY_CHECKED_STATES = "checkedStates";
-    private static final String STATE_KEY_CHECKED_ID_STATES = "checkedIdStates";
-    private static final String STATE_KEY_CHECKED_COUNT = "checkedCount";
-    private static final int CHECK_POSITION_SEARCH_DISTANCE = 20;
+
+    public enum ChoiceMode {
+        NONE,
+        SINGLE,
+        MULTIPLE
+    }
+
     private final RecyclerView mRecyclerView;
     private final TouchListener mTouchListener;
+
     private ChoiceMode mChoiceMode = ChoiceMode.NONE;
     private CheckedStates mCheckedStates;
     private CheckedIdStates mCheckedIdStates;
     private int mCheckedCount;
+
+    private static final String STATE_KEY_CHOICE_MODE = "choiceMode";
+    private static final String STATE_KEY_CHECKED_STATES = "checkedStates";
+    private static final String STATE_KEY_CHECKED_ID_STATES = "checkedIdStates";
+    private static final String STATE_KEY_CHECKED_COUNT = "checkedCount";
+
+    private static final int CHECK_POSITION_SEARCH_DISTANCE = 20;
 
     private MultiItemSelectionSupport(RecyclerView recyclerView) {
         mRecyclerView = recyclerView;
@@ -37,53 +47,13 @@ public class MultiItemSelectionSupport {
         recyclerView.addOnItemTouchListener(mTouchListener);
     }
 
-    public static MultiItemSelectionSupport addTo(RecyclerView recyclerView) {
-        MultiItemSelectionSupport itemSelectionSupport = from(recyclerView);
-        if (itemSelectionSupport == null) {
-            itemSelectionSupport = new MultiItemSelectionSupport(recyclerView);
-            recyclerView.setTag(R.id.twowayview_item_selection_support, itemSelectionSupport);
-        } else {
-            // TODO: Log warning
+    private void updateOnScreenCheckedViews() {
+        final int count = mRecyclerView.getChildCount();
+        for (int i = 0; i < count; i++) {
+            final View child = mRecyclerView.getChildAt(i);
+            final int position = mRecyclerView.getChildPosition(child);
+            setViewChecked(child, mCheckedStates.get(position));
         }
-
-        return itemSelectionSupport;
-    }
-
-    public static MultiItemSelectionSupport from(RecyclerView recyclerView) {
-        if (recyclerView == null) {
-            return null;
-        }
-
-        return (MultiItemSelectionSupport) recyclerView.getTag(R.id.twowayview_item_selection_support);
-    }
-
-    public static void removeFrom(RecyclerView recyclerView) {
-        final MultiItemSelectionSupport itemSelection = from(recyclerView);
-        if (itemSelection == null) {
-            // TODO: Log warning
-            return;
-        }
-
-        itemSelection.clearChoices();
-
-        recyclerView.removeOnItemTouchListener(itemSelection.mTouchListener);
-        recyclerView.setTag(R.id.twowayview_item_selection_support, null);
-    }
-
-    /**
-     * Clears any choices previously set.
-     */
-    public void clearChoices() {
-        if (mCheckedStates != null) {
-            mCheckedStates.clear();
-        }
-
-        if (mCheckedIdStates != null) {
-            mCheckedIdStates.clear();
-        }
-
-        mCheckedCount = 0;
-        updateOnScreenCheckedViews();
     }
 
     /**
@@ -101,6 +71,25 @@ public class MultiItemSelectionSupport {
      */
     public int getCheckedItemCount() {
         return mCheckedCount;
+    }
+
+    /**
+     * Returns the checked state of the specified position. The result is only
+     * valid if the choice mode has been set to {@link ChoiceMode#SINGLE}
+     * or {@link ChoiceMode#MULTIPLE}.
+     *
+     * @param position The item whose checked state to return
+     * @return The item's checked state or <code>false</code> if choice mode
+     *         is invalid
+     *
+     * @see #setChoiceMode(ChoiceMode)
+     */
+    public boolean isItemChecked(int position) {
+        if (mChoiceMode != ChoiceMode.NONE && mCheckedStates != null) {
+            return mCheckedStates.get(position);
+        }
+
+        return false;
     }
 
     /**
@@ -228,33 +217,6 @@ public class MultiItemSelectionSupport {
         updateOnScreenCheckedViews();
     }
 
-    /**
-     * Returns the checked state of the specified position. The result is only
-     * valid if the choice mode has been set to {@link ChoiceMode#SINGLE}
-     * or {@link ChoiceMode#MULTIPLE}.
-     *
-     * @param position The item whose checked state to return
-     * @return The item's checked state or <code>false</code> if choice mode
-     * is invalid
-     * @see #setChoiceMode(ChoiceMode)
-     */
-    public boolean isItemChecked(int position) {
-        if (mChoiceMode != ChoiceMode.NONE && mCheckedStates != null) {
-            return mCheckedStates.get(position);
-        }
-
-        return false;
-    }
-
-    private void updateOnScreenCheckedViews() {
-        final int count = mRecyclerView.getChildCount();
-        for (int i = 0; i < count; i++) {
-            final View child = mRecyclerView.getChildAt(i);
-            final int position = mRecyclerView.getChildPosition(child);
-            setViewChecked(child, mCheckedStates.get(position));
-        }
-    }
-
     @TargetApi(HONEYCOMB)
     public void setViewChecked(View view, boolean checked) {
         if (view instanceof Checkable) {
@@ -262,6 +224,22 @@ public class MultiItemSelectionSupport {
         } else if (Build.VERSION.SDK_INT >= HONEYCOMB) {
             view.setActivated(checked);
         }
+    }
+
+    /**
+     * Clears any choices previously set.
+     */
+    public void clearChoices() {
+        if (mCheckedStates != null) {
+            mCheckedStates.clear();
+        }
+
+        if (mCheckedIdStates != null) {
+            mCheckedIdStates.clear();
+        }
+
+        mCheckedCount = 0;
+        updateOnScreenCheckedViews();
     }
 
     /**
@@ -364,25 +342,40 @@ public class MultiItemSelectionSupport {
         // TODO confirm ids here
     }
 
-    public enum ChoiceMode {
-        NONE,
-        SINGLE,
-        MULTIPLE
+    public static MultiItemSelectionSupport addTo(RecyclerView recyclerView) {
+        MultiItemSelectionSupport itemSelectionSupport = from(recyclerView);
+        if (itemSelectionSupport == null) {
+            itemSelectionSupport = new MultiItemSelectionSupport(recyclerView);
+            recyclerView.setTag(R.id.twowayview_item_selection_support, itemSelectionSupport);
+        } else {
+            // TODO: Log warning
+        }
+
+        return itemSelectionSupport;
+    }
+
+    public static void removeFrom(RecyclerView recyclerView) {
+        final MultiItemSelectionSupport itemSelection = from(recyclerView);
+        if (itemSelection == null) {
+            // TODO: Log warning
+            return;
+        }
+
+        itemSelection.clearChoices();
+
+        recyclerView.removeOnItemTouchListener(itemSelection.mTouchListener);
+        recyclerView.setTag(R.id.twowayview_item_selection_support, null);
+    }
+
+    public static MultiItemSelectionSupport from(RecyclerView recyclerView) {
+        if (recyclerView == null) {
+            return null;
+        }
+
+        return (MultiItemSelectionSupport) recyclerView.getTag(R.id.twowayview_item_selection_support);
     }
 
     private static class CheckedStates extends SparseBooleanArray implements Parcelable {
-        public static final Creator<CheckedStates> CREATOR
-                = new Creator<CheckedStates>() {
-            @Override
-            public CheckedStates createFromParcel(Parcel in) {
-                return new CheckedStates(in);
-            }
-
-            @Override
-            public CheckedStates[] newArray(int size) {
-                return new CheckedStates[size];
-            }
-        };
         private static final int FALSE = 0;
         private static final int TRUE = 1;
 
@@ -417,23 +410,21 @@ public class MultiItemSelectionSupport {
             }
         }
 
+        public static final Creator<CheckedStates> CREATOR
+                = new Creator<CheckedStates>() {
+            @Override
+            public CheckedStates createFromParcel(Parcel in) {
+                return new CheckedStates(in);
+            }
 
+            @Override
+            public CheckedStates[] newArray(int size) {
+                return new CheckedStates[size];
+            }
+        };
     }
 
     private static class CheckedIdStates extends LongSparseArray<Integer> implements Parcelable {
-        public static final Creator<CheckedIdStates> CREATOR
-                = new Creator<CheckedIdStates>() {
-            @Override
-            public CheckedIdStates createFromParcel(Parcel in) {
-                return new CheckedIdStates(in);
-            }
-
-            @Override
-            public CheckedIdStates[] newArray(int size) {
-                return new CheckedIdStates[size];
-            }
-        };
-
         public CheckedIdStates() {
             super();
         }
@@ -465,7 +456,18 @@ public class MultiItemSelectionSupport {
             }
         }
 
+        public static final Creator<CheckedIdStates> CREATOR
+                = new Creator<CheckedIdStates>() {
+            @Override
+            public CheckedIdStates createFromParcel(Parcel in) {
+                return new CheckedIdStates(in);
+            }
 
+            @Override
+            public CheckedIdStates[] newArray(int size) {
+                return new CheckedIdStates[size];
+            }
+        };
     }
 
     private class TouchListener extends ClickItemTouchListener {

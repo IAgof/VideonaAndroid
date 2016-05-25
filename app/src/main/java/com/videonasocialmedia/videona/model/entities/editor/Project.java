@@ -30,11 +30,11 @@ import java.util.ArrayList;
  */
 public class Project {
 
-    public static String VIDEONA_PATH = "";
     /**
      * There could be just one project open at a time. So this converts Project in a Singleton.
      */
     private static Project INSTANCE;
+
     /**
      * Project name. Also it will be the name of the exported video
      */
@@ -52,15 +52,19 @@ public class Project {
      * project profile.
      */
     private ArrayList<AudioTrack> audioTracks;
+
     /**
      * Project profile. Defines some limitations and characteristic of the project based on user
      * subscription.
      */
     private Profile profile;
+
     /**
      * Project duration. The duration of the project in milliseconds.
      */
     private int duration;
+
+    public static String VIDEONA_PATH = "";
 
     /**
      * Constructor of minimum number of parameters. This is the Default constructor.
@@ -157,16 +161,16 @@ public class Project {
         this.profile = profile;
     }
 
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     public int getDuration() {
         duration = 0;
         for (Media video : mediaTrack.getItems()) {
             duration = duration + video.getDuration();
         }
         return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     public void clear() {

@@ -50,7 +50,7 @@ public abstract class Media extends EditorElement {
     protected int fileStartTime;
 
     /**
-     * The stop time of the media resource within the file it represents.
+     * The start time of the media resource within the file it represents.
      */
     protected int fileStopTime;
 

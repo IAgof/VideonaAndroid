@@ -41,15 +41,15 @@ public class NavigationDrawerFragment extends VideonaFragment implements Videona
 
     /*CONFIG*/
     /**
-     * LOG_TAG
-     */
-    private static final String LOG_TAG = "NavigationDrawerFragment";
-    private final int REQUEST_CODE_EXIT_APP = 1;
-    /**
      * Tracker google analytics
      */
     private Tracker tracker;
+    /**
+     * LOG_TAG
+     */
+    private static final String LOG_TAG = "NavigationDrawerFragment";
     private VideonaDialog dialog;
+    private final int REQUEST_CODE_EXIT_APP = 1;
 
     @Nullable
     @Override

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.videonasocialmedia.videona"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.videonasocialmedia.videona">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -103,8 +103,8 @@
 
         <activity
             android:name=".presentation.views.activity.IntroAppActivity"
-            android:label="@string/app_name"
-            android:theme="@style/VideonaIntroTutorial">
+            android:theme="@style/VideonaIntroTutorial"
+            android:label="@string/app_name">
         </activity>
 
         <activity
@@ -208,8 +208,8 @@
 
         <activity
             android:name=".presentation.views.activity.ShareVideoActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.RecordActivity"/>
+            android:parentActivityName=".presentation.views.activity.RecordActivity"
+            android:label="@string/app_name"/>
 
 
     </application>

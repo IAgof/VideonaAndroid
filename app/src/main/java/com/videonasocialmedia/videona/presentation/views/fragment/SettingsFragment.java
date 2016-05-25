@@ -38,7 +38,6 @@ public class SettingsFragment extends PreferenceFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener, PreferencesView,
         VideonaDialogListener {
 
-    protected final int REQUEST_CODE_EXIT_APP = 1;
     protected ListPreference resolutionPref;
     protected ListPreference qualityPref;
     protected PreferencesPresenter preferencesPresenter;
@@ -47,6 +46,7 @@ public class SettingsFragment extends PreferenceFragment implements
     protected SharedPreferences.Editor editor;
     protected MixpanelAPI mixpanel;
     protected VideonaDialog dialog;
+    protected final int REQUEST_CODE_EXIT_APP = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -120,18 +120,6 @@ public class SettingsFragment extends PreferenceFragment implements
         });
     }
 
-    private void setupShareVideona() {
-        Preference exitPref = findPreference("shareVideona");
-        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                trackAppShared("Videona", "WhatsApp");
-                shareVideonaWithWhatsapp();
-                return true;
-            }
-        });
-    }
-
     private void trackLinkClicked(String uri, String destination) {
         JSONObject linkClickedProperties = new JSONObject();
         try {
@@ -150,6 +138,18 @@ public class SettingsFragment extends PreferenceFragment implements
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
+    }
+
+    private void setupShareVideona() {
+        Preference exitPref = findPreference("shareVideona");
+        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                trackAppShared("Videona", "WhatsApp");
+                shareVideonaWithWhatsapp();
+                return true;
+            }
+        });
     }
 
     private void trackAppShared(String appName, String socialNetwork) {
@@ -245,6 +245,14 @@ public class SettingsFragment extends PreferenceFragment implements
         preference.setSummary(value);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                          String key) {
+        Preference connectionPref = findPreference(key);
+        trackQualityAndResolutionUserTraits(key, sharedPreferences.getString(key, ""));
+        connectionPref.setSummary(sharedPreferences.getString(key, ""));
+    }
+
     private void trackQualityAndResolutionUserTraits(String key, String value) {
         String property = null;
         if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION))
@@ -252,14 +260,6 @@ public class SettingsFragment extends PreferenceFragment implements
         else if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY))
             property = AnalyticsConstants.QUALITY;
         mixpanel.getPeople().set(property, value.toLowerCase());
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                                          String key) {
-        Preference connectionPref = findPreference(key);
-        trackQualityAndResolutionUserTraits(key, sharedPreferences.getString(key, ""));
-        connectionPref.setSummary(sharedPreferences.getString(key, ""));
     }
 
     @Override

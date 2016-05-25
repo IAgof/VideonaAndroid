@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by vlf on 7/7/15.
  */
-public class SplitPreviewPresenter implements OnVideosRetrieved {
+public class SplitPreviewPresenter implements OnVideosRetrieved{
 
     /**
      * LOG_TAG

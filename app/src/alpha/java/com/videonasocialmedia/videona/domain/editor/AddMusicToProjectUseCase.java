@@ -41,10 +41,6 @@ public class AddMusicToProjectUseCase {
         }
     }
 
-    private AudioTrack obtainAudioTrack(int trackIndex) {
-        return Project.getInstance(null, null, null).getAudioTracks().get(trackIndex);
-    }
-
     public void addMusicToTrack(Music music, int trackIndex) {
         AudioTrack audioTrack = null;
         try {
@@ -53,6 +49,10 @@ public class AddMusicToProjectUseCase {
         } catch (IndexOutOfBoundsException | IllegalItemOnTrack exception) {
             exception.printStackTrace();
         }
+    }
+
+    private AudioTrack obtainAudioTrack(int trackIndex) {
+        return Project.getInstance(null, null, null).getAudioTracks().get(trackIndex);
     }
 
 }

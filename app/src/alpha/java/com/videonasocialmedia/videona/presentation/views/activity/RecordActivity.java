@@ -55,7 +55,6 @@ import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
-import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -553,7 +552,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         trackVideoExported();
         saveVideoFeaturesToConfig();
         Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
+        intent.putExtra("VIDEO_EDITED", videoToSharePath);
         startActivity(intent);
     }
 

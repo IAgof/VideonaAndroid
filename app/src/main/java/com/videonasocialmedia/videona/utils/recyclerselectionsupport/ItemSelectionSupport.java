@@ -36,14 +36,6 @@ public class ItemSelectionSupport {
         return itemSelectionSupport;
     }
 
-    public static ItemSelectionSupport from(RecyclerView recyclerView) {
-        if (recyclerView == null) {
-            return null;
-        }
-
-        return (ItemSelectionSupport) recyclerView.getTag(R.id.twowayview_item_click_support);
-    }
-
     public static void removeFrom(RecyclerView recyclerView) {
         final ItemSelectionSupport itemSelectionSupport = from(recyclerView);
         if (itemSelectionSupport == null) {
@@ -53,6 +45,14 @@ public class ItemSelectionSupport {
 
         recyclerView.removeOnItemTouchListener(itemSelectionSupport.mTouchListener);
         recyclerView.setTag(R.id.twowayview_item_click_support, null);
+    }
+
+    public static ItemSelectionSupport from(RecyclerView recyclerView) {
+        if (recyclerView == null) {
+            return null;
+        }
+
+        return (ItemSelectionSupport) recyclerView.getTag(R.id.twowayview_item_click_support);
     }
 
     /**

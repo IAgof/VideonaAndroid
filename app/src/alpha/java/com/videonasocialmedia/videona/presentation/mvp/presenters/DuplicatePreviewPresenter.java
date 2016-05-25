@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by vlf on 7/7/15.
  */
-public class DuplicatePreviewPresenter implements OnVideosRetrieved {
+public class DuplicatePreviewPresenter implements OnVideosRetrieved{
 
     /**
      * LOG_TAG
@@ -54,6 +54,15 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
 
     }
 
+    public void onResume(){
+
+    }
+
+    public void onPause(){
+
+    }
+
+
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
         duplicateView.showPreview(videoList);
@@ -66,18 +75,10 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
         duplicateView.showError("No videos");
     }
 
-    public void onResume() {
-
-    }
-
-    public void onPause() {
-
-    }
 
     public void duplicateVideo(Video video, int positionInAdapter, int numDuplicates) {
-        for (int duplicates = 1; duplicates < numDuplicates; duplicates++) {
-            Video copyVideo = new Video(video);
-            addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter);
+        for(int duplicates = 1;duplicates<numDuplicates; duplicates++){
+            addVideoToProjectUseCase.addVideoToProjectAtPosition(new Video(video),positionInAdapter);
         }
 
 

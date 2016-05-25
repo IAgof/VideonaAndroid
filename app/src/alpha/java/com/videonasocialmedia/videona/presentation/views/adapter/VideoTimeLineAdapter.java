@@ -61,12 +61,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     }
 
     @Override
-    public void finishMovement(int newPosition) {
-        if (newPosition != -1)
-            notifyDataSetChanged();
-    }
-
-    @Override
     public void remove(int itemPosition) {
         int newPosition = recalculateSelectedVideoPosition(itemPosition);
         videoList.remove(itemPosition);
@@ -82,6 +76,12 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
             newPosition = selectedVideoPosition - 1;
         }
         return newPosition;
+    }
+
+    @Override
+    public void finishMovement(int newPosition) {
+        if (newPosition != -1)
+            notifyDataSetChanged();
     }
 
     public void updateSelection(int positionSelected) {
@@ -115,7 +115,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         drawVideoThumbnail(holder.thumb, current);
         holder.thumb.setSelected(position == selectedVideoPosition);
         holder.thumbOrder.setText(String.valueOf(position + 1));
-        if (position == selectedVideoPosition) {
+        if(position == selectedVideoPosition) {
             holder.showDeleteIcon();
         } else {
             holder.hideDeleteIcon();
@@ -124,7 +124,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     }
 
     public void drawVideoThumbnail(ImageView thumbnailView, Video current) {
-        int microSecond = current.getFileStartTime() * 1000;
+        int microSecond = current.getFileStartTime()*1000;
         BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
         FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
                 new VideoBitmapDecoder(microSecond),
@@ -154,7 +154,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     /**
      * Video ViewHolder class
-     */
+      */
     class VideoViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         @Bind(R.id.timeline_video_thumb)
         ImageView thumb;
@@ -192,7 +192,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 //            return true;
 //        }
 
-        @OnClick(R.id.image_remove_video)
+        @OnClick (R.id.image_remove_video)
         public void onClickRemoveVideoTimeline() {
             videoTimeLineListener.onClipRemoveClicked(getAdapterPosition());
         }

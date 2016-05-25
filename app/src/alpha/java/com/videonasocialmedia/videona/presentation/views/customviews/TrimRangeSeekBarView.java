@@ -27,7 +27,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBar
 
 public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchListener {
 
-    private final String TAG = "TrimRangeSeekBarView";
+    private final String TAG = "RangeSeekbar";
     private final String IMAGE_VIEW_TAG_MIN = "image_view_tag_selected";
     private final String IMAGE_VIEW_TAG_MAX = "image_view_tag_unselected";
     private int minThumbWidth, maxThumbWidth, baseLineWidth, minEdgePosition, maxEdgePosition, minThumbPosition, maxThumbPosition;
@@ -59,6 +59,11 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
         initializeComponents(context, attrs);
     }
 
+    public TrimRangeSeekBarView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initializeComponents(context, attrs);
+    }
+
     /**
      * Function to initialize components of the class.
      *
@@ -83,26 +88,6 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
         ivMaxThumb.setOnTouchListener(this);
         initializeSeekBarThumbPosition();
         setAttributes(context, attrs);
-    }
-
-    /**
-     * Function to initialize initial position of seek bar thumb
-     */
-    private void initializeSeekBarThumbPosition() {
-        final ImageView ivMaxThumb = (ImageView) findViewById(R.id.ivMaxThumb);
-        ViewTreeObserver observer = ivMaxThumb.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                ivMaxThumb.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                minThumbWidth = ivMinThumb.getMeasuredWidth();
-                maxThumbWidth = ivMaxThumb.getMeasuredWidth();
-                baseLineWidth = viewBaseLine.getMeasuredWidth();
-                Log.i(TAG, "thumb width is : " + maxThumbWidth + " " + baseLineWidth);
-                setBaseLineViewPositions();
-                setEdgePositions();
-            }
-        });
     }
 
     /**
@@ -132,6 +117,26 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
     }
 
     /**
+     * Function to initialize initial position of seek bar thumb
+     */
+    private void initializeSeekBarThumbPosition() {
+        final ImageView ivMaxThumb = (ImageView) findViewById(R.id.ivMaxThumb);
+        ViewTreeObserver observer = ivMaxThumb.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ivMaxThumb.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                minThumbWidth = ivMinThumb.getMeasuredWidth();
+                maxThumbWidth = ivMaxThumb.getMeasuredWidth();
+                baseLineWidth = viewBaseLine.getMeasuredWidth();
+                Log.i(TAG, "thumb width is : " + maxThumbWidth + " " + baseLineWidth);
+                setBaseLineViewPositions();
+                setEdgePositions();
+            }
+        });
+    }
+
+    /**
      * Function to set base line view position
      */
     private void setBaseLineViewPositions() {
@@ -141,22 +146,32 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
     }
 
     /**
+     * Function to set view margin for the given view.
+     *
+     * @param view View
+     */
+    private void setViewMarginFor(View view) {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
+        layoutParams.leftMargin = layoutParams.leftMargin + (minThumbWidth / 2);
+        layoutParams.rightMargin = layoutParams.rightMargin + (maxThumbWidth / 2);
+        view.setLayoutParams(layoutParams);
+    }
+
+    /**
      * Function to set position of seek bar min and max thumb.
      */
     private void setEdgePositions() {
         try {
             FrameLayout.LayoutParams lpBaseLine = (FrameLayout.LayoutParams) viewBaseLine.getLayoutParams();
-            minEdgePosition = lpBaseLine.leftMargin - ( minThumbWidth / 2 );
+            minEdgePosition = lpBaseLine.leftMargin - (minThumbWidth / 2);
             minThumbPosition = minEdgePosition;
             Log.i(TAG, "minEdgePosition " + minEdgePosition);
-            maxEdgePosition = minEdgePosition + baseLineWidth - ( maxThumbWidth );
+            maxEdgePosition = minEdgePosition + baseLineWidth - (maxThumbWidth);
             maxThumbPosition = maxEdgePosition;
             Log.i(TAG, "maxEdgePosition " + maxEdgePosition);
-            if (isVideoInitialized) {
-                setPositionFor(ivMinThumb, (int) ( initLeftSeekBar * maxEdgePosition ));
-                mRangeChangeListener.setUpdateStartTimeTag();
-                setPositionFor(ivMaxThumb, (int) ( initRightSeekBar * maxEdgePosition ));
-                mRangeChangeListener.setUpdateFinishTimeTag();
+            if(isVideoInitialized) {
+                setPositionFor(ivMinThumb, (int) (initLeftSeekBar * maxEdgePosition));
+                setPositionFor(ivMaxThumb, (int) (initRightSeekBar * maxEdgePosition));
             } else {
                 setPositionFor(ivMinThumb, minEdgePosition);
                 setPositionFor(ivMaxThumb, maxEdgePosition);
@@ -168,78 +183,8 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
     }
 
     /**
-     * Function to set the background color of range seek bar
-     *
-     * @param backgroundColor
-     */
-    public void setBackgroundColor(int backgroundColor) {
-        setColorFor(viewGroupParent, backgroundColor);
-    }
-
-    /**
-     * Function to set color to seek bar.
-     *
-     * @param barColor int
-     */
-    public void setBarColor(int barColor) {
-        setColorFor(viewBaseLine, barColor);
-        setColorFor(viewBaseLineUnselected, barColor);
-    }
-
-    /**
      * Function to set init position of
      */
-
-    /**
-     * Function to set bar color of seek bar which is selected.
-     *
-     * @param barColorSelected int
-     */
-    public void setBarColorSelected(int barColorSelected) {
-        setColorFor(viewBaseLineSelected, barColorSelected);
-    }
-
-    /**
-     * Function to set bar height for all three views.
-     *
-     * @param barHeight float
-     */
-    public void setBarHeight(float barHeight) {
-        setHeightFor(viewBaseLine, barHeight);
-        setHeightFor(viewBaseLineSelected, barHeight);
-        setHeightFor(viewBaseLineUnselected, barHeight);
-    }
-
-    /**
-     * Function to set thumb image for both indicator min and max
-     *
-     * @param thumbImage int
-     */
-    public void setThumbImage(int thumbImage) {
-        ivMinThumb.setImageResource(thumbImage);
-        ivMaxThumb.setImageResource(thumbImage);
-    }
-
-    /**
-     * Function to set thumb image for max indicator
-     *
-     * @param thumbMaxImage int
-     */
-    public void setThumbMaxImage(int thumbMaxImage) {
-        ivMaxThumb.setImageResource(thumbMaxImage);
-    }
-
-    /**
-     * Function to set view margin for the given view.
-     *
-     * @param view View
-     */
-    private void setViewMarginFor(View view) {
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
-        layoutParams.leftMargin = layoutParams.leftMargin + ( minThumbWidth / 2 );
-        layoutParams.rightMargin = layoutParams.rightMargin + ( maxThumbWidth / 2 );
-        view.setLayoutParams(layoutParams);
-    }
 
     /**
      * Function to set position for the given image
@@ -259,36 +204,26 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
         }
     }
 
-    /**
-     * Function to set color for a viewgroup
-     *
-     * @param view            ViewGroup
-     * @param backgroundColor int
-     */
-    private void setColorFor(ViewGroup view, int backgroundColor) {
-        view.setBackgroundColor(backgroundColor);
-    }
-
-    /**
-     * Function to set color for a view.
-     *
-     * @param view            View
-     * @param backgroundColor int
-     */
-    private void setColorFor(View view, int backgroundColor) {
-        view.setBackgroundColor(backgroundColor);
-    }
-
-    /**
-     * Function to set height for a particular view
-     *
-     * @param view      View
-     * @param barHeight float
-     */
-    private void setHeightFor(View view, float barHeight) {
-        FrameLayout.LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-        layoutParams.height = (int) barHeight;
-        view.setLayoutParams(layoutParams);
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        final int xCoordinate = (int) motionEvent.getRawX();
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
+                xDelta = xCoordinate - layoutParams.leftMargin;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                resetViewPosition(view, (xCoordinate - xDelta), false);
+                break;
+            case MotionEvent.ACTION_MASK:
+            case MotionEvent.ACTION_UP:
+                checkForThumbView(view);
+                break;
+            default:
+                break;
+        }
+        viewGroupParent.invalidate();
+        return true;
     }
 
     /**
@@ -300,7 +235,7 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
     private void resetViewPosition(View view, int position, boolean skipPositionCheck) {
         try {
             if (minEdgePosition <= position && position <= maxEdgePosition) {
-                if (skipPositionCheck || ( maxThumbPosition - minThumbPosition ) >= maxThumbWidth) {
+                if (skipPositionCheck || (maxThumbPosition - minThumbPosition) >= maxThumbWidth) {
                     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
                     layoutParams.leftMargin = position;
                     view.setLayoutParams(layoutParams);
@@ -337,7 +272,7 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
      * @return double
      */
     public double getMinPositionValue() {
-        float minPosition = ( minThumbPosition * 100.0f ) / baseLineWidth;
+        float minPosition = (minThumbPosition * 100.0f) / baseLineWidth;
         return Math.round(minPosition * 100.0) / 100.0;
     }
 
@@ -347,35 +282,8 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
      * @return double
      */
     public double getMaxPositionValue() {
-        float minPosition = ( ( maxThumbPosition + maxThumbWidth ) * 100.0f ) / baseLineWidth;
+        float minPosition = ((maxThumbPosition + maxThumbWidth) * 100.0f) / baseLineWidth;
         return Math.round(minPosition * 100.0) / 100.0;
-    }
-
-    public TrimRangeSeekBarView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initializeComponents(context, attrs);
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        final int xCoordinate = (int) motionEvent.getRawX();
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
-                xDelta = xCoordinate - layoutParams.leftMargin;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                resetViewPosition(view, ( xCoordinate - xDelta ), false);
-                break;
-            case MotionEvent.ACTION_MASK:
-            case MotionEvent.ACTION_UP:
-                checkForThumbView(view);
-                break;
-            default:
-                break;
-        }
-        viewGroupParent.invalidate();
-        return true;
     }
 
     /**
@@ -383,7 +291,7 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
      */
     private void checkForThumbView(View view) {
         try {
-            if (( maxThumbPosition - maxThumbWidth ) < minThumbPosition) {
+            if ((maxThumbPosition - maxThumbWidth) < minThumbPosition) {
                 if (view.getTag().equals(IMAGE_VIEW_TAG_MAX)) {
                     resetViewPosition(ivMaxThumb, minThumbPosition + maxThumbWidth, true);
                 } else if (view.getTag().equals(IMAGE_VIEW_TAG_MIN)) {
@@ -396,6 +304,96 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
     }
 
     /**
+     * Function to set thumb image for max indicator
+     *
+     * @param thumbMaxImage int
+     */
+    public void setThumbMaxImage(int thumbMaxImage) {
+        ivMaxThumb.setImageResource(thumbMaxImage);
+    }
+
+    /**
+     * Function to set thumb image for both indicator min and max
+     *
+     * @param thumbImage int
+     */
+    public void setThumbImage(int thumbImage) {
+        ivMinThumb.setImageResource(thumbImage);
+        ivMaxThumb.setImageResource(thumbImage);
+    }
+
+    /**
+     * Function to set bar color of seek bar which is selected.
+     *
+     * @param barColorSelected int
+     */
+    public void setBarColorSelected(int barColorSelected) {
+        setColorFor(viewBaseLineSelected, barColorSelected);
+    }
+
+    /**
+     * Function to set color to seek bar.
+     *
+     * @param barColor int
+     */
+    public void setBarColor(int barColor) {
+        setColorFor(viewBaseLine, barColor);
+        setColorFor(viewBaseLineUnselected, barColor);
+    }
+
+    /**
+     * Function to set the background color of range seek bar
+     *
+     * @param backgroundColor
+     */
+    public void setBackgroundColor(int backgroundColor) {
+        setColorFor(viewGroupParent, backgroundColor);
+    }
+
+    /**
+     * Function to set color for a viewgroup
+     *
+     * @param view            ViewGroup
+     * @param backgroundColor int
+     */
+    private void setColorFor(ViewGroup view, int backgroundColor) {
+        view.setBackgroundColor(backgroundColor);
+    }
+
+    /**
+     * Function to set color for a view.
+     *
+     * @param view            View
+     * @param backgroundColor int
+     */
+    private void setColorFor(View view, int backgroundColor) {
+        view.setBackgroundColor(backgroundColor);
+    }
+
+    /**
+     * Function to set bar height for all three views.
+     *
+     * @param barHeight float
+     */
+    public void setBarHeight(float barHeight) {
+        setHeightFor(viewBaseLine, barHeight);
+        setHeightFor(viewBaseLineSelected, barHeight);
+        setHeightFor(viewBaseLineUnselected, barHeight);
+    }
+
+    /**
+     * Function to set height for a particular view
+     *
+     * @param view      View
+     * @param barHeight float
+     */
+    private void setHeightFor(View view, float barHeight) {
+        FrameLayout.LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+        layoutParams.height = (int) barHeight;
+        view.setLayoutParams(layoutParams);
+    }
+
+    /**
      * Function to set range listener
      *
      * @param rangeChangeListener OnRangeChangeListener
@@ -404,10 +402,14 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
         this.mRangeChangeListener = rangeChangeListener;
     }
 
-    public void setInitializedPosition(double left, double right) {
+    public void setInitializedPosition(double left, double right){
         isVideoInitialized = true;
-        initLeftSeekBar = Math.round(left * 100) / 100.0d;
-        initRightSeekBar = Math.round(right * 100) / 100.0d;
+        initLeftSeekBar = Math.round(left*100)/100.0d;
+        initRightSeekBar = Math.round(right*100)/100.0d;;
+    }
+
+    public void setIsVideonInitialized(){
+        isVideoInitialized = false;
     }
 
 }

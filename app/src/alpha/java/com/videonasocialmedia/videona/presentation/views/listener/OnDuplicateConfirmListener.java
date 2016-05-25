@@ -9,5 +9,5 @@ package com.videonasocialmedia.videona.presentation.views.listener;
 
 public interface OnDuplicateConfirmListener {
 
-    void onDuplicateConfirmed();
+    public void onDuplicateConfirmed();
 }
