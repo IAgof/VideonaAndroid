@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/coordinatorLayout"
-                                                 xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 xmlns:tools="http://schemas.android.com/tools"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:fitsSystemWindows="true"
-                                                 tools:context=".presentation.views.activity.EditActivity">
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".presentation.views.activity.EditActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/VideonaTheme.AppBarOverlay">
+        >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/VideonaTheme.PopupOverlay"/>
+            app:popupTheme="@style/VideonaTheme.PopupOverlay">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <include layout="@layout/edit_activities_navigation_buttons"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
@@ -31,12 +42,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="horizontal">
 
-            <include layout="@layout/edit_activities_navigation_buttons"/>
+            <!--<include layout="@layout/edit_activities_navigation_buttons"/>-->
         </LinearLayout>
-        <!--<include layout="@layout/video_preview" android:id="@+id/video_view" />-->
+
         <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
             android:id="@+id/project_player"
             android:layout_width="wrap_content"

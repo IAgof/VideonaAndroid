@@ -11,8 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        android:theme="@style/VideonaToolbar" />
+        android:elevation="4dp"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -66,7 +65,7 @@
         android:src="@drawable/common_icon_add_white"
         app:borderWidth="0dp"
         app:rippleColor="#fff"
-        app:backgroundTint="@color/colorButton" />
+        app:backgroundTint="@color/colorAccent" />
 
 </LinearLayout>
 
