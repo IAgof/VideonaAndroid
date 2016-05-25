@@ -135,8 +135,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
                 ? current.getIconPath() : current.getMediaPath();
         Glide.with(context)
                 .load(path)
-                .asBitmap()
-                .videoDecoder(decoder)
+               // .asBitmap()
+               // .videoDecoder(decoder)
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(thumbnailView);
