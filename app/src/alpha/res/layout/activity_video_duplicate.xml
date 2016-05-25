@@ -59,7 +59,8 @@
             android:layout_marginTop="8dp"
             android:background="@null"
             android:scaleType="fitCenter"
-            android:src="@drawable/common_icon_expand"/>
+            android:src="@drawable/common_icon_expand"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
