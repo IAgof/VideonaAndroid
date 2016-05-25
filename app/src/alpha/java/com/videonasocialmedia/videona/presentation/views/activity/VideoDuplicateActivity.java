@@ -66,8 +66,6 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     ImageView imageThumbRight;
     @Bind(R.id.textView_duplicate_num_increment)
     TextView textNumDuplicates;
-    @Bind(R.id.button_duplicate_increment_video)
-    ImageButton incrementVideoButton;
     @Bind(R.id.button_duplicate_decrement_video)
     ImageButton decrementVideoButton;
     int videoIndexOnTrack;
@@ -109,12 +107,18 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         Intent intent = getIntent();
         videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
 
+        restoreState(savedInstanceState);
+
+        textNumDuplicates.setText("x" + numDuplicateVideos);
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt(DUPLICATE_VIDEO_POSITION, 0);
             numDuplicateVideos = savedInstanceState.getInt(NUM_DUPLICATE_VIDEOS, 2);
         }
-
-        textNumDuplicates.setText("x" + numDuplicateVideos);
+        if (numDuplicateVideos>2)
+            decrementVideoButton.setVisibility(View.VISIBLE);
     }
 
     @Override
