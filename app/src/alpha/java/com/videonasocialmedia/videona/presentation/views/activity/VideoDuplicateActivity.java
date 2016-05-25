@@ -117,8 +117,6 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
             currentPosition = savedInstanceState.getInt(DUPLICATE_VIDEO_POSITION, 0);
             numDuplicateVideos = savedInstanceState.getInt(NUM_DUPLICATE_VIDEOS, 2);
         }
-        if (numDuplicateVideos>2)
-            decrementVideoButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -309,7 +307,10 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
 
     @Override
     public void initDuplicateView(String path) {
-        decrementVideoButton.setVisibility(View.GONE);
+        if (numDuplicateVideos > 2)
+            decrementVideoButton.setVisibility(View.VISIBLE);
+        else
+            decrementVideoButton.setVisibility(View.GONE);
         showThumVideo(imageThumbLeft);
         showThumVideo(imageThumbRight);
     }
