@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageButton
         android:id="@+id/button_edit_navigator"
         style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="30dp"
         android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:src="@drawable/activity_edit_clip_normal"
         />
 
@@ -14,8 +18,9 @@
         android:id="@+id/button_music_navigator"
         style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="30dp"
         android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_music_normal"
         />
@@ -24,10 +29,11 @@
         android:id="@+id/button_share_navigator"
         style="@style/Widget.AppCompat.ActionButton"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="30dp"
         android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_share_normal"
         />
 
-</merge>
+</LinearLayout>

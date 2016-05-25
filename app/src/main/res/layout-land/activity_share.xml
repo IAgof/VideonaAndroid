@@ -80,7 +80,7 @@
         android:src="@drawable/common_icon_add_white"
         app:layout_anchor="@id/card_view"
         app:layout_anchorGravity="top|right|end"
-        app:backgroundTint="@color/colorButton" />
+        app:backgroundTint="@color/colorAccent" />
 
 </android.support.design.widget.CoordinatorLayout>
 
