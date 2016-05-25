@@ -66,7 +66,8 @@
                 android:layout_margin="8dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/common_icon_expand"/>
+                android:src="@drawable/common_icon_expand"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -152,9 +153,10 @@
         android:id="@+id/button_duplicate_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="12dp"
         android:layout_gravity="bottom|left"
-        android:layout_margin="16dp"
-        android:background="@null"
+        android:layout_margin="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_common_icon_cancel"
         />
 
@@ -162,10 +164,11 @@
         android:id="@+id/button_duplicate_accept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="12dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="24dp"
-        android:background="@null"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_common_icon_accept"
         />
 

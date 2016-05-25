@@ -59,7 +59,8 @@
             android:layout_marginTop="8dp"
             android:background="@null"
             android:scaleType="fitCenter"
-            android:src="@drawable/common_icon_expand"/>
+            android:src="@drawable/common_icon_expand"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
@@ -145,22 +146,24 @@
             android:id="@+id/button_trim_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="12dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="12dp"
-            android:background="@null"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/activity_edit_common_icon_cancel"/>
 
         <ImageButton
             android:id="@+id/button_trim_accept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="12dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="12dp"
-            android:layout_marginRight="12dp"
-            android:background="@null"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/activity_edit_common_icon_accept"/>
 
     </RelativeLayout>

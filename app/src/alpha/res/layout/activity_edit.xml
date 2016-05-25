@@ -58,6 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:padding="10dp">
 
             <include layout="@layout/edit_activity_options_buttons"/>

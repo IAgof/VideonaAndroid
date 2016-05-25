@@ -126,6 +126,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public void drawVideoThumbnail(ImageView thumbnailView, Video current) {
         int microSecond = current.getFileStartTime() * 1000;
         BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
+        //TODO, review Glide and how to manage cache thumbs
         FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
                 new VideoBitmapDecoder(microSecond),
                 bitmapPool,
