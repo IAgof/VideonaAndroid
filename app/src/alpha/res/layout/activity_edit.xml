@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -11,15 +12,25 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/VideonaTheme.AppBarOverlay">
+        >
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/VideonaTheme.PopupOverlay" />
+            app:popupTheme="@style/VideonaTheme.PopupOverlay">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <include layout="@layout/edit_activities_navigation_buttons"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
@@ -31,19 +42,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
-            <include layout="@layout/edit_activities_navigation_buttons" />
+            android:orientation="horizontal">
+
+            <!--<include layout="@layout/edit_activities_navigation_buttons"/>-->
         </LinearLayout>
-        <include layout="@layout/video_preview" android:id="@+id/video_view" />
+
+        <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
+            android:id="@+id/project_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
 
         <LinearLayout
             android:id="@+id/linear_layout_edit_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:padding="10dp">
-            <include layout="@layout/edit_activity_options_buttons" />
+
+            <include layout="@layout/edit_activity_options_buttons"/>
 
         </LinearLayout>
 
@@ -52,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="horizontal"
-           />
+            />
 
     </LinearLayout>
 
@@ -60,10 +79,10 @@
         android:id="@+id/fab_edit_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/coordinatorLayout"
-        app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/common_icon_add_white"
-        app:backgroundTint="@color/colorAccent"/>
+        app:backgroundTint="@color/colorAccent"
+        app:layout_anchor="@id/coordinatorLayout"
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>

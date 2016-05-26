@@ -44,11 +44,6 @@ import java.util.Locale;
  * Utils.
  */
 public class Utils {
-    public final static int THEME_VIDEONA = 0;
-    public final static int THEME_VIDEONA_2 = 1;
-    //sTheme enum from SharedPreference with value saved
-    private static int sTheme;
-
     /**
      * Checks if there is sufficient space to put the input size in the directory
      *
@@ -63,11 +58,7 @@ public class Utils {
         return size <= megabytesAvailable;
     }
 
-    public static String copyMusicResourceToTemp(Context ctx, int rawResourceId) throws IOException {
-        return copyResourceToTemp(ctx, rawResourceId, Constants.AUDIO_MUSIC_FILE_EXTENSION);
-    }
-
-    public static String copyResourceToTemp(Context ctx, int rawResourceId,
+    public static void copyResourceToTemp(Context ctx, int rawResourceId,
                                           String fileTypeExtensionConstant) throws IOException {
         String nameFile = String.valueOf(rawResourceId);
         File file = new File(Constants.PATH_APP_TEMP + File.separator + nameFile +
@@ -92,8 +83,10 @@ public class Utils {
                 in.close();
             }
         }
-        return Constants.PATH_APP_TEMP + File.separator + nameFile +
-                fileTypeExtensionConstant;
+    }
+
+    public static void copyMusicResourceToTemp(Context ctx, int rawResourceId) throws IOException {
+        copyResourceToTemp(ctx, rawResourceId, Constants.AUDIO_MUSIC_FILE_EXTENSION);
     }
 
     public static File getMusicFileById(int rawResourceId) {
@@ -135,6 +128,17 @@ public class Utils {
         return uri;
     }
 
+    private static Uri createUriToShare(ContentResolver resolver, String videoPath) {
+        ContentValues content = new ContentValues(4);
+        content.put(MediaStore.Video.VideoColumns.TITLE, videoPath);
+        content.put(MediaStore.Video.VideoColumns.DATE_ADDED,
+                System.currentTimeMillis());
+        content.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+        content.put(MediaStore.Video.Media.DATA, videoPath);
+        return resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                content);
+    }
+
     private static Uri getUriFromContentProvider(ContentResolver resolver, String videoPath) {
         Uri uri = null;
         String[] retCol = {MediaStore.Audio.Media._ID};
@@ -150,17 +154,6 @@ public class Utils {
             cursor.close();
         }
         return uri;
-    }
-
-    private static Uri createUriToShare(ContentResolver resolver, String videoPath) {
-        ContentValues content = new ContentValues(4);
-        content.put(MediaStore.Video.VideoColumns.TITLE, videoPath);
-        content.put(MediaStore.Video.VideoColumns.DATE_ADDED,
-                System.currentTimeMillis());
-        content.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
-        content.put(MediaStore.Video.Media.DATA, videoPath);
-        return resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                content);
     }
 
     /**
@@ -238,12 +231,15 @@ public class Utils {
         return bmpWithBorder;
     }
 
-    // Utils to setTheme to app, always call before every Activity setContentView.
-    // Be carefull with delay
-    /*
-    // MUST BE SET BEFORE setContentView
-		Utils.onActivityCreateSetTheme(this);
-     */
+    private Bitmap addWhiteBorderOriginal(Bitmap bmp, int borderSize) {
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2,
+                bmp.getHeight() + borderSize * 2, bmp.getConfig());
+        Canvas canvas = new Canvas(bmpWithBorder);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(bmp, borderSize, borderSize, null);
+        return bmpWithBorder;
+    }
+
 
     public static String getDeviceInfo(){
 
@@ -274,6 +270,21 @@ public class Utils {
         return appInfo.toString();
     }
 
+    // Utils to setTheme to app, always call before every Activity setContentView.
+    // Be carefull with delay
+    /*
+    // MUST BE SET BEFORE setContentView
+		Utils.onActivityCreateSetTheme(this);
+     */
+
+    //sTheme enum from SharedPreference with value saved
+    private static int sTheme;
+
+    public final static int THEME_VIDEONA = 0;
+    public final static int THEME_VIDEONA_2 = 1;
+
+
+
     public static void changeToTheme(Activity activity, int theme) {
 
         sTheme = theme;
@@ -284,6 +295,7 @@ public class Utils {
         activity.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
 
     }
+
 
     public static void onActivityCreateSetTheme(Activity activity) {
 
@@ -312,16 +324,5 @@ public class Utils {
                         isoFile.getMovieBox().getMovieHeaderBox().getTimescale()) * 1000;
         return lengthInMSeconds;
     }
-
-    private Bitmap addWhiteBorderOriginal(Bitmap bmp, int borderSize) {
-        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2,
-                bmp.getHeight() + borderSize * 2, bmp.getConfig());
-        Canvas canvas = new Canvas(bmpWithBorder);
-        canvas.drawColor(Color.WHITE);
-        canvas.drawBitmap(bmp, borderSize, borderSize, null);
-        return bmpWithBorder;
-    }
-
-
 
 }

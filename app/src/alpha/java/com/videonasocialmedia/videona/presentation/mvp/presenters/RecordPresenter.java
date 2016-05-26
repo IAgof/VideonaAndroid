@@ -201,7 +201,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void onStop() {
-        recorder.release();
+        //recorder.release();
     }
 
     public void onDestroy() {

@@ -23,6 +23,7 @@ import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
+import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
@@ -47,14 +48,16 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
      * Editor View
      */
     private EditorView editorView;
+    private ProjectPlayerView projectPlayerView;
 
-    public EditPresenter(EditorView editorView) {
+    public EditPresenter(EditorView editorView, ProjectPlayerView projectPlayerView) {
         this.editorView = editorView;
+        this.projectPlayerView = projectPlayerView;
 
         exportProjectUseCase = new ExportProjectUseCase(this);
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
-        reorderMediaItemUseCase= new ReorderMediaItemUseCase();
+        reorderMediaItemUseCase = new ReorderMediaItemUseCase();
 
         sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -65,9 +68,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
      * Ok edit button click listener
      */
     public void startExport() {
-
         exportProjectUseCase.export();
-
     }
 
     public String getResolution() {
@@ -79,12 +80,8 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         return getMediaListFromProjectUseCase.getMediaListFromProject();
     }
 
-    public void obtainVideos(){
-        getMediaListFromProjectUseCase.getMediaListFromProject(this);
-    }
-
-    public void moveItem(Media videoToMove, int toPositon){
-        reorderMediaItemUseCase.moveMediaItem(videoToMove,toPositon,this);
+    public void moveItem(Media videoToMove, int toPositon) {
+        reorderMediaItemUseCase.moveMediaItem(videoToMove, toPositon, this);
     }
 
     @Override
@@ -123,7 +120,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
         editorView.enableEditActions();
-        editorView.showTimeLine(videoList);
+        editorView.bindVideoList(videoList);
     }
 
     @Override
@@ -142,12 +139,16 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onMediaReordered(Media media, int newPosition) {
         //If everything was right the UI is already updated since the user did the reordering
-        editorView.pausePreview();
+        projectPlayerView.pausePreview();
     }
 
     @Override
     public void onErrorReorderingMedia() {
         //The reordering went wrong so we ask the project for the actual video list
         obtainVideos();
+    }
+
+    public void obtainVideos() {
+        getMediaListFromProjectUseCase.getMediaListFromProject(this);
     }
 }

@@ -66,8 +66,6 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     ImageView imageThumbRight;
     @Bind(R.id.textView_duplicate_num_increment)
     TextView textNumDuplicates;
-    @Bind(R.id.button_duplicate_increment_video)
-    ImageButton incrementVideoButton;
     @Bind(R.id.button_duplicate_decrement_video)
     ImageButton decrementVideoButton;
     int videoIndexOnTrack;
@@ -107,14 +105,18 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         mediaController.setVisibility(View.INVISIBLE);
 
         Intent intent = getIntent();
-        videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX,0);
+        videoIndexOnTrack = intent.getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
 
-        if(savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt(DUPLICATE_VIDEO_POSITION,0);
-            numDuplicateVideos = savedInstanceState.getInt(NUM_DUPLICATE_VIDEOS, 2);
-        }
+        restoreState(savedInstanceState);
 
         textNumDuplicates.setText("x" + numDuplicateVideos);
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(DUPLICATE_VIDEO_POSITION, 0);
+            numDuplicateVideos = savedInstanceState.getInt(NUM_DUPLICATE_VIDEOS, 2);
+        }
     }
 
     @Override
@@ -195,8 +197,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     @Override
     public void onBackPressed() {
         finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
+        navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @Override
@@ -206,6 +207,12 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         outState.putInt(NUM_DUPLICATE_VIDEOS, numDuplicateVideos);
         super.onSaveInstanceState(outState);
 
+    }
+
+    private void navigateTo(Class cls, int currentVideoIndex) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        startActivity(intent);
     }
 
     @OnTouch(R.id.video_duplicate_preview)
@@ -221,7 +228,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     @OnClick(R.id.button_duplicate_play_pause)
-    public void onClickPlayPausePreview(){
+    public void onClickPlayPausePreview() {
         if (videoPlayer != null) {
             if (videoPlayer.isPlaying()) {
                 pausePreview();
@@ -242,6 +249,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
                     playButton.setVisibility(View.VISIBLE);
                     videoSeekBar.setProgress(0);
                     videoPlayer.seekTo(video.getFileStartTime());
+                    currentPosition = video.getFileStartTime();
                 }
             }
             handler.postDelayed(updateTimeTask, 20);
@@ -253,17 +261,11 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     @OnClick(R.id.button_duplicate_accept)
-    public void onClickDuplicateAccept(){
+    public void onClickDuplicateAccept() {
 
         presenter.duplicateVideo(video, videoIndexOnTrack, numDuplicateVideos);
         finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
-    }
-
-    private void navigateTo(Class cls,  int currentVideoIndex) {
-        Intent intent = new Intent(this, cls);
-        intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        startActivity(intent);
     }
 
     @OnClick(R.id.button_duplicate_cancel)
@@ -299,13 +301,16 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     private void seekTo(int timeInMsec) {
-        if(videoPlayer!=null)
-        videoPlayer.seekTo(timeInMsec);
+        if (videoPlayer != null)
+            videoPlayer.seekTo(timeInMsec);
     }
 
     @Override
     public void initDuplicateView(String path) {
-        decrementVideoButton.setVisibility(View.GONE);
+        if (numDuplicateVideos > 2)
+            decrementVideoButton.setVisibility(View.VISIBLE);
+        else
+            decrementVideoButton.setVisibility(View.GONE);
         showThumVideo(imageThumbLeft);
         showThumVideo(imageThumbRight);
     }
@@ -394,7 +399,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
 
     private void showThumVideo(ImageView imageThumbLeft) {
 
-        int microSecond = video.getFileStartTime()*1000;
+        int microSecond = video.getFileStartTime() * 1000;
         BitmapPool bitmapPool = Glide.get(this).getBitmapPool();
         FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
                 new VideoBitmapDecoder(microSecond),
@@ -415,16 +420,16 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     @OnClick(R.id.button_duplicate_increment_video)
-    public void onClickIncrementVideo(){
+    public void onClickIncrementVideo() {
         numDuplicateVideos++;
         decrementVideoButton.setVisibility(View.VISIBLE);
         textNumDuplicates.setText("x" + numDuplicateVideos);
     }
 
-    @OnClick (R.id.button_duplicate_decrement_video)
-    public void onClickDecrementVideo(){
+    @OnClick(R.id.button_duplicate_decrement_video)
+    public void onClickDecrementVideo() {
         numDuplicateVideos--;
-        if(numDuplicateVideos <= 2)
+        if (numDuplicateVideos <= 2)
             decrementVideoButton.setVisibility(View.GONE);
         textNumDuplicates.setText("x" + numDuplicateVideos);
 

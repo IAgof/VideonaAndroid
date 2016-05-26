@@ -23,7 +23,8 @@ import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.fragment.VideoGalleryFragment;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
+import com.videonasocialmedia.videona.utils.Constants;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,19 +38,15 @@ import butterknife.OnClick;
  * Created by jca on 20/5/15.
  */
 public class GalleryActivity extends VideonaActivity implements ViewPager.OnPageChangeListener,
-        GalleryPagerView, OnSelectionModeListener, OnVideonaDialogListener {
+        GalleryPagerView, OnSelectionModeListener, VideonaDialogListener {
 
     private final String MASTERS_FRAGMENT_TAG="MASTERS";
     private final String EDITED_FRAGMENT_TAG="EDITED";
-
+    private final int REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY = 1;
     MyPagerAdapter adapterViewPager;
     boolean sharing = false;
     int selectedPage = 0;
-    private int countVideosSelected = 0;
     GalleryPagerPresenter galleryPagerPresenter;
-    private VideonaDialog dialog;
-    private final int REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY = 1;
-
     @Bind(R.id.button_ok_gallery)
     ImageButton okButton;
     @Bind(R.id.gallery_count_selected_videos)
@@ -58,6 +55,8 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     ImageView galleryImageViewClips;
     @Bind(R.id.selection_mode)
     LinearLayout selectionMode;
+    private int countVideosSelected = 0;
+    private VideonaDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +88,9 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        getFragmentManager().putFragment(outState, MASTERS_FRAGMENT_TAG, adapterViewPager.getItem(0));
-        getFragmentManager().putFragment(outState, EDITED_FRAGMENT_TAG,adapterViewPager.getItem(1));
+    public void onPause() {
+        super.onPause();
+        countVideosSelected = getSelectedVideos().size();
     }
 
     @Override
@@ -100,12 +98,23 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
         super.onStart();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        countVideosSelected = getSelectedVideos().size();
+    private List<Video> getSelectedVideos() {
+        List<Video> result = new ArrayList<>();
+        for (int i = 0; i < adapterViewPager.getCount(); i++) {
+            VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
+            Log.d("GALLERY ACTIVITY", selectedFragment.toString());
+            List<Video> videosFromFragment = selectedFragment.getSelectedVideoList();
+            result.addAll(videosFromFragment);
+        }
+        return result;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getFragmentManager().putFragment(outState, MASTERS_FRAGMENT_TAG, adapterViewPager.getItem(0));
+        getFragmentManager().putFragment(outState, EDITED_FRAGMENT_TAG, adapterViewPager.getItem(1));
+    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -122,27 +131,10 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
 
     }
 
-    private List<Video> getSelectedVideosFromCurrentFragment() {
-        VideoGalleryFragment selectedFragment = adapterViewPager.getItem(selectedPage);
-        return selectedFragment.getSelectedVideoList();
-
-    }
-
     private List<Video> getSelectedVideosFromFragment(int selectedFragmentId) {
         VideoGalleryFragment selectedFragment = adapterViewPager.getItem(selectedFragmentId);
         return selectedFragment.getSelectedVideoList();
 
-    }
-
-    private List<Video> getSelectedVideos() {
-        List<Video> result = new ArrayList<>();
-        for (int i = 0; i < adapterViewPager.getCount(); i++) {
-            VideoGalleryFragment selectedFragment = adapterViewPager.getItem(i);
-            Log.d("GALLERY ACTIVITY", selectedFragment.toString());
-            List<Video> videosFromFragment = selectedFragment.getSelectedVideoList();
-            result.addAll(videosFromFragment);
-        }
-        return result;
     }
 
     @OnClick(R.id.button_ok_gallery)
@@ -160,10 +152,16 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
         }
     }
 
+    private List<Video> getSelectedVideosFromCurrentFragment() {
+        VideoGalleryFragment selectedFragment = adapterViewPager.getItem(selectedPage);
+        return selectedFragment.getSelectedVideoList();
+
+    }
+
     private void shareVideo(Video selectedVideo) {
         String videoPath = selectedVideo.getMediaPath();
         Intent intent = new Intent(this, ShareVideoActivity.class);
-        intent.putExtra("VIDEO_EDITED", videoPath);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoPath);
         startActivity(intent);
     }
 
@@ -224,6 +222,16 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
             dialog.dismiss();
     }
 
+    private void updateCounter() {
+        if (selectionMode.getVisibility() != View.VISIBLE)
+            selectionMode.setVisibility(View.VISIBLE);
+        if (!sharing) {
+            videoCounter.setText(Integer.toString(countVideosSelected));
+            if (countVideosSelected == 0)
+                selectionMode.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void navigate() {
         if (!sharing) {
@@ -268,16 +276,6 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
 
     }
 
-    private void updateCounter() {
-        if(selectionMode.getVisibility() != View.VISIBLE)
-            selectionMode.setVisibility(View.VISIBLE);
-        if(!sharing) {
-            videoCounter.setText(Integer.toString(countVideosSelected));
-            if(countVideosSelected == 0)
-                selectionMode.setVisibility(View.GONE);
-        }
-    }
-
     class MyPagerAdapter extends FragmentPagerAdapter {
         private final int NUM_ITEMS = 2;
 
@@ -316,6 +314,19 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
             return NUM_ITEMS;
         }
 
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getResources().getString(R.string.mastersFolderTitle);
+                case 1:
+                    return getResources().getString(R.string.editedFolderTitle);
+                default:
+                    return getResources().getString(R.string.galleryActivityTitle);
+            }
+        }
+
         // Returns the fragment to display for that page
         @Override
         public VideoGalleryFragment getItem(int position) {
@@ -331,19 +342,6 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
                     result = null;
             }
             return result;
-        }
-
-        // Returns the page title for the top indicator
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getResources().getString(R.string.mastersFolderTitle);
-                case 1:
-                    return getResources().getString(R.string.editedFolderTitle);
-                default:
-                    return getResources().getString(R.string.galleryActivityTitle);
-            }
         }
     }
 

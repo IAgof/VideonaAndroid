@@ -29,7 +29,7 @@ import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.ShareVideoActivity;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
-import com.videonasocialmedia.videona.presentation.views.listener.OnVideonaDialogListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,19 +37,19 @@ import butterknife.OnClick;
 /**
  * This class is used to show the right panel of the video fx menu
  */
-public class NavigationDrawerFragment extends VideonaFragment implements OnVideonaDialogListener {
+public class NavigationDrawerFragment extends VideonaFragment implements VideonaDialogListener {
 
     /*CONFIG*/
-    /**
-     * Tracker google analytics
-     */
-    private Tracker tracker;
     /**
      * LOG_TAG
      */
     private static final String LOG_TAG = "NavigationDrawerFragment";
-    private VideonaDialog dialog;
     private final int REQUEST_CODE_EXIT_APP = 1;
+    /**
+     * Tracker google analytics
+     */
+    private Tracker tracker;
+    private VideonaDialog dialog;
 
     @Nullable
     @Override
