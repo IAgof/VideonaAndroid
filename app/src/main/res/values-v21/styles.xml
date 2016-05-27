@@ -39,8 +39,10 @@
 
 
         <item name="android:editTextStyle">@style/VideonaEditText</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimaryLight</item>
 
- </style>
+    </style>
 
 
     <style name="VideonaToolbar" parent="Theme.AppCompat">

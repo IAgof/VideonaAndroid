@@ -5,4 +5,33 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="VideonaTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <!-- Animations -->
+
+
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorPrimaryInverse">@color/colorAccent</item>
+
+
+        <!-- Hide scrollbar in scrollViews -->
+        <item name="android:scrollbarThumbHorizontal">@color/colorTransparent</item>
+        <item name="android:scrollbarThumbVertical">@color/colorTransparent</item>
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@color/colorTransparent</item>
+
+        <item name="android:alertDialogTheme">@style/VideonaAlertDialog</item>
+        <item name="android:preferenceCategoryStyle">@style/VideonaCategoryPreference</item>
+
+
+        <item name="android:editTextStyle">@style/VideonaEditText</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimaryLight</item>
+    </style>
+
+
 </resources>

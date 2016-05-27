@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimaryLight">#f5f5f5</color>
 
     <!-- backup colors justInMind
 
-    <color name="colorBlanco">#FFFFFF</color>
-    <color name="colorAzul">#0091EA</color>
-    <color name="colorAzulFuerte">#027FC6</color>
-    <color name="colorGris">#808080</color>
-    <color name="colorGrisFlojo">#CCCCCC</color>
-    <color name="colorSeparadores">#EFEFEF</color>
-    <color name="colorBlancoCuadrosEmergentes">#FAFAFA</color>
-    <color name="colorRojo">#FD676A</color>
-    <color name="colorVerde">#6ACA6B</color>
+   <color name="colorBlanco">#FFFFFF</color>
+   <color name="colorAzul">#0091EA</color>
+   <color name="colorAzulFuerte">#027FC6</color>
+   <color name="colorGris">#808080</color>
+   <color name="colorGrisFlojo">#CCCCCC</color>
+   <color name="colorSeparadores">#EFEFEF</color>
+   <color name="colorBlancoCuadrosEmergentes">#FAFAFA</color>
+   <color name="colorRojo">#FD676A</color>
+   <color name="colorVerde">#6ACA6B</color>
 
-    -->
+   -->
 
     <color name="colorTransparent">#00000000</color>
     <color name="colorGreyTransparent">#7F000000</color>
