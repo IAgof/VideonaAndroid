@@ -8,8 +8,8 @@
     <ImageView
         android:id="@+id/music_image"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        tools:src="@drawable/activity_music_icon_folk_normal"/>
+        android:layout_height="wrap_content"
+        tools:src="@drawable/imagebutton_music_background_folk"/>
 
     <TextView
         android:id="@+id/music_title"
@@ -17,7 +17,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:minHeight="30dp"
-        android:textSize="18sp"
+        android:paddingBottom="2dp"
+        android:textColor="@color/textColorTitleToolbar"
+        android:textSize="20sp"
         tools:background="#f63"
         tools:text="Guitarra"/>
 </LinearLayout>

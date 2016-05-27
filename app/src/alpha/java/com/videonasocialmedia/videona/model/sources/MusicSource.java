@@ -26,13 +26,13 @@ public class MusicSource {
 
     private void populateLocalMusic() {
 
-        localMusic.add(new Music(R.drawable.activity_music_icon_rock_normal, "audio_rock", R.raw.audio_rock, R.color.colorAccent, "author"));
-        localMusic.add(new Music(R.drawable.activity_music_icon_ambiental_normal, "audio_ambiental", R.raw.audio_ambiental, R.color.colorAccent, "author"));
-        localMusic.add(new Music(R.drawable.activity_music_icon_clarinet_normal, "audio_clasica_flauta", R.raw.audio_clasica_flauta, R.color.colorAccent, "author"));
-        localMusic.add(new Music(R.drawable.activity_music_icon_folk_normal, "audio_folk", R.raw.audio_folk, R.color.colorAccent, "author"));
-        localMusic.add(new Music(R.drawable.activity_music_icon_birthday_normal, "birthday", R.raw.audio_birthday, R.color.colorAccent, "author"));
-        localMusic.add(new Music(R.drawable.activity_music_icon_hip_hop_normal, "audio_hiphop", R.raw.audio_hiphop, R.color.colorAccent, "author"));
-        localMusic.add(new Music(R.drawable.activity_music_icon_classic_normal, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.colorAccent, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_rock, "audio_rock", R.raw.audio_rock, R.color.rock, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_ambient, "audio_ambiental", R.raw.audio_ambiental, R.color.ambient, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_jazz, "audio_clasica_flauta", R.raw.audio_clasica_flauta, R.color.jazz, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_folk, "audio_folk", R.raw.audio_folk, R.color.folk, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_birthday, "birthday", R.raw.audio_birthday, R.color.birthday, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_hiphop, "audio_hiphop", R.raw.audio_hiphop, R.color.hiphop, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_classic, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.classic, "author"));
     }
 
 }

@@ -12,7 +12,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 /**
  * Created by jca on 25/3/15.
  */
-public interface MusicRecyclerViewClickListener {
+public interface musicRecyclerViewClickListener {
 
     void onClick(Music music);
 }

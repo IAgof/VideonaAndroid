@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
-import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.musicRecyclerViewClickListener;
 
 import java.util.List;
 
@@ -22,13 +22,13 @@ import butterknife.OnClick;
 /**
  *
  */
-public class MusicListAdapter extends RecyclerView.Adapter<MusicListItemViewHolder> {
+public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.MusicListItemViewHolder> {
 
     Context context;
     List<Music> musicList;
-    MusicRecyclerViewClickListener musicRecyclerViewClickListener;
+    com.videonasocialmedia.videona.presentation.views.listener.musicRecyclerViewClickListener musicRecyclerViewClickListener;
 
-    public void setMusicRecyclerViewClickListener(MusicRecyclerViewClickListener
+    public void setMusicRecyclerViewClickListener(com.videonasocialmedia.videona.presentation.views.listener.musicRecyclerViewClickListener
                                                           musicRecyclerViewClickListener) {
         this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
     }
@@ -66,32 +66,33 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListItemViewHold
         this.musicList = musicList;
         notifyDataSetChanged();
     }
-}
 
+    class MusicListItemViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.music_title)
+        TextView musicTitle;
+        @Bind(R.id.music_image)
+        ImageView musicImage;
 
-class MusicListItemViewHolder extends RecyclerView.ViewHolder {
-    @Bind(R.id.music_title)
-    TextView musicTitle;
-    @Bind(R.id.music_image)
-    ImageView musicImage;
+        private musicRecyclerViewClickListener clickListener;
+        private List<Music> musicList;
 
-    private MusicRecyclerViewClickListener clickListener;
-    private List<Music> musicList;
+        public MusicListItemViewHolder(View itemView,
+                                       musicRecyclerViewClickListener clickListener,
+                                       List<Music> musicList) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            this.clickListener = clickListener;
+            this.musicList = musicList;
 
-    public MusicListItemViewHolder(View itemView,
-                                   MusicRecyclerViewClickListener clickListener,
-                                   List<Music> musicList) {
-        super(itemView);
-        ButterKnife.bind(this, itemView);
-        this.clickListener = clickListener;
-        this.musicList = musicList;
+        }
 
-    }
-
-
-    @OnClick({R.id.music_title, R.id.music_image})
-    public void onClick() {
-        Music music = musicList.get(getAdapterPosition());
-        clickListener.onClick(music);
+        @OnClick({R.id.music_title, R.id.music_image})
+        public void onClick() {
+            Music music = musicList.get(getAdapterPosition());
+            clickListener.onClick(music);
+        }
     }
 }
+
+
+

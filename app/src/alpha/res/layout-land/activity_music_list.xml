@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".presentation.views.activity.EditActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -18,7 +17,16 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
-            <include layout="@layout/edit_activities_navigation_buttons"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
+                android:gravity="center">
+
+                <include layout="@layout/edit_activities_navigation_buttons"/>
+            </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
 
@@ -27,19 +35,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
             android:id="@+id/activity_music_video_preview"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="4"
             app:aspect="sixteen_nine"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/music_list"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+
+            android:layout_marginTop="8dp"
+            android:layout_weight="3"
             android:scrollbars="horizontal"
             />
     </LinearLayout>

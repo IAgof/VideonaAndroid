@@ -22,4 +22,12 @@
 
     <color name="textColorTitle">@color/textColorPrimary</color>
 
+    <color name="rock">#D63525</color>
+    <color name="jazz">#54BCF0</color>
+    <color name="folk">#F7C041</color>
+    <color name="hiphop">#EE7D2E</color>
+    <color name="classic">#7F7BF5</color>
+    <color name="birthday">#56EA80</color>
+    <color name="ambient">#81E4EA</color>
+
 </resources>
