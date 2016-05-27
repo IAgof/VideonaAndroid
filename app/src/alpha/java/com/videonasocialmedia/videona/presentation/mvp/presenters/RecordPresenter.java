@@ -171,6 +171,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         stopRecord();
         recorder.onHostActivityPaused();
         Log.d(LOG_TAG, "pause presenter");
+        recordView.hideProgressDialog();
     }
 
     public void stopRecord() {

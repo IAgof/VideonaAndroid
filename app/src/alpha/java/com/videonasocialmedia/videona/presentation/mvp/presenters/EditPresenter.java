@@ -12,6 +12,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.videonasocialmedia.videona.R;
@@ -24,12 +25,13 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
+import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinishedListener,
+public class EditPresenter implements OnAddMediaFinishedListener,
         OnRemoveMediaFinishedListener, OnVideosRetrieved, OnReorderMediaListener {
 
     /**
@@ -39,7 +41,6 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     /**
      * UseCases
      */
-    private ExportProjectUseCase exportProjectUseCase;
     private RemoveVideoFromProjectUseCase remoVideoFromProjectUseCase;
     private SharedPreferences sharedPreferences;
     private ReorderMediaItemUseCase reorderMediaItemUseCase;
@@ -54,7 +55,6 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         this.editorView = editorView;
         this.projectPlayerView = projectPlayerView;
 
-        exportProjectUseCase = new ExportProjectUseCase(this);
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         reorderMediaItemUseCase = new ReorderMediaItemUseCase();
@@ -64,12 +64,6 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
                 Context.MODE_PRIVATE);
     }
 
-    /**
-     * Ok edit button click listener
-     */
-    public void startExport() {
-        exportProjectUseCase.export();
-    }
 
     public String getResolution() {
         return sharedPreferences.getString(ConfigPreferences.RESOLUTION, "1280x720");
@@ -102,19 +96,6 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onRemoveMediaItemFromTrackSuccess() {
         editorView.updateProject();
-    }
-
-    @Override
-    public void onExportError(String error) {
-        editorView.hideProgressDialog();
-        //TODO modify error message
-        editorView.showError(R.string.addMediaItemToTrackError);
-    }
-
-    @Override
-    public void onExportSuccess(Video exportedVideo) {
-        editorView.hideProgressDialog();
-        editorView.goToShare(exportedVideo.getMediaPath());
     }
 
     @Override

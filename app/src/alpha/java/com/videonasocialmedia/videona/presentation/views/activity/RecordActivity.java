@@ -12,8 +12,10 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -53,6 +55,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -72,6 +75,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Álvaro Martínez Marco
@@ -147,6 +151,25 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     // TODO define Effects ID
     private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OV";
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
+                int resultCode = bundle.getInt(ExportProjectService.RESULT);
+                if (resultCode == RESULT_OK) {
+                    hideProgressDialog();
+                    goToShare(videoToSharePath);
+                } else {
+                    hideProgressDialog();
+                    showError(R.string.addMediaItemToTrackError);
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,6 +272,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     public void onPause() {
         super.onPause();
+        unregisterReceiver(receiver);
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
     }
@@ -256,6 +280,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(receiver, new IntentFilter(ExportProjectService.NOTIFICATION));
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
@@ -815,9 +840,11 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_share)
     public void exportAndShare() {
         if (!recording) {
+            Intent intent = new Intent(this, ExportProjectService.class);
+            startService(intent);
             showProgressDialog();
             mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
-            startExportThread();
+            //startExportThread();
         }
     }
 
