@@ -31,7 +31,6 @@ import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
-import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -61,7 +60,7 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter implements OnExportFinishedListener {
+public class RecordPresenter {
 
     /**
      * LOG_TAG
@@ -85,10 +84,6 @@ public class RecordPresenter implements OnExportFinishedListener {
     private boolean externalIntent;
 
     /**
-     * Export project use case
-     */
-    private ExportProjectUseCase exportProjectUseCase;
-    /**
      * Get media list from project use case
      */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
@@ -104,7 +99,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         preferencesEditor = sharedPreferences.edit();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
-        exportProjectUseCase = new ExportProjectUseCase(this);
         recordedVideosNumber = 0;
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
         initRecorder(context, cameraPreview);
@@ -171,6 +165,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         stopRecord();
         recorder.onHostActivityPaused();
         Log.d(LOG_TAG, "pause presenter");
+        recordView.hideProgressDialog();
     }
 
     public void stopRecord() {
@@ -257,19 +252,6 @@ public class RecordPresenter implements OnExportFinishedListener {
                 selectedShaderEffect = effect;
             }
         }
-    }
-
-    public void startExport() {
-        //editorView.showProgressDialog();
-        //check VideoList is not empty, if true exportProjectUseCase
-        List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
-        if (videoList.size() > 0) {
-            exportProjectUseCase.export();
-        } else {
-            recordView.hideProgressDialog();
-            recordView.showMessage(R.string.add_videos_to_project);
-        }
-        //exportProjectUseCase.export();
     }
 
     public void onEventMainThread(CameraEncoderResetEvent e) {
@@ -491,16 +473,4 @@ public class RecordPresenter implements OnExportFinishedListener {
         return GetEffectListUseCase.getOverlayEffectGift();
     }
 
-    @Override
-    public void onExportError(String error) {
-        recordView.hideProgressDialog();
-        //TODO modify error message
-        recordView.showError(R.string.addMediaItemToTrackError);
-    }
-
-    @Override
-    public void onExportSuccess(Video exportedVideo) {
-        recordView.hideProgressDialog();
-        recordView.goToShare(exportedVideo.getMediaPath());
-    }
 }
