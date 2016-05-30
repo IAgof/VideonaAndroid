@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 
@@ -48,8 +47,7 @@ public class AboutActivity extends VideonaActivity {
 
         String version= BuildConfig.VERSION_NAME + "\n";
         versionName.setText(version);
-        // Display the fragment as the main content.
-        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
+
     }
 
     /**

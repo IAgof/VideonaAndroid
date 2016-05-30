@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditTextPreferencePresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditTextPreferenceView;
@@ -75,7 +74,6 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
         });
         setToolbar();
         // Display the fragment as the main content.
-        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
     }
 
     @Override
