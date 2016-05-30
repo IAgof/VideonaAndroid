@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
@@ -200,7 +199,6 @@ public class SettingsFragment extends PreferenceFragment implements
         preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
-        Qordoba.updateScreen(getActivity());
     }
 
     @Override
