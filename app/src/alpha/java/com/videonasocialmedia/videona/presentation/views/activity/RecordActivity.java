@@ -844,18 +844,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             startService(intent);
             showProgressDialog();
             mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
-            //startExportThread();
         }
-    }
-
-    private void startExportThread() {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                recordPresenter.startExport();
-            }
-        };
-        t.start();
     }
 
     @OnClick(R.id.button_navigate_drawer)
