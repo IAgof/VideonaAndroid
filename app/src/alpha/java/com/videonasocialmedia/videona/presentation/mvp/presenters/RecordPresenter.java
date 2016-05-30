@@ -285,6 +285,7 @@ public class RecordPresenter {
         String fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
         originalFile.renameTo(destinationFile);
+        Utils.addFileToVideoGallery(destinationFile.toString());
         int numTotalVideosRecorded = sharedPreferences
                 .getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
         preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED,

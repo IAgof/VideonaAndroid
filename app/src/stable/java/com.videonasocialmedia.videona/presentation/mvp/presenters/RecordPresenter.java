@@ -360,6 +360,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         String fileName = "VID_" + timeStamp + ".mp4";
         File destinationFile = new File(Constants.PATH_APP_MASTERS, fileName);
         originalFile.renameTo(destinationFile);
+        Utils.addFileToVideoGallery(destinationFile.toString());
         updateTotalVideosRecorded();
         trackTotalVideosRecordedSuperProperty();
         double clipDuration = 0.0;
@@ -523,6 +524,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     @Override
     public void onExportSuccess(Video exportedVideo) {
+        Utils.addFileToVideoGallery(exportedVideo.getMediaPath().toString());
         recordView.hideProgressDialog();
         recordView.goToShare(exportedVideo.getMediaPath());
     }
