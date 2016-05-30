@@ -18,11 +18,10 @@ import butterknife.ButterKnife;
 
 public class MusicDetailActivity extends VideonaActivity implements MusicDetailView {
 
-    public static String AUTHOR_EXTRAS_KEY = "AUTHOR_EXTRAS_KEY";
-    public static String TITLE_EXTRAS_KEY = "TITLE_EXTRAS_KEY";
-    public static String IMAGE_EXTRAS_KEY = "IMAGE_EXTRAS_KEY";
-    public static String MUSIC_ID_EXTRAS_KEY = "MUSIC_ID_EXTRAS_KEY";
-
+    public static String KEY_AUTHOR_EXTRAS = "KEY_AUTHOR_EXTRAS";
+    public static String KEY_TITLE_EXTRAS = "KEY_TITLE_EXTRAS";
+    public static String KEY_IMAGE_EXTRAS = "KEY_IMAGE_EXTRAS";
+    public static String KEY_MUSIC_ID_EXTRAS = "KEY_MUSIC_ID_EXTRAS";
 
     @Bind(R.id.music_title)
     TextView musicTitle;
@@ -47,10 +46,10 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
 
         try {
             Bundle extras = this.getIntent().getExtras();
-            String author = extras.getString(AUTHOR_EXTRAS_KEY);
-            String title = extras.getString(TITLE_EXTRAS_KEY);
-            int imageId = extras.getInt(IMAGE_EXTRAS_KEY);
-            int musicId = extras.getInt(MUSIC_ID_EXTRAS_KEY);
+            String author = extras.getString(KEY_AUTHOR_EXTRAS);
+            String title = extras.getString(KEY_TITLE_EXTRAS);
+            int imageId = extras.getInt(KEY_IMAGE_EXTRAS);
+            int musicId = extras.getInt(KEY_MUSIC_ID_EXTRAS);
 
             musicDetailPresenter.onCreate(musicId);
 

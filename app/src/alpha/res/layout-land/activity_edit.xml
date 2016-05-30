@@ -18,16 +18,16 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <LinearLayout
+                <com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator
+                    android:id="@+id/navigator"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginEnd="50dp"
                     android:layout_marginStart="50dp"
-                    android:gravity="center">
-
-                    <include layout="@layout/edit_activities_navigation_buttons"/>
-                </LinearLayout>
+                    android:gravity="center"
+                    app:edit_selected="true"
+                    />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 

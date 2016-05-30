@@ -1,7 +1,10 @@
 package com.videonasocialmedia.videona.presentation.views.customviews;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,45 +17,55 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditNavigatorView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.MusicListActivity;
 
+import static com.videonasocialmedia.videona.utils.UIUtils.tintButton;
+
 /**
  *
  */
 public class ToolbarNavigator extends LinearLayout implements EditNavigatorView {
 
-    private View view;
     private ImageButton navigateToEditButton;
     private ImageButton navigateToMusicButton;
     private ImageButton navigateToShareButton;
-    private Context context;
 
+    private Context context;
     private EditNavigatorPresenter navigatorPresenter;
+
+    private ToolbarNavigator.ProjectModifiedCallBack callback;
 
     public ToolbarNavigator(Context context) {
         super(context);
-        initComponents(context);
+        initComponents(context, null, 0);
     }
 
-    private void initComponents(Context context) {
-        view = LayoutInflater.from(context).inflate(R.layout.edit_activities_navigation_buttons, this);
+    private void initComponents(Context context, AttributeSet attrs, int defStyleAttr) {
+
+        this.context = context;
+        LayoutInflater.from(context).inflate(R.layout.edit_activities_navigation_buttons, this);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ToolbarNavigator, defStyleAttr, 0);
+        boolean editSelected = a.getBoolean(R.styleable.ToolbarNavigator_edit_selected, false);
+        boolean musicSelected = a.getBoolean(R.styleable.ToolbarNavigator_music_selected, false);
+        boolean shareSelected = a.getBoolean(R.styleable.ToolbarNavigator_share_selected, false);
+        int tintList = a.getResourceId(R.styleable.ToolbarNavigator_tint_color, R.color.button_color);
+        a.recycle();
+
         navigateToEditButton = (ImageButton) findViewById(R.id.button_edit_navigator);
         navigateToMusicButton = (ImageButton) findViewById(R.id.button_music_navigator);
         navigateToShareButton = (ImageButton) findViewById(R.id.button_share_navigator);
-    }
 
-    public ToolbarNavigator(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.context = context;
-        initComponents(context);
-    }
+        tintButton(navigateToEditButton, tintList);
+        tintButton(navigateToMusicButton, tintList);
+        tintButton(navigateToShareButton, tintList);
 
-    public ToolbarNavigator(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initComponents(context);
-    }
+        navigateToEditButton.setSelected(editSelected);
+        navigateToMusicButton.setSelected(musicSelected);
+        navigateToShareButton.setSelected(shareSelected);
 
-    public ToolbarNavigator(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        initComponents(context);
+        initListeners();
+        disableNavigatorActions();
+        if (!isInEditMode())
+            navigatorPresenter = new EditNavigatorPresenter(this);
     }
 
     private void initListeners() {
@@ -74,7 +87,7 @@ public class ToolbarNavigator extends LinearLayout implements EditNavigatorView 
             @Override
             public void onClick(View v) {
                 if (navigateToShareButton.isEnabled()) {
-                    //navigateTo(ShareVideoActivity)
+                    //navigateTo(ShareVideoActivity.class);
                 }
             }
         });
@@ -84,5 +97,56 @@ public class ToolbarNavigator extends LinearLayout implements EditNavigatorView 
         Intent intent = new Intent(context, cls);
 
         context.startActivity(intent);
+    }
+
+    public ToolbarNavigator(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initComponents(context, attrs, 0);
+    }
+
+    public ToolbarNavigator(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initComponents(context, attrs, defStyleAttr);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public ToolbarNavigator(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        initComponents(context, attrs, defStyleAttr);
+    }
+
+    public ProjectModifiedCallBack getCallback() {
+        if (callback != null)
+            return callback;
+        else
+            return new ToolbarNavigator.ProjectModifiedCallBack();
+    }
+
+    @Override
+    public void enableNavigatorActions() {
+        enableButton(navigateToMusicButton);
+        enableButton(navigateToEditButton);
+        enableButton(navigateToShareButton);
+    }
+
+    private void enableButton(ImageButton button) {
+        if (button.isSelected())
+            button.setEnabled(false);
+        else
+            button.setEnabled(true);
+    }
+
+    @Override
+    public void disableNavigatorActions() {
+        navigateToEditButton.setEnabled(false);
+        navigateToMusicButton.setEnabled(false);
+        navigateToShareButton.setEnabled(false);
+    }
+
+    public class ProjectModifiedCallBack {
+
+        public void onProjectModified() {
+            navigatorPresenter.areThereVideosInProject();
+        }
     }
 }

@@ -24,6 +24,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
+import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
@@ -44,15 +45,18 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     private SharedPreferences sharedPreferences;
     private ReorderMediaItemUseCase reorderMediaItemUseCase;
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
+    private ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack;
     /**
      * Editor View
      */
     private EditorView editorView;
     private ProjectPlayerView projectPlayerView;
 
-    public EditPresenter(EditorView editorView, ProjectPlayerView projectPlayerView) {
+    public EditPresenter(EditorView editorView, ProjectPlayerView projectPlayerView,
+                         ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack) {
         this.editorView = editorView;
         this.projectPlayerView = projectPlayerView;
+        this.projectModifiedCallBack = projectModifiedCallBack;
 
         exportProjectUseCase = new ExportProjectUseCase(this);
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
@@ -91,7 +95,8 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     }
 
     @Override
-    public void onAddMediaItemToTrackSuccess(Media media) {}
+    public void onAddMediaItemToTrackSuccess(Media media) {
+    }
 
     @Override
     public void onRemoveMediaItemFromTrackError() {
@@ -102,6 +107,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     @Override
     public void onRemoveMediaItemFromTrackSuccess() {
         editorView.updateProject();
+        projectModifiedCallBack.onProjectModified();
     }
 
     @Override
@@ -121,6 +127,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
     public void onVideosRetrieved(List<Video> videoList) {
         editorView.enableEditActions();
         editorView.bindVideoList(videoList);
+        projectModifiedCallBack.onProjectModified();
     }
 
     @Override
@@ -128,6 +135,7 @@ public class EditPresenter implements OnExportFinishedListener, OnAddMediaFinish
         editorView.disableEditActions();
         editorView.hideProgressDialog();
         editorView.showMessage(R.string.add_videos_to_project);
+        projectModifiedCallBack.onProjectModified();
     }
 
     public void removeVideoFromProject(Video selectedVideoRemove) {

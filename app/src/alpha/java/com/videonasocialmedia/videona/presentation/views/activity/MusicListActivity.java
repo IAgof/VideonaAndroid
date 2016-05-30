@@ -14,7 +14,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicListPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicListView;
 import com.videonasocialmedia.videona.presentation.views.adapter.MusicListAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.musicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
  *
  */
 public class MusicListActivity extends VideonaActivity implements MusicListView,
-        musicRecyclerViewClickListener {
+        MusicRecyclerViewClickListener {
     @Bind(R.id.music_list)
     RecyclerView musicList;
     private MusicListAdapter musicAdapter;
@@ -106,10 +106,10 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
     @Override
     public void onClick(Music music) {
         Intent i = new Intent(this, MusicDetailActivity.class);
-        i.putExtra(MusicDetailActivity.MUSIC_ID_EXTRAS_KEY, music.getMusicResourceId());
-        i.putExtra(MusicDetailActivity.AUTHOR_EXTRAS_KEY, music.getTitle());
-        i.putExtra(MusicDetailActivity.TITLE_EXTRAS_KEY, music.getTitle());
-        i.putExtra(MusicDetailActivity.IMAGE_EXTRAS_KEY, music.getIconResourceId());
+        i.putExtra(MusicDetailActivity.KEY_MUSIC_ID_EXTRAS, music.getMusicResourceId());
+        i.putExtra(MusicDetailActivity.KEY_AUTHOR_EXTRAS, music.getTitle());
+        i.putExtra(MusicDetailActivity.KEY_TITLE_EXTRAS, music.getTitle());
+        i.putExtra(MusicDetailActivity.KEY_IMAGE_EXTRAS, music.getIconResourceId());
         startActivity(i);
     }
 
