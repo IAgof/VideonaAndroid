@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
@@ -39,6 +40,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -83,6 +86,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     RecyclerView videoListRecyclerView;
     @Bind(R.id.project_player)
     ProjectPlayer projectPlayer;
+    @Bind(R.id.fab_edit_room)
+    FloatingActionsMenu fabEditRoom;
     private List<Video> videoList;
     private int currentVideoIndex = 0;
     private EditPresenter editPresenter;
@@ -134,6 +139,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         if (savedInstanceState != null) {
             this.currentVideoIndex = savedInstanceState.getInt(Constants.CURRENT_VIDEO_INDEX);
         }
+
 
     }
 
@@ -289,6 +295,16 @@ public class EditActivity extends VideonaActivity implements EditorView,
         navigateTo(GalleryActivity.class);
     }
 
+    @OnClick (R.id.fab_go_to_record)
+    public void onClickFabRecord(){
+        navigateTo(RecordActivity.class);
+    }
+
+    @OnClick (R.id.fab_go_to_gallery)
+    public void onClickFabGallery(){
+        navigateTo(GalleryActivity.class);
+    }
+
     @OnClick(R.id.button_music_navigator)
     public void onClickMusicNavigator() {
         showMessage(R.string.comingSoon);
@@ -424,13 +440,13 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void showError(final int stringToast) {
-        Snackbar snackbar = Snackbar.make(projectPlayer, stringToast, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(fabEditRoom, stringToast, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
     @Override
     public void showMessage(final int stringToast) {
-        Snackbar snackbar = Snackbar.make(projectPlayer, stringToast, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(fabEditRoom, stringToast, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
