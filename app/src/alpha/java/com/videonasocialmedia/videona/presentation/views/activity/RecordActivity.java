@@ -75,7 +75,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
-import de.greenrobot.event.EventBus;
 
 /**
  * @author Álvaro Martínez Marco
