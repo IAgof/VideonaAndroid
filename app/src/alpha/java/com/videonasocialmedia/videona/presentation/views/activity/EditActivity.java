@@ -400,7 +400,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void goToShare(String videoToSharePath) {
-        Intent intent = new Intent(this, ShareVideoActivity.class);
+        Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
         startActivity(intent);
     }

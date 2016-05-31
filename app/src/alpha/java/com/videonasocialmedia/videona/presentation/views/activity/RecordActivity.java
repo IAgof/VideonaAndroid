@@ -576,7 +576,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void goToShare(String videoToSharePath) {
         trackVideoExported();
         saveVideoFeaturesToConfig();
-        Intent intent = new Intent(this, ShareVideoActivity.class);
+        Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
         startActivity(intent);
     }
