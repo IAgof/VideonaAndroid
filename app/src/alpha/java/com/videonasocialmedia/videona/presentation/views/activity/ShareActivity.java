@@ -7,7 +7,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +57,14 @@ import butterknife.OnTouch;
 public class ShareActivity extends VideonaActivity implements ShareVideoView, VideoPlayerView,
         SocialNetworkAdapter.OnSocialNetworkClickedListener, SeekBar.OnSeekBarChangeListener{
 
+    @Bind(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
+    @Bind(R.id.button_edit_navigator)
+    ImageButton navigateToEditButton;
+    @Bind(R.id.button_music_navigator)
+    ImageButton navigateToMusicButton;
+    @Bind(R.id.button_share_navigator)
+    ImageButton navigateToShareButton;
     @Bind(R.id.video_share_preview)
     VideoView videoPreview;
     @Bind(R.id.main_social_network_list)
@@ -91,6 +101,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
 
+        setupActivityButtons();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -126,8 +137,9 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause(){
+        super.onPause();
+
         pauseVideo();
         videoPosition = videoPreview.getCurrentPosition();
     }
@@ -185,6 +197,19 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         updateSeekBarTaskHandler.postDelayed(updateSeekBarTask, 20);
     }
 
+    private void setupActivityButtons() {
+        navigateToShareButton.setSelected(true);
+        navigateToMusicButton.setEnabled(true);
+        navigateToShareButton.setEnabled(true);
+        tintEditButtons();
+    }
+
+    private void tintEditButtons() {
+        Utils.tintButton(navigateToEditButton);
+        Utils.tintButton(navigateToMusicButton);
+        Utils.tintButton(navigateToShareButton);
+    }
+
     private void initVideoPreview(final int position, final boolean playing) {
         videoPath = getIntent().getStringExtra(Constants.VIDEO_TO_SHARE_PATH);
         if (videoPath != null) {
@@ -234,6 +259,16 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         mainSocialNetworkList.setLayoutManager(
                 new LinearLayoutManager(this, orientation, false));
         mainSocialNetworkList.setAdapter(mainSocialNetworkAdapter);
+    }
+
+    @OnClick(R.id.button_music_navigator)
+    public void onClickMusicNavigator() {
+        showMessage(R.string.comingSoon);
+    }
+
+    @OnClick(R.id.button_edit_navigator)
+    public void onClickEditNavigator() {
+        navigateTo(EditActivity.class);
     }
 
     @OnClick (R.id.fab_share_room)
@@ -321,6 +356,11 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         presenter.shareVideo(videoPath, socialNetwork, this);
         updateNumTotalVideosShared();
         trackVideoShared(socialNetwork);
+    }
+
+    public void showMessage(final int stringToast) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, stringToast, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     private void updateNumTotalVideosShared() {

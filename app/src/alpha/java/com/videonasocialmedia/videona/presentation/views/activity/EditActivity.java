@@ -47,6 +47,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.ProjectPlayerL
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.Utils;
 
 import java.util.List;
 
@@ -209,19 +210,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     private void tintEditButtons() {
-        tintButton(navigateToEditButton);
-        tintButton(navigateToMusicButton);
-        tintButton(navigateToShareButton);
-        tintButton(editDuplicateButton);
-        tintButton(editSplitButton);
-        tintButton(editTrimButton);
-    }
-
-    public static void tintButton(@NonNull ImageButton button) {
-        ColorStateList editButtonsColors = button.getResources().getColorStateList(R.color.button_color);
-        Drawable button_image = DrawableCompat.wrap(button.getDrawable());
-        DrawableCompat.setTintList(button_image, editButtonsColors);
-        button.setImageDrawable(button_image);
+        Utils.tintButton(navigateToEditButton);
+        Utils.tintButton(navigateToMusicButton);
+        Utils.tintButton(navigateToShareButton);
+        Utils.tintButton(editDuplicateButton);
+        Utils.tintButton(editSplitButton);
+        Utils.tintButton(editTrimButton);
     }
 
     @Override
