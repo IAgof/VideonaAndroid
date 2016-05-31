@@ -290,19 +290,15 @@ public class EditActivity extends VideonaActivity implements EditorView,
         startActivity(intent);
     }
 
-    @OnClick(R.id.fab_edit_room)
-    public void onClickFabEditor() {
-        // navigateTo(Activity.class)
-        navigateTo(GalleryActivity.class);
-    }
-
     @OnClick (R.id.fab_go_to_record)
     public void onClickFabRecord(){
+        fabEditRoom.collapse();
         navigateTo(RecordActivity.class);
     }
 
     @OnClick (R.id.fab_go_to_gallery)
     public void onClickFabGallery(){
+        fabEditRoom.collapse();
         navigateTo(GalleryActivity.class);
     }
 

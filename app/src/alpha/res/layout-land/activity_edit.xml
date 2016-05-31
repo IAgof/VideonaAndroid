@@ -95,18 +95,19 @@
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/colorTransparent"
-            app:fab_colorPressed="@color/colorTransparent"
-            android:layout_gravity="center_vertical"
+            app:fab_colorNormal="@color/colorFabMenu"
+            app:fab_colorPressed="@color/colorFabMenu"
+            android:layout_gravity="center_vertical|center_horizontal"
             android:src="@drawable/common_navigate_record"
+            app:fab_size="normal"
             android:id="@+id/fab_go_to_record"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/colorTransparent"
-            app:fab_colorPressed="@color/colorTransparent"
-            android:layout_gravity="center_vertical"
+            app:fab_colorNormal="@color/colorFabMenu"
+            app:fab_colorPressed="@color/colorFabMenu"
+            app:fab_size="normal"
             android:src="@drawable/common_navigate_gallery"
             android:id="@+id/fab_go_to_gallery"/>
 

@@ -89,16 +89,16 @@
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/colorTransparent"
-            app:fab_colorPressed="@color/colorTransparent"
+            app:fab_colorNormal="@color/colorFabMenu"
+            app:fab_colorPressed="@color/colorFabMenu"
             android:src="@drawable/common_navigate_record"
             android:id="@+id/fab_go_to_record"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/colorTransparent"
-            app:fab_colorPressed="@color/colorTransparent"
+            app:fab_colorNormal="@color/colorFabMenu"
+            app:fab_colorPressed="@color/colorFabMenu"
             android:src="@drawable/common_navigate_gallery"
             android:id="@+id/fab_go_to_gallery"/>
 
