@@ -1,10 +1,13 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -315,8 +318,12 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         videoPreview.seekTo(millisecond);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void showShareNetworksAvailable(List<SocialNetwork> networks) {
+
+        SocialNetwork saveToGallery = new SocialNetwork("Save to gallery", "", "", getDrawable(R.drawable.gatito_rules), "");
+        networks.add(saveToGallery);
         mainSocialNetworkAdapter.setSocialNetworkList(networks);
     }
 
