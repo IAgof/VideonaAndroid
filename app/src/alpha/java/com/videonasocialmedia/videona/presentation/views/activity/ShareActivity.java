@@ -36,6 +36,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.ShareVideoPres
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoPlayerView;
 import com.videonasocialmedia.videona.presentation.views.adapter.SocialNetworkAdapter;
+import com.videonasocialmedia.videona.presentation.views.utils.UiUtils;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -208,9 +209,9 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     }
 
     private void tintEditButtons() {
-        Utils.tintButton(navigateToEditButton);
-        Utils.tintButton(navigateToMusicButton);
-        Utils.tintButton(navigateToShareButton);
+        UiUtils.tintButton(navigateToEditButton);
+        UiUtils.tintButton(navigateToMusicButton);
+        UiUtils.tintButton(navigateToShareButton);
     }
 
     private void initVideoPreview(final int position, final boolean playing) {
@@ -318,11 +319,10 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         videoPreview.seekTo(millisecond);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void showShareNetworksAvailable(List<SocialNetwork> networks) {
-
-        SocialNetwork saveToGallery = new SocialNetwork("Save to gallery", "", "", getDrawable(R.drawable.gatito_rules), "");
+        // TODO move this to presenter in merging alpha and stable.
+        SocialNetwork saveToGallery = new SocialNetwork(getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.gatito_rules_pressed), "");
         networks.add(saveToGallery);
         mainSocialNetworkAdapter.setSocialNetworkList(networks);
     }
@@ -360,9 +360,13 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
 
     @Override
     public void onSocialNetworkClicked(SocialNetwork socialNetwork) {
+        trackVideoShared(socialNetwork);
+        if(socialNetwork.getName().equals(getString(R.string.save_to_gallery)) ){
+            showMessage(R.string.video_saved);
+            return;
+        }
         presenter.shareVideo(videoPath, socialNetwork, this);
         updateNumTotalVideosShared();
-        trackVideoShared(socialNetwork);
     }
 
     public void showMessage(final int stringToast) {

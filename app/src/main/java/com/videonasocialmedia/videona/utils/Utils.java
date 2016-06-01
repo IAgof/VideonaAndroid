@@ -343,11 +343,4 @@ public class Utils {
             }
         });
     }
-
-    public static void tintButton(@NonNull ImageButton button) {
-        ColorStateList editButtonsColors = button.getResources().getColorStateList(R.color.button_color);
-        Drawable button_image = DrawableCompat.wrap(button.getDrawable());
-        DrawableCompat.setTintList(button_image, editButtonsColors);
-        button.setImageDrawable(button_image);
-    }
 }

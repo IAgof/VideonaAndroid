@@ -42,6 +42,7 @@ public class ShareVideoPresenter {
 
     public void obtainNetworksToShare() {
         List networks = obtainNetworksToShareUseCase.obtainMainNetworks();
+
         shareVideoView.showShareNetworksAvailable(networks);
     }
 

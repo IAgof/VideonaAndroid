@@ -46,6 +46,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlay
 import com.videonasocialmedia.videona.presentation.views.listener.ProjectPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
+import com.videonasocialmedia.videona.presentation.views.utils.UiUtils;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -210,12 +211,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     private void tintEditButtons() {
-        Utils.tintButton(navigateToEditButton);
-        Utils.tintButton(navigateToMusicButton);
-        Utils.tintButton(navigateToShareButton);
-        Utils.tintButton(editDuplicateButton);
-        Utils.tintButton(editSplitButton);
-        Utils.tintButton(editTrimButton);
+        UiUtils.tintButton(navigateToEditButton);
+        UiUtils.tintButton(navigateToMusicButton);
+        UiUtils.tintButton(navigateToShareButton);
+        UiUtils.tintButton(editDuplicateButton);
+        UiUtils.tintButton(editSplitButton);
+        UiUtils.tintButton(editTrimButton);
     }
 
     @Override
