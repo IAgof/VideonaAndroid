@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -266,6 +267,9 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
 
     @Override
     public void showShareNetworksAvailable(List<SocialNetwork> networks) {
+        // TODO move this to presenter in merging alpha and stable.
+        SocialNetwork saveToGallery = new SocialNetwork(getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.activity_share_save_to_gallery), "");
+        networks.add(saveToGallery);
         mainSocialNetworkAdapter.setSocialNetworkList(networks);
     }
 
@@ -374,9 +378,18 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
 
     @Override
     public void onSocialNetworkClicked(SocialNetwork socialNetwork) {
+        trackVideoShared(socialNetwork);
+        if(socialNetwork.getName().equals(getString(R.string.save_to_gallery)) ){
+            showMessage(R.string.video_saved);
+            return;
+        }
         presenter.shareVideo(videoPath, socialNetwork, this);
         updateNumTotalVideosShared();
-        trackVideoShared(socialNetwork);
+    }
+
+    public void showMessage(final int stringToast) {
+        Snackbar snackbar = Snackbar.make(fab, stringToast, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
 }
