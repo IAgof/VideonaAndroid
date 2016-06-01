@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/coordinatorLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -46,8 +45,8 @@
                 android:layout_weight="4"
                 android:orientation="vertical">
 
-                <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
-                    android:id="@+id/project_player"
+                <com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer
+                    android:id="@+id/videona_player"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"

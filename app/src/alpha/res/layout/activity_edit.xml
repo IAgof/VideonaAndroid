@@ -47,8 +47,8 @@
             <!--<include layout="@layout/edit_activities_navigation_buttons"/>-->
         </LinearLayout>
 
-        <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
-            android:id="@+id/project_player"
+        <com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer
+            android:id="@+id/videona_player"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
