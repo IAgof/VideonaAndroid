@@ -17,11 +17,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
@@ -31,7 +29,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +36,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -52,6 +51,7 @@ import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
+import com.videonasocialmedia.videona.presentation.views.utils.UiUtils;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -84,6 +84,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     RecyclerView videoListRecyclerView;
     @Bind(R.id.videona_player)
     VideonaPlayer videonaPlayer;
+    @Bind(R.id.fab_edit_room)
+    FloatingActionsMenu fabEditRoom;
     private List<Video> videoList;
     private int currentVideoIndex = 0;
     private EditPresenter editPresenter;
@@ -135,6 +137,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         if (savedInstanceState != null) {
             this.currentVideoIndex = savedInstanceState.getInt(Constants.CURRENT_VIDEO_INDEX);
         }
+
 
     }
 
@@ -216,19 +219,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     private void tintEditButtons() {
-        tintButton(navigateToEditButton);
-        tintButton(navigateToMusicButton);
-        tintButton(navigateToShareButton);
-        tintButton(editDuplicateButton);
-        tintButton(editSplitButton);
-        tintButton(editTrimButton);
-    }
-
-    public static void tintButton(@NonNull ImageButton button) {
-        ColorStateList editButtonsColors = button.getResources().getColorStateList(R.color.button_color);
-        Drawable button_image = DrawableCompat.wrap(button.getDrawable());
-        DrawableCompat.setTintList(button_image, editButtonsColors);
-        button.setImageDrawable(button_image);
+        UiUtils.tintButton(navigateToEditButton);
+        UiUtils.tintButton(navigateToMusicButton);
+        UiUtils.tintButton(navigateToShareButton);
+        UiUtils.tintButton(editDuplicateButton);
+        UiUtils.tintButton(editSplitButton);
+        UiUtils.tintButton(editTrimButton);
     }
 
     @Override
@@ -284,9 +280,15 @@ public class EditActivity extends VideonaActivity implements EditorView,
         startActivity(intent);
     }
 
-    @OnClick(R.id.fab_edit_room)
-    public void onClickFabEditor() {
-        // navigateTo(Activity.class)
+    @OnClick (R.id.fab_go_to_record)
+    public void onClickFabRecord(){
+        fabEditRoom.collapse();
+        navigateTo(RecordActivity.class);
+    }
+
+    @OnClick (R.id.fab_go_to_gallery)
+    public void onClickFabGallery(){
+        fabEditRoom.collapse();
         navigateTo(GalleryActivity.class);
     }
 
@@ -407,7 +409,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void goToShare(String videoToSharePath) {
-        Intent intent = new Intent(this, ShareVideoActivity.class);
+        Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
         startActivity(intent);
     }
@@ -425,14 +427,19 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void showError(final int stringToast) {
-        Snackbar snackbar = Snackbar.make(videonaPlayer, stringToast, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(fabEditRoom, stringToast, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
     @Override
     public void showMessage(final int stringToast) {
-        Snackbar snackbar = Snackbar.make(videonaPlayer, stringToast, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(fabEditRoom, stringToast, Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    @Override
+    public void expandFabMenu(){
+        fabEditRoom.expand();
     }
 
     @Override

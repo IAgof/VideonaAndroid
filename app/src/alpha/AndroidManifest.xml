@@ -10,7 +10,7 @@
         android:theme="@style/VideonaTheme">
 
         <activity
-            android:name=".presentation.views.activity.ShareVideoActivity"
+            android:name=".presentation.views.activity.ShareActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.EditActivity"
             tools:replace="parentActivityName"/>

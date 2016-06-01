@@ -113,6 +113,7 @@ public class EditPresenter implements OnAddMediaFinishedListener,
         editorView.disableEditActions();
         editorView.hideProgressDialog();
         editorView.showMessage(R.string.add_videos_to_project);
+        editorView.expandFabMenu();
     }
 
     public void removeVideoFromProject(Video selectedVideoRemove) {

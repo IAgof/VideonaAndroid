@@ -37,4 +37,6 @@ public interface EditorView {
 
     void disableEditActions();
 
+    void expandFabMenu();
+
 }

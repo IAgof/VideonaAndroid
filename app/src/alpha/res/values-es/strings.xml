@@ -14,4 +14,7 @@
     <string name="dialog_edit_remove_message">Quitar clip de vídeo</string>
     <string name="dialog_edit_remove_accept">Si</string>
     <string name="dialog_edit_remove_cancel">No</string>
+
+    <string name="video_saved">Video guardado en tu galería</string>
+    <string name="save_to_gallery">Guardar en galería</string>
 </resources>
