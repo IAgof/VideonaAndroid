@@ -322,7 +322,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     @Override
     public void showShareNetworksAvailable(List<SocialNetwork> networks) {
         // TODO move this to presenter in merging alpha and stable.
-        SocialNetwork saveToGallery = new SocialNetwork(getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.gatito_rules_pressed), "");
+        SocialNetwork saveToGallery = new SocialNetwork(getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.activity_share_save_to_gallery), "");
         networks.add(saveToGallery);
         mainSocialNetworkAdapter.setSocialNetworkList(networks);
     }
