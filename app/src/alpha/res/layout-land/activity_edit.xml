@@ -45,8 +45,8 @@
                 android:layout_weight="4"
                 android:orientation="vertical">
 
-                <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
-                    android:id="@+id/project_player"
+                <com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer
+                    android:id="@+id/videona_player"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -86,6 +86,6 @@
         android:clickable="true"
         android:src="@drawable/common_icon_add_white"
         app:backgroundTint="@color/colorAccent"
-        app:layout_anchor="@id/project_player"
+        app:layout_anchor="@id/videona_player"
         app:layout_anchorGravity="bottom|right|end"/>
 </android.support.design.widget.CoordinatorLayout>
