@@ -32,8 +32,6 @@ import com.karumi.dexter.listener.multi.DialogOnAnyDeniedMultiplePermissionsList
 import com.karumi.dexter.listener.multi.EmptyMultiplePermissionsListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.qordoba.sdk.Qordoba;
-import com.qordoba.sdk.common.QordobaContextWrapper;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
@@ -92,11 +90,6 @@ public abstract class VideonaActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-//    @Override
-//    protected void attachBaseContext(Context newBase) {
-//        super.attachBaseContext(new QordobaContextWrapper(this, newBase));
-//    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -112,7 +105,6 @@ public abstract class VideonaActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        Qordoba.updateScreen(this);
     }
 
     @Override

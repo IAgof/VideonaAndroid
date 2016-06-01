@@ -23,13 +23,16 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.coremedia.iso.IsoFile;
+import com.videonasocialmedia.videona.VideonaApplication;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -325,4 +328,13 @@ public class Utils {
         return lengthInMSeconds;
     }
 
+    public static void addFileToVideoGallery(String file) {
+        MediaScannerConnection.scanFile(VideonaApplication.getAppContext(),
+                new String[] { file }, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+            public void onScanCompleted(String path, Uri uri) {
+               // Log.i("ExternalStorage", "Scanned " + path + ":");
+            }
+        });
+    }
 }

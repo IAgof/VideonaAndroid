@@ -36,5 +36,6 @@ public class ExportProjectUseCase implements OnExportEndedListener {
     @Override
     public void onExportSuccess(Video video) {
         onExportFinishedListener.onExportSuccess(video);
+
     }
 }

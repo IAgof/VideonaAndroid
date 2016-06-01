@@ -10,8 +10,11 @@ package com.videonasocialmedia.videona.presentation.views.activity;
  *
  */
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
@@ -47,6 +50,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlay
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.ProjectPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
@@ -86,6 +90,26 @@ public class EditActivity extends VideonaActivity implements EditorView,
     private AlertDialog progressDialog;
     private int selectedVideoRemovePosition;
 
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
+                int resultCode = bundle.getInt(ExportProjectService.RESULT);
+                if (resultCode == RESULT_OK) {
+                    hideProgressDialog();
+                    goToShare(videoToSharePath);
+                } else {
+                    //showProgressDialog();
+                    hideProgressDialog();
+                    showError(R.string.addMediaItemToTrackError);
+                }
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +148,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     protected void onPause() {
         super.onPause();
         projectPlayer.pause();
+        unregisterReceiver(receiver);
+        hideProgressDialog();
 //        releaseVideoView();
 //        releaseMusicPlayer();
 //        projectDuration = 0;
@@ -133,7 +159,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     protected void onResume() {
         super.onResume();
-
+        registerReceiver(receiver, new IntentFilter(ExportProjectService.NOTIFICATION));
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {
@@ -275,19 +301,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
         projectPlayer.pausePreview();
         showProgressDialog();
-        startExportThread();
+        Intent intent = new Intent(this, ExportProjectService.class);
+        startService(intent);
 
-
-    }
-
-    private void startExportThread() {
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                editPresenter.startExport();
-            }
-        };
-        t.start();
     }
 
     @OnClick(R.id.button_edit_fullscreen)
@@ -407,12 +423,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    public void showError(int causeTextResource) {
-        VideonaDialog dialog = new VideonaDialog.Builder()
-                .withTitle(getString(R.string.error))
-                .withMessage(getResources().getString(causeTextResource))
-                .create();
-        dialog.show(getFragmentManager(), "errorDialog");
+    public void showError(final int stringToast) {
+        Snackbar snackbar = Snackbar.make(projectPlayer, stringToast, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override

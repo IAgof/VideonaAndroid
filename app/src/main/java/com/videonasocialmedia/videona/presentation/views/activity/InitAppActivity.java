@@ -80,7 +80,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     TextView versionName;
     @Bind(R.id.init_root_view)
     ViewGroup initRootView;
-    private long MINIMUN_WAIT_TIME;
+    private long MINIMUN_WAIT_TIME = 900;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Camera camera;
@@ -106,12 +106,6 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
         createPermissionListeners();
         Dexter.continuePendingRequestsIfPossible(compositePermissionsListener);
 
-        if (BuildConfig.DEBUG) {
-            //Wait longer while debug so we can start qordoba sandbox mode on splash screen
-            MINIMUN_WAIT_TIME = 10000;
-        } else {
-            MINIMUN_WAIT_TIME = 900;
-        }
     }
 
     private void requestPermissionsAndPerformSetup() {

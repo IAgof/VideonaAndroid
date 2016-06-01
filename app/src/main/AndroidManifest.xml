@@ -211,6 +211,9 @@
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
+        <service android:name=".presentation.views.services.ExportProjectService"
+            android:exported="false"
+            />
 
     </application>
 

@@ -10,8 +10,6 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-
-import com.qordoba.sdk.Qordoba;
 import com.videonasocialmedia.videona.R;
 
 /**
@@ -32,8 +30,7 @@ public class TermsOfServiceActivity extends VideonaActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        // Display the fragment as the main content.
-        Qordoba.setCurrentNavigationRoute(android.R.id.content, this.getClass().getName());
+
     }
 
 }
