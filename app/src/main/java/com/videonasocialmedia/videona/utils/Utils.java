@@ -17,19 +17,28 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.util.Log;
+import android.widget.ImageButton;
 
 import com.coremedia.iso.IsoFile;
+import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -325,4 +334,13 @@ public class Utils {
         return lengthInMSeconds;
     }
 
+    public static void addFileToVideoGallery(String file) {
+        MediaScannerConnection.scanFile(VideonaApplication.getAppContext(),
+                new String[] { file }, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+            public void onScanCompleted(String path, Uri uri) {
+               // Log.i("ExternalStorage", "Scanned " + path + ":");
+            }
+        });
+    }
 }

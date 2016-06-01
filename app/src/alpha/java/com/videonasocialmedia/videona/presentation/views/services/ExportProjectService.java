@@ -8,6 +8,7 @@ import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.Utils;
 
 /**
  * Created by  on 26/05/16.
@@ -53,6 +54,7 @@ public class ExportProjectService extends IntentService implements OnExportFinis
 
     @Override
     public void onExportSuccess(Video video) {
+        Utils.addFileToVideoGallery(video.getMediaPath().toString());
         publishResults(video.getMediaPath(), Activity.RESULT_OK);
     }
 

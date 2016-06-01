@@ -15,4 +15,7 @@
     <string name="dialog_edit_remove_accept">Yes</string>
     <string name="dialog_edit_remove_cancel">No</string>
 
+    <string name="video_saved">Video saved in your gallery</string>
+    <string name="save_to_gallery">Save to gallery</string>
+
 </resources>
