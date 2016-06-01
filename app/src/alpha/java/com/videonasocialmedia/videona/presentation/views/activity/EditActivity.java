@@ -448,6 +448,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
+    public void expandFabMenu(){
+        fabEditRoom.expand();
+    }
+
+    @Override
     public void bindVideoList(List<Video> videoList) {
         this.videoList = videoList;
         projectPlayer.initPreviewLists(videoList);
