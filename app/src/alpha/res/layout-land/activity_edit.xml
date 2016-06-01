@@ -84,7 +84,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
         app:fab_addButtonColorNormal="@color/colorAccent"
         app:fab_addButtonColorPressed="@color/colorAccent"
         app:layout_behavior="com.videonasocialmedia.videona.presentation.views.customviews.FloatingActionMenuButtonBehavior"
