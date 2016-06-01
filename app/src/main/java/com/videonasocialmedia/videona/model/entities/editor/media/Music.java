@@ -21,7 +21,7 @@ public class Music extends Audio {
     private int iconResourceId;
 
     public Music(int iconResourceId, String nameResourceId, int musicResourceId, int colorResourceId, String author) {
-        super("", "", "", 0, 0, null, null);
+        super("", "", "", nameResourceId, "", 0, 0, null, null, null, null, null);
         this.musicResourceId = musicResourceId;
         this.colorResourceId = colorResourceId;
         this.nameResourceId = nameResourceId;

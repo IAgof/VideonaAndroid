@@ -34,33 +34,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
         <include
             android:id="@+id/video_view"
-            layout="@layout/video_preview"/>
+            layout="@layout/video_preview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="4"/>
 
-        <ImageView
-            android:id="@+id/music_image"
-            android:layout_width="match_parent"
-            android:layout_height="158dp"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/imagebutton_music_background_folk"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/detail_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="3"
+            android:orientation="vertical"
             android:padding="8dp"
             tools:background="#569388">
+
+            <ImageView
+                android:id="@+id/music_image"
+                android:layout_width="match_parent"
+                android:layout_height="158dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/imagebutton_music_background_folk"/>
 
             <TextView
                 android:id="@+id/music_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="14dp"
                 android:textColor="@color/textColorTitleToolbar"
                 android:textSize="16sp"
                 tools:text="El título de la canción"
@@ -80,11 +89,11 @@
                 android:id="@+id/scene_root"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 tools:layout="@layout/activity_music_detail_scene_accept_cancel"
-                tools:layout_height="50dp"/>
+                tools:layout_height="50dp"
+                />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

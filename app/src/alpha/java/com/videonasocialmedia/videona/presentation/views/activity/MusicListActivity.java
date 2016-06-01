@@ -91,9 +91,6 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
 
     public void navigateTo(Class cls) {
         Intent intent = new Intent(getApplicationContext(), cls);
-        if (cls == GalleryActivity.class) {
-            intent.putExtra("SHARE", false);
-        }
         startActivity(intent);
     }
 
@@ -106,10 +103,7 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
     @Override
     public void onClick(Music music) {
         Intent i = new Intent(this, MusicDetailActivity.class);
-        i.putExtra(MusicDetailActivity.KEY_MUSIC_ID_EXTRAS, music.getMusicResourceId());
-        i.putExtra(MusicDetailActivity.KEY_AUTHOR_EXTRAS, music.getTitle());
-        i.putExtra(MusicDetailActivity.KEY_TITLE_EXTRAS, music.getTitle());
-        i.putExtra(MusicDetailActivity.KEY_IMAGE_EXTRAS, music.getIconResourceId());
+        i.putExtra(MusicDetailActivity.KEY_MUSIC_ID, music.getMusicResourceId());
         startActivity(i);
     }
 
