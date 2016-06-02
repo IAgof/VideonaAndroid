@@ -211,7 +211,8 @@ public class GlUtil {
 
     public static int createTextureFromDrawable(Drawable drawable){
         // Create an empty, mutable bitmap
-        Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+        //Bitmap bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(1024, 1024, Bitmap.Config.ARGB_8888);
         // get a canvas to paint over the bitmap
         Canvas canvas = new Canvas(bitmap);
         canvas.drawARGB(0,0,255,0);
@@ -219,7 +220,8 @@ public class GlUtil {
         // get a background image from resources
         // note the image format must match the bitmap format
         Drawable background = drawable;
-        background.setBounds(0, 0, 256, 256);
+        //background.setBounds(0, 0, 256, 256);
+        background.setBounds(0, 0, 1024, 1024);
         background.draw(canvas); // draw the background to our bitmap
 
         int[] textures = new int[1];
