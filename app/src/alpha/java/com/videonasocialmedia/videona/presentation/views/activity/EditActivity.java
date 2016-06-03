@@ -15,13 +15,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,10 +31,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
@@ -47,13 +40,11 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
-import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.presentation.views.utils.UiUtils;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.Utils;
 
 import java.util.List;
 
@@ -62,9 +53,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class EditActivity extends VideonaActivity implements EditorView,
-        VideonaPlayerListener,
-//        VideonaPlayerView, SeekBar.OnSeekBarChangeListener,
-        VideoTimeLineRecyclerViewClickListener {
+        VideonaPlayerListener, VideoTimeLineRecyclerViewClickListener {
 
     private final int NUM_COLUMNS_GRID_TIMELINE_HORIZONTAL = 3;
     private final int NUM_COLUMNS_GRID_TIMELINE_VERTICAL = 4;
@@ -127,9 +116,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        Project project = Project.getInstance(null, null, null);
-        videonaPlayer.initVideoPreviewFromVideonaProject(project, this);
-//        initVideoPreview();
+        videonaPlayer.initVideoPreview(this);
 
         editPresenter = new EditPresenter(this, videonaPlayer);
 
@@ -137,15 +124,17 @@ public class EditActivity extends VideonaActivity implements EditorView,
         if (savedInstanceState != null) {
             this.currentVideoIndex = savedInstanceState.getInt(Constants.CURRENT_VIDEO_INDEX);
         }
-
-
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        videonaPlayer.destroy();
-//        handler.removeCallbacksAndMessages(null);
+    protected void onStart() {
+        super.onStart();
+        initVideoListRecycler();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -154,10 +143,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         videonaPlayer.pause();
         unregisterReceiver(receiver);
         hideProgressDialog();
-//        releaseVideoView();
-//        releaseMusicPlayer();
-//        projectDuration = 0;
-//        instantTime = 0;
     }
 
     @Override
@@ -174,10 +159,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        initVideoListRecycler();
+    protected void onDestroy() {
+        super.onDestroy();
+        videonaPlayer.destroy();
     }
 
     private void initVideoListRecycler() {
@@ -196,7 +180,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         ItemTouchHelperCallback callback = new ItemTouchHelperCallback(timeLineAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(videoListRecyclerView);
-
     }
 
     private void setupActivityButtons() {
@@ -225,12 +208,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         UiUtils.tintButton(editDuplicateButton);
         UiUtils.tintButton(editSplitButton);
         UiUtils.tintButton(editTrimButton);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
     }
 
     @Override
@@ -268,7 +245,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
             default:
 
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -446,17 +422,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void bindVideoList(List<Video> videoList) {
         this.videoList = videoList;
         videonaPlayer.initPreviewLists(videoList);
-//        projectPlayer.setTotalVideoDuration();
-        videonaPlayer.initPreview();
+        videonaPlayer.initPreview(0);
         this.setSelectedClip(currentVideoIndex);
 
-//        initPreviewLists(videoList);
-//        seekBar.setMax(projectDuration);
-//        initPreview();
         timeLineAdapter.setVideoList(videoList);
         timeLineAdapter.updateSelection(currentVideoIndex); // TODO: check this flow and previous updateSelection(0); in setVideoList
         videoListRecyclerView.scrollToPosition(currentVideoIndex);
-
         timeLineAdapter.notifyDataSetChanged();
     }
 
@@ -472,19 +443,16 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void enableEditActions() {
-
         navigateToMusicButton.setEnabled(true);
         navigateToShareButton.setEnabled(true);
 
         editTrimButton.setEnabled(true);
         editSplitButton.setEnabled(true);
         editDuplicateButton.setEnabled(true);
-
     }
 
     @Override
     public void disableEditActions() {
-
         navigateToMusicButton.setEnabled(false);
         navigateToShareButton.setEnabled(false);
 
@@ -494,9 +462,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
         videonaPlayer.releaseView();
         videonaPlayer.setBlackBackgroundColor();
-//        releaseView();
-//        videoPreview.setBackgroundColor(Color.BLACK);
-
     }
 
     @Override
@@ -505,12 +470,5 @@ public class EditActivity extends VideonaActivity implements EditorView,
         timeLineAdapter.updateSelection(currentClipIndex);
         videoListRecyclerView.scrollToPosition(currentClipIndex);
     }
-
-
-
-
-
-
-
 
 }
