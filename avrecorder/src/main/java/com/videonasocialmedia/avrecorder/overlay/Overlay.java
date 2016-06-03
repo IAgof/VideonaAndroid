@@ -36,7 +36,7 @@ public abstract class Overlay {
      * Creates a texture and a shader program. It MUST be called on the GL thread
      */
     public final void initProgram() {
-        textureId = GlUtil.createTextureFromDrawable(overlayImage);
+        textureId = GlUtil.createTextureFromDrawable(overlayImage, width, height);
         Texture2dProgram program =
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D);
         program.setTexSize(width, height);
