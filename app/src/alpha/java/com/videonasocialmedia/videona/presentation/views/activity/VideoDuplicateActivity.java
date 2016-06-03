@@ -104,15 +104,13 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     @Override
     protected void onPause() {
         super.onPause();
-        presenter.onPause();
         videonaPlayer.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.onResume();
-        presenter.init(videoIndexOnTrack);
+        presenter.loadProjectVideo(videoIndexOnTrack);
     }
 
     @Override
