@@ -18,20 +18,22 @@ import android.content.SharedPreferences;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.GetMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ReorderMediaItemUseCase;
+import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
-import com.videonasocialmedia.videona.presentation.mvp.views.ProjectPlayerView;
-import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
+import com.videonasocialmedia.videona.presentation.mvp.views.VideonaPlayerView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EditPresenter implements OnAddMediaFinishedListener,
-        OnRemoveMediaFinishedListener, OnVideosRetrieved, OnReorderMediaListener {
+        OnRemoveMediaFinishedListener, OnVideosRetrieved, OnReorderMediaListener, GetMusicFromProjectCallback {
 
     /**
      * LOG_TAG
@@ -41,30 +43,33 @@ public class EditPresenter implements OnAddMediaFinishedListener,
      * UseCases
      */
     private RemoveVideoFromProjectUseCase remoVideoFromProjectUseCase;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private ReorderMediaItemUseCase reorderMediaItemUseCase;
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
+    private GetMusicFromProjectUseCase getMusicFromProjectUseCase;
     /**
      * Editor View
      */
     private EditorView editorView;
-    private ProjectPlayerView projectPlayerView;
+    private VideonaPlayerView videonaPlayerView;
 
-    public EditPresenter(EditorView editorView, ProjectPlayerView projectPlayerView) {
+    public EditPresenter(EditorView editorView, VideonaPlayerView videonaPlayerView) {
         this.editorView = editorView;
-        this.projectPlayerView = projectPlayerView;
+        this.videonaPlayerView = videonaPlayerView;
 
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         reorderMediaItemUseCase = new ReorderMediaItemUseCase();
+        getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
 
-        sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
-                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
-                Context.MODE_PRIVATE);
     }
 
 
     public String getResolution() {
+        SharedPreferences sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
+                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+
         return sharedPreferences.getString(ConfigPreferences.RESOLUTION, "1280x720");
     }
 
@@ -108,6 +113,7 @@ public class EditPresenter implements OnAddMediaFinishedListener,
         editorView.disableEditActions();
         editorView.hideProgressDialog();
         editorView.showMessage(R.string.add_videos_to_project);
+        editorView.expandFabMenu();
     }
 
     public void removeVideoFromProject(Video selectedVideoRemove) {
@@ -119,7 +125,7 @@ public class EditPresenter implements OnAddMediaFinishedListener,
     @Override
     public void onMediaReordered(Media media, int newPosition) {
         //If everything was right the UI is already updated since the user did the reordering
-        projectPlayerView.pausePreview();
+        videonaPlayerView.pausePreview();
     }
 
     @Override
@@ -132,4 +138,14 @@ public class EditPresenter implements OnAddMediaFinishedListener,
         getMediaListFromProjectUseCase.getMediaListFromProject(this);
     }
 
+    public void loadProject() {
+        getMediaListFromProjectUseCase.getMediaListFromProject(this);
+//        getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
+        getMusicFromProjectUseCase.getMusicFromProject(this);
+    }
+
+    @Override
+    public void onMusicRetrieved(Music music) {
+        editorView.setMusic(music);
+    }
 }

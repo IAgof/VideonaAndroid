@@ -44,7 +44,7 @@ public class Project {
      */
     private String projectPath;
     /**
-     * Track of Video an Image objects
+     * Track of Video and Image objects
      */
     private MediaTrack mediaTrack;
     /**

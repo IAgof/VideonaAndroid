@@ -47,8 +47,8 @@
             <!--<include layout="@layout/edit_activities_navigation_buttons"/>-->
         </LinearLayout>
 
-        <com.videonasocialmedia.videona.presentation.views.customviews.ProjectPlayer
-            android:id="@+id/project_player"
+        <com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer
+            android:id="@+id/videona_player"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -75,14 +75,33 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fab_edit_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/common_icon_add_white"
+        app:fab_addButtonColorNormal="@color/colorAccent"
+        app:fab_addButtonColorPressed="@color/colorAccent"
         app:backgroundTint="@color/colorAccent"
-        app:layout_anchor="@id/coordinatorLayout"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_behavior="com.videonasocialmedia.videona.presentation.views.customviews.FloatingActionMenuButtonBehavior"
+        android:layout_gravity="bottom|right|end">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorFabMenu"
+            app:fab_colorPressed="@color/colorFabMenu"
+            android:src="@drawable/common_navigate_record"
+            android:id="@+id/fab_go_to_record"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorFabMenu"
+            app:fab_colorPressed="@color/colorFabMenu"
+            android:src="@drawable/common_navigate_gallery"
+            android:id="@+id/fab_go_to_gallery"/>
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>

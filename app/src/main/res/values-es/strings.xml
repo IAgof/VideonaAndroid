@@ -524,4 +524,7 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="no">No</string>
     <string name="comingSoon">Próximamente</string>
 
+    <string name="video_saved">Video guardado en tu galería</string>
+    <string name="save_to_gallery">Guardar en galería</string>
+
 </resources>

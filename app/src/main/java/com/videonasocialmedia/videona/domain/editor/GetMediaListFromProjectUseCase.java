@@ -25,7 +25,6 @@ public class GetMediaListFromProjectUseCase {
         return track.getItems();
     }
 
-    @Deprecated
     public void getMediaListFromProject(OnVideosRetrieved listener){
         Project project=Project.getInstance(null, null, null);
         Track track=project.getMediaTrack();

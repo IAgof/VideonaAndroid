@@ -27,7 +27,7 @@ import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
-import com.videonasocialmedia.videona.presentation.views.activity.ShareVideoActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.ShareActivity;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
 
@@ -94,9 +94,9 @@ public class NavigationDrawerFragment extends VideonaFragment implements Videona
 
             this.getActivity().onBackPressed();
 
-        } else if(this.getActivity().getClass() == ShareVideoActivity.class) {
+        } else if(this.getActivity().getClass() == ShareActivity.class) {
 
-            ShareVideoActivity activity = (ShareVideoActivity) this.getActivity();
+            ShareActivity activity = (ShareActivity) this.getActivity();
            // activity.navigateToEdit();
 
         } else {

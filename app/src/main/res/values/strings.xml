@@ -1611,4 +1611,7 @@ and Conditions.\n\n
     <string name="no">No</string>
     <string name="comingSoon">Coming Soon</string>
 
+    <string name="video_saved">Video saved in your gallery</string>
+    <string name="save_to_gallery">Save to gallery</string>
+
 </resources>
