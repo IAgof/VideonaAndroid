@@ -50,7 +50,6 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Musi
                 .error(R.drawable.gatito_rules)
                 .into(holder.musicImage);
         holder.musicTitle.setText(music.getNameResourceId());
-        holder.musicTitle.setBackgroundResource(music.getColorResourceId());
     }
 
     @Override

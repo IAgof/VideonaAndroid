@@ -48,50 +48,79 @@
 
 
         <LinearLayout
-            android:id="@+id/detail_content"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
             android:layout_weight="3"
-            android:orientation="vertical"
-            android:padding="8dp"
-            tools:background="#569388">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/music_image"
-                android:layout_width="match_parent"
-                android:layout_height="158dp"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/imagebutton_music_background_folk"/>
-
-            <TextView
-                android:id="@+id/music_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="14dp"
-                android:textColor="@color/textColorTitleToolbar"
-                android:textSize="16sp"
-                tools:text="El título de la canción"
-                />
-
-            <TextView
-                android:id="@+id/music_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/music_title"
-                android:layout_marginLeft="20dp"
-                android:textColor="@color/textColorTitleToolbar"
-                tools:text="El autor de la canción"
-                />
-
-            <FrameLayout
-                android:id="@+id/scene_root"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:layout="@layout/activity_music_detail_scene_accept_cancel"
-                tools:layout_height="50dp"
-                />
+                android:layout_margin="4dp"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp">
+
+                <RelativeLayout
+                    android:id="@+id/detail_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/music_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="4dp"
+                        android:minHeight="140dp"
+                        android:scaleType="centerCrop"
+                        tools:src="@drawable/imagebutton_music_background_folk"/>
+
+                    <TextView
+                        android:id="@+id/music_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@+id/music_image"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:background="#000"
+                        android:textColor="@color/textColorTitleToolbar"
+                        android:textSize="16sp"
+                        tools:text="El título de la canción"
+                        />
+
+                    <TextView
+                        android:id="@+id/music_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignStart="@id/music_image"
+                        android:layout_below="@id/music_title"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="4dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:background="#000"
+                        android:textColor="@color/textColorTitleToolbar"
+                        tools:text="El autor de la canción"
+                        />
+
+                    <FrameLayout
+                        android:id="@+id/scene_root"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/music_image"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="8dp"
+                        tools:layout="@layout/activity_music_detail_scene_accept_cancel"
+                        tools:layout_height="50dp"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 

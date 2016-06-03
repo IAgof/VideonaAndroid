@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicDetailPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
 
@@ -55,6 +56,8 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         setContentView(R.layout.activity_music_detail);
         ButterKnife.bind(this);
         initToolbar();
+
+
 
         musicDetailPresenter = new MusicDetailPresenter(this);
 
@@ -157,7 +160,7 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
 
     @Override
     public void showBackground(int colorResourceId) {
-        detailContent.setBackgroundResource(colorResourceId);
+        //detailContent.setBackgroundResource(colorResourceId);
     }
 
     @Nullable
