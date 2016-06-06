@@ -43,7 +43,7 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
     }
 
-    public void init(int videoToTrimIndex) {
+    public void loadProjectVideo(int videoToTrimIndex) {
         List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
         if (videoList != null) {
             ArrayList<Video> v = new ArrayList<>();
@@ -51,14 +51,12 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
             v.add(videoToEdit);
             onVideosRetrieved(v);
         }
-
     }
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
         duplicateView.showPreview(videoList);
         duplicateView.initDuplicateView(videoList.get(0).getMediaPath());
-
     }
 
     @Override
@@ -66,21 +64,11 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
         duplicateView.showError("No videos");
     }
 
-    public void onResume() {
-
-    }
-
-    public void onPause() {
-
-    }
-
     public void duplicateVideo(Video video, int positionInAdapter, int numDuplicates) {
         for (int duplicates = 1; duplicates < numDuplicates; duplicates++) {
             Video copyVideo = new Video(video);
             addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter);
         }
-
-
     }
 
 }
