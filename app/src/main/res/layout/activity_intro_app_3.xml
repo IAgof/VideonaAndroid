@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffc107"
-    tools:context=".presentation.views.activity.IntroAppActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffc107"
+                tools:context=".presentation.views.activity.IntroAppActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            android:src="@drawable/intro_app_slide_share_image" />
+            android:src="@drawable/intro_app_slide_share_image"/>
 
         <ImageView
             android:id="@+id/character"
@@ -27,7 +27,7 @@
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
             android:layout_weight="5"
-            android:src="@drawable/common_character_sonora_speech_balloon" />
+            android:src="@drawable/common_character_sonora_speech_balloon"/>
 
         <TextView
             android:layout_width="match_parent"

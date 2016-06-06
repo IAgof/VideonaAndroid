@@ -7,50 +7,50 @@
   -->
 
 <resources>
-  <string-array name="camera_filter_names">
-    <item>Normal</item>
-    <item>Fisheye</item>
-    <item>Stretch</item>
-    <item>Dent</item>
-    <item>Mirror</item>
-    <item>Squeeze</item>
-    <item>Tunnel</item>
-    <item>Twirl</item>
-    <item>Bulge</item>
-    <item>Normal</item>
-    <item>Aqua</item>
-    <item>PosterizeBW</item>
-    <item>Emboss</item>
-    <item>Mono</item>
-    <item>Negative</item>
-    <item>Night</item>
-    <item>Posterize</item>
-    <item>Sepia</item>
-  </string-array>
+    <string-array name="camera_filter_names">
+        <item>Normal</item>
+        <item>Fisheye</item>
+        <item>Stretch</item>
+        <item>Dent</item>
+        <item>Mirror</item>
+        <item>Squeeze</item>
+        <item>Tunnel</item>
+        <item>Twirl</item>
+        <item>Bulge</item>
+        <item>Normal</item>
+        <item>Aqua</item>
+        <item>PosterizeBW</item>
+        <item>Emboss</item>
+        <item>Mono</item>
+        <item>Negative</item>
+        <item>Night</item>
+        <item>Posterize</item>
+        <item>Sepia</item>
+    </string-array>
 
 
-  <string-array name="camera_resolution_names">
-    <item>@string/low_resolution_name</item>
-    <item>@string/good_resolution_name</item>
-    <item>@string/high_resolution_name</item>
-  </string-array>
+    <string-array name="camera_resolution_names">
+        <item>@string/low_resolution_name</item>
+        <item>@string/good_resolution_name</item>
+        <item>@string/high_resolution_name</item>
+    </string-array>
 
-  <string-array name="camera_resolution_values">
-    <item>@string/low_value</item>
-    <item>@string/good_value</item>
-    <item>@string/high_value</item>
-  </string-array>
+    <string-array name="camera_resolution_values">
+        <item>@string/low_value</item>
+        <item>@string/good_value</item>
+        <item>@string/high_value</item>
+    </string-array>
 
-  <string-array name="camera_quality_names">
-    <item>@string/low_quality_name</item>
-    <item>@string/good_quality_name</item>
-    <item>@string/high_quality_name</item>
-  </string-array>
+    <string-array name="camera_quality_names">
+        <item>@string/low_quality_name</item>
+        <item>@string/good_quality_name</item>
+        <item>@string/high_quality_name</item>
+    </string-array>
 
-  <string-array name="camera_quality_values">
-    <item>@string/low_value</item>
-    <item>@string/good_value</item>
-    <item>@string/high_value</item>
-  </string-array>
+    <string-array name="camera_quality_values">
+        <item>@string/low_value</item>
+        <item>@string/good_value</item>
+        <item>@string/high_value</item>
+    </string-array>
 
 </resources>

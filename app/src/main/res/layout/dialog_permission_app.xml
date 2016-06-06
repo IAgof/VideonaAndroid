@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="20dp"
-     >
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="20dp"
+    >
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/CloseBecauseOfPermissionsTitle"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="@string/CloseBecauseOfPermissionsTitle"
         android:textColor="@color/textColorTitle"
-        android:layout_gravity="center"/>
+        android:textSize="25sp"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        android:background="@color/colorSecondaryLight" />
+        android:layout_marginTop="2dp"
+        android:background="@color/colorSecondaryLight"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,17 +35,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="50dp"
-        android:gravity="right">
+        android:gravity="right"
+        android:paddingTop="50dp">
 
         <TextView
+            android:id="@+id/ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ok"
-            android:textSize="20dp"
-            android:text="@string/ok"
             android:background="@color/colorTransparent"
-            android:textColor="@color/textColorTitle"/>
+            android:text="@string/ok"
+            android:textColor="@color/textColorTitle"
+            android:textSize="20dp"/>
     </LinearLayout>
 
 </LinearLayout>

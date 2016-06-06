@@ -7,8 +7,8 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/colorButtonAccent" android:state_pressed="true" />
+    <item android:drawable="@color/colorButtonAccent" android:state_pressed="true"/>
     <!-- pressed state -->
-    <item android:drawable="@color/colorButton" />
+    <item android:drawable="@color/colorButton"/>
     <!-- default state -->
 </selector>

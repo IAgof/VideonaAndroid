@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +17,7 @@
             android:id="@+id/video_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"/>
 
         <ImageButton
             android:id="@+id/play_pause_button"
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="#00000000"
-            android:src="@drawable/common_icon_play_on_normal" />
+            android:src="@drawable/common_icon_play_on_normal"/>
 
         <SeekBar
             android:id="@+id/seekbar"
@@ -33,7 +34,7 @@
             android:layout_alignBottom="@+id/video_preview"
             android:layout_marginBottom="24dp"
             android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp" />
+            android:layout_marginRight="32dp"/>
 
         <RelativeLayout
             android:id="@+id/bottom_panel"
@@ -41,7 +42,8 @@
             android:layout_height="100dp"
             android:layout_alignParentBottom="true">
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
@@ -59,7 +61,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     tools:layout_height="40dp"
-                    tools:listitem="@layout/share_network_viewholder" />
+                    tools:listitem="@layout/share_network_viewholder"/>
             </android.support.v7.widget.CardView>
 
         </RelativeLayout>
@@ -69,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorTransparent"
-            android:elevation="4dp" />
+            android:elevation="4dp"/>
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -80,7 +82,7 @@
         android:src="@drawable/common_icon_add_white"
         app:layout_anchor="@id/card_view"
         app:layout_anchorGravity="top|right|end"
-        app:backgroundTint="@color/colorAccent" />
+        app:backgroundTint="@color/colorAccent"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

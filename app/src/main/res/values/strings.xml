@@ -78,86 +78,86 @@
 
     <string name="action_settings">Settings</string>
 
-        <!-- Rate Videona -->
-        <string name="rateUsDialogTitle">We count on you</string>
+    <!-- Rate Videona -->
+    <string name="rateUsDialogTitle">We count on you</string>
         <string name="rateUsDialogMessage">Rate our app or send us an email if you have any
             suggestions.</string>
-        <string name="rateUsDialogAffirmative">Rate the app</string>
-        <string name="rateUsDialogNegative">Email</string>
-        <string name="error_rate_app">Could not launch Google Play</string>
-        <string name="title_vote_section">Vote</string>
-        <string name="content_vote_section">Vote our app</string>
+    <string name="rateUsDialogAffirmative">Rate the app</string>
+    <string name="rateUsDialogNegative">Email</string>
+    <string name="error_rate_app">Could not launch Google Play</string>
+    <string name="title_vote_section">Vote</string>
+    <string name="content_vote_section">Vote our app</string>
 
-        <!-- Exit App -->
-        <string name="exit_app_title">Leave application?</string>
-        <string name="exit_app_message">Are you sure do you want to quit?</string>
-        <string name="acceptExit">Yes</string>
-        <string name="cancelExit">No</string>
+    <!-- Exit App -->
+    <string name="exit_app_title">Leave application?</string>
+    <string name="exit_app_message">Are you sure do you want to quit?</string>
+    <string name="acceptExit">Yes</string>
+    <string name="cancelExit">No</string>
 
-        <!-- Advanced section -->
-        <string name="title_advanced_section">Advanced</string>
-        <string name="kamaradaGooglePlayLink">https://play.google.com/store/apps/details?id=com.videonasocialmedia.kamarada&amp;referrer=utm_source%3DVideona%26utm_medium%3DLink_Directo%26utm_campaign%3DDownload_Kamarada_from_videona_settings</string>
-        <string name="downloadKamarada">Download Kamarada</string>
-        <string name="shareVideona">Share Videona</string>
-        <string name="whatsAppNotInstalled">Sorry, WhatsApp is not installed</string>
-        <string name="shareWith">Share with</string>
+    <!-- Advanced section -->
+    <string name="title_advanced_section">Advanced</string>
+    <string name="kamaradaGooglePlayLink">https://play.google.com/store/apps/details?id=com.videonasocialmedia.kamarada&amp;referrer=utm_source%3DVideona%26utm_medium%3DLink_Directo%26utm_campaign%3DDownload_Kamarada_from_videona_settings</string>
+    <string name="downloadKamarada">Download Kamarada</string>
+    <string name="shareVideona">Share Videona</string>
+    <string name="whatsAppNotInstalled">Sorry, WhatsApp is not installed</string>
+    <string name="shareWith">Share with</string>
         <string name="whatsAppSharedText">Having fun with Videona, the best app to edit videos!!!
             Try it!!!\nhttps://goo.gl/YudZYP</string>
-        <string name="followUsInTwitter">Follow us in Twitter</string>
-        <string name="videonaTwitter">https://twitter.com/videona_eng</string>
+    <string name="followUsInTwitter">Follow us in Twitter</string>
+    <string name="videonaTwitter">https://twitter.com/videona_eng</string>
 
-        <!-- Email -->
-        <string name="enterEmail">Enter a valid email</string>
-        <string name="removeEmail">Remove email</string>
-        <string name="invalid_email">Please, insert a valid email</string>
+    <!-- Email -->
+    <string name="enterEmail">Enter a valid email</string>
+    <string name="removeEmail">Remove email</string>
+    <string name="invalid_email">Please, insert a valid email</string>
 
-        <!-- User info -->
-        <string name="settingsTitle">Settings</string>
-        <string name="titleUserSection">My account</string>
-        <string name="name">Name</string>
-        <string name="enterName">Enter your name</string>
-        <string name="removeName">Remove name</string>
-        <string name="username">Username</string>
-        <string name="enterUsername">Enter a username</string>
-        <string name="removeUsername">Remove username</string>
-        <string name="emailPreference">Email</string>
-        <string name="save">Save</string>
+    <!-- User info -->
+    <string name="settingsTitle">Settings</string>
+    <string name="titleUserSection">My account</string>
+    <string name="name">Name</string>
+    <string name="enterName">Enter your name</string>
+    <string name="removeName">Remove name</string>
+    <string name="username">Username</string>
+    <string name="enterUsername">Enter a username</string>
+    <string name="removeUsername">Remove username</string>
+    <string name="emailPreference">Email</string>
+    <string name="save">Save</string>
 
-        <!-- Camera Settings -->
-        <string name="title_camera_section">Camera</string>
-        <string name="resolution">Resolution</string>
-        <string name="low_resolution_name">Good (720p)</string>
-        <string name="low_value">Good</string>
-        <string name="good_resolution_name">Very good (1080p)</string>
-        <string name="good_value">Very good</string>
-        <string name="high_resolution_name">Excellent (4K)</string>
-        <string name="high_value">Excellent</string>
-        <string name="quality">Quality</string>
-        <string name="low_quality_name">Good (2 Mbps)</string>
-        <string name="good_quality_name">Very good (5 Mbps)</string>
-        <string name="high_quality_name">Excellent (10 Mbps)</string>
-        <string name="cancelSettingsCamera">Cancel</string>
+    <!-- Camera Settings -->
+    <string name="title_camera_section">Camera</string>
+    <string name="resolution">Resolution</string>
+    <string name="low_resolution_name">Good (720p)</string>
+    <string name="low_value">Good</string>
+    <string name="good_resolution_name">Very good (1080p)</string>
+    <string name="good_value">Very good</string>
+    <string name="high_resolution_name">Excellent (4K)</string>
+    <string name="high_value">Excellent</string>
+    <string name="quality">Quality</string>
+    <string name="low_quality_name">Good (2 Mbps)</string>
+    <string name="good_quality_name">Very good (5 Mbps)</string>
+    <string name="high_quality_name">Excellent (10 Mbps)</string>
+    <string name="cancelSettingsCamera">Cancel</string>
 
 
-        <!-- More info Settings -->
-        <string name="aboutUsTitle">About us</string>
-        <string name="moreInformation">More information</string>
-        <string name="privacyPolicy">Privacy policy</string>
-        <string name="termsOfService">Terms of service</string>
-        <string name="licenses">Licenses</string>
-        <string name="legacyAdviceTitle">Legal Notice</string>
+    <!-- More info Settings -->
+    <string name="aboutUsTitle">About us</string>
+    <string name="moreInformation">More information</string>
+    <string name="privacyPolicy">Privacy policy</string>
+    <string name="termsOfService">Terms of service</string>
+    <string name="licenses">Licenses</string>
+    <string name="legacyAdviceTitle">Legal Notice</string>
 
-        <!-- Contact Settings, not in use -->
-        <string name="title_contact_section">Contact</string>
-        <string name="content_contact_section">Give us feedback</string>
+    <!-- Contact Settings, not in use -->
+    <string name="title_contact_section">Contact</string>
+    <string name="content_contact_section">Give us feedback</string>
 
-        <!-- Tutorial Settings, not in use -->
-        <string name="title_tutorial_section">Tutorial</string>
-        <string name="content_tutorial_section">See our tutorial</string>
+    <!-- Tutorial Settings, not in use -->
+    <string name="title_tutorial_section">Tutorial</string>
+    <string name="content_tutorial_section">See our tutorial</string>
 
-        <!-- Accounts actions -->
-        <string name="accountActions">Account actions</string>
-        <string name="exit">Exit</string>
+    <!-- Accounts actions -->
+    <string name="accountActions">Account actions</string>
+    <string name="exit">Exit</string>
 
 
     <!-- End Settings Activity -->

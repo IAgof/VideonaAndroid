@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/effectViewHolder"
-    android:orientation="vertical"
-    android:layout_width="70dp"
-    android:layout_height="80dp"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    android:layout_marginBottom="2dp"
-    android:gravity="center">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/effectViewHolder"
+              android:orientation="vertical"
+              android:layout_width="70dp"
+              android:layout_height="80dp"
+              android:layout_marginLeft="2dp"
+              android:layout_marginRight="2dp"
+              android:layout_marginBottom="2dp"
+              android:gravity="center">
 
     <ImageView
         android:id="@+id/effectImage"
@@ -18,7 +18,7 @@
         android:layout_marginTop="5dp"
         android:background="@null"
         android:scaleType="centerCrop"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"/>
 
     <TextView
         android:id="@+id/effectName"

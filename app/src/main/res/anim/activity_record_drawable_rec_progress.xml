@@ -6,9 +6,11 @@
   ~ All rights reserved
   -->
 
-<animation-list   android:id="@+id/imageRecPoint" android:oneshot="false"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/activity_record_icon_rec_circle_small" android:duration="500" />
-    <item android:drawable="@drawable/activity_record_icon_rec_circle_medium" android:duration="500" />
-    <item android:drawable="@drawable/activity_record_icon_rec_circle_big" android:duration="500" />
+<animation-list android:id="@+id/imageRecPoint" xmlns:android="http://schemas.android.com/apk/res/android"
+                android:oneshot="false">
+    <item android:drawable="@drawable/activity_record_icon_rec_circle_small"
+          android:duration="500"/>
+    <item android:drawable="@drawable/activity_record_icon_rec_circle_medium"
+          android:duration="500"/>
+    <item android:drawable="@drawable/activity_record_icon_rec_circle_big" android:duration="500"/>
 </animation-list>

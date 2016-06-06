@@ -12,7 +12,6 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.videonasocialmedia.videona.R;
@@ -21,12 +20,12 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.GetMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ReorderMediaItemUseCase;
-import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideonaPlayerView;
+import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.ArrayList;
@@ -43,9 +42,9 @@ public class EditPresenter implements OnAddMediaFinishedListener,
      * UseCases
      */
     private RemoveVideoFromProjectUseCase remoVideoFromProjectUseCase;
-//    private SharedPreferences sharedPreferences;
     private ReorderMediaItemUseCase reorderMediaItemUseCase;
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
+    private ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack;
     private GetMusicFromProjectUseCase getMusicFromProjectUseCase;
     /**
      * Editor View
@@ -53,9 +52,11 @@ public class EditPresenter implements OnAddMediaFinishedListener,
     private EditorView editorView;
     private VideonaPlayerView videonaPlayerView;
 
-    public EditPresenter(EditorView editorView, VideonaPlayerView videonaPlayerView) {
+    public EditPresenter(EditorView editorView, VideonaPlayerView videonaPlayerView,
+                         ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack) {
         this.editorView = editorView;
         this.videonaPlayerView = videonaPlayerView;
+        this.projectModifiedCallBack = projectModifiedCallBack;
 
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
@@ -89,7 +90,8 @@ public class EditPresenter implements OnAddMediaFinishedListener,
     }
 
     @Override
-    public void onAddMediaItemToTrackSuccess(Media media) {}
+    public void onAddMediaItemToTrackSuccess(Media media) {
+    }
 
     @Override
     public void onRemoveMediaItemFromTrackError() {
@@ -100,12 +102,15 @@ public class EditPresenter implements OnAddMediaFinishedListener,
     @Override
     public void onRemoveMediaItemFromTrackSuccess() {
         editorView.updateProject();
+        projectModifiedCallBack.onProjectModified();
     }
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
         editorView.enableEditActions();
+        videonaPlayerView.bindVideoList(videoList);
         editorView.bindVideoList(videoList);
+        projectModifiedCallBack.onProjectModified();
     }
 
     @Override
@@ -114,6 +119,7 @@ public class EditPresenter implements OnAddMediaFinishedListener,
         editorView.hideProgressDialog();
         editorView.showMessage(R.string.add_videos_to_project);
         editorView.expandFabMenu();
+        projectModifiedCallBack.onProjectModified();
     }
 
     public void removeVideoFromProject(Video selectedVideoRemove) {
@@ -146,6 +152,6 @@ public class EditPresenter implements OnAddMediaFinishedListener,
 
     @Override
     public void onMusicRetrieved(Music music) {
-        editorView.setMusic(music);
+        videonaPlayerView.setMusic(music);
     }
 }

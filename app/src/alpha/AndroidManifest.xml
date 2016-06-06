@@ -18,7 +18,7 @@
         <activity
             android:name=".presentation.views.activity.GalleryActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape"/>
 
         <activity
             android:name=".presentation.views.activity.EditActivity"
@@ -39,6 +39,16 @@
             android:name=".presentation.views.activity.VideoDuplicateActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.EditActivity"/>
+
+        <activity
+            android:name=".presentation.views.activity.MusicListActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.EditActivity"/>
+
+        <activity
+            android:name=".presentation.views.activity.MusicDetailActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".presentation.views.activity.MusicListActivity"/>
 
     </application>
 

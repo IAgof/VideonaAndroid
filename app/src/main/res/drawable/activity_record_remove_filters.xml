@@ -6,6 +6,6 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/activity_record_icon_remove_filters_pressed" android:state_pressed="true" />
-    <item android:drawable="@drawable/activity_record_icon_remove_filters_normal" />
+    <item android:drawable="@drawable/activity_record_icon_remove_filters_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/activity_record_icon_remove_filters_normal"/>
 </selector>

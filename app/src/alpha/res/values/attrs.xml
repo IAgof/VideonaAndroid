@@ -17,4 +17,11 @@
         <attr name="thumb_image_max" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="ToolbarNavigator">
+        <attr name="tint_color" format="reference|color"/>
+        <attr name="edit_selected" default="false" format="boolean"/>
+        <attr name="music_selected" default="false" format="boolean"/>
+        <attr name="share_selected" default="false" format="boolean"/>
+    </declare-styleable>
+
 </resources>

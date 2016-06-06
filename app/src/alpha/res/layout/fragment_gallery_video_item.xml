@@ -6,16 +6,16 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/video_item"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
-    android:layout_margin="3dp">
+                android:id="@+id/video_item"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="3dp">
 
     <ImageView
         android:id="@+id/gallery_thumb"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/fragment_gallery_no_image" />
+        android:src="@drawable/fragment_gallery_no_image"/>
 
     <RelativeLayout
         android:id="@+id/gallery_overlay"
@@ -38,7 +38,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/common_gallery_overlay_icon_background_selector"
             android:clickable="false"
-            android:src="@drawable/fragment_gallery_video_overlay_icon_selector" />
+            android:src="@drawable/fragment_gallery_video_overlay_icon_selector"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -49,6 +49,7 @@
         android:layout_alignStart="@+id/gallery_thumb"
         android:layout_alignBottom="@+id/gallery_thumb"
         android:background="#aa333333">
+
         <TextView
             android:id="@+id/gallery_duration"
             android:layout_width="45dp"

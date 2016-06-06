@@ -4,28 +4,28 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" />
+        android:required="true"/>
 
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="false"
-        android:xlargeScreens="false" />
+        android:xlargeScreens="false"/>
 
     <permission
         android:name="com.videonasocialmedia.videona.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"/>
 
-    <uses-permission android:name="com.videonasocialmedia.videona.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.videonasocialmedia.videona.permission.C2D_MESSAGE"/>
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <application
         android:name=".VideonaApplication"
@@ -35,20 +35,20 @@
 
         <meta-data
             android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates"
-            android:value="false" />
+            android:value="false"/>
 
         <activity
             android:name="com.mixpanel.android.surveys.SurveyActivity"
-            android:theme="@style/com_mixpanel_android_SurveyActivityTheme" />
+            android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
 
         <receiver
             android:name="com.mixpanel.android.mpmetrics.GCMReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
 
-                <category android:name="com.videonasocialmedia.videona" />
+                <category android:name="com.videonasocialmedia.videona"/>
             </intent-filter>
         </receiver>
 
@@ -59,22 +59,22 @@
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />
+                <action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH"/>
             </intent-filter>
         </receiver>
         <service
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"/>
 
         <!-- Used for Google Play Store Campaign Measurement-->
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService"/>
         <receiver
             android:name=".presentation.views.broadcastreceiver.InstallReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
         <!-- Optionally, register CampaignTrackingReceiver and CampaignTrackingService to enable
@@ -84,7 +84,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
 
@@ -95,9 +95,9 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -113,15 +113,15 @@
             android:label="@string/app_name"
             android:screenOrientation="sensorLandscape">
             <intent-filter>
-                <action android:name="android.media.action.VIDEO_CAPTURE" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.media.action.VIDEO_CAPTURE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".presentation.views.activity.SettingsActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.RecordActivity" />
+            android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
         <activity
             android:name=".presentation.views.activity.NamePreferenceActivity"
@@ -129,8 +129,8 @@
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name=".presentation.views.activity.NamePreferenceActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.NamePreferenceActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -140,8 +140,8 @@
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name=".presentation.views.activity.UsernamePreferenceActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.UsernamePreferenceActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -151,58 +151,58 @@
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name=".presentation.views.activity.EmailPreferenceActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.EmailPreferenceActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".presentation.views.activity.AboutActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity">
             <intent-filter>
-                <action android:name=".presentation.views.activity.AboutActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.AboutActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".presentation.views.activity.PrivacyPolicyActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity">
             <intent-filter>
-                <action android:name=".presentation.views.activity.PrivacyPolicyActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.PrivacyPolicyActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".presentation.views.activity.TermsOfServiceActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity">
             <intent-filter>
-                <action android:name=".presentation.views.activity.TermsOfServiceActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.TermsOfServiceActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".presentation.views.activity.LicensesActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity">
             <intent-filter>
-                <action android:name=".presentation.views.activity.LicensesActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.LicensesActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
         <activity
             android:name=".presentation.views.activity.LegalNoticeActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.SettingsActivity" >
+            android:parentActivityName=".presentation.views.activity.SettingsActivity">
             <intent-filter>
-                <action android:name=".presentation.views.activity.LegalNoticeActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name=".presentation.views.activity.LegalNoticeActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -211,7 +211,8 @@
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
-        <service android:name=".presentation.views.services.ExportProjectService"
+        <service
+            android:name=".presentation.views.services.ExportProjectService"
             android:exported="false"
             />
 

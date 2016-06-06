@@ -30,7 +30,6 @@
         <item name="android:preferenceCategoryStyle">@style/VideonaCategoryPreference</item>
 
 
-
     </style>
 
     <style name="VideonaTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -43,7 +42,7 @@
         <item name="android:maxHeight">@dimen/abc_text_size_title_material_toolbar</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/textColorTitleToolbar</item>
-        <item name ="android:textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
         <item name="android:paddingEnd">8dp</item>
         <item name="windowActionBar">false</item>
 
@@ -53,7 +52,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="textColorAlertDialogListItem">@color/textColorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <item name ="textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
@@ -61,7 +60,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="textColorAlertDialogListItem">@color/textColorPrimary</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <item name ="textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
@@ -72,7 +71,7 @@
 
 
     <style name="VideonaCategoryPreference" parent="Theme.AppCompat.Light">
-        <item name ="android:textAllCaps">true</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:layout">@layout/settings_category_preference</item>
         <item name="android:shouldDisableView">false</item>
         <item name="android:selectable">false</item>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:title="@string/title_advanced_section">
@@ -14,7 +14,8 @@
         <Preference
             android:key="followUs"
             android:title="@string/followUsInTwitter">
-            <intent android:action="android.intent.action.VIEW"
+            <intent
+                android:action="android.intent.action.VIEW"
                 android:data="@string/videonaTwitter"/>
         </Preference>
         <Preference
@@ -32,8 +33,8 @@
         </Preference>
         <Preference
             android:key="username"
-            android:title="@string/username" >
-            <intent android:action=".presentation.views.activity.UsernamePreferenceActivity" />
+            android:title="@string/username">
+            <intent android:action=".presentation.views.activity.UsernamePreferenceActivity"/>
         </Preference>
         <Preference
             android:key="email"
@@ -52,7 +53,7 @@
             android:entryValues="@array/camera_resolution_values"
             android:key="list_preferences_resolution"
             android:summary="@string/low_value"
-            android:title="@string/resolution" />
+            android:title="@string/resolution"/>
 
         <com.videonasocialmedia.videona.presentation.views.customviews.ChooseCameraQualityListPreferences
             android:dialogTitle="@string/quality"
@@ -60,7 +61,7 @@
             android:entryValues="@array/camera_quality_values"
             android:key="list_preferences_quality"
             android:summary="@string/good_quality_name"
-            android:title="@string/quality" />
+            android:title="@string/quality"/>
 
     </PreferenceCategory>
 

@@ -1,7 +1,7 @@
 package com.videonasocialmedia.videona.domain.effects;
 
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.videona.model.entities.sources.EffectProvider;
+import com.videonasocialmedia.videona.model.sources.EffectProvider;
 
 import java.util.List;
 

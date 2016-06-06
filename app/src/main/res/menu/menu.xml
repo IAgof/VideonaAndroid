@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_vote"
@@ -8,7 +8,8 @@
         android:title="@string/title_vote_section"
         app:showAsAction="ifRoom"/>
 
-    <item android:id="@+id/action_help"
+    <item
+        android:id="@+id/action_help"
         android:icon="@drawable/common_icon_help_white"
         android:title="@string/title_contact_section"
         app:showAsAction="ifRoom"/>

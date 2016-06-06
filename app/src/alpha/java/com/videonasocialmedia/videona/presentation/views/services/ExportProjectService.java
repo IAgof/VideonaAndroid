@@ -15,17 +15,16 @@ import com.videonasocialmedia.videona.utils.Utils;
  */
 public class ExportProjectService extends IntentService implements OnExportFinishedListener {
 
-    private static final String TAG = "ExportProjectService" ;
     public static final String NOTIFICATION = Constants.NOTIFICATION_EXPORT_SERVICES_RECEIVER;
     public static final String FILEPATH = "filepath";
     public static final String RESULT = "result";
-
+    private static final String TAG = "ExportProjectService";
     ExportProjectUseCase exportUseCase;
 
     //TODO Add persistence. Needed to navigate for ShareActivity if service has finished.
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
      */
     public ExportProjectService() {
         super("ExportProjectService");
@@ -38,18 +37,18 @@ public class ExportProjectService extends IntentService implements OnExportFinis
         exportUseCase.export();
     }
 
+    @Override
+    public void onExportError(String error) {
+        publishResults(error, Activity.RESULT_CANCELED);
+    }
+
     private void publishResults(String outputPath, int result) {
         Intent intent = new Intent(NOTIFICATION);
-        if(result == Activity.RESULT_OK) {
+        if (result == Activity.RESULT_OK) {
             intent.putExtra(FILEPATH, outputPath);
         }
         intent.putExtra(RESULT, result);
         sendBroadcast(intent);
-    }
-
-    @Override
-    public void onExportError(String error) {
-        publishResults(error, Activity.RESULT_CANCELED);
     }
 
     @Override

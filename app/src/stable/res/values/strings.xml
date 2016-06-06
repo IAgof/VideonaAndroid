@@ -2,14 +2,16 @@
 <resources>
     <string name="betaPreferenceText">Join Videona Beta</string>
     <string name="joinBetaDialogTitle">I want to be ambassador</string>
-        <string name="joinBetaDialogMessage">Become a Beta Tester! Create Videona as you like
-            it.</string>
+    <string name="joinBetaDialogMessage">Become a Beta Tester! Create Videona as you like
+        it.
+    </string>
     <string name="joinBetaDialogPositiveButton">Count on Me</string>
     <string name="joinBetaDialogNegativeButton">No, thanks</string>
     <string name="email">email</string>
     <string name="thanks">Thanks for your time!</string>
-        <string name="joinBetaLinkInfo">Follow the instructions from Google. You will receive the
-            update soon.</string>
+    <string name="joinBetaLinkInfo">Follow the instructions from Google. You will receive the
+        update soon.
+    </string>
     <string name="joinBetaLinkPositiveButton">Count on Me</string>
     <string name="joinBetaLinkNegativeButton">No, thanks</string>
 </resources>

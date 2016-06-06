@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
-import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.MultiItemSelectionSupport;
 
@@ -31,7 +31,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     private Context context;
     private List<Video> videoList;
-    private MusicRecyclerViewClickListener musicRecyclerViewClickListener;
+    private RecyclerViewClickListener recyclerViewClickListener;
     private OnTransitionClickListener onTransitionClickListener;
     private MultiItemSelectionSupport selectionSupport;
 
@@ -52,7 +52,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
                 .inflate(R.layout.fragment_gallery_video_item, viewGroup, false);
 
         this.context = viewGroup.getContext();
-        return new VideoViewHolder(rowView, musicRecyclerViewClickListener, onTransitionClickListener);
+        return new VideoViewHolder(rowView, recyclerViewClickListener, onTransitionClickListener);
     }
 
     @Override
@@ -86,8 +86,8 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         return videoList.get(position);
     }
 
-    public void setRecyclerViewClickListener(MusicRecyclerViewClickListener musicRecyclerViewClickListener) {
-        this.musicRecyclerViewClickListener = musicRecyclerViewClickListener;
+    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
+        this.recyclerViewClickListener = recyclerViewClickListener;
     }
 
     public void setSelectionSupport(MultiItemSelectionSupport selectionSupport) {
@@ -116,7 +116,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
 
     class VideoViewHolder extends RecyclerView.ViewHolder{ //implements View.OnTouchListener {
 
-        MusicRecyclerViewClickListener onClickListener;
+        RecyclerViewClickListener onClickListener;
         OnTransitionClickListener onTransitionClickListener;
 
         @Bind(R.id.gallery_thumb)
@@ -131,7 +131,7 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         @Bind(R.id.gallery_overlay_icon)
         ImageView overlayIcon;
 
-        public VideoViewHolder(View itemView, MusicRecyclerViewClickListener onClickListener,
+        public VideoViewHolder(View itemView, RecyclerViewClickListener onClickListener,
                                OnTransitionClickListener onTransitionClickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);

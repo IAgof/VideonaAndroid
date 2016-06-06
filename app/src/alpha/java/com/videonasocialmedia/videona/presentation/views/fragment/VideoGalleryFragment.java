@@ -18,9 +18,9 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.VideoGalleryPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoGalleryView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoGalleryAdapter;
-import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnSelectionModeListener;
 import com.videonasocialmedia.videona.presentation.views.listener.OnTransitionClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.RecyclerViewClickListener;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.ItemSelectionSupport;
 import com.videonasocialmedia.videona.utils.recyclerselectionsupport.MultiItemSelectionSupport;
 
@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
  * Created by jca on 14/5/15.
  */
 public class VideoGalleryFragment extends VideonaFragment implements VideoGalleryView,
-        MusicRecyclerViewClickListener, OnTransitionClickListener {
+        RecyclerViewClickListener, OnTransitionClickListener {
 
     public static final int SELECTION_MODE_SINGLE = 0;
     public static final int SELECTION_MODE_MULTIPLE = 1;

@@ -59,32 +59,32 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     private boolean isFullScreenBack = false;
     private List<Integer> videoStartTimes;
     private List<Integer> videoStopTimes;
+    private Music music;
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekBarProgress();
         }
     };
-    private Music music;
 
     public VideonaPlayer(Context context) {
         super(context);
         this.context = context;
-        this.videonaPlayerView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.videonaPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, videonaPlayerView);
     }
 
     public VideonaPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        this.videonaPlayerView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.videonaPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, videonaPlayerView);
     }
 
     public VideonaPlayer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
-        this.videonaPlayerView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.videonaPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, videonaPlayerView);
     }
 
@@ -130,6 +130,23 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
         showPlayButton();
     }
 
+    @Override
+    public void seekTo(int timeInMsec) {
+        if (videoPlayer != null)
+            videoPlayer.seekTo(timeInMsec);
+    }
+
+    @Override
+    public void setMusic(Music music) {
+        this.music = music;
+    }
+
+    @Override
+    public void bindVideoList(List<Video> videoList) {
+        this.initPreviewLists(videoList);
+        this.initPreview();
+    }
+
     public void showPlayButton() {
         playButton.setVisibility(View.VISIBLE);
     }
@@ -147,13 +164,6 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
         if (videoPlayer != null && videoPlayer.isPlaying())
             videoPlayer.pause();
     }
-
-    @Override
-    public void seekTo(int timeInMsec) {
-        if (videoPlayer != null)
-            videoPlayer.seekTo(timeInMsec);
-    }
-
 
     public void initPreview() {
         if (videoList.size() > 0) {
@@ -197,7 +207,6 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
             videoStopTimes.add(totalVideoDuration);
         }
     }
-
 
     private void initVideoPlayer(final Video video, final int startTime) {
         videoPreview.setVideoPath(video.getMediaPath());
@@ -394,7 +403,6 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
         videoPreview.requestFocus();
     }
 
-
     private void seekToNextVideo(final Video video, final int instantToStart) {
         notifyNewClipPlayed();
 //        timeLineAdapter.updateSelection(currentVideoIndex);
@@ -463,7 +471,7 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     }
 
     private boolean videoHasMusic() {
-        return (music != null);
+        return ( music != null );
 //        music = videonaProject.getAudioTracks().get(0).getItems().get(0)
 //        return videonaProject.getAudioTracks().size() > 0 &&
 //                videonaProject.getAudioTracks().get(0).getItems().size() > 0;
@@ -652,9 +660,5 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
-    }
-
-    public void setMusicTrack(Music music) {
-        this.music = music;
     }
 }

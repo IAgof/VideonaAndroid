@@ -3,13 +3,15 @@
     <string name="betaPreferenceText">Prueba Videona Beta</string>
     <string name="joinBetaDialogTitle">Quiero ser embajador</string>
     <string name="joinBetaDialogMessage">¡Conviértete en Beta Tester! Crea Videona como tú lo
-        quieres.</string>
+        quieres.
+    </string>
     <string name="joinBetaDialogPositiveButton">Contad conmigo</string>
     <string name="joinBetaDialogNegativeButton">No, gracias</string>
     <string name="email">email</string>
     <string name="thanks">¡Gracias por tu tiempo!</string>
     <string name="joinBetaLinkInfo">Sigue las instrucciones de Google. Pronto recibirás la
-        actualización.</string>
+        actualización.
+    </string>
     <string name="joinBetaLinkPositiveButton">Contar conmigo</string>
     <string name="joinBetaLinkNegativeButton">No, gracias</string>
 </resources>

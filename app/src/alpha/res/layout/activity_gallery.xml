@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorBlack"
-    android:animateLayoutChanges="true">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/colorBlack"
+              android:animateLayoutChanges="true">
 
     <RelativeLayout
         android:id="@+id/relativeLayoutTop"
@@ -20,7 +20,7 @@
             android:layout_marginTop="4dp"
             android:background="@android:color/transparent"
             android:scaleType="fitXY"
-            android:src="@drawable/edit_activity_button_cancel_selector" />
+            android:src="@drawable/edit_activity_button_cancel_selector"/>
 
         <TextView
             android:id="@+id/gallery_title_text_view"
@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:text="@string/galleryActivityTitle"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/textColorGalleryTitle" />
+            android:textColor="@color/textColorGalleryTitle"/>
 
         <LinearLayout
             android:id="@+id/selection_mode"
@@ -49,7 +49,7 @@
                 android:id="@+id/gallery_image_view_clips"
                 android:layout_marginRight="4dp"
                 android:layout_gravity="center"
-                android:padding="4dp" />
+                android:padding="4dp"/>
 
             <TextView
                 android:id="@+id/gallery_count_selected_videos"
@@ -60,7 +60,7 @@
                 android:text="0"
                 android:textSize="27sp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"/>
 
             <ImageButton
                 android:id="@+id/button_trash"
@@ -71,7 +71,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
                 android:visibility="visible"
-                android:src="@drawable/edit_activity_button_trash_selector" />
+                android:src="@drawable/edit_activity_button_trash_selector"/>
 
             <ImageButton
                 android:id="@+id/button_ok_gallery"
@@ -83,7 +83,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 android:visibility="visible"
-                android:src="@drawable/edit_activity_button_ok_selector" />
+                android:src="@drawable/edit_activity_button_ok_selector"/>
 
         </LinearLayout>
 
@@ -105,7 +105,7 @@
             android:paddingTop="4dp"
             android:background="@color/colorPrimary"
             android:transitionGroup="false"
-            android:touchscreenBlocksFocus="false" />
+            android:touchscreenBlocksFocus="false"/>
 
     </android.support.v4.view.ViewPager>
 

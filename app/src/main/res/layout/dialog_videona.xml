@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="vertical">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:orientation="vertical">
 
     <TextView
         android:id="@+id/title"
@@ -13,7 +13,7 @@
         android:layout_marginBottom="5dp"
         tools:text="@string/CloseBecauseOfPermissionsTitle"
         android:textSize="23sp"
-        android:textColor="@color/textColorTitle" />
+        android:textColor="@color/textColorTitle"/>
 
     <View
         android:id="@+id/line"
@@ -22,7 +22,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="2dp"
         android:layout_below="@+id/title"
-        android:background="@color/colorSecondaryLight" />
+        android:background="@color/colorSecondaryLight"/>
 
     <LinearLayout
         android:id="@+id/content"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="5dp"
-            tools:src="@drawable/gatito_rules_pressed" />
+            tools:src="@drawable/gatito_rules_pressed"/>
 
         <TextView
             android:id="@+id/message"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:gravity="center"
-            tools:text="@string/permissionsDeniedMessage" />
+            tools:text="@string/permissionsDeniedMessage"/>
 
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.model.entities.sources;
+package com.videonasocialmedia.videona.model.sources;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;

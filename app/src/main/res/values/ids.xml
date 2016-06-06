@@ -9,11 +9,11 @@
         are defined here.
     -->
 
-    <item name="action_next" type="id" />
-    <item name="action_flip" type="id" />
+    <item name="action_next" type="id"/>
+    <item name="action_flip" type="id"/>
 
     <!--Lucas Rocha's TwoWayView clicksupport-->
-    <item name="twowayview_item_click_support" type="id" />
-    <item name="twowayview_item_selection_support" type="id" />
+    <item name="twowayview_item_click_support" type="id"/>
+    <item name="twowayview_item_selection_support" type="id"/>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.videonasocialmedia.videona.model.entities.sources;
+package com.videonasocialmedia.videona.model.sources;
 
 import android.content.Context;
 import android.content.Intent;

@@ -7,7 +7,6 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
-import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 
 import java.util.List;
@@ -28,8 +27,6 @@ public interface EditorView {
     void showMessage(int stringToast);
 
     void bindVideoList(List<Video> movieList);
-
-    void setMusic(Music music);
 
     void updateProject();
 

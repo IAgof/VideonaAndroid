@@ -1,10 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffc107"
-    android:orientation="vertical"
-    tools:context=".presentation.views.activity.IntroAppActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffc107"
+              android:orientation="vertical"
+              tools:context=".presentation.views.activity.IntroAppActivity">
 
     <LinearLayout
         android:id="@+id/content"
@@ -19,14 +19,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/common_character_sonora_speech_balloon" />
+            android:src="@drawable/common_character_sonora_speech_balloon"/>
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/intro_app_slide_share_image" />
+            android:src="@drawable/intro_app_slide_share_image"/>
 
     </LinearLayout>
 

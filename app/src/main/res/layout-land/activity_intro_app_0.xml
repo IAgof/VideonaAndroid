@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#4fc3f7">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#4fc3f7">
 
     <ImageView
         android:id="@+id/image"
@@ -9,6 +9,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/common_character_kachivache_landscape_speech_balloon" />
+        android:src="@drawable/common_character_kachivache_landscape_speech_balloon"/>
 
 </RelativeLayout>

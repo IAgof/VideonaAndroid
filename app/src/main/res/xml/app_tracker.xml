@@ -21,7 +21,7 @@
     <screenName name="com.videonasocialmedia.videona.presentation.views.activity.ShareActivity">
         VideonaApplication-Android ShareActivity
     </screenName>
-    <screenName name="com.videonasocialmedia.videona.presentation.views.activity.MusicActivity">
+    <screenName name="com.videonasocialmedia.videona.presentation.views.activity.MusicListActivity">
         VideonaApplication-Android MusicActivity
     </screenName>
     <screenName name="com.videonasocialmedia.videona.presentation.views.activity.AboutActivity">

@@ -7,12 +7,12 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
-        <bitmap android:src="@drawable/activity_record_edit_pressed" />
+        <bitmap android:src="@drawable/activity_record_edit_pressed"/>
     </item>
     <item android:state_selected="true">
-        <bitmap android:src="@drawable/activity_record_edit_pressed" />
+        <bitmap android:src="@drawable/activity_record_edit_pressed"/>
     </item>
     <item>
-        <bitmap android:src="@drawable/activity_record_edit_normal" />
+        <bitmap android:src="@drawable/activity_record_edit_normal"/>
     </item>
 </selector>

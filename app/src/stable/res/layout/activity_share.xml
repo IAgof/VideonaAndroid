@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -21,7 +21,7 @@
             android:id="@+id/video_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:layout_height="200dp" />
+            tools:layout_height="200dp"/>
 
         <ImageButton
             android:id="@+id/play_pause_button"
@@ -29,14 +29,14 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="#00000000"
-            android:src="@drawable/common_icon_play_on_normal" />
+            android:src="@drawable/common_icon_play_on_normal"/>
 
         <SeekBar
             android:id="@+id/seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/video_preview"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="4dp"/>
     </RelativeLayout>
 
 
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:listitem="@layout/share_network_viewholder" />
+        tools:listitem="@layout/share_network_viewholder"/>
 
     <View
         android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_more_networks"
@@ -63,9 +63,9 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/fab_compat_margin"
         android:src="@drawable/common_icon_add_white"
+        app:backgroundTint="@color/colorAccent"
         app:borderWidth="0dp"
-        app:rippleColor="#fff"
-        app:backgroundTint="@color/colorAccent" />
+        app:rippleColor="#fff"/>
 
 </LinearLayout>
 
