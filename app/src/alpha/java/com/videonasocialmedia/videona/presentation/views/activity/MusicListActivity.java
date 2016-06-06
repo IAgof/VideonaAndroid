@@ -14,7 +14,9 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicListPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicListView;
 import com.videonasocialmedia.videona.presentation.views.adapter.MusicListAdapter;
+import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 
 import java.util.List;
 
@@ -25,9 +27,12 @@ import butterknife.ButterKnife;
  *
  */
 public class MusicListActivity extends VideonaActivity implements MusicListView,
-        MusicRecyclerViewClickListener {
+        MusicRecyclerViewClickListener, VideonaPlayerListener {
     @Bind(R.id.music_list)
     RecyclerView musicList;
+    @Bind(R.id.videona_player)
+    VideonaPlayer videonaPlayer;
+
     private MusicListAdapter musicAdapter;
     private MusicListPresenter presenter;
 
@@ -40,6 +45,8 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         setupToolbar();
         presenter = new MusicListPresenter(this);
         initVideoListRecycler();
+        videonaPlayer.initVideoPreview(this);
+        videonaPlayer.initPreview(0);
     }
 
     private void setupToolbar() {
@@ -107,4 +114,8 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         startActivity(i);
     }
 
+    @Override
+    public void newClipPlayed(int currentClipIndex) {
+
+    }
 }

@@ -62,8 +62,8 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         ButterKnife.bind(this);
         initToolbar();
 
-        videonaPlayer.initVideoPreviewFromVideonaProject(Project.getInstance(null, null, null), this);
-        videonaPlayer.initPreview();
+        videonaPlayer.initVideoPreview(this);
+        videonaPlayer.initPreview(0);
         musicDetailPresenter = new MusicDetailPresenter(this, videonaPlayer);
         try {
             Bundle extras = this.getIntent().getExtras();

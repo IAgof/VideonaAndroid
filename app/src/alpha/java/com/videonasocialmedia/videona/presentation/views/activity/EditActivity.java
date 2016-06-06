@@ -41,6 +41,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
+import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
@@ -201,9 +202,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         tintButton(editTrimButton, tintList);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+
     @Override
     public void onBackPressed() {
         finish();
@@ -311,16 +310,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     public void onClipClicked(int position) {
         setSelectedClip(position);
-    }
-
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                this.onBackPressed();
-                return true;
-            default:
-                return false;
-        }
     }
 
     public void setSelectedClip(int position) {

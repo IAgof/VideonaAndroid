@@ -35,17 +35,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include
-            android:id="@+id/video_view"
-            layout="@layout/video_preview"
+        <com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer
+            android:id="@+id/videona_player"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="4"/>
-
 
         <LinearLayout
             android:layout_width="0dp"
@@ -84,9 +81,9 @@
                         android:layout_alignStart="@+id/music_image"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="8dp"
+                        android:background="#000"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        android:background="#000"
                         android:textColor="@color/textColorTitleToolbar"
                         android:textSize="16sp"
                         tools:text="El título de la canción"
@@ -100,9 +97,9 @@
                         android:layout_below="@id/music_title"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="4dp"
+                        android:background="#000"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        android:background="#000"
                         android:textColor="@color/textColorTitleToolbar"
                         tools:text="El autor de la canción"
                         />

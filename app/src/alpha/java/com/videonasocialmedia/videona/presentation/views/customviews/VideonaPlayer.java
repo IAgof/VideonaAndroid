@@ -153,7 +153,7 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     @Override
     public void bindVideoList(List<Video> videoList) {
         this.initPreviewLists(videoList);
-        this.initPreview();
+        this.initPreview(0);
     }
 
     public void showPlayButton() {
