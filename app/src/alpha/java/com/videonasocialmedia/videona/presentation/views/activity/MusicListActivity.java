@@ -43,10 +43,11 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         setContentView(R.layout.activity_music_list);
         ButterKnife.bind(this);
         setupToolbar();
-        presenter = new MusicListPresenter(this);
-        initVideoListRecycler();
         videonaPlayer.initVideoPreview(this);
         videonaPlayer.initPreview(0);
+        presenter = new MusicListPresenter(this, videonaPlayer);
+        initVideoListRecycler();
+        presenter.onCreate();
     }
 
     private void setupToolbar() {
