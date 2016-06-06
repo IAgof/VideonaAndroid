@@ -11,14 +11,12 @@ import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicDetailPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
@@ -43,8 +41,6 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
     @Nullable
     @Bind(R.id.scene_root)
     FrameLayout sceneRoot;
-    @Bind(R.id.detail_content)
-    ViewGroup detailContent;
 
     @Bind(R.id.videona_player)
     VideonaPlayer videonaPlayer;
@@ -174,11 +170,6 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         ButterKnife.bind(this);
     }
 
-    @Override
-    public void showBackground(int colorResourceId) {
-        //detailContent.setBackgroundResource(colorResourceId);
-    }
-
     @Nullable
     @OnClick(R.id.select_music)
     public void selectMusic() {
@@ -193,22 +184,33 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
     }
 
     @Nullable
-    @OnClick(R.id.cancel_music)
-    public void back() {
-        finish();
-    }
-
-    @Nullable
     @OnClick(R.id.delete_music)
     public void deleteMusic() {
         musicDetailPresenter.removeMusic();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            TransitionManager.go(acceptCancelScene);
-        } else {
-            LayoutInflater inflater = this.getLayoutInflater();
-            inflater.inflate(R.layout.activity_music_detail_scene_accept_cancel, sceneRoot);
-        }
-        ButterKnife.bind(this);
+        goToMusicList();
+    }
+
+    private void goToMusicList() {
+        Intent intent = new Intent(this, MusicListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    @Nullable
+    @OnClick(R.id.cancel_music)
+    public void onBackPressed() {
+        if (musicDetailPresenter.isMusicAddedToProject())
+            goToEditActivity();
+        else
+            goToMusicList();
+    }
+
+    private void goToEditActivity() {
+        Intent intent = new Intent(this, EditActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override

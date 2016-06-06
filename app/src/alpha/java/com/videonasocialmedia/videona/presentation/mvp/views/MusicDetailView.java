@@ -13,6 +13,4 @@ public interface MusicDetailView {
     void showImage(int iconResourceId);
 
     void setupScene(boolean isMusicInProject);
-
-    void showBackground(int colorResourceId);
 }

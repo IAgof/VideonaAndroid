@@ -27,7 +27,7 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
     private VideonaPlayerView playerView;
     private Music music;
     private int musicId;
-
+    private boolean musicAddedToProject;
 
     public MusicDetailPresenter(MusicDetailView musicDetailView, VideonaPlayerView playerView) {
         this.musicDetailView = musicDetailView;
@@ -49,11 +49,12 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
     public void onMusicRetrieved(Music music) {
         if (music == null) {
             this.music = retrieveLocalMusic(musicId);
-            setupScene(false);
+            musicAddedToProject = false;
         } else {
             this.music = music;
-            setupScene(true);
+            musicAddedToProject = true;
         }
+        setupScene(musicAddedToProject);
         playerView.setMusic(this.music);
     }
 
@@ -78,13 +79,15 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
     }
 
     public void removeMusic() {
+        musicAddedToProject = false;
         removeMusicFromProjectUseCase.removeMusicFromProject(music, 0);
     }
 
 
     public void addMusic() {
+        musicAddedToProject = true;
         addMusicToProjectUseCase.addMusicToTrack(music, 0);
-        setupScene(true);
+        setupScene(musicAddedToProject);
     }
 
     @Override
@@ -95,5 +98,9 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
     @Override
     public void onNoVideosRetrieved() {
         //TODO (javi.cabanas) show error
+    }
+
+    public boolean isMusicAddedToProject() {
+        return musicAddedToProject;
     }
 }
