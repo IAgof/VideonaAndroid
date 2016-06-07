@@ -1,7 +1,11 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +21,8 @@ import com.videonasocialmedia.videona.presentation.views.adapter.MusicListAdapte
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
+import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
+import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.List;
 
@@ -36,6 +42,7 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
     private MusicListAdapter musicAdapter;
     private MusicListPresenter presenter;
 
+    private BroadcastReceiver exportReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,7 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         setContentView(R.layout.activity_music_list);
         ButterKnife.bind(this);
         setupToolbar();
+        createExportReceiver();
         videonaPlayer.initVideoPreview(this);
         videonaPlayer.initPreview(0);
         presenter = new MusicListPresenter(this, videonaPlayer);
@@ -58,6 +66,26 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
+    private void createExportReceiver() {
+        exportReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
+                    int resultCode = bundle.getInt(ExportProjectService.RESULT);
+                    if (resultCode == RESULT_OK) {
+                        goToShare(videoToSharePath);
+                    } else {
+                        Snackbar.make(musicList, R.string.shareError, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            }
+        };
+
+    }
+
     private void initVideoListRecycler() {
         musicAdapter = new MusicListAdapter();
         musicAdapter.setMusicRecyclerViewClickListener(this);
@@ -66,6 +94,25 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         musicList.setLayoutManager(layoutManager);
         musicList.setAdapter(musicAdapter);
+    }
+
+    public void goToShare(String videoToSharePath) {
+        Intent intent = new Intent(this, ShareActivity.class);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        videonaPlayer.pause();
+        unregisterReceiver(exportReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(exportReceiver, new IntentFilter(ExportProjectService.NOTIFICATION));
     }
 
     @Override
@@ -102,7 +149,6 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         startActivity(intent);
     }
 
-
     @Override
     public void showVideoList(List<Music> musicList) {
         musicAdapter.setMusicList(musicList);
@@ -119,4 +165,5 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
     public void newClipPlayed(int currentClipIndex) {
 
     }
+
 }

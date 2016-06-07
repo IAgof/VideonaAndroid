@@ -26,13 +26,13 @@ public class MusicSource {
 
     private void populateLocalMusic() {
 
-        localMusic.add(new Music(R.drawable.imagebutton_music_background_rock, "audio_rock", R.raw.audio_rock, R.color.rock, "author"));
-        localMusic.add(new Music(R.drawable.imagebutton_music_background_ambient, "audio_ambiental", R.raw.audio_ambiental, R.color.ambient, "author"));
-        localMusic.add(new Music(R.drawable.imagebutton_music_background_jazz, "audio_clasica_flauta", R.raw.audio_clasica_flauta, R.color.jazz, "author"));
-        localMusic.add(new Music(R.drawable.imagebutton_music_background_folk, "audio_folk", R.raw.audio_folk, R.color.folk, "author"));
-        localMusic.add(new Music(R.drawable.imagebutton_music_background_birthday, "birthday", R.raw.audio_birthday, R.color.birthday, "author"));
-        localMusic.add(new Music(R.drawable.imagebutton_music_background_hiphop, "audio_hiphop", R.raw.audio_hiphop, R.color.hiphop, "author"));
-        localMusic.add(new Music(R.drawable.imagebutton_music_background_classic, "audio_clasica_piano", R.raw.audio_clasica_piano, R.color.classic, "author"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_rock, "Airplane Mod Instrumental", R.raw.audio_rock, R.color.rock, "James Woodward"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_ambient, "Impact Prelude", R.raw.audio_ambiental, R.color.ambient, "Kevin Macleod"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_jazz, "Monkeys Spinning Monkeys", R.raw.audio_clasica_flauta, R.color.jazz, "Kevin Macleod"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_folk, "Don't Close Your Eyes", R.raw.audio_folk, R.color.folk, "Josh Woodward"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_birthday, "Super Psyched for Your Birthday", R.raw.audio_birthday, R.color.birthday, "The Danimals"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_hiphop, "I Dunno", R.raw.audio_hiphop, R.color.hiphop, "Grapes"));
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_classic, "The Last Slice of Pecan Pie", R.raw.audio_clasica_piano, R.color.classic, "Josh Woodward"));
     }
 
 }

@@ -28,14 +28,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
@@ -43,13 +39,10 @@ import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAd
 import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
-import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
-import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
-import com.videonasocialmedia.videona.presentation.views.utils.UiUtils;
 import com.videonasocialmedia.videona.utils.Constants;
-import com.videonasocialmedia.videona.utils.Utils;
 
 import java.util.List;
 
@@ -94,11 +87,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
                 int resultCode = bundle.getInt(ExportProjectService.RESULT);
                 if (resultCode == RESULT_OK) {
-                    hideProgressDialog();
+                   // hideProgressDialog();
                     goToShare(videoToSharePath);
                 } else {
                     //showProgressDialog();
-                    hideProgressDialog();
+                   // hideProgressDialog();
                     showError(R.string.addMediaItemToTrackError);
                 }
             }
@@ -129,17 +122,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        initVideoListRecycler();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         videonaPlayer.pause();
@@ -158,6 +140,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
             }
         }
         editPresenter.loadProject();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initVideoListRecycler();
     }
 
     private void initVideoListRecycler() {
@@ -190,24 +178,15 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 .create();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        super.onSaveInstanceState(outState);
-    }
-
     private void tintEditButtons(int tintList) {
         tintButton(editDuplicateButton, tintList);
         tintButton(editSplitButton, tintList);
         tintButton(editTrimButton, tintList);
     }
 
-
     @Override
-    public void onBackPressed() {
-        finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -216,7 +195,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -247,31 +225,32 @@ public class EditActivity extends VideonaActivity implements EditorView,
         }
         startActivity(intent);
     }
-
-    @OnClick (R.id.fab_go_to_record)
-    public void onClickFabRecord(){
+    @OnClick(R.id.fab_go_to_record)
+    public void onClickFabRecord() {
         fabEditRoom.collapse();
         navigateTo(RecordActivity.class);
+    }@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        super.onSaveInstanceState(outState);
     }
 
-    @OnClick (R.id.fab_go_to_gallery)
-    public void onClickFabGallery(){
+    @OnClick(R.id.fab_go_to_gallery)
+    public void onClickFabGallery() {
         fabEditRoom.collapse();
         navigateTo(GalleryActivity.class);
-    }
-
-    @OnClick(R.id.button_share_navigator)
-    public void onClickShareNavigator() {
-        videonaPlayer.pausePreview();
-        showProgressDialog();
-        Intent intent = new Intent(this, ExportProjectService.class);
-        startService(intent);
     }
 
     @OnClick(R.id.button_edit_fullscreen)
     public void onClickEditFullscreen() {
         // navigateTo(Activity.class)
     }
+
+//    @OnClick(R.id.button_share_navigator)
+//    public void onClickShareNavigator() {
+//        videonaPlayer.pausePreview();
+//        showProgressDialog();
+//    }
 
     @OnClick(R.id.button_edit_duplicate)
     public void onClickEditDuplicate() {
@@ -291,6 +270,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
         if (!editTrimButton.isEnabled())
             return;
         navigateTo(VideoTrimActivity.class, currentVideoIndex);
+    }    @Override
+    public void onBackPressed() {
+        finish();
+        Intent record = new Intent(this, RecordActivity.class);
+        startActivity(record);
     }
 
     @OnClick(R.id.button_edit_split)
@@ -387,11 +371,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    public void expandFabMenu(){
-        fabEditRoom.expand();
-    }
-
-    @Override
     public void bindVideoList(List<Video> videoList) {
         this.videoList = videoList;
         this.setSelectedClip(currentVideoIndex);
@@ -414,16 +393,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         editDuplicateButton.setEnabled(true);
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                this.onBackPressed();
-                return true;
-            default:
-                return false;
-        }
-    }
-
     @Override
     public void disableEditActions() {
 
@@ -436,9 +405,33 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
+    public void expandFabMenu() {
+        fabEditRoom.expand();
+    }
+
+    @Override
     public void newClipPlayed(int currentClipIndex) {
         currentVideoIndex = currentClipIndex;
         timeLineAdapter.updateSelection(currentClipIndex);
         videoListRecyclerView.scrollToPosition(currentClipIndex);
+    }
+
+
+
+
+
+
+
+
+
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                this.onBackPressed();
+                return true;
+            default:
+                return false;
+        }
     }
 }

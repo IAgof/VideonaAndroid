@@ -54,7 +54,7 @@
             android:layout_marginTop="8dp"
             android:layout_weight="3"
             android:scrollbars="horizontal"
-            />
+            tools:listitem="@layout/music_list_item_view_holder"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
