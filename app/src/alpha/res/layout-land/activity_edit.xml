@@ -14,8 +14,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:layout_height="?attr/actionBarSize">
 
             <com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator
                 android:id="@+id/navigator"
@@ -78,31 +77,32 @@
         android:id="@+id/fab_edit_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
         app:fab_addButtonColorNormal="@color/colorAccent"
         app:fab_addButtonColorPressed="@color/colorAccent"
+        app:fab_labelsPosition="right"
         app:layout_behavior="com.videonasocialmedia.videona.presentation.views.customviews.FloatingActionMenuButtonBehavior"
-        android:layout_gravity="bottom|right|end"
-        app:fab_labelsPosition="right">
+        app:layout_scrollFlags="scroll|enterAlways">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_go_to_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/colorFabMenu"
-            app:fab_colorPressed="@color/colorFabMenu"
             android:layout_gravity="center_vertical|center_horizontal"
             android:src="@drawable/common_navigate_record"
-            app:fab_size="normal"
-            android:id="@+id/fab_go_to_record"/>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:fab_colorNormal="@color/colorFabMenu"
             app:fab_colorPressed="@color/colorFabMenu"
-            app:fab_size="normal"
+            app:fab_size="normal"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_go_to_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/common_navigate_gallery"
-            android:id="@+id/fab_go_to_gallery"/>
+            app:fab_colorNormal="@color/colorFabMenu"
+            app:fab_colorPressed="@color/colorFabMenu"
+            app:fab_size="normal"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

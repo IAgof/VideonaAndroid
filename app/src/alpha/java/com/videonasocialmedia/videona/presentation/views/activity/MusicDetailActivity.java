@@ -1,9 +1,13 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.transition.Scene;
@@ -21,6 +25,8 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicDetailPre
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
+import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
+import com.videonasocialmedia.videona.utils.Constants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +47,6 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
     @Nullable
     @Bind(R.id.scene_root)
     FrameLayout sceneRoot;
-
     @Bind(R.id.videona_player)
     VideonaPlayer videonaPlayer;
 
@@ -50,6 +55,8 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
 
     private MusicDetailPresenter musicDetailPresenter;
 
+    private BroadcastReceiver exportReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +64,17 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         setContentView(R.layout.activity_music_detail);
         ButterKnife.bind(this);
         initToolbar();
-
         videonaPlayer.initVideoPreview(this);
         videonaPlayer.initPreview(0);
         musicDetailPresenter = new MusicDetailPresenter(this, videonaPlayer);
         try {
             Bundle extras = this.getIntent().getExtras();
             int musicId = extras.getInt(KEY_MUSIC_ID);
-
             musicDetailPresenter.onCreate(musicId);
-
         } catch (Exception e) {
             //TODO show snackbar with error message
         }
+        createExportReceiver();
     }
 
     private void initToolbar() {
@@ -80,16 +85,43 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        videonaPlayer.destroy();
+    private void createExportReceiver() {
+        exportReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
+                    int resultCode = bundle.getInt(ExportProjectService.RESULT);
+                    if (resultCode == RESULT_OK) {
+                        goToShare(videoToSharePath);
+                    } else {
+                        Snackbar.make(sceneRoot, R.string.shareError, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            }
+        };
+
+    }
+
+    public void goToShare(String videoToSharePath) {
+        Intent intent = new Intent(this, ShareActivity.class);
+        intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
+        startActivity(intent);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         videonaPlayer.pause();
+        unregisterReceiver(exportReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(exportReceiver, new IntentFilter(ExportProjectService.NOTIFICATION));
     }
 
     @Override

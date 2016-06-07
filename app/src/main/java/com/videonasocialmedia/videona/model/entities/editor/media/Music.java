@@ -60,4 +60,8 @@ public class Music extends Audio {
     public void setIconResourceId(int iconResourceId) {
         this.iconResourceId = iconResourceId;
     }
+
+    public String getAuthor() {
+        return author;
+    }
 }

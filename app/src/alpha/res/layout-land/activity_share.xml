@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout android:id="@+id/coordinatorLayout"
-                                                 xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-    >
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,16 +22,16 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <LinearLayout
+                <com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator
+                    android:id="@+id/navigator"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginEnd="50dp"
                     android:layout_marginStart="50dp"
-                    android:gravity="center">
-
-                    <include layout="@layout/edit_activities_navigation_buttons"/>
-                </LinearLayout>
+                    android:gravity="center"
+                    app:share_selected="true"
+                    />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 
@@ -49,8 +49,8 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp">
 
                     <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
                         android:id="@+id/video_share_preview"
@@ -97,10 +97,10 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_weight="3">
+                android:layout_marginTop="8dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/main_social_network_list"
@@ -118,8 +118,8 @@
         android:id="@+id/fab_share_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
         android:src="@drawable/common_icon_add_white"
         app:backgroundTint="@color/colorAccent"
         app:layout_anchor="@id/coordinatorLayout"
