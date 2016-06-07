@@ -141,8 +141,14 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
 
     @Override
     public void seekTo(int timeInMsec) {
-        if (videoPlayer != null)
+        if (videoPlayer != null) {
             videoPlayer.seekTo(timeInMsec);
+            currentTimePositionInList = timeInMsec;
+        }
+    }
+
+    public void setSeekBarProgress(int progress){
+        seekBar.setProgress(progress);
     }
 
     @Override

@@ -16,7 +16,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.videonasocialmedia.videona.R;
@@ -37,6 +36,7 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
 
     private String TAG = this.getClass().getName();
     private static final String SPLIT_POSITION = "split_position";
+    private static final String SPLIT_VIDEO_POSITION = "split_video_position";
     @Bind(R.id.videona_player)
     VideonaPlayer videonaPlayer;
     @Bind(R.id.text_time_split)
@@ -46,7 +46,8 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
     int videoIndexOnTrack;
     private SplitPreviewPresenter presenter;
     private Video video;
-    private int currentPosition = 0;
+    private int currentSplitPosition = 0;
+    private int currentVideoPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,8 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
 
     private void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt(SPLIT_POSITION, 0);
+            currentSplitPosition = savedInstanceState.getInt(SPLIT_POSITION, 0);
+            currentVideoPosition = savedInstanceState.getInt(SPLIT_VIDEO_POSITION, 0);
         }
     }
 
@@ -141,7 +143,11 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
     }
 
     public void navigateTo(Class cls) {
-        startActivity(new Intent(getApplicationContext(), cls));
+        Intent intent = new Intent(getApplicationContext(), cls);
+        if (cls == GalleryActivity.class) {
+            intent.putExtra("SHARE", false);
+        }
+        startActivity(intent);
     }
 
     @Override
@@ -152,7 +158,8 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(SPLIT_POSITION, currentPosition);
+        outState.putInt(SPLIT_VIDEO_POSITION, videonaPlayer.getCurrentPosition()  );
+        outState.putInt(SPLIT_POSITION, currentSplitPosition);
         super.onSaveInstanceState(outState);
     }
 
@@ -165,7 +172,7 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
     @OnClick(R.id.button_split_accept)
     public void onClickSplitAccept() {
 
-        presenter.splitVideo(video, videoIndexOnTrack, currentPosition);
+        presenter.splitVideo(video, videoIndexOnTrack, currentSplitPosition);
         finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
@@ -176,54 +183,20 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
-//    private void updateSeekBarProgress() {
-//        if (videoPlayer != null) {
-//            if (videoPlayer.isPlaying()) {
-//                currentPosition = videoPlayer.getCurrentPosition() - video.getFileStartTime();
-//                videoSeekBar.setProgress(currentPosition);
-//                splitSeekBar.setProgress(currentPosition);
-//                refreshTimeTag(currentPosition);
-//                if (isEndOfVideo()) {
-//                    videoPlayer.pause();
-//                    playButton.setVisibility(View.VISIBLE);
-//                    refreshTimeTag(0);
-//                    videoSeekBar.setProgress(0);
-//                    splitSeekBar.setProgress(0);
-//                    videoPlayer.seekTo(video.getFileStartTime());
-//                    currentPosition = video.getFileStartTime();
-//                }
-//            }
-//            handler.postDelayed(updateTimeTask, 20);
-//        }
-//    }
-
     private void refreshTimeTag(int currentPosition) {
 
         timeTag.setText(TimeUtils.toFormattedTime(currentPosition));
     }
 
-//    private boolean isEndOfVideo() {
-//        return videoSeekBar.getProgress() >= ( video.getFileStopTime() - video.getFileStartTime() );
-//    }
-
-    @OnClick(R.id.seekBar_split)
-    public void onClickSeekbarSplit() {
-//        if (videoPlayer != null && videoPlayer.isPlaying()) {
-//            pausePreview();
-//            updateSeekBarProgress();
-//        }
-    }
-
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            videonaPlayer.seekTo(progress + video.getFileStartTime());
-            videonaPlayer.pause();
-
-            currentPosition = videonaPlayer.getCurrentPosition() - video.getFileStartTime();
+            currentSplitPosition = progress;
             splitSeekBar.setProgress(progress);
-            timeTag.setText(TimeUtils.toFormattedTime(progress));
+            refreshTimeTag(currentSplitPosition);
+            videonaPlayer.seekTo(video.getFileStartTime() + progress);
+            videonaPlayer.setSeekBarProgress(progress);
+
         }
     }
 
@@ -240,8 +213,8 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
     @Override
     public void initSplitView(int maxSeekBar) {
         splitSeekBar.setMax(maxSeekBar);
-        splitSeekBar.setProgress(currentPosition);
-        timeTag.setText(TimeUtils.toFormattedTime(currentPosition));
+        splitSeekBar.setProgress(currentSplitPosition);
+        refreshTimeTag(currentSplitPosition);
     }
 
 
@@ -259,7 +232,7 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
         videonaPlayer.initPreviewLists(movieList);
-        videonaPlayer.initPreview(currentPosition);
+        videonaPlayer.initPreview(currentVideoPosition);
     }
 
     @Override
