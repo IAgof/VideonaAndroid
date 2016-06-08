@@ -1,5 +1,6 @@
 package com.videonasocialmedia.videona.domain.editor.export;
 
+import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -113,7 +114,11 @@ public class ExporterImpl implements Exporter {
             Movie merge = appendVideos(videoTranscoded, false);
 
             Music music = (Music) project.getAudioTracks().get(0).getItems().getFirst();
+            // TODO(alvaro) 060616 check if music is downloaded in a repository, not here.
             File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
+            if(musicFile == null){
+                onExportEndedListener.onExportError("Music not found");
+            }
             ArrayList<String> audio = new ArrayList<>();
             audio.add(musicFile.getPath());
             double movieDuration = getMovieDuration(merge);
