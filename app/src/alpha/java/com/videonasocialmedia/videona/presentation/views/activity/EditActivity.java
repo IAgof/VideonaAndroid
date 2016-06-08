@@ -293,12 +293,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onClipRemoveClicked(int position) {
         selectedVideoRemovePosition = position;
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -327,16 +321,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void onClipMoved(int fromPosition, int toPosition) {
         currentVideoIndex = toPosition;
         editPresenter.moveItem(fromPosition, toPosition);
-        //videonaPlayer.updatePreviewTimeLists();
-        //      this.setSelectedClip(toPosition);
         videonaPlayer.seekToClip(currentVideoIndex);
+    }    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        super.onSaveInstanceState(outState);
     }
-
-//    @OnClick(R.id.button_share_navigator)
-//    public void onClickShareNavigator() {
-//        videonaPlayer.pausePreview();
-//        showProgressDialog();
-//    }
 
     @Override
     public void goToShare(String videoToSharePath) {
@@ -411,6 +401,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
         timeLineAdapter.updateSelection(currentClipIndex);
         videoListRecyclerView.scrollToPosition(currentClipIndex);
     }
+
+
 
 
     @Override
