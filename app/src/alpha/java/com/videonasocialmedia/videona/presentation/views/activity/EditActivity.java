@@ -322,7 +322,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
         currentVideoIndex = toPosition;
         editPresenter.moveItem(fromPosition, toPosition);
         videonaPlayer.seekToClip(currentVideoIndex);
-    }    @Override
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
         super.onSaveInstanceState(outState);
@@ -401,8 +403,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         timeLineAdapter.updateSelection(currentClipIndex);
         videoListRecyclerView.scrollToPosition(currentClipIndex);
     }
-
-
 
 
     @Override
