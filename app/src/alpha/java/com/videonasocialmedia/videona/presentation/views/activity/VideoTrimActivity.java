@@ -86,8 +86,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         }
     };
     private String VIDEO_POSITION = "video_position";
-    private String TRIMMINGBAR_MIN = "trimming_bar_min";
-    private String TRIMMINGBAR_MAX = "trimming_bar_max";
     private String START_TIME_TAG = "start_time_tag";
     private String STOP_TIME_TAG = "stop_time_tag";
     private boolean isInstanceState;
@@ -123,8 +121,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         if (savedInstanceState != null) {
 
             currentPosition = savedInstanceState.getInt(VIDEO_POSITION, 0);
-            seekBarMin = savedInstanceState.getDouble(TRIMMINGBAR_MIN);
-            seekBarMax = savedInstanceState.getDouble(TRIMMINGBAR_MAX);
             startTimeMs = savedInstanceState.getInt(START_TIME_TAG);
             finishTimeMs = savedInstanceState.getInt(STOP_TIME_TAG);
 
@@ -216,8 +212,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     protected void onSaveInstanceState(Bundle outState) {
 
         outState.putInt(VIDEO_POSITION, currentPosition);
-        outState.putDouble(TRIMMINGBAR_MIN, seekBarMin);
-        outState.putDouble(TRIMMINGBAR_MAX, seekBarMax);
         outState.putInt(START_TIME_TAG, startTimeMs);
         outState.putInt(STOP_TIME_TAG, finishTimeMs);
         super.onSaveInstanceState(outState);
@@ -454,7 +448,9 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
         updateTrimingTextTags();
         isTrimminBarsInitialized = true;
-        rangeSeekBar.setInitializedPosition(seekBarMin / 100, seekBarMax / 100);
+        seekBarMin = (double) startTimeMs / videoDuration;
+        seekBarMax = (double) finishTimeMs / videoDuration;
+        rangeSeekBar.setInitializedPosition(seekBarMin, seekBarMax);
     }
 
     @Override
