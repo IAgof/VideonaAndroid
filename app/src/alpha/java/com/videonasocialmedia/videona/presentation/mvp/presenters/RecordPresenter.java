@@ -243,7 +243,11 @@ public class RecordPresenter {
         if (effect instanceof OverlayEffect) {
             recorder.removeOverlay();
             Drawable overlay = context.getResources().getDrawable(( (OverlayEffect) effect ).getResourceId());
-            recorder.addOverlayFilter(overlay);
+            if(effect.getName() == "Bollywood"){
+                recorder.addOverlayFilterBollywood(overlay);
+            } else {
+                recorder.addOverlayFilter(overlay);
+            }
             selectedOverlayEffect = effect;
         } else {
             if (effect instanceof ShaderEffect) {

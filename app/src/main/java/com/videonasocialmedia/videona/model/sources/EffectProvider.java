@@ -199,9 +199,9 @@ public class EffectProvider {
     }
 
     public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("OV25", "Spring",
+        return new OverlayEffect("OV26", "Bollywood",
                 R.drawable.common_filter_overlay_ov25_spring,
-                R.drawable.overlay_filter_spring, AnalyticsConstants.FILTER_TYPE_OVERLAY);
+                R.drawable.overlay_filter_bollywood, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
 }
