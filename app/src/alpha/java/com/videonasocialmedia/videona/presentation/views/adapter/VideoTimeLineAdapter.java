@@ -36,6 +36,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     private VideoTimeLineRecyclerViewClickListener videoTimeLineListener;
     private List<Video> videoList;
     private int selectedVideoPosition = -1;
+    private int fromPosition = -1;
+    private boolean fromPositonIsSeted = false;
 
     public VideoTimeLineAdapter(List<Video> videoList) {
         this.videoList = videoList;
@@ -55,8 +57,11 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         if (fromPositon != toPosition) {
             Collections.swap(videoList, fromPositon, toPosition);
             selectedVideoPosition = toPosition;
+            if (!fromPositonIsSeted) {
+                this.fromPosition = fromPositon;
+                fromPositonIsSeted = true;
+            }
             notifyItemMoved(fromPositon, toPosition);
-            videoTimeLineListener.onClipMoved(toPosition);
         }
     }
 
@@ -64,6 +69,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     public void finishMovement(int newPosition) {
         if (newPosition != -1)
             notifyDataSetChanged();
+        fromPositonIsSeted = false;
+        videoTimeLineListener.onClipMoved(fromPosition, newPosition);
     }
 
     @Override
@@ -77,8 +84,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     private int recalculateSelectedVideoPosition(int removedItemPosition) {
         int newPosition = selectedVideoPosition;
         if (removedItemPosition < selectedVideoPosition ||
-                (removedItemPosition == videoList.size() - 1 &&
-                        selectedVideoPosition == removedItemPosition)) {
+                ( removedItemPosition == videoList.size() - 1 &&
+                        selectedVideoPosition == removedItemPosition )) {
             newPosition = selectedVideoPosition - 1;
         }
         return newPosition;
@@ -136,8 +143,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
                 ? current.getIconPath() : current.getMediaPath();
         Glide.with(context)
                 .load(path)
-               // .asBitmap()
-               // .videoDecoder(decoder)
+                // .asBitmap()
+                // .videoDecoder(decoder)
                 .centerCrop()
                 .error(R.drawable.fragment_gallery_no_image)
                 .into(thumbnailView);

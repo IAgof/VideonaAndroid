@@ -87,11 +87,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
                 int resultCode = bundle.getInt(ExportProjectService.RESULT);
                 if (resultCode == RESULT_OK) {
-                   // hideProgressDialog();
+                    // hideProgressDialog();
                     goToShare(videoToSharePath);
                 } else {
                     //showProgressDialog();
-                   // hideProgressDialog();
+                    // hideProgressDialog();
                     showError(R.string.addMediaItemToTrackError);
                 }
             }
@@ -225,14 +225,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
         }
         startActivity(intent);
     }
+
     @OnClick(R.id.fab_go_to_record)
     public void onClickFabRecord() {
         fabEditRoom.collapse();
         navigateTo(RecordActivity.class);
-    }@Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        super.onSaveInstanceState(outState);
     }
 
     @OnClick(R.id.fab_go_to_gallery)
@@ -245,12 +242,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void onClickEditFullscreen() {
         // navigateTo(Activity.class)
     }
-
-//    @OnClick(R.id.button_share_navigator)
-//    public void onClickShareNavigator() {
-//        videonaPlayer.pausePreview();
-//        showProgressDialog();
-//    }
 
     @OnClick(R.id.button_edit_duplicate)
     public void onClickEditDuplicate() {
@@ -270,11 +261,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         if (!editTrimButton.isEnabled())
             return;
         navigateTo(VideoTrimActivity.class, currentVideoIndex);
-    }    @Override
-    public void onBackPressed() {
-        finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
     }
 
     @OnClick(R.id.button_edit_split)
@@ -296,6 +282,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
         setSelectedClip(position);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        super.onSaveInstanceState(outState);
+    }
+
     public void setSelectedClip(int position) {
         currentVideoIndex = position;
         videonaPlayer.seekToClip(position);
@@ -305,6 +297,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     public void onClipLongClicked() {
         videonaPlayer.pausePreview();
     }
+
+//    @OnClick(R.id.button_share_navigator)
+//    public void onClickShareNavigator() {
+//        videonaPlayer.pausePreview();
+//        showProgressDialog();
+//    }
 
     @Override
     public void onClipRemoveClicked(int position) {
@@ -332,12 +330,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    public void onClipMoved(int toPosition) {
-        editPresenter.moveItem(videoList.get(currentVideoIndex), toPosition);
-        videonaPlayer.updatePreviewTimeLists();
-        this.setSelectedClip(toPosition);
-//        currentVideoIndex = toPosition;
-//        projectPlayer.seekToClip(currentVideoIndex);
+    public void onClipMoved(int fromPosition, int toPosition) {
+        currentVideoIndex = toPosition;
+        editPresenter.moveItem(fromPosition, toPosition);
+        //videonaPlayer.updatePreviewTimeLists();
+        //      this.setSelectedClip(toPosition);
+        videonaPlayer.seekToClip(currentVideoIndex);
     }
 
     @Override
@@ -373,11 +371,13 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     public void bindVideoList(List<Video> videoList) {
         this.videoList = videoList;
-        this.setSelectedClip(currentVideoIndex);
         timeLineAdapter.setVideoList(videoList);
         timeLineAdapter.updateSelection(currentVideoIndex); // TODO: check this flow and previous updateSelection(0); in setVideoList
         videoListRecyclerView.scrollToPosition(currentVideoIndex);
         timeLineAdapter.notifyDataSetChanged();
+
+        videonaPlayer.bindVideoList(videoList);
+        videonaPlayer.seekToClip(currentVideoIndex);
     }
 
     @Override
@@ -387,21 +387,24 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @Override
     public void enableEditActions() {
-
         editTrimButton.setEnabled(true);
         editSplitButton.setEnabled(true);
         editDuplicateButton.setEnabled(true);
     }
-
     @Override
     public void disableEditActions() {
-
         editTrimButton.setEnabled(false);
         editSplitButton.setEnabled(false);
         editDuplicateButton.setEnabled(false);
-
         videonaPlayer.releaseView();
         videonaPlayer.setBlackBackgroundColor();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent record = new Intent(this, RecordActivity.class);
+        startActivity(record);
     }
 
     @Override
@@ -415,11 +418,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         timeLineAdapter.updateSelection(currentClipIndex);
         videoListRecyclerView.scrollToPosition(currentClipIndex);
     }
-
-
-
-
-
 
 
 

@@ -96,8 +96,40 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
         pausePreview();
         releaseVideoView();
         releaseMusicPlayer();
-//        totalVideoDuration = 0;
-//        currentTimePositionInList = 0;
+    }
+
+    /**
+     * Releases the media player and the video view
+     */
+    private void releaseVideoView() {
+        videoPreview.stopPlayback();
+        videoPreview.clearFocus();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            videoPlayer = null;
+        }
+    }
+
+    private void releaseMusicPlayer() {
+        if (musicPlayer != null) {
+            musicPlayer.stop();
+            musicPlayer.release();
+            musicPlayer = null;
+        }
+    }
+
+    public void pauseVideo() {
+        if (videoPlayer != null && videoPlayer.isPlaying())
+            videoPlayer.pause();
+    }
+
+    public void pauseMusic() {
+        if (musicPlayer != null && musicPlayer.isPlaying())
+            musicPlayer.pause();
+    }
+
+    public void showPlayButton() {
+        playButton.setVisibility(View.VISIBLE);
     }
 
     /**** end of Videona player lifecycle methods ****/
@@ -146,6 +178,28 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     }
 
     @Override
+    public void seekToClip(int position) {
+        currentVideoListIndex = position;
+
+        int progress = videoStartTimes.get(currentVideoListIndex) -
+                videoList.get(currentVideoListIndex).getFileStartTime();
+
+        currentTimePositionInList = progress;
+        seekBar.setProgress(progress);
+
+        int timeInMsec = progress - videoStartTimes.get(currentVideoListIndex) +
+                videoList.get(currentVideoListIndex).getFileStartTime();
+
+        if (videoPlayer != null) {
+            seekToNextVideo(videoList.get(position), timeInMsec);
+        } else {
+            initVideoPlayer(videoList.get(position), timeInMsec);
+        }
+
+        showPlayButton();
+    }
+
+    @Override
     public void setMusic(Music music) {
         this.music = music;
     }
@@ -153,25 +207,11 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     @Override
     public void bindVideoList(List<Video> videoList) {
         this.initPreviewLists(videoList);
-        this.initPreview(0);
-    }
-
-    public void showPlayButton() {
-        playButton.setVisibility(View.VISIBLE);
+        this.initPreview(currentTimePositionInList);
     }
 
     public void hidePlayButton() {
         playButton.setVisibility(View.INVISIBLE);
-    }
-
-    public void pauseMusic() {
-        if (musicPlayer != null && musicPlayer.isPlaying())
-            musicPlayer.pause();
-    }
-
-    public void pauseVideo() {
-        if (videoPlayer != null && videoPlayer.isPlaying())
-            videoPlayer.pause();
     }
 
     public void initPreview(int instantTime) {
@@ -562,47 +602,6 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
             default:
                 return false;
         }
-    }
-
-    /**
-     * Releases the media player and the video view
-     */
-    private void releaseVideoView() {
-        videoPreview.stopPlayback();
-        videoPreview.clearFocus();
-        if (videoPlayer != null) {
-            videoPlayer.release();
-            videoPlayer = null;
-        }
-    }
-
-    private void releaseMusicPlayer() {
-        if (musicPlayer != null) {
-            musicPlayer.stop();
-            musicPlayer.release();
-            musicPlayer = null;
-        }
-    }
-
-    public void seekToClip(int position) {
-        currentVideoListIndex = position;
-
-        int progress = videoStartTimes.get(currentVideoListIndex) -
-                videoList.get(currentVideoListIndex).getFileStartTime();
-
-        currentTimePositionInList = progress;
-        seekBar.setProgress(progress);
-
-        int timeInMsec = progress - videoStartTimes.get(currentVideoListIndex) +
-                videoList.get(currentVideoListIndex).getFileStartTime();
-
-        if (videoPlayer != null) {
-            seekToNextVideo(videoList.get(position), timeInMsec);
-        } else {
-            initVideoPlayer(videoList.get(position), timeInMsec);
-        }
-
-        showPlayButton();
     }
 
     public void setBlackBackgroundColor() {

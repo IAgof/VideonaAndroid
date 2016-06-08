@@ -51,6 +51,7 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
      */
     private EditorView editorView;
     private VideonaPlayerView videonaPlayerView;
+    private List<Video> videoList;
 
     public EditPresenter(EditorView editorView, VideonaPlayerView videonaPlayerView,
                          ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack) {
@@ -62,7 +63,6 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         reorderMediaItemUseCase = new ReorderMediaItemUseCase();
         getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
-
     }
 
 
@@ -79,8 +79,8 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
         return getMediaListFromProjectUseCase.getMediaListFromProject();
     }
 
-    public void moveItem(Media videoToMove, int toPositon) {
-        reorderMediaItemUseCase.moveMediaItem(videoToMove, toPositon, this);
+    public void moveItem(int fromPosition, int toPositon) {
+        reorderMediaItemUseCase.moveMediaItem(videoList.get(fromPosition), toPositon, this);
     }
 
     @Override
@@ -107,9 +107,11 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
 
     @Override
     public void onVideosRetrieved(List<Video> videoList) {
+        this.videoList = videoList;
+        List<Video> videoCopy = new ArrayList<>(videoList);
         editorView.enableEditActions();
-        videonaPlayerView.bindVideoList(videoList);
-        editorView.bindVideoList(videoList);
+        //videonaPlayerView.bindVideoList(videoList);
+        editorView.bindVideoList(videoCopy);
         projectModifiedCallBack.onProjectModified();
     }
 
@@ -132,6 +134,7 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
     public void onMediaReordered(Media media, int newPosition) {
         //If everything was right the UI is already updated since the user did the reordering
         videonaPlayerView.pausePreview();
+        editorView.updateProject();
     }
 
     @Override
