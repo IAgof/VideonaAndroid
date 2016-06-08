@@ -282,12 +282,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         setSelectedClip(position);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        super.onSaveInstanceState(outState);
-    }
-
     public void setSelectedClip(int position) {
         currentVideoIndex = position;
         videonaPlayer.seekToClip(position);
@@ -298,11 +292,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
         videonaPlayer.pausePreview();
     }
 
-//    @OnClick(R.id.button_share_navigator)
-//    public void onClickShareNavigator() {
-//        videonaPlayer.pausePreview();
-//        showProgressDialog();
-//    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onClipRemoveClicked(int position) {
@@ -337,6 +331,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
         //      this.setSelectedClip(toPosition);
         videonaPlayer.seekToClip(currentVideoIndex);
     }
+
+//    @OnClick(R.id.button_share_navigator)
+//    public void onClickShareNavigator() {
+//        videonaPlayer.pausePreview();
+//        showProgressDialog();
+//    }
 
     @Override
     public void goToShare(String videoToSharePath) {
@@ -375,7 +375,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         timeLineAdapter.updateSelection(currentVideoIndex); // TODO: check this flow and previous updateSelection(0); in setVideoList
         videoListRecyclerView.scrollToPosition(currentVideoIndex);
         timeLineAdapter.notifyDataSetChanged();
-
         videonaPlayer.bindVideoList(videoList);
         videonaPlayer.seekToClip(currentVideoIndex);
     }
@@ -391,6 +390,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         editSplitButton.setEnabled(true);
         editDuplicateButton.setEnabled(true);
     }
+
     @Override
     public void disableEditActions() {
         editTrimButton.setEnabled(false);
@@ -398,13 +398,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
         editDuplicateButton.setEnabled(false);
         videonaPlayer.releaseView();
         videonaPlayer.setBlackBackgroundColor();
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        Intent record = new Intent(this, RecordActivity.class);
-        startActivity(record);
     }
 
     @Override
@@ -420,8 +413,12 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
 
-
-
+    @Override
+    public void onBackPressed() {
+        finish();
+        Intent record = new Intent(this, RecordActivity.class);
+        startActivity(record);
+    }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {

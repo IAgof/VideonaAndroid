@@ -477,6 +477,9 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
             videoPlayer.seekTo(instantToStart);
             videoPlayer.start();
             videoPlayer.pause();
+            if (videoHasMusic()) {
+                musicPlayer.pause();
+            }
         } catch (IllegalArgumentException | IllegalStateException | IOException e) {
             e.printStackTrace();
         }
