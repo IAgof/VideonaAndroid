@@ -31,7 +31,7 @@ public class EditPresenterTest {
 
     @Test
     public void loadProjectCallsGetMusicFromProjectUseCase() {
-        editPresenter = new EditPresenter(editorView, null);
+        editPresenter = new EditPresenter(editorView, null, null);
 
         editPresenter.loadProject();
 
