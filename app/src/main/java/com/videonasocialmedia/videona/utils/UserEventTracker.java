@@ -1,5 +1,7 @@
 package com.videonasocialmedia.videona.utils;
 
+import android.util.Log;
+
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 
@@ -10,6 +12,7 @@ import org.json.JSONObject;
  * Created by jliarte on 7/06/16.
  */
 public class UserEventTracker {
+    private final String TAG = getClass().getSimpleName();
     private static UserEventTracker userEventTrackerInstance;
     public MixpanelAPI mixpanel;
 
@@ -23,7 +26,7 @@ public class UserEventTracker {
         return userEventTrackerInstance;
     }
 
-    public void trackEvent(Event event) {
+    protected void trackEvent(Event event) {
         if (event != null) {
             mixpanel.track(event.getName(), event.getProperties());
         }
@@ -33,13 +36,71 @@ public class UserEventTracker {
         JSONObject eventProperties = new JSONObject();
         try {
             eventProperties.put(AnalyticsConstants.EDIT_ACTION, AnalyticsConstants.EDIT_ACTION_REORDER);
-            eventProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, project.numberOfClips());
-            eventProperties.put(AnalyticsConstants.VIDEO_LENGTH, project.getDuration());
+            addProjectEventProperties(project, eventProperties);
+            Event trackingEvent = new Event(AnalyticsConstants.VIDEO_EDITED, eventProperties);
+            this.trackEvent(trackingEvent);
+        } catch (JSONException e) {
+            Log.d(TAG, "trackClipsReordered: error sending mixpanel VIDEO_EDITED reorder event");
+            e.printStackTrace();
+        }
+    }
+
+    public void trackClipTrimmed(Project project) {
+        JSONObject eventProperties = new JSONObject();
+        try {
+            eventProperties.put(AnalyticsConstants.EDIT_ACTION, AnalyticsConstants.EDIT_ACTION_TRIM);
+            addProjectEventProperties(project, eventProperties);
+            Event trackingEvent = new Event(AnalyticsConstants.VIDEO_EDITED, eventProperties);
+            this.trackEvent(trackingEvent);
+        } catch (JSONException e) {
+            Log.d(TAG, "trackClipTrimmed: error sending mixpanel VIDEO_EDITED trim event");
+            e.printStackTrace();
+        }
+    }
+
+    public void trackClipSplitted(Project project) {
+        JSONObject eventProperties = new JSONObject();
+        try {
+            eventProperties.put(AnalyticsConstants.EDIT_ACTION, AnalyticsConstants.EDIT_ACTION_SPLIT);
+            addProjectEventProperties(project, eventProperties);
+            Event trackingEvent = new Event(AnalyticsConstants.VIDEO_EDITED, eventProperties);
+            this.trackEvent(trackingEvent);
+        } catch (JSONException e) {
+            Log.d(TAG, "trackClipSplitted: error sending mixpanel VIDEO_EDITED split event");
+            e.printStackTrace();
+        }
+    }
+
+    public void trackClipDuplicated(int copies, Project project) {
+        JSONObject eventProperties = new JSONObject();
+        try {
+            eventProperties.put(AnalyticsConstants.EDIT_ACTION, AnalyticsConstants.EDIT_ACTION_DUPLICATE);
+            eventProperties.put(AnalyticsConstants.NUMBER_OF_DUPLICATES, copies);
+            addProjectEventProperties(project, eventProperties);
+            Event trackingEvent = new Event(AnalyticsConstants.VIDEO_EDITED, eventProperties);
+            this.trackEvent(trackingEvent);
+        } catch (JSONException e) {
+            Log.d(TAG, "trackClipDuplicated: error sending mixpanel VIDEO_EDITED duplicate event");
+            e.printStackTrace();
+        }
+    }
+
+    public void trackMusicSet(Project project) {
+        JSONObject eventProperties = new JSONObject();
+        try {
+            eventProperties.put(AnalyticsConstants.EDIT_ACTION, AnalyticsConstants.EDIT_ACTION_MUSIC_SET);
+            eventProperties.put(AnalyticsConstants.MUSIC_TITLE, project.getMusic().getTitle());
+            addProjectEventProperties(project, eventProperties);
             Event trackingEvent = new Event(AnalyticsConstants.VIDEO_EDITED, eventProperties);
             this.trackEvent(trackingEvent);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addProjectEventProperties(Project project, JSONObject eventProperties) throws JSONException {
+        eventProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, project.numberOfClips());
+        eventProperties.put(AnalyticsConstants.VIDEO_LENGTH, project.getDuration());
     }
 
     public static class Event {

@@ -97,6 +97,15 @@ public class AnalyticsConstants {
     public static final String DESTINATION_KAMARADA_PLAY = "Kamarada Google Play";
 
 
+    /**
+     * Edit Events properties and values
+     */
     public static final String EDIT_ACTION = "editAction";
     public static final String EDIT_ACTION_REORDER = "Reorder";
+    public static final String EDIT_ACTION_TRIM = "Trim";
+    public static final String EDIT_ACTION_SPLIT = "Split";
+    public static final String EDIT_ACTION_DUPLICATE = "Duplicate";
+    public static final String EDIT_ACTION_MUSIC_SET = "Music set";
+    public static final String NUMBER_OF_DUPLICATES = "numberOfDuplicates";
+    public static final String MUSIC_TITLE = "musicTitle";
 }
