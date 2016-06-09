@@ -15,5 +15,8 @@
     <string name="dialog_edit_remove_accept">Yes</string>
     <string name="dialog_edit_remove_cancel">No</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

@@ -78,9 +78,6 @@ public class VideoGalleryAdapter extends RecyclerView.Adapter<VideoGalleryAdapte
         return videoList.size();
     }
 
-//    public List<Video> getVideoList() {
-//        return videoList;
-//    }
 
     public Video getVideo(int position) {
         return videoList.get(position);

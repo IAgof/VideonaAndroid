@@ -3,4 +3,45 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:background="#2cf321"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:title="Texto">
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.TabLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/tab_layout">
+    </android.support.design.widget.TabLayout>
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layoutMode="opticalBounds">
+
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pager_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:background="@color/colorPrimary"
+            android:transitionGroup="false"
+            android:touchscreenBlocksFocus="false"/>
+
+    </android.support.v4.view.ViewPager>
+
+
 </LinearLayout>
