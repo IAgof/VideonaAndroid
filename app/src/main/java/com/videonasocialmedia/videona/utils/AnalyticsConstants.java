@@ -9,6 +9,7 @@ public class AnalyticsConstants {
      */
     public final static String APP_STARTED = "App Started";
     public final static String VIDEO_RECORDED = "Video Recorded";
+    public final static String VIDEO_EDITED = "Video Edited";
     public final static String VIDEO_EXPORTED = "Video Exported";
     public static final String VIDEO_SHARED = "Video Shared";
     public final static String USER_INTERACTED = "User Interacted";
@@ -96,4 +97,6 @@ public class AnalyticsConstants {
     public static final String DESTINATION_KAMARADA_PLAY = "Kamarada Google Play";
 
 
+    public static final String EDIT_ACTION = "editAction";
+    public static final String EDIT_ACTION_REORDER = "Reorder";
 }

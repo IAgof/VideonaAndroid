@@ -31,6 +31,8 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
@@ -43,6 +45,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineR
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.util.List;
 
@@ -111,9 +114,10 @@ public class EditActivity extends VideonaActivity implements EditorView,
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        videonaPlayer.initVideoPreview(this);
+        UserEventTracker userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        editPresenter = new EditPresenter(this, videonaPlayer, navigator.getCallback(), userEventTracker);
 
-        editPresenter = new EditPresenter(this, videonaPlayer, navigator.getCallback());
+        videonaPlayer.initVideoPreview(this);
 
         createProgressDialog();
         if (savedInstanceState != null) {

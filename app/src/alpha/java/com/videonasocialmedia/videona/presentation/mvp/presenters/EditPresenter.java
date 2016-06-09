@@ -20,6 +20,7 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.GetMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.ReorderMediaItemUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -27,6 +28,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideonaPlayerView;
 import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +54,12 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
     private EditorView editorView;
     private VideonaPlayerView videonaPlayerView;
     private List<Video> videoList;
+    protected UserEventTracker userEventTracker;
+    private Project currentProject;
 
     public EditPresenter(EditorView editorView, VideonaPlayerView videonaPlayerView,
-                         ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack) {
+                         ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack,
+                         UserEventTracker userEventTracker) {
         this.editorView = editorView;
         this.videonaPlayerView = videonaPlayerView;
         this.projectModifiedCallBack = projectModifiedCallBack;
@@ -63,6 +68,13 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         reorderMediaItemUseCase = new ReorderMediaItemUseCase();
         getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
+        this.userEventTracker = userEventTracker;
+        this.currentProject = loadCurrentProject();
+    }
+
+    public Project loadCurrentProject() {
+        // TODO(jliarte): this should make use of a repository or use case to load the Project
+        return Project.getInstance(null, null, null);
     }
 
 
@@ -75,9 +87,6 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
     }
 
 
-    public List<Media> checkVideosOnProject() {
-        return getMediaListFromProjectUseCase.getMediaListFromProject();
-    }
 
     public void moveItem(int fromPosition, int toPositon) {
         reorderMediaItemUseCase.moveMediaItem(videoList.get(fromPosition), toPositon, this);
@@ -134,6 +143,7 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
     @Override
     public void onMediaReordered(Media media, int newPosition) {
         //If everything was right the UI is already updated since the user did the reordering
+        userEventTracker.trackClipsReordered(currentProject);
         videonaPlayerView.pausePreview();
         editorView.updateProject();
     }

@@ -172,4 +172,8 @@ public class Project {
     public void clear() {
         INSTANCE = new Project(null, null, null);
     }
+
+    public int numberOfClips() {
+        return getMediaTrack().getItems().size();
+    }
 }
