@@ -26,6 +26,10 @@ public class UserEventTracker {
         return userEventTrackerInstance;
     }
 
+    public static void clear() {
+        userEventTrackerInstance = null;
+    }
+
     protected void trackEvent(Event event) {
         if (event != null) {
             mixpanel.track(event.getName(), event.getProperties());
@@ -89,7 +93,11 @@ public class UserEventTracker {
         JSONObject eventProperties = new JSONObject();
         try {
             eventProperties.put(AnalyticsConstants.EDIT_ACTION, AnalyticsConstants.EDIT_ACTION_MUSIC_SET);
-            eventProperties.put(AnalyticsConstants.MUSIC_TITLE, project.getMusic().getTitle());
+            String musicTitle = "";
+            if (project.getMusic() != null) {
+                musicTitle = project.getMusic().getTitle();
+            }
+            eventProperties.put(AnalyticsConstants.MUSIC_TITLE, musicTitle);
             addProjectEventProperties(project, eventProperties);
             Event trackingEvent = new Event(AnalyticsConstants.VIDEO_EDITED, eventProperties);
             this.trackEvent(trackingEvent);

@@ -8,6 +8,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,12 @@ public class UserEventTrackerTest {
     @Before
     public void injectMocks() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @After
+    public void tearDown() {
+        Project.getInstance(null, null, null).clear();
+        UserEventTracker.clear();
     }
 
     @Test
@@ -131,7 +138,7 @@ public class UserEventTrackerTest {
     }
 
     @Test
-    public void trackMusicAddedCallsTrackWithEventNameAndProperties() throws IllegalItemOnTrack, JSONException {
+    public void trackMusicSetCallsTrackWithEventNameAndProperties() throws IllegalItemOnTrack, JSONException {
         UserEventTracker userEventTracker = Mockito.spy(UserEventTracker.getInstance(mockedMixpanelAPI));
         Project videonaProject = getAProject();
         Music music = new Music(1, "Music title", 2, 3, "Music Author");
@@ -145,6 +152,17 @@ public class UserEventTrackerTest {
         assertThat(trackedEvent.getProperties().getString(AnalyticsConstants.EDIT_ACTION), is(AnalyticsConstants.EDIT_ACTION_MUSIC_SET));
         assertThat(trackedEvent.getProperties().getString(AnalyticsConstants.MUSIC_TITLE), is(music.getTitle()));
         assertEvenPropertiesIncludeProjectCommonProperties(trackedEvent.getProperties(), videonaProject);
+    }
+
+    @Test
+    public void trackMusicSetTracksEmptyTitleIfMusicIsNull() throws JSONException {
+        UserEventTracker userEventTracker = Mockito.spy(UserEventTracker.getInstance(mockedMixpanelAPI));
+        Project videonaProject = getAProject();
+
+        userEventTracker.trackMusicSet(videonaProject);
+
+        Mockito.verify(userEventTracker).trackEvent(eventCaptor.capture());
+        assertThat(eventCaptor.getValue().getProperties().getString(AnalyticsConstants.MUSIC_TITLE), isEmptyString());
     }
 
     public void assertEvenPropertiesIncludeProjectCommonProperties(JSONObject eventProperties, Project videonaProject) throws JSONException {

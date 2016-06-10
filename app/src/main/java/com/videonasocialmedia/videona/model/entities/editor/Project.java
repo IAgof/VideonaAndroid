@@ -192,11 +192,7 @@ public class Project {
         Music result = null;
         try {
             result = (Music) getAudioTracks().get(0).getItems().get(0);
-        } catch (Exception e) {
-            Logger log = Logger.getLogger(TAG);
-            log.log(Level.FINE, "getMusic: exception trying to load project music");
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
         return result;
     }
 }
