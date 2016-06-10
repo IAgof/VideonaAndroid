@@ -63,7 +63,6 @@ public class EditPresenterTest {
         Mockito.verify(mockedUserEventTracker).trackClipsReordered(videonaProject);
     }
 
-
     // Seems not needed since we already use @InjectMocks annotation
     @NonNull
     public EditPresenter getEditPresenter() {
