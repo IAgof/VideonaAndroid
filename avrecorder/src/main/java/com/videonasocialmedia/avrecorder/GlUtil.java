@@ -16,7 +16,6 @@
 
 package com.videonasocialmedia.avrecorder;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -217,12 +216,8 @@ public class GlUtil {
         Canvas canvas = new Canvas(bitmap);
         canvas.drawARGB(0,0,0,0);
 
-        // get a background image from resources
-        // note the image format must match the bitmap format
-        Drawable background = drawable;
-        //background.setBounds(0, 0, 256, 256);
-        background.setBounds(0, 0, width, height);
-        background.draw(canvas); // draw the background to our bitmap
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(canvas); // draw the background to our bitmap
 
         int[] textures = new int[1];
 

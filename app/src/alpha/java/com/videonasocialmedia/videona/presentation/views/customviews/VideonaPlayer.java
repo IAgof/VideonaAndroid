@@ -68,25 +68,27 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     public VideonaPlayer(Context context) {
         super(context);
         this.context = context;
-        this.videonaPlayerView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.videonaPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, videonaPlayerView);
     }
 
     public VideonaPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        this.videonaPlayerView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.videonaPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, videonaPlayerView);
     }
 
     public VideonaPlayer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
-        this.videonaPlayerView = ((Activity) getContext()).getLayoutInflater().inflate(R.layout.video_preview, this, true);
+        this.videonaPlayerView = ( (Activity) getContext() ).getLayoutInflater().inflate(R.layout.video_preview, this, true);
         ButterKnife.bind(this, videonaPlayerView);
     }
 
-    /**** Videona player lifecycle methods ****/
+    /****
+     * Videona player lifecycle methods
+     ****/
 
     public void destroy() {
         handler.removeCallbacksAndMessages(null);
@@ -132,7 +134,9 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
         playButton.setVisibility(View.VISIBLE);
     }
 
-    /**** end of Videona player lifecycle methods ****/
+    /****
+     * end of Videona player lifecycle methods
+     ****/
 
     public void initVideoPreview(VideonaPlayerListener videonaPlayerListener) {
         this.videoList = new ArrayList<>(); // TODO(jliarte): should initialize with videos from project?
@@ -477,9 +481,7 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
             videoPlayer.seekTo(instantToStart);
             videoPlayer.start();
             videoPlayer.pause();
-            if (videoHasMusic()) {
-                musicPlayer.pause();
-            }
+            pauseMusic();
         } catch (IllegalArgumentException | IllegalStateException | IOException e) {
             e.printStackTrace();
         }

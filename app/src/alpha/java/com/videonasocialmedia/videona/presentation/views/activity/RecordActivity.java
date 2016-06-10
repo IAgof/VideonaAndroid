@@ -46,7 +46,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.Tracker;
-import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
+import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
@@ -97,7 +97,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Bind(R.id.button_share)
     ImageButton shareButton;
     @Bind(R.id.cameraPreview)
-    GLCameraEncoderView cameraView;
+    GLCameraView cameraView;
     @Bind(R.id.button_change_camera)
     ImageButton rotateCameraButton;
     @Bind(R.id.button_navigate_edit)
@@ -173,13 +173,12 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_record);
+        keepScreenOn();
         ButterKnife.bind(this);
         drawerLayout.setDrawerListener(this);
-
         checkAction();
-
-        cameraView.setKeepScreenOn(true);
         sharedPreferences = getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
@@ -195,6 +194,10 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         buttonThumbClipRecorded.setBorderWidth(5);
         buttonThumbClipRecorded.setBorderColor(Color.WHITE);
         numVideosRecorded.setVisibility(View.GONE);
+    }
+
+    private void keepScreenOn() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void checkAction() {
@@ -264,21 +267,25 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         recordPresenter.onDestroy();
+        cameraView = null;
+        Log.d(LOG_TAG, "onDestroy");
+        super.onDestroy();
     }
 
     @Override
     public void onPause() {
-        super.onPause();
         unregisterReceiver(receiver);
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
+        Log.d(LOG_TAG, "onPause");
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(LOG_TAG, "onResume");
         registerReceiver(receiver, new IntentFilter(ExportProjectService.NOTIFICATION));
         recordPresenter.onResume();
         recording = false;
@@ -288,6 +295,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(LOG_TAG, "onStart");
         recordPresenter.onStart();
     }
 
@@ -314,8 +322,9 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     protected void onStop() {
-        super.onStop();
         recordPresenter.onStop();
+        Log.d(LOG_TAG, "OnStop");
+        super.onStop();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
