@@ -839,6 +839,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_navigate_edit)
     public void navigateToEdit() {
         if (!recording) {
+            //TODO(alvaro 130616) Save flash state
+            recordPresenter.setFlashOff();
             Intent edit = new Intent(this, EditActivity.class);
             //edit.putExtra("SHARE", false);
             startActivity(edit);
@@ -848,6 +850,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     @OnClick(R.id.button_share)
     public void exportAndShare() {
         if (!recording) {
+            recordPresenter.setFlashOff();
             Intent intent = new Intent(this, ExportProjectService.class);
             startService(intent);
             showProgressDialog();
