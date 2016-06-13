@@ -302,7 +302,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
                         timeLineAdapter.remove(selectedVideoRemovePosition);
-                        updateProject();
+                        editPresenter.removeVideoFromProject(selectedVideoRemovePosition);
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -325,16 +325,16 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void goToShare(String videoToSharePath) {
         Intent intent = new Intent(this, ShareActivity.class);
         intent.putExtra(Constants.VIDEO_TO_SHARE_PATH, videoToSharePath);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
