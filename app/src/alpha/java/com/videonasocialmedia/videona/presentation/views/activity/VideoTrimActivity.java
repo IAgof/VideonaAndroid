@@ -203,13 +203,17 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     }
 
     public void navigateTo(Class cls) {
-        startActivity(new Intent(getApplicationContext(), cls));
+        Intent intent = new Intent(getApplicationContext(), cls);
+        if (cls == GalleryActivity.class) {
+            intent.putExtra("SHARE", false);
+        }
+        startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
+        finish();
     }
 
     @Override
@@ -280,13 +284,11 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     public void onClickTrimAccept() {
         presenter.modifyVideoStartTime(startTimeMs);
         presenter.modifyVideoFinishTime(finishTimeMs);
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_trim_cancel)
     public void onClickTrimCancel() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
