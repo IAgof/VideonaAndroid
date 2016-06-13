@@ -111,6 +111,7 @@
             android:name=".presentation.views.activity.RecordActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.media.action.VIDEO_CAPTURE"/>

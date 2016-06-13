@@ -9,6 +9,7 @@ public class AnalyticsConstants {
      */
     public final static String APP_STARTED = "App Started";
     public final static String VIDEO_RECORDED = "Video Recorded";
+    public final static String VIDEO_EDITED = "Video Edited";
     public final static String VIDEO_EXPORTED = "Video Exported";
     public static final String VIDEO_SHARED = "Video Shared";
     public final static String USER_INTERACTED = "User Interacted";
@@ -96,4 +97,15 @@ public class AnalyticsConstants {
     public static final String DESTINATION_KAMARADA_PLAY = "Kamarada Google Play";
 
 
+    /**
+     * Edit Events properties and values
+     */
+    public static final String EDIT_ACTION = "editAction";
+    public static final String EDIT_ACTION_REORDER = "Reorder";
+    public static final String EDIT_ACTION_TRIM = "Trim";
+    public static final String EDIT_ACTION_SPLIT = "Split";
+    public static final String EDIT_ACTION_DUPLICATE = "Duplicate";
+    public static final String EDIT_ACTION_MUSIC_SET = "Music set";
+    public static final String NUMBER_OF_DUPLICATES = "numberOfDuplicates";
+    public static final String MUSIC_TITLE = "musicTitle";
 }

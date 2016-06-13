@@ -178,13 +178,17 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,
     }
 
     public void navigateTo(Class cls) {
-        startActivity(new Intent(getApplicationContext(), cls));
+        Intent intent = new Intent(getApplicationContext(), cls);
+        if (cls == GalleryActivity.class) {
+            intent.putExtra("SHARE", false);
+        }
+        startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
+        finish();
     }
 
     @Override
@@ -268,13 +272,11 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,
     public void onClickSplitAccept() {
 
         presenter.splitVideo(video, videoIndexOnTrack, currentPosition);
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_split_cancel)
     public void onClickSplitCancel() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
