@@ -406,8 +406,8 @@ public class TrimRangeSeekBarView extends FrameLayout implements View.OnTouchLis
 
     public void setInitializedPosition(double left, double right) {
         isVideoInitialized = true;
-        initLeftSeekBar = Math.round(left * 100) / 100.0d;
-        initRightSeekBar = Math.round(right * 100) / 100.0d;
+        initLeftSeekBar = left;// Math.round(left * 100) / 100.0d;
+        initRightSeekBar = right;// Math.round(right * 100) / 100.0d;
     }
 
 }

@@ -7,6 +7,8 @@
 
 package com.videonasocialmedia.videona.domain.editor.export;
 
+import android.content.Context;
+
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;

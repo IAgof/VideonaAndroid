@@ -100,8 +100,14 @@ public class Utils {
 
     public static File getMusicFileById(int rawResourceId) {
         File f = new File(Constants.PATH_APP_TEMP + File.separator + rawResourceId + Constants.AUDIO_MUSIC_FILE_EXTENSION);
-        if (!f.exists())
-            f = null;
+        if (!f.exists()) {
+            try {
+                copyMusicResourceToTemp(VideonaApplication.getAppContext(), rawResourceId);
+            } catch (IOException e) {
+                //TODO show error message
+                f = null;
+            }
+        }
         return f;
     }
 

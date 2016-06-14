@@ -31,8 +31,8 @@ import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditPresenter implements OnAddMediaFinishedListener,
-        OnRemoveMediaFinishedListener, OnVideosRetrieved, OnReorderMediaListener, GetMusicFromProjectCallback {
+public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaFinishedListener,
+        OnVideosRetrieved, OnReorderMediaListener, GetMusicFromProjectCallback {
 
     /**
      * LOG_TAG
@@ -146,7 +146,6 @@ public class EditPresenter implements OnAddMediaFinishedListener,
 
     public void loadProject() {
         getMediaListFromProjectUseCase.getMediaListFromProject(this);
-//        getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
         getMusicFromProjectUseCase.getMusicFromProject(this);
     }
 

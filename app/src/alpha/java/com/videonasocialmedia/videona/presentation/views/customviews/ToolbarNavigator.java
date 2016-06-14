@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditNavigatorView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.MusicDetailActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.MusicListActivity;
+import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 
 import static com.videonasocialmedia.videona.utils.UIUtils.tintButton;
 
@@ -90,7 +92,9 @@ public class ToolbarNavigator extends LinearLayout implements EditNavigatorView 
             @Override
             public void onClick(View v) {
                 if (navigateToShareButton.isEnabled()) {
-                    //navigateTo(ShareVideoActivity.class);
+                    Intent intent = new Intent(context, ExportProjectService.class);
+                    Snackbar.make(v, "Starting export", Snackbar.LENGTH_INDEFINITE).show();
+                    context.startService(intent);
                 }
             }
         });

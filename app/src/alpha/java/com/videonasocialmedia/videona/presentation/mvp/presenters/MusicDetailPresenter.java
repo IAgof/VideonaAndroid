@@ -73,7 +73,7 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
 
     private void setupScene(boolean isMusicOnProject) {
         musicDetailView.showTitle(music.getNameResourceId());
-        musicDetailView.showAuthor(music.getNameResourceId());
+        musicDetailView.showAuthor(music.getAuthor());
         musicDetailView.showImage(music.getIconResourceId());
         musicDetailView.setupScene(isMusicOnProject);
     }
