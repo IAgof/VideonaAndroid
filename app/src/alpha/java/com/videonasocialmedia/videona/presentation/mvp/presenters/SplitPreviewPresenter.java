@@ -9,9 +9,11 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.SplitView;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +38,19 @@ public class SplitPreviewPresenter implements OnVideosRetrieved {
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
 
     private SplitView splitView;
+    protected UserEventTracker userEventTracker;
+    protected Project currentProject;
 
-    public SplitPreviewPresenter(SplitView splitView) {
+    public SplitPreviewPresenter(SplitView splitView, UserEventTracker userEventTracker) {
         this.splitView = splitView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        this.currentProject = loadCurrentProject();
+        this.userEventTracker = userEventTracker;
+    }
+
+    private Project loadCurrentProject() {
+        return Project.getInstance(null, null, null);
     }
 
     public void init(int videoToTrimIndex) {
@@ -75,6 +85,7 @@ public class SplitPreviewPresenter implements OnVideosRetrieved {
         video.setIsSplit(true);
         copyVideo.setIsSplit(true);
         addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);
+        userEventTracker.trackClipSplitted(currentProject);
     }
 
 }

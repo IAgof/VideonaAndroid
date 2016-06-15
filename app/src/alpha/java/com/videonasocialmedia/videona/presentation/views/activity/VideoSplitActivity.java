@@ -26,6 +26,8 @@ import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.SplitPreviewPresenter;
@@ -34,6 +36,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.AspectRatio
 import com.videonasocialmedia.videona.presentation.views.listener.OnSplitConfirmListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.io.IOException;
 import java.util.List;
@@ -89,7 +92,8 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new SplitPreviewPresenter(this);
+        UserEventTracker userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        presenter = new SplitPreviewPresenter(this, userEventTracker);
 
         splitSeekBar.setProgress(0);
         splitSeekBar.setOnSeekBarChangeListener(this);
