@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.auth.repository.apiclient;
+package com.videonasocialmedia.videona.auth.repository.model;
 
 import com.google.gson.Gson;
 

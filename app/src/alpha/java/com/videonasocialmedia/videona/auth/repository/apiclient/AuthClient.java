@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.auth.repository.apiclient;
 
 import com.videonasocialmedia.videona.auth.domain.model.Token;
+import com.videonasocialmedia.videona.auth.repository.model.AuthTokenRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
