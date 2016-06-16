@@ -2,10 +2,10 @@ package com.videonasocialmedia.videona.utils.recyclerselectionsupport;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnItemTouchListener;
+import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,11 +13,21 @@ import android.view.View;
 abstract class ClickItemTouchListener implements OnItemTouchListener {
     private static final String LOGTAG = "ClickItemTouchListener";
 
-    private final GestureDetectorCompat mGestureDetector;
+    private final ItemClickGestureDetector mGestureDetector;
 
     ClickItemTouchListener(RecyclerView hostView) {
         mGestureDetector = new ItemClickGestureDetector(hostView.getContext(),
                 new ItemClickGestureListener(hostView));
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent event) {
+        if (!isAttachedToWindow(recyclerView) || !hasAdapter(recyclerView)) {
+            return false;
+        }
+
+        mGestureDetector.onTouchEvent(event);
+        return false;
     }
 
     private boolean isAttachedToWindow(RecyclerView hostView) {
@@ -33,16 +43,6 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
     }
 
     @Override
-    public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent event) {
-        if (!isAttachedToWindow(recyclerView) || !hasAdapter(recyclerView)) {
-            return false;
-        }
-
-        mGestureDetector.onTouchEvent(event);
-        return false;
-    }
-
-    @Override
     public void onTouchEvent(RecyclerView recyclerView, MotionEvent event) {
         // We can silently track tap and and long presses by silently
         // intercepting touch events in the host RecyclerView.
@@ -51,7 +51,7 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
     abstract boolean performItemClick(RecyclerView parent, View view, int position, long id);
     abstract boolean performItemLongClick(RecyclerView parent, View view, int position, long id);
 
-    private class ItemClickGestureDetector extends GestureDetectorCompat {
+    private class ItemClickGestureDetector extends GestureDetector {
         private final ItemClickGestureListener mGestureListener;
 
         public ItemClickGestureDetector(Context context, ItemClickGestureListener listener) {
@@ -91,22 +91,6 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
         }
 
         @Override
-        public boolean onDown(MotionEvent event) {
-            final int x = (int) event.getX();
-            final int y = (int) event.getY();
-
-            mTargetChild = mHostView.findChildViewUnder(x, y);
-            return (mTargetChild != null);
-        }
-
-        @Override
-        public void onShowPress(MotionEvent event) {
-            if (mTargetChild != null) {
-                mTargetChild.setPressed(true);
-            }
-        }
-
-        @Override
         public boolean onSingleTapUp(MotionEvent event) {
             boolean handled = false;
 
@@ -124,18 +108,6 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
         }
 
         @Override
-        public boolean onScroll(MotionEvent event, MotionEvent event2, float v, float v2) {
-            if (mTargetChild != null) {
-                mTargetChild.setPressed(false);
-                mTargetChild = null;
-
-                return true;
-            }
-
-            return false;
-        }
-
-        @Override
         public void onLongPress(MotionEvent event) {
             if (mTargetChild == null) {
                 return;
@@ -149,6 +121,34 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
                 mTargetChild.setPressed(false);
                 mTargetChild = null;
             }
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent event, MotionEvent event2, float v, float v2) {
+            if (mTargetChild != null) {
+                mTargetChild.setPressed(false);
+                mTargetChild = null;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent event) {
+            if (mTargetChild != null) {
+                mTargetChild.setPressed(true);
+            }
+        }
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            final int x = (int) event.getX();
+            final int y = (int) event.getY();
+
+            mTargetChild = mHostView.findChildViewUnder(x, y);
+            return ( mTargetChild != null );
         }
     }
 }
