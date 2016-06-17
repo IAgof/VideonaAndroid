@@ -35,7 +35,7 @@ android {
         }
         debug {
             buildConfigField "String", "MIXPANEL_TOKEN", "\"c6617213110cd2513dfc0ad97dbaee66\""
-            buildConfigField "String", "API_BASE_URL", "\"http://videona.com/api/\""
+            buildConfigField "String", "API_BASE_URL", "\"http://staging.videona.com/api/v1/\""
         }
 
     }

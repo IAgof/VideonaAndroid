@@ -48,5 +48,4 @@ public class CachedToken {
         editor.putBoolean("HAS_TOKEN", false);
         editor.apply();
     }
-
 }

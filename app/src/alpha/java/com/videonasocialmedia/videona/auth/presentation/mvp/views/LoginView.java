@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.presentation.mvp.views;
+package com.videonasocialmedia.videona.auth.presentation.mvp.views;
 
 /**
  * Created by alvaro on 14/06/16.

@@ -20,7 +20,7 @@ import retrofit2.http.POST;
  */
 public interface AuthClient {
 
-    @POST("login")
+    @POST("/auth")
     @Headers("Content-Type: application/json")
     Call<Token> getAuthToken(@Body AuthTokenRequest requestBody);
 }

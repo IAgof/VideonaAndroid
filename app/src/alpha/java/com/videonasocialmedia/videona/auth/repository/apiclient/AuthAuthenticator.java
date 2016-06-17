@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.auth.repository.apiclient;
 
+import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
 import com.videonasocialmedia.videona.main.repository.rest.ServiceGenerator;
 
 import java.io.IOException;
@@ -23,9 +24,15 @@ public class AuthAuthenticator implements Authenticator {
     @Override
     public Request authenticate(Route route, Response response) throws IOException {
         AuthClient authClient = new ServiceGenerator().generateService(AuthClient.class);
-        // TODO(javi.cabanas): 15/6/16 refresh token
         // Token newToken= authClient.refreshToken();
-        return response.request().newBuilder().addHeader("Authorization", "token")// TODO(javi.cabanas): 15/6/16 use real token
-                .build();
+        CachedToken token = new CachedToken();
+        Request.Builder builder = response.request().newBuilder();
+        if (!token.hasToken()) {
+            // TODO(javi.cabanas): 15/6/16 refresh token
+            builder.addHeader("Authorization", "fakeToken");
+        } else {
+            builder.addHeader("Authorization", token.getToken().getToken());
+        }
+        return builder.build();
     }
 }

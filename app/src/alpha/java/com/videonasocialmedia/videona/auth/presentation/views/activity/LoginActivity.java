@@ -5,16 +5,15 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.presentation.views.activity;
+package com.videonasocialmedia.videona.auth.presentation.views.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
-
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -25,8 +24,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.mvp.presenters.LoginPresenter;
-import com.videonasocialmedia.videona.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.LoginPresenter;
+import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,8 +40,6 @@ import butterknife.OnEditorAction;
  */
 public class LoginActivity extends VideonaActivity implements LoginView {
 
-
-    private LoginPresenter loginPresenter;
 
     // UI references.
     @Bind(R.id.email_text_input)
@@ -56,6 +56,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     View loginFormView;
     @Bind(R.id.email_sign_in_button)
     Button emailSignInButton;
+    private LoginPresenter loginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +67,12 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         loginPresenter = new LoginPresenter(this);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -92,7 +81,6 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,6 +109,22 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         attemptLogin();
     }
 
+    /**
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    private void attemptLogin() {
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+
+        if (loginPresenter.isEmailValidAndNotEmpty(email) &&
+                loginPresenter.isPasswordValidAndNotEmpty(password)) {
+
+            loginPresenter.tryToLogIn(email, password);
+        }
+    }
+
     @OnEditorAction(R.id.password_edit_text)
     public boolean onEditorAction(int id, KeyEvent key) {
 
@@ -132,9 +136,29 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     }
 
     @Override
-    public void showErrorLogin(int stringErrorLogin) {
-        Snackbar snackbar = Snackbar.make(emailSignInButton, stringErrorLogin, Snackbar.LENGTH_LONG);
-        snackbar.show();
+    public void resetErrorFields() {
+        emailTextInput.setError(null);
+        passwordTextInput.setError(null);
+    }
+
+    @Override
+    public void passwordFieldRequire() {
+        passwordTextInput.setError(getString(R.string.error_invalid_password));
+    }
+
+    @Override
+    public void emailFieldRequire() {
+        emailTextInput.setError(getString(R.string.error_field_required));
+    }
+
+    @Override
+    public void emailInvalid() {
+        emailTextInput.setError(getString(R.string.error_invalid_email));
+    }
+
+    @Override
+    public void passwordInvalid() {
+        passwordTextInput.setError(getString(R.string.error_invalid_password));
     }
 
     @Override
@@ -148,29 +172,9 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     }
 
     @Override
-    public void resetErrorFields(){
-        emailTextInput.setError(null);
-        passwordTextInput.setError(null);
-    }
-
-    @Override
-    public void passwordFieldRequire(){
-        passwordTextInput.setError(getString(R.string.error_invalid_password));
-    }
-
-    @Override
-    public void emailFieldRequire(){
-        emailTextInput.setError(getString(R.string.error_field_required));
-    }
-
-    @Override
-    public void emailInvalid(){
-        emailTextInput.setError(getString(R.string.error_invalid_email));
-    }
-
-    @Override
-    public void passwordInvalid(){
-        passwordTextInput.setError(getString(R.string.error_invalid_password));
+    public void showErrorLogin(int stringErrorLogin) {
+        Snackbar snackbar = Snackbar.make(emailSignInButton, stringErrorLogin, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
@@ -180,31 +184,6 @@ public class LoginActivity extends VideonaActivity implements LoginView {
             intent.putExtra("SHARE", false);
         }
         startActivity(intent);
-    }
-
-
-    private void setupToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
-    }
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-
-        if(loginPresenter.isEmailValidAndNotEmpty(email) &&
-                loginPresenter.isPasswordValidAndNotEmpty(password)) {
-
-            loginPresenter.checkLogin(email, password);
-        }
     }
 
     /**

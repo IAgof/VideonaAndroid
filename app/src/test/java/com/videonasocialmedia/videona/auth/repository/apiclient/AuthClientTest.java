@@ -49,13 +49,12 @@ public class AuthClientTest {
         server.shutdown();
     }
 
-
     @Test
     public void ShouldReceiveCorrectlyFormattedToken() throws Exception {
         enqeueAuthResponse();
         Token receivedToken = performLogin();
         RecordedRequest loginRequest = server.takeRequest();
-        assertEquals("/test/login", loginRequest.getPath());
+        assertEquals("/auth", loginRequest.getPath());
         assertEquals(receivedToken.getToken(), ACCES_TOKEN_KEY);
     }
 

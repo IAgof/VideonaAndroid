@@ -10,13 +10,15 @@
 package com.videonasocialmedia.videona.auth.domain.usecase;
 
 import com.videonasocialmedia.videona.auth.domain.model.Token;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnUserIsLoggedInListener;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthClient;
 import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
 import com.videonasocialmedia.videona.auth.repository.model.AuthTokenRequest;
 import com.videonasocialmedia.videona.main.repository.rest.ServiceGenerator;
 
-import java.io.IOException;
-
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -24,34 +26,36 @@ import retrofit2.Response;
  */
 public class LoginUser {
 
-    private CachedToken cachedToken;
-    private AuthClient authClient;
+    private CachedToken cachedToken = new CachedToken();
 
-    public void userIsLoggedIn() {
-        cachedToken = new CachedToken();
+    public void userIsLoggedIn(OnUserIsLoggedInListener listener) {
         boolean hasToken = cachedToken.hasToken();
         if (hasToken) {
-            // TODO(javi.cabanas): 16/6/16 implement callback
+            listener.onUserIsLoggedIn();
         } else {
-
+            listener.onUserIsLoggedOut();
         }
     }
 
-    public void login(String email, String password) {
-        authClient = new ServiceGenerator().generateService(AuthClient.class);
-        try {
-            Response<Token> response =
-                    authClient.getAuthToken(new AuthTokenRequest(email, password)).execute();
-            if (response.isSuccessful()) {
+    public void login(String email, String password, final OnLoginListener loginListener) {
+        AuthClient authClient = new ServiceGenerator().generateService(AuthClient.class);
+        AuthTokenRequest requestBody = new AuthTokenRequest(email, password);
+        authClient.getAuthToken(requestBody).enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
                 Token token = response.body();
-                cachedToken.setToken(token);
-            } else {
-                // TODO(javi.cabanas): 16/6/16 implement error callback
+                if (token != null) {
+                    cachedToken.setToken(token);
+                    loginListener.onLoginSuccess();
+                } else
+                    loginListener.onLoginError(OnLoginListener.Causes.UNKNOWN_ERROR);
             }
-        } catch (IOException e) {
-            // TODO(javi.cabanas): 16/6/16 implement error callback
-        }
 
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                loginListener.onLoginError(OnLoginListener.Causes.UNKNOWN_ERROR);
+            }
+        });
     }
 
 }

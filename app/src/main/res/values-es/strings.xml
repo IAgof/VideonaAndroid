@@ -526,5 +526,9 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
 
     <string name="video_saved">Video guardado en tu galería</string>
     <string name="save_to_gallery">Guardar en galería</string>
+    <string name="defaultErrorMessage">Oh, algo ha salido mal. Intentalo mas tarde</string>
+    <string name="signOut">Sign out</string>
+    <string name="signIn">Sign In</string>
+    <string name="title_activity_logout">Log Out</string>
 
 </resources>

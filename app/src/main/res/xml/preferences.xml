@@ -4,6 +4,9 @@
     <PreferenceCategory
         android:title="@string/title_advanced_section">
         <Preference
+            android:key="login"
+            android:title="@string/title_activity_login"/>
+        <Preference
             android:key="downloadKamarada"
             android:title="@string/downloadKamarada">
         </Preference>

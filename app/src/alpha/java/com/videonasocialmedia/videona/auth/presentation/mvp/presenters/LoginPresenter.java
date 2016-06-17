@@ -5,12 +5,14 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.presentation.mvp.presenters;
+package com.videonasocialmedia.videona.auth.presentation.mvp.presenters;
 
 import android.util.Patterns;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
+import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 
 /**
@@ -20,28 +22,25 @@ public class LoginPresenter implements OnLoginListener {
 
     private LoginView loginView;
 
-    public LoginPresenter(LoginView loginView){
+    public LoginPresenter(LoginView loginView) {
         this.loginView = loginView;
     }
 
-    public void checkLogin(String email, String password){
+    public void tryToLogIn(String email, String password) {
         loginView.resetErrorFields();
         loginView.showProgressAuthenticationDialog();
-
-       /* if(!isEmailValidAndNotEmpty(email) || !isPasswordValidAndNotEmpty(password)){
-            onLoginError(R.string.error);
-            return;
-        }*/
-
-        // UseCase email, password
+        if (isEmailValidAndNotEmpty(email) && isPasswordValidAndNotEmpty(password)) {
+            LoginUser loginUser = new LoginUser();
+            loginUser.login(email, password, this);
+        }
     }
 
     public boolean isEmailValidAndNotEmpty(String email) {
-        if (isEmptyField(email)){
+        if (isEmptyField(email)) {
             loginView.emailFieldRequire();
             return false;
         }
-        if(!isEmailValid(email)){
+        if (!isEmailValid(email)) {
             loginView.emailInvalid();
             return false;
         }
@@ -49,15 +48,19 @@ public class LoginPresenter implements OnLoginListener {
     }
 
     public boolean isPasswordValidAndNotEmpty(String password) {
-        if (isEmptyField(password)){
+        if (isEmptyField(password)) {
             loginView.passwordFieldRequire();
             return false;
         }
-        if(!isPasswordValid(password)){
+        if (!isPasswordValid(password)) {
             loginView.passwordInvalid();
             return false;
         }
         return true;
+    }
+
+    private boolean isEmptyField(String field) {
+        return field == null || field.length() == 0;
     }
 
     private boolean isEmailValid(String email) {
@@ -69,17 +72,10 @@ public class LoginPresenter implements OnLoginListener {
         return password.length() > 4;
     }
 
-    private boolean isEmptyField(String field){
-        if (field == null || field.length() == 0)
-            return true;
-        else
-            return false;
-    }
-
     @Override
-    public void onLoginError(int stringError) {
+    public void onLoginError(Causes causes) {
         loginView.hideProgressAuthenticationDialog();
-        loginView.showErrorLogin(stringError);
+        loginView.showErrorLogin(R.string.defaultErrorMessage);
     }
 
     @Override

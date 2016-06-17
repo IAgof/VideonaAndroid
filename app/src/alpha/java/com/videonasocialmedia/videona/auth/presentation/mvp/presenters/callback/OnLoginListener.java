@@ -5,14 +5,20 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.presentation.mvp.presenters;
+package com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback;
 
 /**
  * Created by alvaro on 15/06/16.
  */
 public interface OnLoginListener {
 
-    void onLoginError(int stringError);
+    void onLoginError(Causes causes);
 
     void onLoginSuccess();
+
+    enum Causes {
+        NETWORK_ERROR, CREDENTIALS_EXPIRED, UNKNOWN_ERROR, CREDENTIALS_UNKNOWN
+    }
+
+
 }

@@ -8,14 +8,14 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.LoginPresenter;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
+import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -77,9 +77,9 @@ public class LoginPresenterTest {
 
     @Test
     public void hideProgressDialogOnLoginError(){
-        loginPresenter.onLoginError(R.string.error);
+        loginPresenter.onLoginError(OnLoginListener.Causes.UNKNOWN_ERROR);
         verify(loginView).hideProgressAuthenticationDialog();
-        verify(loginView).showErrorLogin(R.string.error);
+        verify(loginView).showErrorLogin(R.string.defaultErrorMessage);
     }
 
 }
