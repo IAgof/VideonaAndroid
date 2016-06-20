@@ -19,7 +19,6 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
-import com.videonasocialmedia.videona.auth.presentation.views.activity.LogoutActivity;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
@@ -209,6 +208,7 @@ public class SettingsFragment extends PreferenceFragment implements
         preferencesPresenter.setupSignInPreferences();
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
@@ -252,21 +252,17 @@ public class SettingsFragment extends PreferenceFragment implements
     }
 
     @Override
-    public void configSignIn(boolean signedIn) {
-        Preference signInSetting = findPreference("login");
-        final Intent intent;
-        if (signedIn) {
-            signInSetting.setTitle(R.string.signOut);
-            intent = new Intent(context, LogoutActivity.class);
-        } else {
-            signInSetting.setTitle(R.string.signIn);
-            intent = new Intent(context, LoginActivity.class);
-        }
-
+    public void configSignIn(final boolean signedIn) {
+        final Preference signInSetting = findPreference("login");
         signInSetting.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                startActivity(intent);
+                if (signedIn) {
+                    preferencesPresenter.signOut();
+                } else {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    startActivity(intent);
+                }
                 return true;
             }
         });

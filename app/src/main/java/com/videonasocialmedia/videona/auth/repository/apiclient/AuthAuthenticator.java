@@ -25,7 +25,6 @@ public class AuthAuthenticator implements Authenticator {
     public Request authenticate(Route route, Response response) throws IOException {
         AuthClient authClient = new ServiceGenerator().generateService(AuthClient.class);
         // Token newToken= authClient.refreshToken();
-        CachedToken token = new CachedToken();
         Request.Builder builder = response.request().newBuilder();
         if (!CachedToken.hasToken()) {
             // TODO(javi.cabanas): 15/6/16 refresh token

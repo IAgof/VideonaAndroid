@@ -17,6 +17,7 @@ import android.preference.ListPreference;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.auth.domain.usecase.LogoutUser;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnUserIsLoggedInListener;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
@@ -203,6 +204,12 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
     public void setupSignInPreferences() {
         LoginUser loginUser = new LoginUser();
         loginUser.userIsLoggedIn(this);
+    }
+
+    public void signOut() {
+        LogoutUser logoutUser = new LogoutUser();
+        logoutUser.logout();
+        preferencesView.configSignIn(false);
     }
 
     @Override
