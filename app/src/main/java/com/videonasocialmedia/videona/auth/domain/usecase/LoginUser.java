@@ -3,8 +3,6 @@
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
- *
- * Authors: Juan Javier Cabanas
  */
 
 package com.videonasocialmedia.videona.auth.domain.usecase;
@@ -26,10 +24,10 @@ import retrofit2.Response;
  */
 public class LoginUser {
 
-    private CachedToken cachedToken = new CachedToken();
+
 
     public void userIsLoggedIn(OnUserIsLoggedInListener listener) {
-        boolean hasToken = cachedToken.hasToken();
+        boolean hasToken = CachedToken.hasToken();
         if (hasToken) {
             listener.onUserIsLoggedIn();
         } else {
@@ -45,7 +43,7 @@ public class LoginUser {
             public void onResponse(Call<Token> call, Response<Token> response) {
                 Token token = response.body();
                 if (token != null) {
-                    cachedToken.setToken(token);
+                    CachedToken.setToken(token);
                     loginListener.onLoginSuccess();
                 } else
                     loginListener.onLoginError(OnLoginListener.Causes.UNKNOWN_ERROR);

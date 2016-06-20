@@ -77,7 +77,6 @@ public class RecordPresenter {
     private Effect selectedOverlayEffect;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor preferencesEditor;
-    private String resolution;
     private Context context;
     private GLCameraView cameraPreview;
 
@@ -323,7 +322,7 @@ public class RecordPresenter {
 
     private void trackVideoRecorded(Double clipDuration) {
         JSONObject videoRecordedProperties = new JSONObject();
-        resolution = config.getVideoWidth() + "x" + config.getVideoHeight();
+        String resolution = config.getVideoWidth() + "x" + config.getVideoHeight();
         int totalVideosRecorded = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_RECORDED, 0);
         try {
             videoRecordedProperties.put(AnalyticsConstants.VIDEO_LENGTH, clipDuration);
@@ -392,7 +391,6 @@ public class RecordPresenter {
         applyEffect(selectedOverlayEffect);
 
         checkFlashSupport();
-
     }
 
     public void checkFlashSupport() {
@@ -416,7 +414,6 @@ public class RecordPresenter {
     public void setFlashOff() {
         boolean on = recorder.setFlashOff();
         recordView.showFlashOn(on);
-
     }
 
     public void toggleFlash() {

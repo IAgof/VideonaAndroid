@@ -17,33 +17,33 @@ import com.videonasocialmedia.videona.auth.domain.model.Token;
 /**
  *
  */
-public class CachedToken {
+public final class CachedToken {
 
-    private final SharedPreferences.Editor editor;
-    private SharedPreferences authPreference;
+    private static final SharedPreferences authPreference = VideonaApplication.getAppContext()
+            .getSharedPreferences("AUTH", Context.MODE_PRIVATE);
 
-    public CachedToken() {
-        authPreference = VideonaApplication.getAppContext()
-                .getSharedPreferences("AUTH", Context.MODE_PRIVATE);
-        editor = authPreference.edit();
+    private CachedToken() {
+
     }
 
-    public boolean hasToken() {
+    public static boolean hasToken() {
         return authPreference.getBoolean("HAS_TOKEN", false);
     }
 
-    public Token getToken() {
+    public static Token getToken() {
         String token = authPreference.getString("AUTH_TOKEN", null);
         return new Token(token);
     }
 
-    public void setToken(Token token) {
+    public static void setToken(Token token) {
+        SharedPreferences.Editor editor = authPreference.edit();
         editor.putString("AUTH_TOKEN", token.getToken());
         editor.putBoolean("HAS_TOKEN", true);
         editor.apply();
     }
 
-    public void deleteToken() {
+    public static void deleteToken() {
+        SharedPreferences.Editor editor = authPreference.edit();
         editor.putString("AUTH_TOKEN", null);
         editor.putBoolean("HAS_TOKEN", false);
         editor.apply();
