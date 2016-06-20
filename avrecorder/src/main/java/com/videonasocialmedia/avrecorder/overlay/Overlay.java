@@ -41,6 +41,7 @@ public abstract class Overlay {
                 new Texture2dProgram(Texture2dProgram.ProgramType.TEXTURE_2D);
         program.setTexSize(width, height);
         overlayLayer = new FullFrameRect(program);
+        overlayImage = null;
     }
 
 
@@ -50,11 +51,11 @@ public abstract class Overlay {
         overlayLayer.drawFrame(textureId, IDENTITY_MATRIX);
     }
 
-    protected abstract void setBlendMode();
-
     protected void setGlViewportSize() {
         GLES20.glViewport(positionX, positionY, width, height);
     }
+
+    protected abstract void setBlendMode();
 
     public int getHeight() {
         return height;

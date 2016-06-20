@@ -5,18 +5,19 @@
   ~ All rights reserved
   -->
 
-<android.support.v4.widget.DrawerLayout android:id="@+id/activity_record_drawer_layout"
-                                        xmlns:CustomManualFocusView="http://schemas.android.com/apk/res-auto"
-                                        xmlns:android="http://schemas.android.com/apk/res/android"
-                                        xmlns:tools="http://schemas.android.com/tools"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent">
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/activity_record_drawer_layout"
+    xmlns:CustomManualFocusView="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.videonasocialmedia.avrecorder.view.GLCameraEncoderView
+        <com.videonasocialmedia.avrecorder.view.GLCameraView
             android:id="@+id/cameraPreview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

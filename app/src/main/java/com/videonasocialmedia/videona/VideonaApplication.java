@@ -12,13 +12,13 @@ package com.videonasocialmedia.videona;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.karumi.dexter.Dexter;
+import com.squareup.leakcanary.LeakCanary;
 
 public class VideonaApplication extends Application {
 
@@ -46,6 +46,7 @@ public class VideonaApplication extends Application {
         setupGoogleAnalytics();
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         Dexter.initialize(this);
+        setupLeakCanary();
     }
 
     private void setupGoogleAnalytics() {
@@ -55,6 +56,12 @@ public class VideonaApplication extends Application {
         analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         appTracker = analytics.newTracker(R.xml.app_tracker);
         appTracker.enableAdvertisingIdCollection(true);
+    }
+
+    private void setupLeakCanary() {
+        if (BuildConfig.DEBUG) {
+            LeakCanary.install(this);
+        }
     }
 
     protected void attachBaseContext(Context base) {

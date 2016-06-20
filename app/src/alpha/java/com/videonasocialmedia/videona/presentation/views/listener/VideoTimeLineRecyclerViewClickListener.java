@@ -18,5 +18,5 @@ public interface VideoTimeLineRecyclerViewClickListener {
 
     void onClipRemoveClicked(int position);
 
-    void onClipMoved(int toPosition);
+    void onClipMoved(int fromPosition, int toPosition);
 }

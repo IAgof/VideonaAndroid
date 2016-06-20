@@ -6,10 +6,12 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.GetMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMusicListUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideonaPlayerView;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.util.List;
 
@@ -28,14 +30,24 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
     private Music music;
     private int musicId;
     private boolean musicAddedToProject;
+    protected UserEventTracker userEventTracker;
+    protected Project currentProject;
 
-    public MusicDetailPresenter(MusicDetailView musicDetailView, VideonaPlayerView playerView) {
+    public MusicDetailPresenter(MusicDetailView musicDetailView, VideonaPlayerView playerView,
+                                UserEventTracker userEventTracker) {
         this.musicDetailView = musicDetailView;
         this.playerView = playerView;
         addMusicToProjectUseCase = new AddMusicToProjectUseCase();
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
         getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        this.currentProject = loadCurrentProject();
+        this.userEventTracker = userEventTracker;
+    }
+
+    private Project loadCurrentProject() {
+        // TODO(jliarte): this should make use of a repository or use case to load the Project
+        return Project.getInstance(null, null, null);
     }
 
     public void onCreate(int musicId) {
@@ -81,12 +93,14 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
     public void removeMusic() {
         musicAddedToProject = false;
         removeMusicFromProjectUseCase.removeMusicFromProject(music, 0);
+        userEventTracker.trackMusicSet(currentProject);
     }
 
 
     public void addMusic() {
         musicAddedToProject = true;
         addMusicToProjectUseCase.addMusicToTrack(music, 0);
+        userEventTracker.trackMusicSet(currentProject);
         setupScene(musicAddedToProject);
     }
 

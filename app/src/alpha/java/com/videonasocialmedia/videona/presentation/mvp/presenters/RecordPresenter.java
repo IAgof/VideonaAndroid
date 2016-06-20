@@ -26,9 +26,10 @@ import com.videonasocialmedia.avrecorder.SessionConfig;
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
 import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
-import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
+import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
@@ -37,7 +38,6 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
-import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
@@ -79,7 +79,7 @@ public class RecordPresenter {
     private SharedPreferences.Editor preferencesEditor;
     private String resolution;
     private Context context;
-    private GLCameraEncoderView cameraPreview;
+    private GLCameraView cameraPreview;
 
     private boolean externalIntent;
 
@@ -89,7 +89,7 @@ public class RecordPresenter {
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
 
     public RecordPresenter(Context context, RecordView recordView,
-                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences, boolean externalIntent) {
+                           GLCameraView cameraPreview, SharedPreferences sharedPreferences, boolean externalIntent) {
         this.recordView = recordView;
         this.context = context;
         this.cameraPreview = cameraPreview;
@@ -101,14 +101,25 @@ public class RecordPresenter {
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         recordedVideosNumber = 0;
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
-        initRecorder(context, cameraPreview);
+        //initRecorder(cameraPreview);
+    }
+
+    public String getResolution() {
+        return config.getVideoWidth() + "x" + config.getVideoHeight();
+    }
+
+    public void onStart() {
+        if (recorder == null || recorder.isReleased()) {
+//            cameraPreview.releaseCamera();
+            initRecorder(cameraPreview);
+        }
         hideInitialsButtons();
     }
 
-    private void initRecorder(Context context, GLCameraEncoderView cameraPreview) {
+    private void initRecorder(GLCameraView cameraPreview) {
         config = new SessionConfig(Constants.PATH_APP_TEMP);
         try {
-            recorder = new AVRecorder(config, context.getResources()
+            recorder = new AVRecorder(config, VideonaApplication.getAppContext().getResources()
                     .getDrawable(R.drawable.watermark720));
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
@@ -124,20 +135,9 @@ public class RecordPresenter {
         recordView.hideChronometer();
     }
 
-    public String getResolution() {
-        return config.getVideoWidth() + "x" + config.getVideoHeight();
-    }
-
-    public void onStart() {
-        if (recorder.isReleased()) {
-            cameraPreview.releaseCamera();
-            initRecorder(context, cameraPreview);
-        }
-    }
-
     public void onResume() {
         EventBus.getDefault().register(this);
-        recorder.onHostActivityResumed();
+        //recorder.onHostActivityResumed();
         if (!externalIntent)
             showThumbAndNumber();
         Log.d(LOG_TAG, "resume presenter");
@@ -163,7 +163,7 @@ public class RecordPresenter {
     public void onPause() {
         EventBus.getDefault().unregister(this);
         stopRecord();
-        recorder.onHostActivityPaused();
+        //recorder.onHostActivityPaused();
         Log.d(LOG_TAG, "pause presenter");
         recordView.hideProgressDialog();
     }
@@ -196,11 +196,12 @@ public class RecordPresenter {
     }
 
     public void onStop() {
-        //recorder.release();
+        if (recorder.isRecording())
+            recorder.stopRecording();
     }
 
     public void onDestroy() {
-        //recorder.release();
+        recorder.release();
     }
 
     public void requestRecord() {
@@ -427,9 +428,13 @@ public class RecordPresenter {
         recordView.showFlashOn(on);
     }
 
-    public Effect getSelectedShaderEffect() { return selectedShaderEffect; }
+    public Effect getSelectedShaderEffect() {
+        return selectedShaderEffect;
+    }
 
-    public Effect getSelectedOverlayEffect() { return selectedOverlayEffect; }
+    public Effect getSelectedOverlayEffect() {
+        return selectedOverlayEffect;
+    }
 
     public void removeEffect(Effect effect) {
         if (effect instanceof OverlayEffect) {

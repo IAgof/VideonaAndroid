@@ -39,6 +39,17 @@ public class Video extends Media {
      */
     private boolean isSplit;
 
+    // TODO(jliarte): 14/06/16 this entity should not depend on MediaMetadataRetriever as it is part of android
+    /* Needed to allow mockito inject it */
+    private MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+
+
+    /**
+     * protected default empty constructor, trying to get injectMocks working
+     */
+    protected Video() {
+        super();
+    }
 
     /**
      * Constructor of minimum number of parameters. Default constructor.
@@ -73,7 +84,7 @@ public class Video extends Media {
     public Video(String mediaPath) {
         super(null, null, mediaPath, 0, 0, null, null);
         try {
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             retriever.setDataSource(mediaPath);
             duration = Integer.parseInt(retriever.extractMetadata(
                     MediaMetadataRetriever.METADATA_KEY_DURATION));
@@ -114,7 +125,7 @@ public class Video extends Media {
     }
 
     private int getFileDuration(String path){
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
         return Integer.parseInt(retriever.extractMetadata(
                 MediaMetadataRetriever.METADATA_KEY_DURATION));

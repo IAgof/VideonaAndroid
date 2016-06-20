@@ -42,7 +42,8 @@ public abstract class Media extends EditorElement {
      */
     protected String mediaPath;
 
-    protected File source;
+    // TODO(jliarte): 14/06/16 seems to not being used. If so, maybe initialize in getter?
+//    protected File source;
 
     /**
      * The start time of the media resource within the file it represents.
@@ -108,7 +109,7 @@ public abstract class Media extends EditorElement {
                     int duration, ArrayList<User> authors, License license) {
         super(identifier, iconPath);
         this.mediaPath = mediaPath;
-        this.source = new File(this.mediaPath);
+//        this.source = new File(this.mediaPath);
         this.fileStartTime = fileStartTime;
         this.duration = duration;
         this.fileStopTime = duration;
@@ -140,7 +141,7 @@ public abstract class Media extends EditorElement {
         super(identifier, iconPath, selectedIconPath);
         this.title = title;
         this.mediaPath = mediaPath;
-        this.source = new File(this.mediaPath);
+//        this.source = new File(this.mediaPath);
         this.fileStartTime = fileStartTime;
         this.fileStopTime = duration;
         this.duration = duration;
@@ -150,6 +151,11 @@ public abstract class Media extends EditorElement {
         this.authors = authors;
         this.license = license;
     }
+
+    /**
+     * protected default empty constructor, trying to get injectMocks working
+     */
+    public Media() {}
 
     public boolean hashTransitions() {
         return (this.opening != null || this.ending != null);

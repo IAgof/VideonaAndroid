@@ -27,6 +27,8 @@ import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
@@ -37,6 +39,7 @@ import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBar
 import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.io.IOException;
 import java.util.List;
@@ -108,7 +111,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new TrimPreviewPresenter(this);
+        UserEventTracker userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        presenter = new TrimPreviewPresenter(this, userEventTracker);
 
         rangeSeekBar.setOnRangeListener(this);
 
@@ -203,13 +207,17 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     }
 
     public void navigateTo(Class cls) {
-        startActivity(new Intent(getApplicationContext(), cls));
+        Intent intent = new Intent(getApplicationContext(), cls);
+        if (cls == GalleryActivity.class) {
+            intent.putExtra("SHARE", false);
+        }
+        startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
+        finish();
     }
 
     @Override
@@ -278,15 +286,14 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
     @OnClick(R.id.button_trim_accept)
     public void onClickTrimAccept() {
-        presenter.modifyVideoStartTime(startTimeMs);
-        presenter.modifyVideoFinishTime(finishTimeMs);
-        finish();
+        presenter.setTrim(startTimeMs, finishTimeMs);
+//        presenter.modifyVideoStartTime(startTimeMs);
+//        presenter.modifyVideoFinishTime(finishTimeMs);
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_trim_cancel)
     public void onClickTrimCancel() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
