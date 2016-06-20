@@ -17,7 +17,7 @@
     <string name="dialog_processing">Making magic in your video</string>
     <string name="recordError">Something bad happened. Impossible to record video, try again</string>
     <string name="giftOverlayDialogTitle">Your present</string>
-    <string name="giftOverlayDialogMessage">Enjoy your new filter</string>
+    <string name="giftOverlayDialogMessage">Enjoy your new Bollywood filter</string>
 
     <!-- Share Activity -->
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>

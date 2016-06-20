@@ -17,7 +17,7 @@
     <string name="dialog_processing">Haciendo magia en tu vídeo</string>
     <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
     <string name="giftOverlayDialogTitle">Tu regalo</string>
-    <string name="giftOverlayDialogMessage">Disfruta de tu nuevo filtro</string>
+    <string name="giftOverlayDialogMessage">Disfruta de tu nuevo filtro de Bollywood</string>
 
     <!-- Share Activity -->
     <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
