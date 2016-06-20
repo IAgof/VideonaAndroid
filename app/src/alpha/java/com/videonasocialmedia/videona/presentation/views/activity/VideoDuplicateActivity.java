@@ -88,17 +88,14 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         textNumDuplicates.setText("x" + numDuplicateVideos);
     }
 
-    private void restoreState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt(DUPLICATE_VIDEO_POSITION, 0);
-            numDuplicateVideos = savedInstanceState.getInt(NUM_DUPLICATE_VIDEOS, 2);
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        videonaPlayer.destroy();
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -114,13 +111,16 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onDestroy() {
+        super.onDestroy();
+        videonaPlayer.destroy();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    private void restoreState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(DUPLICATE_VIDEO_POSITION, 0);
+            numDuplicateVideos = savedInstanceState.getInt(NUM_DUPLICATE_VIDEOS, 2);
+        }
     }
 
     @Override

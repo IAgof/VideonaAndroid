@@ -25,52 +25,13 @@
         android:baselineAligned="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer
+            android:id="@+id/videona_player"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:layout_weight="4">
-
-            <com.videonasocialmedia.videona.presentation.views.customviews.AspectRatioVideoView
-                android:id="@+id/video_trim_preview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:aspect="sixteen_nine"/>
-
-            <ImageButton
-                android:id="@+id/button_trim_play_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="#00000000"
-                android:src="@drawable/common_icon_play"/>
-
-            <SeekBar
-                android:id="@+id/seekbar_trim_preview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/video_trim_preview"
-                android:layout_marginBottom="12dp"
-                android:maxHeight="1dp"
-                android:progressDrawable="@color/colorAccent"
-                android:thumb="@drawable/activity_edit_common_icon_seekbar_advance"/>
-
-            <ImageButton
-                android:id="@+id/button_trim_fullscreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/video_trim_preview"
-                android:layout_alignTop="@+id/video_trim_preview"
-                android:layout_margin="8dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/common_icon_expand"
-                android:visibility="gone"/>
-
-
-        </RelativeLayout>
+            android:layout_weight="4" />
 
         <RelativeLayout
             android:layout_width="0dp"
