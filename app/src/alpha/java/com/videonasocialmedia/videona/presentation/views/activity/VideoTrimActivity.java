@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.TrimPreviewPresenter;
@@ -28,10 +30,10 @@ import com.videonasocialmedia.videona.presentation.mvp.views.TrimView;
 import com.videonasocialmedia.videona.presentation.views.customviews.TrimRangeSeekBarView;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.OnRangeSeekBarChangeListener;
-import com.videonasocialmedia.videona.presentation.views.listener.OnTrimConfirmListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -56,7 +58,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
     int videoIndexOnTrack;
     private TrimPreviewPresenter presenter;
-    private OnTrimConfirmListener onTrimConfirmListener;
     private Video video;
     private int videoDuration = 1;
     private int startTimeMs = 0;
@@ -87,7 +88,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new TrimPreviewPresenter(this);
+        UserEventTracker userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        presenter = new TrimPreviewPresenter(this, userEventTracker);
         trimmingRangeSeekBar.setOnRangeListener(this);
         videonaPlayer.initVideoPreview(this);
 
@@ -174,8 +176,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
     @Override
     public void onBackPressed() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
+        finish();
     }
 
     @Override
@@ -188,8 +190,9 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
     @OnClick(R.id.button_trim_accept)
     public void onClickTrimAccept() {
-        presenter.modifyVideoStartTime(startTimeMs);
-        presenter.modifyVideoFinishTime(finishTimeMs);
+        presenter.setTrim(startTimeMs, finishTimeMs);
+//        presenter.modifyVideoStartTime(startTimeMs);
+//        presenter.modifyVideoFinishTime(finishTimeMs);
         finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }

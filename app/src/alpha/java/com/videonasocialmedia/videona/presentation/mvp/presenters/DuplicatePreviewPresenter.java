@@ -9,9 +9,11 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.DuplicateView;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +38,19 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
 
     private DuplicateView duplicateView;
+    protected UserEventTracker userEventTracker;
+    protected Project currentProject;
 
-    public DuplicatePreviewPresenter(DuplicateView duplicateView) {
+    public DuplicatePreviewPresenter(DuplicateView duplicateView, UserEventTracker userEventTracker) {
         this.duplicateView = duplicateView;
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        this.currentProject = loadCurrentProject();
+        this.userEventTracker = userEventTracker;
+    }
+
+    private Project loadCurrentProject() {
+        return Project.getInstance(null, null, null);
     }
 
     public void loadProjectVideo(int videoToTrimIndex) {
@@ -69,6 +79,7 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
             Video copyVideo = new Video(video);
             addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter);
         }
+        userEventTracker.trackClipDuplicated(numDuplicates, currentProject);
     }
 
 }

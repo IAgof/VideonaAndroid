@@ -18,6 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.SplitPreviewPresenter;
@@ -26,15 +29,19 @@ import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlay
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
+
+import java.io.IOException;
 import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
-public class VideoSplitActivity extends VideonaActivity implements SplitView,VideonaPlayerListener,
+public class VideoSplitActivity extends VideonaActivity implements SplitView, VideonaPlayerListener,
     SeekBar.OnSeekBarChangeListener {
 
-    private String TAG = this.getClass().getName();
     private static final String SPLIT_POSITION = "split_position";
     private static final String SPLIT_VIDEO_POSITION = "split_video_position";
     @Bind(R.id.videona_player)
@@ -61,9 +68,8 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new SplitPreviewPresenter(this);
-
-        videonaPlayer.initVideoPreview(this);
+        UserEventTracker userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        presenter = new SplitPreviewPresenter(this, userEventTracker);
 
         splitSeekBar.setProgress(0);
         splitSeekBar.setOnSeekBarChangeListener(this);
@@ -196,7 +202,6 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView,Vid
             refreshTimeTag(currentSplitPosition);
             videonaPlayer.seekTo(video.getFileStartTime() + progress);
             videonaPlayer.setSeekBarProgress(progress);
-
         }
     }
 

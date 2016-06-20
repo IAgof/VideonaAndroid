@@ -11,15 +11,20 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor;
 
+import android.util.Log;
+
 import com.videonasocialmedia.videona.model.entities.editor.media.Audio;
 import com.videonasocialmedia.videona.model.entities.editor.media.Image;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
+import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.AudioTrack;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Project representation that contains reference to media, audio, transitions and effects used in
@@ -30,6 +35,7 @@ import java.util.ArrayList;
  */
 public class Project {
 
+    private final String TAG = getClass().getCanonicalName();
     public static String VIDEONA_PATH = "";
     /**
      * There could be just one project open at a time. So this converts Project in a Singleton.
@@ -61,6 +67,7 @@ public class Project {
      * Project duration. The duration of the project in milliseconds.
      */
     private int duration;
+    private Music music;
 
     /**
      * Constructor of minimum number of parameters. This is the Default constructor.
@@ -171,5 +178,21 @@ public class Project {
 
     public void clear() {
         INSTANCE = new Project(null, null, null);
+    }
+
+    public int numberOfClips() {
+        return getMediaTrack().getItems().size();
+    }
+
+    public Music getMusic() {
+        /**
+         * TODO(jliarte): review this method and matching use case
+         * @see com.videonasocialmedia.videona.domain.editor.GetMusicFromProjectUseCase
+         */
+        Music result = null;
+        try {
+            result = (Music) getAudioTracks().get(0).getItems().get(0);
+        } catch (Exception e) { e.printStackTrace(); }
+        return result;
     }
 }

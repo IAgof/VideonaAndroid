@@ -15,6 +15,8 @@ public interface VideonaPlayerView {
 
     void seekTo(int timeInMsec);
 
+    void seekToClip(int position);
+
     void setMusic(Music music);
 
     void bindVideoList(List<Video>videoList);

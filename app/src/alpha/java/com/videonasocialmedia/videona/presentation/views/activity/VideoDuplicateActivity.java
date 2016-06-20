@@ -28,6 +28,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.FileDescriptorBitmapDecoder;
 import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.DuplicatePreviewPresenter;
@@ -35,6 +37,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.DuplicateView;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import java.util.List;
 
@@ -77,7 +80,8 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        presenter = new DuplicatePreviewPresenter(this);
+        UserEventTracker userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        presenter = new DuplicatePreviewPresenter(this, userEventTracker);
 
         videonaPlayer.initVideoPreview(this);
 
@@ -153,7 +157,11 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     public void navigateTo(Class cls) {
-        startActivity(new Intent(getApplicationContext(), cls));
+        Intent intent = new Intent(getApplicationContext(), cls);
+        if (cls == GalleryActivity.class) {
+            intent.putExtra("SHARE", false);
+        }
+        startActivity(intent);
     }
 
     private void navigateTo(Class cls, int currentVideoIndex) {
@@ -164,8 +172,8 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
 
     @Override
     public void onBackPressed() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
+        finish();
     }
 
     @Override
@@ -178,13 +186,11 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     @OnClick(R.id.button_duplicate_accept)
     public void onClickDuplicateAccept() {
         presenter.duplicateVideo(video, videoIndexOnTrack, numDuplicateVideos);
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_duplicate_cancel)
     public void onClickDuplicateCancel() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 

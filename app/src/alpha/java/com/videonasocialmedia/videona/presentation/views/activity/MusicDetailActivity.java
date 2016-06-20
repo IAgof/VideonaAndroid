@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicDetailPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
@@ -27,6 +29,7 @@ import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlay
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,7 +69,9 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         initToolbar();
         videonaPlayer.initVideoPreview(this);
         videonaPlayer.initPreview(0);
-        musicDetailPresenter = new MusicDetailPresenter(this, videonaPlayer);
+
+        UserEventTracker userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        musicDetailPresenter = new MusicDetailPresenter(this, videonaPlayer, userEventTracker);
         try {
             Bundle extras = this.getIntent().getExtras();
             int musicId = extras.getInt(KEY_MUSIC_ID);
