@@ -17,6 +17,7 @@ import android.view.Surface;
 
 import com.videonasocialmedia.avrecorder.event.CameraEncoderResetEvent;
 import com.videonasocialmedia.avrecorder.event.CameraOpenedEvent;
+import com.videonasocialmedia.avrecorder.overlay.BollywoodFilter;
 import com.videonasocialmedia.avrecorder.overlay.Filter;
 import com.videonasocialmedia.avrecorder.overlay.Overlay;
 import com.videonasocialmedia.avrecorder.overlay.Watermark;
@@ -362,7 +363,19 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     public void addOverlayFilter(Drawable overlayImage, int width, int height) {
+
         Overlay overlayToAdd = new Filter(overlayImage, height, width);
+        if (overlayList == null) {
+            overlayList = new ArrayList<>();
+            if (mDisplayRenderer != null)
+                mDisplayRenderer.setOverlayList(overlayList);
+        }
+        overlayList.add(overlayToAdd);
+    }
+
+    public void addOverlayFilterBollywood(Drawable overlayImage, int width, int height) {
+
+        Overlay overlayToAdd = new BollywoodFilter(overlayImage, height, width);
         if (overlayList == null) {
             overlayList = new ArrayList<>();
             if (mDisplayRenderer != null)

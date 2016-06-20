@@ -1,6 +1,5 @@
 package com.videonasocialmedia.videona.domain.editor.export;
 
-import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -115,7 +114,7 @@ public class ExporterImpl implements Exporter {
 
             Music music = (Music) project.getAudioTracks().get(0).getItems().getFirst();
             // TODO(alvaro) 060616 check if music is downloaded in a repository, not here.
-            File musicFile = Utils.getMusicFileById(music.getMusicResourceId());
+            File musicFile = Utils.getMusicFileByName(music.getMusicTitle(), music.getMusicResourceId());
             if(musicFile == null){
                 onExportEndedListener.onExportError("Music not found");
             }

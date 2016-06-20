@@ -221,6 +221,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 trackUserProfile();
                 initSettings();
                 joinBetaFortnight();
+                resetPreferencesFilterGifted();
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
@@ -235,6 +236,12 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
             default:
                 break;
         }
+    }
+
+    //reset filter gifted to false.
+    private void resetPreferencesFilterGifted() {
+        editor.putBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false);
+        editor.commit();
     }
 
     private void trackUserProfileGeneralTraits() {

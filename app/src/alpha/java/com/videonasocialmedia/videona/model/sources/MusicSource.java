@@ -26,6 +26,7 @@ public class MusicSource {
 
     private void populateLocalMusic() {
 
+        localMusic.add(new Music(R.drawable.imagebutton_music_background_bollywood, "Vadodora", R.raw.audio_bollywood, R.color.bollywood, "Kevin Macleod"));
         localMusic.add(new Music(R.drawable.imagebutton_music_background_rock, "Airplane Mod Instrumental", R.raw.audio_rock, R.color.rock, "James Woodward"));
         localMusic.add(new Music(R.drawable.imagebutton_music_background_ambient, "Impact Prelude", R.raw.audio_ambiental, R.color.ambient, "Kevin Macleod"));
         localMusic.add(new Music(R.drawable.imagebutton_music_background_jazz, "Monkeys Spinning Monkeys", R.raw.audio_clasica_flauta, R.color.jazz, "Kevin Macleod"));

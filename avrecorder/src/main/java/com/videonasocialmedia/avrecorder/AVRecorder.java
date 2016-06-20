@@ -77,6 +77,10 @@ public class AVRecorder {
         mCamEncoder.addOverlayFilter(image, mConfig.getVideoWidth(), mConfig.getVideoHeight());
     }
 
+    public void addOverlayFilterBollywood(Drawable image) {
+        mCamEncoder.addOverlayFilterBollywood(image, mConfig.getVideoWidth(), mConfig.getVideoHeight());
+    }
+
     public void setWatermark(Drawable watermarkImage, boolean showInPreview) {
         mCamEncoder.addWatermark(watermarkImage, showInPreview);
     }

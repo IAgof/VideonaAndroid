@@ -49,7 +49,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Musi
                 .load(music.getIconResourceId())
                 .error(R.drawable.gatito_rules)
                 .into(holder.musicImage);
-        holder.musicTitle.setText(music.getNameResourceId());
+        holder.musicTitle.setText(music.getMusicTitle());
     }
 
     @Override

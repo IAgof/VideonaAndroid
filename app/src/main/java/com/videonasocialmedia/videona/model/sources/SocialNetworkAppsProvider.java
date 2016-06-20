@@ -45,7 +45,7 @@ public class SocialNetworkAppsProvider {
             } else if (packageName.toLowerCase().contains("youtube")
                     || activityName.toLowerCase().contains("youtube")) {
                 socialNetwork = new SocialNetwork("Youtube", packageName,
-                        activityName, icon, "");
+                        activityName, icon, "#videonaTime");
             } else if (packageName.toLowerCase().contains("plus")
                     && activityName.toLowerCase().contains("com.google.android.libraries.social.gateway.GatewayActivity")) {
                 socialNetwork = new SocialNetwork("GooglePlus", packageName,
