@@ -193,13 +193,11 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         presenter.setTrim(startTimeMs, finishTimeMs);
 //        presenter.modifyVideoStartTime(startTimeMs);
 //        presenter.modifyVideoFinishTime(finishTimeMs);
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_trim_cancel)
     public void onClickTrimCancel() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 

@@ -158,8 +158,8 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView, Vi
 
     @Override
     public void onBackPressed() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
+        finish();
     }
 
     @Override
@@ -179,13 +179,11 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView, Vi
     public void onClickSplitAccept() {
 
         presenter.splitVideo(video, videoIndexOnTrack, currentSplitPosition);
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
     @OnClick(R.id.button_split_cancel)
     public void onClickSplitCancel() {
-        finish();
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 

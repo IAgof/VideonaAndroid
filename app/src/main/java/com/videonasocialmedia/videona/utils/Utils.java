@@ -67,16 +67,16 @@ public class Utils {
         return size <= megabytesAvailable;
     }
 
-    public static void copyResourceToTemp(Context ctx, int rawResourceId,
+    public static void copyResourceToTemp(Context ctx, String name, int musicResourceId,
                                           String fileTypeExtensionConstant) throws IOException {
-        String nameFile = String.valueOf(rawResourceId);
+        String nameFile = String.valueOf(name);
         File file = new File(Constants.PATH_APP_TEMP + File.separator + nameFile +
                 fileTypeExtensionConstant);
 
         if (!file.exists() || !file.isFile()) {
             if (!file.isFile())
                 file.delete();
-            InputStream in = ctx.getResources().openRawResource(rawResourceId);
+            InputStream in = ctx.getResources().openRawResource(musicResourceId);
             try {
                 FileOutputStream out = new FileOutputStream(Constants.PATH_APP_TEMP + File.separator +
                         nameFile + fileTypeExtensionConstant);
@@ -94,15 +94,15 @@ public class Utils {
         }
     }
 
-    public static void copyMusicResourceToTemp(Context ctx, int rawResourceId) throws IOException {
-        copyResourceToTemp(ctx, rawResourceId, Constants.AUDIO_MUSIC_FILE_EXTENSION);
+    public static void copyMusicResourceToTemp(Context ctx, String name, int musicResourceId) throws IOException {
+        copyResourceToTemp(ctx, name, musicResourceId, Constants.AUDIO_MUSIC_FILE_EXTENSION);
     }
 
-    public static File getMusicFileById(int rawResourceId) {
-        File f = new File(Constants.PATH_APP_TEMP + File.separator + rawResourceId + Constants.AUDIO_MUSIC_FILE_EXTENSION);
+    public static File getMusicFileByName(String musicName, int musicResourceId) {
+        File f = new File(Constants.PATH_APP_TEMP + File.separator + musicName + Constants.AUDIO_MUSIC_FILE_EXTENSION);
         if (!f.exists()) {
             try {
-                copyMusicResourceToTemp(VideonaApplication.getAppContext(), rawResourceId);
+                copyMusicResourceToTemp(VideonaApplication.getAppContext(), musicName, musicResourceId);
             } catch (IOException e) {
                 //TODO show error message
                 f = null;
