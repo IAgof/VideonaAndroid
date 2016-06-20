@@ -53,7 +53,7 @@ public class SplitPreviewPresenter implements OnVideosRetrieved {
         return Project.getInstance(null, null, null);
     }
 
-    public void init(int videoToTrimIndex) {
+    public void loadProjectVideo(int videoToTrimIndex) {
         List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
         if (videoList != null) {
             ArrayList<Video> v = new ArrayList<>();

@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,6 +45,7 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     @Bind(R.id.button_editor_play_pause)
     ImageButton playButton;
 
+    private String TAG = VideonaPlayer.class.getCanonicalName();
     private View videonaPlayerView;
     private VideonaPlayerListener videonaPlayerListener;
     private MediaController mediaController;
@@ -57,13 +59,13 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     private boolean isFullScreenBack = false;
     private List<Integer> videoStartTimes;
     private List<Integer> videoStopTimes;
-    private Music music;
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekBarProgress();
         }
     };
+    private Music music;
 
     public VideonaPlayer(Context context) {
         super(context);
@@ -177,8 +179,15 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
 
     @Override
     public void seekTo(int timeInMsec) {
-        if (videoPlayer != null)
+        if (videoPlayer != null) {
+            currentTimePositionInList = timeInMsec;
             videoPlayer.seekTo(timeInMsec);
+            seekBar.setProgress(timeInMsec);
+        }
+    }
+
+    public void setSeekBarProgress(int progress){
+        seekBar.setProgress(progress);
     }
 
     @Override
@@ -220,6 +229,8 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
 
     public void initPreview(int instantTime) {
         this.currentTimePositionInList = instantTime;
+        seekBar.setProgress(instantTime);
+//        updateSeekBarProgress();
         if (videoList.size() > 0) {
             Video video = getVideoByProgress(this.currentTimePositionInList);
             currentVideoListIndex = getVideoPositioninList(video);
@@ -274,14 +285,16 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
                 videoPlayer.setVolume(0.5f, 0.5f);
                 videoPlayer.setLooping(false);
                 videoPlayer.seekTo(startTime);
-                videoPlayer.start();
+                seekBar.setProgress(startTime);
+//                videoPlayer.start();
+                // TODO(jliarte): 17/06/16 This has to be called in order updateTimeTask to start the thread
                 updateSeekBarProgress();
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                videoPlayer.pause();
+//                try {
+//                    Thread.sleep(10);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                videoPlayer.pause();
             }
         });
         videoPreview.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -490,7 +503,8 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     private void updateSeekBarProgress() {
         if (videoPlayer != null) {
             try {
-                if (videoPlayer.isPlaying() && currentVideoListIndex < videoList.size()) {
+//                if (videoPlayer.isPlaying() && currentVideoListIndex < videoList.size()) {
+                if (currentVideoListIndex < videoList.size()) {
                     seekBar.setProgress(videoPlayer.getCurrentPosition() +
                             videoStartTimes.get(currentVideoListIndex) -
                             videoList.get(currentVideoListIndex).getFileStartTime());
@@ -507,7 +521,8 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
                     }
                 }
             } catch (Exception e) {
-
+                Log.d(TAG, "updateSeekBarProgress: exception updating videonaplayer seekbar");
+                Log.d(TAG, e.getMessage());
             }
             handler.postDelayed(updateTimeTask, 20);
         }
@@ -518,7 +533,7 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     }
 
     private boolean videoHasMusic() {
-        return ( music != null );
+        return (music != null);
 //        music = videonaProject.getAudioTracks().get(0).getItems().get(0)
 //        return videonaProject.getAudioTracks().size() > 0 &&
 //                videonaProject.getAudioTracks().get(0).getItems().size() > 0;
