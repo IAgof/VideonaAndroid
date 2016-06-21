@@ -11,7 +11,7 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.track;
 
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.effects.model.entities.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
@@ -75,6 +75,22 @@ public abstract class Track {
     }
 
     //Media Items
+
+    /**
+     * @param itemToAdd
+     * @return
+     * @throws IllegalItemOnTrack
+     */
+    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
+        //Check if possible
+        if (this.items == null) {
+            //TODO ¿hemos perdido el track? ¿que hacemos? ¿lo recuperamos de la última versión buena? ¿petamos?
+            //por el momento evitamos un nullpointer.
+            this.setItems(new LinkedList<Media>());
+        }
+
+        return this.insertItemAt(this.items.size(), itemToAdd);
+    }
 
     /**
      * Inserts a new Media item at the given position. The position must be calculate in the view
@@ -141,23 +157,6 @@ public abstract class Track {
             return true;
         }
     }
-
-    /**
-     * @param itemToAdd
-     * @return
-     * @throws IllegalItemOnTrack
-     */
-    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
-        //Check if possible
-        if (this.items == null) {
-            //TODO ¿hemos perdido el track? ¿que hacemos? ¿lo recuperamos de la última versión buena? ¿petamos?
-            //por el momento evitamos un nullpointer.
-            this.setItems(new LinkedList<Media>());
-        }
-
-        return this.insertItemAt(this.items.size(), itemToAdd);
-    }
-
 
     /**
      * Delete Media item. Get his position and deletes from the list.

@@ -1,10 +1,17 @@
-package com.videonasocialmedia.videona.model.sources;
+/*
+ * Copyright (C) 2016 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
+
+package com.videonasocialmedia.videona.effects.repository;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
-import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.videona.effects.model.entities.Effect;
+import com.videonasocialmedia.videona.effects.model.entities.OverlayEffect;
+import com.videonasocialmedia.videona.effects.model.entities.ShaderEffect;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 
 import java.util.ArrayList;

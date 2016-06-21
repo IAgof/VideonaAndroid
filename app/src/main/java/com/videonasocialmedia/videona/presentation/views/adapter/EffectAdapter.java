@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.effects.model.entities.Effect;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 
 import java.util.List;

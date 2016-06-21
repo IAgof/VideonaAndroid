@@ -1,4 +1,11 @@
-package com.videonasocialmedia.videona.model.entities.editor.effects;
+/*
+ * Copyright (C) 2016 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
+
+package com.videonasocialmedia.videona.effects.model.entities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

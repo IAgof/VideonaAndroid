@@ -1,16 +1,11 @@
 /*
- * Copyright (C) 2015 Videona Socialmedia SL
+ * Copyright (C) 2016 Videona Socialmedia SL
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
- *
- * Authors:
- * Juan Javier Cabanas
- * Álvaro Martínez Marco
- * Danny R. Fonseca Arboleda
  */
 
-package com.videonasocialmedia.videona.model.entities.editor.effects;
+package com.videonasocialmedia.videona.effects.model.entities;
 
 /**
  *
