@@ -28,7 +28,7 @@ public class AuthAuthenticator implements Authenticator {
         Request.Builder builder = response.request().newBuilder();
         if (!CachedToken.hasToken()) {
             // TODO(javi.cabanas): 15/6/16 refresh token
-            builder.addHeader("Authorization", "fakeToken");
+            //builder.addHeader("Authorization", "fakeToken");
         } else {
             builder.addHeader("Authorization", CachedToken.getToken().getToken());
         }

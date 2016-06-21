@@ -254,6 +254,10 @@ public class SettingsFragment extends PreferenceFragment implements
     @Override
     public void configSignIn(final boolean signedIn) {
         final Preference signInSetting = findPreference("login");
+        if (signedIn)
+            signInSetting.setTitle(R.string.signOut);
+        else
+            signInSetting.setTitle(R.string.signIn);
         signInSetting.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
