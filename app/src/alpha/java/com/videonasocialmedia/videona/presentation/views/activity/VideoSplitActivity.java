@@ -31,13 +31,11 @@ import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.TimeUtils;
 import com.videonasocialmedia.videona.utils.UserEventTracker;
 
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 public class VideoSplitActivity extends VideonaActivity implements SplitView, VideonaPlayerListener,
     SeekBar.OnSeekBarChangeListener {
@@ -173,6 +171,7 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView, Vi
         Intent intent = new Intent(this, cls);
         intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
         startActivity(intent);
+        finish();
     }
 
     @OnClick(R.id.button_split_accept)
@@ -187,20 +186,20 @@ public class VideoSplitActivity extends VideonaActivity implements SplitView, Vi
         navigateTo(EditActivity.class, videoIndexOnTrack);
     }
 
-    private void refreshTimeTag(int currentPosition) {
-
-        timeTag.setText(TimeUtils.toFormattedTime(currentPosition));
-    }
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
             currentSplitPosition = progress;
-            splitSeekBar.setProgress(progress);
+            //splitSeekBar.setProgress(progress);
             refreshTimeTag(currentSplitPosition);
             videonaPlayer.seekTo(video.getFileStartTime() + progress);
             videonaPlayer.setSeekBarProgress(progress);
         }
+    }
+
+    private void refreshTimeTag(int currentPosition) {
+
+        timeTag.setText(TimeUtils.toFormattedTime(currentPosition));
     }
 
     @Override

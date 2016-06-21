@@ -99,13 +99,9 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
+        videonaPlayer.destroy();
     }
 
     @Override
@@ -122,9 +118,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        videonaPlayer.destroy();
+    protected void onStart() {
+        super.onStart();
     }
 
     private void restoreState(Bundle savedInstanceState) {
@@ -135,6 +130,11 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
 
             activityStateHasChanged = true;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -168,16 +168,16 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         startActivity(new Intent(getApplicationContext(), cls));
     }
 
-    private void navigateTo(Class cls, int currentVideoIndex) {
-        Intent intent = new Intent(this, cls);
-        intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
-        startActivity(intent);
-    }
-
     @Override
     public void onBackPressed() {
         navigateTo(EditActivity.class, videoIndexOnTrack);
         finish();
+    }
+
+    private void navigateTo(Class cls, int currentVideoIndex) {
+        Intent intent = new Intent(this, cls);
+        intent.putExtra(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        startActivity(intent);
     }
 
     @Override
@@ -191,9 +191,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     @OnClick(R.id.button_trim_accept)
     public void onClickTrimAccept() {
         presenter.setTrim(startTimeMs, finishTimeMs);
-//        presenter.modifyVideoStartTime(startTimeMs);
-//        presenter.modifyVideoFinishTime(finishTimeMs);
         navigateTo(EditActivity.class, videoIndexOnTrack);
+        finish();
     }
 
     @OnClick(R.id.button_trim_cancel)
@@ -247,14 +246,6 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         videonaPlayer.seekTo(timeInMsec);
     }
 
-    private void updateTrimingTextTags() {
-        startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
-        stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
-
-        int duration = ((finishTimeMs/1000) - (startTimeMs/1000))*1000;
-        durationTag.setText(TimeUtils.toFormattedTime(duration));
-    }
-
     @Override
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
@@ -283,6 +274,14 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         seekBarMin = (double) startTimeMs / videoDuration;
         seekBarMax = (double) finishTimeMs / videoDuration;
         trimmingRangeSeekBar.setInitializedPosition(seekBarMin, seekBarMax);
+    }
+
+    private void updateTrimingTextTags() {
+        startTimeTag.setText(TimeUtils.toFormattedTime(startTimeMs));
+        stopTimeTag.setText(TimeUtils.toFormattedTime(finishTimeMs));
+
+        int duration = ( ( finishTimeMs / 1000 ) - ( startTimeMs / 1000 ) ) * 1000;
+        durationTag.setText(TimeUtils.toFormattedTime(duration));
     }
 
     @Override
