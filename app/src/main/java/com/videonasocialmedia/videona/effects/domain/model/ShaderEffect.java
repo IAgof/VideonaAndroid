@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.effects.model.entities;
+package com.videonasocialmedia.videona.effects.domain.model;
 
 /**
  * Created by Veronica Lago Fominaya on 25/11/2015.

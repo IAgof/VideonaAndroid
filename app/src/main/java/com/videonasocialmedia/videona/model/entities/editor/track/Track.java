@@ -11,7 +11,7 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.track;
 
-import com.videonasocialmedia.videona.effects.model.entities.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;

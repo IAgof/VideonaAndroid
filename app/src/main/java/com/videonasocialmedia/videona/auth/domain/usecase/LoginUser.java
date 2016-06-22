@@ -9,7 +9,6 @@ package com.videonasocialmedia.videona.auth.domain.usecase;
 
 import com.videonasocialmedia.videona.auth.domain.model.Token;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
-import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnUserIsLoggedInListener;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthClient;
 import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
 import com.videonasocialmedia.videona.auth.repository.model.AuthTokenRequest;
@@ -25,14 +24,8 @@ import retrofit2.Response;
 public class LoginUser {
 
 
-
-    public void userIsLoggedIn(OnUserIsLoggedInListener listener) {
-        boolean hasToken = CachedToken.hasToken();
-        if (hasToken) {
-            listener.onUserIsLoggedIn();
-        } else {
-            listener.onUserIsLoggedOut();
-        }
+    public boolean userIsLoggedIn() {
+        return CachedToken.hasToken();
     }
 
     public void login(String email, String password, final OnLoginListener loginListener) {

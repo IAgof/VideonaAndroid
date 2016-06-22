@@ -1,6 +1,13 @@
-package com.videonasocialmedia.videona.domain.effects;
+/*
+ * Copyright (C) 2016 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
 
-import com.videonasocialmedia.videona.effects.model.entities.Effect;
+package com.videonasocialmedia.videona.effects.domain.usecase;
+
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.repository.EffectProvider;
 
 import java.util.List;
@@ -26,7 +33,7 @@ public class GetEffectListUseCase {
         return EffectProvider.getOverlayFilterList();
     }
 
-    public static Effect getOverlayEffectGift() {
-        return EffectProvider.getOverlayEffectGift();
-    }
+//    public static Effect getOverlayEffectGift() {
+//        return EffectProvider.getOverlayEffectGift();
+//    }
 }

@@ -5,7 +5,9 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.effects.model.entities;
+package com.videonasocialmedia.videona.effects.domain.model;
+
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 
 /**
  *
@@ -27,6 +29,8 @@ public abstract class Effect {
     protected final int iconId;
     protected final String type;
 
+    protected final PermissionType permissionType;
+
     /**
      * Constructor.
      *
@@ -40,6 +44,7 @@ public abstract class Effect {
         this.iconPath = iconPath;
         this.iconId = -1;
         this.type = type;
+        this.permissionType = PermissionType.ALL;
     }
 
     /**
@@ -55,6 +60,17 @@ public abstract class Effect {
         this.iconPath = null;
         this.iconId = iconId;
         this.type = type;
+        this.permissionType = PermissionType.ALL;
+    }
+
+    public Effect(String identifier, String name, int iconId, String type,
+                  PermissionType permissionType) {
+        this.identifier = identifier;
+        this.name = name;
+        this.iconPath = null;
+        this.iconId = iconId;
+        this.type = type;
+        this.permissionType = permissionType;
     }
 
     public String getIdentifier() {
@@ -75,5 +91,7 @@ public abstract class Effect {
 
     public String getType() { return type; }
 
-
+    public PermissionType getPermissionType() {
+        return permissionType;
+    }
 }

@@ -11,7 +11,7 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.track;
 
-import com.videonasocialmedia.videona.effects.model.entities.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalOrphanTransitionOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Audio;
@@ -68,6 +68,15 @@ public class MediaTrack extends Track {
         return this.getItems().size();
     }
 
+    @Override
+    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
+        if (itemToAdd instanceof Audio) {
+            throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
+        }
+        // With super works, waiting merge model branch to dev return this.insertItem(itemToAdd);
+        return super.insertItem(itemToAdd);
+    }
+
     /**
      * Insert a new Media item in the media track. Get sure it is not an Audio media item.
      *
@@ -80,15 +89,6 @@ public class MediaTrack extends Track {
             throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
         }
         return super.insertItemAt(position, itemToAdd);
-    }
-
-    @Override
-    public boolean insertItem(Media itemToAdd) throws IllegalItemOnTrack {
-        if (itemToAdd instanceof Audio) {
-            throw new IllegalItemOnTrack("Cannot add an Audio media item to a MediaTrack.");
-        }
-        // With super works, waiting merge model branch to dev return this.insertItem(itemToAdd);
-        return super.insertItem(itemToAdd);
     }
 
     /**

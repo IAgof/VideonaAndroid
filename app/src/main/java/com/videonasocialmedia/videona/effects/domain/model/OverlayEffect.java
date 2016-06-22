@@ -5,10 +5,12 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.effects.model.entities;
+package com.videonasocialmedia.videona.effects.domain.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 
 import java.io.File;
 
@@ -41,6 +43,13 @@ public class OverlayEffect extends Effect {
         this.resourceId = resourceId;
     }
 
+    public OverlayEffect(String identifier, String name, int iconId, int resourceId,
+                         String type, PermissionType permissionType) {
+        super(identifier, name, iconId, type, permissionType);
+        this.resourcePath = null;
+        this.resourceId = resourceId;
+    }
+
     public String getResourcePath() {
         return resourcePath;
     }
@@ -52,7 +61,7 @@ public class OverlayEffect extends Effect {
     public Bitmap getImage() {
         File image = new File(resourcePath);
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
 
         return bitmap;
     }

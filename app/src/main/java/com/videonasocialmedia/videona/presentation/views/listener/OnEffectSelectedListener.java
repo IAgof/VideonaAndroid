@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.listener;
 
-import com.videonasocialmedia.videona.effects.model.entities.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 
 /**
  * Created by Veronica Lago Fominaya on 03/11/2015.

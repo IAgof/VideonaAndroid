@@ -9,9 +9,10 @@ package com.videonasocialmedia.videona.effects.repository;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.effects.model.entities.Effect;
-import com.videonasocialmedia.videona.effects.model.entities.OverlayEffect;
-import com.videonasocialmedia.videona.effects.model.entities.ShaderEffect;
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
+import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 
 import java.util.ArrayList;
@@ -145,9 +146,9 @@ public class EffectProvider {
 
         List<Effect> overlayList = new ArrayList<>();
 
-        overlayList.add(new OverlayEffect("GIFT_OV", " ",
-                R.drawable.common_filter_overlay_gift,
-                R.drawable.overlay_filter_spring, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV25", "Spring",
+                R.drawable.common_filter_overlay_ov25_spring,
+                R.drawable.overlay_filter_spring, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
         overlayList.add(new OverlayEffect("OV5", "Autumn",
                 R.drawable.common_filter_overlay_ov5_autumn,
                 R.drawable.overlay_filter_autumn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
@@ -204,12 +205,6 @@ public class EffectProvider {
                 R.drawable.overlay_filter_passion, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         return overlayList;
-    }
-
-    public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("OV25", "Spring",
-                R.drawable.common_filter_overlay_ov25_spring,
-                R.drawable.overlay_filter_spring, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
 }
