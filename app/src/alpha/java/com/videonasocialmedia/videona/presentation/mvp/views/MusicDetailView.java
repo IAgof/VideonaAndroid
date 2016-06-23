@@ -13,4 +13,6 @@ public interface MusicDetailView {
     void showImage(int iconResourceId);
 
     void setupScene(boolean isMusicInProject);
+
+    void goToEdit(String musicTitle);
 }

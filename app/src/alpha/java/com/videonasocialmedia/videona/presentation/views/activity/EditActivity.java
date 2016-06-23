@@ -137,13 +137,23 @@ public class EditActivity extends VideonaActivity implements EditorView,
     protected void onResume() {
         super.onResume();
         registerReceiver(receiver, new IntentFilter(ExportProjectService.NOTIFICATION));
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {
                 this.currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
             }
+            if(bundle.containsKey(Constants.MUSIC_SELECTED_TITLE)){
+                String musicTitle = getIntent().getStringExtra(Constants.MUSIC_SELECTED_TITLE);
+                showMusicTitle(musicTitle);
+            }
+
         }
         editPresenter.loadProject();
+    }
+
+    private void showMusicTitle(String musicTitle) {
+        Snackbar snackbar = Snackbar.make(fabEditRoom, musicTitle, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
