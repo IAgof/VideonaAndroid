@@ -829,6 +829,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             cameraOverlayEffectsAdapter.resetSelectedEffect();
             trackGiftOpened(recordPresenter.getOverlayEffectGift());
             showGiftFilterToast();
+            recordPresenter.applyEffect(effect);
             return;
 
         }
@@ -879,6 +880,8 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         // Save user preferences
         editor.putBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, true);
         editor.commit();
+
+
 
         // Uptade overlay effect adapter
         cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
