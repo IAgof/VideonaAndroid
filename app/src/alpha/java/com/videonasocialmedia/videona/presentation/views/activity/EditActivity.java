@@ -249,7 +249,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @OnClick(R.id.fab_go_to_gallery)
     public void onClickFabGallery() {
         fabEditRoom.collapse();
-        navigateTo(GalleryActivity.class);
+        navigateTo(GalleryMaterialActivity.class);
     }
 
     @OnClick(R.id.button_edit_fullscreen)
