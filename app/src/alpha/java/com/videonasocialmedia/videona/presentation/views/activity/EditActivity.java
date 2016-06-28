@@ -100,6 +100,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
             }
         }
     };
+    private boolean isMusicSelectedMessageShowed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +123,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         createProgressDialog();
         if (savedInstanceState != null) {
             this.currentVideoIndex = savedInstanceState.getInt(Constants.CURRENT_VIDEO_INDEX);
+            this.isMusicSelectedMessageShowed = savedInstanceState.getBoolean(Constants.IS_MUSIC_SELECTED_MESSAGE_SHOWED);
         }
     }
 
@@ -142,8 +144,9 @@ public class EditActivity extends VideonaActivity implements EditorView,
             if (bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {
                 this.currentVideoIndex = getIntent().getIntExtra(Constants.CURRENT_VIDEO_INDEX, 0);
             }
-            if(bundle.containsKey(Constants.MUSIC_SELECTED_TITLE)){
+            if(bundle.containsKey(Constants.MUSIC_SELECTED_TITLE) && !isMusicSelectedMessageShowed){
                 String musicTitle = getIntent().getStringExtra(Constants.MUSIC_SELECTED_TITLE);
+                isMusicSelectedMessageShowed = true;
                 showMusicTitle(musicTitle);
             }
 
@@ -152,7 +155,8 @@ public class EditActivity extends VideonaActivity implements EditorView,
     }
 
     private void showMusicTitle(String musicTitle) {
-        Snackbar snackbar = Snackbar.make(fabEditRoom, musicTitle, Snackbar.LENGTH_LONG);
+        String musicMessage = getString(R.string.message_edit_activity_music_selected_added) + " " + musicTitle;
+        Snackbar snackbar = Snackbar.make(fabEditRoom, musicMessage, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
@@ -348,6 +352,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(Constants.CURRENT_VIDEO_INDEX, currentVideoIndex);
+        outState.putBoolean(Constants.IS_MUSIC_SELECTED_MESSAGE_SHOWED, isMusicSelectedMessageShowed);
         super.onSaveInstanceState(outState);
     }
 
