@@ -8,7 +8,7 @@
 package com.videonasocialmedia.videona.user.model.entities;
 
 /**
- *
+ * Videona's user representation
  */
 public class User {
 
