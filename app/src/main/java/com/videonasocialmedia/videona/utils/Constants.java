@@ -51,6 +51,7 @@ public class Constants {
     final public static String CURRENT_VIDEO_INDEX = "current_video_index";
     final public static String VIDEO_TO_SHARE_PATH = "video_to_share_path";
     final public static String MUSIC_SELECTED_TITLE = "music_selected";
+    final public static String IS_MUSIC_SELECTED_MESSAGE_SHOWED = "is_music_selected_message_showed";
 
 
     public static final String NOTIFICATION_EXPORT_SERVICES_RECEIVER = "com.videonasocialmedia.videona";

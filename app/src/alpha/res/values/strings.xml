@@ -15,5 +15,6 @@
     <string name="dialog_edit_remove_accept">Yes</string>
     <string name="dialog_edit_remove_cancel">No</string>
 
+    <string name="message_edit_activity_music_selected_added">Music added</string>
 
 </resources>
