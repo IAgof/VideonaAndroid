@@ -232,8 +232,11 @@ public class EditActivity extends VideonaActivity implements EditorView,
 
     @OnClick(R.id.fab_go_to_record)
     public void onClickFabRecord() {
-        fabEditRoom.collapse();
-        navigateTo(RecordActivity.class);
+        //Atajo para ir al profile activity
+        //fabEditRoom.collapse();
+        //navigateTo(RecordActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
+        this.startActivity(intent);
     }
 
     @OnClick(R.id.fab_go_to_gallery)
