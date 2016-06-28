@@ -9,6 +9,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/common_character_kachivache_landscape_speech_balloon"/>
+        android:src="@drawable/welcome_slide_one"/>
 
 </RelativeLayout>
