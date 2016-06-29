@@ -1,42 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ee534f"
-                tools:context=".presentation.views.activity.IntroAppActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#c0ca33">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="35dp">
-
-        <ImageView
-            android:id="@+id/character"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="5"
-            android:src="@drawable/common_character_eddyt_speech_balloon"/>
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:src="@drawable/intro_app_slide_edit_image"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            tools:text="holaaaaaaaaaaaaaaaa"
-            android:textColor="@android:color/white"/>
-
-    </LinearLayout>
+        android:layout_centerVertical="true"
+        android:src="@drawable/welcome_slide_three"/>
 
 </RelativeLayout>

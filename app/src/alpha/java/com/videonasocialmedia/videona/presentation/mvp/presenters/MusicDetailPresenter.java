@@ -102,6 +102,7 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
         addMusicToProjectUseCase.addMusicToTrack(music, 0);
         userEventTracker.trackMusicSet(currentProject);
         setupScene(musicAddedToProject);
+        musicDetailView.goToEdit(music.getMusicTitle());
     }
 
     @Override

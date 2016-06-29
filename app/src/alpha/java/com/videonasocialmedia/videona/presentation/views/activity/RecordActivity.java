@@ -901,6 +901,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             cameraOverlayEffectsAdapter.resetSelectedEffect();
             trackGiftOpened(recordPresenter.getOverlayEffectGift());
             showGiftFilterToast();
+            recordPresenter.applyEffect(effect);
             return;
 
         }
