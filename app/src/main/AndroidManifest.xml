@@ -17,6 +17,8 @@
         android:protectionLevel="signature"/>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="com.videonasocialmedia.videona.permission.C2D_MESSAGE"/>
 
     <uses-permission android:name="android.permission.CAMERA"/>

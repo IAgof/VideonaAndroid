@@ -17,6 +17,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
@@ -33,14 +34,18 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
+import com.videonasocialmedia.videona.domain.editor.SendInfoVideoToBackendUseCase;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.presentation.views.location.DeviceLocation;
+import com.videonasocialmedia.videona.presentation.views.utils.InfoVideoConstants;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -61,7 +66,7 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter {
+public class RecordPresenter implements OnAddMediaFinishedListener{
 
     /**
      * LOG_TAG
@@ -71,6 +76,7 @@ public class RecordPresenter {
     private RecordView recordView;
     private SessionConfig config;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
+    private SendInfoVideoToBackendUseCase sendInfoVideoToBackendUseCase;
     private AVRecorder recorder;
     private int recordedVideosNumber;
     private MixpanelAPI mixpanel;
@@ -89,6 +95,16 @@ public class RecordPresenter {
      */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
 
+    private String locationLatitude;
+    private String locationLongitude;
+    private String videoHeight;
+    private String videoWidth;
+    private String videoRotation;
+    private String videoDuration;
+    private String videoSizeMb;
+    private String videoDate;
+    private String videoBitRate;
+
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraView cameraPreview, SharedPreferences sharedPreferences, boolean externalIntent) {
         this.recordView = recordView;
@@ -99,6 +115,7 @@ public class RecordPresenter {
 
         preferencesEditor = sharedPreferences.edit();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
+        sendInfoVideoToBackendUseCase = new SendInfoVideoToBackendUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         recordedVideosNumber = 0;
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
@@ -282,26 +299,8 @@ public class RecordPresenter {
         if (externalIntent) {
             recordView.finishActivityForResult(finalPath);
         } else {
-            addVideoToProjectUseCase.addVideoToTrack(finalPath);
+            addVideoToProjectUseCase.addVideoToTrack(finalPath, this);
         }
-
-        sendVideoInfoToBackend(finalPath);
-    }
-
-    private void sendVideoInfoToBackend(String finalPath) {
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(finalPath);
-        String frameRate = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_CAPTURE_FRAMERATE);
-        String duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        String location = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_LOCATION);
-        String height = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
-        String width = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
-        String rotation = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
-        String year = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
-        String bitRate = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-        String date = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE);
-        String mimeType = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_MIMETYPE);
-        String author = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR);
 
     }
 
@@ -502,6 +501,64 @@ public class RecordPresenter {
     public Effect getOverlayEffectGift() {
 
         return GetEffectListUseCase.getOverlayEffectGift();
+    }
+
+    public void saveLocation(double latitude, double longitude) {
+        locationLatitude = String.valueOf(latitude);
+        locationLongitude = String.valueOf(longitude);
+    }
+
+    @Override
+    public void onAddMediaItemToTrackError() {
+
+    }
+
+    @Override
+    public void onAddMediaItemToTrackSuccess(Media media) {
+        DeviceLocation.getLastKnownLocation(VideonaApplication.getAppContext(), false, new DeviceLocation.LocationResult() {
+            @Override
+            public void gotLocation(Location location) {
+                locationLatitude =  String.valueOf(location.getLatitude());
+                locationLongitude = String.valueOf(location.getLongitude());
+            }
+        });
+        sendVideoInfoToBackend(media.getMediaPath());
+    }
+
+    private void sendVideoInfoToBackend(String finalPath) {
+
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(finalPath);
+        videoDuration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        videoHeight = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+        videoWidth = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+        videoRotation = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
+        videoBitRate = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+        videoDate = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE);
+        videoSizeMb = getVideoSizeFromPath(finalPath);
+
+        JSONObject infoVideoRecorded = new JSONObject();
+        try {
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_BITRATE, videoBitRate);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_DATE, videoDate);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_DURATION_MILLISECONDS, videoDuration);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_HEIGHT, videoHeight);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_WIDTH,videoWidth);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_ROTATION, videoRotation);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_SIZE_MB, videoSizeMb);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_LATITUDE, locationLatitude);
+            infoVideoRecorded.put(InfoVideoConstants.VIDEO_LONGITUDE, locationLongitude);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendInfoVideoToBackendUseCase.sendInfoVideoRecorded(infoVideoRecorded);
+    }
+
+    private String getVideoSizeFromPath(String finalPath){
+        File f = new File(finalPath);
+        double sizeMB =(double) f.length() / (1024*1024);
+        return String.valueOf(sizeMB);
     }
 
 }

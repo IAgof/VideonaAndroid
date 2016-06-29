@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
@@ -14,16 +15,20 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,8 +51,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.Tracker;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.CompositeMultiplePermissionsListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.multi.SnackbarOnAnyDeniedMultiplePermissionsListener;
 import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
@@ -55,6 +68,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+import com.videonasocialmedia.videona.presentation.views.location.DeviceLocation;
 import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
@@ -141,6 +155,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean mUseImmersiveMode = true;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private CompositeMultiplePermissionsListener compositePermissionsListener;
 
     /**
      * if for result
@@ -194,6 +209,79 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         buttonThumbClipRecorded.setBorderWidth(5);
         buttonThumbClipRecorded.setBorderColor(Color.WHITE);
         numVideosRecorded.setVisibility(View.GONE);
+
+        createPermissionListeners();
+        Dexter.continuePendingRequestsIfPossible(compositePermissionsListener);
+    }
+
+    private void createPermissionListeners() {
+
+        MultiplePermissionsListener corePermissionsListener = new CorePermissionListener(this);
+        compositePermissionsListener = new CompositeMultiplePermissionsListener(corePermissionsListener);
+    }
+
+    private void requestPermissionsAndPerformSetup() {
+        Dexter.checkPermissions(compositePermissionsListener,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+
+    private boolean isLocationPermissionsGranted() {
+        boolean granted= ContextCompat.checkSelfPermission(RecordActivity.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(RecordActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return granted;
+    }
+
+    private class CorePermissionListener implements MultiplePermissionsListener {
+        private final RecordActivity activity;
+
+        public CorePermissionListener(RecordActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onPermissionsChecked(MultiplePermissionsReport report) {
+            if (report.areAllPermissionsGranted()) {
+
+                DeviceLocation.getLastKnownLocation(VideonaApplication.getAppContext(), false, new DeviceLocation.LocationResult() {
+                    @Override
+                    public void gotLocation(Location location) {
+                        recordPresenter.saveLocation(location.getLatitude(), location.getLongitude());
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+            activity.showPermissionRationale(token);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void showPermissionRationale(final PermissionToken token) {
+        new AlertDialog.Builder(this).setTitle(R.string.permissionsDeniedTitle)
+                .setMessage(R.string.permissionsDeniedMessage)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        token.cancelPermissionRequest();
+                    }
+                })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        token.continuePermissionRequest();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override public void onDismiss(DialogInterface dialog) {
+                        token.cancelPermissionRequest();
+                    }
+                })
+                .show();
     }
 
     private void keepScreenOn() {
@@ -297,6 +385,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         super.onStart();
         Log.d(LOG_TAG, "onStart");
         recordPresenter.onStart();
+        if(!isLocationPermissionsGranted())
+            requestPermissionsAndPerformSetup();
     }
 
     private void hideSystemUi() {
