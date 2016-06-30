@@ -15,9 +15,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:src="@drawable/splash_screen_portrait"
+        android:src="@drawable/splash_screen_landscape"
         android:scaleType="centerCrop"
-        android:paddingTop="54dp" />
+        android:paddingLeft="28dp" />
 
     <TextView
         android:id="@+id/videona_version"
