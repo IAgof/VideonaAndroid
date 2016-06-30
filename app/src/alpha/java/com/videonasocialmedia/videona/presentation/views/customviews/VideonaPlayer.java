@@ -59,13 +59,13 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     private boolean isFullScreenBack = false;
     private List<Integer> videoStartTimes;
     private List<Integer> videoStopTimes;
+    private Music music;
     private final Runnable updateTimeTask = new Runnable() {
         @Override
         public void run() {
             updateSeekBarProgress();
         }
     };
-    private Music music;
 
     public VideonaPlayer(Context context) {
         super(context);
@@ -186,10 +186,6 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
         }
     }
 
-    public void setSeekBarProgress(int progress){
-        seekBar.setProgress(progress);
-    }
-
     @Override
     public void seekToClip(int position) {
         currentVideoListIndex = position;
@@ -221,6 +217,10 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     public void bindVideoList(List<Video> videoList) {
         this.initPreviewLists(videoList);
         this.initPreview(currentTimePositionInList);
+    }
+
+    public void setSeekBarProgress(int progress) {
+        seekBar.setProgress(progress);
     }
 
     public void hidePlayButton() {
@@ -521,8 +521,7 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
                     }
                 }
             } catch (Exception e) {
-                Log.d(TAG, "updateSeekBarProgress: exception updating videonaplayer seekbar");
-                Log.d(TAG, e.getMessage());
+                Log.d(TAG, "updateSeekBarProgress: exception updating videonaplayer seekbar", e);
             }
             handler.postDelayed(updateTimeTask, 20);
         }
@@ -533,7 +532,7 @@ public class VideonaPlayer extends RelativeLayout implements VideonaPlayerView, 
     }
 
     private boolean videoHasMusic() {
-        return (music != null);
+        return ( music != null );
 //        music = videonaProject.getAudioTracks().get(0).getItems().get(0)
 //        return videonaProject.getAudioTracks().size() > 0 &&
 //                videonaProject.getAudioTracks().get(0).getItems().size() > 0;

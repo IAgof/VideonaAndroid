@@ -59,6 +59,7 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
     private MusicDetailPresenter musicDetailPresenter;
 
     private BroadcastReceiver exportReceiver;
+    private int musicId;
 
 
     @Override
@@ -74,7 +75,7 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         musicDetailPresenter = new MusicDetailPresenter(this, videonaPlayer, userEventTracker);
         try {
             Bundle extras = this.getIntent().getExtras();
-            int musicId = extras.getInt(KEY_MUSIC_ID);
+            musicId = extras.getInt(KEY_MUSIC_ID);
             musicDetailPresenter.onCreate(musicId);
         } catch (Exception e) {
             //TODO show snackbar with error message
@@ -207,10 +208,18 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         ButterKnife.bind(this);
     }
 
+    @Override
+    public void goToEdit(String musicTitle) {
+        Intent i = new Intent(this, EditActivity.class);
+        //i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra(Constants.MUSIC_SELECTED_TITLE, musicTitle);
+        startActivity(i);
+    }
+
     @Nullable
     @OnClick(R.id.select_music)
     public void selectMusic() {
-        musicDetailPresenter.addMusic();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             TransitionManager.go(deleteSecene);
         } else {
@@ -218,6 +227,7 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
             inflater.inflate(R.layout.activity_music_detail_scene_delete, sceneRoot);
         }
         ButterKnife.bind(this);
+        musicDetailPresenter.addMusic();
     }
 
     @Nullable
