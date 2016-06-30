@@ -20,11 +20,11 @@ public class InfoVideoConstants {
     public final static String VIDEO_WIDTH = "video_width";
     public final static String VIDEO_HEIGHT = "video_height";
     public final static String VIDEO_DATE = "video_date";
-    public final static String VIDEO_DURATION_MILLISECONDS = "video_duration_milliseconds";
+    public final static String VIDEO_DURATION = "video_duration_milliseconds";
     public final static String VIDEO_ROTATION = "video_rotation";
     public final static String VIDEO_BITRATE = "video_bitrate";
     public final static String VIDEO_LATITUDE = "video_latitude";
     public final static String VIDEO_LONGITUDE = "video_longitude";
-    public final static String VIDEO_SIZE_MB = "video_size_mb";
+    public final static String VIDEO_SIZE = "video_size_mb";
 
 }

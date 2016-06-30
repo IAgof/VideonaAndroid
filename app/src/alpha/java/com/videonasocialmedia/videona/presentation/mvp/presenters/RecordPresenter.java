@@ -17,8 +17,6 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -34,18 +32,15 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
-import com.videonasocialmedia.videona.domain.editor.SendInfoVideoToBackendUseCase;
+import com.videonasocialmedia.videona.domain.editor.SendInfoVideoRecordedToBackendUseCase;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
-import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
-import com.videonasocialmedia.videona.presentation.views.location.DeviceLocation;
-import com.videonasocialmedia.videona.presentation.views.utils.InfoVideoConstants;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -66,7 +61,7 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter implements OnAddMediaFinishedListener{
+public class RecordPresenter {
 
     /**
      * LOG_TAG
@@ -76,7 +71,7 @@ public class RecordPresenter implements OnAddMediaFinishedListener{
     private RecordView recordView;
     private SessionConfig config;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
-    private SendInfoVideoToBackendUseCase sendInfoVideoToBackendUseCase;
+    private SendInfoVideoRecordedToBackendUseCase sendInfoVideoToBackendUseCase;
     private AVRecorder recorder;
     private int recordedVideosNumber;
     private MixpanelAPI mixpanel;
@@ -115,7 +110,7 @@ public class RecordPresenter implements OnAddMediaFinishedListener{
 
         preferencesEditor = sharedPreferences.edit();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
-        sendInfoVideoToBackendUseCase = new SendInfoVideoToBackendUseCase();
+        sendInfoVideoToBackendUseCase = new SendInfoVideoRecordedToBackendUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         recordedVideosNumber = 0;
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
@@ -171,6 +166,7 @@ public class RecordPresenter implements OnAddMediaFinishedListener{
             recordView.showVideosRecordedNumber(recordedVideosNumber);
             recordView.showRecordedVideoThumb(lastItem.getMediaPath());
             recordView.enableShareButton();
+
         } else {
             recordView.hideRecordedVideoThumb();
             recordView.hideVideosRecordedNumber();
@@ -299,7 +295,7 @@ public class RecordPresenter implements OnAddMediaFinishedListener{
         if (externalIntent) {
             recordView.finishActivityForResult(finalPath);
         } else {
-            addVideoToProjectUseCase.addVideoToTrack(finalPath, this);
+            addVideoToProjectUseCase.addVideoToTrack(finalPath);
         }
 
     }
@@ -324,6 +320,7 @@ public class RecordPresenter implements OnAddMediaFinishedListener{
             e.printStackTrace();
         }
         trackVideoRecorded(clipDuration);
+
         return destinationFile.getAbsolutePath();
     }
 
@@ -506,59 +503,6 @@ public class RecordPresenter implements OnAddMediaFinishedListener{
     public void saveLocation(double latitude, double longitude) {
         locationLatitude = String.valueOf(latitude);
         locationLongitude = String.valueOf(longitude);
-    }
-
-    @Override
-    public void onAddMediaItemToTrackError() {
-
-    }
-
-    @Override
-    public void onAddMediaItemToTrackSuccess(Media media) {
-        DeviceLocation.getLastKnownLocation(VideonaApplication.getAppContext(), false, new DeviceLocation.LocationResult() {
-            @Override
-            public void gotLocation(Location location) {
-                locationLatitude =  String.valueOf(location.getLatitude());
-                locationLongitude = String.valueOf(location.getLongitude());
-            }
-        });
-        sendVideoInfoToBackend(media.getMediaPath());
-    }
-
-    private void sendVideoInfoToBackend(String finalPath) {
-
-        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(finalPath);
-        videoDuration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        videoHeight = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
-        videoWidth = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
-        videoRotation = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
-        videoBitRate = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-        videoDate = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE);
-        videoSizeMb = getVideoSizeFromPath(finalPath);
-
-        JSONObject infoVideoRecorded = new JSONObject();
-        try {
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_BITRATE, videoBitRate);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_DATE, videoDate);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_DURATION_MILLISECONDS, videoDuration);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_HEIGHT, videoHeight);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_WIDTH,videoWidth);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_ROTATION, videoRotation);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_SIZE_MB, videoSizeMb);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_LATITUDE, locationLatitude);
-            infoVideoRecorded.put(InfoVideoConstants.VIDEO_LONGITUDE, locationLongitude);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        sendInfoVideoToBackendUseCase.sendInfoVideoRecorded(infoVideoRecorded);
-    }
-
-    private String getVideoSizeFromPath(String finalPath){
-        File f = new File(finalPath);
-        double sizeMB =(double) f.length() / (1024*1024);
-        return String.valueOf(sizeMB);
     }
 
 }

@@ -11,7 +11,6 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.media;
 
-import android.media.MediaMetadata;
 
 import com.videonasocialmedia.videona.model.entities.editor.EditorElement;
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
@@ -77,7 +76,7 @@ public abstract class Media extends EditorElement {
     /**
      * Metadata of the resource
      */
-    protected MediaMetadata metadata;
+    protected ArrayList<String> metadata;
 
     /**
      * List with de authors id;
@@ -136,7 +135,7 @@ public abstract class Media extends EditorElement {
      */
     protected Media(String identifier, String iconPath, String selectedIconPath, String title,
                     String mediaPath, int fileStartTime, int duration, Transition opening,
-                    Transition ending, MediaMetadata metadata, ArrayList<User> authors,
+                    Transition ending, ArrayList<String> metadata, ArrayList<User> authors,
                     License license) {
         super(identifier, iconPath, selectedIconPath);
         this.title = title;
@@ -207,11 +206,11 @@ public abstract class Media extends EditorElement {
         this.fileStopTime = fileStopTime;
     }
 
-    public MediaMetadata getMetadata() {
+    public ArrayList<String> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(MediaMetadata metadata) {
+    public void setMetadata(ArrayList<String> metadata) {
         this.metadata = metadata;
     }
 

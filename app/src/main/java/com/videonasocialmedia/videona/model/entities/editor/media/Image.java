@@ -69,7 +69,7 @@ public class Image extends Media {
      */
     public Image(String identifier, String iconPath, String selectedIconPath, String title, String
             mediaPath, int duration, Transition opening, Transition ending,
-                 MediaMetadata metadata, ArrayList<User> authors, License license) {
+                 ArrayList<String> metadata, ArrayList<User> authors, License license) {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, 0, duration,
                 opening, ending, metadata, authors, license);
     }
