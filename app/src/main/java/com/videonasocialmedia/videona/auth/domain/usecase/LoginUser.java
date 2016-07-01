@@ -25,7 +25,6 @@ import retrofit2.Response;
 public class LoginUser {
 
 
-
     public void userIsLoggedIn(OnUserIsLoggedInListener listener) {
         boolean hasToken = CachedToken.hasToken();
         if (hasToken) {

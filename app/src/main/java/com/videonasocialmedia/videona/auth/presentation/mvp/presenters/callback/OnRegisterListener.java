@@ -10,15 +10,13 @@ package com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback
 /**
  *
  */
-public interface OnLoginListener {
+public interface OnRegisterListener {
+    void onRegisterError(Causes causes);
 
-    void onLoginError(Causes causes);
-
-    void onLoginSuccess();
+    void onRegisterSuccess();
 
     enum Causes {
-        NETWORK_ERROR, CREDENTIALS_EXPIRED, UNKNOWN_ERROR, CREDENTIALS_UNKNOWN
+        NETWORK_ERROR, UNKNOWN_ERROR, USER_ALREADY_EXISTS, INVALID_EMAIL, MISSING_REQUEST_PARAMETERS, INVALID_PASSWORD,
     }
-
 
 }
