@@ -11,27 +11,37 @@ import android.util.Patterns;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.auth.domain.usecase.RegisterUser;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnRegisterListener;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 
 /**
  * Created by alvaro on 14/06/16.
  */
-public class LoginPresenter implements OnLoginListener {
+public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     private LoginView loginView;
+    private String email;
+    private String password;
+    private LoginUser loginUser;
+    private RegisterUser registerUser;
 
     public LoginPresenter(LoginView loginView) {
+        this.loginUser = new LoginUser();
         this.loginView = loginView;
+        this.registerUser = new RegisterUser();
     }
 
-    public void tryToLogIn(String email, String password) {
+    public void tryToSignInOrLogIn(String email, String password) {
         loginView.resetErrorFields();
         loginView.showProgressAuthenticationDialog();
         if (isEmailValidAndNotEmpty(email) && isPasswordValidAndNotEmpty(password)) {
-            LoginUser loginUser = new LoginUser();
-            loginUser.login(email, password, this);
+            this.email = email;
+            this.password = password;
+            loginView.hideProgressAuthenticationDialog();
+            registerUser.register(email, password, this);
         }
     }
 
@@ -69,18 +79,28 @@ public class LoginPresenter implements OnLoginListener {
 
     private boolean isPasswordValid(String password) {
         // TODO:(alvaro.martinez) 15/06/16 will there be a rule for passwords?
-        return password.length() > 4;
+        return password.length() > 6;
     }
 
     @Override
-    public void onLoginError(Causes causes) {
+    public void onLoginError(OnLoginListener.Causes causes) {
         loginView.hideProgressAuthenticationDialog();
         loginView.showErrorLogin(R.string.defaultErrorMessage);
     }
 
     @Override
     public void onLoginSuccess() {
-        loginView.hideProgressAuthenticationDialog();
         loginView.navigateTo(SettingsActivity.class);
+    }
+
+    @Override
+    public void onRegisterError(OnRegisterListener.Causes causes) {
+        if (causes == OnRegisterListener.Causes.USER_ALREADY_EXISTS)
+            loginUser.login(email, password, this);
+    }
+
+    @Override
+    public void onRegisterSuccess() {
+        loginUser.login(email, password, this);
     }
 }

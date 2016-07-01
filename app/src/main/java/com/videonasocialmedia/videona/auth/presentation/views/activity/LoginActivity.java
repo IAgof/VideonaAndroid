@@ -121,7 +121,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         if (loginPresenter.isEmailValidAndNotEmpty(email) &&
                 loginPresenter.isPasswordValidAndNotEmpty(password)) {
 
-            loginPresenter.tryToLogIn(email, password);
+            loginPresenter.tryToSignInOrLogIn(email, password);
         }
     }
 
