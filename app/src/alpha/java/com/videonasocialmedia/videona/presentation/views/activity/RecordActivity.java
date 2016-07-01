@@ -222,6 +222,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     private void requestPermissionsAndPerformSetup() {
         Dexter.checkPermissions(compositePermissionsListener,
+                Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
     }
@@ -229,6 +230,8 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean isLocationPermissionsGranted() {
         boolean granted= ContextCompat.checkSelfPermission(RecordActivity.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(RecordActivity.this,
+                        Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(RecordActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         return granted;
@@ -245,12 +248,13 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         public void onPermissionsChecked(MultiplePermissionsReport report) {
             if (report.areAllPermissionsGranted()) {
 
-                DeviceLocation.getLastKnownLocation(VideonaApplication.getAppContext(), false, new DeviceLocation.LocationResult() {
+              /*  DeviceLocation.getLocation(VideonaApplication.getAppContext(), true, new DeviceLocation.LocationResult() {
                     @Override
-                    public void gotLocation(Location location) {
-                        recordPresenter.saveLocation(location.getLatitude(), location.getLongitude());
+                    public void gotLocationLatLng(double latitude, double longitude) {
+
                     }
-                });
+
+                });*/
             }
         }
 

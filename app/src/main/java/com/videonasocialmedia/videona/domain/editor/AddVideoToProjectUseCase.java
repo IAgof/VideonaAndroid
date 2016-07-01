@@ -12,6 +12,7 @@ package com.videonasocialmedia.videona.domain.editor;
 
 import android.location.Location;
 import android.media.MediaMetadataRetriever;
+import android.util.Log;
 
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
@@ -44,6 +45,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class AddVideoToProjectUseCase {
 
+    private final String TAG = this.getClass().getName();
+
     /**
      * Constructor.
      */
@@ -57,7 +60,8 @@ public class AddVideoToProjectUseCase {
         Video videoToAdd = new Video(videoPath);
         addInfoToVideo(videoToAdd);
         addVideoToTrack(videoToAdd);
-      //  sendInfoVideoToBackend(videoToAdd);
+        Log.d(TAG,"Video position: " + videoToAdd.getLocationLatitude() + " x " + videoToAdd.getLocationLongitude());
+       // sendInfoVideoToBackend(videoToAdd);
     }
 
 
@@ -75,15 +79,15 @@ public class AddVideoToProjectUseCase {
         videoToAdd.setBitRate(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)));
         videoToAdd.setDate(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE));
 
-        videoToAdd.setSize(new File(mediaPath).length());
-        videoToAdd.setTitle(new File(mediaPath).getName());
+        File f = new File(mediaPath);
+        videoToAdd.setSize(f.length());
+        videoToAdd.setTitle(f.getName());
 
         DeviceLocation.getLastKnownLocation(VideonaApplication.getAppContext(), false, new DeviceLocation.LocationResult() {
             @Override
-            public void gotLocation(Location location) {
-                videoToAdd.setLocationLatitude(location.getLatitude());
-                videoToAdd.setLocationLongitude(location.getLongitude());
-
+            public void gotLocationLatLng(double latitude, double longitude) {
+                videoToAdd.setLocationLatitude(latitude);
+                videoToAdd.setLocationLongitude(longitude);
             }
         });
 
@@ -111,7 +115,7 @@ public class AddVideoToProjectUseCase {
         Video videoToAdd = new Video(videoPath);
         addInfoToVideo(videoToAdd);
         addVideoToTrack(videoToAdd, listener);
-        sendInfoVideoToBackend(videoToAdd);
+       // sendInfoVideoToBackend(videoToAdd);
     }
 
     private void sendInfoVideoToBackend(Video videoToAdd) {
@@ -140,16 +144,20 @@ public class AddVideoToProjectUseCase {
 
 
         VideoInfoRecordedApi service = retrofit.create(VideoInfoRecordedApi.class);
-        service.sendVideoInfoRecorded(videoToAdd, new Callback() {
+        //service.sendVideoInfoRecorded(videoToAdd);
+        Log.d("service", " service retrofit " +service.sendVideoInfoRecorded(videoToAdd).toString());
+        Call<Video> call = service.sendVideoInfoRecorded(videoToAdd);
+        call.enqueue(new Callback<Video>() {
             @Override
-            public void onResponse(Call call, Response response) {
-
+            public void onResponse(Call<Video> call, Response<Video> response) {
+                Log.d("CallBack", " response is " + response);
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
-
+            public void onFailure(Call<Video> call, Throwable t) {
+                Log.d("CallBack", " Throwable is " +t);
             }
+
         });
     }
 
@@ -159,6 +167,10 @@ public class AddVideoToProjectUseCase {
      * @deprecated use the one parameter version instead
      */
     public void addVideoToTrack(Video video, OnAddMediaFinishedListener listener) {
+
+        addInfoToVideo(video);
+        sendInfoVideoToBackend(video);
+
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItem(video);

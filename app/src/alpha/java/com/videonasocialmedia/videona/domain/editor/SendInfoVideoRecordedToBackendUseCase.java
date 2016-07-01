@@ -25,7 +25,7 @@ public class SendInfoVideoRecordedToBackendUseCase {
 
     public void sendInfoVideoRecorded(Video video){
 
-        Retrofit retrofit = new Retrofit.Builder()
+      /*  Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -44,7 +44,7 @@ public class SendInfoVideoRecordedToBackendUseCase {
             public void onFailure(Call call, Throwable t) {
                 // try again later?
             }
-        });
+        }); */
 
     }
 

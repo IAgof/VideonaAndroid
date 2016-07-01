@@ -15,6 +15,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 
 import org.json.JSONObject;
 
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
@@ -25,6 +26,9 @@ import retrofit2.http.POST;
  */
 public interface VideoInfoRecordedApi {
 
-    @POST("/user/newvideorecorded")
-    void sendVideoInfoRecorded(@Body Video videoInfoRecorded, Callback response);
+    @POST("user/newvideo")
+    Call<Video> sendVideoInfoRecorded(Video videoInfoRecorded);
+
+    //@POST("/user/newvideorecorded")
+    //void sendVideoInfoRecorded(@Body Video videoInfoRecorded, Callback response);
 }

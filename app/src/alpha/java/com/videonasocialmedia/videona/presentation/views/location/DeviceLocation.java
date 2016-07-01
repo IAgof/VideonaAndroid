@@ -9,16 +9,17 @@ package com.videonasocialmedia.videona.presentation.views.location;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,10 +40,14 @@ public class DeviceLocation {
     private Location bestLocation;
     private boolean waitForGpsFix;
 
+    private SharedPreferences sharedPreferences  = VideonaApplication.getAppContext().getSharedPreferences(
+            ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+            Context.MODE_PRIVATE);
 
-    public static void getLocation(Context context, boolean waitForGpsFix, final LocationResult cb) {
+
+    public static void getLocation(Context context, boolean waitForGpsFix, final LocationResult callback) {
         DeviceLocation deviceLocation = new DeviceLocation();
-        deviceLocation.getLocation(context, cb, waitForGpsFix);
+        deviceLocation.getLocation(context, callback, waitForGpsFix);
     }
 
     /**
@@ -52,45 +57,33 @@ public class DeviceLocation {
      *
      * @param context
      * @param waitForGpsFix
-     * @param cb
+     * @param callback
      */
-    public static void getLastKnownLocation(Context context, boolean waitForGpsFix, final LocationResult cb) {
+    public static void getLastKnownLocation(Context context, boolean waitForGpsFix, final LocationResult callback) {
         DeviceLocation deviceLocation = new DeviceLocation();
 
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Location last_loc;
-        if (ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+        if (ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         last_loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (last_loc == null)
             last_loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        if (last_loc != null && cb != null) {
-            cb.gotLocation(last_loc);
+        if (last_loc != null && callback != null) {
+            callback.gotLocationLatLng(last_loc.getLatitude(), last_loc.getLongitude());
+            deviceLocation.saveLocationInPreferences(last_loc.getLatitude(), last_loc.getLongitude());
         } else {
-            deviceLocation.getLocation(context, cb, waitForGpsFix);
+            deviceLocation.getLocation(context, callback, waitForGpsFix);
         }
     }
-
-    private boolean isLocationPermissionsGranted() {
-        boolean granted= ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        return granted;
-    }
-
 
     public boolean getLocation(Context context, LocationResult result, boolean waitForGpsFix) {
         this.waitForGpsFix = waitForGpsFix;
@@ -110,16 +103,21 @@ public class DeviceLocation {
         } catch (Exception ex) {
         }
 
-        //don't start listeners if no provider is enabled
-        if (!gps_enabled && !network_enabled)
+        //don't start listeners if no provider is enabled, get data from preferences
+        if (!gps_enabled && !network_enabled) {
+            double latitude = Double.parseDouble(sharedPreferences.getString(ConfigPreferences.LOCATION_LATITUDE,  "0.0"));
+            double longitude = Double.parseDouble(sharedPreferences.getString(ConfigPreferences.LOCATION_LONGITUDE, "0.0"));
+            locationResult.gotLocationLatLng(latitude, longitude);
             return false;
+        }
 
         if (gps_enabled)
-            if (ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                    Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -138,7 +136,7 @@ public class DeviceLocation {
     }
 
     public static abstract class LocationResult {
-        public abstract void gotLocation(Location location);
+        public abstract void gotLocationLatLng(double latitude, double longitude);
     }
 
     LocationListener locationListenerGps = new LocationListener() {
@@ -149,18 +147,13 @@ public class DeviceLocation {
 
             if (!waitForGpsFix || bestLocation.getAccuracy() < ACCURATE_LOCATION_THRESHOLD_METERS) {
                 timer1.cancel();
-                locationResult.gotLocation(bestLocation);
-                if (ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+                locationResult.gotLocationLatLng(bestLocation.getLatitude(), bestLocation.getLongitude());
+                saveLocationInPreferences(bestLocation.getLatitude(), bestLocation.getLongitude());
+                if (ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                                Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
                     return;
                 }
                 lm.removeUpdates(this);
@@ -179,21 +172,47 @@ public class DeviceLocation {
         }
     };
 
+    LocationListener locationListenerNetwork = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            Log.i(TAG, "got network loc accurate to " + String.valueOf(location.getAccuracy()) + "m");
+            if (bestLocation == null || bestLocation.getAccuracy() > location.getAccuracy())
+                bestLocation = location;
+
+            if (!waitForGpsFix || bestLocation.getAccuracy() < ACCURATE_LOCATION_THRESHOLD_METERS) {
+                timer1.cancel();
+                locationResult.gotLocationLatLng(bestLocation.getLatitude(),bestLocation.getLongitude());
+                saveLocationInPreferences(bestLocation.getLatitude(), bestLocation.getLongitude());
+                if (ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                        Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                lm.removeUpdates(this);
+                lm.removeUpdates(locationListenerGps);
+            }
+
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+    };
+
     class GetBestLocation extends TimerTask {
         @Override
         public void run() {
             Log.i(TAG, "Timer expired before adequate location acquired");
-            if (ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+            if (ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+                    && ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
+                    Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+
                 return;
             }
             lm.removeUpdates(locationListenerGps);
@@ -207,63 +226,42 @@ public class DeviceLocation {
 
             //if there are both values use the latest one
             if (gps_loc != null && net_loc != null) {
-                if (gps_loc.getTime() > net_loc.getTime())
-                    locationResult.gotLocation(gps_loc);
-                else
-                    locationResult.gotLocation(net_loc);
+                if (gps_loc.getTime() > net_loc.getTime()) {
+                    locationResult.gotLocationLatLng(gps_loc.getLatitude(), gps_loc.getLongitude());
+                    saveLocationInPreferences(gps_loc.getLatitude(), gps_loc.getLongitude());
+                }else {
+                    locationResult.gotLocationLatLng(net_loc.getLatitude(), net_loc.getLongitude());
+                    saveLocationInPreferences(net_loc.getLatitude(), net_loc.getLongitude());
+                }
                 return;
             }
 
             if (gps_loc != null) {
-                locationResult.gotLocation(gps_loc);
+                locationResult.gotLocationLatLng(gps_loc.getLatitude(), gps_loc.getLongitude());
+                saveLocationInPreferences(gps_loc.getLatitude(), gps_loc.getLongitude());
                 return;
             }
             if (net_loc != null) {
-                locationResult.gotLocation(net_loc);
+                locationResult.gotLocationLatLng(net_loc.getLatitude(), net_loc.getLongitude());
+                saveLocationInPreferences(net_loc.getLatitude(), net_loc.getLongitude());
                 return;
             }
-            locationResult.gotLocation(null);
+            double latitude = Double.parseDouble(sharedPreferences.getString(ConfigPreferences.LOCATION_LATITUDE,  "0.0"));
+            double longitude = Double.parseDouble(sharedPreferences.getString(ConfigPreferences.LOCATION_LONGITUDE, "0.0"));
+            locationResult.gotLocationLatLng(latitude, longitude);
         }
     }
 
+    // TODO:(alvaro.martinez) 1/07/16 Save data position with realm, persistence. Shared preferences not goog, slow.
+    public void saveLocationInPreferences(double latitude, double longitude){
 
-    LocationListener locationListenerNetwork = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            Log.i(TAG, "got network loc accurate to " + String.valueOf(location.getAccuracy()) + "m");
-            if (bestLocation == null || bestLocation.getAccuracy() > location.getAccuracy())
-                bestLocation = location;
+        if(latitude == 0.0 && longitude == 0.0)
+            return;
 
-            if (!waitForGpsFix || bestLocation.getAccuracy() < ACCURATE_LOCATION_THRESHOLD_METERS) {
-                timer1.cancel();
-                locationResult.gotLocation(bestLocation);
-                if (ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(VideonaApplication.getAppContext(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                lm.removeUpdates(this);
-                lm.removeUpdates(locationListenerGps);
-                }
-
-            }
-
-            public void onProviderDisabled(String provider) {
-            }
-
-            public void onProviderEnabled(String provider) {
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-        };
-
-
+        SharedPreferences.Editor editor = sharedPreferences.edit();;
+        editor.putString(ConfigPreferences.LOCATION_LATITUDE,String.valueOf(latitude));
+        editor.putString(ConfigPreferences.LOCATION_LONGITUDE, String.valueOf(longitude));
+        editor.commit();
     }
+}
+

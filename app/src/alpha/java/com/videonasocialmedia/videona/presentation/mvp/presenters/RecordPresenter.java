@@ -90,15 +90,6 @@ public class RecordPresenter {
      */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
 
-    private String locationLatitude;
-    private String locationLongitude;
-    private String videoHeight;
-    private String videoWidth;
-    private String videoRotation;
-    private String videoDuration;
-    private String videoSizeMb;
-    private String videoDate;
-    private String videoBitRate;
 
     public RecordPresenter(Context context, RecordView recordView,
                            GLCameraView cameraPreview, SharedPreferences sharedPreferences, boolean externalIntent) {
@@ -498,11 +489,6 @@ public class RecordPresenter {
     public Effect getOverlayEffectGift() {
 
         return GetEffectListUseCase.getOverlayEffectGift();
-    }
-
-    public void saveLocation(double latitude, double longitude) {
-        locationLatitude = String.valueOf(latitude);
-        locationLongitude = String.valueOf(longitude);
     }
 
 }
