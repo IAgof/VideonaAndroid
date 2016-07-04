@@ -94,9 +94,28 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
     }
 
     @Override
-    public void onRegisterError(OnRegisterListener.Causes causes) {
-        if (causes == OnRegisterListener.Causes.USER_ALREADY_EXISTS)
-            loginUser.login(email, password, this);
+    public void onRegisterError(OnRegisterListener.Causes cause) {
+        switch (cause) {
+            case NETWORK_ERROR:
+                loginView.showErrorLogin(R.string.networkError);
+                break;
+            case UNKNOWN_ERROR:
+                loginView.showErrorLogin(R.string.error);
+                break;
+            case USER_ALREADY_EXISTS:
+                loginUser.login(email, password, this);
+                break;
+            case INVALID_EMAIL:
+                loginView.showErrorLogin(R.string.error_invalid_email);
+                break;
+            case MISSING_REQUEST_PARAMETERS:
+                loginView.showErrorLogin(R.string.error_field_required);
+                break;
+            case INVALID_PASSWORD:
+                loginView.showErrorLogin(R.string.error_invalid_email);
+                break;
+        }
+
     }
 
     @Override
