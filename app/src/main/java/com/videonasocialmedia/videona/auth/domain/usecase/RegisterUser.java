@@ -47,7 +47,6 @@ public class RegisterUser {
                     }
                     registerListener.onRegisterError(cause);
                 } else {
-                    // TODO(javi.cabanas): 1/7/16 login here?
                     registerListener.onRegisterSuccess();
                 }
             }
