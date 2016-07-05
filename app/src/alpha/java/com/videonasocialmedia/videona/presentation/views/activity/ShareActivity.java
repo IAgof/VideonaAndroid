@@ -67,8 +67,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     FloatingActionButton fab;
     @Bind(R.id.seekbar_share_preview)
     SeekBar seekBar;
-
-
+    boolean isPlaying = false;
     private String videoPath;
     private ShareVideoPresenter presenter;
     private SocialNetworkAdapter mainSocialNetworkAdapter;
@@ -90,11 +89,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         setContentView(R.layout.activity_share);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        setupToolBar();
 
         sharedPreferences =
                 getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -103,18 +98,28 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         presenter = new ShareVideoPresenter(this);
         presenter.onCreate();
 
+        restoreState(savedInstanceState);
+
+        //initVideoPreview(videoPosition, isPlaying);
+        //initNetworksList();
+    }
+
+    private void setupToolBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
         if (videoPosition == 0)
             videoPosition = 100;
-        boolean isPlaying = false;
+
         if (savedInstanceState != null) {
             videoPosition = savedInstanceState.getInt("videoPosition", 100);
             isPlaying = savedInstanceState.getBoolean("videoPlaying", false);
         }
-
-        initVideoPreview(videoPosition, isPlaying);
-        initNetworksList();
-
-
     }
 
     @Override
@@ -163,26 +168,14 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         });
     }
 
-    private void initNetworksList() {
-        mainSocialNetworkAdapter = new SocialNetworkAdapter(this);
-
-        int orientation = LinearLayoutManager.VERTICAL;
-        // if (isLandscapeOriented())
-        //     orientation = LinearLayoutManager.HORIZONTAL;
-
-        mainSocialNetworkList.setLayoutManager(
-                new LinearLayoutManager(this, orientation, false));
-        mainSocialNetworkList.setAdapter(mainSocialNetworkAdapter);
-    }
-
-    ///// GO TO ANOTHER ACTIVITY
-
     private void initSeekBar(int progress, int max) {
         seekBar.setMax(max);
         seekBar.setProgress(progress);
         seekBar.setOnSeekBarChangeListener(this);
         updateSeekbar();
     }
+
+    ///// GO TO ANOTHER ACTIVITY
 
     @OnClick(R.id.button_share_play_pause)
     @Override
@@ -206,6 +199,18 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     @Override
     public void seekTo(int millisecond) {
         videoPreview.seekTo(millisecond);
+    }
+
+    private void initNetworksList() {
+        mainSocialNetworkAdapter = new SocialNetworkAdapter(this);
+
+        int orientation = LinearLayoutManager.VERTICAL;
+        // if (isLandscapeOriented())
+        //     orientation = LinearLayoutManager.HORIZONTAL;
+
+        mainSocialNetworkList.setLayoutManager(
+                new LinearLayoutManager(this, orientation, false));
+        mainSocialNetworkList.setAdapter(mainSocialNetworkAdapter);
     }
 
     @Override

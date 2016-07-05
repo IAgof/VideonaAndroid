@@ -83,7 +83,8 @@ import butterknife.OnTouch;
 /**
  * RecordActivity manages a single live record.
  */
-public class RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
+public class
+RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         RecordView, OnEffectSelectedListener {
 
     private final String LOG_TAG = getClass().getSimpleName();
