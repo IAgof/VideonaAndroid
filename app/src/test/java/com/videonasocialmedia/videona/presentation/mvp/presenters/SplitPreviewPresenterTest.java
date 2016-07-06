@@ -35,8 +35,6 @@ public class SplitPreviewPresenterTest {
     @Mock private MixpanelAPI mockedMixpanelAPI;
     @Mock private UserEventTracker mockedUserEventTracker;
 
-    // TODO(jliarte): 13/06/16 Decouple Video entity from android
-    @Mock(name="retriever") MediaMetadataRetriever mockedMediaMetadataRetriever;
     @InjectMocks Video injectedVideo;
 
     @Before

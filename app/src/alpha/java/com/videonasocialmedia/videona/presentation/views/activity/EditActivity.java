@@ -91,6 +91,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
                 int resultCode = bundle.getInt(ExportProjectService.RESULT);
                 if (resultCode == RESULT_OK) {
                     // hideProgressDialog();
+                    editPresenter.sendInfoVideoEdited(videoToSharePath);
                     goToShare(videoToSharePath);
                 } else {
                     //showProgressDialog();

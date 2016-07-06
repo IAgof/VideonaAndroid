@@ -32,14 +32,15 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
-import com.videonasocialmedia.videona.domain.editor.SendInfoVideoRecordedToBackendUseCase;
+import com.videonasocialmedia.videona.network.domain.usecase.SendInfoVideo;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
-import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
 import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.network.presenters.callback.OnSendInfoVideoListener;
+import com.videonasocialmedia.videona.network.repository.model.VideoMetadataRequest;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
@@ -61,7 +62,7 @@ import de.greenrobot.event.EventBus;
  * @author Juan Javier Cabanas
  */
 
-public class RecordPresenter {
+public class RecordPresenter implements OnSendInfoVideoListener {
 
     /**
      * LOG_TAG
@@ -71,7 +72,7 @@ public class RecordPresenter {
     private RecordView recordView;
     private SessionConfig config;
     private AddVideoToProjectUseCase addVideoToProjectUseCase;
-    private SendInfoVideoRecordedToBackendUseCase sendInfoVideoToBackendUseCase;
+    private SendInfoVideo sendInfoVideoUseCase;
     private AVRecorder recorder;
     private int recordedVideosNumber;
     private MixpanelAPI mixpanel;
@@ -101,7 +102,7 @@ public class RecordPresenter {
 
         preferencesEditor = sharedPreferences.edit();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
-        sendInfoVideoToBackendUseCase = new SendInfoVideoRecordedToBackendUseCase();
+        sendInfoVideoUseCase = new SendInfoVideo();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         recordedVideosNumber = 0;
         mixpanel = MixpanelAPI.getInstance(context, BuildConfig.MIXPANEL_TOKEN);
@@ -287,8 +288,21 @@ public class RecordPresenter {
             recordView.finishActivityForResult(finalPath);
         } else {
             addVideoToProjectUseCase.addVideoToTrack(finalPath);
+            videoRecorded(finalPath);
+            sendInfoVideoUseCase.sendMetadataVideo(finalPath, VideoMetadataRequest.VIDEO_TYPE.RECORDED, this);
         }
 
+    }
+
+    private void videoRecorded(String path){
+
+        recordView.showRecordedVideoThumb(path);
+        recordView.showRecordButton();
+        recordView.enableShareButton();
+        recordView.showVideosRecordedNumber(++recordedVideosNumber);
+        recordView.showMenuOptions();
+        recordView.hideChronometer();
+        recordView.reStartScreenRotation();
     }
 
     private String moveVideoToMastersFolder() {
@@ -364,17 +378,6 @@ public class RecordPresenter {
         mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_RECORDED, 1);
         mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-    }
-
-    public void onEvent(AddMediaItemToTrackSuccessEvent e) {
-        String path = e.videoAdded.getMediaPath();
-        recordView.showRecordedVideoThumb(path);
-        recordView.showRecordButton();
-        recordView.enableShareButton();
-        recordView.showVideosRecordedNumber(++recordedVideosNumber);
-        recordView.showMenuOptions();
-        recordView.hideChronometer();
-        recordView.reStartScreenRotation();
     }
 
     public int getProjectDuration() {
@@ -491,4 +494,27 @@ public class RecordPresenter {
         return GetEffectListUseCase.getOverlayEffectGift();
     }
 
+    public void sendInfoVideo(String path) {
+        sendInfoVideoUseCase.sendMetadataVideo(path, VideoMetadataRequest.VIDEO_TYPE.EDITED, this);
+    }
+
+    @Override
+    public void onSendInfoVideoError(Causes causes) {
+        switch (causes) {
+            case NETWORK_ERROR:
+                //¿try again later?
+                break;
+            case CREDENTIALS_EXPIRED:
+                break;
+            case UNKNOWN_ERROR:
+                break;
+            case CREDENTIALS_UNKNOWN:
+                break;
+        }
+    }
+
+    @Override
+    public void onSendInfoSuccess() {
+
+    }
 }

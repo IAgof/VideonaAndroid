@@ -87,7 +87,7 @@ public class ExporterImpl implements Exporter {
                 int startTime = medias.get(index).getFileStartTime();
                 int endTime = medias.get(index).getFileStopTime();
                 int editedFileDuration = medias.get(index).getFileStopTime() - medias.get(index).getFileStartTime();
-                int originalFileDuration = ((Video)medias.get(index)).getFileDuration();
+                int originalFileDuration = (int) ((Video)medias.get(index)).getFileDuration();
                 if(editedFileDuration < originalFileDuration) {
                     trimmer = new VideoTrimmer();
                     movie = trimmer.trim(medias.get(index).getMediaPath(), startTime, endTime);
@@ -135,6 +135,7 @@ public class ExporterImpl implements Exporter {
             long spent = System.currentTimeMillis() - start;
             Log.d("WRITING VIDEO FILE", "time spent in millis: " + spent);
             onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
+
         } catch (IOException | NullPointerException e) {
             onExportEndedListener.onExportError(String.valueOf(e));
         }

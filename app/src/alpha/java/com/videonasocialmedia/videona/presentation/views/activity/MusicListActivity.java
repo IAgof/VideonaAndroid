@@ -76,6 +76,7 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
                     String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
                     int resultCode = bundle.getInt(ExportProjectService.RESULT);
                     if (resultCode == RESULT_OK) {
+                        presenter.sendInfoVideoEdited(videoToSharePath);
                         goToShare(videoToSharePath);
                     } else {
                         Snackbar.make(musicList, R.string.shareError, Snackbar.LENGTH_LONG).show();

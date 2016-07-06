@@ -176,6 +176,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                 int resultCode = bundle.getInt(ExportProjectService.RESULT);
                 if (resultCode == RESULT_OK) {
                     hideProgressDialog();
+                    recordPresenter.sendInfoVideo(videoToSharePath);
                     goToShare(videoToSharePath);
                 } else {
                     hideProgressDialog();
@@ -437,6 +438,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
                 checkSelectedFilters();
             } else {
                 recordPresenter.stopRecord();
+
             }
         }
         return true;

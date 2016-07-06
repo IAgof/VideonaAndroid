@@ -118,13 +118,7 @@ public class DeviceLocation {
                     Manifest.permission.ACCESS_FINE_LOCATION) !=  PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(VideonaApplication.getAppContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+
                 return false;
             }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGps);
@@ -252,7 +246,7 @@ public class DeviceLocation {
         }
     }
 
-    // TODO:(alvaro.martinez) 1/07/16 Save data position with realm, persistence. Shared preferences not goog, slow.
+    // TODO:(alvaro.martinez) 1/07/16 Save data position with realm, persistence. Shared preferences not good, slow.
     public void saveLocationInPreferences(double latitude, double longitude){
 
         if(latitude == 0.0 && longitude == 0.0)

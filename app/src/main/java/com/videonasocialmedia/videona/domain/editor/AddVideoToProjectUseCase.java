@@ -15,7 +15,6 @@ import android.media.MediaMetadataRetriever;
 import android.util.Log;
 
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideoAddedToTrackEvent;
@@ -23,22 +22,13 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
-import com.videonasocialmedia.videona.network.VideoInfoRecordedApi;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFinishedListener;
 import com.videonasocialmedia.videona.presentation.views.location.DeviceLocation;
 
 import java.io.File;
 import java.util.List;
-import java.util.logging.Level;
 
 import de.greenrobot.event.EventBus;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * This class is used to add a new videos to the project.
@@ -60,8 +50,6 @@ public class AddVideoToProjectUseCase {
         Video videoToAdd = new Video(videoPath);
         addInfoToVideo(videoToAdd);
         addVideoToTrack(videoToAdd);
-        Log.d(TAG,"Video position: " + videoToAdd.getLocationLatitude() + " x " + videoToAdd.getLocationLongitude());
-       // sendInfoVideoToBackend(videoToAdd);
     }
 
 
@@ -72,7 +60,7 @@ public class AddVideoToProjectUseCase {
 
         MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
         mediaMetadataRetriever.setDataSource(mediaPath);
-        videoToAdd.setFileDuration(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)));
+        videoToAdd.setFileDuration(Long.parseLong(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)));
         videoToAdd.setHeight(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)));
         videoToAdd.setWidth(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)));
         videoToAdd.setRotation(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)));
@@ -97,10 +85,6 @@ public class AddVideoToProjectUseCase {
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItem(video);
-            EventBus.getDefault().post(new AddMediaItemToTrackSuccessEvent(video));
-            EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
-            EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
-            EventBus.getDefault().post(new VideoAddedToTrackEvent());
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             //TODO manejar error
         }
@@ -115,50 +99,7 @@ public class AddVideoToProjectUseCase {
         Video videoToAdd = new Video(videoPath);
         addInfoToVideo(videoToAdd);
         addVideoToTrack(videoToAdd, listener);
-       // sendInfoVideoToBackend(videoToAdd);
-    }
 
-    private void sendInfoVideoToBackend(Video videoToAdd) {
-
-        /*Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.fake.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();*/
-
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        // set your desired log level
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        // add your other interceptors …
-
-        // add logging as last interceptor
-        httpClient.addInterceptor(logging);  // <-- this is the important line!
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.fake.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-
-
-
-        VideoInfoRecordedApi service = retrofit.create(VideoInfoRecordedApi.class);
-        //service.sendVideoInfoRecorded(videoToAdd);
-        Log.d("service", " service retrofit " +service.sendVideoInfoRecorded(videoToAdd).toString());
-        Call<Video> call = service.sendVideoInfoRecorded(videoToAdd);
-        call.enqueue(new Callback<Video>() {
-            @Override
-            public void onResponse(Call<Video> call, Response<Video> response) {
-                Log.d("CallBack", " response is " + response);
-            }
-
-            @Override
-            public void onFailure(Call<Video> call, Throwable t) {
-                Log.d("CallBack", " Throwable is " +t);
-            }
-
-        });
     }
 
     /**
@@ -167,10 +108,7 @@ public class AddVideoToProjectUseCase {
      * @deprecated use the one parameter version instead
      */
     public void addVideoToTrack(Video video, OnAddMediaFinishedListener listener) {
-
         addInfoToVideo(video);
-        sendInfoVideoToBackend(video);
-
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItem(video);
@@ -202,6 +140,7 @@ public class AddVideoToProjectUseCase {
             EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
             EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
             EventBus.getDefault().post(new VideoAddedToTrackEvent());
+
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             listener.onAddMediaItemToTrackError();
         }

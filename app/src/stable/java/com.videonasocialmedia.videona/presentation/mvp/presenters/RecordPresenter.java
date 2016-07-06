@@ -27,7 +27,6 @@ import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCa
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
-import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
@@ -351,7 +350,20 @@ public class RecordPresenter implements OnExportFinishedListener {
             recordView.finishActivityForResult(finalPath);
         } else {
             addVideoToProjectUseCase.addVideoToTrack(finalPath);
+            videoRecorded(finalPath);
         }
+    }
+
+    private void videoRecorded(String path){
+
+        recordView.showRecordedVideoThumb(path);
+        recordView.showRecordButton();
+        recordView.enableShareButton();
+        recordView.showVideosRecordedNumber(++recordedVideosNumber);
+        recordView.showSettings();
+        recordView.hideChronometer();
+        recordView.reStartScreenRotation();
+
     }
 
     private String moveVideoToMastersFolder() {
@@ -419,17 +431,6 @@ public class RecordPresenter implements OnExportFinishedListener {
         mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_RECORDED, 1);
         mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_RECORDED,
                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-    }
-
-    public void onEvent(AddMediaItemToTrackSuccessEvent e) {
-        String path = e.videoAdded.getMediaPath();
-        recordView.showRecordedVideoThumb(path);
-        recordView.showRecordButton();
-        recordView.enableShareButton();
-        recordView.showVideosRecordedNumber(++recordedVideosNumber);
-        recordView.showSettings();
-        recordView.hideChronometer();
-        recordView.reStartScreenRotation();
     }
 
     public void onEventMainThread(VideosRemovedFromProjectEvent e) {

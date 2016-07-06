@@ -101,6 +101,7 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
                     String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
                     int resultCode = bundle.getInt(ExportProjectService.RESULT);
                     if (resultCode == RESULT_OK) {
+                        musicDetailPresenter.sendInfoVideoEdited(videoToSharePath);
                         goToShare(videoToSharePath);
                     } else {
                         Snackbar.make(sceneRoot, R.string.shareError, Snackbar.LENGTH_LONG).show();

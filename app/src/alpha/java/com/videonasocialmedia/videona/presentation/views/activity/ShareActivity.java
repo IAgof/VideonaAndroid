@@ -26,6 +26,7 @@ import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
+import com.videonasocialmedia.videona.network.domain.usecase.SendInfoVideo;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.ShareVideoPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideoPlayerView;
@@ -46,6 +47,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+
+import static com.videonasocialmedia.videona.utils.Constants.*;
 
 /**
  * Created by root on 31/05/16.
@@ -113,14 +116,18 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
 
         initVideoPreview(videoPosition, isPlaying);
         initNetworksList();
+        sendInfoVideoToBackend();
 
+    }
+
+    // If video to share came from edit activity, send info to backend
+    private void sendInfoVideoToBackend() {
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         pauseVideo();
         videoPosition = videoPreview.getCurrentPosition();
     }
@@ -132,7 +139,8 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     }
 
     private void initVideoPreview(final int position, final boolean playing) {
-        videoPath = getIntent().getStringExtra(Constants.VIDEO_TO_SHARE_PATH);
+        videoPath = getIntent().getStringExtra(VIDEO_TO_SHARE_PATH);
+
         if (videoPath != null) {
             videoPreview.setVideoPath(videoPath);
             Log.d("TAG", "MESSAGE");
@@ -161,6 +169,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
                 seekBar.setProgress(0);
             }
         });
+
     }
 
     private void initNetworksList() {

@@ -11,13 +11,13 @@
  */
 package com.videonasocialmedia.videona.model.entities.editor.media;
 
-import com.google.gson.annotations.SerializedName;
+import android.media.MediaMetadata;
+import android.media.MediaMetadataRetriever;
+
 import com.videonasocialmedia.videona.model.entities.editor.transitions.Transition;
 import com.videonasocialmedia.videona.model.entities.licensing.License;
 import com.videonasocialmedia.videona.model.entities.social.User;
-import com.videonasocialmedia.videona.presentation.views.utils.InfoVideoConstants;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -30,28 +30,45 @@ public class Video extends Media {
 
     public static String VIDEO_PATH;
 
-    @SerializedName(InfoVideoConstants.VIDEO_LATITUDE)
+    /**
+     * Device location, latitude, longitude
+     */
     private double locationLatitude;
-    @SerializedName(InfoVideoConstants.VIDEO_LONGITUDE)
     private double locationLongitude;
-    @SerializedName(InfoVideoConstants.VIDEO_HEIGHT)
+    /**
+     * Video resolution, height, widht
+     */
     private int height;
-    @SerializedName(InfoVideoConstants.VIDEO_WIDTH)
     private int width;
-    @SerializedName(InfoVideoConstants.VIDEO_ROTATION)
+    /**
+     * Video rotation, The video rotation angle may be 0, 90, 180, or 270 degrees.
+     */
     private int rotation;
-    @SerializedName(InfoVideoConstants.VIDEO_DURATION)
-    private int fileDuration;
-    @SerializedName(InfoVideoConstants.VIDEO_SIZE)
-    private long size;
-    @SerializedName(InfoVideoConstants.VIDEO_DATE)
-    private String date;
-    @SerializedName(InfoVideoConstants.VIDEO_BITRATE)
+    /**
+     * Video bit rate, in bits/sec
+     */
     private int bitRate;
+    /**
+     * File duration milliseconds
+     */
+    private long fileDuration;
+    /**
+     * File size, bytes
+     */
+    private long size;
+    /**
+     * Date when the data source was created or modified.
+     */
+    private String date;
+
     /**
      * Define if a video has been split before
      */
     private boolean isSplit;
+
+    // TODO(jliarte): 14/06/16 this entity should not depend on MediaMetadataRetriever as it is part of android
+    /* Needed to allow mockito inject it */
+    private MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
 
     /**
@@ -69,7 +86,7 @@ public class Video extends Media {
     public Video(String identifier, String iconPath, String mediaPath, int fileStartTime,
                  int duration, ArrayList<User> authors, License license) {
         super(identifier, iconPath, mediaPath, fileStartTime, duration, authors, license);
-
+        fileDuration = getFileDuration(mediaPath);
     }
 
     /**
@@ -83,7 +100,7 @@ public class Video extends Media {
                  License license) {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, fileStartTime, duration,
                 opening, ending, metadata, authors, license);
-
+        fileDuration = getFileDuration(mediaPath);
     }
 
     /**
@@ -94,7 +111,11 @@ public class Video extends Media {
     public Video(String mediaPath) {
         super(null, null, mediaPath, 0, 0, null, null);
         try {
-
+//            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(mediaPath);
+            duration = Integer.parseInt(retriever.extractMetadata(
+                    MediaMetadataRetriever.METADATA_KEY_DURATION));
+            fileDuration = duration;
             fileStartTime = 0;
             fileStopTime = duration;
             isSplit = false;
@@ -108,22 +129,23 @@ public class Video extends Media {
 
     public Video(String mediaPath, int fileStartTime, int duration) {
         super(null, null, mediaPath, fileStartTime, duration, null, null);
+        fileDuration = getFileDuration(mediaPath);
     }
 
     public Video(Video video) {
         super(null, null, video.getMediaPath(), video.getFileStartTime(),
                 video.getDuration(), null, null);
-
+        fileDuration = getFileDuration(video.getMediaPath());
         fileStopTime = video.getFileStopTime();
     }
 
 
 
-    public int getFileDuration() {
+    public long getFileDuration() {
         return fileDuration;
     }
 
-    public void setFileDuration(int fileDuration){
+    public void setFileDuration(long fileDuration){
         this.fileDuration = fileDuration;
     }
 
@@ -170,6 +192,7 @@ public class Video extends Media {
     public long getSize(){
         return size;
     }
+
     public void setSize(long size){
         this.size = size;
     }
@@ -198,9 +221,11 @@ public class Video extends Media {
         this.isSplit = isSplit;
     }
 
-
-
-
-
+    private int getFileDuration(String path){
+//        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(path);
+        return Integer.parseInt(retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_DURATION));
+    }
 
 }
