@@ -33,7 +33,7 @@ public class GetEffectListUseCase {
         return EffectProvider.getOverlayFilterList();
     }
 
-//    public static Effect getOverlayEffectGift() {
-//        return EffectProvider.getOverlayEffectGift();
-//    }
+    public static Effect getOverlayEffectWolder() {
+        return EffectProvider.getOverlayEffectWolder();
+    }
 }

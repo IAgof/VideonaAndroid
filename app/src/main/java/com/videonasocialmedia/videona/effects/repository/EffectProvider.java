@@ -149,9 +149,6 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("OV7", "Pride",
                 R.drawable.common_filter_overlay_ov7_pride,
                 R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
-        overlayList.add(new OverlayEffect("OV5", "Autumn",
-                R.drawable.common_filter_overlay_ov5_autumn,
-                R.drawable.overlay_filter_autumn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV4", "Retrotv",
                 R.drawable.common_filter_overlay_ov4_retrotv,
                 R.drawable.overlay_filter_retrotv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
@@ -186,7 +183,7 @@ public class EffectProvider {
         return overlayList;
     }
 
-    public static Effect getOverlayEffectGift() {
+    public static Effect getOverlayEffectWolder() {
         return new OverlayEffect("OV7", "Pride",
                 R.drawable.common_filter_overlay_ov7_pride,
                 R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY);

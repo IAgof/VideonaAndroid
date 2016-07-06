@@ -42,8 +42,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.eventbus.events.survey.JoinBetaEvent;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
@@ -823,16 +823,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 effect.getName().toLowerCase(),
                 effect.getIdentifier().toLowerCase());
 
-        if(effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
-                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
-            // Reset effect to remove selected background
-            cameraOverlayEffectsAdapter.resetSelectedEffect();
-            trackGiftOpened(recordPresenter.getOverlayEffectGift());
-            showGiftFilterToast();
-            recordPresenter.applyEffect(effect);
-            return;
-
-        }
+//        if(effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
+//                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
+//            // Reset effect to remove selected background
+//            cameraOverlayEffectsAdapter.resetSelectedEffect();
+//            trackGiftOpened(recordPresenter.getOverlayEffectGift());
+//            showGiftFilterToast();
+//            recordPresenter.applyEffect(effect);
+//            return;
+//
+//        }
 
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
@@ -932,7 +932,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         }
     }
 
-    private void scrollEffectList(com.videonasocialmedia.videona.model.entities.editor.effects.Effect effect) {
+    private void scrollEffectList(Effect effect) {
         if (!overlayFilterHidden) {
             List effects = cameraOverlayEffectsAdapter.getElementList();
             int index = effects.indexOf(effect);

@@ -8,7 +8,7 @@
 package com.videonasocialmedia.videona.auth.repository.apiclient;
 
 import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
-import com.videonasocialmedia.videona.main.repository.rest.ServiceGenerator;
+import com.videonasocialmedia.videona.repository.rest.ServiceGenerator;
 
 import java.io.IOException;
 

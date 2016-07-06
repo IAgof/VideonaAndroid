@@ -7,14 +7,15 @@
   -->
 
 <LinearLayout android:id="@+id/effectViewHolder"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="70dp"
-              android:layout_height="80dp"
-              android:layout_marginBottom="2dp"
-              android:layout_marginLeft="2dp"
-              android:layout_marginRight="2dp"
-              android:gravity="center"
-              android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="80dp"
+    android:layout_marginBottom="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/effectImage"
@@ -25,5 +26,15 @@
         android:gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:src="@drawable/common_filter_overlay_gift"/>
+
+    <TextView
+        android:id="@+id/effectName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="AD0"
+        android:textColor="@color/textColorFiltersRecord"
+        android:background="@null"
+        android:textSize="12sp"
+        android:gravity="center_horizontal|top"/>
 
 </LinearLayout>

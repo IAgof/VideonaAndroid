@@ -211,6 +211,10 @@
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
+        <activity
+            android:name=".auth.presentation.views.activity.LoginActivity"
+            android:label="@string/title_activity_login"/>
+
         <service
             android:name=".presentation.views.services.ExportProjectService"
             android:exported="false"

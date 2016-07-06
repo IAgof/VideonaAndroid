@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -22,17 +23,20 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
-import com.videonasocialmedia.videona.domain.effects.GetEffectListUseCase;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
+import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
+import com.videonasocialmedia.videona.effects.domain.usecase.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideosRemovedFromProjectEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
-import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
@@ -116,8 +120,13 @@ public class RecordPresenter implements OnExportFinishedListener {
         config = getConfigFromPreferences(sharedPreferences);
 
         try {
-            Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
-            recorder = new AVRecorder(config, watermark);
+            if(isAWolderUser()){
+                Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
+                recorder = new AVRecorder(config, watermark);
+            } else {
+                Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
+                recorder = new AVRecorder(config, watermark);
+            }
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
         } catch (IOException ioe) {
@@ -300,7 +309,10 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void applyEffect(Effect effect) {
-        if (effect instanceof OverlayEffect) {
+        if (!isEffectAuthorized(effect)) {
+            Intent intent = new Intent(context, LoginActivity.class);
+            context.startActivity(intent);
+        } else if (effect instanceof OverlayEffect) {
             recorder.removeOverlay();
             Drawable overlay = context.getResources().getDrawable(( (OverlayEffect) effect ).getResourceId());
             recorder.addOverlayFilter(overlay);
@@ -312,6 +324,17 @@ public class RecordPresenter implements OnExportFinishedListener {
                 selectedShaderEffect = effect;
             }
         }
+    }
+
+    private boolean isEffectAuthorized(Effect effect) {
+        if(effect.getPermissionType() == PermissionType.ALL){
+            return true;
+        }
+        LoginUser loginUser = new LoginUser();
+        if (loginUser.userIsLoggedIn() && effect.getPermissionType() == PermissionType.LOGGED_IN) {
+                return true;
+        }
+        return false;
     }
 
     public void startExport() {
@@ -546,18 +569,26 @@ public class RecordPresenter implements OnExportFinishedListener {
 
         List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
 
-        if(sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
-            // Always gift in position 0
-            overlayList.remove(0);
-            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
-        }
+        if(isAWolderUser())
+            overlayList.add(1, GetEffectListUseCase.getOverlayEffectWolder());
+
+//        if(sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
+//            // Always gift in position 0
+//            overlayList.remove(0);
+//            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
+//        }
 
         return overlayList;
     }
 
-    public Effect getOverlayEffectGift() {
+    private boolean isAWolderUser() {
 
-        return GetEffectListUseCase.getOverlayEffectGift();
+        return sharedPreferences.getBoolean(ConfigPreferences.I_AM_WOLDER_USER, true);
     }
+
+//    public Effect getOverlayEffectGift() {
+//
+//        return GetEffectListUseCase.getOverlayEffectGift();
+//    }
 
 }

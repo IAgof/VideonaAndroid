@@ -23,8 +23,7 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 
-
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 
 import java.util.List;
 

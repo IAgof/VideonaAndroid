@@ -17,7 +17,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -26,8 +25,6 @@ import android.widget.EditText;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.LoginPresenter;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
-import com.videonasocialmedia.videona.presentation.views.activity.GalleryActivity;
-import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
 
 import butterknife.Bind;
@@ -78,11 +75,11 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
+       // getMenuInflater().inflate(R.menu.menu_edit_activity, menu);
         return true;
     }
 
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -102,7 +99,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @OnClick (R.id.email_sign_in_button)
     public void emailSignInButtonClickListener(){
@@ -180,9 +177,9 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     @Override
     public void navigateTo(Class cls) {
         Intent intent = new Intent(getApplicationContext(), cls);
-        if (cls == GalleryActivity.class) {
+       /* if (cls == GalleryActivity.class) {
             intent.putExtra("SHARE", false);
-        }
+        }*/
         startActivity(intent);
     }
 

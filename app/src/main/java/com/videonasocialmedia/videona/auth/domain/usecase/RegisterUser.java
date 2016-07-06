@@ -10,7 +10,7 @@ package com.videonasocialmedia.videona.auth.domain.usecase;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnRegisterListener;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthClient;
 import com.videonasocialmedia.videona.auth.repository.model.RegisterRequest;
-import com.videonasocialmedia.videona.main.repository.rest.ServiceGenerator;
+import com.videonasocialmedia.videona.repository.rest.ServiceGenerator;
 
 import java.util.Map;
 
