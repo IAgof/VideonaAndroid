@@ -9,10 +9,12 @@ package com.videonasocialmedia.videona.network.repository.apiclient;
 
 
 
+import com.videonasocialmedia.videona.auth.repository.model.RegisterRequest;
 import com.videonasocialmedia.videona.network.repository.model.VideoMetadataRequest;
 import com.videonasocialmedia.videona.network.repository.model.VideoResponse;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

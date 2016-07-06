@@ -12,7 +12,10 @@ import com.videonasocialmedia.videona.auth.domain.model.Token;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthAuthenticator;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthInterceptor;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -38,6 +41,12 @@ public class ServiceGenerator {
      */
     public ServiceGenerator(String ApiBaseUrl) {
         httpClientBuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpClientBuilder.addInterceptor(logging);
+        httpClientBuilder.connectTimeout(90, TimeUnit.SECONDS);
+        httpClientBuilder.readTimeout(90, TimeUnit.SECONDS);
         if (ApiBaseUrl != null)
             retrofitBuilder = new Retrofit.Builder()
                     .baseUrl(ApiBaseUrl)

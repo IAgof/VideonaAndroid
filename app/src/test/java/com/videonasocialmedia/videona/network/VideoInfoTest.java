@@ -7,11 +7,11 @@
 
 package com.videonasocialmedia.videona.network;
 
+import com.videonasocialmedia.videona.main.repository.rest.ServiceGenerator;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.network.repository.apiclient.VideoInfoApi;
 import com.videonasocialmedia.videona.network.repository.model.VideoMetadataRequest;
 import com.videonasocialmedia.videona.network.repository.model.VideoResponse;
-import com.videonasocialmedia.videona.network.repository.rest.ServiceGenerator;
 
 import org.junit.After;
 import org.junit.Before;

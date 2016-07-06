@@ -79,7 +79,7 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     private boolean isPasswordValid(String password) {
         // TODO:(alvaro.martinez) 15/06/16 will there be a rule for passwords?
-        return password.length() > 6;
+        return password.length() > 4;
     }
 
     @Override

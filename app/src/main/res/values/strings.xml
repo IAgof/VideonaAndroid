@@ -1617,6 +1617,6 @@ and Conditions.\n\n
     <string name="signOut">Sign out</string>
     <string name="signIn">Sign In</string>
     <string name="title_activity_logout">Log Out</string>
-    <string name="networkError">Are you connected to the internet</string>
+    <string name="networkError">Are you connected to internet</string>
 
 </resources>

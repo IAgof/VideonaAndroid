@@ -30,6 +30,10 @@ public class RegisterUser {
             public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
                 Map<String, String> responseBody = response.body();
                 OnRegisterListener.Causes cause = OnRegisterListener.Causes.UNKNOWN_ERROR;
+                if(responseBody == null){
+                    registerListener.onRegisterError(cause);
+                }
+
                 if (responseBody.containsKey("error")) {
                     switch (responseBody.get("error")) {
                         case "Missing request parameters":

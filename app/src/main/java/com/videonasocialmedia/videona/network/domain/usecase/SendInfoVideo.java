@@ -10,6 +10,7 @@ package com.videonasocialmedia.videona.network.domain.usecase;
 import android.media.MediaMetadataRetriever;
 
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.main.repository.rest.ServiceGenerator;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
@@ -17,7 +18,6 @@ import com.videonasocialmedia.videona.network.presenters.callback.OnSendInfoVide
 import com.videonasocialmedia.videona.network.repository.apiclient.VideoInfoApi;
 import com.videonasocialmedia.videona.network.repository.model.VideoMetadataRequest;
 import com.videonasocialmedia.videona.network.repository.model.VideoResponse;
-import com.videonasocialmedia.videona.network.repository.rest.ServiceGenerator;
 import com.videonasocialmedia.videona.presentation.views.location.DeviceLocation;
 
 
