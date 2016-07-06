@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
@@ -67,6 +68,7 @@ public class SettingsFragment extends PreferenceFragment implements
         editor = sharedPreferences.edit();
         resolutionPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION);
         qualityPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY);
+
 
         setupExitPreference();
         setupBetaPreference();
@@ -163,7 +165,7 @@ public class SettingsFragment extends PreferenceFragment implements
     }
 
     private void shareVideonaWithWhatsapp() {
-        if(preferencesPresenter.checkIfWhatsappIsInstalled()) {
+        if (preferencesPresenter.checkIfWhatsappIsInstalled()) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.setPackage("com.whatsapp");
@@ -180,12 +182,12 @@ public class SettingsFragment extends PreferenceFragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.list, null);
-        ListView listView = (ListView)v.findViewById(android.R.id.list);
+        ListView listView = (ListView) v.findViewById(android.R.id.list);
 
         ViewGroup footer = (ViewGroup) inflater.inflate(R.layout.footer, listView, false);
         listView.addFooterView(footer, null, false);
 
-        TextView footerText = (TextView)v.findViewById(R.id.footerText);
+        TextView footerText = (TextView) v.findViewById(R.id.footerText);
         String text = getString(R.string.videona) + " v" + BuildConfig.VERSION_NAME + "\n" +
                 getString(R.string.madeIn);
         footerText.setText(text);
@@ -196,10 +198,16 @@ public class SettingsFragment extends PreferenceFragment implements
     @Override
     public void onResume() {
         super.onResume();
+        setupSignInPreferences();
         preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
     }
+
+    private void setupSignInPreferences() {
+        preferencesPresenter.setupSignInPreferences();
+    }
+
 
     @Override
     public void onPause() {
@@ -214,7 +222,7 @@ public class SettingsFragment extends PreferenceFragment implements
         int size = listNames.size();
         CharSequence entries[] = new String[size];
         CharSequence entryValues[] = new String[size];
-        for (int i=0; i<size; i++) {
+        for (int i = 0; i < size; i++) {
             entries[i] = listNames.get(i);
             entryValues[i] = listValues.get(i);
         }
@@ -243,11 +251,32 @@ public class SettingsFragment extends PreferenceFragment implements
         preference.setSummary(value);
     }
 
+    @Override
+    public void configSignIn(final boolean signedIn) {
+        final Preference signInSetting = findPreference("login");
+        if (signedIn)
+            signInSetting.setTitle(R.string.signOut);
+        else
+            signInSetting.setTitle(R.string.signIn);
+        signInSetting.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (signedIn) {
+                    preferencesPresenter.signOut();
+                } else {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
+    }
+
     private void trackQualityAndResolutionUserTraits(String key, String value) {
         String property = null;
-        if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION))
+        if (key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION))
             property = AnalyticsConstants.RESOLUTION;
-        else if(key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY))
+        else if (key.equals(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY))
             property = AnalyticsConstants.QUALITY;
         mixpanel.getPeople().set(property, value.toLowerCase());
     }
@@ -262,7 +291,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
     @Override
     public void onClickPositiveButton(int id) {
-        if(id == REQUEST_CODE_EXIT_APP) {
+        if (id == REQUEST_CODE_EXIT_APP) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -274,7 +303,7 @@ public class SettingsFragment extends PreferenceFragment implements
 
     @Override
     public void onClickNegativeButton(int id) {
-        if(id == REQUEST_CODE_EXIT_APP)
+        if (id == REQUEST_CODE_EXIT_APP)
             dialog.dismiss();
     }
 

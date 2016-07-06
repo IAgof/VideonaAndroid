@@ -3,54 +3,56 @@
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".VideonaApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/VideonaTheme">
-
         <activity
             android:name=".presentation.views.activity.ShareActivity"
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.EditActivity"
-            tools:replace="parentActivityName"/>
-
+            tools:replace="parentActivityName" />
         <activity
             android:name=".presentation.views.activity.GalleryActivity"
             android:label="@string/app_name"
-            android:screenOrientation="sensorLandscape"/>
-
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".presentation.views.activity.EditActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:parentActivityName=".presentation.views.activity.RecordActivity"/>
-
+            android:parentActivityName=".presentation.views.activity.RecordActivity" />
         <activity
             android:name=".presentation.views.activity.VideoTrimActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.EditActivity"/>
-
+            android:parentActivityName=".presentation.views.activity.EditActivity" />
         <activity
             android:name=".presentation.views.activity.VideoSplitActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.EditActivity"/>
-
+            android:parentActivityName=".presentation.views.activity.EditActivity" />
         <activity
             android:name=".presentation.views.activity.VideoDuplicateActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.EditActivity"/>
-
+            android:parentActivityName=".presentation.views.activity.EditActivity" />
         <activity
             android:name=".presentation.views.activity.MusicListActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.EditActivity"/>
-
+            android:parentActivityName=".presentation.views.activity.EditActivity" />
         <activity
             android:name=".presentation.views.activity.MusicDetailActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".presentation.views.activity.MusicListActivity"/>
-
+            android:parentActivityName=".presentation.views.activity.MusicListActivity" />
+        <activity
+            android:name=".auth.presentation.views.activity.LoginActivity"
+            android:label="@string/title_activity_login"/>
+        <activity
+            android:name=".auth.presentation.views.activity.LogoutActivity"
+            android:label="@string/title_activity_logout"/>
     </application>
 
 </manifest>
