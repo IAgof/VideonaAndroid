@@ -1613,5 +1613,10 @@ and Conditions.\n\n
 
     <string name="video_saved">Video saved in your gallery</string>
     <string name="save_to_gallery">Save to gallery</string>
+    <string name="defaultErrorMessage">Ooops, something happened. Try it later</string>
+    <string name="signOut">Sign out</string>
+    <string name="signIn">Sign In</string>
+    <string name="title_activity_logout">Log Out</string>
+    <string name="networkError">Are you connected to the internet</string>
 
 </resources>

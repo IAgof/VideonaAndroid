@@ -78,7 +78,7 @@ public class EffectProvider {
         return distortionEffects;
     }
 
-    public static List<Effect> getShaderEffectList(){
+    public static List<Effect> getShaderEffectList() {
 
         List<Effect> shaderEffects = new ArrayList<>();
 
@@ -137,6 +137,7 @@ public class EffectProvider {
     public static List<Effect> getOverlayFilterList() {
 
         List<Effect> overlayList = new ArrayList<>();
+
         overlayList.add(new OverlayEffect("GIFT_OV", " ",
                 R.drawable.common_filter_overlay_gift,
                 R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY));

@@ -16,6 +16,9 @@ import android.preference.ListPreference;
 
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.auth.domain.usecase.LogoutUser;
+import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnUserIsLoggedInListener;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
@@ -26,7 +29,7 @@ import java.util.ArrayList;
 /**
  * This class is used to show the setting menu.
  */
-public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenceChangeListener, OnUserIsLoggedInListener {
 
     private Context context;
     private SharedPreferences sharedPreferences;
@@ -73,19 +76,12 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
         checkUserAccountPreference(ConfigPreferences.EMAIL);
     }
 
-    private void checkUserAccountPreference(String key) {
-        String data = sharedPreferences.getString(key, null);
-        if (data != null && !data.isEmpty())
-            preferencesView.setSummary(key, data);
-    }
-
-
     /**
      * Checks supported resolutions on camera
      */
     private void checkAvailableResolution() {
         ArrayList<String> resolutionNames = new ArrayList<>();
-        ArrayList<String> resolutionValues =  new ArrayList<>();
+        ArrayList<String> resolutionValues = new ArrayList<>();
         String defaultResolution = null;
         String key = ConfigPreferences.KEY_LIST_PREFERENCES_RESOLUTION; //"list_preference_resolution";
         boolean isPaidApp = true;
@@ -168,10 +164,16 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
         }
     }
 
+    private void checkUserAccountPreference(String key) {
+        String data = sharedPreferences.getString(key, null);
+        if (data != null && !data.isEmpty())
+            preferencesView.setSummary(key, data);
+    }
+
     /**
      * Checks if the actual default value in shared preferences is supported by the device
      *
-     * @param key the key of the shared preference
+     * @param key    the key of the shared preference
      * @param values the supported values for this preference
      * @return return true if the default value is not supported by the device, so update it
      */
@@ -199,4 +201,24 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
         return obtainNetworksToShareUseCase.checkIfSocialNetworkIsInstalled("whatsapp");
     }
 
+    public void setupSignInPreferences() {
+        LoginUser loginUser = new LoginUser();
+        loginUser.userIsLoggedIn(this);
+    }
+
+    public void signOut() {
+        LogoutUser logoutUser = new LogoutUser();
+        logoutUser.logout();
+        preferencesView.configSignIn(false);
+    }
+
+    @Override
+    public void onUserIsLoggedIn() {
+        preferencesView.configSignIn(true);
+    }
+
+    @Override
+    public void onUserIsLoggedOut() {
+        preferencesView.configSignIn(false);
+    }
 }
