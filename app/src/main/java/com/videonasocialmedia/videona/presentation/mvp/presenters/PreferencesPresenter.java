@@ -18,7 +18,6 @@ import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
 import com.videonasocialmedia.videona.auth.domain.usecase.LogoutUser;
-import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnUserIsLoggedInListener;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 /**
  * This class is used to show the setting menu.
  */
-public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenceChangeListener, OnUserIsLoggedInListener {
+public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Context context;
     private SharedPreferences sharedPreferences;
@@ -203,22 +202,15 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
 
     public void setupSignInPreferences() {
         LoginUser loginUser = new LoginUser();
-        loginUser.userIsLoggedIn(this);
+        if (loginUser.userIsLoggedIn())
+            preferencesView.configSignIn(true);
+        else
+            preferencesView.configSignIn(false);
     }
 
     public void signOut() {
         LogoutUser logoutUser = new LogoutUser();
         logoutUser.logout();
-        preferencesView.configSignIn(false);
-    }
-
-    @Override
-    public void onUserIsLoggedIn() {
-        preferencesView.configSignIn(true);
-    }
-
-    @Override
-    public void onUserIsLoggedOut() {
         preferencesView.configSignIn(false);
     }
 }

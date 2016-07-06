@@ -1,16 +1,13 @@
 /*
- * Copyright (C) 2015 Videona Socialmedia SL
+ * Copyright (C) 2016 Videona Socialmedia SL
  * http://www.videona.com
  * info@videona.com
  * All rights reserved
- *
- * Authors:
- * Juan Javier Cabanas
- * Álvaro Martínez Marco
- * Danny R. Fonseca Arboleda
  */
 
-package com.videonasocialmedia.videona.model.entities.editor.effects;
+package com.videonasocialmedia.videona.effects.domain.model;
+
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 
 /**
  *
@@ -32,6 +29,8 @@ public abstract class Effect {
     protected final int iconId;
     protected final String type;
 
+    protected final PermissionType permissionType;
+
     /**
      * Constructor.
      *
@@ -45,6 +44,7 @@ public abstract class Effect {
         this.iconPath = iconPath;
         this.iconId = -1;
         this.type = type;
+        this.permissionType = PermissionType.ALL;
     }
 
     /**
@@ -60,6 +60,17 @@ public abstract class Effect {
         this.iconPath = null;
         this.iconId = iconId;
         this.type = type;
+        this.permissionType = PermissionType.ALL;
+    }
+
+    public Effect(String identifier, String name, int iconId, String type,
+                  PermissionType permissionType) {
+        this.identifier = identifier;
+        this.name = name;
+        this.iconPath = null;
+        this.iconId = iconId;
+        this.type = type;
+        this.permissionType = permissionType;
     }
 
     public String getIdentifier() {
@@ -80,5 +91,7 @@ public abstract class Effect {
 
     public String getType() { return type; }
 
-
+    public PermissionType getPermissionType() {
+        return permissionType;
+    }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  -->
+
+<LinearLayout android:id="@+id/effectViewHolder"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="70dp"
+              android:layout_height="80dp"
+              android:layout_marginBottom="2dp"
+              android:layout_marginLeft="2dp"
+              android:layout_marginRight="2dp"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/effectImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:background="@null"
+        android:gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/common_filter_overlay_gift"/>
+
+</LinearLayout>

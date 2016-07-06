@@ -1,10 +1,18 @@
-package com.videonasocialmedia.videona.model.sources;
+/*
+ * Copyright (C) 2016 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
+
+package com.videonasocialmedia.videona.effects.repository;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
-import com.videonasocialmedia.videona.model.entities.editor.effects.OverlayEffect;
-import com.videonasocialmedia.videona.model.entities.editor.effects.ShaderEffect;
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
+import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 
 import java.util.ArrayList;
@@ -138,9 +146,12 @@ public class EffectProvider {
 
         List<Effect> overlayList = new ArrayList<>();
 
-        overlayList.add(new OverlayEffect("GIFT_OV", " ",
-                R.drawable.common_filter_overlay_gift,
-                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV7", "Pride",
+                R.drawable.common_filter_overlay_ov7_pride,
+                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
+        overlayList.add(new OverlayEffect("OV5", "Autumn",
+                R.drawable.common_filter_overlay_ov5_autumn,
+                R.drawable.overlay_filter_autumn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV4", "Retrotv",
                 R.drawable.common_filter_overlay_ov4_retrotv,
                 R.drawable.overlay_filter_retrotv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
