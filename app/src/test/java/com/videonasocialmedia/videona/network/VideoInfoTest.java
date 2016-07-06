@@ -16,7 +16,6 @@ import com.videonasocialmedia.videona.network.repository.rest.ServiceGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 
 import java.io.IOException;
 
@@ -25,8 +24,6 @@ import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static org.junit.Assert.assertEquals;
 
@@ -70,7 +67,7 @@ public class VideoInfoTest {
         VideoMetadataRequest videoMetadata = new VideoMetadataRequest(video.getLocationLatitude(),
                 video.getLocationLongitude(),video.getHeight(), video.getWidth(),
                 video.getRotation(), video.getFileDuration(), video.getSize(),
-                video.getDate(), video.getBitRate(),video.getTitle(), VideoMetadataRequest.VIDEO_TYPE.RECORDED);
+                video.getDate(), video.getBitRate(),video.getTitle(), VideoMetadataRequest.VIDEO_TYPE.Recorded);
 
         Response<VideoResponse> response = videoInfoApi.sendInfoVideo(videoMetadata).execute();
 

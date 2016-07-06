@@ -174,7 +174,7 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
     }
 
     public void sendInfoVideoEdited(String mediaPath){
-        sendInfoVideoUseCase.sendMetadataVideo(mediaPath, VideoMetadataRequest.VIDEO_TYPE.EDITED, this);
+        sendInfoVideoUseCase.sendMetadataVideo(mediaPath, VideoMetadataRequest.VIDEO_TYPE.Edited, this);
     }
 
 

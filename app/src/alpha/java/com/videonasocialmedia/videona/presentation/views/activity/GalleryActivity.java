@@ -41,7 +41,7 @@ public class GalleryActivity extends VideonaActivity implements ViewPager.OnPage
         GalleryPagerView, OnSelectionModeListener, VideonaDialogListener {
 
     private final String MASTERS_FRAGMENT_TAG="MASTERS";
-    private final String EDITED_FRAGMENT_TAG="EDITED";
+    private final String EDITED_FRAGMENT_TAG="Edited";
     private final int REQUEST_CODE_REMOVE_VIDEOS_FROM_GALLERY = 1;
     MyPagerAdapter adapterViewPager;
     boolean sharing = false;

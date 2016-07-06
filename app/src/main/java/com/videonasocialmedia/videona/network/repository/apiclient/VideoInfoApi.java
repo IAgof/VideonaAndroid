@@ -24,8 +24,8 @@ import retrofit2.http.POST;
  */
 public interface VideoInfoApi {
 
-    @POST("user/new_video")
+    @POST("videos/")
     @Headers("Content-Type: application/json")
-    Call<VideoResponse> sendInfoVideo(@Body VideoMetadataRequest videoInfoRecorded);
+    Call<VideoResponse> sendInfoVideo(@Body VideoMetadataRequest videoInfo);
 
 }

@@ -289,7 +289,7 @@ public class RecordPresenter implements OnSendInfoVideoListener {
         } else {
             addVideoToProjectUseCase.addVideoToTrack(finalPath);
             videoRecorded(finalPath);
-            sendInfoVideoUseCase.sendMetadataVideo(finalPath, VideoMetadataRequest.VIDEO_TYPE.RECORDED, this);
+            sendInfoVideoUseCase.sendMetadataVideo(finalPath, VideoMetadataRequest.VIDEO_TYPE.Recorded, this);
         }
 
     }
@@ -495,7 +495,7 @@ public class RecordPresenter implements OnSendInfoVideoListener {
     }
 
     public void sendInfoVideo(String path) {
-        sendInfoVideoUseCase.sendMetadataVideo(path, VideoMetadataRequest.VIDEO_TYPE.EDITED, this);
+        sendInfoVideoUseCase.sendMetadataVideo(path, VideoMetadataRequest.VIDEO_TYPE.Edited, this);
     }
 
     @Override

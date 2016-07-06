@@ -76,7 +76,7 @@ public class SendInfoVideo {
 
     private Video getVideo(String mediaPath, VideoMetadataRequest.VIDEO_TYPE videoType) {
         Video video;
-        if(videoType.compareTo(VideoMetadataRequest.VIDEO_TYPE.RECORDED) == 0) {
+        if(videoType.compareTo(VideoMetadataRequest.VIDEO_TYPE.Recorded) == 0) {
             video = getVideoFromProject(mediaPath);
         } else {
             video = new Video(mediaPath);

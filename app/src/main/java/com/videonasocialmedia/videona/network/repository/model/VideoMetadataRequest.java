@@ -8,6 +8,8 @@
 package com.videonasocialmedia.videona.network.repository.model;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.LongSerializationPolicy;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -18,7 +20,9 @@ public class VideoMetadataRequest {
     /**
      *  Type of video created, recorded, edited
      */
-    public enum VIDEO_TYPE { RECORDED, EDITED}
+    public enum VIDEO_TYPE {
+        Recorded, Edited
+    }
 
     @SerializedName("lat")
     private double locationLatitude;

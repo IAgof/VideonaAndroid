@@ -55,7 +55,7 @@ public class MusicListPresenter implements OnVideosRetrieved, OnSendInfoVideoLis
     }
 
     public void sendInfoVideoEdited(String videoToSharePath) {
-        sendInfoVideoUseCase.sendMetadataVideo(videoToSharePath, VideoMetadataRequest.VIDEO_TYPE.EDITED, this);
+        sendInfoVideoUseCase.sendMetadataVideo(videoToSharePath, VideoMetadataRequest.VIDEO_TYPE.Edited, this);
     }
 
     @Override
