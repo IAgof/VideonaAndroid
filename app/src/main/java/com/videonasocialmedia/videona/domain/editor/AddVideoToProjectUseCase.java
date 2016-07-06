@@ -10,7 +10,11 @@
 
 package com.videonasocialmedia.videona.domain.editor;
 
-import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
+import android.location.Location;
+import android.media.MediaMetadataRetriever;
+import android.util.Log;
+
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.eventbus.events.project.UpdateProjectDurationEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.NumVideosChangedEvent;
 import com.videonasocialmedia.videona.eventbus.events.video.VideoAddedToTrackEvent;
@@ -19,7 +23,9 @@ import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalIt
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFinishedListener;
+import com.videonasocialmedia.videona.presentation.views.location.DeviceLocation;
 
+import java.io.File;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -28,6 +34,8 @@ import de.greenrobot.event.EventBus;
  * This class is used to add a new videos to the project.
  */
 public class AddVideoToProjectUseCase {
+
+    private final String TAG = this.getClass().getName();
 
     /**
      * Constructor.
@@ -40,17 +48,43 @@ public class AddVideoToProjectUseCase {
      */
     public void addVideoToTrack(String videoPath) {
         Video videoToAdd = new Video(videoPath);
+        addInfoToVideo(videoToAdd);
         addVideoToTrack(videoToAdd);
+    }
+
+
+
+    private void addInfoToVideo(final Video videoToAdd) {
+
+        String mediaPath = videoToAdd.getMediaPath();
+
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(mediaPath);
+        videoToAdd.setFileDuration(Long.parseLong(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)));
+        videoToAdd.setHeight(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)));
+        videoToAdd.setWidth(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)));
+        videoToAdd.setRotation(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)));
+        videoToAdd.setBitRate(Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)));
+        videoToAdd.setDate(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE));
+
+        File f = new File(mediaPath);
+        videoToAdd.setSize(f.length());
+        videoToAdd.setTitle(f.getName());
+
+        DeviceLocation.getLastKnownLocation(VideonaApplication.getAppContext(), false, new DeviceLocation.LocationResult() {
+            @Override
+            public void gotLocationLatLng(double latitude, double longitude) {
+                videoToAdd.setLocationLatitude(latitude);
+                videoToAdd.setLocationLongitude(longitude);
+            }
+        });
+
     }
 
     public void addVideoToTrack(Video video) {
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItem(video);
-            EventBus.getDefault().post(new AddMediaItemToTrackSuccessEvent(video));
-            EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
-            EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
-            EventBus.getDefault().post(new VideoAddedToTrackEvent());
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             //TODO manejar error
         }
@@ -63,7 +97,9 @@ public class AddVideoToProjectUseCase {
      */
     public void addVideoToTrack(String videoPath, OnAddMediaFinishedListener listener) {
         Video videoToAdd = new Video(videoPath);
+        addInfoToVideo(videoToAdd);
         addVideoToTrack(videoToAdd, listener);
+
     }
 
     /**
@@ -72,6 +108,7 @@ public class AddVideoToProjectUseCase {
      * @deprecated use the one parameter version instead
      */
     public void addVideoToTrack(Video video, OnAddMediaFinishedListener listener) {
+        addInfoToVideo(video);
         try {
             MediaTrack mediaTrack = Project.getInstance(null, null, null).getMediaTrack();
             mediaTrack.insertItem(video);
@@ -103,6 +140,7 @@ public class AddVideoToProjectUseCase {
             EventBus.getDefault().post(new UpdateProjectDurationEvent(Project.getInstance(null, null, null).getDuration()));
             EventBus.getDefault().post(new NumVideosChangedEvent(Project.getInstance(null, null, null).getMediaTrack().getNumVideosInProject()));
             EventBus.getDefault().post(new VideoAddedToTrackEvent());
+
         } catch (IllegalItemOnTrack illegalItemOnTrack) {
             listener.onAddMediaItemToTrackError();
         }

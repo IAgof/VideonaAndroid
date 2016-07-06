@@ -24,6 +24,9 @@ import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.network.domain.usecase.SendInfoVideo;
+import com.videonasocialmedia.videona.network.presenters.callback.OnSendInfoVideoListener;
+import com.videonasocialmedia.videona.network.repository.model.VideoMetadataRequest;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideonaPlayerView;
 import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
@@ -34,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaFinishedListener,
-        OnVideosRetrieved, OnReorderMediaListener, GetMusicFromProjectCallback {
+        OnVideosRetrieved, OnReorderMediaListener, GetMusicFromProjectCallback, OnSendInfoVideoListener {
 
     /**
      * LOG_TAG
@@ -48,6 +51,7 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private ToolbarNavigator.ProjectModifiedCallBack projectModifiedCallBack;
     private GetMusicFromProjectUseCase getMusicFromProjectUseCase;
+    private SendInfoVideo sendInfoVideoUseCase;
     /**
      * Editor View
      */
@@ -68,6 +72,7 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
         remoVideoFromProjectUseCase = new RemoveVideoFromProjectUseCase();
         reorderMediaItemUseCase = new ReorderMediaItemUseCase();
         getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
+        sendInfoVideoUseCase = new SendInfoVideo();
         this.userEventTracker = userEventTracker;
         this.currentProject = loadCurrentProject();
     }
@@ -166,5 +171,20 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
     @Override
     public void onMusicRetrieved(Music music) {
         videonaPlayerView.setMusic(music);
+    }
+
+    public void sendInfoVideoEdited(String mediaPath){
+        sendInfoVideoUseCase.sendMetadataVideo(mediaPath, VideoMetadataRequest.VIDEO_TYPE.Edited, this);
+    }
+
+
+    @Override
+    public void onSendInfoVideoError(OnSendInfoVideoListener.Causes causes) {
+
+    }
+
+    @Override
+    public void onSendInfoSuccess() {
+
     }
 }

@@ -10,6 +10,8 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
+import com.videonasocialmedia.videona.network.domain.usecase.SendInfoVideo;
+import com.videonasocialmedia.videona.network.presenters.callback.OnSendInfoVideoListener;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -19,7 +21,7 @@ import java.util.List;
 /**
  * Created by jca on 11/12/15.
  */
-public class ShareVideoPresenter {
+public class ShareVideoPresenter{
 
     private ObtainNetworksToShareUseCase obtainNetworksToShareUseCase;
     private ShareVideoView shareVideoView;
@@ -82,5 +84,4 @@ public class ShareVideoPresenter {
     public String getResolution() {
         return sharedPreferences.getString(ConfigPreferences.RESOLUTION, "1280x720");
     }
-
 }

@@ -41,5 +41,7 @@ public class ConfigPreferences {
     public final static String TOTAL_VIDEOS_RECORDED = "total_videos_recorded";
     public final static String TOTAL_VIDEOS_SHARED = "total_videos_shared";
     public final static String FILTER_OVERLAY_GIFT = "filter_overlay_gift";
+    public final static String LOCATION_LATITUDE = "location_latitude";
+    public final static String LOCATION_LONGITUDE = "location_longitude";
 
 }

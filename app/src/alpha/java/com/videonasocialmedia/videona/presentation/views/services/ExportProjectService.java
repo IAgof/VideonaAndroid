@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.network.domain.usecase.SendInfoVideo;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.OnExportFinishedListener;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -20,6 +21,7 @@ public class ExportProjectService extends IntentService implements OnExportFinis
     public static final String RESULT = "result";
     private static final String TAG = "ExportProjectService";
     ExportProjectUseCase exportUseCase;
+    
 
     //TODO Add persistence. Needed to navigate for ShareActivity if service has finished.
 

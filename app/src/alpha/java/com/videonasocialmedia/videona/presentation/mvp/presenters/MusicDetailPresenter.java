@@ -9,6 +9,9 @@ import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCas
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
+import com.videonasocialmedia.videona.network.domain.usecase.SendInfoVideo;
+import com.videonasocialmedia.videona.network.presenters.callback.OnSendInfoVideoListener;
+import com.videonasocialmedia.videona.network.repository.model.VideoMetadataRequest;
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
 import com.videonasocialmedia.videona.presentation.mvp.views.VideonaPlayerView;
 import com.videonasocialmedia.videona.utils.UserEventTracker;
@@ -19,12 +22,14 @@ import java.util.List;
 /**
  *
  */
-public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVideosRetrieved {
+public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVideosRetrieved,
+        OnSendInfoVideoListener{
 
     private AddMusicToProjectUseCase addMusicToProjectUseCase;
     private RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private GetMusicFromProjectUseCase getMusicFromProjectUseCase;
+    private SendInfoVideo sendInfoVideoUseCase;
     private MusicDetailView musicDetailView;
     private VideonaPlayerView playerView;
     private Music music;
@@ -41,6 +46,7 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
         removeMusicFromProjectUseCase = new RemoveMusicFromProjectUseCase();
         getMusicFromProjectUseCase = new GetMusicFromProjectUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
+        sendInfoVideoUseCase = new SendInfoVideo();
         this.currentProject = loadCurrentProject();
         this.userEventTracker = userEventTracker;
     }
@@ -117,5 +123,19 @@ public class MusicDetailPresenter implements GetMusicFromProjectCallback, OnVide
 
     public boolean isMusicAddedToProject() {
         return musicAddedToProject;
+    }
+
+    public void sendInfoVideoEdited(String videoToSharePath) {
+        sendInfoVideoUseCase.sendMetadataVideo(videoToSharePath, VideoMetadataRequest.VIDEO_TYPE.Edited, this);
+    }
+
+    @Override
+    public void onSendInfoVideoError(Causes causes) {
+
+    }
+
+    @Override
+    public void onSendInfoSuccess() {
+
     }
 }

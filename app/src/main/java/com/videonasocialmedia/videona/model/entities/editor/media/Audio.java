@@ -43,7 +43,7 @@ public class Audio extends Media {
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
      */
-    public Audio(String identifier, String iconPath, String selectedIconPath, String title, String mediaPath, int fileStartTime, int duration, Transition opening, Transition ending, MediaMetadata metadata, ArrayList<User> authors, License license) {
+    public Audio(String identifier, String iconPath, String selectedIconPath, String title, String mediaPath, int fileStartTime, int duration, Transition opening, Transition ending, ArrayList<String> metadata, ArrayList<User> authors, License license) {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, fileStartTime, duration, opening, ending, metadata, authors, license);
     }
 }

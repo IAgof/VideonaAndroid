@@ -252,12 +252,12 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         // TODO(jliarte): check this workarround.
         Video untrimmedVideo = new Video(video);
         untrimmedVideo.setFileStartTime(0);
-        untrimmedVideo.setFileStopTime(video.getFileDuration());
+        untrimmedVideo.setFileStopTime((int)video.getFileDuration());
         List<Video> untrimedMovieList = new LinkedList<>();
         untrimedMovieList.add(untrimmedVideo);
         // end of workarround.
 
-        videoDuration = video.getFileDuration();
+        videoDuration = (int) video.getFileDuration();
         timeCorrector = videoDuration / 100;
 
         videonaPlayer.initPreviewLists(untrimedMovieList);

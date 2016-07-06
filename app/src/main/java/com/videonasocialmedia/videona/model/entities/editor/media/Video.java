@@ -31,11 +31,38 @@ public class Video extends Media {
     public static String VIDEO_PATH;
 
     /**
-     * The total duration of the file media resource
+     * Device location, latitude, longitude
      */
-    private int fileDuration;
+    private double locationLatitude;
+    private double locationLongitude;
     /**
-     * Define if a video has been splitted before
+     * Video resolution, height, widht
+     */
+    private int height;
+    private int width;
+    /**
+     * Video rotation, The video rotation angle may be 0, 90, 180, or 270 degrees.
+     */
+    private int rotation;
+    /**
+     * Video bit rate, in bits/sec
+     */
+    private int bitRate;
+    /**
+     * File duration milliseconds
+     */
+    private long fileDuration;
+    /**
+     * File size, bytes
+     */
+    private long size;
+    /**
+     * Date when the data source was created or modified.
+     */
+    private String date;
+
+    /**
+     * Define if a video has been split before
      */
     private boolean isSplit;
 
@@ -69,7 +96,7 @@ public class Video extends Media {
      */
     public Video(String identifier, String iconPath, String selectedIconPath, String title,
                  String mediaPath, int fileStartTime, int duration, Transition opening,
-                 Transition ending, MediaMetadata metadata, ArrayList<User> authors,
+                 Transition ending, ArrayList<String> metadata, ArrayList<User> authors,
                  License license) {
         super(identifier, iconPath, selectedIconPath, title, mediaPath, fileStartTime, duration,
                 opening, ending, metadata, authors, license);
@@ -112,8 +139,78 @@ public class Video extends Media {
         fileStopTime = video.getFileStopTime();
     }
 
-    public int getFileDuration() {
+
+
+    public long getFileDuration() {
         return fileDuration;
+    }
+
+    public void setFileDuration(long fileDuration){
+        this.fileDuration = fileDuration;
+    }
+
+    public double getLocationLatitude(){
+        return locationLatitude;
+    }
+
+    public void setLocationLatitude(double latitude){
+        this.locationLatitude = latitude;
+    }
+
+    public double getLocationLongitude(){
+        return locationLongitude;
+    }
+
+    public void setLocationLongitude(double longitude){
+        this.locationLongitude = longitude;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public void setHeight(int height){
+        this.height = height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public void setWidth(int width){
+        this.width = width;
+    }
+
+    public int getRotation(){
+        return rotation;
+    }
+
+    public void setRotation(int rotation){
+        this.rotation = rotation;
+    }
+
+    public long getSize(){
+        return size;
+    }
+
+    public void setSize(long size){
+        this.size = size;
+    }
+
+    public String getDate(){
+        return date;
+    }
+
+    public void setDate(String date){
+        this.date = date;
+    }
+
+    public int getBitRate(){
+        return bitRate;
+    }
+
+    public void setBitRate(int bitRate){
+        this.bitRate = bitRate;
     }
 
     public boolean getIsSplit() {

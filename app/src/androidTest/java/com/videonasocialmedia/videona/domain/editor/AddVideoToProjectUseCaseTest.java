@@ -17,6 +17,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.OnAddMediaFini
 
 import org.mockito.ArgumentCaptor;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -85,4 +86,7 @@ public class AddVideoToProjectUseCaseTest extends AndroidTestCase {
         boolean anyBoolean = true;
         assertSame(anyBoolean, result);
     }
+
+
+
 }
