@@ -27,7 +27,7 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
     }
 
     public void validateCode(String code){
-           
+
     }
 
     @Override
