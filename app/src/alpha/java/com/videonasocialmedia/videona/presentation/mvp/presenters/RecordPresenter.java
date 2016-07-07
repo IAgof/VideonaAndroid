@@ -268,11 +268,11 @@ public class RecordPresenter {
     }
 
     private boolean isNotAuthorized(Effect effect) {
-        LoginUser loginUser = new LoginUser();
+      /*  LoginUser loginUser = new LoginUser();
         if (!loginUser.userIsLoggedIn()) {
             if (effect.getPermissionType() == PermissionType.LOGGED_IN)
                 return true;
-        }
+        }*/
         return false;
     }
 

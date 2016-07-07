@@ -148,7 +148,8 @@ public class EffectProvider {
 
         overlayList.add(new OverlayEffect("OV7", "Pride",
                 R.drawable.common_filter_overlay_ov7_pride,
-                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
+                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+                //R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
         overlayList.add(new OverlayEffect("OV4", "Retrotv",
                 R.drawable.common_filter_overlay_ov4_retrotv,
                 R.drawable.overlay_filter_retrotv, AnalyticsConstants.FILTER_TYPE_OVERLAY));

@@ -121,8 +121,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
         try {
             if(isAWolderUser()){
-                Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
-                recorder = new AVRecorder(config, watermark);
+                recorder = new AVRecorder(config);
             } else {
                 Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
                 recorder = new AVRecorder(config, watermark);
@@ -293,8 +292,10 @@ public class RecordPresenter implements OnExportFinishedListener {
     private void startRecord() {
         mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
         trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.START);
-        applyEffect(selectedShaderEffect);
-        applyEffect(selectedOverlayEffect);
+        if(selectedShaderEffect!=null)
+            applyEffect(selectedShaderEffect);
+        if(selectedOverlayEffect!=null)
+            applyEffect(selectedOverlayEffect);
 
         recorder.startRecording();
         recordView.lockScreenRotation();
@@ -327,14 +328,14 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     private boolean isEffectAuthorized(Effect effect) {
-        if(effect.getPermissionType() == PermissionType.ALL){
-            return true;
+        if(effect.getPermissionType() != PermissionType.ALL){
+            return false;
         }
-        LoginUser loginUser = new LoginUser();
+       /* LoginUser loginUser = new LoginUser();
         if (loginUser.userIsLoggedIn() && effect.getPermissionType() == PermissionType.LOGGED_IN) {
                 return true;
-        }
-        return false;
+        }*/
+        return true;
     }
 
     public void startExport() {
@@ -571,13 +572,6 @@ public class RecordPresenter implements OnExportFinishedListener {
 
         if(isAWolderUser())
             overlayList.add(1, GetEffectListUseCase.getOverlayEffectWolder());
-
-//        if(sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)){
-//            // Always gift in position 0
-//            overlayList.remove(0);
-//            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
-//        }
-
         return overlayList;
     }
 
