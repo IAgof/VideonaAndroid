@@ -7,6 +7,9 @@
             android:key="login"
             android:title="@string/title_activity_login"/>
         <Preference
+            android:key="promo"
+            android:title="@string/title_activity_promo"/>
+        <Preference
             android:key="downloadKamarada"
             android:title="@string/downloadKamarada">
         </Preference>

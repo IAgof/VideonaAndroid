@@ -83,6 +83,12 @@
 
     <!-- Loggin -->
     <string name="title_activity_login">Sign in</string>
+    <!-- Promo -->
+    <string name="title_activity_promo">Promo code</string>
+    <string name="validate_code">Validate</string>
+    <string name="introduce_your_promo_code">Introduce your promo code</string>
+    <string name="message_promocode_valid">Your code is valid</string>
+    <string name="message_promocode_invalid">Invalid code</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

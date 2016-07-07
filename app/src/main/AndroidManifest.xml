@@ -215,6 +215,10 @@
             android:name=".auth.presentation.views.activity.LoginActivity"
             android:label="@string/title_activity_login"/>
 
+        <activity
+            android:name=".promocode.domain.presentation.views.activity.PromoCodeActivity"
+            android:label="@string/title_activity_promo"/>
+
         <service
             android:name=".presentation.views.services.ExportProjectService"
             android:exported="false"

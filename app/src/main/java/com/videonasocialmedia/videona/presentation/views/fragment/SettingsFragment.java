@@ -18,11 +18,13 @@ import android.widget.Toast;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
+import com.videonasocialmedia.videona.promocode.domain.presentation.views.activity.PromoCodeActivity;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
@@ -74,6 +76,8 @@ public class SettingsFragment extends PreferenceFragment implements
         setupBetaPreference();
         setupDownloadKamaradaPreference();
         setupShareVideona();
+
+
     }
 
     private void setupExitPreference() {
@@ -199,9 +203,22 @@ public class SettingsFragment extends PreferenceFragment implements
     public void onResume() {
         super.onResume();
         setupSignInPreferences();
+        setupPromoCodePreferences();
         preferencesPresenter.checkAvailablePreferences();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferencesPresenter);
+    }
+
+    private void setupPromoCodePreferences() {
+        Preference promoPref = findPreference("promo");
+        promoPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(VideonaApplication.getAppContext(), PromoCodeActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     private void setupSignInPreferences() {

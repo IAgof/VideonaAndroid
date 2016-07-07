@@ -76,6 +76,16 @@
 
     <string name="action_settings">Ajustes</string>
 
+    <!-- Loggin -->
+    <string name="title_activity_login">Registrar</string>
+    <!-- Promo -->
+    <string name="title_activity_promo">Código promocional</string>
+    <string name="validate_code">Validar</string>
+    <string name="introduce_your_promo_code">Introduce tu código promocional</string>
+    <string name="message_promocode_valid">Código válido</string>
+    <string name="message_promocode_invalid">El código no es correcto</string>
+
+
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">Contamos contigo</string>
     <string name="rateUsDialogMessage">Valora nuestra app o escríbenos un email si tienes alguna
