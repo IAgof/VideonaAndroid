@@ -89,6 +89,7 @@
     <string name="introduce_your_promo_code">Introduce your promo code</string>
     <string name="message_promocode_valid">Your code is valid</string>
     <string name="message_promocode_invalid">Invalid code</string>
+    <string name="message_promocode_unauthorized">First you need sign in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.promocode.domain.presentation.mvp.presenters.callback;
+package com.videonasocialmedia.videona.promo.presentation.mvp.presenters.callback;
 
 /**
  * Created by alvaro on 7/07/16.

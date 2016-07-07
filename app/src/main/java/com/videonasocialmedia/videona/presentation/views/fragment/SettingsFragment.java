@@ -24,7 +24,7 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.PreferencesPre
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
-import com.videonasocialmedia.videona.promocode.domain.presentation.views.activity.PromoCodeActivity;
+import com.videonasocialmedia.videona.promo.presentation.views.activity.PromoCodeActivity;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 

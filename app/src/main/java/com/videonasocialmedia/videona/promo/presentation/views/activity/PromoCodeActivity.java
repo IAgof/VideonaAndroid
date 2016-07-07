@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.promocode.domain.presentation.views.activity;
+package com.videonasocialmedia.videona.promo.presentation.views.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +19,8 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
-import com.videonasocialmedia.videona.promocode.domain.presentation.mvp.presenters.PromoCodePresenter;
-import com.videonasocialmedia.videona.promocode.domain.presentation.mvp.views.PromoCodeView;
+import com.videonasocialmedia.videona.promo.presentation.mvp.presenters.PromoCodePresenter;
+import com.videonasocialmedia.videona.promo.presentation.mvp.views.PromoCodeView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

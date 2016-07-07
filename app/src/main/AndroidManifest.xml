@@ -216,7 +216,7 @@
             android:label="@string/title_activity_login"/>
 
         <activity
-            android:name=".promocode.domain.presentation.views.activity.PromoCodeActivity"
+            android:name=".promo.presentation.views.activity.PromoCodeActivity"
             android:label="@string/title_activity_promo"/>
 
         <service

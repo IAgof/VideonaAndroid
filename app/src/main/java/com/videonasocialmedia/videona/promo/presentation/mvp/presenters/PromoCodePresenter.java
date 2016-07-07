@@ -5,15 +5,12 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.promocode.domain.presentation.mvp.presenters;
-
-import android.content.Intent;
+package com.videonasocialmedia.videona.promo.presentation.mvp.presenters;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
-import com.videonasocialmedia.videona.promocode.domain.presentation.mvp.presenters.callback.CheckPromoCodeListener;
-import com.videonasocialmedia.videona.promocode.domain.presentation.mvp.views.PromoCodeView;
+import com.videonasocialmedia.videona.promo.domain.usecase.CheckPromoCode;
+import com.videonasocialmedia.videona.promo.presentation.mvp.presenters.callback.CheckPromoCodeListener;
+import com.videonasocialmedia.videona.promo.presentation.mvp.views.PromoCodeView;
 
 /**
  * Created by alvaro on 7/07/16.
@@ -21,13 +18,16 @@ import com.videonasocialmedia.videona.promocode.domain.presentation.mvp.views.Pr
 public class PromoCodePresenter implements CheckPromoCodeListener {
 
     private PromoCodeView promoCodeView;
+    private CheckPromoCode checkPromoCodeUseCase;
 
     public PromoCodePresenter(PromoCodeView promoCodeView){
         this.promoCodeView = promoCodeView;
+        checkPromoCodeUseCase = new CheckPromoCode();
     }
 
     public void validateCode(String code){
 
+        checkPromoCodeUseCase.checkPromoCode(code, this);
     }
 
     @Override
@@ -41,6 +41,10 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
 
     @Override
     public void onError(Causes cause) {
+        if(cause == Causes.UNAUTHORIZED){
+           promoCodeView.showInvalidCode(R.string.message_promocode_unauthorized);
+           return;
+        }
         promoCodeView.showInvalidCode(R.string.message_promocode_invalid);
     }
 

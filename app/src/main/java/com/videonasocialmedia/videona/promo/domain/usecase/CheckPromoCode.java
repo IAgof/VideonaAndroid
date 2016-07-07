@@ -5,10 +5,11 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.promo.domain;
+package com.videonasocialmedia.videona.promo.domain.usecase;
 
 import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
 import com.videonasocialmedia.videona.promo.model.PromoCode;
+import com.videonasocialmedia.videona.promo.presentation.mvp.presenters.callback.CheckPromoCodeListener;
 import com.videonasocialmedia.videona.promo.repository.apiclient.PromoCodeClient;
 import com.videonasocialmedia.videona.promo.repository.apiclient.PromoCodeResponse;
 import com.videonasocialmedia.videona.repository.rest.ServiceGenerator;
@@ -26,7 +27,7 @@ public class CheckPromoCode {
         PromoCode promoCode = new PromoCode(code);
         PromoCodeClient client;
         ServiceGenerator generator = new ServiceGenerator();
-        if (CachedToken.hasToken()) {
+        if (isUserLogged()) {
             client = generator.generateService(PromoCodeClient.class, CachedToken.getToken());
             client.validatePromoCode(promoCode).enqueue(new Callback<PromoCodeResponse>() {
                 @Override
@@ -46,6 +47,10 @@ public class CheckPromoCode {
         } else {
             listener.onError(CheckPromoCodeListener.Causes.UNAUTHORIZED);
         }
+    }
+
+    private boolean isUserLogged(){
+        return CachedToken.hasToken();
     }
 
 }

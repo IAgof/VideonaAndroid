@@ -84,6 +84,7 @@
     <string name="introduce_your_promo_code">Introduce tu código promocional</string>
     <string name="message_promocode_valid">Código válido</string>
     <string name="message_promocode_invalid">El código no es correcto</string>
+    <string name="message_promocode_unauthorized">Primero necesitas registrarte</string>
 
 
     <!-- Rate Videona -->
