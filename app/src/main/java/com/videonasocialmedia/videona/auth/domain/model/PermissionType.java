@@ -11,5 +11,5 @@ package com.videonasocialmedia.videona.auth.domain.model;
  *
  */
 public enum PermissionType {
-    ALL, LOGGED_IN
+    ALL, LOGGED_IN, WOLDER
 }
