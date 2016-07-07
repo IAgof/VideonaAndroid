@@ -18,6 +18,9 @@
     <string name="recordError">Something bad happened. Impossible to record video, try again</string>
     <string name="giftOverlayDialogTitle">Your present</string>
     <string name="giftOverlayDialogMessage">Enjoy your new filter</string>
+    <string name="dialog_record_go_to_login_message">Log with Videona and get this new filter</string>
+    <string name="dialog_record_login_accept">Ok</string>
+    <string name="dialog_record_login_cancel">Cancel</string>
 
     <!-- Share Activity -->
     <string name="shareError">Ups, we couldn\'t share this video. Sorry</string>

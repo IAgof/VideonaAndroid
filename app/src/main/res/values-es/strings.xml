@@ -18,6 +18,9 @@
     <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
     <string name="giftOverlayDialogTitle">Tu regalo</string>
     <string name="giftOverlayDialogMessage">Disfruta de tu nuevo filtro</string>
+    <string name="dialog_record_go_to_login_message">Registrate en la aplicación y consigue este filtro</string>
+    <string name="dialog_record_login_accept">Aceptar</string>
+    <string name="dialog_record_login_cancel">Cancelar+</string>
 
     <!-- Share Activity -->
     <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>

@@ -7,7 +7,9 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -310,10 +312,7 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public void applyEffect(Effect effect) {
-        if (!isEffectAuthorized(effect)) {
-            Intent intent = new Intent(context, LoginActivity.class);
-            context.startActivity(intent);
-        } else if (effect instanceof OverlayEffect) {
+        if (effect instanceof OverlayEffect) {
             recorder.removeOverlay();
             Drawable overlay = context.getResources().getDrawable(( (OverlayEffect) effect ).getResourceId());
             recorder.addOverlayFilter(overlay);
@@ -327,16 +326,7 @@ public class RecordPresenter implements OnExportFinishedListener {
         }
     }
 
-    private boolean isEffectAuthorized(Effect effect) {
-        if(effect.getPermissionType() != PermissionType.ALL){
-            return false;
-        }
-       /* LoginUser loginUser = new LoginUser();
-        if (loginUser.userIsLoggedIn() && effect.getPermissionType() == PermissionType.LOGGED_IN) {
-                return true;
-        }*/
-        return true;
-    }
+
 
     public void startExport() {
         //editorView.showProgressDialog();
