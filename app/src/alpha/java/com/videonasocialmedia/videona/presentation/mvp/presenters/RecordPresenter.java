@@ -484,7 +484,7 @@ public class RecordPresenter {
 
     private boolean isAWolderUser() {
 
-        return sharedPreferences.getBoolean(ConfigPreferences.I_AM_WOLDER_USER, true);
+        return sharedPreferences.getBoolean(ConfigPreferences.IS_WOLDER_USER, false);
     }
 
 

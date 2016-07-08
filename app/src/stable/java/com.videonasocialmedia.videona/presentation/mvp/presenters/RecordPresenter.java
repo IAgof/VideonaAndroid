@@ -7,10 +7,7 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -570,7 +567,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     private boolean isAWolderUser() {
 
-        return sharedPreferences.getBoolean(ConfigPreferences.I_AM_WOLDER_USER, true);
+        return sharedPreferences.getBoolean(ConfigPreferences.IS_WOLDER_USER, false);
     }
 
     public Effect getOverlayEffectGift() {

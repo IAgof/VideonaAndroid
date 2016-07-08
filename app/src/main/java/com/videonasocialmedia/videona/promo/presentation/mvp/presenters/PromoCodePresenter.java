@@ -7,6 +7,8 @@
 
 package com.videonasocialmedia.videona.promo.presentation.mvp.presenters;
 
+import android.content.SharedPreferences;
+
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.promo.domain.usecase.CheckPromoCode;
 import com.videonasocialmedia.videona.promo.presentation.mvp.presenters.callback.CheckPromoCodeListener;
@@ -19,6 +21,9 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
 
     private PromoCodeView promoCodeView;
     private CheckPromoCode checkPromoCodeUseCase;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferencesEditor;
 
     public PromoCodePresenter(PromoCodeView promoCodeView){
         this.promoCodeView = promoCodeView;
@@ -33,6 +38,9 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
     @Override
     public void onSuccess() {
         showMessageValidateCode();
+        // TODO:(alvaro.martinez) 8/07/16 save validate code, i am a wolder user, use realm
+        // preferencesEditor.putBoolean(ConfigPreferences.IS_WOLDER_USER, true);
+        // preferencesEditor.commit();
     }
 
     private void showMessageValidateCode() {
