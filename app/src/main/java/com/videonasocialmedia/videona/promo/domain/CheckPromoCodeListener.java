@@ -11,11 +11,11 @@ package com.videonasocialmedia.videona.promo.domain;
  *
  */
 public interface CheckPromoCodeListener {
-    void onSuccess();
+    void onSuccess(String campaign);
 
     void onError(Causes cause);
 
     enum Causes {
-        INVALID, EXPIRED, UNAUTHORIZED, UNKNOWN
+        INVALID, UNAUTHORIZED, UNKNOWN
     }
 }

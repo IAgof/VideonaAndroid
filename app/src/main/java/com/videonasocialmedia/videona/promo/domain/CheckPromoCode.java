@@ -8,9 +8,11 @@
 package com.videonasocialmedia.videona.promo.domain;
 
 import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
-import com.videonasocialmedia.videona.promo.model.PromoCode;
+import com.videonasocialmedia.videona.promo.domain.model.Promo;
+import com.videonasocialmedia.videona.promo.repository.PromoRepository;
 import com.videonasocialmedia.videona.promo.repository.apiclient.PromoCodeClient;
 import com.videonasocialmedia.videona.promo.repository.apiclient.PromoCodeResponse;
+import com.videonasocialmedia.videona.promo.repository.local.PromosLocalSource;
 import com.videonasocialmedia.videona.repository.rest.ServiceGenerator;
 
 import retrofit2.Call;
@@ -23,18 +25,22 @@ import retrofit2.Response;
 public class CheckPromoCode {
 
     public void checkPromoCode(String code, final CheckPromoCodeListener listener) {
-        PromoCode promoCode = new PromoCode(code);
         PromoCodeClient client;
         ServiceGenerator generator = new ServiceGenerator();
         if (CachedToken.hasToken()) {
             client = generator.generateService(PromoCodeClient.class, CachedToken.getToken());
-            client.validatePromoCode(promoCode).enqueue(new Callback<PromoCodeResponse>() {
+            client.validatePromoCode(code).enqueue(new Callback<PromoCodeResponse>() {
                 @Override
                 public void onResponse(Call<PromoCodeResponse> call, Response<PromoCodeResponse> response) {
-                    if (response.body().isValidCode()) {
-                        listener.onSuccess();
+                    PromoCodeResponse responseBody = response.body();
+                    if (responseBody.isValidCode()) {
+                        Promo promo = new Promo(responseBody.getCampaign()
+                                , responseBody.isValidCode());
+                        PromoRepository local = new PromosLocalSource();
+                        local.setPromo(promo, null);
+                        listener.onSuccess(promo.getCampaign());
                     } else {
-                        listener.onError(CheckPromoCodeListener.Causes.UNKNOWN);
+                        listener.onError(CheckPromoCodeListener.Causes.INVALID);
                     }
                 }
 
@@ -47,5 +53,4 @@ public class CheckPromoCode {
             listener.onError(CheckPromoCodeListener.Causes.UNAUTHORIZED);
         }
     }
-
 }
