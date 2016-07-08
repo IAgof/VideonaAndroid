@@ -11,13 +11,19 @@ package com.videonasocialmedia.videona.promo.repository.apiclient;
  *
  */
 public class PromoCodeResponse {
-    private final boolean validCode;
+    private final boolean validcode;
+    private final String campaign;
 
-    public PromoCodeResponse(boolean validCode) {
-        this.validCode = validCode;
+    public PromoCodeResponse(boolean validcode, String campaign) {
+        this.validcode = validcode;
+        this.campaign = campaign;
     }
 
     public boolean isValidCode() {
-        return validCode;
+        return validcode;
+    }
+
+    public String getCampaign() {
+        return campaign;
     }
 }
