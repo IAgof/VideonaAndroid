@@ -36,4 +36,8 @@ public class GetEffectListUseCase {
     public static Effect getOverlayEffectWolder() {
         return EffectProvider.getOverlayEffectWolder();
     }
+
+    public static Effect getOverlayEffectGift() {
+        return EffectProvider.getOverlayEffectGift();
+    }
 }

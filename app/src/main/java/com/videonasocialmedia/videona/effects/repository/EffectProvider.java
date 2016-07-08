@@ -146,8 +146,8 @@ public class EffectProvider {
 
         List<Effect> overlayList = new ArrayList<>();
 
-        overlayList.add(new OverlayEffect("OV7", "Pride",
-                R.drawable.common_filter_overlay_ov7_pride,
+        overlayList.add(new OverlayEffect("GIFT_OV", " ",
+                R.drawable.common_filter_overlay_gift,
                 R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
         overlayList.add(new OverlayEffect("OV4", "Retrotv",
                 R.drawable.common_filter_overlay_ov4_retrotv,
@@ -188,5 +188,12 @@ public class EffectProvider {
                 R.drawable.common_filter_overlay_ov27_wolder,
                 R.drawable.overlay_filter_wolder, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
+
+    public static Effect getOverlayEffectGift() {
+        return new OverlayEffect("OV7", "Pride",
+                R.drawable.common_filter_overlay_ov7_pride,
+                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY);
+    }
+
 
 }

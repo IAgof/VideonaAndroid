@@ -25,9 +25,6 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
-import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
-import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
@@ -560,6 +557,12 @@ public class RecordPresenter implements OnExportFinishedListener {
 
         List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
 
+        if (sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
+            // Always gift in position 0
+            overlayList.remove(0);
+            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
+        }
+
         if(isAWolderUser())
             overlayList.add(1, GetEffectListUseCase.getOverlayEffectWolder());
         return overlayList;
@@ -570,9 +573,8 @@ public class RecordPresenter implements OnExportFinishedListener {
         return sharedPreferences.getBoolean(ConfigPreferences.I_AM_WOLDER_USER, true);
     }
 
-//    public Effect getOverlayEffectGift() {
-//
-//        return GetEffectListUseCase.getOverlayEffectGift();
-//    }
+    public Effect getOverlayEffectGift() {
 
+        return GetEffectListUseCase.getOverlayEffectGift();
+    }
 }

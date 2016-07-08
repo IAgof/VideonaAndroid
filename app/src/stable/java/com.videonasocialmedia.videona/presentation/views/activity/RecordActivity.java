@@ -321,11 +321,13 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         if (shaderEffect != null)
             sendFilterSelectedTracking(shaderEffect.getType(),
                     shaderEffect.getName().toLowerCase(),
-                    shaderEffect.getIdentifier().toLowerCase());
+                    shaderEffect.getIdentifier().toLowerCase(),
+                    shaderEffect.getPermissionType().toString().toLowerCase());
         if (overlayEffect != null)
             sendFilterSelectedTracking(overlayEffect.getType(),
                     overlayEffect.getName().toLowerCase(),
-                    overlayEffect.getIdentifier().toLowerCase());
+                    overlayEffect.getIdentifier().toLowerCase(),
+                    overlayEffect.getPermissionType().toString().toLowerCase());
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -831,10 +833,21 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             }
         }
 
-
         sendFilterSelectedTracking(effect.getType(),
             effect.getName().toLowerCase(),
-            effect.getIdentifier().toLowerCase());
+            effect.getIdentifier().toLowerCase(),
+            effect.getPermissionType().toString().toLowerCase());
+
+        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
+                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
+            // Reset effect to remove selected background
+            cameraOverlayEffectsAdapter.resetSelectedEffect();
+            trackGiftOpened(recordPresenter.getOverlayEffectGift());
+            showGiftFilterToast();
+            recordPresenter.applyEffect(effect);
+            return;
+
+        }
 
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
@@ -925,7 +938,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
     }
 
-    private void sendFilterSelectedTracking(String type, String name, String code) {
+    private void sendFilterSelectedTracking(String type, String name, String code,String permissionType) {
         JSONObject userInteractionsProperties = new JSONObject();
         List<String> effectsCombinedList = getEffectsCombinedList();
         boolean combined = false;
@@ -938,6 +951,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
             userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
             userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_PERMISSION_TYPE, permissionType);
             mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();

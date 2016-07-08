@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -48,6 +49,10 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
@@ -356,14 +361,16 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         if(shaderEffect != null)
             sendFilterSelectedTracking(shaderEffect.getType(),
                     shaderEffect.getName().toLowerCase(),
-                    shaderEffect.getIdentifier().toLowerCase());
+                    shaderEffect.getIdentifier().toLowerCase(),
+                    shaderEffect.getPermissionType().toString().toLowerCase());
         if(overlayEffect != null)
             sendFilterSelectedTracking(overlayEffect.getType(),
                     overlayEffect.getName().toLowerCase(),
-                    overlayEffect.getIdentifier().toLowerCase());
+                    overlayEffect.getIdentifier().toLowerCase(),
+                    overlayEffect.getPermissionType().toString().toLowerCase());
     }
 
-    private void sendFilterSelectedTracking(String type, String name, String code) {
+    private void sendFilterSelectedTracking(String type, String name, String code, String permissionType) {
         JSONObject userInteractionsProperties = new JSONObject();
         List<String> effectsCombinedList = getEffectsCombinedList();
         boolean combined = false;
@@ -376,6 +383,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
             userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
             userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_PERMISSION_TYPE, permissionType);
             mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -892,25 +900,65 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onEffectSelected(Effect effect) {
+        if(effect.getPermissionType() == PermissionType.LOGGED_IN){
+            if(!isUserLogged()) {
+                showDialogGoToLogin();
+                return;
+            }
+        }
 
-//        sendFilterSelectedTracking(effect.getType(),
-//                effect.getName().toLowerCase(),
-//                effect.getIdentifier().toLowerCase());
-//
-//        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
-//                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
-//            // Reset effect to remove selected background
-//            cameraOverlayEffectsAdapter.resetSelectedEffect();
-//            trackGiftOpened(recordPresenter.getOverlayEffectGift());
-//            showGiftFilterToast();
-//            return;
-//        }
+        sendFilterSelectedTracking(effect.getType(),
+                effect.getName().toLowerCase(),
+                effect.getIdentifier().toLowerCase(),
+                effect.getPermissionType().toString().toLowerCase());
+
+        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
+                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
+            // Reset effect to remove selected background
+            cameraOverlayEffectsAdapter.resetSelectedEffect();
+            trackGiftOpened(recordPresenter.getOverlayEffectGift());
+            showGiftFilterToast();
+            recordPresenter.applyEffect(effect);
+            return;
+
+        }
 
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
         removeFilterActivated = true;
 
+    }
+
+    private boolean isUserLogged() {
+        LoginUser loginUser = new LoginUser();
+        return loginUser.userIsLoggedIn();
+    }
+
+
+    private void showDialogGoToLogin(){
+
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+
+                        Intent intent = new Intent(VideonaApplication.getAppContext(), LoginActivity.class);
+                        startActivity(intent);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaDialog);
+        builder.setMessage(R.string.dialog_record_go_to_login_message).setPositiveButton(R.string.dialog_record_login_accept, dialogClickListener)
+                .setNegativeButton(R.string.dialog_record_login_cancel, dialogClickListener).show();
     }
 
     private void scrollEffectList(Effect effect) {

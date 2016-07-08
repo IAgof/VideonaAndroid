@@ -31,9 +31,6 @@ import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
-import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
-import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
-import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
@@ -121,9 +118,13 @@ public class RecordPresenter {
 
     private void initRecorder(GLCameraView cameraPreview) {
         config = new SessionConfig(Constants.PATH_APP_TEMP);
-        try {
-            recorder = new AVRecorder(config, VideonaApplication.getAppContext().getResources()
-                    .getDrawable(R.drawable.watermark720));
+            try {
+                if(isAWolderUser()){
+                    recorder = new AVRecorder(config);
+                } else {
+                    Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
+                    recorder = new AVRecorder(config, watermark);
+                }
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
         } catch (IOException ioe) {
@@ -229,8 +230,10 @@ public class RecordPresenter {
     private void startRecord() {
         mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
         trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.START);
-        applyEffect(selectedShaderEffect);
-        applyEffect(selectedOverlayEffect);
+        if(selectedShaderEffect!=null)
+            applyEffect(selectedShaderEffect);
+        if(selectedOverlayEffect!=null)
+            applyEffect(selectedOverlayEffect);
         recorder.startRecording();
         recordView.lockScreenRotation();
         recordView.showStopButton();
@@ -245,17 +248,9 @@ public class RecordPresenter {
 
     public void applyEffect(Effect effect) {
 
-        if (isNotAuthorized(effect)) {
-            Intent intent = new Intent(context, LoginActivity.class);
-            context.startActivity(intent);
-        } else if (effect instanceof OverlayEffect) {
+        if (effect instanceof OverlayEffect) {
             recorder.removeOverlay();
             Drawable overlay = context.getResources().getDrawable(( (OverlayEffect) effect ).getResourceId());
-           /* if(effect.getName() == "Bollywood"){
-                recorder.addOverlayFilterBollywood(overlay);
-            } else {
-                recorder.addOverlayFilter(overlay);
-            }*/
             recorder.addOverlayFilter(overlay);
             selectedOverlayEffect = effect;
         } else {
@@ -265,15 +260,7 @@ public class RecordPresenter {
                 selectedShaderEffect = effect;
             }
         }
-    }
 
-    private boolean isNotAuthorized(Effect effect) {
-      /*  LoginUser loginUser = new LoginUser();
-        if (!loginUser.userIsLoggedIn()) {
-            if (effect.getPermissionType() == PermissionType.LOGGED_IN)
-                return true;
-        }*/
-        return false;
     }
 
     public void onEventMainThread(CameraEncoderResetEvent e) {
@@ -484,18 +471,27 @@ public class RecordPresenter {
 
         List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
 
-//        if (sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
-//            // Always gift in position 0
-//            overlayList.remove(0);
-//            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
-//        }
+        if (sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
+            // Always gift in position 0
+            overlayList.remove(0);
+            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
+        }
 
+        if(isAWolderUser())
+            overlayList.add(1, GetEffectListUseCase.getOverlayEffectWolder());
         return overlayList;
     }
 
-//    public Effect getOverlayEffectGift() {
-//
-//        return GetEffectListUseCase.getOverlayEffectGift();
-//    }
+    private boolean isAWolderUser() {
+
+        return sharedPreferences.getBoolean(ConfigPreferences.I_AM_WOLDER_USER, true);
+    }
+
+
+    public Effect getOverlayEffectGift() {
+
+        return GetEffectListUseCase.getOverlayEffectGift();
+    }
+
 
 }
