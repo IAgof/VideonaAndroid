@@ -185,7 +185,7 @@ public class EffectProvider {
 
     public static Effect getOverlayEffectWolder() {
         return new OverlayEffect("OV27", "Wolder",
-                R.drawable.common_filter_overlay_ov7_pride,
+                R.drawable.common_filter_overlay_ov27_wolder,
                 R.drawable.overlay_filter_wolder, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
