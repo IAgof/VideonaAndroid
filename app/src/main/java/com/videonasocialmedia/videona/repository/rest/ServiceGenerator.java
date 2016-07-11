@@ -12,6 +12,8 @@ import com.videonasocialmedia.videona.auth.domain.model.Token;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthAuthenticator;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthInterceptor;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -37,7 +39,9 @@ public class ServiceGenerator {
      * @param ApiBaseUrl the url of the API
      */
     public ServiceGenerator(String ApiBaseUrl) {
-        httpClientBuilder = new OkHttpClient.Builder();
+        httpClientBuilder = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS);
         if (ApiBaseUrl != null)
             retrofitBuilder = new Retrofit.Builder()
                     .baseUrl(ApiBaseUrl)
