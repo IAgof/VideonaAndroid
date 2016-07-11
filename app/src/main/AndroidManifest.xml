@@ -219,7 +219,8 @@
         <activity
             android:name=".promo.presentation.views.activity.PromoCodeActivity"
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
-            android:label="@string/title_activity_promo"/>
+            android:label="@string/title_activity_promo"
+            android:windowSoftInputMode="adjustResize"/>
 
         <service
             android:name=".presentation.views.services.ExportProjectService"
