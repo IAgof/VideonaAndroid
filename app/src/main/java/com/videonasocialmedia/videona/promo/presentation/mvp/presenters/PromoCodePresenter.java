@@ -10,8 +10,8 @@ package com.videonasocialmedia.videona.promo.presentation.mvp.presenters;
 import android.content.SharedPreferences;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.promo.domain.usecase.CheckPromoCode;
-import com.videonasocialmedia.videona.promo.presentation.mvp.presenters.callback.CheckPromoCodeListener;
+import com.videonasocialmedia.videona.promo.domain.CheckPromoCode;
+import com.videonasocialmedia.videona.promo.domain.CheckPromoCodeListener;
 import com.videonasocialmedia.videona.promo.presentation.mvp.views.PromoCodeView;
 
 /**
@@ -25,18 +25,18 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor preferencesEditor;
 
-    public PromoCodePresenter(PromoCodeView promoCodeView){
+    public PromoCodePresenter(PromoCodeView promoCodeView) {
         this.promoCodeView = promoCodeView;
         checkPromoCodeUseCase = new CheckPromoCode();
     }
 
-    public void validateCode(String code){
+    public void validateCode(String code) {
 
         checkPromoCodeUseCase.checkPromoCode(code, this);
     }
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(String campaing) {
         showMessageValidateCode();
         // TODO:(alvaro.martinez) 8/07/16 save validate code, i am a wolder user, use realm
         // preferencesEditor.putBoolean(ConfigPreferences.IS_WOLDER_USER, true);
@@ -49,12 +49,9 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
 
     @Override
     public void onError(Causes cause) {
-        if(cause == Causes.UNAUTHORIZED){
-           promoCodeView.showInvalidCode(R.string.message_promocode_unauthorized);
-           return;
-        }
-        promoCodeView.showInvalidCode(R.string.message_promocode_invalid);
+        if (cause == Causes.UNAUTHORIZED)
+            promoCodeView.showInvalidCode(R.string.message_promocode_unauthorized);
+        else
+            promoCodeView.showInvalidCode(R.string.message_promocode_invalid);
     }
-
-
 }
