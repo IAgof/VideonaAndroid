@@ -29,9 +29,8 @@
                 <android.support.v7.widget.Toolbar
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
                     android:id="@id/toolbar"
-                    app:popupTheme="@style/VideonaTheme.PopupOverlay">
+                    android:theme="@style/VideonaToolbar">
                 </android.support.v7.widget.Toolbar>
 
             </android.support.design.widget.AppBarLayout>
@@ -63,10 +62,11 @@
                 android:id="@+id/button_validate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="?android:textAppearanceSmall"
+                android:background="@color/colorButton"
+                android:textColor="@color/textColorButton"
                 android:layout_alignParentBottom="true"
                 android:text="@string/validate_code"
-                android:textStyle="bold"
+
                 />
         </RelativeLayout>
 
