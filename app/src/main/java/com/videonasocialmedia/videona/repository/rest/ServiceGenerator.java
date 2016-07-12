@@ -60,8 +60,8 @@ public class ServiceGenerator {
         if (token != null) {
             AuthInterceptor authInterceptor = new AuthInterceptor(token);
             AuthAuthenticator authenticator = new AuthAuthenticator();
-            httpClientBuilder.addInterceptor(authInterceptor)
-                    .authenticator(authenticator);
+            httpClientBuilder.addInterceptor(authInterceptor);
+//                    .authenticator(authenticator);
         }
 
         OkHttpClient okClient = httpClientBuilder.build();

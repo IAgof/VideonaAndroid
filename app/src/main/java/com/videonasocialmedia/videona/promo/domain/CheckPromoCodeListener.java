@@ -16,6 +16,6 @@ public interface CheckPromoCodeListener {
     void onError(Causes cause);
 
     enum Causes {
-        INVALID, UNAUTHORIZED, UNKNOWN
+        INVALID, UNAUTHORIZED, REDEEMED, EXPIRED, UNKNOWN
     }
 }

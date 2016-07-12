@@ -9,14 +9,12 @@ package com.videonasocialmedia.videona.promo.repository.apiclient;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.Path;
 
 /**
  *
  */
 public interface PromoCodeClient {
-    @GET("promo_code/{promoCode}")
-    @Headers("Content-Type: application/json")
+    @GET("promo_codes/{promoCode}")
     Call<PromoCodeResponse> validatePromoCode(@Path("promoCode") String promoCode);
 }

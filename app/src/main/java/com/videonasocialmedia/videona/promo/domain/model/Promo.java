@@ -7,23 +7,20 @@
 
 package com.videonasocialmedia.videona.promo.domain.model;
 
-import java.util.Date;
-
 /**
  *
  */
 public class Promo {
 
     private final String campaign;
-    private final Date activationDate;
+    // private final Date activationDate;
     private boolean activated;
-    private boolean expired;
+//    private boolean expired;
 
-    public Promo(boolean activated, boolean expired, String campaign, Date activationDate) {
-        this.activated = activated;
-        this.expired = expired;
+
+    public Promo(String campaign, boolean activated) {
         this.campaign = campaign;
-        this.activationDate = activationDate;
+        this.activated = activated;
     }
 
     public boolean isActivated() {
@@ -38,13 +35,13 @@ public class Promo {
         return campaign;
     }
 
-    public boolean isExpired() {
-        return expired;
-    }
-
-    public void setExpired(boolean expired) {
-        this.expired = expired;
-    }
+//    public boolean isExpired() {
+//        return expired;
+//    }
+//
+//    public void setExpired(boolean expired) {
+//        this.expired = expired;
+//    }
 
 
 }

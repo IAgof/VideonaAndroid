@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.promo.repository.local;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.videonasocialmedia.videona.promo.domain.model.Promo;
 import com.videonasocialmedia.videona.promo.repository.PromoRepository;
@@ -90,12 +91,16 @@ public class PromosLocalSource implements PromoRepository {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-                callBack.onPromoSetted();
+                Log.e(PromosLocalSource.class.getCanonicalName(), "writing to database successfully");
+                if (callBack != null) callBack.onPromoSetted();
             }
         }, new Realm.Transaction.OnError() {
             @Override
             public void onError(Throwable error) {
-                callBack.onError(error);
+                Log.e(PromosLocalSource.class.getCanonicalName(), "error writing to database", error);
+                if (callBack != null) {
+                    callBack.onError(error);
+                }
             }
         });
     }

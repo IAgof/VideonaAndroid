@@ -53,6 +53,7 @@ public class VideonaApplication extends Application {
         setupDataBase();
     }
 
+
     private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
         if (BuildConfig.DEBUG)
@@ -69,10 +70,14 @@ public class VideonaApplication extends Application {
     }
 
     private void setupDataBase() {
+
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
-                .name("videonaDB").build();
+                .name("videonaDB")
+                .schemaVersion(1)
+                .build();
         Realm.setDefaultConfiguration(realmConfiguration);
     }
+
 
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
