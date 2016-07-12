@@ -4,69 +4,71 @@
   ~ http://www.videona.com
   ~ info@videona.com
   ~ All rights reserved
-  -->
+  --><android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:id="@+id/coordinatorLayout">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/VideonaToolbar">
-
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:gravity="center_vertical|center_horizontal"
-            android:text=""
-            android:textColor="@color/textColorTitleToolbar"
-            android:textSize="20dp"/>
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
-        android:id="@+id/edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp">
-
-        <EditText
-            android:id="@+id/edit_promocode"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:hint="@string/introduce_your_promo_code"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:backgroundTint="@color/editTextBottomLine"
-            android:imeActionLabel="Done"
-            android:singleLine="true"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior=".presentation.views.customviews.CustomBehaviorSnackbar">
 
-    </LinearLayout>
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar">
 
-    <TextView
-        android:id="@+id/info_field"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/edit_text"
-        android:layout_centerInParent="true"/>
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    android:id="@id/toolbar"
+                    app:popupTheme="@style/VideonaTheme.PopupOverlay">
+                </android.support.v7.widget.Toolbar>
 
-    <Button
-        android:id="@+id/button_validate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorButton"
-        android:text="@string/validate_code"
-        android:textColor="@color/textColorButton"/>
+            </android.support.design.widget.AppBarLayout>
 
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_below="@+id/appbar"
+                android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/edit_promocode"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="@string/introduce_your_promo_code"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:backgroundTint="@color/editTextBottomLine"
+                        android:imeActionLabel="Done"
+                        android:singleLine="true"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_validate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="?android:textAppearanceSmall"
+                android:layout_alignParentBottom="true"
+                android:text="@string/validate_code"
+                android:textStyle="bold"
+                />
+        </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
