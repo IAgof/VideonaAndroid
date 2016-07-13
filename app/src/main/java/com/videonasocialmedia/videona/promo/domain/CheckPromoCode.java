@@ -46,6 +46,10 @@ public class CheckPromoCode {
         @Override
         public void onResponse(Call<PromoCodeResponse> call, Response<PromoCodeResponse> response) {
             PromoCodeResponse responseBody = response.body();
+            if(responseBody == null){
+                listener.onError(CheckPromoCodeListener.Causes.UNKNOWN);
+                return;
+            }
             if (responseBody.isValidCode()) {
                 Promo promo = new Promo(responseBody.getCampaign()
                         , responseBody.isValidCode());
