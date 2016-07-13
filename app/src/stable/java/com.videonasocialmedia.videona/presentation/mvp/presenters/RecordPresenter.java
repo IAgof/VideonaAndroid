@@ -22,6 +22,7 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraEncoderView;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
@@ -38,6 +39,9 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoQuality;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.promo.domain.GetPromos;
+import com.videonasocialmedia.videona.promo.domain.GetPromosListener;
+import com.videonasocialmedia.videona.promo.domain.model.Promo;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -49,6 +53,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -85,21 +90,20 @@ public class RecordPresenter implements OnExportFinishedListener {
      * Export project use case
      */
     private ExportProjectUseCase exportProjectUseCase;
-    /**
-     * Get media list from project use case
-     */
     private GetMediaListFromProjectUseCase getMediaListFromProjectUseCase;
     private RemoveVideosUseCase removeVideosUseCase;
+    private LoginUser loginUser;
     private boolean externalIntent;
 
     public RecordPresenter(Context context, RecordView recordView,
-                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences, boolean externalIntent) {
+                           GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences,
+                           boolean externalIntent) {
         this.recordView = recordView;
         this.context = context;
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
         this.externalIntent = externalIntent;
-
+        loginUser = new LoginUser();
         preferencesEditor = sharedPreferences.edit();
         exportProjectUseCase = new ExportProjectUseCase(this);
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
@@ -111,17 +115,16 @@ public class RecordPresenter implements OnExportFinishedListener {
         hideInitialsButtons();
     }
 
-    private void initRecorder(Context context, GLCameraEncoderView cameraPreview, SharedPreferences sharedPreferences) {
+    /**
+     * Get media list from project use case
+     */
+    private void initRecorder(Context context, GLCameraEncoderView cameraPreview,
+                              SharedPreferences sharedPreferences) {
 
         config = getConfigFromPreferences(sharedPreferences);
 
         try {
-            if(isAWolderUser()){
-                recorder = new AVRecorder(config);
-            } else {
-                Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
-                recorder = new AVRecorder(config, watermark);
-            }
+            recorder = new AVRecorder(config);
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
         } catch (IOException ioe) {
@@ -202,9 +205,17 @@ public class RecordPresenter implements OnExportFinishedListener {
     public void onResume() {
         EventBus.getDefault().register(this);
         recorder.onHostActivityResumed();
-        if(!externalIntent)
-         showThumbAndNumber();
+        if (!externalIntent)
+            showThumbAndNumber();
+        updateEffectLists();
+        if (isAWolderUser())
+            recorder.removeWatermark();
+        else {
+            Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
+            recorder.setWatermark(watermark);
+        }
         Log.d(LOG_TAG, "resume presenter");
+
     }
 
     private void showThumbAndNumber() {
@@ -222,6 +233,54 @@ public class RecordPresenter implements OnExportFinishedListener {
             recordView.hideVideosRecordedNumber();
             recordView.disableShareButton();
         }
+    }
+
+    private void updateEffectLists() {
+        List<Effect> shaderEffects, overlayEffects;
+
+        shaderEffects = this.getShaderEffectList();
+        overlayEffects = this.getOverlayEffects();
+
+        recordView.updateShaderEffectList(shaderEffects);
+        recordView.updateOverlayEffectList(overlayEffects);
+        // TODO(javi.cabanas): 12/7/16 if currently selected effects are not on the lists they must be disabled
+    }
+
+    private boolean isAWolderUser() {
+        boolean result = false;
+        final List<Promo> copyPromos = new ArrayList<>();
+        GetPromos getPromosUseCase = new GetPromos();
+        getPromosUseCase.getPromosByCampaign("wolder", new GetPromosListener() {
+            @Override
+            public void onPromosRetrieved(List<Promo> promos) {
+                copyPromos.addAll(promos);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+
+        for (Promo promo :
+                copyPromos) {
+            if (promo.getCampaign().compareToIgnoreCase("wolder") == 0 && promo.isActivated())
+                result = true;
+        }
+
+        return result && loginUser.userIsLoggedIn();
+    }
+
+    public List<Effect> getShaderEffectList() {
+
+        return GetEffectListUseCase.getShaderEffectsList();
+    }
+
+    public List<Effect> getOverlayEffects() {
+
+        List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
+
+        return overlayList;
     }
 
     public void onPause() {
@@ -288,9 +347,9 @@ public class RecordPresenter implements OnExportFinishedListener {
     private void startRecord() {
         mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
         trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.START);
-        if(selectedShaderEffect!=null)
+        if (selectedShaderEffect != null)
             applyEffect(selectedShaderEffect);
-        if(selectedOverlayEffect!=null)
+        if (selectedOverlayEffect != null)
             applyEffect(selectedOverlayEffect);
 
         recorder.startRecording();
@@ -319,8 +378,6 @@ public class RecordPresenter implements OnExportFinishedListener {
             }
         }
     }
-
-
 
     public void startExport() {
         //editorView.showProgressDialog();
@@ -537,41 +594,4 @@ public class RecordPresenter implements OnExportFinishedListener {
         recordView.goToShare(exportedVideo.getMediaPath());
     }
 
-    public List<Effect> getDistortionEffectList() {
-        return GetEffectListUseCase.getDistortionEffectList();
-    }
-
-    public List<Effect> getColorEffectList() {
-        return GetEffectListUseCase.getColorEffectList();
-    }
-
-    public List<Effect> getShaderEffectList() {
-
-        return GetEffectListUseCase.getShaderEffectsList();
-    }
-
-    public List<Effect> getOverlayEffects() {
-
-        List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
-
-        if (sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
-            // Always gift in position 0
-            overlayList.remove(0);
-            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
-        }
-
-        if(isAWolderUser())
-            overlayList.add(1, GetEffectListUseCase.getOverlayEffectWolder());
-        return overlayList;
-    }
-
-    private boolean isAWolderUser() {
-
-        return sharedPreferences.getBoolean(ConfigPreferences.IS_WOLDER_USER, false);
-    }
-
-    public Effect getOverlayEffectGift() {
-
-        return GetEffectListUseCase.getOverlayEffectGift();
-    }
 }

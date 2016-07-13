@@ -26,55 +26,46 @@ import io.realm.RealmResults;
 public class PromosLocalSource implements PromoRepository {
 
     @Override
-    public void getAllPromos(PromoRepositoryCallBack callBack) {
+    public List<Promo> getAllPromos() {
         RealmQuery<com.videonasocialmedia.videona.promo.repository.model.Promo> query
                 = getPromoRealmQuery();
-
         RealmResults<com.videonasocialmedia.videona.promo.repository.model.Promo> result =
-                query.findAllAsync();
-
+                query.findAll();
         List<Promo> promos = mapPromos(result);
-        callBack.onPromosRetrieved(promos);
+        return promos;
     }
 
     @Override
-    public void getActivePromos(PromoRepositoryCallBack callBack) {
+    public List<Promo> getActivePromos() {
         RealmQuery<com.videonasocialmedia.videona.promo.repository.model.Promo> query
                 = getPromoRealmQuery();
         query.equalTo("activated", true);
-
         RealmResults<com.videonasocialmedia.videona.promo.repository.model.Promo> result =
-                query.findAllAsync();
-
+                query.findAll();
         List<Promo> promos = mapPromos(result);
-        callBack.onPromosRetrieved(promos);
+        return promos;
     }
 
     @Override
-    public void getInactivePromos(PromoRepositoryCallBack callBack) {
+    public List<Promo> getInactivePromos() {
         RealmQuery<com.videonasocialmedia.videona.promo.repository.model.Promo> query
                 = getPromoRealmQuery();
         query.equalTo("activated", false);
-
         RealmResults<com.videonasocialmedia.videona.promo.repository.model.Promo> result =
-                query.findAllAsync();
-
+                query.findAll();
         List<Promo> promos = mapPromos(result);
-        callBack.onPromosRetrieved(promos);
+        return promos;
     }
 
     @Override
-    public void getPromo(String campaign, PromoRepositoryCallBack callBack) {
+    public List<Promo> getPromosByCampaign(String campaign) {
         RealmQuery<com.videonasocialmedia.videona.promo.repository.model.Promo> query
                 = getPromoRealmQuery();
         query.equalTo("campaign", campaign);
-
         RealmResults<com.videonasocialmedia.videona.promo.repository.model.Promo> result =
-                query.findAllAsync();
-
+                query.findAll();
         List<Promo> promos = mapPromos(result);
-        callBack.onPromosRetrieved(promos);
-
+        return promos;
     }
 
     @Override
@@ -106,7 +97,18 @@ public class PromosLocalSource implements PromoRepository {
     }
 
     public void deletePromo(final Promo promo, final PromoRepositoryCallBack callBack) {
-
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmQuery<com.videonasocialmedia.videona.promo.repository.model.Promo> query
+                        = getPromoRealmQuery();
+                query.equalTo("campaign", promo.getCampaign());
+                RealmResults<com.videonasocialmedia.videona.promo.repository.model.Promo> result =
+                        query.findAll();
+                result.deleteFirstFromRealm();
+            }
+        });
     }
 
     @NonNull

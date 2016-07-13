@@ -53,10 +53,6 @@ public interface RecordView {
 
     void stopChronometer();
 
-    void showCameraEffectShader(List<Effect> effects);
-
-    void showCameraEffectOverlay(List<Effect> effects);
-
     void lockScreenRotation();
 
     void unlockScreenRotation();
@@ -88,5 +84,9 @@ public interface RecordView {
     void disableShareButton();
 
     void finishActivityForResult(String path);
+
+    void updateShaderEffectList(List<Effect> shaderEffects);
+
+    void updateOverlayEffectList(List<Effect> overlayEffects);
 }
 

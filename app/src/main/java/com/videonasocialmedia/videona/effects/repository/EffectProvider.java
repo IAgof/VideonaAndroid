@@ -10,9 +10,13 @@ package com.videonasocialmedia.videona.effects.repository;
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
+import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
 import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
+import com.videonasocialmedia.videona.promo.domain.model.Promo;
+import com.videonasocialmedia.videona.promo.repository.PromoRepository;
+import com.videonasocialmedia.videona.promo.repository.local.PromosLocalSource;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 
 import java.util.ArrayList;
@@ -144,11 +148,22 @@ public class EffectProvider {
 
     public static List<Effect> getOverlayFilterList() {
 
+
         List<Effect> overlayList = new ArrayList<>();
 
-        overlayList.add(new OverlayEffect("GIFT_OV", " ",
-                R.drawable.common_filter_overlay_gift,
-                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
+        if (CachedToken.hasToken()) {
+            if (isWolderActive()) {
+                overlayList.add(new OverlayEffect("OV27", "Wolder",
+                        R.drawable.common_filter_overlay_ov27_wolder,
+                        R.drawable.overlay_filter_wolder, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+            }
+            overlayList.add(new OverlayEffect("OV7", "Pride",
+                    R.drawable.common_filter_overlay_ov7_pride,
+                    R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        } else
+            overlayList.add(new OverlayEffect("GIFT_OV", " ",
+                    R.drawable.common_filter_overlay_gift,
+                    R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
         overlayList.add(new OverlayEffect("OV4", "Retrotv",
                 R.drawable.common_filter_overlay_ov4_retrotv,
                 R.drawable.overlay_filter_retrotv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
@@ -183,16 +198,11 @@ public class EffectProvider {
         return overlayList;
     }
 
-    public static Effect getOverlayEffectWolder() {
-        return new OverlayEffect("OV27", "Wolder",
-                R.drawable.common_filter_overlay_ov27_wolder,
-                R.drawable.overlay_filter_wolder, AnalyticsConstants.FILTER_TYPE_OVERLAY);
-    }
-
-    public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("OV7", "Pride",
-                R.drawable.common_filter_overlay_ov7_pride,
-                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY);
+    private static boolean isWolderActive() {
+        final List<Promo> promotions;
+        PromoRepository local = new PromosLocalSource();
+        promotions = local.getActivePromos();
+        return !promotions.isEmpty();
     }
 
 

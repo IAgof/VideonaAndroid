@@ -28,8 +28,8 @@ public class CheckPromoCode {
         PromoCodeClient client;
         ServiceGenerator generator = new ServiceGenerator();
         client = generator.generateService(PromoCodeClient.class, CachedToken.getToken());
-        client.validatePromoCode(code).enqueue(new InternalPromoCodeCallback(listener));
-        if (CachedToken.hasToken()) {
+        if (!CachedToken.hasToken()) {
+            client.validatePromoCode(code).enqueue(new InternalPromoCodeCallback(listener));
         } else {
             listener.onError(CheckPromoCodeListener.Causes.UNAUTHORIZED);
         }

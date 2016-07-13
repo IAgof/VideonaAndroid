@@ -184,6 +184,11 @@ public class EffectAdapter
         return selectedPosition;
     }
 
+    public void setEffectList(List<Effect> effectList) {
+        this.effects = effectList;
+        notifyDataSetChanged();
+    }
+
     /**
      * This class is used to controls an item view of cameraEffect and metadata about its place within
      * the recycler view.

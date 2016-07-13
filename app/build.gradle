@@ -22,7 +22,7 @@ android {
         }
         stable {
 //            applicationId "com.videonasocialmedia.videona.stable"
-            versionName "1.0.9"
+            versionName "1.0.9-wolder"
             resValue "string", "app_name", "Videona-stable"
         }
     }

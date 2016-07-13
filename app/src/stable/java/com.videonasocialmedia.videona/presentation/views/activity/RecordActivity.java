@@ -244,8 +244,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
-//        cameraView.setPreserveEGLContextOnPause(true);
-//        cameraView.onPause();
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
     }
@@ -328,6 +326,38 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                     overlayEffect.getName().toLowerCase(),
                     overlayEffect.getIdentifier().toLowerCase(),
                     overlayEffect.getPermissionType().toString().toLowerCase());
+    }
+
+    private void sendFilterSelectedTracking(String type, String name, String code, String permissionType) {
+        JSONObject userInteractionsProperties = new JSONObject();
+        List<String> effectsCombinedList = getEffectsCombinedList();
+        boolean combined = false;
+        if (effectsCombinedList.size() > 1)
+            combined = true;
+        try {
+            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
+            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
+            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
+            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
+            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_PERMISSION_TYPE, permissionType);
+            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_FILTERS_USED, 1);
+    }
+
+    private List<String> getEffectsCombinedList() {
+        List<String> effects = new ArrayList<>();
+        Effect effect1 = recordPresenter.getSelectedShaderEffect();
+        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
+        if (effect1 != null)
+            effects.add(effect1.getName().toLowerCase());
+        if (effect2 != null)
+            effects.add(effect2.getName().toLowerCase());
+        return effects;
     }
 
     @OnClick(R.id.button_navigate_edit)
@@ -468,20 +498,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     }
 
     @Override
-    public void showCameraEffectShader(List<Effect> effects) {
-        showEffectsRecylerView(shaderEffectsRecycler);
-        shaderFilterHidden = false;
-        buttonCameraEffectShader.setActivated(true);
-    }
-
-    @Override
-    public void showCameraEffectOverlay(List<Effect> effects) {
-        runTranslateAnimation(overlayFilterRecycler, 0, new AccelerateInterpolator(3));
-        overlayFilterHidden = false;
-        buttonCameraEffectOverlay.setActivated(true);
-    }
-
-    @Override
     public void lockScreenRotation() {
         orientationHelper.stopMonitoringOrientation();
     }
@@ -607,8 +623,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
             if (resultVideoPath != null) {
                 Utils.copyFile(originalVideoPath, resultVideoPath);
                 Utils.removeVideo(originalVideoPath);
-            }
-            else
+            } else
                 resultVideoPath = originalVideoPath;
             Uri videoUri = Uri.fromFile(new File(resultVideoPath));
             Intent returnIntent = new Intent();
@@ -618,6 +633,16 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void updateShaderEffectList(List<Effect> shaderEffects) {
+        cameraShaderEffectsAdapter.setEffectList(shaderEffects);
+    }
+
+    @Override
+    public void updateOverlayEffectList(List<Effect> overlayEffects) {
+        cameraOverlayEffectsAdapter.setEffectList(overlayEffects);
     }
 
     private void trackVideoExported() {
@@ -667,7 +692,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         } else {
             trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_SHADER);
-            showCameraEffectShader(null);
+            showCameraEffectShader();
             if (removeFilterActivated) {
                 showRemoveFilters();
             }
@@ -690,6 +715,12 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     private void hideRemoveFilters() {
 
         hideRemoveView(removeFilters);
+    }
+
+    public void showCameraEffectShader() {
+        showEffectsRecylerView(shaderEffectsRecycler);
+        shaderFilterHidden = false;
+        buttonCameraEffectShader.setActivated(true);
     }
 
     private void showRemoveFilters() {
@@ -750,11 +781,17 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         } else {
             trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_OVERLAY);
-            showCameraEffectOverlay(null);
+            showCameraEffectOverlay();
             if (removeFilterActivated) {
                 showRemoveFilters();
             }
         }
+    }
+
+    public void showCameraEffectOverlay() {
+        runTranslateAnimation(overlayFilterRecycler, 0, new AccelerateInterpolator(3));
+        overlayFilterHidden = false;
+        buttonCameraEffectOverlay.setActivated(true);
     }
 
     @OnClick(R.id.button_remove_filters)
@@ -826,43 +863,28 @@ public class RecordActivity extends VideonaActivity implements RecordView,
     @Override
     public void onEffectSelected(Effect effect) {
 
-        if(effect.getPermissionType() == PermissionType.LOGGED_IN){
-            if(!isUserLogged()) {
-                showDialogGoToLogin();
-                return;
-            }
-        }
-
-        sendFilterSelectedTracking(effect.getType(),
-            effect.getName().toLowerCase(),
-            effect.getIdentifier().toLowerCase(),
-            effect.getPermissionType().toString().toLowerCase());
-
-        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
-                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
-            // Reset effect to remove selected background
-            cameraOverlayEffectsAdapter.resetSelectedEffect();
-            trackGiftOpened(recordPresenter.getOverlayEffectGift());
-            showGiftFilterToast();
+        if (effect.getPermissionType() == PermissionType.LOGGED_IN && !isUserLogged()) {
+            showDialogGoToLogin(); // TODO(javi.cabanas): 12/7/16 extract gift logic to use case
+        } else {
             recordPresenter.applyEffect(effect);
-            return;
+            scrollEffectList(effect);
+            showRemoveFilters();
+            removeFilterActivated = true;
 
+            sendFilterSelectedTracking(effect.getType(),
+                    effect.getName().toLowerCase(),
+                    effect.getIdentifier().toLowerCase(),
+                    effect.getPermissionType().toString().toLowerCase());
         }
-
-        recordPresenter.applyEffect(effect);
-        scrollEffectList(effect);
-        showRemoveFilters();
-        removeFilterActivated = true;
-
     }
 
     private boolean isUserLogged() {
+        // TODO(javi.cabanas): 12/7/16 hay que quitar esto. LoginUser es un UseCase no se puede llamar desde una actividad
         LoginUser loginUser = new LoginUser();
         return loginUser.userIsLoggedIn();
     }
 
-
-    private void showDialogGoToLogin(){
+    private void showDialogGoToLogin() {
 
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -887,6 +909,29 @@ public class RecordActivity extends VideonaActivity implements RecordView,
                 .setNegativeButton(R.string.dialog_record_login_cancel, dialogClickListener).show();
     }
 
+    private void scrollEffectList(Effect effect) {
+        if (!overlayFilterHidden) {
+            List effects = cameraOverlayEffectsAdapter.getElementList();
+            int index = effects.indexOf(effect);
+            int scroll = index > cameraOverlayEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            overlayFilterRecycler.scrollToPosition(index + scroll);
+        } else if (!shaderFilterHidden) {
+            List effects = cameraShaderEffectsAdapter.getElementList();
+            int index = effects.indexOf(effect);
+            int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            shaderEffectsRecycler.scrollToPosition(index + scroll);
+        }
+    }
+
+    @Override
+    public void onEffectSelectionCancel(Effect effect) {
+        recordPresenter.removeEffect(effect);
+        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()) {
+            hideRemoveFilters();
+        }
+    }
+
     private void trackGiftOpened(Effect overlayEffectGift) {
 
         JSONObject giftDetails = new JSONObject();
@@ -900,7 +945,7 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         try {
             giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED_DATE,
                     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-            String giftResourceName = overlayEffectGift.getType() + " - " + overlayEffectGift.getName() + " " +  overlayEffectGift.getIdentifier();
+            String giftResourceName = overlayEffectGift.getType() + " - " + overlayEffectGift.getName() + " " + overlayEffectGift.getIdentifier();
             giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED, giftResourceName);
             mixpanel.getPeople().set(giftDetails);
             giftDetails.put(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, ++giftsDownloadedCount);
@@ -928,7 +973,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
         editor.commit();
 
 
-
         // Uptade overlay effect adapter
         cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
         overlayFilterRecycler.setLayoutManager(
@@ -937,62 +981,6 @@ public class RecordActivity extends VideonaActivity implements RecordView,
 
 
     }
-
-    private void sendFilterSelectedTracking(String type, String name, String code,String permissionType) {
-        JSONObject userInteractionsProperties = new JSONObject();
-        List<String> effectsCombinedList = getEffectsCombinedList();
-        boolean combined = false;
-        if(effectsCombinedList.size() > 1)
-            combined = true;
-        try {
-            userInteractionsProperties.put(AnalyticsConstants.TYPE, type);
-            userInteractionsProperties.put(AnalyticsConstants.NAME, name);
-            userInteractionsProperties.put(AnalyticsConstants.CODE, code);
-            userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
-            userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
-            userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
-            userInteractionsProperties.put(AnalyticsConstants.FILTERS_PERMISSION_TYPE, permissionType);
-            mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_FILTERS_USED, 1);
-    }
-
-    private List<String> getEffectsCombinedList() {
-        List<String> effects = new ArrayList<>();
-        Effect effect1 = recordPresenter.getSelectedShaderEffect();
-        Effect effect2 = recordPresenter.getSelectedOverlayEffect();
-        if(effect1 != null)
-            effects.add(effect1.getName().toLowerCase());
-        if(effect2 != null)
-            effects.add(effect2.getName().toLowerCase());
-        return effects;
-    }
-
-    @Override
-    public void onEffectSelectionCancel(Effect effect) {
-        recordPresenter.removeEffect(effect);
-        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
-                !cameraShaderEffectsAdapter.isEffectSelected()) {
-            hideRemoveFilters();
-        }
-    }
-
-    private void scrollEffectList(Effect effect) {
-        if (!overlayFilterHidden) {
-            List effects = cameraOverlayEffectsAdapter.getElementList();
-            int index = effects.indexOf(effect);
-            int scroll = index > cameraOverlayEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            overlayFilterRecycler.scrollToPosition(index + scroll);
-        } else if (!shaderFilterHidden) {
-            List effects = cameraShaderEffectsAdapter.getElementList();
-            int index = effects.indexOf(effect);
-            int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            shaderEffectsRecycler.scrollToPosition(index + scroll);
-        }
-    }
-
 
     private class OrientationHelper extends OrientationEventListener {
 

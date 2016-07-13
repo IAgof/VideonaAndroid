@@ -32,12 +32,4 @@ public class GetEffectListUseCase {
     public static List<Effect> getOverlayEffectsList() {
         return EffectProvider.getOverlayFilterList();
     }
-
-    public static Effect getOverlayEffectWolder() {
-        return EffectProvider.getOverlayEffectWolder();
-    }
-
-    public static Effect getOverlayEffectGift() {
-        return EffectProvider.getOverlayEffectGift();
-    }
 }

@@ -9,7 +9,6 @@ package com.videonasocialmedia.videona.repository.rest;
 
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.auth.domain.model.Token;
-import com.videonasocialmedia.videona.auth.repository.apiclient.AuthAuthenticator;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -59,9 +58,7 @@ public class ServiceGenerator {
     public <T> T generateService(Class<T> serviceClass, final Token token) {
         if (token != null) {
             AuthInterceptor authInterceptor = new AuthInterceptor(token);
-            AuthAuthenticator authenticator = new AuthAuthenticator();
             httpClientBuilder.addInterceptor(authInterceptor);
-//                    .authenticator(authenticator);
         }
 
         OkHttpClient okClient = httpClientBuilder.build();

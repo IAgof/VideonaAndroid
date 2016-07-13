@@ -10,17 +10,19 @@ package com.videonasocialmedia.videona.promo.repository;
 import com.videonasocialmedia.videona.promo.domain.model.Promo;
 import com.videonasocialmedia.videona.promo.repository.local.PromoRepositoryCallBack;
 
+import java.util.List;
+
 /**
  *
  */
 public interface PromoRepository {
-    void getAllPromos(PromoRepositoryCallBack callBack);
+    List<Promo> getAllPromos();
 
-    void getActivePromos(PromoRepositoryCallBack callBack);
+    List<Promo> getActivePromos();
 
-    void getInactivePromos(PromoRepositoryCallBack callBack);
+    List<Promo> getInactivePromos();
 
-    void getPromo(String campaign, PromoRepositoryCallBack callBack);
+    List<Promo> getPromosByCampaign(String campaign);
 
     void setPromo(Promo promo, PromoRepositoryCallBack callBack);
 
