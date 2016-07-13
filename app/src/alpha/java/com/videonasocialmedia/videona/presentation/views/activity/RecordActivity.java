@@ -12,16 +12,17 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +49,9 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.export.presentation.service.ExportService;
+import com.videonasocialmedia.videona.export.presentation.service.OnExportProjectListener;
+import com.videonasocialmedia.videona.export.presentation.service.OnExportServiceListener;
 import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
@@ -55,7 +59,6 @@ import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
 import com.videonasocialmedia.videona.presentation.views.customviews.CircleImageView;
 import com.videonasocialmedia.videona.presentation.views.dialog.VideonaToast;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
-import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -152,24 +155,29 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     // TODO define Effects ID
     private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OV";
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    ExportService myService = null;
+    boolean isBound;
+    OnExportServiceListener serviceListener;
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
-                int resultCode = bundle.getInt(ExportProjectService.RESULT);
-                if (resultCode == RESULT_OK) {
-                    hideProgressDialog();
-                    goToShare(videoToSharePath);
-                } else {
-                    hideProgressDialog();
-                    showError(R.string.addMediaItemToTrackError);
+    private ServiceConnection myConnection =
+            new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+
+                    serviceListener = (OnExportServiceListener) service;
+                    serviceListener.registerListener(listener);
+                    isBound = true;
                 }
-            }
-        }
-    };
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    myService = null;
+                    serviceListener.unregisterListener();
+                    isBound = false;
+                    listener = null;
+                }
+            };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,7 +284,6 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
 
     @Override
     public void onPause() {
-        unregisterReceiver(receiver);
         recordPresenter.onPause();
         orientationHelper.stopMonitoringOrientation();
         Log.d(LOG_TAG, "onPause");
@@ -287,7 +294,6 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "onResume");
-        registerReceiver(receiver, new IntentFilter(ExportProjectService.NOTIFICATION));
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
@@ -297,6 +303,9 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     protected void onStart() {
         super.onStart();
         Log.d(LOG_TAG, "onStart");
+        // Bind to LocalService
+        Intent intent = new Intent(this, ExportService.class);
+        bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
         recordPresenter.onStart();
     }
 
@@ -326,6 +335,11 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         recordPresenter.onStop();
         Log.d(LOG_TAG, "OnStop");
         super.onStop();
+        if (isBound) {
+            serviceListener.unregisterListener();
+            unbindService(myConnection);
+            isBound = false;
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -852,8 +866,7 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     public void exportAndShare() {
         if (!recording) {
             recordPresenter.setFlashOff();
-            Intent intent = new Intent(this, ExportProjectService.class);
-            startService(intent);
+            requestExportProject();
             showProgressDialog();
             mixpanel.timeEvent(AnalyticsConstants.VIDEO_EXPORTED);
         }
@@ -1100,5 +1113,43 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         private class NoOrientationSupportException extends Exception {
         }
     }
+
+    private void requestExportProject() {
+        Intent intent = new Intent(this, ExportService.class);
+        startService(intent);
+        bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private OnExportProjectListener listener = new OnExportProjectListener() {
+        @Override
+        public void messageService(String message) {
+            if(message.compareTo("Init") == 0){
+                if(isBound) requestExportProject();
+            }
+
+            if(message.compareTo("ExportFinished") == 0){
+               progressDialog.setMessage("ExportFinished");
+            }
+            if(message.compareTo("Error") == 0){
+                progressDialog.setMessage("Error");
+            }
+            if(message.compareTo("Adding music") == 0){
+                progressDialog.setMessage("Adding music");
+            }
+
+        }
+
+        @Override
+        public void onSuccessVideoExported(String mediaPath) {
+            hideProgressDialog();
+            goToShare(mediaPath);
+            if (isBound) {
+                serviceListener.unregisterListener();
+                unbindService(myConnection);
+                isBound = false;
+            }
+        }
+
+    };
 
 }

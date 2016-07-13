@@ -1,12 +1,16 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
+import android.app.NotificationManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,6 +29,10 @@ import android.widget.SeekBar;
 import android.widget.VideoView;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.export.presentation.service.ExportService;
+import com.videonasocialmedia.videona.export.presentation.service.OnExportProjectListener;
+import com.videonasocialmedia.videona.export.presentation.service.OnExportServiceListener;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.ShareVideoPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
@@ -83,6 +91,29 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         }
     };
 
+    ExportService myService = null;
+    boolean isBound;
+    OnExportServiceListener serviceListener;
+
+    private ServiceConnection myConnection =
+            new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+
+                    serviceListener = (OnExportServiceListener) service;
+                    serviceListener.registerListener(listener);
+                    isBound = true;
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    myService = null;
+                    serviceListener.unregisterListener();
+                    isBound = false;
+                    listener = null;
+                }
+            };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +131,14 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
 
         restoreState(savedInstanceState);
 
-        //initVideoPreview(videoPosition, isPlaying);
-        //initNetworksList();
+        initNetworksList();
+
+        Bundle extras = this.getIntent().getExtras();
+        if(extras!= null) {
+            videoPath = extras.getString("VideoExportedFinished");
+        }
+        initVideoPreview(videoPosition, isPlaying);
+
     }
 
     private void setupToolBar() {
@@ -119,6 +156,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         if (savedInstanceState != null) {
             videoPosition = savedInstanceState.getInt("videoPosition", 100);
             isPlaying = savedInstanceState.getBoolean("videoPlaying", false);
+            videoPath = savedInstanceState.getString("videoPath", null);
         }
     }
 
@@ -131,13 +169,47 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        videoPath = intent.getStringExtra("VideoExportedFinished");
+        setIntent(intent);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         presenter.onResume();
+
+        if(videoPath != null){
+            initVideoPreview(videoPosition, isPlaying);
+        }
+
+        NotificationManager notificationManager = (NotificationManager) VideonaApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(Constants.NOTIFICATION_EXPORT_ID);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, ExportService.class);
+        bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if (isBound) {
+            serviceListener.unregisterListener();
+            unbindService(myConnection);
+            isBound = false;
+        }
+
     }
 
     private void initVideoPreview(final int position, final boolean playing) {
-        videoPath = getIntent().getStringExtra(Constants.VIDEO_TO_SHARE_PATH);
+       // videoPath = getIntent().getStringExtra(Constants.VIDEO_TO_SHARE_PATH);
         if (videoPath != null) {
             videoPreview.setVideoPath(videoPath);
             Log.d("TAG", "MESSAGE");
@@ -166,6 +238,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
                 seekBar.setProgress(0);
             }
         });
+
     }
 
     private void initSeekBar(int progress, int max) {
@@ -217,6 +290,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("videoPosition", videoPreview.getCurrentPosition() - 200);
         outState.putBoolean("videoPlaying", videoPreview.isPlaying());
+        outState.putString("videoPath", videoPath);
         super.onSaveInstanceState(outState);
     }
 
@@ -374,14 +448,53 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         trackVideoShared(socialNetwork);
         if (socialNetwork.getName().equals(getString(R.string.save_to_gallery))) {
             showMessage(R.string.video_saved);
+            if(isBound) requestExportProject();
             return;
         }
         presenter.shareVideo(videoPath, socialNetwork, this);
         updateNumTotalVideosShared();
     }
 
-    public void showMessage(final int stringToast) {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, stringToast, Snackbar.LENGTH_LONG);
+    private void showMessage(String stringMessage) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, stringMessage, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
+
+    private void requestExportProject() {
+        Intent intent = new Intent(this, ExportService.class);
+        startService(intent);
+        bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void showMessage(final int stringResource) {
+        Snackbar snackbar = Snackbar.make(coordinatorLayout, stringResource, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    private OnExportProjectListener listener = new OnExportProjectListener() {
+        @Override
+        public void messageService(String message) {
+            if(message.compareTo("Init") == 0){
+                if(isBound) requestExportProject();
+            }
+
+            if(message.compareTo("ExportFinished") == 0){
+                showMessage(message);
+            }
+            if(message.compareTo("Error") == 0){
+                showMessage(message);
+            }
+            if(message.compareTo("Adding music") == 0){
+                showMessage(message);
+            }
+
+        }
+
+        @Override
+        public void onSuccessVideoExported(String mediaPath) {
+            videoPath = mediaPath;
+            initVideoPreview(videoPosition, isPlaying);
+        }
+
+    };
 }

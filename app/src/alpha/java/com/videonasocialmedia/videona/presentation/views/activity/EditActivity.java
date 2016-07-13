@@ -43,7 +43,6 @@ import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavi
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
-import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserEventTracker;
 
@@ -81,25 +80,6 @@ public class EditActivity extends VideonaActivity implements EditorView,
     private AlertDialog progressDialog;
     private int selectedVideoRemovePosition;
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
-                int resultCode = bundle.getInt(ExportProjectService.RESULT);
-                if (resultCode == RESULT_OK) {
-                    // hideProgressDialog();
-                    goToShare(videoToSharePath);
-                } else {
-                    //showProgressDialog();
-                    // hideProgressDialog();
-                    showError(R.string.addMediaItemToTrackError);
-                }
-            }
-        }
-    };
     private boolean isMusicSelectedMessageShowed = false;
 
     @Override
@@ -131,14 +111,14 @@ public class EditActivity extends VideonaActivity implements EditorView,
     protected void onPause() {
         super.onPause();
         videonaPlayer.pause();
-        unregisterReceiver(receiver);
+       // unregisterReceiver(receiver);
         hideProgressDialog();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(receiver, new IntentFilter(ExportProjectService.NOTIFICATION));
+       // registerReceiver(receiver, new IntentFilter(ExportProjectService.NOTIFICATION));
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(Constants.CURRENT_VIDEO_INDEX)) {

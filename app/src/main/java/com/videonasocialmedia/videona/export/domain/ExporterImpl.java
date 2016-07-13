@@ -1,4 +1,11 @@
-package com.videonasocialmedia.videona.domain.editor.export;
+/*
+ * Copyright (C) 2016 Videona Socialmedia SL
+ * http://www.videona.com
+ * info@videona.com
+ * All rights reserved
+ */
+
+package com.videonasocialmedia.videona.export.domain;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -10,6 +17,7 @@ import com.videonasocialmedia.muxer.Appender;
 import com.videonasocialmedia.muxer.AudioTrimmer;
 import com.videonasocialmedia.muxer.Trimmer;
 import com.videonasocialmedia.muxer.VideoTrimmer;
+import com.videonasocialmedia.videona.export.domain.callback.ExportProgressListener;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
@@ -35,7 +43,7 @@ import java.util.List;
 public class ExporterImpl implements Exporter {
 
     private static final String TAG = "Exporter implementation";
-    private OnExportEndedListener onExportEndedListener;
+    private ExportProgressListener exportProgressListener;
     private Project project;
     private Transcoder transcoder;
     private boolean trimCorrect = true;
@@ -47,8 +55,8 @@ public class ExporterImpl implements Exporter {
     private String tempTranscodeDirectory = Constants.PATH_APP_TEMP + File.separator + "transcode";
     private String pathVideoEdited;
 
-    public ExporterImpl(Project project, OnExportEndedListener onExportEndedListener) {
-        this.onExportEndedListener = onExportEndedListener;
+    public ExporterImpl(Project project, ExportProgressListener exportProgressListener) {
+        this.exportProgressListener = exportProgressListener;
         this.project = project;
     }
 
@@ -99,7 +107,7 @@ public class ExporterImpl implements Exporter {
             } catch (IOException | NullPointerException e) {
                 trimCorrect = false;
                 videoTrimmedPaths = null;
-                onExportEndedListener.onExportError(String.valueOf(e));
+                exportProgressListener.onExportError(String.valueOf(e));
             }
             index++;
         } while(trimCorrect && medias.size() > index);
@@ -116,8 +124,9 @@ public class ExporterImpl implements Exporter {
             // TODO(alvaro) 060616 check if music is downloaded in a repository, not here.
             File musicFile = Utils.getMusicFileByName(music.getMusicTitle(), music.getMusicResourceId());
             if(musicFile == null){
-                onExportEndedListener.onExportError("Music not found");
+                exportProgressListener.onExportError("Music not found");
             }
+            exportProgressListener.onExportProgressUpdated(50);
             ArrayList<String> audio = new ArrayList<>();
             audio.add(musicFile.getPath());
             double movieDuration = getMovieDuration(merge);
@@ -134,9 +143,9 @@ public class ExporterImpl implements Exporter {
             com.videonasocialmedia.muxer.utils.Utils.createFile(result, pathVideoEdited);
             long spent = System.currentTimeMillis() - start;
             Log.d("WRITING VIDEO FILE", "time spent in millis: " + spent);
-            onExportEndedListener.onExportSuccess(new Video(pathVideoEdited));
+            exportProgressListener.onExportSuccessFinished(pathVideoEdited);
         } catch (IOException | NullPointerException e) {
-            onExportEndedListener.onExportError(String.valueOf(e));
+            exportProgressListener.onExportError(String.valueOf(e));
         }
     }
 
@@ -151,7 +160,7 @@ public class ExporterImpl implements Exporter {
             merge = appender.appendVideos(videoTranscodedPaths, addOriginalAudio);
         } catch (Exception e) {
             merge = null;
-            onExportEndedListener.onExportError(String.valueOf(e));
+            exportProgressListener.onExportError(String.valueOf(e));
         }
         return merge;
     }
@@ -173,7 +182,7 @@ public class ExporterImpl implements Exporter {
             try {
                 audioList.add(trimmer.trim(audio, 0, movieDuration));
             } catch (IOException | NullPointerException e) {
-                onExportEndedListener.onExportError(String.valueOf(e));
+                exportProgressListener.onExportError(String.valueOf(e));
             }
         }
 
@@ -189,7 +198,7 @@ public class ExporterImpl implements Exporter {
             try {
                 movie.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
             } catch (IOException | NullPointerException e) {
-                onExportEndedListener.onExportError(String.valueOf(e));
+                exportProgressListener.onExportError(String.valueOf(e));
                 // TODO se debe continuar sin música o lo paro??
             }
         }
@@ -230,7 +239,7 @@ public class ExporterImpl implements Exporter {
                 transcodeCorrect = false;
                 numFilesTranscoded = 0;
                 videoTranscoded = null;
-                onExportEndedListener.onExportError(String.valueOf(exception));
+                exportProgressListener.onExportError(String.valueOf(exception));
             }
         };
         int index = 0;

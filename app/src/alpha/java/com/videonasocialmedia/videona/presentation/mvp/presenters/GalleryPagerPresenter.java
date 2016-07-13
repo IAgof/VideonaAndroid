@@ -13,7 +13,7 @@ package com.videonasocialmedia.videona.presentation.mvp.presenters;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveMusicFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideoFromProjectUseCase;
-import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
+
 import com.videonasocialmedia.videona.model.entities.editor.media.Media;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.GalleryPagerView;
@@ -30,8 +30,6 @@ public class GalleryPagerPresenter implements OnAddMediaFinishedListener,
     RemoveMusicFromProjectUseCase removeMusicFromProjectUseCase;
     AddVideoToProjectUseCase addVideoToProjectUseCase;
     GalleryPagerView galleryPagerView;
-    ExportProjectUseCase exportProjectUseCase;
-    private boolean exported = false;
 
     /**
      * Constructor.

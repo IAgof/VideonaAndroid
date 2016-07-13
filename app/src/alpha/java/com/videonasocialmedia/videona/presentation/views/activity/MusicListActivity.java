@@ -21,7 +21,6 @@ import com.videonasocialmedia.videona.presentation.views.adapter.MusicListAdapte
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.MusicRecyclerViewClickListener;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
-import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.Constants;
 
 import java.util.List;
@@ -42,15 +41,12 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
     private MusicListAdapter musicAdapter;
     private MusicListPresenter presenter;
 
-    private BroadcastReceiver exportReceiver;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_list);
         ButterKnife.bind(this);
         setupToolbar();
-        createExportReceiver();
         videonaPlayer.initVideoPreview(this);
         videonaPlayer.initPreview(0);
         presenter = new MusicListPresenter(this, videonaPlayer);
@@ -64,26 +60,6 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void createExportReceiver() {
-        exportReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
-                    int resultCode = bundle.getInt(ExportProjectService.RESULT);
-                    if (resultCode == RESULT_OK) {
-                        goToShare(videoToSharePath);
-                    } else {
-                        Snackbar.make(musicList, R.string.shareError, Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            }
-        };
-
     }
 
     private void initVideoListRecycler() {
@@ -106,13 +82,11 @@ public class MusicListActivity extends VideonaActivity implements MusicListView,
     protected void onPause() {
         super.onPause();
         videonaPlayer.pause();
-        unregisterReceiver(exportReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(exportReceiver, new IntentFilter(ExportProjectService.NOTIFICATION));
     }
 
     @Override

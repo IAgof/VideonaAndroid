@@ -55,6 +55,7 @@ public abstract class EditTextPreferenceActivity extends VideonaActivity impleme
         if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP)
             editText.getBackground().setColorFilter(getResources().getColor(R.color.editTextBottomLine),
                     PorterDuff.Mode.SRC_ATOP);
+
         editText.addTextChangedListener(new TextWatcher() {
 
             public void beforeTextChanged(CharSequence s, int start,

@@ -19,7 +19,7 @@ import com.videonasocialmedia.videona.presentation.mvp.views.EditNavigatorView;
 import com.videonasocialmedia.videona.presentation.views.activity.EditActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.MusicDetailActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.MusicListActivity;
-import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
+import com.videonasocialmedia.videona.presentation.views.activity.ShareActivity;
 
 import static com.videonasocialmedia.videona.utils.UIUtils.tintButton;
 
@@ -92,9 +92,10 @@ public class ToolbarNavigator extends LinearLayout implements EditNavigatorView 
             @Override
             public void onClick(View v) {
                 if (navigateToShareButton.isEnabled()) {
-                    Intent intent = new Intent(context, ExportProjectService.class);
+                    /*Intent intent = new Intent(context, ExportProjectService.class);
                     Snackbar.make(v, "Starting export", Snackbar.LENGTH_INDEFINITE).show();
-                    context.startService(intent);
+                    context.startService(intent);*/
+                    navigateTo(ShareActivity.class);
                 }
             }
         });

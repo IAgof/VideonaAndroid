@@ -27,7 +27,6 @@ import com.videonasocialmedia.videona.presentation.mvp.presenters.MusicDetailPre
 import com.videonasocialmedia.videona.presentation.mvp.views.MusicDetailView;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.VideonaPlayerListener;
-import com.videonasocialmedia.videona.presentation.views.services.ExportProjectService;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.UserEventTracker;
 
@@ -58,7 +57,6 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
 
     private MusicDetailPresenter musicDetailPresenter;
 
-    private BroadcastReceiver exportReceiver;
     private int musicId;
 
 
@@ -80,7 +78,6 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         } catch (Exception e) {
             //TODO show snackbar with error message
         }
-        createExportReceiver();
     }
 
     private void initToolbar() {
@@ -89,26 +86,6 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void createExportReceiver() {
-        exportReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    String videoToSharePath = bundle.getString(ExportProjectService.FILEPATH);
-                    int resultCode = bundle.getInt(ExportProjectService.RESULT);
-                    if (resultCode == RESULT_OK) {
-                        goToShare(videoToSharePath);
-                    } else {
-                        Snackbar.make(sceneRoot, R.string.shareError, Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            }
-        };
-
     }
 
     public void goToShare(String videoToSharePath) {
@@ -121,13 +98,11 @@ public class MusicDetailActivity extends VideonaActivity implements MusicDetailV
     protected void onPause() {
         super.onPause();
         videonaPlayer.pause();
-        unregisterReceiver(exportReceiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(exportReceiver, new IntentFilter(ExportProjectService.NOTIFICATION));
     }
 
     @Override
