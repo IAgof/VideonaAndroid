@@ -89,6 +89,15 @@
     <string name="message_promocode_invalid">El código no es correcto</string>
     <string name="message_promocode_unauthorized">Primero necesitas registrarte</string>
 
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Inicia sesión o regístrate</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">La dirección de email es incorrecta</string>
+    <string name="error_invalid_password">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password">La contraseñaes incorrecta</string>
+    <string name="error_field_required">Este campo ha de rellenarse</string>
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">Contamos contigo</string>
