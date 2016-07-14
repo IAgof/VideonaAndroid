@@ -15,4 +15,8 @@ public interface PromoCodeView {
     void showMessageValidateCode(int stringResourceId);
 
     void showInvalidCode(int stringResourceId);
+
+    void showProgressDialog();
+
+    void hideProgressDialog();
 }

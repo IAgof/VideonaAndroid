@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.promo.repository.apiclient;
+package com.videonasocialmedia.videona.promo.repository.model;
 
 /**
  *

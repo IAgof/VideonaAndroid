@@ -40,7 +40,6 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
         if (isEmailValidAndNotEmpty(email) && isPasswordValidAndNotEmpty(password)) {
             this.email = email;
             this.password = password;
-            loginView.hideProgressAuthenticationDialog();
             //registerUser.register(email, password, this);
             loginUser.login(email, password, this);
         }
@@ -96,6 +95,9 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     @Override
     public void onRegisterError(OnRegisterListener.Causes cause) {
+
+        loginView.hideProgressAuthenticationDialog();
+
         switch (cause) {
             case NETWORK_ERROR:
                 loginView.showErrorLogin(R.string.networkError);

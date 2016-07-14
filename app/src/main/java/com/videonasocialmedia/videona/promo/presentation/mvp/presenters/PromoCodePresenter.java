@@ -28,6 +28,7 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
     }
 
     public void validateCode(String code) {
+        promoCodeView.showProgressDialog();
         checkPromoCodeUseCase.checkPromoCode(code, this);
     }
 
@@ -42,6 +43,9 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
 
     @Override
     public void onError(Causes cause) {
+
+        promoCodeView.hideProgressDialog();
+
         if (cause == Causes.UNAUTHORIZED)
             promoCodeView.showInvalidCode(R.string.message_promocode_unauthorized);
         else
