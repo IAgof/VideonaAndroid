@@ -75,7 +75,6 @@
                     android:id="@+id/email_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintTextAppearance="@style/Hint"
                     app:errorEnabled="true">
 
                     <EditText
@@ -86,8 +85,7 @@
                         android:inputType="textEmailAddress"
                         android:singleLine="true"
                         android:textCursorDrawable="@null"
-                        android:textIsSelectable="false"
-                        android:theme="@style/VideonaSelectHandleColor"/>
+                        android:textIsSelectable="false" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -95,7 +93,6 @@
                     android:id="@+id/password_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintTextAppearance="@style/Hint"
                     app:errorEnabled="true">
 
                     <EditText
@@ -110,7 +107,6 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textCursorDrawable="@null"
-                        android:theme="@style/VideonaSelectHandleColor"
                         />
 
                 </android.support.design.widget.TextInputLayout>
