@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
@@ -38,6 +39,9 @@ public class PromoCodeActivity extends VideonaActivity implements PromoCodeView 
 
     @Bind(R.id.button_validate)
     Button buttonValidate;
+
+    @Bind(R.id.promocode_progressbar)
+    ProgressBar progressBar;
 
     PromoCodePresenter presenter;
 
@@ -83,6 +87,18 @@ public class PromoCodeActivity extends VideonaActivity implements PromoCodeView 
             return;
         }
         showSnackBar(stringResourceId);
+    }
+
+    @Override
+    public void showProgressDialog() {
+        progressBar.setVisibility(View.VISIBLE);
+        editText.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        progressBar.setVisibility(View.GONE);
+        editText.setVisibility(View.VISIBLE);
     }
 
     private void showSnackBar(int stringResourceId) {
