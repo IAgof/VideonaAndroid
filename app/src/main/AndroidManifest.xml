@@ -220,6 +220,7 @@
             android:name=".promo.presentation.views.activity.PromoCodeActivity"
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
             android:label="@string/title_activity_promo"
+            android:theme="@style/VideonaSettings"
             android:windowSoftInputMode="adjustResize"/>
 
         <service
