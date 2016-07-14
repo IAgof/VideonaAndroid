@@ -7,6 +7,7 @@
 
 package com.videonasocialmedia.videona.auth.domain.usecase;
 
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.auth.domain.model.Token;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
 import com.videonasocialmedia.videona.auth.repository.apiclient.AuthClient;

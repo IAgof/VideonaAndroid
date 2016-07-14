@@ -66,6 +66,29 @@
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+-keepattributes Annotation
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+# Also you must note that if you are using GSON for conversion from JSON to POJO representation, you must ignore those POJO classes from being obfuscated.
+# Here include the POJO's that have you have created for mapping JSON response to POJO for example.
+-keep class com.videonasocialmedia.videona.auth.repository.model.** { *; }
+-keep class com.videonasocialmedia.videona.auth.domain.model.** { *; }
+-keep class com.videonasocialmedia.videona.auth.repository.localsource.** { *; }
+-keep class com.videonasocialmedia.videona.promo.repository.model.** { *; }
+
+# Proguard Configuration for Realm (http://realm.io)
+# For detailed discussion see: https://groups.google.com/forum/#!topic/realm-java/umqKCc50JGU
+# Additionally you need to keep your Realm Model classes as well
+# For example:
+# -keep class com.yourcompany.realm.** { *; }
+
+-keep class io.realm.annotations.RealmModule
+-keep @io.realm.annotations.RealmModule class *
+-keep class io.realm.internal.Keep
+-keep @io.realm.internal.Keep class *
+-dontwarn javax.**
+-dontwarn io.realm.**
 
 #Okio
 -dontwarn okio.**

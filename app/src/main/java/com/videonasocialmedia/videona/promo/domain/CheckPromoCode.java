@@ -11,7 +11,7 @@ import com.videonasocialmedia.videona.auth.repository.localsource.CachedToken;
 import com.videonasocialmedia.videona.promo.domain.model.Promo;
 import com.videonasocialmedia.videona.promo.repository.PromoRepository;
 import com.videonasocialmedia.videona.promo.repository.apiclient.PromoCodeClient;
-import com.videonasocialmedia.videona.promo.repository.apiclient.PromoCodeResponse;
+import com.videonasocialmedia.videona.promo.repository.model.PromoCodeResponse;
 import com.videonasocialmedia.videona.promo.repository.local.PromosLocalSource;
 import com.videonasocialmedia.videona.repository.rest.ServiceGenerator;
 
@@ -28,7 +28,7 @@ public class CheckPromoCode {
         PromoCodeClient client;
         ServiceGenerator generator = new ServiceGenerator();
         client = generator.generateService(PromoCodeClient.class, CachedToken.getToken());
-        if (!CachedToken.hasToken()) {
+        if (CachedToken.hasToken()) {
             client.validatePromoCode(code).enqueue(new InternalPromoCodeCallback(listener));
         } else {
             listener.onError(CheckPromoCodeListener.Causes.UNAUTHORIZED);

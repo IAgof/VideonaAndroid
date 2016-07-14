@@ -7,6 +7,8 @@
 
 package com.videonasocialmedia.videona.promo.repository.apiclient;
 
+import com.videonasocialmedia.videona.promo.repository.model.PromoCodeResponse;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
