@@ -87,16 +87,6 @@
 
     </style>
 
-    <style name="Hint" parent="TextAppearance.Design.Hint">
-        <item name="android:textColor">@color/textColorPrimary</item>
-    </style>
-
-    <style name="VideonaSelectHandleColor" parent="Theme.AppCompat.Light">
-        <item name="colorControlNormal">@color/colorPrimary</item>
-        <item name="colorControlActivated">@color/colorPrimaryDark</item>
-        <item name="android:textColorHighlight">@color/colorSecondaryLight</item>
-
-    </style>
 
     <style name="VideonaSettings" parent="Theme.AppCompat.Light">
 
