@@ -215,6 +215,7 @@
             android:name=".auth.presentation.views.activity.LoginActivity"
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
             android:theme="@style/VideonaSettings"
+            android:screenOrientation="sensorPortrait"
             android:label="@string/title_activity_login"/>
 
         <activity
@@ -222,6 +223,7 @@
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
             android:label="@string/title_activity_promo"
             android:theme="@style/VideonaSettings"
+            android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="adjustResize"/>
 
         <service

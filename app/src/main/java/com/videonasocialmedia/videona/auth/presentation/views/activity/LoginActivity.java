@@ -170,17 +170,22 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     @Override
     public void showErrorLogin(int stringErrorLogin) {
-        Snackbar snackbar = Snackbar.make(emailSignInButton, stringErrorLogin, Snackbar.LENGTH_LONG);
+        showMessage(stringErrorLogin);
+    }
+
+    @Override
+    public void showSuccessLogin(int stringSuccesLogin) {
+        showMessage(stringSuccesLogin);
+    }
+
+    private void showMessage(int stringResource) {
+        Snackbar snackbar = Snackbar.make(emailSignInButton, stringResource, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
     @Override
-    public void navigateTo(Class cls) {
-        Intent intent = new Intent(getApplicationContext(), cls);
-       /* if (cls == GalleryActivity.class) {
-            intent.putExtra("SHARE", false);
-        }*/
-        startActivity(intent);
+    public void exitLoginActivity() {
+        finish();
     }
 
     /**

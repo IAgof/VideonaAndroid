@@ -28,5 +28,7 @@ public interface LoginView {
 
     void showErrorLogin(int stringErrorLogin);
 
-    void navigateTo(Class cls);
+    void showSuccessLogin(int stringSuccesLogin);
+
+    void exitLoginActivity();
 }
