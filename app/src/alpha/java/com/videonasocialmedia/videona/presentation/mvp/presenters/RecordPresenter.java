@@ -15,7 +15,6 @@
 package com.videonasocialmedia.videona.presentation.mvp.presenters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -30,7 +29,7 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
@@ -41,6 +40,9 @@ import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccess
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
+import com.videonasocialmedia.videona.promo.domain.GetPromos;
+import com.videonasocialmedia.videona.promo.domain.GetPromosListener;
+import com.videonasocialmedia.videona.promo.domain.model.Promo;
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
@@ -52,6 +54,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -80,7 +83,7 @@ public class RecordPresenter {
     private SharedPreferences.Editor preferencesEditor;
     private Context context;
     private GLCameraView cameraPreview;
-
+    private LoginUser loginUser;
     private boolean externalIntent;
 
     /**
@@ -95,7 +98,7 @@ public class RecordPresenter {
         this.cameraPreview = cameraPreview;
         this.sharedPreferences = sharedPreferences;
         this.externalIntent = externalIntent;
-
+        loginUser = new LoginUser();
         preferencesEditor = sharedPreferences.edit();
         addVideoToProjectUseCase = new AddVideoToProjectUseCase();
         getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
@@ -162,6 +165,43 @@ public class RecordPresenter {
             recordView.hideVideosRecordedNumber();
             recordView.disableShareButton();
         }
+    }
+
+    private boolean isAWolderUser() {
+        boolean result = false;
+        final List<Promo> copyPromos = new ArrayList<>();
+        GetPromos getPromosUseCase = new GetPromos();
+        getPromosUseCase.getPromosByCampaign("wolder", new GetPromosListener() {
+            @Override
+            public void onPromosRetrieved(List<Promo> promos) {
+                copyPromos.addAll(promos);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+
+        for (Promo promo :
+                copyPromos) {
+            if (promo.getCampaign().compareToIgnoreCase("wolder") == 0 && promo.isActivated())
+                result = true;
+        }
+
+        return result && loginUser.userIsLoggedIn();
+    }
+
+    public List<Effect> getShaderEffectList() {
+
+        return GetEffectListUseCase.getShaderEffectsList();
+    }
+
+    public List<Effect> getOverlayEffects() {
+
+        List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
+
+        return overlayList;
     }
 
     public void onPause() {
@@ -455,43 +495,6 @@ public class RecordPresenter {
         recorder.rotateCamera(rotation);
     }
 
-    public List<Effect> getDistortionEffectList() {
-        return GetEffectListUseCase.getDistortionEffectList();
-    }
-
-    public List<Effect> getColorEffectList() {
-        return GetEffectListUseCase.getColorEffectList();
-    }
-
-    public List<Effect> getShaderEffectList() {
-        return GetEffectListUseCase.getShaderEffectsList();
-    }
-
-    public List<Effect> getOverlayEffects() {
-
-        List<Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
-
-        if (sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
-            // Always gift in position 0
-            overlayList.remove(0);
-            overlayList.add(0, GetEffectListUseCase.getOverlayEffectGift());
-        }
-
-        if(isAWolderUser())
-            overlayList.add(1, GetEffectListUseCase.getOverlayEffectWolder());
-        return overlayList;
-    }
-
-    private boolean isAWolderUser() {
-
-        return sharedPreferences.getBoolean(ConfigPreferences.IS_WOLDER_USER, false);
-    }
-
-
-    public Effect getOverlayEffectGift() {
-
-        return GetEffectListUseCase.getOverlayEffectGift();
-    }
 
 
 }

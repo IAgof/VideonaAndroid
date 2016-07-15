@@ -900,7 +900,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onEffectSelected(Effect effect) {
-        if(effect.getPermissionType() == PermissionType.LOGGED_IN){
+       /* if(effect.getPermissionType() == PermissionType.LOGGED_IN){
             if(!isUserLogged()) {
                 showDialogGoToLogin();
                 return;
@@ -926,7 +926,21 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recordPresenter.applyEffect(effect);
         scrollEffectList(effect);
         showRemoveFilters();
-        removeFilterActivated = true;
+        removeFilterActivated = true;*/
+
+        if (effect.getPermissionType() == PermissionType.LOGGED_IN && !isUserLogged()) {
+            showDialogGoToLogin(); // TODO(javi.cabanas): 12/7/16 extract gift logic to use case
+        } else {
+            recordPresenter.applyEffect(effect);
+            scrollEffectList(effect);
+            showRemoveFilters();
+            removeFilterActivated = true;
+
+            sendFilterSelectedTracking(effect.getType(),
+                    effect.getName().toLowerCase(),
+                    effect.getIdentifier().toLowerCase(),
+                    effect.getPermissionType().toString().toLowerCase());
+        }
 
     }
 
