@@ -295,8 +295,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         recordPresenter.onResume();
         recording = false;
         hideSystemUi();
-        cameraOverlayEffectsAdapter.notifyDataSetChanged();
-        cameraShaderEffectsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -648,6 +646,16 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void updateShaderEffectList(List<Effect> shaderEffects) {
+        cameraShaderEffectsAdapter.setEffectList(shaderEffects);
+    }
+
+    @Override
+    public void updateOverlayEffectList(List<Effect> overlayEffects) {
+        cameraOverlayEffectsAdapter.setEffectList(overlayEffects);
     }
 
     private void trackVideoExported() {

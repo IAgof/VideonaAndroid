@@ -121,13 +121,9 @@ public class RecordPresenter {
 
     private void initRecorder(GLCameraView cameraPreview) {
         config = new SessionConfig(Constants.PATH_APP_TEMP);
-            try {
-                if(isAWolderUser()){
-                    recorder = new AVRecorder(config);
-                } else {
-                    Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
-                    recorder = new AVRecorder(config, watermark);
-                }
+
+        try {
+            recorder = new AVRecorder(config);
             recorder.setPreviewDisplay(cameraPreview);
             firstTimeRecording = true;
         } catch (IOException ioe) {
@@ -147,7 +143,25 @@ public class RecordPresenter {
         //recorder.onHostActivityResumed();
         if (!externalIntent)
             showThumbAndNumber();
+        updateEffectLists();
+        if (isAWolderUser())
+            recorder.removeWatermark();
+        else {
+            Drawable watermark = context.getResources().getDrawable(R.drawable.watermark720);
+            recorder.setWatermark(watermark);
+        }
         Log.d(LOG_TAG, "resume presenter");
+    }
+
+    private void updateEffectLists() {
+        List<Effect> shaderEffects, overlayEffects;
+
+        shaderEffects = this.getShaderEffectList();
+        overlayEffects = this.getOverlayEffects();
+
+        recordView.updateShaderEffectList(shaderEffects);
+        recordView.updateOverlayEffectList(overlayEffects);
+        // TODO(javi.cabanas): 12/7/16 if currently selected effects are not on the lists they must be disabled
     }
 
     private void showThumbAndNumber() {

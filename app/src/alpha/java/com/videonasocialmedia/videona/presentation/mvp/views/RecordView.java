@@ -81,4 +81,8 @@ public interface RecordView {
     void disableShareButton();
 
     void finishActivityForResult(String path);
+
+    void updateShaderEffectList(List<Effect> shaderEffects);
+
+    void updateOverlayEffectList(List<Effect> overlayEffects);
 }
