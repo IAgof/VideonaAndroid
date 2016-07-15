@@ -90,7 +90,9 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     @Override
     public void onLoginSuccess() {
-        loginView.navigateTo(SettingsActivity.class);
+        loginView.hideProgressAuthenticationDialog();
+        loginView.showSuccessLogin(R.string.success_login);
+        loginView.exitLoginActivity();
     }
 
     @Override

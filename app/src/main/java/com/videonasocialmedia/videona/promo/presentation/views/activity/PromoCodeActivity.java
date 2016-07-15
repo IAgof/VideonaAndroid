@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.promo.presentation.views.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -28,6 +29,7 @@ import com.videonasocialmedia.videona.promo.presentation.mvp.views.PromoCodeView
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by alvaro on 7/07/16.
@@ -53,6 +55,29 @@ public class PromoCodeActivity extends VideonaActivity implements PromoCodeView 
         setToolbar();
         presenter = new PromoCodePresenter(this);
     }
+
+   @Override
+    protected void onResume() {
+        super.onResume();
+        changeTypeFontRobotoThin();
+    }
+
+
+    @OnTextChanged(R.id.edit_promocode)
+    public void editTextPromocodenTextChanged(){
+        editText.setTypeface(Typeface.DEFAULT);
+        String text= editText.getText().toString();
+
+        if(text.length()==0) {
+            changeTypeFontRobotoThin();
+        }
+    }
+
+
+    private void changeTypeFontRobotoThin() {
+        editText.setTypeface(Typeface.createFromAsset(getAssets(),"fonts/Roboto-Thin.ttf"));
+    }
+
 
     private void setToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

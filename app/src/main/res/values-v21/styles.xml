@@ -56,6 +56,7 @@
         <item name="colorControlNormal">@color/colorControlNormal</item>
     </style>
 
+
     <style name="VideonaDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorAlertDialogListItem">@color/textColorPrimary</item>
