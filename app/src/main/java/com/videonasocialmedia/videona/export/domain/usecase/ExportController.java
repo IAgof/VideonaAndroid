@@ -28,6 +28,7 @@ public class ExportController implements ExportProgressListener {
     private static final int MSG_PROGRESS_UPDATED = 101;
     private static final int MSG_PROGRESS_SUCCESS = 102;
     private static final int MSG_PROGRESS_ERROR = 103;
+    private final Project project;
 
 
     private volatile ExportHandler exportHandler;
@@ -35,7 +36,8 @@ public class ExportController implements ExportProgressListener {
 
     public ExportController() {
 
-        Project project = Project.getInstance(null, null, null);
+        project = Project.getInstance(null, null, null);
+
         exporter = new ExporterImpl(project, this);
     }
 
@@ -47,7 +49,7 @@ public class ExportController implements ExportProgressListener {
             @Override
             public void run() {
 
-                exporter.export();
+                exporter.export(project.getTitle());
                 exportHandler.sendMessage(exportHandler.obtainMessage(MSG_PROGRESS_SUCCESS));
 
             }

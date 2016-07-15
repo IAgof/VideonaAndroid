@@ -525,7 +525,8 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
     private void startLoadingProject(OnInitAppEventListener listener) {
         //TODO Define project title (by date, by project count, ...)
         //TODO Define path project. By default, path app. Path .temp, private data
-        Project.getInstance(Constants.PROJECT_TITLE, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
+        String title = "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        Project.getInstance(title, sharedPreferences.getString(ConfigPreferences.PRIVATE_PATH, ""), checkProfile());
     }
 
     private void moveVideonaVideosToDcim() {

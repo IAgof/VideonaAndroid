@@ -1,6 +1,7 @@
 package com.videonasocialmedia.videona.presentation.views.activity;
 
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -103,6 +104,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
                     serviceListener = (OnExportServiceListener) service;
                     serviceListener.registerListener(listener);
                     isBound = true;
+                    requestExportProject();
                 }
 
                 @Override
@@ -113,6 +115,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
                     listener = null;
                 }
             };
+    private ProgressDialog barProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,14 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
             videoPath = extras.getString("VideoExportedFinished");
         }
         initVideoPreview(videoPosition, isPlaying);
+
+        barProgressDialog = new ProgressDialog(ShareActivity.this);
+
+        barProgressDialog.setTitle("Exporting project ...");
+
+        barProgressDialog.setMessage("Starting ...");
+        barProgressDialog.setProgressStyle(barProgressDialog.STYLE_HORIZONTAL);
+        barProgressDialog.setIndeterminate(true);
 
     }
 
@@ -456,11 +467,14 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     }
 
     private void showMessage(String stringMessage) {
-        Snackbar snackbar = Snackbar.make(coordinatorLayout, stringMessage, Snackbar.LENGTH_LONG);
-        snackbar.show();
+        //Snackbar snackbar = Snackbar.make(coordinatorLayout, stringMessage, Snackbar.LENGTH_LONG);
+        //snackbar.show();
+
+        barProgressDialog.setMessage(stringMessage);
     }
 
     private void requestExportProject() {
+        barProgressDialog.show();
         Intent intent = new Intent(this, ExportService.class);
         startService(intent);
         bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
@@ -474,15 +488,13 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     private OnExportProjectListener listener = new OnExportProjectListener() {
         @Override
         public void messageService(String message) {
-            if(message.compareTo("Init") == 0){
-                if(isBound) requestExportProject();
-            }
 
             if(message.compareTo("ExportFinished") == 0){
                 showMessage(message);
             }
             if(message.compareTo("Error") == 0){
                 showMessage(message);
+                barProgressDialog.dismiss();
             }
             if(message.compareTo("Adding music") == 0){
                 showMessage(message);
@@ -494,6 +506,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         public void onSuccessVideoExported(String mediaPath) {
             videoPath = mediaPath;
             initVideoPreview(videoPosition, isPlaying);
+            barProgressDialog.dismiss();
         }
 
     };

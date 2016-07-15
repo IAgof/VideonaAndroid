@@ -61,8 +61,8 @@ public class ExporterImpl implements Exporter {
     }
 
     @Override
-    public void export() {
-        pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+    public void export(String title) {
+        pathVideoEdited = Constants.PATH_APP_EDITED + File.separator + title + ".mp4";
         LinkedList<Media> medias = getMediasFromProject();
         ArrayList<String> videoTrimmedPaths = trimVideos(medias);
         if(trimCorrect) {
