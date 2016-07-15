@@ -900,33 +900,6 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     @Override
     public void onEffectSelected(Effect effect) {
-       /* if(effect.getPermissionType() == PermissionType.LOGGED_IN){
-            if(!isUserLogged()) {
-                showDialogGoToLogin();
-                return;
-            }
-        }
-
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase(),
-                effect.getPermissionType().toString().toLowerCase());
-
-        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
-                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
-            // Reset effect to remove selected background
-            cameraOverlayEffectsAdapter.resetSelectedEffect();
-            trackGiftOpened(recordPresenter.getOverlayEffectGift());
-            showGiftFilterToast();
-            recordPresenter.applyEffect(effect);
-            return;
-
-        }
-
-        recordPresenter.applyEffect(effect);
-        scrollEffectList(effect);
-        showRemoveFilters();
-        removeFilterActivated = true;*/
 
         if (effect.getPermissionType() == PermissionType.LOGGED_IN && !isUserLogged()) {
             showDialogGoToLogin(); // TODO(javi.cabanas): 12/7/16 extract gift logic to use case
