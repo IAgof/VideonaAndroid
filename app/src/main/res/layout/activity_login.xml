@@ -13,8 +13,13 @@
                                                  android:fitsSystemWindows="true"
                                                  android:gravity="center_horizontal"
                                                  android:orientation="vertical"
-                                                 tools:context=".auth.presentation.views.activity.LoginActivity">
 
+                                                 tools:context=".auth.presentation.views.activity.LoginActivity">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior=".presentation.views.customviews.CustomBehaviorSnackbar">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -34,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingTop="16dp"
+        android:paddingTop="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- Login progress -->
@@ -44,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:paddingTop="16dp"
             android:layout_gravity="center_horizontal"
             android:visibility="gone" />
 
@@ -128,4 +134,5 @@
             </android.support.v7.widget.CardView>
         </ScrollView>
     </LinearLayout>
+</RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
