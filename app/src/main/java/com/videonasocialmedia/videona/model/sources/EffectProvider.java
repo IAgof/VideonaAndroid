@@ -53,12 +53,7 @@ public class EffectProvider {
         distortionEffects.add(
                 new ShaderEffect("FX1", "Fisheye", R.drawable.common_filter_distortion_fx1_fisheye,
                         Filters.FILTER_FISHEYE, AnalyticsConstants.FILTER_TYPE_DISTORTION));
-        distortionEffects.add(
-                new ShaderEffect("FX2", "Stretch", R.drawable.common_filter_distortion_fx2_stretch,
-                        Filters.FILTER_STRETCH, AnalyticsConstants.FILTER_TYPE_DISTORTION));
-        distortionEffects.add(
-                new ShaderEffect("FX3", "Dent", R.drawable.common_filter_distortion_fx3_dent,
-                        Filters.FILTER_DENT, AnalyticsConstants.FILTER_TYPE_DISTORTION));
+
         distortionEffects.add(
                 new ShaderEffect("FX4", "Mirror", R.drawable.common_filter_distortion_fx4_mirror,
                         Filters.FILTER_MIRROR, AnalyticsConstants.FILTER_TYPE_DISTORTION));
@@ -71,9 +66,7 @@ public class EffectProvider {
         distortionEffects.add(
                 new ShaderEffect("FX7", "Twirl", R.drawable.common_filter_distortion_fx7_twirl,
                         Filters.FILTER_TWIRL, AnalyticsConstants.FILTER_TYPE_DISTORTION));
-        distortionEffects.add(
-                new ShaderEffect("FX8", "Bulge", R.drawable.common_filter_distortion_fx8_bulge,
-                        Filters.FILTER_BULGE, AnalyticsConstants.FILTER_TYPE_DISTORTION));
+
 
         return distortionEffects;
     }
@@ -86,17 +79,11 @@ public class EffectProvider {
                 new ShaderEffect("FX4", "Mirror", R.drawable.common_filter_distortion_fx4_mirror,
                         Filters.FILTER_MIRROR, AnalyticsConstants.FILTER_TYPE_DISTORTION));
         shaderEffects.add(
-                new ShaderEffect("FX3", "Dent", R.drawable.common_filter_distortion_fx3_dent,
-                        Filters.FILTER_DENT, AnalyticsConstants.FILTER_TYPE_DISTORTION));
-        shaderEffects.add(
                 new ShaderEffect("FX5", "Squeeze", R.drawable.common_filter_distortion_fx5_squeeze,
                         Filters.FILTER_SQUEEZE, AnalyticsConstants.FILTER_TYPE_DISTORTION));
         shaderEffects.add(
                 new ShaderEffect("AD7", "Posterize", R.drawable.common_filter_color_ad7_posterize,
                         Filters.FILTER_POSTERIZE, AnalyticsConstants.FILTER_TYPE_COLOR));
-        shaderEffects.add(
-                new ShaderEffect("FX2", "Stretch", R.drawable.common_filter_distortion_fx2_stretch,
-                        Filters.FILTER_STRETCH, AnalyticsConstants.FILTER_TYPE_DISTORTION));
         shaderEffects.add(
                 new ShaderEffect("FX1", "Fisheye", R.drawable.common_filter_distortion_fx1_fisheye,
                         Filters.FILTER_FISHEYE, AnalyticsConstants.FILTER_TYPE_DISTORTION));
@@ -106,9 +93,6 @@ public class EffectProvider {
         shaderEffects.add(
                 new ShaderEffect("FX6", "Tunnel", R.drawable.common_filter_distortion_fx6_tunnel,
                         Filters.FILTER_TUNNEL, AnalyticsConstants.FILTER_TYPE_DISTORTION));
-        shaderEffects.add(
-                new ShaderEffect("FX8", "Bulge", R.drawable.common_filter_distortion_fx8_bulge,
-                        Filters.FILTER_BULGE, AnalyticsConstants.FILTER_TYPE_DISTORTION));
         shaderEffects.add(
                 new ShaderEffect("AD5", "Negative", R.drawable.common_filter_color_ad5_negative,
                         Filters.FILTER_NEGATIVE, AnalyticsConstants.FILTER_TYPE_COLOR));
@@ -128,7 +112,7 @@ public class EffectProvider {
                 new ShaderEffect("AD8", "Sepia", R.drawable.common_filter_color_ad8_sepia,
                         Filters.FILTER_SEPIA, AnalyticsConstants.FILTER_TYPE_COLOR));
         shaderEffects.add(
-                new ShaderEffect("AD6", "Night", R.drawable.common_filter_color_ad6_green,
+                new ShaderEffect("AD6", "Green", R.drawable.common_filter_color_ad6_green,
                         Filters.FILTER_NIGHT, AnalyticsConstants.FILTER_TYPE_COLOR));
 
         return shaderEffects;
@@ -170,6 +154,24 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("OV13", "Passion",
                 R.drawable.common_filter_overlay_ov13_passion,
                 R.drawable.overlay_filter_passion, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV24", "Bokeh",
+                R.drawable.common_filter_overlay_ov24_bokeh,
+                R.drawable.overlay_filter_bokeh, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV03", "Sunset",
+                R.drawable.common_filter_overlay_ov3_sunset,
+                R.drawable.overlay_filter_sunset, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV05", "Autumn",
+                R.drawable.common_filter_overlay_ov5_autumn,
+                R.drawable.overlay_filter_autumn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV13", "Wasted",
+                R.drawable.common_filter_overlay_ov17_wasted,
+                R.drawable.overlay_filter_wasted, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV17", "Burn",
+                R.drawable.common_filter_overlay_ov1_burn,
+                R.drawable.overlay_filter_burn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV14", "Stain",
+                R.drawable.common_filter_overlay_ov14_stain,
+                R.drawable.overlay_filter_stain, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         return overlayList;
     }
