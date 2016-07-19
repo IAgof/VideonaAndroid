@@ -148,12 +148,12 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("OV19", "Old",
                 R.drawable.common_filter_overlay_ov19_old,
                 R.drawable.overlay_filter_old, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV15", "Pastel",
-                R.drawable.common_filter_overlay_ov15_pastel,
-                R.drawable.overlay_filter_pastel, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV13", "Passion",
-                R.drawable.common_filter_overlay_ov13_passion,
-                R.drawable.overlay_filter_passion, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OVHT1", "Monster Hunter",
+                R.drawable.common_filter_overlay_ovt01_monster_hunter,
+                R.drawable.overlay_filter_monster_hunter, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("OV13", "Kisscam",
+                R.drawable.common_filter_overlay_ov13_kiss_cam,
+                R.drawable.overlay_filter_kiss_cam, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV24", "Bokeh",
                 R.drawable.common_filter_overlay_ov24_bokeh,
                 R.drawable.overlay_filter_bokeh, AnalyticsConstants.FILTER_TYPE_OVERLAY));
@@ -172,6 +172,7 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("OV14", "Stain",
                 R.drawable.common_filter_overlay_ov14_stain,
                 R.drawable.overlay_filter_stain, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
 
         return overlayList;
     }
