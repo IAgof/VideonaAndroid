@@ -30,5 +30,9 @@ public interface LoginView {
 
     void showSuccessLogin(int stringSuccesLogin);
 
+    void showNoChekedPrivacyTerm (int stringNoChekedPrivacyTerm);
+
     void exitLoginActivity();
+
+    void goToPrivacyTerms();
 }

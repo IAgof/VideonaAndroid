@@ -20,11 +20,15 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.LoginPresenter;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.presentation.views.activity.TermsOfServiceActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
 
 import butterknife.Bind;
@@ -53,7 +57,11 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     View loginFormView;
     @Bind(R.id.email_sign_in_button)
     Button emailSignInButton;
+   @Bind(R.id.accept_term_text_view)
+    TextView accepTermTextView;
     private LoginPresenter loginPresenter;
+    @Bind(R.id.check_box_Accept_Term)
+    CheckBox checkBoxAcceptTerm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +124,18 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         String password = passwordEditText.getText().toString();
 
         if (loginPresenter.isEmailValidAndNotEmpty(email) &&
-                loginPresenter.isPasswordValidAndNotEmpty(password)) {
+                loginPresenter.isPasswordValidAndNotEmpty(password)&& loginPresenter.isCheckedPrivacyTerm(checkBoxAcceptTerm)) {
 
             loginPresenter.tryToSignInOrLogIn(email, password);
         }
+
     }
+
+    @OnClick (R.id.accept_term_text_view)
+    public void goToPrivacyTermClickListener(){
+        goToPrivacyTerms();
+    }
+
 
     @OnEditorAction(R.id.password_edit_text)
     public boolean onEditorAction(int id, KeyEvent key) {
@@ -178,6 +193,12 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         showMessage(stringSuccesLogin);
     }
 
+    @Override
+    public void showNoChekedPrivacyTerm(int stringNoChekedPrivacyTerm) {
+        showMessage(stringNoChekedPrivacyTerm);
+
+    }
+
     private void showMessage(int stringResource) {
         Snackbar snackbar = Snackbar.make(emailSignInButton, stringResource, Snackbar.LENGTH_LONG);
         snackbar.show();
@@ -186,6 +207,12 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     @Override
     public void exitLoginActivity() {
         finish();
+    }
+
+    @Override
+    public void goToPrivacyTerms() {
+        Intent intent = new Intent(VideonaApplication.getAppContext(), TermsOfServiceActivity.class);
+        startActivity(intent);
     }
 
     /**

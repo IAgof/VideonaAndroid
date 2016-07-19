@@ -118,6 +118,15 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/check_box_Accept_Term"
+                    android:checked="false"
+                    android:text="Acepto las Condiciones de Uso"
+                    android:textColor="@color/colorSecondary"/>
+
+
                 <Button
                     android:id="@+id/email_sign_in_button"
                     android:layout_width="match_parent"
@@ -125,7 +134,16 @@
                     android:layout_marginTop="16dp"
                     android:text="@string/action_sign_in"
                     android:background="@color/colorButton"
-                    android:textColor="@color/textColorButton"
+                    android:textColor="@color/textColorButton"/>
+
+                <TextView
+                    android:paddingTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ver condiciones de uso"
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/accept_term_text_view"/>
                    />
 
 

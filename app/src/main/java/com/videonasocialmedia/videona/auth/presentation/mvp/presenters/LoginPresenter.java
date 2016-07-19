@@ -8,6 +8,7 @@
 package com.videonasocialmedia.videona.auth.presentation.mvp.presenters;
 
 import android.util.Patterns;
+import android.widget.CheckBox;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
@@ -27,6 +28,7 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
     private String password;
     private LoginUser loginUser;
     private RegisterUser registerUser;
+    private CheckBox checkBox;
 
     public LoginPresenter(LoginView loginView) {
         this.loginUser = new LoginUser();
@@ -64,6 +66,15 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
         }
         if (!isPasswordValid(password)) {
             loginView.passwordInvalid();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isCheckedPrivacyTerm(CheckBox checkBox){
+
+        if (!checkBox.isChecked()){
+            loginView.showNoChekedPrivacyTerm(R.string.error_No_Cheked_PrivacyTerm);
             return false;
         }
         return true;
