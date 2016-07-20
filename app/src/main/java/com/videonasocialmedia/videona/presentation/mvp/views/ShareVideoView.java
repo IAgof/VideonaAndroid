@@ -16,4 +16,6 @@ public interface ShareVideoView {
     void showMoreNetworks(List<SocialNetwork> networks);
 
     void hideExtraNetworks();
+
+    void startVideoExporting();
 }

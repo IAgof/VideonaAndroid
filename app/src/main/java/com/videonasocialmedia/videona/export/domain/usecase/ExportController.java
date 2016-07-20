@@ -14,7 +14,9 @@ import com.videonasocialmedia.videona.export.domain.Exporter;
 import com.videonasocialmedia.videona.export.domain.ExporterImpl;
 import com.videonasocialmedia.videona.export.domain.callback.ExportProgressListener;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.utils.Constants;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 /**
@@ -45,18 +47,42 @@ public class ExportController implements ExportProgressListener {
     public void export(final ExportProgressListener progressListener) {
 
         exportHandler = new ExportHandler(progressListener);
-        Runnable runnable = new Runnable() {
+
+        String filePath = Constants.PATH_APP + File.separator + project.getTitle() + ".mp4";
+        if(videoFileExportedExist(filePath)){
+                progressListener.onExportSuccessFinished(filePath);
+                return;
+        }
+
+
+       /* Runnable runnable = new Runnable() {
             @Override
             public void run() {
-
-                exporter.export(project.getTitle());
-                exportHandler.sendMessage(exportHandler.obtainMessage(MSG_PROGRESS_SUCCESS));
-
+                    exporter.export(project.getTitle());
+                    exportHandler.sendMessage(exportHandler.obtainMessage(MSG_PROGRESS_SUCCESS));
             }
         };
 
         Thread t = new Thread(runnable);
-        t.start();
+        t.start(); */
+
+        Thread threadA = new Thread(new Runnable(){
+            public void run(){
+                exporter.export(project.getTitle());
+                exportHandler.sendMessage(exportHandler.obtainMessage(MSG_PROGRESS_SUCCESS));
+            }
+        }, "Thread A");
+
+        threadA.start();
+
+    }
+
+    private boolean videoFileExportedExist(String title) {
+        File f = new File(title);
+        if(f.exists())
+            return true;
+
+        return false;
     }
 
     @Override
@@ -108,4 +134,5 @@ public class ExportController implements ExportProgressListener {
         }
 
     }
+
 }

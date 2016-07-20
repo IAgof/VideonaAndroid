@@ -11,6 +11,7 @@
         android:layout_height="30dp"
         android:layout_weight="1"
         android:scaleType="fitCenter"
+        android:onClick="clickEvent"
         android:src="@drawable/activity_edit_clip_normal"
         />
 
@@ -21,6 +22,7 @@
         android:layout_height="30dp"
         android:layout_weight="1"
         android:scaleType="fitCenter"
+        android:onClick="clickEvent"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_music_normal"
         />
@@ -32,6 +34,7 @@
         android:layout_height="30dp"
         android:layout_weight="1"
         android:scaleType="fitCenter"
+        android:onClick="clickEvent"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/activity_edit_share_normal"
         />

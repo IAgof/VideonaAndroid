@@ -22,7 +22,9 @@ import com.videonasocialmedia.videona.model.entities.editor.track.AudioTrack;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -177,7 +179,8 @@ public class Project {
     }
 
     public void clear() {
-        INSTANCE = new Project(null, null, null);
+        String title = "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        INSTANCE = new Project(title, null, null);
     }
 
     public int numberOfClips() {

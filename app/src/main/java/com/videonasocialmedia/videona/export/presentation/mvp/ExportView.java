@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.export.presentation.service;
+package com.videonasocialmedia.videona.export.presentation.mvp;
 
 /**
  * Created by alvaro on 11/07/16.

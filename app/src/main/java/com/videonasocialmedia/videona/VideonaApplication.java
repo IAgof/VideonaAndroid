@@ -46,7 +46,7 @@ public class VideonaApplication extends Application {
         setupGoogleAnalytics();
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         Dexter.initialize(this);
-        setupLeakCanary();
+      //  setupLeakCanary();
     }
 
     private void setupGoogleAnalytics() {

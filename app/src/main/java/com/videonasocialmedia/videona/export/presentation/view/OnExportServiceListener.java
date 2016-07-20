@@ -5,9 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.export.presentation.service;
-
-import android.app.Activity;
+package com.videonasocialmedia.videona.export.presentation.view;
 
 /**
  * Created by alvaro on 12/07/16.

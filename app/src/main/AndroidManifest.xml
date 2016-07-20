@@ -217,7 +217,7 @@
             />
 
         <service
-            android:name=".export.presentation.service.ExportService"
+            android:name=".export.presentation.view.ExportService"
             android:exported="false"
             android:enabled="true"
             />

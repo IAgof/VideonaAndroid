@@ -9,11 +9,17 @@ import android.net.Uri;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
+import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,14 +28,16 @@ import java.util.List;
 public class ShareVideoPresenter {
 
     private ObtainNetworksToShareUseCase obtainNetworksToShareUseCase;
+    private Project currentProject;
     private ShareVideoView shareVideoView;
     private SharedPreferences sharedPreferences;
 
-    public ShareVideoPresenter(ShareVideoView shareVideoView) {
+    public ShareVideoPresenter(ShareVideoView shareVideoView, ToolbarNavigator.ProjectModifiedCallBack callback) {
         this.shareVideoView = shareVideoView;
         sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                 Context.MODE_PRIVATE);
+        currentProject = Project.getInstance(null, null, null);
     }
 
     public void onCreate() {
@@ -83,4 +91,27 @@ public class ShareVideoPresenter {
         return sharedPreferences.getString(ConfigPreferences.RESOLUTION, "1280x720");
     }
 
+    public void resetProject() {
+        currentProject.clear();
+    }
+
+    public void continueProject(){
+        String title = "V_EDIT_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        currentProject.setTitle(title);
+    }
+
+    public void checkIfVideoIsExported() {
+        String filePath = Constants.PATH_APP + File.separator + currentProject.getTitle() + ".mp4";
+        if(!videoFileExportedExist(filePath)){
+            shareVideoView.startVideoExporting();
+        }
+    }
+
+    private boolean videoFileExportedExist(String title) {
+        File f = new File(title);
+        if(f.exists())
+            return true;
+
+        return false;
+    }
 }

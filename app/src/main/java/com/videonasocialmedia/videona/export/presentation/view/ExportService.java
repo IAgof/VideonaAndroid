@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.export.presentation.service;
+package com.videonasocialmedia.videona.export.presentation.view;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -20,6 +20,8 @@ import android.support.annotation.Nullable;
 
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.export.presentation.mvp.ExportPresenter;
+import com.videonasocialmedia.videona.export.presentation.mvp.ExportView;
 import com.videonasocialmedia.videona.presentation.views.activity.ShareActivity;
 import com.videonasocialmedia.videona.utils.Constants;
 
@@ -37,17 +39,12 @@ public class ExportService extends Service implements ExportView {
     // This is the object that receives interactions from clients.  See
     // RemoteService for a more complete example.
     private final IBinder mBinder = new LocalBinder();
-    private String mediaPathVideoExported;
 
     public class LocalBinder extends Binder implements OnExportServiceListener{
-        public ExportService getService() {
-            return ExportService.this;
-        }
 
         @Override
         public void registerListener(OnExportProjectListener callback) {
             exportProjectListener = callback;
-            exportProjectListener.messageService("Init");
         }
 
         @Override
@@ -62,7 +59,7 @@ public class ExportService extends Service implements ExportView {
         super.onCreate();
         exportPresenter = new ExportPresenter();
         exportPresenter.onCreate(this);
-        notificationManager = (NotificationManager) VideonaApplication.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Nullable
@@ -86,7 +83,6 @@ public class ExportService extends Service implements ExportView {
 
     private Notification.Builder prepareNotificationBuilder() {
         Intent intent= new Intent(this, ShareActivity.class);
-        intent.putExtra("VideoExportedFinished", mediaPathVideoExported);
         intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
@@ -112,6 +108,8 @@ public class ExportService extends Service implements ExportView {
             stopForeground(true);
             notificationManager.notify(Constants.NOTIFICATION_EXPORT_ID, builder.build());
         }
+        if(exportProjectListener !=null)
+            exportProjectListener.startService();
     }
 
     @Override
@@ -134,8 +132,8 @@ public class ExportService extends Service implements ExportView {
 
     @Override
     public void hideNotification() {
-        if(exportProjectListener != null)
-            notificationManager.cancel(Constants.NOTIFICATION_EXPORT_ID);
+       // if(exportProjectListener != null)
+       //     notificationManager.cancel(Constants.NOTIFICATION_EXPORT_ID);
     }
 
     @Override
@@ -146,12 +144,7 @@ public class ExportService extends Service implements ExportView {
 
     @Override
     public void onSuccessVideoExported(String mediaPath) {
-        if(mediaPath!=null) {
-            if(exportProjectListener != null)
+        if(mediaPath!=null && exportProjectListener != null)
                 exportProjectListener.onSuccessVideoExported(mediaPath);
-            mediaPathVideoExported = mediaPath;
-
-        }
     }
-
 }

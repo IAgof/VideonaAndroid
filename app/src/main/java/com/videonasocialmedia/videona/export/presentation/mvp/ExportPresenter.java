@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.export.presentation.service;
+package com.videonasocialmedia.videona.export.presentation.mvp;
 
 import com.videonasocialmedia.videona.export.domain.usecase.ExportController;
 import com.videonasocialmedia.videona.export.domain.callback.ExportProgressListener;
@@ -32,7 +32,6 @@ public class ExportPresenter implements ExportProgressListener {
     public void onExportSuccessFinished(String mediaPath) {
         exportView.onSuccessVideoExported(mediaPath);
         exportView.setNotificationProgress(110);
-        exportView.hideNotification();
         exportView.showMessage("ExportFinished");
     }
 
@@ -43,7 +42,7 @@ public class ExportPresenter implements ExportProgressListener {
 
     @Override
     public void onExportProgressUpdated(int progress) {
-        exportView.showMessage("Adding music");
+
         exportView.setNotificationProgress(80);
 
     }
