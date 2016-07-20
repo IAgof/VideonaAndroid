@@ -34,5 +34,7 @@ public interface LoginView {
 
     void exitLoginActivity();
 
-    void goToPrivacyTerms();
+    void goToTermsOfService();
+
+    void goToPrivacyPolicy();
 }

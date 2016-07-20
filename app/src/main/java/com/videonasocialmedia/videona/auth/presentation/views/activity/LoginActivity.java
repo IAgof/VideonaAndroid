@@ -11,10 +11,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -28,6 +32,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.LoginPresenter;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.presentation.views.activity.PrivacyPolicyActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.TermsOfServiceActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
 
@@ -57,11 +62,19 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     View loginFormView;
     @Bind(R.id.email_sign_in_button)
     Button emailSignInButton;
-   @Bind(R.id.accept_term_text_view)
-    TextView accepTermTextView;
+   @Bind(R.id.accept_term_service_text_view)
+    TextView accepTermServiceTextView;
     private LoginPresenter loginPresenter;
     @Bind(R.id.check_box_Accept_Term)
     CheckBox checkBoxAcceptTerm;
+    @Bind(R.id.login_progress_layout)
+    View loginProgressLayout;
+    @Bind(R.id.email_login_form)
+    View emailLoginForm;
+    @Bind(R.id.login_progress_text_view)
+    TextView loginProgressTextView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +83,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         ButterKnife.bind(this);
         setupToolbar();
         loginPresenter = new LoginPresenter(this);
+        addTextViewWithMultipleLink(accepTermServiceTextView);
     }
 
     private void setupToolbar() {
@@ -131,9 +145,9 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     }
 
-    @OnClick (R.id.accept_term_text_view)
+    @OnClick (R.id.accept_term_service_text_view)
     public void goToPrivacyTermClickListener(){
-        goToPrivacyTerms();
+        goToTermsOfService();
     }
 
 
@@ -190,7 +204,11 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     @Override
     public void showSuccessLogin(int stringSuccesLogin) {
-        showMessage(stringSuccesLogin);
+        progressView.setVisibility(View.INVISIBLE);
+        loginProgressTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
+        loginProgressTextView.setText(stringSuccesLogin);
+
+
     }
 
     @Override
@@ -206,13 +224,53 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     @Override
     public void exitLoginActivity() {
-        finish();
+
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        },3000);
+    }
+
+
+    @Override
+    public void goToTermsOfService() {
+        Intent intent = new Intent(VideonaApplication.getAppContext(), TermsOfServiceActivity.class);
+        startActivity(intent);
     }
 
     @Override
-    public void goToPrivacyTerms() {
-        Intent intent = new Intent(VideonaApplication.getAppContext(), TermsOfServiceActivity.class);
+    public void goToPrivacyPolicy() {
+        Intent intent = new Intent(VideonaApplication.getAppContext(), PrivacyPolicyActivity.class);
         startActivity(intent);
+
+    }
+
+    public void addTextViewWithMultipleLink(TextView textView){
+        SpannableStringBuilder newTextOfTextView = new SpannableStringBuilder(getString(R.string.term_of_service_link));
+
+        newTextOfTextView.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                goToTermsOfService();
+            }
+        }, newTextOfTextView.length() - getString(R.string.term_of_service_link).length(), newTextOfTextView.length(),0);
+
+
+        newTextOfTextView.append("  " +getString(R.string.and)+"  ");
+
+        newTextOfTextView.append(getString(R.string.privacy_policy_link));
+        newTextOfTextView.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                goToPrivacyPolicy();
+            }
+        }, newTextOfTextView.length() - getString(R.string.privacy_policy_link).length(), newTextOfTextView.length(),0);;
+
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(newTextOfTextView, TextView.BufferType.SPANNABLE);
     }
 
     /**
@@ -220,20 +278,20 @@ public class LoginActivity extends VideonaActivity implements LoginView {
      */
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-        loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        loginFormView.animate().setDuration(shortAnimTime).alpha(
+        emailLoginForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+        emailLoginForm.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                emailLoginForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
             }
         });
-        progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        progressView.animate().setDuration(shortAnimTime).alpha(
+        loginProgressLayout.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        loginProgressLayout.animate().setDuration(shortAnimTime).alpha(
                 show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                loginProgressLayout.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             }
         });
     }

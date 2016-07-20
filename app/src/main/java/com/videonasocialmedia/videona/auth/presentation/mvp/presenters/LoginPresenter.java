@@ -101,9 +101,10 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     @Override
     public void onLoginSuccess() {
-        loginView.hideProgressAuthenticationDialog();
+
         loginView.showSuccessLogin(R.string.success_login);
         loginView.exitLoginActivity();
+
     }
 
     @Override

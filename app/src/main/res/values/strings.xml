@@ -106,6 +106,11 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_No_Cheked_PrivacyTerm">You must agree to the terms of service before continuing</string>
+    <string name="title_checkbox_termService">I agree to the Terms of Service and Privacy Policy</string>
+    <string name="term_of_service_link">Term of Service</string>
+    <string name="privacy_policy_link">Privacy Policy</string>
+    <string name="login_in_progress">Login in progress... </string>
+    <string name="and"> and </string>
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">We count on you</string>

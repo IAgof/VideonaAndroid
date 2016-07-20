@@ -99,7 +99,12 @@
     <string name="error_invalid_password">La contraseña es demasiado corta</string>
     <string name="error_incorrect_password">La contraseñaes incorrecta</string>
     <string name="error_field_required">Este campo ha de rellenarse</string>
-    <string name="error_No_Cheked_PrivacyTerm">Necesita aceptar las condiciones de uso</string>
+    <string name="error_No_Cheked_PrivacyTerm">Necesita aceptar las condiciones de servicio</string>
+    <string name="title_checkbox_termService">Acepto las condiciones de servicio y la política de privacidad</string>
+    <string name="term_of_service_link">Condiciones de servicio</string>
+    <string name="privacy_policy_link">Política de privacidad</string>
+    <string name="login_in_progress">Registro en curso... </string>
+    <string name="and">y</string>
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">Contamos contigo</string>
