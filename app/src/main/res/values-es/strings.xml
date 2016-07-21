@@ -77,11 +77,12 @@
     <string name="action_settings">Ajustes</string>
 
     <!-- Loggin -->
-    <string name="title_activity_login">Registro</string>
+    <string name="title_activity_login">Iniciar sesión</string>
     <string name="signOut">Cerrar sesión</string>
-    <string name="signIn">Registro</string>
+    <string name="signIn">Iniciar sesión</string>
     <string name="title_activity_logout">Desconectarse</string>
-    <string name="success_login">Registro válido, bienvenido a Videona</string>
+    <string name="success_login">Sesión iniciada, bienvenido a Videona</string>
+    <string name="success_register">Registro válido, bienvenido a Videona</string>
     <!-- Promo -->
     <string name="title_activity_promo">Código promocional</string>
     <string name="validate_code">Validar</string>
@@ -93,18 +94,37 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Contraseña</string>
-    <string name="action_sign_in">Inicia sesión o regístrate</string>
+    <string name="action_sign_in">Iniciar sesión</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">La dirección de email es incorrecta</string>
     <string name="error_invalid_password">La contraseña es demasiado corta</string>
-    <string name="error_incorrect_password">La contraseñaes incorrecta</string>
+    <string name="error_incorrect_password">La contraseña es incorrecta</string>
     <string name="error_field_required">Este campo ha de rellenarse</string>
-    <string name="error_No_Cheked_PrivacyTerm">Necesita aceptar las condiciones de servicio</string>
+    <string name="login_in_progress">Inicio de sesión en curso... </string>
+
+    <string name="first_string_link_for_create_account">¿No tienes una cuenta de Videona?</string>
+    <string name="second_string_link_for_create_account">Créate una</string>
+
+    <!-- Strings related to register -->
+    <string name="prompt_email_register">Email</string>
+    <string name="prompt_password_register">Contraseña</string>
+
+    <string name="action_register_short">Sign in</string>
+    <string name="error_already_exits">Ya existe un usuario con este email</string>
+    <string name="error_invalid_email_register">La dirección de email es incorrecta</string>
+    <string name="error_invalid_password_register">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password_register">La contraseña es incorrecta</string>
+    <string name="error_field_required_register">Este campo ha de rellenarse</string>
+
+
+    <string name="error_No_Cheked_PrivacyTerm">Necesita aceptar las condiciones de servicio y la política de privacidad</string>
+    <string name="action_register">Registrarme</string>
     <string name="title_checkbox_termService">Acepto las condiciones de servicio y la política de privacidad</string>
     <string name="term_of_service_link">Condiciones de servicio</string>
     <string name="privacy_policy_link">Política de privacidad</string>
-    <string name="login_in_progress">Registro en curso... </string>
+    <string name="register_progress">Registro en curso... </string>
     <string name="and">y</string>
+
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">Contamos contigo</string>

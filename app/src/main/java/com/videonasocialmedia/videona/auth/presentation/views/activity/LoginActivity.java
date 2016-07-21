@@ -19,12 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -32,8 +32,6 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.LoginPresenter;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
-import com.videonasocialmedia.videona.presentation.views.activity.PrivacyPolicyActivity;
-import com.videonasocialmedia.videona.presentation.views.activity.TermsOfServiceActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
 
 import butterknife.Bind;
@@ -65,8 +63,6 @@ public class LoginActivity extends VideonaActivity implements LoginView {
    @Bind(R.id.accept_term_service_text_view)
     TextView accepTermServiceTextView;
     private LoginPresenter loginPresenter;
-    @Bind(R.id.check_box_Accept_Term)
-    CheckBox checkBoxAcceptTerm;
     @Bind(R.id.login_progress_layout)
     View loginProgressLayout;
     @Bind(R.id.email_login_form)
@@ -83,7 +79,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         ButterKnife.bind(this);
         setupToolbar();
         loginPresenter = new LoginPresenter(this);
-        addTextViewWithMultipleLink(accepTermServiceTextView);
+        addTextViewWithLink(accepTermServiceTextView);
     }
 
     private void setupToolbar() {
@@ -138,17 +134,14 @@ public class LoginActivity extends VideonaActivity implements LoginView {
         String password = passwordEditText.getText().toString();
 
         if (loginPresenter.isEmailValidAndNotEmpty(email) &&
-                loginPresenter.isPasswordValidAndNotEmpty(password)&& loginPresenter.isCheckedPrivacyTerm(checkBoxAcceptTerm)) {
+                loginPresenter.isPasswordValidAndNotEmpty(password)/*&& loginPresenter.isCheckedPrivacyTerm(checkBoxAcceptTerm)*/) {
 
             loginPresenter.tryToSignInOrLogIn(email, password);
         }
 
     }
 
-    @OnClick (R.id.accept_term_service_text_view)
-    public void goToPrivacyTermClickListener(){
-        goToTermsOfService();
-    }
+
 
 
     @OnEditorAction(R.id.password_edit_text)
@@ -204,17 +197,25 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     @Override
     public void showSuccessLogin(int stringSuccesLogin) {
+
+
         progressView.setVisibility(View.INVISIBLE);
         loginProgressTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
         loginProgressTextView.setText(stringSuccesLogin);
 
-
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                exitLoginActivity();
+            }
+        },3000);
     }
 
     @Override
-    public void showNoChekedPrivacyTerm(int stringNoChekedPrivacyTerm) {
-        showMessage(stringNoChekedPrivacyTerm);
-
+    public void goToRegisterActivity() {
+        Intent intent = new Intent(VideonaApplication.getAppContext(), RegisterActivity.class);
+        startActivity(intent);
     }
 
     private void showMessage(int stringResource) {
@@ -224,50 +225,23 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     @Override
     public void exitLoginActivity() {
-
-        Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
                 finish();
-            }
-        },3000);
     }
 
+    public void addTextViewWithLink(TextView textView){
+        SpannableStringBuilder newTextOfTextView = new SpannableStringBuilder(getString(R.string.first_string_link_for_create_account));
 
-    @Override
-    public void goToTermsOfService() {
-        Intent intent = new Intent(VideonaApplication.getAppContext(), TermsOfServiceActivity.class);
-        startActivity(intent);
-    }
+        newTextOfTextView.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)),0,newTextOfTextView.length(),0);
 
-    @Override
-    public void goToPrivacyPolicy() {
-        Intent intent = new Intent(VideonaApplication.getAppContext(), PrivacyPolicyActivity.class);
-        startActivity(intent);
+        newTextOfTextView.append(" ");
 
-    }
-
-    public void addTextViewWithMultipleLink(TextView textView){
-        SpannableStringBuilder newTextOfTextView = new SpannableStringBuilder(getString(R.string.term_of_service_link));
-
+        newTextOfTextView.append(getString(R.string.second_string_link_for_create_account));
         newTextOfTextView.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                goToTermsOfService();
+                goToRegisterActivity();
             }
-        }, newTextOfTextView.length() - getString(R.string.term_of_service_link).length(), newTextOfTextView.length(),0);
-
-
-        newTextOfTextView.append("  " +getString(R.string.and)+"  ");
-
-        newTextOfTextView.append(getString(R.string.privacy_policy_link));
-        newTextOfTextView.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                goToPrivacyPolicy();
-            }
-        }, newTextOfTextView.length() - getString(R.string.privacy_policy_link).length(), newTextOfTextView.length(),0);;
+        }, newTextOfTextView.length() - getString(R.string.second_string_link_for_create_account).length(), newTextOfTextView.length(),0);;
 
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setText(newTextOfTextView, TextView.BufferType.SPANNABLE);

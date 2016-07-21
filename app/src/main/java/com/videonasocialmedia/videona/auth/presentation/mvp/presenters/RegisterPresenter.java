@@ -1,10 +1,3 @@
-/*
- * Copyright (C) 2016 Videona Socialmedia SL
- * http://www.videona.com
- * info@videona.com
- * All rights reserved
- */
-
 package com.videonasocialmedia.videona.auth.presentation.mvp.presenters;
 
 import android.util.Patterns;
@@ -16,44 +9,45 @@ import com.videonasocialmedia.videona.auth.domain.usecase.RegisterUser;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnRegisterListener;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
-import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
+import com.videonasocialmedia.videona.auth.presentation.mvp.views.RegisterView;
 
 /**
- * Created by alvaro on 14/06/16.
+ * Created by ruth on 21/07/16.
  */
-public class LoginPresenter implements OnLoginListener, OnRegisterListener {
+public class RegisterPresenter implements OnLoginListener, OnRegisterListener {
 
     private LoginView loginView;
+    private RegisterView registerView;
     private String email;
     private String password;
     private LoginUser loginUser;
     private RegisterUser registerUser;
     private CheckBox checkBox;
 
-    public LoginPresenter(LoginView loginView) {
+    public RegisterPresenter(RegisterView registerView) {
         this.loginUser = new LoginUser();
-        this.loginView = loginView;
+        this.registerView = registerView;
         this.registerUser = new RegisterUser();
     }
 
     public void tryToSignInOrLogIn(String email, String password) {
-        loginView.resetErrorFields();
-        loginView.showProgressAuthenticationDialog();
+        registerView.resetErrorFields();
+        registerView.showProgressAuthenticationDialog();
         if (isEmailValidAndNotEmpty(email) && isPasswordValidAndNotEmpty(password)) {
             this.email = email;
             this.password = password;
-            //registerUser.register(email, password, this);
-            loginUser.login(email, password, this);
+            registerUser.register(email, password, this);
+
         }
     }
 
     public boolean isEmailValidAndNotEmpty(String email) {
         if (isEmptyField(email)) {
-            loginView.emailFieldRequire();
+            registerView.emailFieldRequire();
             return false;
         }
         if (!isEmailValid(email)) {
-            loginView.emailInvalid();
+            registerView.emailInvalid();
             return false;
         }
         return true;
@@ -61,11 +55,20 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     public boolean isPasswordValidAndNotEmpty(String password) {
         if (isEmptyField(password)) {
-            loginView.passwordFieldRequire();
+            registerView.passwordFieldRequire();
             return false;
         }
         if (!isPasswordValid(password)) {
-            loginView.passwordInvalid();
+            registerView.passwordInvalid();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isCheckedPrivacyTerm(CheckBox checkBox){
+
+        if (!checkBox.isChecked()){
+            registerView.showNoChekedPrivacyTerm(R.string.error_No_Cheked_PrivacyTerm);
             return false;
         }
         return true;
@@ -84,41 +87,32 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
         return password.length() >= 6;
     }
 
-    @Override
-    public void onLoginError(OnLoginListener.Causes causes) {
-        loginView.hideProgressAuthenticationDialog();
-        loginView.showErrorLogin(R.string.defaultErrorMessage);
-    }
 
-    @Override
-    public void onLoginSuccess() {
-        loginView.showSuccessLogin(R.string.success_login);
-
-    }
 
     @Override
     public void onRegisterError(OnRegisterListener.Causes cause) {
 
-        loginView.hideProgressAuthenticationDialog();
+        registerView.hideProgressAuthenticationDialog();
 
         switch (cause) {
             case NETWORK_ERROR:
-                loginView.showErrorLogin(R.string.networkError);
+                registerView.showErrorRegister(R.string.networkError);
                 break;
             case UNKNOWN_ERROR:
-                loginView.showErrorLogin(R.string.error);
+                registerView.showErrorRegister(R.string.error);
                 break;
             case USER_ALREADY_EXISTS:
-                loginUser.login(email, password, this);
+                registerView.showErrorRegister(R.string.error_already_exits);
+                //loginUser.login(email, password, this);
                 break;
             case INVALID_EMAIL:
-                loginView.showErrorLogin(R.string.error_invalid_email);
+                registerView.showErrorRegister(R.string.error_invalid_email);
                 break;
             case MISSING_REQUEST_PARAMETERS:
-                loginView.showErrorLogin(R.string.error_field_required);
+                registerView.showErrorRegister(R.string.error_field_required);
                 break;
             case INVALID_PASSWORD:
-                loginView.showErrorLogin(R.string.error_invalid_email);
+                registerView.showErrorRegister(R.string.error_invalid_email);
                 break;
         }
 
@@ -127,5 +121,19 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
     @Override
     public void onRegisterSuccess() {
         loginUser.login(email, password, this);
+        registerView.showSuccessRegister(R.string.success_register);
+    }
+
+
+    @Override
+    public void onLoginError(OnLoginListener.Causes causes) {
+        loginView.hideProgressAuthenticationDialog();
+        loginView.showErrorLogin(R.string.defaultErrorMessage);
+    }
+
+    @Override
+    public void onLoginSuccess() {
+        //loginView.showSuccessLogin(R.string.success_login);
+
     }
 }

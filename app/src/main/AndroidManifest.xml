@@ -219,6 +219,13 @@
             android:label="@string/title_activity_login"/>
 
         <activity
+            android:name=".auth.presentation.views.activity.RegisterActivity"
+            android:parentActivityName=".auth.presentation.views.activity.LoginActivity"
+            android:theme="@style/VideonaSettings"
+            android:screenOrientation="sensorPortrait"
+            android:label="@string/title_activity_login"/>
+
+        <activity
             android:name=".promo.presentation.views.activity.PromoCodeActivity"
             android:parentActivityName=".presentation.views.activity.SettingsActivity"
             android:label="@string/title_activity_promo"

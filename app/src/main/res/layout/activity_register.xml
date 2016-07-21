@@ -14,7 +14,7 @@
                                                  android:gravity="center_horizontal"
                                                  android:orientation="vertical"
 
-                                                 tools:context=".auth.presentation.views.activity.LoginActivity">
+                                                 tools:context=".auth.presentation.views.activity.RegisterActivity">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -46,7 +46,7 @@
 
 
         <ScrollView
-            android:id="@+id/login_form_view"
+            android:id="@+id/register_form_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
@@ -66,11 +66,11 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:visibility="invisible"
-                    android:id="@+id/login_progress_layout"
+                    android:id="@+id/register_progress_layout"
                     >
 
                     <ProgressBar
-                        android:id="@+id/login_progress_view"
+                        android:id="@+id/register_progress_view"
                         style="?android:attr/progressBarStyleLarge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -79,18 +79,18 @@
                         android:layout_gravity="center_horizontal"
                          />
                     <TextView
-                        android:id="@+id/login_progress_text_view"
+                        android:id="@+id/register_progress_text_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/login_in_progress"/>
+                        android:text="@string/register_progress"/>
 
 
                 </LinearLayout>
 
 
             <LinearLayout
-                android:id="@+id/email_login_form"
+                android:id="@+id/email_register_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -101,16 +101,16 @@
                 android:visibility="visible">
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/email_text_input"
+                    android:id="@+id/email_register_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true">
 
                     <EditText
-                        android:id="@+id/email_edit_text"
+                        android:id="@+id/email_register_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_email"
+                        android:hint="@string/prompt_email_register"
                         android:inputType="textEmailAddress"
                         android:singleLine="true"
                         android:textCursorDrawable="@null"
@@ -119,18 +119,18 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/password_text_input"
+                    android:id="@+id/password_register_text_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true">
 
                     <EditText
-                        android:id="@+id/password_edit_text"
+                        android:id="@+id/password_register_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_password"
+                        android:hint="@string/prompt_password_register"
                         android:imeActionId="@+id/login"
-                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeActionLabel="@string/action_register_short"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
                         android:maxLines="1"
@@ -140,12 +140,21 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/check_box_Accept_Term"
+                    android:checked="false"
+                    android:text="@string/title_checkbox_termService"
+                    android:textColor="@color/colorSecondary"/>
+
+
                 <Button
-                    android:id="@+id/email_sign_in_button"
+                    android:id="@+id/email_register_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/action_sign_in"
+                    android:text="@string/action_register"
                     android:background="@color/colorButton"
                     android:textColor="@color/textColorButton"/>
 
