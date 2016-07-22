@@ -9,10 +9,12 @@ package com.videonasocialmedia.videona.effects.domain.model;
 
 import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 
+import io.realm.RealmModel;
+
 /**
  *
  */
-public abstract class Effect {
+public abstract class Effect implements RealmModel {
 
     /**
      * Identifier of the effect. Cannot be null.
@@ -65,6 +67,16 @@ public abstract class Effect {
 
     public Effect(String identifier, String name, int iconId, String type,
                   PermissionType permissionType) {
+        this.identifier = identifier;
+        this.name = name;
+        this.iconPath = null;
+        this.iconId = iconId;
+        this.type = type;
+        this.permissionType = permissionType;
+    }
+
+    public Effect(String identifier, String name, int iconId, String type,
+                  PermissionType permissionType, boolean firstUse) {
         this.identifier = identifier;
         this.name = name;
         this.iconPath = null;

@@ -23,13 +23,12 @@ import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
-import com.videonasocialmedia.videona.effects.domain.model.Effect;
+import com.videonasocialmedia.videona.effects.repository.model.Effect;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
 /**
  * This class is used to show the camera effects gallery.
@@ -38,9 +37,9 @@ public class EffectAdapter
         extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
     private static final int GIFT_VIEW_TYPE = 300;
     private static final int EFFECT_VIEW_TYPE = 254;
+    private RealmResults<Effect> realmEffects;
 
     private Context context;
-    private List<Effect> effects;
     private OnEffectSelectedListener onEffectSelectedListener;
     private int selectedPosition = -1;
     private int previousSelectionPosition = -1;
@@ -53,8 +52,9 @@ public class EffectAdapter
      *
      * @param effects the list of the available effects
      */
-    public EffectAdapter(List<Effect> effects, OnEffectSelectedListener listener) {
-        this.effects = effects;
+
+    public EffectAdapter(RealmResults<Effect> effects, OnEffectSelectedListener listener) {
+        this.realmEffects = effects;
         this.onEffectSelectedListener = listener;
     }
 
@@ -63,8 +63,9 @@ public class EffectAdapter
      *
      * @return
      */
-    public List<Effect> getElementList() {
-        return effects;
+
+    public RealmResults<Effect> getRealmElementList() {
+        return realmEffects.where().findAll();
     }
 
     @Override
@@ -89,7 +90,8 @@ public class EffectAdapter
 
     @Override
     public void onBindViewHolder(cameraEffectViewHolder holder, int position) {
-        Effect selectedEffect = effects.get(position);
+        //Effect selectedEffect = effects.get(position);
+        Effect selectedEffect = realmEffects.get(position);
         if (getItemViewType(position) != GIFT_VIEW_TYPE) {
             Glide.with(context)
                     .load(selectedEffect.getIconId())
@@ -109,14 +111,15 @@ public class EffectAdapter
 
     @Override
     public int getItemViewType(int position) {
-        return effects.get(position).getPermissionType() ==
-                PermissionType.LOGGED_IN && !loginUser.userIsLoggedIn()
-                ? GIFT_VIEW_TYPE : EFFECT_VIEW_TYPE;
+
+        return realmEffects.get(position).getActivated()
+                ? EFFECT_VIEW_TYPE : GIFT_VIEW_TYPE;
     }
 
     @Override
     public int getItemCount() {
-        return effects.size();
+        //return effects.size();
+        return realmEffects.size();
     }
 
     /**
@@ -126,7 +129,8 @@ public class EffectAdapter
      * @return
      */
     public Effect getEffect(int position) {
-        return effects.get(position);
+        //return effects.get(position);
+        return realmEffects.get(position);
     }
 
 
@@ -140,23 +144,6 @@ public class EffectAdapter
         this.onEffectSelectedListener = onEffectSelectedListener;
     }
 
-    /**
-     * Appends new effect to the actual effect list
-     *
-     * @param effects
-     */
-    public void appendCameraEffect(List<Effect> effects) {
-        this.effects.addAll(effects);
-    }
-
-    /**
-     * Checks if the cameraEffectColor list is empty
-     *
-     * @return
-     */
-    public boolean isCameraEffectColorListEmpty() {
-        return effects.isEmpty();
-    }
 
     /**
      * Checks if some effect has been selected
@@ -184,8 +171,9 @@ public class EffectAdapter
         return selectedPosition;
     }
 
-    public void setEffectList(List<Effect> effectList) {
-        this.effects = effectList;
+
+    public void setRealmEffectList(RealmResults<Effect> effectList) {
+        this.realmEffects = effectList;
         notifyDataSetChanged();
     }
 
@@ -227,12 +215,12 @@ public class EffectAdapter
                 if (selectedPosition == getAdapterPosition()) {
                     int adapterPosition = getAdapterPosition();
                     resetSelectedEffect();
-                    onClickListener.onEffectSelectionCancel(effects.get(adapterPosition));
+                    onClickListener.onEffectSelectionCancel(realmEffects.get(adapterPosition));
                 } else {
                     effectSelected = true;
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);
-                    onClickListener.onEffectSelected(effects.get(selectedPosition));
+                    onClickListener.onEffectSelected(realmEffects.get(selectedPosition));
                 }
             }
             return true;

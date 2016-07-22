@@ -16,6 +16,8 @@ import com.videonasocialmedia.videona.effects.domain.model.Effect;
 
 import java.util.List;
 
+import io.realm.RealmResults;
+
 public interface RecordView {
 
     void showRecordButton();
@@ -41,10 +43,6 @@ public interface RecordView {
     void startChronometer();
 
     void stopChronometer();
-
-    void showCameraEffectShader(List<Effect> effects);
-
-    void showCameraEffectOverlay(List<Effect> effects);
 
     void lockScreenRotation();
 
@@ -82,7 +80,11 @@ public interface RecordView {
 
     void finishActivityForResult(String path);
 
-    void updateShaderEffectList(List<Effect> shaderEffects);
+    void showCameraEffectShader(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> effects);
 
-    void updateOverlayEffectList(List<Effect> overlayEffects);
+    void showCameraEffectOverlay(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> effects);
+
+    void updateShaderEffectList(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderEffects);
+
+    void updateOverlayEffectList(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayEffects);
 }

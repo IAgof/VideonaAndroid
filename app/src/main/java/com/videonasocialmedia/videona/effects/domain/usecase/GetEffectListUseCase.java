@@ -8,28 +8,50 @@
 package com.videonasocialmedia.videona.effects.domain.usecase;
 
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
-import com.videonasocialmedia.videona.effects.repository.EffectProvider;
+import com.videonasocialmedia.videona.effects.domain.model.EffectType;
+import com.videonasocialmedia.videona.effects.repository.EffectRepository;
+import com.videonasocialmedia.videona.effects.repository.apiclient.EffectProvider;
+import com.videonasocialmedia.videona.effects.repository.local.EffectLocalSource;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 /**
  * Created by Veronica Lago Fominaya on 25/11/2015.
  */
 public class GetEffectListUseCase {
 
-    public static List<Effect> getColorEffectList() {
-        return EffectProvider.getColorEffectList();
+    public static RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffectsList() {
+
+        EffectRepository effectRepository = new EffectLocalSource();
+        //RealmResults realmResults = effectRepository.getShaderEffectList();
+
+        return effectRepository.getShaderEffectList();
     }
 
-    public static List<Effect> getDistortionEffectList() {
-        return EffectProvider.getDistortionEffectList();
+    public static void updateShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
+        EffectRepository effectRepository = new EffectLocalSource();
+        effectRepository.updateShaderEffect(effect);
     }
 
-    public static List<Effect> getShaderEffectsList() {
-        return EffectProvider.getShaderEffectList();
+    public static RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getOverlayEffectsList() {
+
+        EffectRepository effectRepository = new EffectLocalSource();
+        RealmResults realmResults = effectRepository.getOverlayEffectList();
+
+        if(realmResults.size() == 0){
+            effectRepository.addOverlayEffectList();
+        }
+
+
+        return effectRepository.getOverlayEffectList();
     }
 
-    public static List<Effect> getOverlayEffectsList() {
-        return EffectProvider.getOverlayFilterList();
+    public static void updateOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
+        EffectRepository effectRepository = new EffectLocalSource();
+        effectRepository.updateOverlayEffect(effect);
     }
 }

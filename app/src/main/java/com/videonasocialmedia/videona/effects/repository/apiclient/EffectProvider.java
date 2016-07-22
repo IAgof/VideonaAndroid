@@ -5,7 +5,7 @@
  * All rights reserved
  */
 
-package com.videonasocialmedia.videona.effects.repository;
+package com.videonasocialmedia.videona.effects.repository.apiclient;
 
 import com.videonasocialmedia.avrecorder.Filters;
 import com.videonasocialmedia.videona.R;
@@ -157,13 +157,12 @@ public class EffectProvider {
                         R.drawable.common_filter_overlay_ov27_wolder,
                         R.drawable.overlay_filter_wolder, AnalyticsConstants.FILTER_TYPE_OVERLAY));
             }
-            overlayList.add(new OverlayEffect("OV7", "Pride",
-                    R.drawable.common_filter_overlay_ov7_pride,
-                    R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        } else
-            overlayList.add(new OverlayEffect("GIFT_OV", " ",
-                    R.drawable.common_filter_overlay_gift,
-                    R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
+
+        }
+
+        overlayList.add(new OverlayEffect("OV7", "Pride",
+                R.drawable.common_filter_overlay_ov7_pride,
+                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
         overlayList.add(new OverlayEffect("OV4", "Retrotv",
                 R.drawable.common_filter_overlay_ov4_retrotv,
                 R.drawable.overlay_filter_retrotv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
