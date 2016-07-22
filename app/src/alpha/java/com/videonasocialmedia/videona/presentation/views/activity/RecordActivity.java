@@ -149,7 +149,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     private boolean externalIntent = false;
 
     // TODO define Effects ID
-    private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OV";
+    private String OVERLAY_EFFECT_GIFT_ID = "GIFT_OVg01";
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
 

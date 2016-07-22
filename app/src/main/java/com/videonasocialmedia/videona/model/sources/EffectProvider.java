@@ -124,8 +124,8 @@ public class EffectProvider {
     public static List<Effect> getOverlayFilterList() {
 
         List<Effect> overlayList = new ArrayList<>();
-        overlayList.add(new OverlayEffect("GIFT_OVg01", "Invaders",
-                R.drawable.common_filter_overlay_ovg01_invaders,
+        overlayList.add(new OverlayEffect("GIFT_OVg01", " ",
+                R.drawable.common_filter_overlay_gift,
                 R.drawable.overlay_filter_invaders, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         overlayList.add(new OverlayEffect("OV22", "Rain",
