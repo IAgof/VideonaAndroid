@@ -21,7 +21,7 @@ import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivi
 /**
  * Created by alvaro on 14/06/16.
  */
-public class LoginPresenter implements OnLoginListener, OnRegisterListener {
+public class LoginPresenter implements OnLoginListener /*OnRegisterListener */{
 
     private LoginView loginView;
     private String email;
@@ -96,36 +96,4 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     }
 
-    @Override
-    public void onRegisterError(OnRegisterListener.Causes cause) {
-
-        loginView.hideProgressAuthenticationDialog();
-
-        switch (cause) {
-            case NETWORK_ERROR:
-                loginView.showErrorLogin(R.string.networkError);
-                break;
-            case UNKNOWN_ERROR:
-                loginView.showErrorLogin(R.string.error);
-                break;
-            case USER_ALREADY_EXISTS:
-                loginUser.login(email, password, this);
-                break;
-            case INVALID_EMAIL:
-                loginView.showErrorLogin(R.string.error_invalid_email);
-                break;
-            case MISSING_REQUEST_PARAMETERS:
-                loginView.showErrorLogin(R.string.error_field_required);
-                break;
-            case INVALID_PASSWORD:
-                loginView.showErrorLogin(R.string.error_invalid_email);
-                break;
-        }
-
-    }
-
-    @Override
-    public void onRegisterSuccess() {
-        loginUser.login(email, password, this);
-    }
 }

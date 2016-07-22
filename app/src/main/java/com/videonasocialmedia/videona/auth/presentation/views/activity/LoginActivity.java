@@ -46,16 +46,16 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
 
     // UI references.
-    @Bind(R.id.email_text_input)
-    TextInputLayout emailTextInput;
+    @Bind(R.id.text_input_email)
+    TextInputLayout textInputEmail;
     @Bind(R.id.password_text_input)
     TextInputLayout passwordTextInput;
     @Bind(R.id.email_edit_text)
     EditText emailEditText;
     @Bind(R.id.password_edit_text)
     EditText passwordEditText;
-    @Bind(R.id.login_progress_view)
-    View progressView;
+    @Bind(R.id.progress_bar_login)
+    View progressBarLogin;
     @Bind(R.id.login_form_view)
     View loginFormView;
     @Bind(R.id.email_sign_in_button)
@@ -63,10 +63,10 @@ public class LoginActivity extends VideonaActivity implements LoginView {
    @Bind(R.id.accept_term_service_text_view)
     TextView accepTermServiceTextView;
     private LoginPresenter loginPresenter;
-    @Bind(R.id.login_progress_layout)
-    View loginProgressLayout;
-    @Bind(R.id.email_login_form)
-    View emailLoginForm;
+    @Bind(R.id.layoutProgressBarLogin)
+    View layoutProgressLogin;
+    @Bind(R.id.layout_login_form)
+    View layoutLoginForm;
     @Bind(R.id.login_progress_text_view)
     TextView loginProgressTextView;
 
@@ -156,7 +156,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     @Override
     public void resetErrorFields() {
-        emailTextInput.setError(null);
+        textInputEmail.setError(null);
         passwordTextInput.setError(null);
     }
 
@@ -167,12 +167,12 @@ public class LoginActivity extends VideonaActivity implements LoginView {
 
     @Override
     public void emailFieldRequire() {
-        emailTextInput.setError(getString(R.string.error_field_required));
+        textInputEmail.setError(getString(R.string.error_field_required));
     }
 
     @Override
     public void emailInvalid() {
-        emailTextInput.setError(getString(R.string.error_invalid_email));
+        textInputEmail.setError(getString(R.string.error_invalid_email));
     }
 
     @Override
@@ -199,7 +199,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     public void showSuccessLogin(int stringSuccesLogin) {
 
 
-        progressView.setVisibility(View.INVISIBLE);
+        progressBarLogin.setVisibility(View.INVISIBLE);
         loginProgressTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
         loginProgressTextView.setText(stringSuccesLogin);
 
@@ -229,6 +229,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     }
 
     public void addTextViewWithLink(TextView textView){
+
         SpannableStringBuilder newTextOfTextView = new SpannableStringBuilder(getString(R.string.first_string_link_for_create_account));
 
         newTextOfTextView.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)),0,newTextOfTextView.length(),0);
@@ -252,20 +253,20 @@ public class LoginActivity extends VideonaActivity implements LoginView {
      */
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-        emailLoginForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
-        emailLoginForm.animate().setDuration(shortAnimTime).alpha(
+        layoutLoginForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+        layoutLoginForm.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                emailLoginForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+                layoutLoginForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
             }
         });
-        loginProgressLayout.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-        loginProgressLayout.animate().setDuration(shortAnimTime).alpha(
+        layoutProgressLogin.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        layoutProgressLogin.animate().setDuration(shortAnimTime).alpha(
                 show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                loginProgressLayout.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+                layoutProgressLogin.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             }
         });
     }

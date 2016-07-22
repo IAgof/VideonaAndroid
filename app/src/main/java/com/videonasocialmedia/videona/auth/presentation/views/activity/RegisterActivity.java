@@ -35,6 +35,7 @@ import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.RegisterPresenter;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.RegisterView;
 import com.videonasocialmedia.videona.presentation.views.activity.PrivacyPolicyActivity;
+import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.TermsOfServiceActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
@@ -57,8 +58,8 @@ public class RegisterActivity extends VideonaActivity implements RegisterView {
     EditText emailRegisterEditText;
     @Bind(R.id.password_register_edit_text)
     EditText passwordRegisterEditText;
-    @Bind(R.id.register_progress_view)
-    View registerProgressView;
+    @Bind(R.id.progress_bar_register)
+    View ProgressBarRegister;
     @Bind(R.id.register_form_view)
     View loginFormView;
     @Bind(R.id.email_register_button)
@@ -68,10 +69,10 @@ public class RegisterActivity extends VideonaActivity implements RegisterView {
 
     @Bind(R.id.check_box_Accept_Term)
     CheckBox checkBoxAcceptTerm;
-    @Bind(R.id.register_progress_layout)
-    View registerProgressLayout;
-    @Bind(R.id.email_register_form)
-    View emailRegisterForm;
+    @Bind(R.id.layout_progress_register)
+    View layoutProgressBarRegister;
+    @Bind(R.id.layout_register_form)
+    View layoutRegisterForm;
     @Bind(R.id.register_progress_text_view)
     TextView registerProgressTextView;
 
@@ -119,11 +120,6 @@ public class RegisterActivity extends VideonaActivity implements RegisterView {
 
             registerPresenter.tryToSignInOrLogIn(email, password);
         }
-    }
-
-    @OnClick (R.id.accept_term_service_text_view)
-    public void goToPrivacyTermClickListener(){
-        goToTermsOfService();
     }
 
     @OnEditorAction(R.id.password_register_edit_text)
@@ -182,7 +178,7 @@ public class RegisterActivity extends VideonaActivity implements RegisterView {
 
     @Override
     public void showSuccessRegister(int stringSuccesRegister) {
-        registerProgressView.setVisibility(View.INVISIBLE);
+        ProgressBarRegister.setVisibility(View.INVISIBLE);
         registerProgressTextView.setTextColor(getResources().getColor(R.color.colorPrimary));
         registerProgressTextView.setText(stringSuccesRegister);
 
@@ -190,7 +186,7 @@ public class RegisterActivity extends VideonaActivity implements RegisterView {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                goToSettingsActivity();
+                goToRecordActivity();
             }
         },3000);
     }
@@ -205,68 +201,61 @@ public class RegisterActivity extends VideonaActivity implements RegisterView {
         snackbar.show();
     }
 
-    public void goToSettingsActivity(){
-        Intent intent = new Intent(VideonaApplication.getAppContext(), SettingsActivity.class);
+    public void goToRecordActivity(){
+        Intent intent = new Intent(VideonaApplication.getAppContext(), RecordActivity.class);
         startActivity(intent);
 
-    }
-
-    @Override
-    public void goToTermsOfService() {
-        Intent intent = new Intent(VideonaApplication.getAppContext(), TermsOfServiceActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void goToPrivacyPolicy() {
-        Intent intent = new Intent(VideonaApplication.getAppContext(), PrivacyPolicyActivity.class);
-        startActivity(intent);
     }
 
     public void addTextViewWithMultipleLink(TextView textView){
 
-        SpannableStringBuilder textWithLink = new SpannableStringBuilder(getString(R.string.term_of_service_link));
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(getString(R.string.term_of_service_link));
 
-        textWithLink.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                goToTermsOfService();
-            }
-        }, textWithLink.length() - getString(R.string.term_of_service_link).length(), textWithLink.length(),0);
+        addStringClickable(stringBuilder, R.string.term_of_service_link, TermsOfServiceActivity.class );
 
 
-        textWithLink.append("  " +getString(R.string.and)+"  ");
-        textWithLink.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)),textWithLink.length()-3,textWithLink.length(),0);
+        stringBuilder.append("  " +getString(R.string.and)+"  ");
+        stringBuilder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)),stringBuilder.length()-3,stringBuilder.length(),0);
 
-        textWithLink.append(getString(R.string.privacy_policy_link));
-        textWithLink.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                goToPrivacyPolicy();
-            }
-        }, textWithLink.length() - getString(R.string.privacy_policy_link).length(), textWithLink.length(),0);;
+        stringBuilder.append(getString(R.string.privacy_policy_link));
+
+        addStringClickable(stringBuilder, R.string.privacy_policy_link, PrivacyPolicyActivity.class);
+
 
         textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setText(textWithLink, TextView.BufferType.SPANNABLE);
+        textView.setText(stringBuilder, TextView.BufferType.SPANNABLE);
+    }
+
+
+    private SpannableStringBuilder addStringClickable(SpannableStringBuilder spannableStringBuilder, int stringClickable, final Class<?> activity) {
+        spannableStringBuilder.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Intent intent = new Intent(VideonaApplication.getAppContext(), activity);
+                startActivity(intent);
+            }
+        }, spannableStringBuilder.length() - getString(stringClickable).length(), spannableStringBuilder.length(), 0);
+
+        return spannableStringBuilder;
     }
 
 
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-        emailRegisterForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
-        emailRegisterForm.animate().setDuration(shortAnimTime).alpha(
+        layoutRegisterForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+        layoutRegisterForm.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                emailRegisterForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+                layoutRegisterForm.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
             }
         });
-        registerProgressLayout.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-        registerProgressLayout.animate().setDuration(shortAnimTime).alpha(
+        layoutProgressBarRegister.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        layoutProgressBarRegister.animate().setDuration(shortAnimTime).alpha(
                 show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                registerProgressLayout.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+                layoutProgressBarRegister.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             }
         });
     }

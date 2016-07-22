@@ -16,13 +16,11 @@ import com.videonasocialmedia.videona.auth.presentation.mvp.views.RegisterView;
  */
 public class RegisterPresenter implements OnLoginListener, OnRegisterListener {
 
-    private LoginView loginView;
     private RegisterView registerView;
     private String email;
     private String password;
     private LoginUser loginUser;
     private RegisterUser registerUser;
-    private CheckBox checkBox;
 
     public RegisterPresenter(RegisterView registerView) {
         this.loginUser = new LoginUser();
@@ -121,19 +119,17 @@ public class RegisterPresenter implements OnLoginListener, OnRegisterListener {
     @Override
     public void onRegisterSuccess() {
         loginUser.login(email, password, this);
-        registerView.showSuccessRegister(R.string.success_register);
     }
 
 
     @Override
     public void onLoginError(OnLoginListener.Causes causes) {
-        loginView.hideProgressAuthenticationDialog();
-        loginView.showErrorLogin(R.string.defaultErrorMessage);
+        registerView.hideProgressAuthenticationDialog();
+        registerView.showErrorRegister(R.string.defaultErrorMessage);
     }
 
     @Override
     public void onLoginSuccess() {
-        //loginView.showSuccessLogin(R.string.success_login);
-
+        registerView.showSuccessRegister(R.string.success_register);
     }
 }

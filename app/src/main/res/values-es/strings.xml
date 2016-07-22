@@ -81,8 +81,8 @@
     <string name="signOut">Cerrar sesión</string>
     <string name="signIn">Iniciar sesión</string>
     <string name="title_activity_logout">Desconectarse</string>
-    <string name="success_login">Sesión iniciada, bienvenido a Videona</string>
-    <string name="success_register">Registro válido, bienvenido a Videona</string>
+    <string name="success_login">Sesión iniciada ¡¡BIENVENIDO A VIDEONA!!</string>
+    <string name="success_register">Registro válido ¡¡BIENVENIDO A VIDEONA !!</string>
     <!-- Promo -->
     <string name="title_activity_promo">Código promocional</string>
     <string name="validate_code">Validar</string>

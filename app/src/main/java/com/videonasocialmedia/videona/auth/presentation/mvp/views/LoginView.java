@@ -34,5 +34,4 @@ public interface LoginView {
 
     void exitLoginActivity();
 
-
 }

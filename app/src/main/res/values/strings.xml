@@ -86,8 +86,8 @@
     <string name="signOut">Sign out</string>
     <string name="signIn">Sign In</string>
     <string name="title_activity_logout">Log Out</string>
-    <string name="success_login">Login ok, welcome to Videona</string>
-    <string name="success_register">Login ok, welcome to Videona</string>
+    <string name="success_login">Login ok, WELCOME TO VIDEONA!!</string>
+    <string name="success_register">Login ok, WELCOME TO VIDEONA!!</string>
 
     <!-- Promo -->
     <string name="title_activity_promo">Promo code</string>

@@ -24,8 +24,4 @@ public interface RegisterView {
     void showSuccessRegister(int stringSuccessRegister);
 
     void showNoChekedPrivacyTerm (int stringNoChekedPrivacyTerm);
-
-    void goToTermsOfService();
-
-    void goToPrivacyPolicy();
 }
