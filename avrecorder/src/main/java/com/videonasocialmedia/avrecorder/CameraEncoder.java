@@ -399,8 +399,10 @@ public class CameraEncoder implements SurfaceTexture.OnFrameAvailableListener, R
     }
 
     private int[] calculateDefaultWatermarkSize() {
-        int width = (mSessionConfig.getVideoWidth() * 265) / 1280;
-        int height = (mSessionConfig.getVideoHeight() * 36) / 720;
+       // int width = (mSessionConfig.getVideoWidth() * 265) / 1280;
+       // int height = (mSessionConfig.getVideoHeight() * 36) / 720;
+        int width = (mSessionConfig.getVideoWidth() * 205) / 1280;
+        int height = (mSessionConfig.getVideoHeight() * 109) / 720;
         return new int[]{width, height};
     }
 
