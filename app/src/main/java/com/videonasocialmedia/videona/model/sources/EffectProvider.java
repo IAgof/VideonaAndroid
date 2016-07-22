@@ -91,6 +91,9 @@ public class EffectProvider {
                 new ShaderEffect("FX7", "Twirl", R.drawable.common_filter_distortion_fx7_twirl,
                         Filters.FILTER_TWIRL, AnalyticsConstants.FILTER_TYPE_DISTORTION));
         shaderEffects.add(
+                new ShaderEffect("FX2", "Stretch", R.drawable.common_filter_distortion_fx2_stretch,
+                        Filters.FILTER_STRETCH, AnalyticsConstants.FILTER_TYPE_DISTORTION));
+        shaderEffects.add(
                 new ShaderEffect("FX6", "Tunnel", R.drawable.common_filter_distortion_fx6_tunnel,
                         Filters.FILTER_TUNNEL, AnalyticsConstants.FILTER_TYPE_DISTORTION));
         shaderEffects.add(
@@ -121,48 +124,32 @@ public class EffectProvider {
     public static List<Effect> getOverlayFilterList() {
 
         List<Effect> overlayList = new ArrayList<>();
-        overlayList.add(new OverlayEffect("GIFT_OV", " ",
-                R.drawable.common_filter_overlay_gift,
-                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV4", "Retrotv",
-                R.drawable.common_filter_overlay_ov4_retrotv,
-                R.drawable.overlay_filter_retrotv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV6", "Mist",
-                R.drawable.common_filter_overlay_ov6_mist,
-                R.drawable.overlay_filter_mist, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV26", "Bollywood",
-                R.drawable.common_filter_overlay_ov26_bollywood,
-                R.drawable.overlay_filter_bollywood, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("GIFT_OVg01", "Invaders",
+                R.drawable.common_filter_overlay_ovg01_invaders,
+                R.drawable.overlay_filter_invaders, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
         overlayList.add(new OverlayEffect("OV22", "Rain",
                 R.drawable.common_filter_overlay_ov22_rain,
                 R.drawable.overlay_filter_rain, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV10", "CCTV",
-                R.drawable.common_filter_overlay_ov10_cctv,
-                R.drawable.overlay_filter_cctv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
         overlayList.add(new OverlayEffect("OV9", "Summer",
                 R.drawable.common_filter_overlay_ov9_summer,
                 R.drawable.overlay_filter_summer, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV18", "Polaroid",
                 R.drawable.common_filter_overlay_ov18_polaroid,
                 R.drawable.overlay_filter_polaroid, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV19", "Old",
-                R.drawable.common_filter_overlay_ov19_old,
-                R.drawable.overlay_filter_old, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
         overlayList.add(new OverlayEffect("OVHT1", "Monster Hunter",
                 R.drawable.common_filter_overlay_ovt01_monster_hunter,
                 R.drawable.overlay_filter_monster_hunter, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV13", "Kisscam",
                 R.drawable.common_filter_overlay_ov13_kiss_cam,
                 R.drawable.overlay_filter_kiss_cam, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV24", "Bokeh",
-                R.drawable.common_filter_overlay_ov24_bokeh,
-                R.drawable.overlay_filter_bokeh, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
         overlayList.add(new OverlayEffect("OV03", "Sunset",
                 R.drawable.common_filter_overlay_ov3_sunset,
                 R.drawable.overlay_filter_sunset, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV05", "Autumn",
-                R.drawable.common_filter_overlay_ov5_autumn,
-                R.drawable.overlay_filter_autumn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
         overlayList.add(new OverlayEffect("OV13", "Wasted",
                 R.drawable.common_filter_overlay_ov17_wasted,
                 R.drawable.overlay_filter_wasted, AnalyticsConstants.FILTER_TYPE_OVERLAY));
@@ -178,9 +165,9 @@ public class EffectProvider {
     }
 
     public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("OV7", "Pride",
-                R.drawable.common_filter_overlay_ov7_pride,
-                R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY);
+        return new OverlayEffect("OVg01", "Invaders",
+                R.drawable.common_filter_overlay_ovg01_invaders,
+                R.drawable.overlay_filter_invaders, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
 }
