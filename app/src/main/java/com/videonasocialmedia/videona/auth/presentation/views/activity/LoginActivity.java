@@ -122,6 +122,7 @@ public class LoginActivity extends VideonaActivity implements LoginView {
     @OnClick (R.id.email_sign_in_button)
     public void emailSignInButtonClickListener(){
         attemptLogin();
+
     }
 
     /**

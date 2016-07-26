@@ -83,6 +83,11 @@
     <string name="title_activity_logout">Desconectarse</string>
     <string name="success_login">Sesión iniciada ¡¡BIENVENIDO A VIDEONA!!</string>
     <string name="success_register">Registro válido ¡¡BIENVENIDO A VIDEONA !!</string>
+
+    <string name="signOut_title_dialog">Cerrar sesión</string>
+    <string name="signOut_message_dialog">¿Estás seguro? Se eliminarán todos los datos de Videona de este dispositivo</string>
+    <string name="acceptSignOut">Sí</string>
+    <string name="cancelSignOut">No</string>
     <!-- Promo -->
     <string name="title_activity_promo">Código promocional</string>
     <string name="validate_code">Validar</string>
@@ -124,6 +129,11 @@
     <string name="privacy_policy_link">Política de privacidad</string>
     <string name="register_progress">Registro en curso... </string>
     <string name="and">y</string>
+
+    <string name="exit_registerActivity_title">Cancelar registro</string>
+    <string name="exit_registerActivity_message">¿Seguro que quieres salir? Se descartará la información introducida</string>
+    <string name="acceptExitRegisterActivity">Sí</string>
+    <string name="cancelExitRegisterActivity">No</string>
 
 
     <!-- Rate Videona -->
@@ -580,6 +590,7 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
     <string name="video_saved">Video guardado en tu galería</string>
     <string name="save_to_gallery">Guardar en galería</string>
     <string name="defaultErrorMessage">Oh, algo ha salido mal. Intentalo mas tarde</string>
+    <string name="credentialsUknownError">Email o contraseña incorrecto</string>
     <string name="networkError">¿Tienes conexión a internet?</string>
 
 </resources>

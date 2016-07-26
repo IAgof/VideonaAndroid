@@ -89,6 +89,11 @@
     <string name="success_login">Login ok, WELCOME TO VIDEONA!!</string>
     <string name="success_register">Login ok, WELCOME TO VIDEONA!!</string>
 
+    <string name="signOut_title_dialog">Sign Out</string>
+    <string name="signOut_message_dialog">Sign out now?</string>
+    <string name="acceptSignOut">YES</string>
+    <string name="cancelSignOut">NO</string>
+
     <!-- Promo -->
     <string name="title_activity_promo">Promo code</string>
     <string name="validate_code">Validate</string>
@@ -129,6 +134,11 @@
     <string name="and"> and </string>
     <string name="action_register">Register</string>
     <string name="register_progress">Register in progress... </string>
+
+    <string name="exit_registerActivity_title">Leave Register?</string>
+    <string name="exit_registerActivity_message">Are you sure you want to cancel account creation?\n This will discard any information that you have entered so far </string>
+    <string name="acceptExitRegisterActivity">Yes</string>
+    <string name="cancelExitRegisterActivity">No</string>
 
 
 
@@ -1667,6 +1677,7 @@ and Conditions.\n\n
 
     <string name="video_saved">Video saved in your gallery</string>
     <string name="save_to_gallery">Save to gallery</string>
+    <string name="credentialsUknownError">The email o password that you have entered is incorrect. Please try again.</string>
     <string name="defaultErrorMessage">Ooops, something happened. Try it later</string>
 
     <string name="networkError">Are you connected to the internet</string>

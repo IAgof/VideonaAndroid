@@ -40,7 +40,7 @@ public class SettingsFragment extends PreferenceFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener, PreferencesView,
         VideonaDialogListener {
 
-    protected final int REQUEST_CODE_EXIT_APP = 1;
+    protected final int REQUEST_CODE_SIGN_OUT= 1;
     protected ListPreference resolutionPref;
     protected ListPreference qualityPref;
     protected PreferencesPresenter preferencesPresenter;
@@ -72,7 +72,7 @@ public class SettingsFragment extends PreferenceFragment implements
         qualityPref = (ListPreference) findPreference(ConfigPreferences.KEY_LIST_PREFERENCES_QUALITY);
 
 
-        setupExitPreference();
+
         setupBetaPreference();
         setupDownloadKamaradaPreference();
         setupShareVideona();
@@ -80,26 +80,6 @@ public class SettingsFragment extends PreferenceFragment implements
 
     }
 
-    private void setupExitPreference() {
-        Preference exitPref = findPreference("exit");
-
-        exitPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                dialog = new VideonaDialog.Builder()
-                        .withTitle(getString(R.string.exit_app_title))
-                        .withImage(R.drawable.common_icon_bobina)
-                        .withMessage(getString(R.string.exit_app_message))
-                        .withPositiveButton(getString(R.string.acceptExit))
-                        .withNegativeButton(getString(R.string.cancelExit))
-                        .withCode(REQUEST_CODE_EXIT_APP)
-                        .withListener(SettingsFragment.this)
-                        .create();
-                dialog.show(getFragmentManager(), "exitAppDialog");
-                return true;
-            }
-        });
-    }
 
     private void setupBetaPreference() {
         Preference joinBetaPref = findPreference("beta");
@@ -279,7 +259,17 @@ public class SettingsFragment extends PreferenceFragment implements
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (signedIn) {
-                    preferencesPresenter.signOut();
+                   dialog = new VideonaDialog.Builder()
+                            .withTitle(getString(R.string.signOut_title_dialog))
+                            .withImage(R.drawable.common_icon_bobina)
+                            .withMessage(getString(R.string.signOut_message_dialog))
+                            .withPositiveButton(getString(R.string.acceptSignOut))
+                            .withNegativeButton(getString(R.string.cancelSignOut))
+                            .withCode(REQUEST_CODE_SIGN_OUT)
+                            .withListener(SettingsFragment.this)
+                            .create();
+                    dialog.show(getFragmentManager(), "signOutDialog");
+
                 } else {
                     Intent intent = new Intent(context, LoginActivity.class);
                     startActivity(intent);
@@ -308,19 +298,15 @@ public class SettingsFragment extends PreferenceFragment implements
 
     @Override
     public void onClickPositiveButton(int id) {
-        if (id == REQUEST_CODE_EXIT_APP) {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            getActivity().finish();
-            System.exit(0);
+        if(id == REQUEST_CODE_SIGN_OUT){
+            dialog.dismiss();
+            preferencesPresenter.signOut();
         }
     }
 
     @Override
     public void onClickNegativeButton(int id) {
-        if (id == REQUEST_CODE_EXIT_APP)
+        if (id == REQUEST_CODE_SIGN_OUT)
             dialog.dismiss();
     }
 

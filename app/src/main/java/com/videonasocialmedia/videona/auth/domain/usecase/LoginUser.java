@@ -16,6 +16,8 @@ import com.videonasocialmedia.videona.auth.repository.model.AuthTokenRequest;
 import com.videonasocialmedia.videona.repository.rest.ServiceGenerator;
 
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,8 +42,18 @@ public class LoginUser {
                 if (token != null) {
                     CachedToken.setToken(token);
                     loginListener.onLoginSuccess();
-                } else
-                    loginListener.onLoginError(OnLoginListener.Causes.UNKNOWN_ERROR);
+                } else {
+                    OnLoginListener.Causes error_code = OnLoginListener.Causes.UNKNOWN_ERROR;
+                    if (response.code() == 401) {
+                        try {
+                            String errorString = response.errorBody().string();
+                            if (errorString.contains("Invalid credentials")) {
+                                error_code = OnLoginListener.Causes.CREDENTIALS_UNKNOWN;
+                            }
+                        } catch (IOException e) {}
+                    }
+                    loginListener.onLoginError(error_code);
+                }
             }
 
             @Override

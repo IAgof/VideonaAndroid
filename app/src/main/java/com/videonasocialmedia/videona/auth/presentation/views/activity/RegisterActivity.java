@@ -23,6 +23,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -39,6 +40,8 @@ import com.videonasocialmedia.videona.presentation.views.activity.RecordActivity
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.TermsOfServiceActivity;
 import com.videonasocialmedia.videona.presentation.views.activity.VideonaActivity;
+import com.videonasocialmedia.videona.presentation.views.dialog.VideonaDialog;
+import com.videonasocialmedia.videona.presentation.views.listener.VideonaDialogListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,7 +51,9 @@ import butterknife.OnEditorAction;
 /**
  * Created by ruth on 21/07/16.
  */
-public class RegisterActivity extends VideonaActivity implements RegisterView {
+public class RegisterActivity extends VideonaActivity implements RegisterView, VideonaDialogListener {
+    protected final int REQUEST_CODE_EXIT_REGISTER_ACTIVITY = 1;
+    VideonaDialog dialog;
 
     @Bind(R.id.email_register_text_input)
     TextInputLayout emailregisterTextInput;
@@ -205,6 +210,44 @@ public class RegisterActivity extends VideonaActivity implements RegisterView {
         Intent intent = new Intent(VideonaApplication.getAppContext(), RecordActivity.class);
         startActivity(intent);
 
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                setupExitRegisterActivity();
+                return  true;
+
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void setupExitRegisterActivity() {
+                 dialog = new VideonaDialog.Builder() .withTitle(getString(R.string.exit_registerActivity_title))
+                .withImage(0)
+                .withMessage(getString(R.string.exit_registerActivity_message))
+                .withPositiveButton(getString(R.string.acceptExitRegisterActivity))
+                .withNegativeButton(getString(R.string.cancelExitRegisterActivity))
+                .withCode(REQUEST_CODE_EXIT_REGISTER_ACTIVITY)
+                .withListener(RegisterActivity.this)
+                .create();
+                dialog.show(getFragmentManager(), "exitRegisterActivityDialog");
+
+    }
+
+    @Override
+    public void onClickPositiveButton(int id) {
+        if(id == REQUEST_CODE_EXIT_REGISTER_ACTIVITY)
+           finish();
+    }
+
+    @Override
+    public void onClickNegativeButton(int id) {
+        //TODO cambiar email
+        if(id == REQUEST_CODE_EXIT_REGISTER_ACTIVITY)
+            dialog.dismiss();
     }
 
     public void addTextViewWithMultipleLink(TextView textView){

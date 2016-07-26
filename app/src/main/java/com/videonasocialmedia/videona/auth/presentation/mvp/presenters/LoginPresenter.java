@@ -87,7 +87,14 @@ public class LoginPresenter implements OnLoginListener /*OnRegisterListener */{
     @Override
     public void onLoginError(OnLoginListener.Causes causes) {
         loginView.hideProgressAuthenticationDialog();
-        loginView.showErrorLogin(R.string.defaultErrorMessage);
+        switch (causes) {
+            case CREDENTIALS_UNKNOWN:
+                loginView.showErrorLogin(R.string.credentialsUknownError);
+                break;
+            case UNKNOWN_ERROR:
+                loginView.showErrorLogin(R.string.defaultErrorMessage);
+                break;
+        }
     }
 
     @Override
