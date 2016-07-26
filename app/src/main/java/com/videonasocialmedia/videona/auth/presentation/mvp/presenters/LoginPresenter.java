@@ -15,7 +15,7 @@ import com.videonasocialmedia.videona.auth.domain.usecase.RegisterUser;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnRegisterListener;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
-import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
+import com.videonasocialmedia.videona.effects.domain.usecase.GetEffectListUseCase;
 
 /**
  * Created by alvaro on 14/06/16.
@@ -90,9 +90,14 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
 
     @Override
     public void onLoginSuccess() {
+        unlockLoginFeatures();
         loginView.hideProgressAuthenticationDialog();
         loginView.showSuccessLogin(R.string.success_login);
-        loginView.exitLoginActivity();
+       // loginView.exitLoginActivity();
+    }
+
+    private void unlockLoginFeatures() {
+        GetEffectListUseCase.unlockLoggedOverlayEffects();
     }
 
     @Override

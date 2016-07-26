@@ -80,9 +80,9 @@ public interface RecordView {
 
     void finishActivityForResult(String path);
 
-    void showCameraEffectShader(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> effects);
+    void showCameraEffectShader();
 
-    void showCameraEffectOverlay(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> effects);
+    void showCameraEffectOverlay();
 
     void updateShaderEffectList(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderEffects);
 

@@ -7,7 +7,7 @@
 
 package com.videonasocialmedia.videona.effects.repository.local;
 
-import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.domain.model.EffectType;
 import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
@@ -66,7 +66,7 @@ public class EffectLocalSource implements EffectRepository {
     }
 
     @Override
-    public void updateShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
+    public void discoverShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
 
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -118,7 +118,7 @@ public class EffectLocalSource implements EffectRepository {
     }
 
     @Override
-    public void updateOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
+    public void discoverOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
 
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -128,5 +128,35 @@ public class EffectLocalSource implements EffectRepository {
         realm.commitTransaction();
     }
 
+    @Override
+    public void unlockLoggedOverlayEffects() {
+
+        for(com.videonasocialmedia.videona.effects.repository.model.Effect effect: getOverlayEffectList().where().findAll()){
+            if(effect.getPermissionType().toString().compareTo(PermissionType.LOGGED_IN.toString()) == 0){
+                discoverOverlayEffect(effect);
+            }
+        }
+
+    }
+
+    @Override
+    public void lockLoggedOverlayEffects() {
+
+        for(com.videonasocialmedia.videona.effects.repository.model.Effect effect: getOverlayEffectList().where().findAll()){
+            if(effect.getPermissionType().toString().compareTo(PermissionType.LOGGED_IN.toString()) == 0){
+                hideOverlayEffect(effect);
+            }
+        }
+    }
+
+    public void hideOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+
+        effect.setActivated(false);
+
+        realm.commitTransaction();
+    }
 
 }

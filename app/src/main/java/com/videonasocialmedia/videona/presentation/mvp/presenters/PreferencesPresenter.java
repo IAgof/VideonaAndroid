@@ -20,6 +20,7 @@ import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
 import com.videonasocialmedia.videona.auth.domain.usecase.LogoutUser;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
+import com.videonasocialmedia.videona.effects.domain.usecase.GetEffectListUseCase;
 import com.videonasocialmedia.videona.presentation.mvp.views.PreferencesView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 
@@ -209,8 +210,11 @@ public class PreferencesPresenter implements SharedPreferences.OnSharedPreferenc
     }
 
     public void signOut() {
+        GetEffectListUseCase.lockLoggedOverlayEffects();
         LogoutUser logoutUser = new LogoutUser();
         logoutUser.logout();
         preferencesView.configSignIn(false);
+
+
     }
 }

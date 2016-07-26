@@ -44,8 +44,6 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
     private int selectedPosition = -1;
     private int previousSelectionPosition = -1;
     private boolean effectSelected = false;
-    private LoginUser loginUser = new LoginUser();
-
 
     /**
      * Constructor.
@@ -90,7 +88,7 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
 
     @Override
     public void onBindViewHolder(cameraEffectViewHolder holder, int position) {
-        //Effect selectedEffect = effects.get(position);
+
         Effect selectedEffect = realmEffects.get(position);
         if (getItemViewType(position) != GIFT_VIEW_TYPE) {
             Glide.with(context)
@@ -125,7 +123,6 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
 
     @Override
     public int getItemCount() {
-        //return effects.size();
         return realmEffects.size();
     }
 
@@ -136,7 +133,6 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
      * @return
      */
     public Effect getEffect(int position) {
-        //return effects.get(position);
         return realmEffects.get(position);
     }
 

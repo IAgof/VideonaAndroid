@@ -23,11 +23,15 @@ public interface EffectRepository {
 
     void addShaderEffectList();
 
-    void updateShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect);
+    void discoverShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect);
 
     RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getOverlayEffectList();
 
     void addOverlayEffectList();
 
-    void updateOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect);
+    void discoverOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect);
+
+    void unlockLoggedOverlayEffects();
+
+    void lockLoggedOverlayEffects();
 }

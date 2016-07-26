@@ -491,14 +491,14 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     }
 
     @Override
-    public void showCameraEffectShader(RealmResults<Effect> effects) {
+    public void showCameraEffectShader() {
         showEffectsRecylerView(shaderEffectsRecycler);
         shaderFilterHidden = false;
         buttonCameraEffectShader.setActivated(true);
     }
 
     @Override
-    public void showCameraEffectOverlay(RealmResults<Effect> effects) {
+    public void showCameraEffectOverlay() {
         runTranslateAnimation(overlayFilterRecycler, 0, new AccelerateInterpolator(3));
         overlayFilterHidden = false;
         buttonCameraEffectOverlay.setActivated(true);
@@ -710,7 +710,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } else {
             trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_SHADER);
-            showCameraEffectShader(null);
+            showCameraEffectShader();
             if (removeFilterActivated) {
                 showRemoveFilters();
             }
@@ -793,7 +793,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         } else {
             trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_OVERLAY);
-            showCameraEffectOverlay(null);
+            showCameraEffectOverlay();
             if (removeFilterActivated) {
                 showRemoveFilters();
             }
@@ -913,6 +913,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
     public void onEffectSelected(Effect effect) {
 
         if (effect.getPermissionType().compareTo(PermissionType.LOGGED_IN.toString()) == 0 && !isUserLogged()) {
+            onEffectSelectionCancel(effect);
             showDialogGoToLogin(); // TODO(javi.cabanas): 12/7/16 extract gift logic to use case
         } else {
             if(effect.getActivated() == false){
@@ -966,13 +967,11 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
 
     private void scrollEffectList(Effect effect) {
         if (!overlayFilterHidden) {
-            //List effects = cameraOverlayEffectsAdapter.getElementList();
             List effects = cameraOverlayEffectsAdapter.getRealmElementList();
             int index = effects.indexOf(effect);
             int scroll = index > cameraOverlayEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
             overlayFilterRecycler.scrollToPosition(index + scroll);
         } else if (!shaderFilterHidden) {
-           // List effects = cameraShaderEffectsAdapter.getElementList();
             List effects = cameraOverlayEffectsAdapter.getRealmElementList();
             int index = effects.indexOf(effect);
             int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
@@ -1019,7 +1018,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
         VideonaToast toast = new VideonaToast.Builder(getApplicationContext())
                 .withTitle(R.string.giftOverlayDialogTitle)
                 .withMessage(R.string.giftOverlayDialogMessage)
-                .withDrawableImage(R.drawable.common_filter_overlay_gift_open)
+                .withDrawableImage(R.drawable.common_filter_overlay_new)
                 .withDuration(Toast.LENGTH_LONG)
                 .build();
 
