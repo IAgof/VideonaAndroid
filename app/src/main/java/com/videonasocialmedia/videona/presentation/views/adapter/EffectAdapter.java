@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.effects.domain.model.EffectType;
 import com.videonasocialmedia.videona.effects.repository.model.Effect;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
 
@@ -33,10 +33,10 @@ import io.realm.RealmResults;
 /**
  * This class is used to show the camera effects gallery.
  */
-public class EffectAdapter
-        extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
+public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
     private static final int GIFT_VIEW_TYPE = 300;
     private static final int EFFECT_VIEW_TYPE = 254;
+
     private RealmResults<Effect> realmEffects;
 
     private Context context;
@@ -76,7 +76,7 @@ public class EffectAdapter
         switch (viewType) {
             case GIFT_VIEW_TYPE:
                 rowView = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.record_gift_effects_view_holder, viewGroup, false);
+                        .inflate(R.layout.record_effects_gift_view_holder, viewGroup, false);
                 break;
             case EFFECT_VIEW_TYPE:
             default:
@@ -105,6 +105,13 @@ public class EffectAdapter
                 holder.effect.setBackgroundResource(R.color.colorAccent);
             } else {
                 holder.effect.setBackgroundResource(0);
+            }
+        } else {
+            if(selectedEffect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
+                Glide.with(context)
+                        .load(selectedEffect.getCoverIconId())
+                        .error(R.drawable.gatito_rules)
+                        .into(holder.effectImage);
             }
         }
     }

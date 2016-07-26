@@ -59,7 +59,7 @@ public class EffectLocalSource implements EffectRepository {
         realmShaderEffect.setPermissionType(shaderEffect.getPermissionType().toString());
         realmShaderEffect.setResourceId(shaderEffect.getResourceId());
         realmShaderEffect.setAnalyticsType(shaderEffect.getType());
-        realmShaderEffect.setActivated(false);
+        realmShaderEffect.setActivated(true);
 
         realm.commitTransaction();
 
@@ -68,17 +68,10 @@ public class EffectLocalSource implements EffectRepository {
     @Override
     public void updateShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
 
-
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-        RealmQuery<com.videonasocialmedia.videona.effects.repository.model.Effect> query = realm.where(com.videonasocialmedia.videona.effects.repository.model.Effect.class);
-
-        int position = query.contains("typeEffect", EffectType.SHADER.toString()).findAll().indexOf(effect);
-        int iconResourceId = EffectProvider.getOverlayFilterList().get(position).getIconId();
-
         effect.setActivated(true);
-        effect.setIconId(iconResourceId);
 
         realm.commitTransaction();
     }
@@ -113,6 +106,7 @@ public class EffectLocalSource implements EffectRepository {
         realmOverlayEffect.setTypeEffect(EffectType.OVERLAY.toString());
         realmOverlayEffect.setIdentifier(overlayEffect.getIdentifier());
         realmOverlayEffect.setName(overlayEffect.getName());
+        realmOverlayEffect.setCoverIconId(overlayEffect.getCoverIconId());
         realmOverlayEffect.setIconId(overlayEffect.getIconId());
         realmOverlayEffect.setPermissionType(overlayEffect.getPermissionType().toString());
         realmOverlayEffect.setResourceId(overlayEffect.getResourceId());
@@ -126,17 +120,10 @@ public class EffectLocalSource implements EffectRepository {
     @Override
     public void updateOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
 
-
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-        RealmQuery<com.videonasocialmedia.videona.effects.repository.model.Effect> query = realm.where(com.videonasocialmedia.videona.effects.repository.model.Effect.class);
-
-        int position = query.contains("typeEffect", EffectType.OVERLAY.toString()).findAll().indexOf(effect);
-        int iconResourceId = EffectProvider.getOverlayFilterList().get(position).getIconId();
-
         effect.setActivated(true);
-        effect.setIconId(iconResourceId);
 
         realm.commitTransaction();
     }

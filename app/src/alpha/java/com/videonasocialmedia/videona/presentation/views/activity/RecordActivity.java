@@ -916,7 +916,7 @@ public class RecordActivity extends VideonaActivity implements DrawerLayout.Draw
             showDialogGoToLogin(); // TODO(javi.cabanas): 12/7/16 extract gift logic to use case
         } else {
             if(effect.getActivated() == false){
-                showGiftFilterToast();
+                //showGiftFilterToast();
                 recordPresenter.updateEffect(effect);
 
             }

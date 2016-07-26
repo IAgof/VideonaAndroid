@@ -36,16 +36,16 @@ public class OverlayEffect extends Effect {
         this.resourceId = resourceId;
     }
 
-    public OverlayEffect(String identifier, String name, int iconId, int resourceId,
+    public OverlayEffect(String identifier, String name,  int coverIconId, int iconId,int resourceId,
                          String type) {
-        super(identifier, name, iconId, type);
+        super(identifier, name, coverIconId, iconId,type);
         this.resourcePath = null;
         this.resourceId = resourceId;
     }
 
-    public OverlayEffect(String identifier, String name, int iconId, int resourceId,
+    public OverlayEffect(String identifier, String name, int coverIconId, int iconId, int resourceId,
                          String type, PermissionType permissionType) {
-        super(identifier, name, iconId, type, permissionType);
+        super(identifier, name, coverIconId, iconId,type, permissionType);
         this.resourcePath = null;
         this.resourceId = resourceId;
     }

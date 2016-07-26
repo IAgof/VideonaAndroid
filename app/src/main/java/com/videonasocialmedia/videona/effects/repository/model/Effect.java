@@ -27,6 +27,7 @@ public class Effect extends RealmObject{
     private String identifier;
     @Required
     private String name;
+    private int coverIconId;
     //@Required
     private int iconId;
     //@Required
@@ -61,6 +62,15 @@ public class Effect extends RealmObject{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public int getCoverIconId() {
+        return coverIconId;
+    }
+
+    public void setCoverIconId(int coverIconId) {
+        this.coverIconId = coverIconId;
     }
 
     public int getIconId() {

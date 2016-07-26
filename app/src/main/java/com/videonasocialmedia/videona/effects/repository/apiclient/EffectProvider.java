@@ -154,44 +154,44 @@ public class EffectProvider {
         if (CachedToken.hasToken()) {
             if (isWolderActive()) {
                 overlayList.add(new OverlayEffect("OV27", "Wolder",
-                        R.drawable.common_filter_overlay_ov27_wolder,
+                        R.drawable.common_filter_overlay_wolder, R.drawable.common_filter_overlay_ov27_wolder,
                         R.drawable.overlay_filter_wolder, AnalyticsConstants.FILTER_TYPE_OVERLAY));
             }
 
         }
 
         overlayList.add(new OverlayEffect("OV7", "Pride",
-                R.drawable.common_filter_overlay_ov7_pride,
+                R.drawable.common_filter_overlay_login, R.drawable.common_filter_overlay_ov7_pride,
                 R.drawable.overlay_filter_pride, AnalyticsConstants.FILTER_TYPE_OVERLAY, PermissionType.LOGGED_IN));
         overlayList.add(new OverlayEffect("OV4", "Retrotv",
-                R.drawable.common_filter_overlay_ov4_retrotv,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov4_retrotv,
                 R.drawable.overlay_filter_retrotv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV6", "Mist",
-                R.drawable.common_filter_overlay_ov6_mist,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov6_mist,
                 R.drawable.overlay_filter_mist, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV26", "Bollywood",
-                R.drawable.common_filter_overlay_ov26_bollywood,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov26_bollywood,
                 R.drawable.overlay_filter_bollywood, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV22", "Rain",
-                R.drawable.common_filter_overlay_ov22_rain,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov22_rain,
                 R.drawable.overlay_filter_rain, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV10", "CCTV",
-                R.drawable.common_filter_overlay_ov10_cctv,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov10_cctv,
                 R.drawable.overlay_filter_cctv, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV9", "Summer",
-                R.drawable.common_filter_overlay_ov9_summer,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov9_summer,
                 R.drawable.overlay_filter_summer, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV18", "Polaroid",
-                R.drawable.common_filter_overlay_ov18_polaroid,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov18_polaroid,
                 R.drawable.overlay_filter_polaroid, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV19", "Old",
-                R.drawable.common_filter_overlay_ov19_old,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov19_old,
                 R.drawable.overlay_filter_old, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV15", "Pastel",
-                R.drawable.common_filter_overlay_ov15_pastel,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov15_pastel,
                 R.drawable.overlay_filter_pastel, AnalyticsConstants.FILTER_TYPE_OVERLAY));
         overlayList.add(new OverlayEffect("OV13", "Passion",
-                R.drawable.common_filter_overlay_ov13_passion,
+                R.drawable.common_filter_overlay_new, R.drawable.common_filter_overlay_ov13_passion,
                 R.drawable.overlay_filter_passion, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         return overlayList;
