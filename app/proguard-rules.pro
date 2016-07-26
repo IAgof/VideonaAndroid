@@ -76,6 +76,8 @@
 -keep class com.videonasocialmedia.videona.auth.domain.model.** { *; }
 -keep class com.videonasocialmedia.videona.auth.repository.localsource.** { *; }
 -keep class com.videonasocialmedia.videona.promo.repository.model.** { *; }
+-keep class com.videonasocialmedia.videona.effects.repository.model.** { *; }
+-keep class com.videonasocialmedia.videona.effects.domain.model.** { *; }
 
 # Proguard Configuration for Realm (http://realm.io)
 # For detailed discussion see: https://groups.google.com/forum/#!topic/realm-java/umqKCc50JGU
