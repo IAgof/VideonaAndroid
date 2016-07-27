@@ -128,36 +128,36 @@ public class EffectProvider {
                 R.drawable.common_filter_overlay_gift,
                 R.drawable.overlay_filter_invaders, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("OV22", "Rain",
-                R.drawable.common_filter_overlay_ov22_rain,
+        overlayList.add(new OverlayEffect("ovn001", "Rain",
+                R.drawable.common_filter_overlay_ovn001_rain,
                 R.drawable.overlay_filter_rain, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("OV9", "Summer",
-                R.drawable.common_filter_overlay_ov9_summer,
+        overlayList.add(new OverlayEffect("ovs001", "Summer",
+                R.drawable.common_filter_overlay_ovs001_summer,
                 R.drawable.overlay_filter_summer, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV18", "Polaroid",
-                R.drawable.common_filter_overlay_ov18_polaroid,
+        overlayList.add(new OverlayEffect("ovctp001", "Vintage",
+                R.drawable.common_filter_overlay_ovctp001_polaroid,
                 R.drawable.overlay_filter_polaroid, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("OVHT1", "Monster Hunter",
-                R.drawable.common_filter_overlay_ovt01_monster_hunter,
+        overlayList.add(new OverlayEffect("ovt001", "Monster",
+                R.drawable.common_filter_overlay_ovt001_monster_hunter,
                 R.drawable.overlay_filter_monster_hunter, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV13", "Kisscam",
-                R.drawable.common_filter_overlay_ov13_kiss_cam,
+        overlayList.add(new OverlayEffect("ovp001", "Kisscam",
+                R.drawable.common_filter_overlay_ovp001_kiss_cam,
                 R.drawable.overlay_filter_kiss_cam, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("OV03", "Sunset",
-                R.drawable.common_filter_overlay_ov3_sunset,
+        overlayList.add(new OverlayEffect("ovc001", "Sunset",
+                R.drawable.common_filter_overlay_ovc001_sunset,
                 R.drawable.overlay_filter_sunset, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("OV13", "Wasted",
-                R.drawable.common_filter_overlay_ov17_wasted,
+        overlayList.add(new OverlayEffect("ovb001", "Wasted",
+                R.drawable.common_filter_overlay_ovb001_wasted,
                 R.drawable.overlay_filter_wasted, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV17", "Burn",
-                R.drawable.common_filter_overlay_ov1_burn,
+        overlayList.add(new OverlayEffect("ovr001", "Burn",
+                R.drawable.common_filter_overlay_ovr001_burn,
                 R.drawable.overlay_filter_burn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-        overlayList.add(new OverlayEffect("OV14", "Stain",
-                R.drawable.common_filter_overlay_ov14_stain,
+        overlayList.add(new OverlayEffect("ovi001", "Stain",
+                R.drawable.common_filter_overlay_ovi001_stain,
                 R.drawable.overlay_filter_stain, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
 
@@ -165,8 +165,8 @@ public class EffectProvider {
     }
 
     public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("OVg01", "Invaders",
-                R.drawable.common_filter_overlay_ovg01_invaders,
+        return new OverlayEffect("ovh001", "Invaders",
+                R.drawable.common_filter_overlay_ovh001_invaders,
                 R.drawable.overlay_filter_invaders, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
