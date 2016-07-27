@@ -61,7 +61,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnEditorAction;
 import butterknife.OnTouch;
 
 /**
@@ -117,7 +116,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
                     serviceListener = (OnExportServiceListener) service;
                     serviceListener.registerListener(listener);
                     isBound = true;
-                  //  requestExportProject();
+
                 }
 
                 @Override
@@ -143,7 +142,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
                 getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                         Context.MODE_PRIVATE);
         preferencesEditor = sharedPreferences.edit();
-        presenter = new ShareVideoPresenter(this,  navigator.getCallback());
+        presenter = new ShareVideoPresenter(this); //,  navigator.getCallback());
         navigatorPresenter = new EditNavigatorPresenter(this);
         presenter.onCreate();
 
@@ -164,11 +163,11 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     }
 
     private void initBarProgressDialog() {
-        barProgressDialog = new ProgressDialog(ShareActivity.this);
+        barProgressDialog = new ProgressDialog(ShareActivity.this, R.style.VideonaDialog);
 
-        barProgressDialog.setTitle("Exporting project ...");
+        barProgressDialog.setTitle(R.string.dialog_processing_title);
 
-        barProgressDialog.setMessage(getString(R.string.dialog_processing));
+        barProgressDialog.setMessage(getString(R.string.dialog_processing_progress));
         //barProgressDialog.setProgressStyle(barProgressDialog.STYLE_HORIZONTAL);
         barProgressDialog.setProgressStyle(barProgressDialog.STYLE_SPINNER);
         barProgressDialog.setIndeterminate(true);
@@ -200,7 +199,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        videoPath = intent.getStringExtra("VideoExportedFinished");
+
         setIntent(intent);
     }
 
@@ -213,17 +212,23 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
             initVideoPreview(videoPosition, isPlaying);
             isExporting = false;
             navigator.enableNavigatorActions();
+
+            File f = new File(videoPath);
+            if (f.exists()) {
+                return;
+            }
         }
 
-        requestExportProject();
+        presenter.checkIfVideoIsExported();
+
     }
 
     @Override
     protected void onStart(){
         super.onStart();
         // Bind to LocalService
-       // Intent intent = new Intent(this, ExportService.class);
-        //bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+        Intent intent = new Intent(this, ExportService.class);
+        bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
 
     }
 
@@ -235,6 +240,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         barProgressDialog.dismiss();
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("videoPosition", videoPreview.getCurrentPosition() - 200);
@@ -245,12 +251,18 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     }
 
     @Override
-    protected void onStop(){
-        super.onStop();
+    protected void onDestroy(){
+         super.onDestroy();
+
+        if (isBound) {
+            serviceListener.unregisterListener();
+            unbindService(myConnection);
+            isBound = false;
+        }
     }
 
     private void initVideoPreview(final int position, final boolean playing) {
-       // videoPath = getIntent().getStringExtra(Constants.VIDEO_TO_SHARE_PATH);
+
         if (videoPath != null) {
             videoPreview.setVideoPath(videoPath);
             Log.d("TAG", "MESSAGE");
@@ -501,17 +513,6 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         barProgressDialog.setMessage(stringMessage);
     }
 
-    private void requestExportProject() {
-
-        if(videoPath!=null) {
-            File f = new File(videoPath);
-            if (f.exists()) {
-                return;
-            }
-        }
-        presenter.checkIfVideoIsExported();
-    }
-
     public void showMessage(final int stringResource) {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, stringResource, Snackbar.LENGTH_LONG);
         snackbar.show();
@@ -551,31 +552,27 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
 
         @Override
         public void onSuccessVideoExported(String mediaPath) {
-            videoPath = mediaPath;
+            if(mediaPath!=null)
+                videoPath = mediaPath;
             initVideoPreview(videoPosition, isPlaying);
             barProgressDialog.dismiss();
             isExporting = false;
             navigator.enableNavigatorActions();
-           /* if (isBound) {
-                serviceListener.unregisterListener();
-                unbindService(myConnection);
-                isBound = false;
-            }*/
         }
     };
 
 
     @OnClick (R.id.button_music_navigator)
     public void onMusicNavigatorClickListener(){
-        showDialogExport(R.id.button_music_navigator);
+        showDialogProject(R.id.button_music_navigator);
     }
 
     @OnClick (R.id.button_edit_navigator)
     public void onEditNavigatorClickListener(){
-        showDialogExport(R.id.button_edit_navigator);
+        showDialogProject(R.id.button_edit_navigator);
     }
 
-    private void showDialogExport(final int resourceButtonId){
+    private void showDialogProject(final int resourceButtonId){
 
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -604,8 +601,8 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaDialog);
-        builder.setMessage("Do you want to start a new project?").setPositiveButton(R.string.dialog_edit_remove_accept, dialogClickListener)
-        .setNegativeButton(R.string.dialog_edit_remove_cancel, dialogClickListener).show();
+        builder.setMessage(R.string.dialog_message_clean_project).setPositiveButton(R.string.dialog_accept_clean_project, dialogClickListener)
+        .setNegativeButton(R.string.dialog_cancel_clean_project, dialogClickListener).show();
 
     }
 
@@ -633,6 +630,6 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     @Override
     public void onClick(View v) {
 
-        showDialogExport(R.id.navigator);
+        showDialogProject(R.id.navigator);
     }
 }

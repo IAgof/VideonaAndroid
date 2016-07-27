@@ -12,7 +12,6 @@ import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
-import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
 import com.videonasocialmedia.videona.utils.Utils;
@@ -32,7 +31,7 @@ public class ShareVideoPresenter {
     private ShareVideoView shareVideoView;
     private SharedPreferences sharedPreferences;
 
-    public ShareVideoPresenter(ShareVideoView shareVideoView, ToolbarNavigator.ProjectModifiedCallBack callback) {
+    public ShareVideoPresenter(ShareVideoView shareVideoView) {
         this.shareVideoView = shareVideoView;
         sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
                 ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
@@ -92,6 +91,9 @@ public class ShareVideoPresenter {
     }
 
     public void resetProject() {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putLong(ConfigPreferences.VIDEO_DURATION, 0);
+        preferencesEditor.putInt(ConfigPreferences.NUMBER_OF_CLIPS, 0);
         currentProject.clear();
     }
 

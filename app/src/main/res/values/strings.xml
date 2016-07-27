@@ -14,7 +14,6 @@
     <string name="chronometerDefault">00:00</string>
     <string name="toast_exit">Press back to exit</string>
     <string name="please_wait">Please wait</string>
-    <string name="dialog_processing">Making magic in your video</string>
     <string name="recordError">Something bad happened. Impossible to record video, try again</string>
     <string name="giftOverlayDialogTitle">Your present</string>
     <string name="giftOverlayDialogMessage">Enjoy your new filter</string>
@@ -24,6 +23,12 @@
     <string name="share_using">"Share video using "</string>
     <string name="sharedWithVideona">"#videonatime"</string>
     <string name="videonaTags">"#VideonaTime"</string>
+    <string name="notification_export">Exporting project</string>
+    <string name="dialog_processing_title">Exporting project</string>
+    <string name="dialog_processing_progress">Making magic in your video</string>
+    <string name="dialog_message_clean_project">Do you want to start a new project?</string>
+    <string name="dialog_accept_clean_project">Yes</string>
+    <string name="dialog_cancel_clean_project">No</string>
 
     <!-- Editor Activity -->
 

@@ -289,6 +289,11 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     }
 
     @Override
+    public void startVideoExporting() {
+
+    }
+
+    @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser)
             seekTo(progress);

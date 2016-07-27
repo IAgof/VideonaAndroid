@@ -19,7 +19,6 @@ import android.support.annotation.Nullable;
 
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.export.presentation.mvp.ExportPresenter;
 import com.videonasocialmedia.videona.export.presentation.mvp.ExportView;
 import com.videonasocialmedia.videona.presentation.views.activity.ShareActivity;
@@ -91,10 +90,10 @@ public class ExportService extends Service implements ExportView {
         return new Notification.Builder(this)
                 .setAutoCancel(true) // Close after click
                 .setSmallIcon(R.drawable.ic_launcher)  // the status icon
-                .setTicker("Exporting project")  // the status text
+                .setTicker(getString(R.string.notification_export)) // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
-                .setContentTitle("Exporting project")  // the label of the entry
-                .setContentText("Magic")  // the contents of the entry
+                .setContentTitle(getString(R.string.notification_export))  // the label of the entry
+                .setContentText(getString(R.string.dialog_processing_progress))  // the contents of the entry
                 .setProgress(100, 0, false)
                 .setContentIntent(contentIntent);  // The intent to send when the entry is clicked
     }
@@ -115,8 +114,8 @@ public class ExportService extends Service implements ExportView {
     @Override
     public void setNotificationProgress(int progress) {
         if (progress > 100) {
-            builder.setContentText("Exporting finished");
-            builder.setContentTitle("Exporting finished");
+            builder.setContentText(getString(R.string.notification_export));
+            builder.setContentTitle(getString(R.string.notification_export));
             builder.setProgress(0, 0, false);
             showNotification(false);
         } else {
@@ -132,8 +131,6 @@ public class ExportService extends Service implements ExportView {
 
     @Override
     public void hideNotification() {
-       // if(exportProjectListener != null)
-       //     notificationManager.cancel(Constants.NOTIFICATION_EXPORT_ID);
     }
 
     @Override

@@ -30,6 +30,7 @@ public class ExportPresenter implements ExportProgressListener {
 
     @Override
     public void onExportSuccessFinished(String mediaPath) {
+
         exportView.onSuccessVideoExported(mediaPath);
         exportView.setNotificationProgress(110);
         exportView.showMessage("ExportFinished");

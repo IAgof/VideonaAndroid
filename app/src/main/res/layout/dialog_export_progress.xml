@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
-            android:text="@string/dialog_processing"
+            android:text="@string/dialog_processing_progress"
             android:textSize="18sp"/>
     </LinearLayout>
 </LinearLayout>
