@@ -221,7 +221,7 @@ public class InitAppActivity extends VideonaActivity implements InitAppView, OnI
                 trackUserProfile();
                 initSettings();
                 joinBetaFortnight();
-                resetPreferencesFilterGifted();
+                //resetPreferencesFilterGifted();
                 break;
             case FIRST_TIME:
                 Log.d(LOG_TAG, " AppStart State FIRST_TIME");
