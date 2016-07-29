@@ -81,8 +81,8 @@
     <string name="signOut">Cerrar sesión</string>
     <string name="signIn">Iniciar sesión</string>
     <string name="title_activity_logout">Desconectarse</string>
-    <string name="success_login">Sesión iniciada ¡¡BIENVENIDO A VIDEONA!!</string>
-    <string name="success_register">Registro válido ¡¡BIENVENIDO A VIDEONA !!</string>
+    <string name="success_login">Sesión iniciada </string>
+    <string name="success_register">¡BIENVENIDO A VIDEONA !</string>
 
     <string name="signOut_title_dialog">Cerrar sesión</string>
     <string name="signOut_message_dialog">¿Estás seguro? Se eliminarán todos los datos de Videona de este dispositivo</string>
@@ -130,7 +130,7 @@
     <string name="register_progress">Registro en curso... </string>
     <string name="and">y</string>
 
-    <string name="exit_registerActivity_title">Cancelar registro</string>
+    <string name="exit_registerActivity_title">Salir</string>
     <string name="exit_registerActivity_message">¿Seguro que quieres salir? Se descartará la información introducida</string>
     <string name="acceptExitRegisterActivity">Sí</string>
     <string name="cancelExitRegisterActivity">No</string>

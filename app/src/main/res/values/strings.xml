@@ -136,7 +136,7 @@
     <string name="register_progress">Register in progress... </string>
 
     <string name="exit_registerActivity_title">Leave Register?</string>
-    <string name="exit_registerActivity_message">Are you sure you want to cancel account creation?\n This will discard any information that you have entered so far </string>
+    <string name="exit_registerActivity_message">Are you sure you want to exit?\n This will discard any information that you have entered so far </string>
     <string name="acceptExitRegisterActivity">Yes</string>
     <string name="cancelExitRegisterActivity">No</string>
 

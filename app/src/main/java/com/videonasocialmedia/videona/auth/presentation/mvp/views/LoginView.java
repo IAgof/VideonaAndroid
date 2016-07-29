@@ -28,10 +28,12 @@ public interface LoginView {
 
     void showErrorLogin(int stringErrorLogin);
 
-    void showSuccessLogin(int stringSuccesLogin);
-
-    void goToRegisterActivity();
+    void showSuccess(int stringSuccesLogin);
 
     void exitLoginActivity();
+
+    void showErrorRegister(int stringErrorRegister);
+
+    void showNoChekedPrivacyTerm (int stringNoChekedPrivacyTerm);
 
 }
