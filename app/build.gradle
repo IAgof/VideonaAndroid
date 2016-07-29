@@ -31,13 +31,13 @@ android {
             resValue "string", "app_name", "Videona"
             buildConfigField "String", "MIXPANEL_TOKEN", "\"985b2aeb535dbc92b81fb5cce7ad1212\""
             //buildConfigField "String", "API_BASE_URL", "\"http://videona.com/api/\""
-            buildConfigField "String", "API_BASE_URL", "\"http://staging.videona.com/api/v1/\""
+            buildConfigField "String", "API_BASE_URL", "\"http://api.videona.com/api/v1/\""
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             buildConfigField "String", "MIXPANEL_TOKEN", "\"c6617213110cd2513dfc0ad97dbaee66\""
-            buildConfigField "String", "API_BASE_URL", "\"http://staging.videona.com/api/v1/\""
+            buildConfigField "String", "API_BASE_URL", "\"http://api.videona.com/api/v1/\""
         }
 
     }

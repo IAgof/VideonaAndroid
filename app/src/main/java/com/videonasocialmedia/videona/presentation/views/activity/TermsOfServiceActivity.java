@@ -10,6 +10,9 @@ package com.videonasocialmedia.videona.presentation.views.activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+
 import com.videonasocialmedia.videona.R;
 
 /**
@@ -33,4 +36,15 @@ public class TermsOfServiceActivity extends VideonaActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return  true;
+
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
 }
