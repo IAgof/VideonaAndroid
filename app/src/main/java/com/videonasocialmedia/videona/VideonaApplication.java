@@ -14,11 +14,13 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.karumi.dexter.Dexter;
 import com.squareup.leakcanary.LeakCanary;
+import io.fabric.sdk.android.Fabric;
 
 public class VideonaApplication extends Application {
 
@@ -42,6 +44,7 @@ public class VideonaApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         context = getApplicationContext();
         setupGoogleAnalytics();
 //        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
