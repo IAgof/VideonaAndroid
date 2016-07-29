@@ -324,7 +324,7 @@ public class RecordPresenter {
 
     public void updateEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
         if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0){
-            GetEffectListUseCase.updateOverlayEffect(effect);
+            GetEffectListUseCase.discoverOverlayEffects();
         } else {
             if(effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0)
                 GetEffectListUseCase.updateShaderEffect(effect);

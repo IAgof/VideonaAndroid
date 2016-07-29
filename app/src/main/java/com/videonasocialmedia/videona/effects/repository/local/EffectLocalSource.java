@@ -117,7 +117,6 @@ public class EffectLocalSource implements EffectRepository {
 
     }
 
-    @Override
     public void discoverOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
 
         Realm realm = Realm.getDefaultInstance();
@@ -126,6 +125,18 @@ public class EffectLocalSource implements EffectRepository {
         effect.setActivated(true);
 
         realm.commitTransaction();
+    }
+
+    @Override
+    public void discoverOverlayEffect(){
+
+        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> result = getOverlayEffectList();
+
+        RealmQuery<com.videonasocialmedia.videona.effects.repository.model.Effect> effect = result.where().contains("permissionType", PermissionType.ALL.toString());
+        for(int i=0; i<effect.findAll().size(); i++){
+            discoverOverlayEffect(effect.findAll().get(i));
+        }
+
     }
 
     @Override

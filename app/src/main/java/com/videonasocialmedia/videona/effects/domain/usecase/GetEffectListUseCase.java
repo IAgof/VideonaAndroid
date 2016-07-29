@@ -43,9 +43,9 @@ public class GetEffectListUseCase {
         return effectRepository.getOverlayEffectList();
     }
 
-    public static void updateOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
+    public static void discoverOverlayEffects(){
         EffectRepository effectRepository = new EffectLocalSource();
-        effectRepository.discoverOverlayEffect(effect);
+        effectRepository.discoverOverlayEffect();
     }
 
     public static void unlockLoggedOverlayEffects(){

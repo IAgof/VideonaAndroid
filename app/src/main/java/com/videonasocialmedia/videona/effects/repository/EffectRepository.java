@@ -29,7 +29,7 @@ public interface EffectRepository {
 
     void addOverlayEffectList();
 
-    void discoverOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect);
+    void discoverOverlayEffect();
 
     void unlockLoggedOverlayEffects();
 
