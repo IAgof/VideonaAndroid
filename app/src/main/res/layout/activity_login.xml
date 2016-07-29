@@ -88,6 +88,17 @@
 
                 </LinearLayout>
 
+                <ImageView
+                    android:layout_width="150sp"
+                    android:layout_height="150sp"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone"
+                    android:paddingTop="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_launcher"
+                    android:id="@+id/image_videona"/>
+
+
             <LinearLayout
                 android:id="@+id/layout_login_form"
                 android:layout_width="match_parent"

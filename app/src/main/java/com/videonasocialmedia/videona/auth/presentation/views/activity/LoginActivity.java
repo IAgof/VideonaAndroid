@@ -30,6 +30,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
@@ -55,6 +56,9 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
 
 
     // UI references Login.
+
+    @Bind(R.id.image_videona)
+    ImageView imageVideona;
 
     @Bind(R.id.text_input_email)
     TextInputLayout textInputEmail;
@@ -257,6 +261,7 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
 
 
             progressBarLogin.setVisibility(View.INVISIBLE);
+            imageVideona.setVisibility(View.VISIBLE);
             textViewLoginProgress.setTextColor(getResources().getColor(R.color.colorPrimary));
             textViewLoginProgress.setText(stringSuccesLogin);
 

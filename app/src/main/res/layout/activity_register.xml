@@ -90,6 +90,15 @@
 
                 </LinearLayout>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:paddingTop="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_launcher"
+                    android:id="@+id/image_videona"/>
+
 
             <LinearLayout
                 android:id="@+id/layout_login_form"

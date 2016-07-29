@@ -16,6 +16,7 @@ import com.videonasocialmedia.videona.auth.domain.usecase.RegisterUser;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnLoginListener;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.callback.OnRegisterListener;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
+import com.videonasocialmedia.videona.effects.domain.usecase.GetEffectListUseCase;
 import com.videonasocialmedia.videona.presentation.views.activity.SettingsActivity;
 
 /**
