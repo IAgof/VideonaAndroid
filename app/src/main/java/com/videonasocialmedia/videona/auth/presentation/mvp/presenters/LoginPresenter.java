@@ -163,7 +163,7 @@ public class LoginPresenter implements OnLoginListener, OnRegisterListener {
                 loginView.showErrorRegister(R.string.error_field_required);
                 break;
             case INVALID_PASSWORD:
-                loginView.showErrorRegister(R.string.error_invalid_email);
+                loginView.showErrorRegister(R.string.error_incorrect_password);
                 break;
         }
 
