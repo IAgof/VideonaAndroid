@@ -123,6 +123,9 @@
                         android:hint="@string/prompt_email"
                         android:inputType="textEmailAddress"
                         android:singleLine="true"
+                        android:imeOptions="actionUnspecified"
+                        android:imeActionLabel="@string/action_email_sign_in_short"
+                        android:imeActionId="@+id/closekeyBoard"
                         android:textCursorDrawable="@null"
                         android:textIsSelectable="false" />
 
@@ -139,7 +142,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
-                        android:imeActionId="@+id/login"
+                        android:imeActionId="@+id/closekeyBoard"
                         android:imeActionLabel="@string/action_sign_in_short"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
@@ -167,7 +170,7 @@
                         android:text="@string/term_of_service_link"
                         android:layout_gravity="center"
                         android:textColor="@color/colorPrimary"
-                        android:id="@+id/create_account_text_view"/>
+                        android:id="@+id/text_view_spannable_string"/>
 
 
             </LinearLayout>
