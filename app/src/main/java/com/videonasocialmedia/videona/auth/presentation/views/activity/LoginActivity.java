@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.auth.presentation.views.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,16 +18,19 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableStringBuilder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -34,7 +38,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.auth.presentation.mvp.presenters.LoginPresenter;
 import com.videonasocialmedia.videona.auth.presentation.mvp.views.LoginView;
 import com.videonasocialmedia.videona.presentation.views.activity.PrivacyPolicyActivity;
@@ -76,16 +79,13 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
     @Bind(R.id.progress_bar_login)
     View progressBarLogin;
 
-    @Bind(R.id.login_form_view)
-    View loginFormView;
-
     @Nullable
     @Bind(R.id.email_sign_in_button)
     Button emailSignInButton;
 
     @Nullable
-   @Bind(R.id.create_account_text_view)
-    TextView textViewCreateAccount;
+   @Bind(R.id.text_view_spannable_string)
+    TextView textViewStringSpannable;
 
     private LoginPresenter loginPresenter;
 
@@ -103,6 +103,8 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
     @Bind(R.id.coordinatorLayoutLogin)
     View coordinatorLayoutLogin;
 
+    CharSequence spannableFinal;
+
     // UI references Register.
 
     protected final int REQUEST_CODE_EXIT_REGISTER_ACTIVITY = 1;
@@ -111,15 +113,11 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
     VideonaDialog dialog;
 
     @Nullable
-    @Bind(R.id.toolbarRegister)
-    Toolbar toolbarRegister;
-
-    @Nullable
     @Bind(R.id.email_register_button)
     Button emailRegisterButton;
-    @Nullable
-    @Bind(R.id.term_of_service_text_view)
-    TextView accepTermServiceTextView;
+
+    //@Bind(R.id.text_view_spannable_string)
+   // TextView accepTermServiceTextView;
     @Nullable
     @Bind(R.id.check_box_Accept_Term)
     CheckBox checkBoxAcceptTerm;
@@ -133,17 +131,20 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
-        setupToolbar(R.id.toolbar);
+
+        setContentView(R.layout.activity_register);
+        ButterKnife.bind(LoginActivity.this);
+        setupToolbar();
         loginPresenter = new LoginPresenter(this);
-        addTextViewWithLinktoRegister(textViewCreateAccount);
+        textViewStringSpannable.setMovementMethod(LinkMovementMethod.getInstance());
+        textViewStringSpannable.setText(createSpannableFinalInRegister());
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 
     }
 
-    private void setupToolbar(int toolbarSelect) {
-        Toolbar toolbar = (Toolbar) findViewById(toolbarSelect);
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         ActionBar ab = getSupportActionBar();
@@ -198,17 +199,27 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
     @OnEditorAction(R.id.password_edit_text)
     public boolean onEditorAction(int id, KeyEvent key) {
 
-        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-            attemptLogin();
-            return true;
-        }
+        if (id == R.id.closekeyBoard || id == EditorInfo.IME_ACTION_UNSPECIFIED) {
 
-        if (id == R.id.register || id == EditorInfo.IME_NULL) {
-            attemptRegister();
+            InputMethodManager inputMethodManager = (InputMethodManager) passwordEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
             return true;
         }
         return false;
     }
+
+    @OnEditorAction(R.id.email_edit_text)
+    public boolean onEditorActionEmail(int id, KeyEvent key) {
+
+        if (id == R.id.closekeyBoard || id == EditorInfo.IME_ACTION_UNSPECIFIED) {
+
+            InputMethodManager inputMethodManager = (InputMethodManager) passwordEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public void resetErrorFields() {
@@ -338,65 +349,91 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
             dialog.dismiss();
     }
 
-    public void addTextViewWithLinktoRegister(TextView textView){
+    //Create spannableString
 
-        SpannableStringBuilder newTextOfTextView = new SpannableStringBuilder(getString(R.string.first_string_link_for_create_account));
+    public Spannable createSpannableNoClickable(String stringResource, int colorResource) {
 
-        newTextOfTextView.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)),0,newTextOfTextView.length(),0);
+        Spannable spanText = new SpannableString(stringResource);
+        spanText.setSpan(new ForegroundColorSpan(getResources()
+                .getColor(colorResource)), 0, stringResource.length(), 0);
+        return spanText;
+    }
 
-        newTextOfTextView.append(" ");
+    public Spannable createSpannableClickableWithIntent(String stringResource, int colorResource, final Class nextActivity){
+        Spannable spannableClickable= createSpannableNoClickable(stringResource, colorResource);
 
-        newTextOfTextView.append(getString(R.string.second_string_link_for_create_account));
-        newTextOfTextView.setSpan(new ClickableSpan() {
+        ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
-            public void onClick(View widget) {
+            public void onClick(View textView) {
+                startActivity(new Intent(LoginActivity.this, nextActivity)) ;
+            }
+        };
+        spannableClickable.setSpan(clickableSpan, 0, spannableClickable.length(), 0);
+        return spannableClickable;
+    }
+
+    public Spannable createSpannableClickableToInflateViewLogin(String stringResource,  int colorResource) {
+        Spannable spannableClickable = createSpannableNoClickable(stringResource, colorResource);
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                setContentView(R.layout.activity_login);
+                ButterKnife.bind(LoginActivity.this);
+                setupToolbar();
+                textViewStringSpannable.setMovementMethod(LinkMovementMethod.getInstance());
+                textViewStringSpannable.setText(createSpannableFinalInLogin());
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+            }
+        };
+        spannableClickable.setSpan(clickableSpan, 0, spannableClickable.length(), 0);
+
+        return spannableClickable;
+    }
+
+    public Spannable createSpannableClickableToInflateViewRegister(String stringResource,  int colorResource){
+        Spannable spannableClickable= createSpannableNoClickable(stringResource, colorResource);
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
                 setContentView(R.layout.activity_register);
                 ButterKnife.bind(LoginActivity.this);
-                setupToolbar(R.id.toolbarRegister);
-                addTextViewWithLinktoTermService(accepTermServiceTextView);
-
+                setupToolbar();
+                textViewStringSpannable.setMovementMethod(LinkMovementMethod.getInstance());
+                textViewStringSpannable.setText(createSpannableFinalInRegister());
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             }
-        }, newTextOfTextView.length() - getString(R.string.second_string_link_for_create_account).length(), newTextOfTextView.length(),0);;
+        };
 
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setText(newTextOfTextView, TextView.BufferType.SPANNABLE);
+        spannableClickable.setSpan(clickableSpan, 0, spannableClickable.length(), 0);
+
+        return spannableClickable;
     }
 
-    public void addTextViewWithLinktoTermService(TextView textView){
+    private CharSequence createSpannableFinalInLogin(){
 
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(getString(R.string.term_of_service_link));
-
-        addStringClickable(stringBuilder, R.string.term_of_service_link, TermsOfServiceActivity.class );
-
-
-        stringBuilder.append("  " +getString(R.string.and)+"  ");
-        stringBuilder.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSecondary)),stringBuilder.length()-3,stringBuilder.length(),0);
-
-        stringBuilder.append(getString(R.string.privacy_policy_link));
-
-        addStringClickable(stringBuilder, R.string.privacy_policy_link, PrivacyPolicyActivity.class);
-
-
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setText(stringBuilder, TextView.BufferType.SPANNABLE);
+        Spannable string1=createSpannableNoClickable(getString(R.string.first_string_link_for_create_account),R.color.colorSecondary);
+        Spannable string2=createSpannableClickableToInflateViewRegister(getString(R.string.second_string_link_for_create_account),R.color.colorPrimary);
+        spannableFinal= TextUtils.concat(string1,string2);
+        return spannableFinal;
     }
 
-    private SpannableStringBuilder addStringClickable(SpannableStringBuilder spannableStringBuilder, int stringClickable, final Class<?> activity) {
-        spannableStringBuilder.setSpan(new ClickableSpan() {
-            @Override
-            public void onClick(View widget) {
-                Intent intent = new Intent(VideonaApplication.getAppContext(), activity);
-                startActivity(intent);
-            }
-        }, spannableStringBuilder.length() - getString(stringClickable).length(), spannableStringBuilder.length(), 0);
+    private CharSequence createSpannableFinalInRegister(){
 
-        return spannableStringBuilder;
+        Spannable string1=createSpannableNoClickable(getString(R.string.first_string_link_for_goToLogin),R.color.colorSecondary);
+        Spannable string2=createSpannableClickableToInflateViewLogin(getString(R.string.second_string_link_for_goToLogin),R.color.colorPrimary);
+        Spannable string6=createSpannableNoClickable("\n\n",R.color.colorSecondary);
+        Spannable string3=createSpannableClickableWithIntent(getString(R.string.term_of_service_link),R.color.colorPrimary,TermsOfServiceActivity.class);
+        Spannable string4=createSpannableNoClickable(" "+getString(R.string.and)+" ",R.color.colorSecondary);
+        Spannable string5=createSpannableClickableWithIntent(getString(R.string.privacy_policy_link),R.color.colorPrimary,PrivacyPolicyActivity.class);
+        spannableFinal= TextUtils.concat(string1,string2,string6,string3,string4,string5);
+
+        return spannableFinal;
     }
 
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
     private void showProgress(final boolean show) {
 
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -418,13 +455,6 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
             });
 
     }
-
-
-    /*public int getIdViewActivate(){
-        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
-
-        return viewGroup.getId();
-    }*/
 
 }
 
