@@ -9,12 +9,10 @@ package com.videonasocialmedia.videona.effects.domain.model;
 
 import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 
-import io.realm.RealmModel;
-
 /**
  *
  */
-public abstract class Effect implements RealmModel {
+public abstract class Effect {
 
     /**
      * Identifier of the effect. Cannot be null.

@@ -7,8 +7,11 @@
 
 package com.videonasocialmedia.videona.effects.domain.usecase;
 
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.repository.EffectRepository;
 import com.videonasocialmedia.videona.effects.repository.local.EffectLocalSource;
+
+import java.util.List;
 
 import io.realm.RealmResults;
 
@@ -17,7 +20,7 @@ import io.realm.RealmResults;
  */
 public class GetEffectListUseCase {
 
-    public static RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffectsList() {
+    public static List<Effect> getShaderEffectsList() {
 
         EffectRepository effectRepository = new EffectLocalSource();
         //RealmResults realmResults = effectRepository.getShaderEffectList();

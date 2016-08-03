@@ -29,14 +29,11 @@ import com.videonasocialmedia.avrecorder.event.MuxerFinishedEvent;
 import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.domain.model.EffectType;
-import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
-import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
 import com.videonasocialmedia.videona.effects.domain.usecase.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -156,18 +153,6 @@ public class RecordPresenter {
         Log.d(LOG_TAG, "resume presenter");
     }
 
-    private void updateEffectLists() {
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderEffects;
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayEffects;
-
-        shaderEffects = this.getShaderEffects();
-        overlayEffects = this.getOverlayEffects();
-
-        recordView.updateShaderEffectList(shaderEffects);
-        recordView.updateOverlayEffectList(overlayEffects);
-        // TODO(javi.cabanas): 12/7/16 if currently selected effects are not on the lists they must be disabled
-    }
-
     private void showThumbAndNumber() {
         GetMediaListFromProjectUseCase getMediaListFromProjectUseCase = new GetMediaListFromProjectUseCase();
         final List mediaInProject = getMediaListFromProjectUseCase.getMediaListFromProject();
@@ -183,6 +168,18 @@ public class RecordPresenter {
             recordView.hideVideosRecordedNumber();
             recordView.disableShareButton();
         }
+    }
+
+    private void updateEffectLists() {
+        List<Effect> shaderEffects;
+        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayEffects;
+
+        shaderEffects = this.getShaderEffects();
+        overlayEffects = this.getOverlayEffects();
+
+        recordView.updateShaderEffectList(shaderEffects);
+        recordView.updateOverlayEffectList(overlayEffects);
+        // TODO(javi.cabanas): 12/7/16 if currently selected effects are not on the lists they must be disabled
     }
 
     private boolean isAWolderUser() {
@@ -210,15 +207,16 @@ public class RecordPresenter {
         return result && loginUser.userIsLoggedIn();
     }
 
-    public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffects() {
+    public List<Effect> getShaderEffects() {
 
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderList = GetEffectListUseCase.getShaderEffectsList();
+
+        List<Effect> shaderList = GetEffectListUseCase.getShaderEffectsList();
 
         return shaderList;
     }
 
     public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getOverlayEffects() {
-
+        // TODO(javi.cabanas): 3/8/16 REMOVE REALM FROM PRESENTER. Only domain or view model can be accessed from this level. Realm objects are repository model objects.
         RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
 
         return overlayList;
@@ -290,9 +288,9 @@ public class RecordPresenter {
     private void startRecord() {
         mixpanel.timeEvent(AnalyticsConstants.VIDEO_RECORDED);
         trackUserInteracted(AnalyticsConstants.RECORD, AnalyticsConstants.START);
-        if(selectedShaderEffect!=null)
+        if (selectedShaderEffect != null)
             applyEffect(selectedShaderEffect);
-        if(selectedOverlayEffect!=null)
+        if (selectedOverlayEffect != null)
             applyEffect(selectedOverlayEffect);
         recorder.startRecording();
         recordView.lockScreenRotation();
@@ -307,14 +305,14 @@ public class RecordPresenter {
     }
 
 
-    public void applyEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect){
-        if(effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
+    public void applyEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
+        if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
             recorder.removeOverlay();
-            Drawable overlay = context.getResources().getDrawable((effect).getResourceId());
+            Drawable overlay = context.getResources().getDrawable(( effect ).getResourceId());
             recorder.addOverlayFilter(overlay);
             selectedOverlayEffect = effect;
         } else {
-            if(effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0) {
+            if (effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0) {
                 int shaderId = effect.getResourceId();
                 recorder.applyFilter(shaderId);
                 selectedShaderEffect = effect;
@@ -323,10 +321,10 @@ public class RecordPresenter {
     }
 
     public void updateEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
-        if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0){
+        if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
             GetEffectListUseCase.discoverOverlayEffects();
         } else {
-            if(effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0)
+            if (effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0)
                 GetEffectListUseCase.updateShaderEffect(effect);
         }
 
@@ -523,7 +521,6 @@ public class RecordPresenter {
     public void rotateCamera(int rotation) {
         recorder.rotateCamera(rotation);
     }
-
 
 
 }
