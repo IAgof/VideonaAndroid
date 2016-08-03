@@ -82,9 +82,9 @@
     <string name="action_settings">Settings</string>
 
     <!-- Loggin -->
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Register/Sign in</string>
     <string name="signOut">Sign out</string>
-    <string name="signIn">Sign In</string>
+    <string name="signIn">Register/Sign in</string>
     <string name="title_activity_logout">Log Out</string>
     <string name="success_login">Login ok, WELCOME TO VIDEONA!!</string>
     <string name="success_register">Login ok, WELCOME TO VIDEONA!!</string>
@@ -106,7 +106,8 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in_short">Close</string>
+    <string name="action_email_sign_in_short">Close"</string>
     <string name="error_already_exits">There already exists a user with this email</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -115,13 +116,16 @@
     <string name="login_in_progress">Login in progress... </string>
     <string name="first_string_link_for_create_account">Don\'t have an account?</string>
     <string name="second_string_link_for_create_account">Create one</string>
+    <string name="first_string_link_for_goToLogin">Have an account?</string>
+    <string name="second_string_link_for_goToLogin">Sign in</string>
 
 
     <!-- Strings related to register -->
 
     <string name="prompt_email_register">Email</string>
     <string name="prompt_password_register">Password</string>
-    <string name="action_register_short">Sign in</string>
+    <string name="action_register_short">Done</string>
+    <string name="action_email_register_short">Close Keyboard</string>"
     <string name="error_invalid_email_register">This email address is invalid</string>
     <string name="error_invalid_password_register">This password is too short</string>
     <string name="error_incorrect_password_register">This password is incorrect</string>
@@ -135,7 +139,7 @@
     <string name="action_register">Register</string>
     <string name="register_progress">Register in progress... </string>
 
-    <string name="exit_registerActivity_title">Leave Register?</string>
+    <string name="exit_registerActivity_title">Exit</string>
     <string name="exit_registerActivity_message">Are you sure you want to exit?\n This will discard any information that you have entered so far </string>
     <string name="acceptExitRegisterActivity">Yes</string>
     <string name="cancelExitRegisterActivity">No</string>

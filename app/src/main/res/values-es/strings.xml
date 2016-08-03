@@ -18,7 +18,7 @@
     <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
     <string name="giftOverlayDialogTitle">Tu regalo</string>
     <string name="giftOverlayDialogMessage">Disfruta de tu nuevo filtro</string>
-    <string name="dialog_record_go_to_login_message">Registrate en la aplicación y consigue este filtro</string>
+    <string name="dialog_record_go_to_login_message">Registrate o inicia sesión en la aplicación y consigue este filtro</string>
     <string name="dialog_record_login_accept">Aceptar</string>
     <string name="dialog_record_login_cancel">Cancelar</string>
 
@@ -77,12 +77,12 @@
     <string name="action_settings">Ajustes</string>
 
     <!-- Loggin -->
-    <string name="title_activity_login">Iniciar sesión</string>
+    <string name="title_activity_login">Registro / Iniciar Sesión </string>
     <string name="signOut">Cerrar sesión</string>
-    <string name="signIn">Iniciar sesión</string>
+    <string name="signIn">Registro / Iniciar Sesión</string>
     <string name="title_activity_logout">Desconectarse</string>
     <string name="success_login">Sesión iniciada </string>
-    <string name="success_register">¡BIENVENIDO A VIDEONA !</string>
+    <string name="success_register">¡BIENVENIDO A VIDEONA!</string>
 
     <string name="signOut_title_dialog">Cerrar sesión</string>
     <string name="signOut_message_dialog">¿Estás seguro? Se eliminarán todos los datos de Videona de este dispositivo</string>
@@ -100,7 +100,8 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Iniciar sesión</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in_short">Ok</string>
+    <string name="action_email_sign_in_short">Ocultar</string>
     <string name="error_invalid_email">La dirección de email es incorrecta</string>
     <string name="error_invalid_password">La contraseña es demasiado corta</string>
     <string name="error_incorrect_password">La contraseña es incorrecta</string>
@@ -109,13 +110,16 @@
 
     <string name="first_string_link_for_create_account">¿No tienes una cuenta de Videona?</string>
     <string name="second_string_link_for_create_account">Créate una</string>
+    <string name="first_string_link_for_goToLogin">¿Tienes una cuenta en Videona?</string>
+    <string name="second_string_link_for_goToLogin">Inicia sesión</string>
 
     <!-- Strings related to register -->
     <string name="prompt_email_register">Email</string>
     <string name="prompt_password_register">Contraseña</string>
 
-    <string name="action_register_short">Sign in</string>
-    <string name="error_already_exits">Ya existe un usuario con este email</string>
+    <string name="action_register_short">Hecho</string>
+    <string name="action_email_register_short">Ocultar</string>
+    <string name="error_already_exits">Ya existe un usuario con esta dirección de email</string>
     <string name="error_invalid_email_register">La dirección de email es incorrecta</string>
     <string name="error_invalid_password_register">La contraseña es demasiado corta</string>
     <string name="error_incorrect_password_register">La contraseña es incorrecta</string>
