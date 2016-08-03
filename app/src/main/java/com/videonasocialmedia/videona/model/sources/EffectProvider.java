@@ -124,7 +124,7 @@ public class EffectProvider {
     public static List<Effect> getOverlayFilterList() {
 
         List<Effect> overlayList = new ArrayList<>();
-        overlayList.add(new OverlayEffect("GIFT_OV", " ",
+        overlayList.add(new OverlayEffect("GIFT_OVg01", " ",
                 R.drawable.common_filter_overlay_gift,
                 R.drawable.overlay_filter_olimpic, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
@@ -135,7 +135,6 @@ public class EffectProvider {
         overlayList.add(new OverlayEffect("ovs002", "Dive",
                 R.drawable.common_filter_overlay_ovs002_dive,
                 R.drawable.overlay_filter_diving, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-
 
         overlayList.add(new OverlayEffect("ovp002", "Love",
                 R.drawable.common_filter_overlay_ovp002_love,
@@ -170,7 +169,7 @@ public class EffectProvider {
     }
 
     public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("ovt002", "olympics",
+        return new OverlayEffect("ovt002", "Olympics",
                 R.drawable.common_filter_overlay_ovt002_olimpic,
                 R.drawable.overlay_filter_olimpic, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
