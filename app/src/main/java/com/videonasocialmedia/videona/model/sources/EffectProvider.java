@@ -128,41 +128,41 @@ public class EffectProvider {
                 R.drawable.common_filter_overlay_gift,
                 R.drawable.overlay_filter_olimpic, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("ovn002", "Paradise",
-                R.drawable.common_filter_overlay_ovn002_paradise,
-                R.drawable.overlay_filter_paradise, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("ovn003", "Hawaii",
+                R.drawable.common_filter_overlay_ovn003_hawaii,
+                R.drawable.overlay_filter_hawaii, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("ovs002", "Dive",
-                R.drawable.common_filter_overlay_ovs002_dive,
-                R.drawable.overlay_filter_diving, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("ovs003", "Holidays",
+                R.drawable.common_filter_overlay_ovs003_holidays,
+                R.drawable.overlay_filter_holidays, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("ovp002", "Love",
-                R.drawable.common_filter_overlay_ovp002_love,
-                R.drawable.overlay_filter_love, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("ovp003", "Baby",
+                R.drawable.common_filter_overlay_ovp003_baby,
+                R.drawable.overlay_filter_baby, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("ovc002", "Lines",
-                R.drawable.common_filter_overlay_ovc002_lines,
-                R.drawable.overlay_filter_lines, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("ovh003", "Tattoo",
+                R.drawable.common_filter_overlay_ovh003_tattoo,
+                R.drawable.overlay_filter_tattoo, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
+        overlayList.add(new OverlayEffect("ovr003", "NY",
+                R.drawable.common_filter_overlay_ovr003_ny,
+                R.drawable.overlay_filter_ny, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
+        overlayList.add(new OverlayEffect("ovb003", "Dirty",
+                R.drawable.common_filter_overlay_ovb003_dirty,
+                R.drawable.overlay_filter_dirty, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
+        overlayList.add(new OverlayEffect("ovi003", "Unicorn",
+                R.drawable.common_filter_overlay_ovi003_unicorn,
+                R.drawable.overlay_filter_unicorn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+
+        overlayList.add(new OverlayEffect("ovf003", "Retro Game",
+                R.drawable.common_filter_overlay_ovf003_retro_game,
+                R.drawable.overlay_filter_retro_game, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         overlayList.add(new OverlayEffect("ovh002", "Gamer",
                 R.drawable.common_filter_overlay_ovh002_game,
                 R.drawable.overlay_filter_gamer, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-
-        overlayList.add(new OverlayEffect("ovr002", "Party",
-                R.drawable.common_filter_overlay_ovr002_party,
-                R.drawable.overlay_filter_party, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-
-        overlayList.add(new OverlayEffect("ovb002", "Crash",
-                R.drawable.common_filter_overlay_ovb002_crash,
-                R.drawable.overlay_filter_crash, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-
-        overlayList.add(new OverlayEffect("ovi002", "Tale",
-                R.drawable.common_filter_overlay_ovi002_tale,
-                R.drawable.overlay_filter_tale, AnalyticsConstants.FILTER_TYPE_OVERLAY));
-
-        overlayList.add(new OverlayEffect("ovctp001", "Vintage",
-                R.drawable.common_filter_overlay_ovctp001_polaroid,
-                R.drawable.overlay_filter_polaroid, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
 
         return overlayList;
