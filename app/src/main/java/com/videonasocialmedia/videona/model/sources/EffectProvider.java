@@ -126,7 +126,7 @@ public class EffectProvider {
         List<Effect> overlayList = new ArrayList<>();
         overlayList.add(new OverlayEffect("GIFT_OVg01", " ",
                 R.drawable.common_filter_overlay_gift,
-                R.drawable.overlay_filter_olimpic, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+                R.drawable.overlay_filter_disco, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         overlayList.add(new OverlayEffect("ovn001", "Mexico",
                 R.drawable.common_filter_overlay_ovw001_mexico,
@@ -136,9 +136,9 @@ public class EffectProvider {
                 R.drawable.common_filter_overlay_ovf004_pixel,
                 R.drawable.overlay_filter_pixel, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("ovh004", "Disco",
-                R.drawable.common_filter_overlay_ovh004_disco,
-                R.drawable.overlay_filter_disco, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("ovt002", "Olympics",
+                R.drawable.common_filter_overlay_ovt002_olimpic,
+                R.drawable.overlay_filter_olimpic, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         overlayList.add(new OverlayEffect("ovp004", "Dog",
                 R.drawable.common_filter_overlay_ovp004_dog,
@@ -169,9 +169,9 @@ public class EffectProvider {
     }
 
     public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("ovt002", "Olympics",
-                R.drawable.common_filter_overlay_ovt002_olimpic,
-                R.drawable.overlay_filter_olimpic, AnalyticsConstants.FILTER_TYPE_OVERLAY);
+        return new OverlayEffect("ovh004", "Disco",
+                R.drawable.common_filter_overlay_ovh004_disco,
+                R.drawable.overlay_filter_disco, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
 }
