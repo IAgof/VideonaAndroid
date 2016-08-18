@@ -74,6 +74,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     private boolean trimmingBarsHaveBeenInitialized = false;
     private boolean leftTimeTagIsUpdated = false;
     private boolean rightTimeTagIsUpdated = false;
+    private Video untrimmedVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +251,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
     public void showPreview(List<Video> movieList) {
         video = movieList.get(0);
         // TODO(jliarte): check this workarround.
-        Video untrimmedVideo = new Video(video);
+        untrimmedVideo = new Video(video);
         untrimmedVideo.setFileStartTime(0);
         untrimmedVideo.setFileStopTime(video.getFileDuration());
         List<Video> untrimedMovieList = new LinkedList<>();
@@ -274,6 +275,8 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         seekBarMin = (double) startTimeMs / videoDuration;
         seekBarMax = (double) finishTimeMs / videoDuration;
         trimmingRangeSeekBar.setInitializedPosition(seekBarMin, seekBarMax);
+        videonaPlayer.seekTo(startTimeMs);
+        updateTimeVideoPlaying();
     }
 
     private void updateTrimingTextTags() {
@@ -299,6 +302,7 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
             if(!trimmingBarsHaveBeenInitialized) {
                 startTimeMs = startTime;
                 updateTrimingTextTags();
+                updateTimeVideoPlaying();
             }
             return;
         }
@@ -306,12 +310,25 @@ public class VideoTrimActivity extends VideonaActivity implements TrimView,
         if (seekBarMax != maxPosition) {
             seekBarMin = minPosition;
             seekBarMax = maxPosition;
-            videonaPlayer.seekTo(finishTime);
+            videonaPlayer.seekTo(startTime);
             if(!trimmingBarsHaveBeenInitialized) {
                 finishTimeMs = finishTime;
                 updateTrimingTextTags();
+                updateTimeVideoPlaying();
             }
             return;
+        }
+    }
+
+    private void updateTimeVideoPlaying() {
+        if (untrimmedVideo != null){
+            untrimmedVideo.setFileStartTime(startTimeMs);
+            untrimmedVideo.setFileStopTime(finishTimeMs);
+            List<Video> untrimedMovieList = new LinkedList<>();
+            untrimedMovieList.add(untrimmedVideo);
+            videonaPlayer.initPreviewLists(untrimedMovieList);
+            seekTo(startTimeMs);
+            videonaPlayer.initPreview(currentPosition);
         }
     }
 
