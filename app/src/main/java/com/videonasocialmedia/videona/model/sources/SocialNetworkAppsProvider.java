@@ -33,29 +33,29 @@ public class SocialNetworkAppsProvider {
             Drawable icon= app.loadIcon(pm);
             SocialNetwork socialNetwork;
             if (activityName.equalsIgnoreCase("com.twitter.android.composer.ComposerActivity")) {
-                socialNetwork = new SocialNetwork("Twitter", packageName,
+                socialNetwork = new SocialNetwork("Twitter", "Twitter", packageName,
                         activityName, icon, "#videona");
             } else if (activityName.equalsIgnoreCase("com.facebook.composer.shareintent.ImplicitShareIntentHandlerDefaultAlias")) {
-                socialNetwork = new SocialNetwork("Facebook", packageName,
+                socialNetwork = new SocialNetwork("Facebook","Facebook", packageName,
                         activityName, icon, "");
             } else if (packageName.toLowerCase().contains("whatsapp")
                     || activityName.toLowerCase().contains("whatsapp")) {
-                socialNetwork = new SocialNetwork("Whatsapp", packageName,
+                socialNetwork = new SocialNetwork("Whatsapp","Whatsapp", packageName,
                         activityName, icon, "#videona");
             } else if (packageName.toLowerCase().contains("youtube")
                     || activityName.toLowerCase().contains("youtube")) {
-                socialNetwork = new SocialNetwork("Youtube", packageName,
+                socialNetwork = new SocialNetwork("Youtube", "Youtube", packageName,
                         activityName, icon, "#videonaTime");
             } else if (packageName.toLowerCase().contains("plus")
                     && activityName.toLowerCase().contains("com.google.android.libraries.social.gateway.GatewayActivity")) {
-                socialNetwork = new SocialNetwork("GooglePlus", packageName,
+                socialNetwork = new SocialNetwork("GooglePlus","GooglePlus", packageName,
                         activityName, icon, "#videona");
             } else if (packageName.toLowerCase().contains("instagram")
                     || activityName.toLowerCase().contains("instagram")) {
-                socialNetwork = new SocialNetwork("Instagram", packageName,
+                socialNetwork = new SocialNetwork("Instagram","Instagram", packageName,
                         activityName, icon, "#videona");
             } else {
-                socialNetwork = new SocialNetwork("Generic", packageName,
+                socialNetwork = new SocialNetwork("Generic","Generic", packageName,
                         activityName, icon, "");
             }
             socialNetworks.add(socialNetwork);

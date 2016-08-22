@@ -268,7 +268,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     @Override
     public void showShareNetworksAvailable(List<SocialNetwork> networks) {
         // TODO move this to presenter in merging alpha and stable.
-        SocialNetwork saveToGallery = new SocialNetwork(getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.activity_share_save_to_gallery), "");
+        SocialNetwork saveToGallery = new SocialNetwork("SaveToGallery",getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.activity_share_save_to_gallery), "");
         networks.add(saveToGallery);
         mainSocialNetworkAdapter.setSocialNetworkList(networks);
     }
@@ -325,7 +325,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         trackVideoSharedSuperProperties();
         String socialNetworkName = null;
         if (socialNetwork != null)
-            socialNetworkName = socialNetwork.getName();
+            socialNetworkName = socialNetwork.getIdSocialNetwork();
         JSONObject socialNetworkProperties = new JSONObject();
         try {
             socialNetworkProperties.put(AnalyticsConstants.SOCIAL_NETWORK, socialNetworkName);
