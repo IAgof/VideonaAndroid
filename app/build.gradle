@@ -24,14 +24,14 @@ android {
         applicationId "com.videonasocialmedia.videona"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 93 // 24/08/2016
+        versionCode 94 // 24/08/2016
         // Enabling multidex support.
         multiDexEnabled true
     }
     productFlavors {
         alpha {
 //            applicationId "com.videonasocialmedia.videona.alpha"
-            versionName "1.1-rc10-beta"
+            versionName "1.1-rc11-beta"
             resValue "string", "app_name", "Videona-alpha"
         }
         stable {
