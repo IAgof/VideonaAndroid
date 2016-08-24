@@ -104,7 +104,7 @@ public class AddMusicToProjectUseCaseTest {
     @Test
     public void testAddMusicToTrackDoesntAddToNonExistentTrackIndex() throws Exception {
         Project videonaProject = getAProject(); // TODO: inject as a dependence in Use Case constructor
-        Music musicToAdd = new Music(42, "musicNameId", 3, 2);
+        Music musicToAdd = new Music(42, "musicNameId", 3, 2, "");
 
         new AddMusicToProjectUseCase().addMusicToTrack(musicToAdd, 1);
         AudioTrack projectAudioTrack = videonaProject.getAudioTracks().get(0);

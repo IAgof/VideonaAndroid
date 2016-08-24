@@ -9,9 +9,12 @@ import android.net.Uri;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
+import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
+import com.videonasocialmedia.videona.model.entities.social.User;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import java.util.List;
@@ -24,12 +27,17 @@ public class ShareVideoPresenter {
     private ObtainNetworksToShareUseCase obtainNetworksToShareUseCase;
     private ShareVideoView shareVideoView;
     private SharedPreferences sharedPreferences;
+    protected Project currentProject;
+    protected UserEventTracker userEventTracker;
 
-    public ShareVideoPresenter(ShareVideoView shareVideoView) {
+    public ShareVideoPresenter(ShareVideoView shareVideoView, UserEventTracker userEventTracker) {
         this.shareVideoView = shareVideoView;
-        sharedPreferences = VideonaApplication.getAppContext().getSharedPreferences(
-                ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
-                Context.MODE_PRIVATE);
+        this.userEventTracker = userEventTracker;
+        this.currentProject = loadCurrentProject();
+    }
+
+    private Project loadCurrentProject() {
+        return Project.getInstance(null, null, null);
     }
 
     public void onCreate() {
@@ -42,7 +50,6 @@ public class ShareVideoPresenter {
 
     public void obtainNetworksToShare() {
         List networks = obtainNetworksToShareUseCase.obtainMainNetworks();
-
         shareVideoView.showShareNetworksAvailable(networks);
     }
 
@@ -71,16 +78,18 @@ public class ShareVideoPresenter {
         shareVideoView.showMoreNetworks(networks);
     }
 
-    public double getVideoLength() {
-        return sharedPreferences.getLong(ConfigPreferences.VIDEO_DURATION, 0);
-    }
-
-    public double getNumberOfClips() {
-        return sharedPreferences.getInt(ConfigPreferences.NUMBER_OF_CLIPS, 1);
+    public void updateNumTotalVideosShared() {
+        currentProject.updateTotalVideosShared();
     }
 
     public String getResolution() {
-        return sharedPreferences.getString(ConfigPreferences.RESOLUTION, "1280x720");
+        //// TODO:(alvaro.martinez) 24/08/16 getResolution from camera settings
+        return "1280x720";
     }
 
+    public void trackVideoShared(String socialNetwork) {
+
+        userEventTracker.trackVideoShared(socialNetwork, currentProject.getDuration(),
+                       getResolution(), currentProject.numberOfClips(), currentProject.getNumTotalVideosShared());
+    }
 }

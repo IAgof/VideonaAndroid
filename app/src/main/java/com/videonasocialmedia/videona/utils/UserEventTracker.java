@@ -4,9 +4,14 @@ import android.util.Log;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
+import com.videonasocialmedia.videona.presentation.views.activity.AboutActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by jliarte on 7/06/16.
@@ -109,6 +114,47 @@ public class UserEventTracker {
     public void addProjectEventProperties(Project project, JSONObject eventProperties) throws JSONException {
         eventProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, project.numberOfClips());
         eventProperties.put(AnalyticsConstants.VIDEO_LENGTH, project.getDuration());
+    }
+
+    public void trackVideoShared(String socialNetworkId, double videoLength, String resolution,
+                                 double numberOfClips, int totalVideoShared){
+
+        trackVideoSharedSuperProperties();
+
+        JSONObject eventProperties = new JSONObject();
+        try {
+            eventProperties.put(AnalyticsConstants.SOCIAL_NETWORK, socialNetworkId);
+            eventProperties.put(AnalyticsConstants.VIDEO_LENGTH, videoLength);
+            eventProperties.put(AnalyticsConstants.RESOLUTION, resolution);
+            eventProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numberOfClips);
+            eventProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED, totalVideoShared);
+            Event trackingEvent = new Event(AnalyticsConstants.VIDEO_SHARED, eventProperties);
+            this.trackEvent(trackingEvent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_SHARED, 1);
+        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_SHARED,
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
+
+    }
+
+    private void trackVideoSharedSuperProperties() {
+        JSONObject updateSuperProperties = new JSONObject();
+        int numPreviousVideosShared;
+        try {
+            numPreviousVideosShared =
+                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_SHARED);
+        } catch (JSONException e) {
+            numPreviousVideosShared = 0;
+        }
+        try {
+            updateSuperProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED,
+                    ++numPreviousVideosShared);
+            mixpanel.registerSuperProperties(updateSuperProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static class Event {
