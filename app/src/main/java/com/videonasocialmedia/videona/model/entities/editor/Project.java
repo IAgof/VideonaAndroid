@@ -69,8 +69,6 @@ public class Project {
     private int duration;
     private Music music;
 
-    private int numTotalVideosShared = 0;
-
     /**
      * Constructor of minimum number of parameters. This is the Default constructor.
      *
@@ -196,13 +194,5 @@ public class Project {
             result = (Music) getAudioTracks().get(0).getItems().get(0);
         } catch (Exception e) { e.printStackTrace(); }
         return result;
-    }
-
-    public int getNumTotalVideosShared() {
-        return numTotalVideosShared;
-    }
-
-    public void updateTotalVideosShared() {
-        numTotalVideosShared++;
     }
 }

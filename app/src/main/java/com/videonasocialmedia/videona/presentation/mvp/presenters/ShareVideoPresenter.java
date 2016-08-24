@@ -10,6 +10,7 @@ import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.VideonaApplication;
 import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 import com.videonasocialmedia.videona.model.entities.social.User;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
@@ -79,17 +80,22 @@ public class ShareVideoPresenter {
     }
 
     public void updateNumTotalVideosShared() {
-        currentProject.updateTotalVideosShared();
+
     }
 
     public String getResolution() {
-        //// TODO:(alvaro.martinez) 24/08/16 getResolution from camera settings
-        return "1280x720";
+        VideoResolution videoResolution = new VideoResolution(currentProject.getProfile().getResolution());
+        return videoResolution.getWidth() + "x" + videoResolution.getHeight();
+    }
+    
+    public int getNumTotalVideosShared() {
+        return 0;
     }
 
     public void trackVideoShared(String socialNetwork) {
 
         userEventTracker.trackVideoShared(socialNetwork, currentProject.getDuration(),
-                       getResolution(), currentProject.numberOfClips(), currentProject.getNumTotalVideosShared());
+                       getResolution(), currentProject.numberOfClips(), getNumTotalVideosShared());
     }
+
 }
