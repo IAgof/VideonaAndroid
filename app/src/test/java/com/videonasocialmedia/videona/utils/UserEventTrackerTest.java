@@ -5,6 +5,7 @@ import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.exceptions.IllegalItemOnTrack;
 import com.videonasocialmedia.videona.model.entities.editor.media.Music;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +31,8 @@ public class UserEventTrackerTest {
 
     @Mock
     private MixpanelAPI mockedMixpanelAPI;
+    @Mock
+    private VideoResolution mockedVideoResolution;
 
     @Before
     public void injectMocks() {
@@ -163,6 +166,28 @@ public class UserEventTrackerTest {
 
         Mockito.verify(userEventTracker).trackEvent(eventCaptor.capture());
         assertThat(eventCaptor.getValue().getProperties().getString(AnalyticsConstants.MUSIC_TITLE), isEmptyString());
+    }
+
+    @Test
+    public void trackVideoSharedPropertiesCallsTrackWithEventNameAndProperties() throws JSONException {
+
+        UserEventTracker userEventTracker = Mockito.spy(UserEventTracker.getInstance(mockedMixpanelAPI));
+        Project videonaProject = getAProject();
+
+        String socialNetworkId = "SocialNetwork";
+        VideoResolution videoResolution = new VideoResolution(videonaProject.getProfile().getResolution());
+
+        int totalVideoShared = 2;
+        userEventTracker.trackVideoShared(socialNetworkId, videonaProject,totalVideoShared);
+
+        Mockito.verify(userEventTracker).trackEvent(eventCaptor.capture());
+        UserEventTracker.Event trackedEvent = eventCaptor.getValue();
+        assertThat(trackedEvent.getProperties().getString(AnalyticsConstants.SOCIAL_NETWORK), is(socialNetworkId));
+        assertThat(trackedEvent.getProperties().getInt(AnalyticsConstants.VIDEO_LENGTH), is(videonaProject.getDuration()));
+        assertThat(trackedEvent.getProperties().getString(AnalyticsConstants.RESOLUTION), is(videoResolution.getWidth() + "x" + videoResolution.getHeight()));
+        assertThat(trackedEvent.getProperties().getInt(AnalyticsConstants.NUMBER_OF_CLIPS), is(videonaProject.numberOfClips()));
+        assertThat(trackedEvent.getProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_SHARED), is(totalVideoShared));
+
     }
 
     public void assertEvenPropertiesIncludeProjectCommonProperties(JSONObject eventProperties, Project videonaProject) throws JSONException {

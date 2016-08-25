@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 import com.videonasocialmedia.videona.presentation.views.activity.AboutActivity;
 
@@ -116,30 +117,7 @@ public class UserEventTracker {
         eventProperties.put(AnalyticsConstants.VIDEO_LENGTH, project.getDuration());
     }
 
-    public void trackVideoShared(String socialNetworkId, double videoLength, String resolution,
-                                 double numberOfClips, int totalVideoShared){
-
-        trackVideoSharedSuperProperties();
-
-        JSONObject eventProperties = new JSONObject();
-        try {
-            eventProperties.put(AnalyticsConstants.SOCIAL_NETWORK, socialNetworkId);
-            eventProperties.put(AnalyticsConstants.VIDEO_LENGTH, videoLength);
-            eventProperties.put(AnalyticsConstants.RESOLUTION, resolution);
-            eventProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, numberOfClips);
-            eventProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED, totalVideoShared);
-            Event trackingEvent = new Event(AnalyticsConstants.VIDEO_SHARED, eventProperties);
-            this.trackEvent(trackingEvent);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_SHARED, 1);
-        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_SHARED,
-                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-
-    }
-
-    private void trackVideoSharedSuperProperties() {
+    public void trackVideoSharedSuperProperties() {
         JSONObject updateSuperProperties = new JSONObject();
         int numPreviousVideosShared;
         try {
@@ -155,6 +133,30 @@ public class UserEventTracker {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void trackVideoShared(String socialNetworkId, Project project,int totalVideoShared) {
+
+        JSONObject eventProperties = new JSONObject();
+        try {
+            eventProperties.put(AnalyticsConstants.SOCIAL_NETWORK, socialNetworkId);
+            eventProperties.put(AnalyticsConstants.VIDEO_LENGTH, project.getDuration());
+            VideoResolution videoResolution = new VideoResolution(project.getProfile().getResolution());
+            eventProperties.put(AnalyticsConstants.RESOLUTION, videoResolution.getWidth() + "x" + videoResolution.getHeight());
+            eventProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, project.numberOfClips());
+            eventProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED, totalVideoShared);
+
+            Event trackingEvent = new Event(AnalyticsConstants.VIDEO_SHARED, eventProperties);
+            this.trackEvent(trackingEvent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void trackVideoSharedUserTraits() {
+        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_SHARED, 1);
+        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_SHARED,
+                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
     }
 
     public static class Event {

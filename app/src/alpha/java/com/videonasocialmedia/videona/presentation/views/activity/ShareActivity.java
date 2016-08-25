@@ -85,6 +85,7 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         }
     };
 
+    private SharedPreferences sharedPreferences;
     protected UserEventTracker userEventTracker;
 
     @Override
@@ -100,7 +101,9 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         ab.setDisplayHomeAsUpEnabled(true);
 
         this.userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
-        presenter = new ShareVideoPresenter(this, userEventTracker);
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                        Context.MODE_PRIVATE);
+        presenter = new ShareVideoPresenter(this, userEventTracker, sharedPreferences);
         presenter.onCreate();
 
         if (videoPosition == 0)
@@ -336,5 +339,23 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
     public void showMessage(final int stringToast) {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, stringToast, Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    public void trackVideoSharedSuperProperties() {
+        JSONObject updateSuperProperties = new JSONObject();
+        int numPreviousVideosShared;
+        try {
+            numPreviousVideosShared =
+                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_SHARED);
+        } catch (JSONException e) {
+            numPreviousVideosShared = 0;
+        }
+        try {
+            updateSuperProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED,
+                    ++numPreviousVideosShared);
+            mixpanel.registerSuperProperties(updateSuperProperties);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

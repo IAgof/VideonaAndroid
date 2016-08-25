@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.model.entities.editor.Profile;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
 import com.videonasocialmedia.videona.utils.UserEventTracker;
 
@@ -21,7 +22,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.annotation.Config;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,6 +37,9 @@ public class ShareVideoPresenterTest {
     private ShareVideoView mockedShareVideoView;
     @Mock
     private UserEventTracker mockedUserEventTracker;
+    @Mock
+    private SharedPreferences mockSharedPrefs;
+
 
     @Before
     public void injectMocks() {
@@ -52,15 +55,18 @@ public class ShareVideoPresenterTest {
     public void constructorSetsCurrentProject() {
 
         Project videonaProject = getAProject();
-        ShareVideoPresenter shareVideoPresenter = new ShareVideoPresenter(mockedShareVideoView,mockedUserEventTracker);
+        ShareVideoPresenter shareVideoPresenter = new ShareVideoPresenter(mockedShareVideoView,
+                mockedUserEventTracker, mockSharedPrefs);
 
         assertThat(shareVideoPresenter.currentProject, is(videonaProject));
     }
 
     @Test
     public void constructorSetsUserTracker() {
+
         UserEventTracker userEventTracker = UserEventTracker.getInstance(mockedMixpanelAPI);
-        ShareVideoPresenter shareVideoPresenter = new ShareVideoPresenter(mockedShareVideoView, userEventTracker);
+        ShareVideoPresenter shareVideoPresenter = new ShareVideoPresenter(mockedShareVideoView,
+                userEventTracker, mockSharedPrefs);
 
         assertThat(shareVideoPresenter.userEventTracker, is(userEventTracker));
     }
@@ -68,28 +74,20 @@ public class ShareVideoPresenterTest {
     @Test
     public void shareVideoPresenterCallsTracking(){
 
-        ShareVideoPresenter shareVideoPresenter = new ShareVideoPresenter(mockedShareVideoView,mockedUserEventTracker);
+        ShareVideoPresenter shareVideoPresenter = new ShareVideoPresenter(mockedShareVideoView,
+                mockedUserEventTracker, mockSharedPrefs);
         Project videonaProject = getAProject();
-        shareVideoPresenter.trackVideoShared("SocialNetwork");
+        String socialNetwokId = "SocialNetwork";
+        int totalVideosShared = 0;
+        shareVideoPresenter.trackVideoShared(socialNetwokId);
 
-        Mockito.verify(mockedUserEventTracker).trackVideoShared("SocialNetwork",
-                videonaProject.getDuration(),shareVideoPresenter.getResolution(), videonaProject.numberOfClips(),0);
-    }
-
-    @Test
-    public void shareVideoUpdateTotalVideosShared(){
-
-        ShareVideoPresenter shareVideoPresenter = new ShareVideoPresenter(mockedShareVideoView,mockedUserEventTracker);
-        Project videonaProject = getAProject();
-        int numVideosShared = 2;
-        shareVideoPresenter.updateNumTotalVideosShared();
-        shareVideoPresenter.updateNumTotalVideosShared();
-
-        assertThat(videonaProject.getNumTotalVideosShared(), is(numVideosShared));
+        Mockito.verify(mockedUserEventTracker).trackVideoShared(socialNetwokId,videonaProject,
+                totalVideosShared);
     }
 
     public Project getAProject() {
         return Project.getInstance("title", "/path", Profile.getInstance(Profile.ProfileType.free));
     }
+
 
 }

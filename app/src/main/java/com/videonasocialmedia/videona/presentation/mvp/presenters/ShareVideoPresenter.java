@@ -12,7 +12,6 @@ import com.videonasocialmedia.videona.domain.social.ObtainNetworksToShareUseCase
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
-import com.videonasocialmedia.videona.model.entities.social.User;
 import com.videonasocialmedia.videona.presentation.mvp.views.ShareVideoView;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.UserEventTracker;
@@ -27,14 +26,18 @@ public class ShareVideoPresenter {
 
     private ObtainNetworksToShareUseCase obtainNetworksToShareUseCase;
     private ShareVideoView shareVideoView;
-    private SharedPreferences sharedPreferences;
     protected Project currentProject;
     protected UserEventTracker userEventTracker;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferencesEditor;
 
-    public ShareVideoPresenter(ShareVideoView shareVideoView, UserEventTracker userEventTracker) {
+    public ShareVideoPresenter(ShareVideoView shareVideoView, UserEventTracker userEventTracker,
+                               SharedPreferences sharedPreferences) {
         this.shareVideoView = shareVideoView;
         this.userEventTracker = userEventTracker;
-        this.currentProject = loadCurrentProject();
+        this.sharedPreferences = sharedPreferences;
+        currentProject = loadCurrentProject();
+
     }
 
     private Project loadCurrentProject() {
@@ -55,6 +58,7 @@ public class ShareVideoPresenter {
     }
 
     public void shareVideo(String videoPath, SocialNetwork appToShareWith, Context ctx) {
+
         final ComponentName name = new ComponentName(appToShareWith.getAndroidPackageName(),
                 appToShareWith.getAndroidActivityName());
 
@@ -80,22 +84,25 @@ public class ShareVideoPresenter {
     }
 
     public void updateNumTotalVideosShared() {
-
+        int totalVideosShared = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0);
+        preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, ++totalVideosShared);
+        preferencesEditor.commit();
     }
 
-    public String getResolution() {
+    public int getNumTotalVideosShared() {
+        return  sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0);
+    }
+
+    public String getResolution(){
         VideoResolution videoResolution = new VideoResolution(currentProject.getProfile().getResolution());
         return videoResolution.getWidth() + "x" + videoResolution.getHeight();
-    }
-    
-    public int getNumTotalVideosShared() {
-        return 0;
     }
 
     public void trackVideoShared(String socialNetwork) {
 
-        userEventTracker.trackVideoShared(socialNetwork, currentProject.getDuration(),
-                       getResolution(), currentProject.numberOfClips(), getNumTotalVideosShared());
+        userEventTracker.trackVideoSharedSuperProperties();
+        userEventTracker.trackVideoShared(socialNetwork, currentProject, getNumTotalVideosShared());
+        userEventTracker.trackVideoSharedUserTraits();
     }
-
 }
