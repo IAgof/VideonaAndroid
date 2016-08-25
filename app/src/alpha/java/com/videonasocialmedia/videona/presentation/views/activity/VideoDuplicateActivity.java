@@ -227,7 +227,7 @@ public class VideoDuplicateActivity extends VideonaActivity implements Duplicate
     }
 
     private void showThumbVideo(ImageView imageThumbLeft) {
-        int microSecond = video.getFileStartTime() * 1000;
+        int microSecond = video.getStartTime() * 1000;
         BitmapPool bitmapPool = Glide.get(this).getBitmapPool();
         FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
                 new VideoBitmapDecoder(microSecond),

@@ -53,11 +53,11 @@ public class DuplicatePreviewPresenter implements OnVideosRetrieved {
         return Project.getInstance(null, null, null);
     }
 
-    public void loadProjectVideo(int videoToTrimIndex) {
+    public void loadProjectVideo(int videoIndex) {
         List<Media> videoList = getMediaListFromProjectUseCase.getMediaListFromProject();
         if (videoList != null) {
             ArrayList<Video> v = new ArrayList<>();
-            videoToEdit = (Video) videoList.get(videoToTrimIndex);
+            videoToEdit = (Video) videoList.get(videoIndex);
             v.add(videoToEdit);
             onVideosRetrieved(v);
         }

@@ -68,8 +68,8 @@ public class AddMusicToProjectUseCaseTest {
 //    FIXME: cannot reach catch as method signature only allows Music type
 //    @Ignore @Test public void testAddMusicToTrackDoesntAddToProjectDefaultTrackIfNotMusic() throws Exception {
 //        class NoAudio extends Media {
-//            public NoAudio(String identifier, String iconPath, String medokiaPath, int fileStartTime, int duration, ArrayList<User> authors, License license) {
-//                super(identifier, iconPath, mediaPath, fileStartTime, duration, authors, license);
+//            public NoAudio(String identifier, String iconPath, String medokiaPath, int startTime, int duration, ArrayList<User> authors, License license) {
+//                super(identifier, iconPath, mediaPath, startTime, duration, authors, license);
 //            }
 //        }
 //        Project videonaProject = getAProject();

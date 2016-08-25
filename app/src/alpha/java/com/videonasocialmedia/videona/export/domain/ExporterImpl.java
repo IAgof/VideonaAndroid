@@ -30,9 +30,7 @@ import net.ypresto.androidtranscoder.Transcoder;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -92,9 +90,9 @@ public class ExporterImpl implements Exporter {
             try {
                 String videoTrimmedTempPath =  trimTempPath + File.separator + "video_trimmed_" +
                         index + ".mp4";
-                int startTime = medias.get(index).getFileStartTime();
-                int endTime = medias.get(index).getFileStopTime();
-                int editedFileDuration = medias.get(index).getFileStopTime() - medias.get(index).getFileStartTime();
+                int startTime = medias.get(index).getStartTime();
+                int endTime = medias.get(index).getStopTime();
+                int editedFileDuration = medias.get(index).getStopTime() - medias.get(index).getStartTime();
                 int originalFileDuration = ((Video)medias.get(index)).getFileDuration();
                 if(editedFileDuration < originalFileDuration) {
                     trimmer = new VideoTrimmer();

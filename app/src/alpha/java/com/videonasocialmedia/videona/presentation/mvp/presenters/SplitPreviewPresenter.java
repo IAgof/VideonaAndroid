@@ -68,7 +68,7 @@ public class SplitPreviewPresenter implements OnVideosRetrieved {
     public void onVideosRetrieved(List<Video> videoList) {
         splitView.showPreview(videoList);
         Video video = videoList.get(0);
-        splitView.initSplitView(video.getFileStopTime() - video.getFileStartTime());
+        splitView.initSplitView(video.getStopTime() - video.getStartTime());
     }
 
     @Override
@@ -79,9 +79,9 @@ public class SplitPreviewPresenter implements OnVideosRetrieved {
 
     public void splitVideo(Video video, int positionInAdapter, int timeMs) {
         Video copyVideo = new Video(video);
-        copyVideo.setFileStartTime(timeMs);
-        copyVideo.setFileStopTime(video.getFileStopTime());
-        video.setFileStopTime(timeMs);
+        copyVideo.setStartTime(timeMs);
+        copyVideo.setStopTime(video.getStopTime());
+        video.setStopTime(timeMs);
         video.setIsSplit(true);
         copyVideo.setIsSplit(true);
         addVideoToProjectUseCase.addVideoToProjectAtPosition(copyVideo, positionInAdapter + 1);

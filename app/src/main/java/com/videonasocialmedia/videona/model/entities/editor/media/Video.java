@@ -89,13 +89,13 @@ public class Video extends Media {
             duration = Integer.parseInt(retriever.extractMetadata(
                     MediaMetadataRetriever.METADATA_KEY_DURATION));
             fileDuration = duration;
-            fileStartTime = 0;
-            fileStopTime = duration;
+            startTime = 0;
+            stopTime = duration;
             isSplit = false;
         } catch (Exception e) {
             fileDuration = 0;
             duration = 0;
-            fileStopTime = 0;
+            stopTime = 0;
             isSplit = false;
         }
     }
@@ -106,10 +106,10 @@ public class Video extends Media {
     }
 
     public Video(Video video) {
-        super(null, null, video.getMediaPath(), video.getFileStartTime(),
+        super(null, null, video.getMediaPath(), video.getStartTime(),
                 video.getDuration(), null, null);
         fileDuration = getFileDuration(video.getMediaPath());
-        fileStopTime = video.getFileStopTime();
+        stopTime = video.getStopTime();
     }
 
     public int getFileDuration() {

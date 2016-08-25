@@ -37,7 +37,7 @@ public class Image extends Media {
      * <p/>
      * An image always starts at the beginning of the file and has a default duration fixed for
      * recent created image objects. However this duration could be changed during the edition
-     * process, but the fileStartTime never could be changed.
+     * process, but the startTime never could be changed.
      *
      * @see com.videonasocialmedia.videona.model.entities.editor.media.Media
      */
@@ -75,12 +75,12 @@ public class Image extends Media {
     }
 
     @Override
-    public int getFileStartTime() {
+    public int getStartTime() {
         return 0;
     }
 
     @Override
-    public void setFileStartTime(int fileStartTime) {
+    public void setStartTime(int startTime) {
         //
     }
 

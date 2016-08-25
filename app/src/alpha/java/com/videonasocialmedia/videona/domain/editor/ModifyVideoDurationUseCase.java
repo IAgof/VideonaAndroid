@@ -7,12 +7,12 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
  */
 public class ModifyVideoDurationUseCase {
     public void modifyVideoStartTime(Video video, int starTime) {
-        video.setFileStartTime(starTime);
-        video.setDuration(video.getFileStopTime() - video.getFileStartTime());
+        video.setStartTime(starTime);
+        video.setDuration(video.getStopTime() - video.getStartTime());
     }
 
     public void modifyVideoFinishTime(Video video, int finishTime) {
-        video.setFileStopTime(finishTime);
-        video.setDuration(video.getFileStopTime() - video.getFileStartTime());
+        video.setStopTime(finishTime);
+        video.setDuration(video.getStopTime() - video.getStartTime());
     }
 }

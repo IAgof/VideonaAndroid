@@ -69,13 +69,13 @@ public class TrimPreviewPresenter implements OnVideosRetrieved{
         trimView.showPreview(videoList);
         Video video = videoList.get(0);
         //showTimeTags(video);
-        trimView.showTrimBar(video.getFileStartTime(), video.getFileStopTime(), video.getFileDuration());
+        trimView.showTrimBar(video.getStartTime(), video.getStopTime(), video.getFileDuration());
     }
 
     private void showTimeTags(Video video) {
         trimView.refreshDurationTag(video.getDuration());
-        trimView.refreshStartTimeTag(video.getFileStartTime());
-        trimView.refreshStopTimeTag(video.getFileStopTime());
+        trimView.refreshStartTimeTag(video.getStartTime());
+        trimView.refreshStopTimeTag(video.getStopTime());
     }
 
     @Override

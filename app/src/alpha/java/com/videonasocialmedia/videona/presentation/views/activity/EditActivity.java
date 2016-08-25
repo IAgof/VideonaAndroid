@@ -10,11 +10,8 @@ package com.videonasocialmedia.videona.presentation.views.activity;
  *
  */
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -38,7 +35,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.EditPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.EditorView;
 import com.videonasocialmedia.videona.presentation.views.adapter.VideoTimeLineAdapter;
-import com.videonasocialmedia.videona.presentation.views.adapter.helper.ItemTouchHelperCallback;
+import com.videonasocialmedia.videona.presentation.views.adapter.helper.VideoTimeLineTouchHelperCallback;
 import com.videonasocialmedia.videona.presentation.views.customviews.ToolbarNavigator;
 import com.videonasocialmedia.videona.presentation.views.customviews.VideonaPlayer;
 import com.videonasocialmedia.videona.presentation.views.listener.VideoTimeLineRecyclerViewClickListener;
@@ -159,7 +156,7 @@ public class EditActivity extends VideonaActivity implements EditorView,
         timeLineAdapter = new VideoTimeLineAdapter(this);
         videoListRecyclerView.setAdapter(timeLineAdapter);
 
-        ItemTouchHelperCallback callback = new ItemTouchHelperCallback(timeLineAdapter);
+        VideoTimeLineTouchHelperCallback callback = new VideoTimeLineTouchHelperCallback(timeLineAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(videoListRecyclerView);
     }

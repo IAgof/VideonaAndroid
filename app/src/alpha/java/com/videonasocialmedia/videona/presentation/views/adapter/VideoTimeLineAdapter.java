@@ -36,12 +36,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     private VideoTimeLineRecyclerViewClickListener videoTimeLineListener;
     private List<Video> videoList;
     private int selectedVideoPosition = -1;
-    private int fromPosition = -1;
-    private boolean fromPositonIsSeted = false;
-
-    public VideoTimeLineAdapter(List<Video> videoList) {
-        this.videoList = videoList;
-    }
 
     public VideoTimeLineAdapter(VideoTimeLineRecyclerViewClickListener listener) {
         this.videoList = new ArrayList<>();
@@ -53,24 +47,18 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
     }
 
     @Override
-    public void moveItem(int fromPositon, int toPosition) {
-        if (fromPositon != toPosition) {
-            Collections.swap(videoList, fromPositon, toPosition);
+    public void moveItem(int fromPosition, int toPosition) {
+        if (fromPosition != toPosition) {
+            Collections.swap(videoList, fromPosition, toPosition);
             selectedVideoPosition = toPosition;
-            if (!fromPositonIsSeted) {
-                this.fromPosition = fromPositon;
-                fromPositonIsSeted = true;
-            }
-            notifyItemMoved(fromPositon, toPosition);
+            notifyItemMoved(fromPosition, toPosition);
+            videoTimeLineListener.onClipMoved(fromPosition, toPosition);
         }
     }
 
     @Override
     public void finishMovement(int newPosition) {
-        if (newPosition != -1)
-            notifyDataSetChanged();
-        fromPositonIsSeted = false;
-        videoTimeLineListener.onClipMoved(fromPosition, newPosition);
+        videoTimeLineListener.onClipClicked(newPosition);
     }
 
     @Override
@@ -101,6 +89,7 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     public void setVideoList(List<Video> videoList) {
         this.videoList = videoList;
+        notifyDataSetChanged();
         updateSelection(0);
     }
 
@@ -130,8 +119,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
 
     }
 
-    public void drawVideoThumbnail(ImageView thumbnailView, Video current) {
-        int microSecond = current.getFileStartTime() * 1000;
+    public void drawVideoThumbnail(ImageView thumbnailView, Video currentVideo) {
+        int microSecond = currentVideo.getStartTime() * 1000;
         BitmapPool bitmapPool = Glide.get(context).getBitmapPool();
         //TODO, review Glide and how to manage cache thumbs
         FileDescriptorBitmapDecoder decoder = new FileDescriptorBitmapDecoder(
@@ -139,8 +128,8 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
                 bitmapPool,
                 DecodeFormat.PREFER_ARGB_8888);
 
-        String path = current.getIconPath() != null
-                ? current.getIconPath() : current.getMediaPath();
+        String path = currentVideo.getIconPath() != null
+                ? currentVideo.getIconPath() : currentVideo.getMediaPath();
         Glide.with(context)
                 .load(path)
                 // .asBitmap()
@@ -171,7 +160,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         @Bind(R.id.image_remove_video)
         ImageView removeVideo;
 
-
         public VideoViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -192,13 +180,6 @@ public class VideoTimeLineAdapter extends RecyclerView.Adapter<VideoTimeLineAdap
         public void hideDeleteIcon() {
             removeVideo.setVisibility(View.GONE);
         }
-
-//        @OnLongClick(R.id.timeline_video_thumb)
-//        public boolean videoOnLongClick() {
-//            thumb.setRotation(20);
-//            videoTimeLineListener.onClipLongClicked();
-//            return true;
-//        }
 
         @OnClick(R.id.image_remove_video)
         public void onClickRemoveVideoTimeline() {

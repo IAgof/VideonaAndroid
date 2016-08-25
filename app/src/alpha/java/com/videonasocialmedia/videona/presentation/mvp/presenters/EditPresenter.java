@@ -145,7 +145,11 @@ public class EditPresenter implements OnAddMediaFinishedListener, OnRemoveMediaF
         //If everything was right the UI is already updated since the user did the reordering
         userEventTracker.trackClipsReordered(currentProject);
         videonaPlayerView.pausePreview();
-        editorView.updateProject();
+        // (jliarte): 24/08/16 probando fix del reorder. Si actualizamos el proyecto al
+        //          reordenar, como se reordena en cada cambio de celda, no sólo al final,
+        //          generamos overhead innecesario en la actividad y además de esto, se para el
+        //          preview y se corta el movimiento que estemos haciendo de reordenado
+//        editorView.updateProject();
     }
 
     @Override
