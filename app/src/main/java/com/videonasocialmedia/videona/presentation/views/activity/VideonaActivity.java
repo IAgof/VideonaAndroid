@@ -147,7 +147,7 @@ public abstract class VideonaActivity extends AppCompatActivity {
         return getResources().getConfiguration().orientation;
     }
 
-    protected boolean isPortraitOriented() {
+    public boolean isPortraitOriented() {
         return getOrientation() == Configuration.ORIENTATION_PORTRAIT;
     }
 
