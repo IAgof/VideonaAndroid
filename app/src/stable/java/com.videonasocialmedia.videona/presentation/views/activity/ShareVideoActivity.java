@@ -89,7 +89,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             updateSeekbar();
         }
     };
-
+    private SharedPreferences sharedPreferences;
     protected UserEventTracker userEventTracker;
 
     @Override
@@ -99,7 +99,9 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         ButterKnife.bind(this);
 
         this.userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
-        presenter = new ShareVideoPresenter(this, userEventTracker);
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        presenter = new ShareVideoPresenter(this, userEventTracker, sharedPreferences);
         presenter.onCreate();
         initToolbar();
         initFloatingActionButton();
