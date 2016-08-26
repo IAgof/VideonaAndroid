@@ -28,6 +28,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.VideoView;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.videonasocialmedia.videona.BuildConfig;
 import com.videonasocialmedia.videona.R;
 import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.ShareVideoPresenter;
@@ -37,6 +39,7 @@ import com.videonasocialmedia.videona.presentation.views.adapter.SocialNetworkAd
 import com.videonasocialmedia.videona.utils.AnalyticsConstants;
 import com.videonasocialmedia.videona.utils.ConfigPreferences;
 import com.videonasocialmedia.videona.utils.Constants;
+import com.videonasocialmedia.videona.utils.UserEventTracker;
 import com.videonasocialmedia.videona.utils.Utils;
 
 import org.json.JSONException;
@@ -78,8 +81,6 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     private ShareVideoPresenter presenter;
     private SocialNetworkAdapter mainSocialNetworkAdapter;
     private int videoPosition;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor preferencesEditor;
     private Handler updateSeekBarTaskHandler = new Handler();
     private boolean draggingSeekBar;
     private Runnable updateSeekBarTask = new Runnable() {
@@ -88,17 +89,19 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
             updateSeekbar();
         }
     };
+    private SharedPreferences sharedPreferences;
+    protected UserEventTracker userEventTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
         ButterKnife.bind(this);
-        sharedPreferences =
-                getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
-                        Context.MODE_PRIVATE);
-        preferencesEditor = sharedPreferences.edit();
-        presenter = new ShareVideoPresenter(this);
+
+        this.userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
+        sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
+                Context.MODE_PRIVATE);
+        presenter = new ShareVideoPresenter(this, userEventTracker, sharedPreferences);
         presenter.onCreate();
         initToolbar();
         initFloatingActionButton();
@@ -111,6 +114,9 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
         }
         initVideoPreview(videoPosition, isPlaying);
         initNetworksList();
+
+
+
     }
 
     private void initToolbar() {
@@ -268,7 +274,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     @Override
     public void showShareNetworksAvailable(List<SocialNetwork> networks) {
         // TODO move this to presenter in merging alpha and stable.
-        SocialNetwork saveToGallery = new SocialNetwork(getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.activity_share_save_to_gallery), "");
+        SocialNetwork saveToGallery = new SocialNetwork("SaveToGallery",getString(R.string.save_to_gallery), "", "", this.getResources().getDrawable(R.drawable.activity_share_save_to_gallery), "");
         networks.add(saveToGallery);
         mainSocialNetworkAdapter.setSocialNetworkList(networks);
     }
@@ -307,7 +313,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     @OnClick(R.id.button_more_networks)
     public void showMoreNetworks() {
         updateNumTotalVideosShared();
-        trackVideoShared(null);
+        presenter.trackVideoShared("Other network");
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("video/*");
         Uri uri = Utils.obtainUriToShare(this, videoPath);
@@ -316,49 +322,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
     }
 
     private void updateNumTotalVideosShared() {
-        int totalVideosShared = sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0);
-        preferencesEditor.putInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, ++totalVideosShared);
-        preferencesEditor.commit();
-    }
-
-    private void trackVideoShared(SocialNetwork socialNetwork) {
-        trackVideoSharedSuperProperties();
-        String socialNetworkName = null;
-        if (socialNetwork != null)
-            socialNetworkName = socialNetwork.getName();
-        JSONObject socialNetworkProperties = new JSONObject();
-        try {
-            socialNetworkProperties.put(AnalyticsConstants.SOCIAL_NETWORK, socialNetworkName);
-            socialNetworkProperties.put(AnalyticsConstants.VIDEO_LENGTH, presenter.getVideoLength());
-            socialNetworkProperties.put(AnalyticsConstants.RESOLUTION, presenter.getResolution());
-            socialNetworkProperties.put(AnalyticsConstants.NUMBER_OF_CLIPS, presenter.getNumberOfClips());
-            socialNetworkProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED,
-                    sharedPreferences.getInt(ConfigPreferences.TOTAL_VIDEOS_SHARED, 0));
-            mixpanel.track(AnalyticsConstants.VIDEO_SHARED, socialNetworkProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_VIDEOS_SHARED, 1);
-        mixpanel.getPeople().set(AnalyticsConstants.LAST_VIDEO_SHARED,
-                new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-    }
-
-    private void trackVideoSharedSuperProperties() {
-        JSONObject updateSuperProperties = new JSONObject();
-        int numPreviousVideosShared;
-        try {
-            numPreviousVideosShared =
-                    mixpanel.getSuperProperties().getInt(AnalyticsConstants.TOTAL_VIDEOS_SHARED);
-        } catch (JSONException e) {
-            numPreviousVideosShared = 0;
-        }
-        try {
-            updateSuperProperties.put(AnalyticsConstants.TOTAL_VIDEOS_SHARED,
-                    ++numPreviousVideosShared);
-            mixpanel.registerSuperProperties(updateSuperProperties);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        presenter.updateNumTotalVideosShared();
     }
 
     @OnTouch(R.id.video_preview)
@@ -378,7 +342,7 @@ public class ShareVideoActivity extends VideonaActivity implements ShareVideoVie
 
     @Override
     public void onSocialNetworkClicked(SocialNetwork socialNetwork) {
-        trackVideoShared(socialNetwork);
+        presenter.trackVideoShared(socialNetwork.getIdSocialNetwork());
         if(socialNetwork.getName().equals(getString(R.string.save_to_gallery)) ){
             showMessage(R.string.video_saved);
             return;

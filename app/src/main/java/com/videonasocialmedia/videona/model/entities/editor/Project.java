@@ -20,6 +20,7 @@ import com.videonasocialmedia.videona.model.entities.editor.media.Music;
 import com.videonasocialmedia.videona.model.entities.editor.media.Video;
 import com.videonasocialmedia.videona.model.entities.editor.track.AudioTrack;
 import com.videonasocialmedia.videona.model.entities.editor.track.MediaTrack;
+import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
 
 import java.io.File;
 import java.util.ArrayList;
