@@ -5,8 +5,7 @@ import android.util.Log;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
 import com.videonasocialmedia.videona.model.entities.editor.utils.VideoResolution;
-import com.videonasocialmedia.videona.model.entities.social.SocialNetwork;
-import com.videonasocialmedia.videona.presentation.views.activity.AboutActivity;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
