@@ -126,7 +126,7 @@ public class EffectProvider {
         List<Effect> overlayList = new ArrayList<>();
         overlayList.add(new OverlayEffect("GIFT_OVg01", " ",
                 R.drawable.common_filter_overlay_gift,
-                R.drawable.overlay_filter_panoramic, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+                R.drawable.overlay_filter_cancer, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         overlayList.add(new OverlayEffect("ovw001", "Mexico",
                 R.drawable.common_filter_overlay_ovw001_mexico,
@@ -200,9 +200,9 @@ public class EffectProvider {
                 R.drawable.common_filter_overlay_ovh002_game,
                 R.drawable.overlay_filter_gamer, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
-        overlayList.add(new OverlayEffect("ovs002", "Dive",
-                R.drawable.common_filter_overlay_ovs002_dive,
-                R.drawable.overlay_filter_diving, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+        overlayList.add(new OverlayEffect("ovf007", "Retro Style",
+                R.drawable.common_filter_overlay_ovf007_panoramic,
+                R.drawable.overlay_filter_panoramic, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         overlayList.add(new OverlayEffect("ovr002", "Party",
                 R.drawable.common_filter_overlay_ovr002_party,
@@ -225,9 +225,9 @@ public class EffectProvider {
     }
 
     public static Effect getOverlayEffectGift() {
-        return new OverlayEffect("ovf007", "Retro Style",
-                R.drawable.common_filter_overlay_ovf007_panoramic,
-                R.drawable.overlay_filter_panoramic, AnalyticsConstants.FILTER_TYPE_OVERLAY);
+        return new OverlayEffect("ovt004", "Pink Fight",
+                R.drawable.common_filter_overlay_ovt004_cancer,
+                R.drawable.overlay_filter_cancer, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
 }
