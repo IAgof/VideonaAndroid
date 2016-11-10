@@ -18,7 +18,7 @@ import io.realm.RealmResults;
  */
 public interface EffectRepository {
 
-    List<Effect> getShaderEffectList();
+    RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect>  getShaderEffectList();
 
     void addShaderEffectList();
 

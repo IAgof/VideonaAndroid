@@ -32,7 +32,7 @@ public class EffectLocalSource implements EffectRepository {
 
 
     @Override
-    public List<Effect> getShaderEffectList() {
+    public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffectList() {
         Realm realm = Realm.getDefaultInstance();
 
         RealmQuery<com.videonasocialmedia.videona.effects.repository.model.Effect> query = realm.where(com.videonasocialmedia.videona.effects.repository.model.Effect.class);
@@ -43,7 +43,8 @@ public class EffectLocalSource implements EffectRepository {
         RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> result =
                 query.contains("typeEffect", EffectType.SHADER.toString()).findAll();
 
-        return mapEffectListToDomainModel(result);
+        //return mapEffectListToDomainModel(result);
+        return result;
     }
 
     @NonNull

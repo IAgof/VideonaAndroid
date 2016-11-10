@@ -171,7 +171,7 @@ public class RecordPresenter {
     }
 
     private void updateEffectLists() {
-        List<Effect> shaderEffects;
+        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderEffects;
         RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayEffects;
 
         shaderEffects = this.getShaderEffects();
@@ -207,10 +207,9 @@ public class RecordPresenter {
         return result && loginUser.userIsLoggedIn();
     }
 
-    public List<Effect> getShaderEffects() {
+    public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffects() {
 
-
-        List<Effect> shaderList = GetEffectListUseCase.getShaderEffectsList();
+        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderList = GetEffectListUseCase.getShaderEffectsList();
 
         return shaderList;
     }

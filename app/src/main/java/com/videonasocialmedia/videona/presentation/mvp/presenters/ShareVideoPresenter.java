@@ -30,7 +30,6 @@ import java.util.List;
 public class ShareVideoPresenter {
 
     private ObtainNetworksToShareUseCase obtainNetworksToShareUseCase;
-    private Project currentProject;
     private ShareVideoView shareVideoView;
     protected Project currentProject;
     protected UserEventTracker userEventTracker;

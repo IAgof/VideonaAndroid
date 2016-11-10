@@ -22,6 +22,10 @@
 
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
+
+import java.util.List;
+
 import io.realm.RealmResults;
 
 public interface RecordView {

@@ -20,10 +20,9 @@ import io.realm.RealmResults;
  */
 public class GetEffectListUseCase {
 
-    public static List<Effect> getShaderEffectsList() {
+    public static  RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect>  getShaderEffectsList() {
 
         EffectRepository effectRepository = new EffectLocalSource();
-        //RealmResults realmResults = effectRepository.getShaderEffectList();
 
         return effectRepository.getShaderEffectList();
     }

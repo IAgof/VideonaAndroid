@@ -57,8 +57,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -145,8 +143,6 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
         this.userEventTracker = UserEventTracker.getInstance(MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN));
         sharedPreferences = getSharedPreferences(ConfigPreferences.SETTINGS_SHARED_PREFERENCES_FILE_NAME,
                         Context.MODE_PRIVATE);
-        preferencesEditor = sharedPreferences.edit();
-        presenter = new ShareVideoPresenter(this); //,  navigator.getCallback());
         navigatorPresenter = new EditNavigatorPresenter(this);
         presenter = new ShareVideoPresenter(this, userEventTracker, sharedPreferences);
         presenter.onCreate();

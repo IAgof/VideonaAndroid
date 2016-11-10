@@ -26,7 +26,8 @@ import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
 import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.RemoveVideosUseCase;
-import com.videonasocialmedia.videona.domain.editor.export.ExportProjectUseCase;
+
+import com.videonasocialmedia.videona.domain.export.ExportProjectUseCase;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.domain.model.EffectType;
 import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
@@ -275,14 +276,16 @@ public class RecordPresenter implements OnExportFinishedListener {
     }
 
     public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffects() {
+    //public List<Effect> getShaderEffects() {
 
         RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderList = GetEffectListUseCase.getShaderEffectsList();
+       // List<Effect> shaderList = GetEffectListUseCase.getShaderEffectsList();
 
         return shaderList;
     }
 
     public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getOverlayEffects() {
-
+        // TODO(javi.cabanas): 3/8/16 REMOVE REALM FROM PRESENTER. Only domain or view model can be accessed from this level. Realm objects are repository model objects.
         RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
 
         return overlayList;
@@ -386,7 +389,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void updateEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
         if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0){
-            GetEffectListUseCase.updateOverlayEffect(effect);
+            GetEffectListUseCase.discoverOverlayEffects();
         } else {
             if(effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0)
                 GetEffectListUseCase.updateShaderEffect(effect);
