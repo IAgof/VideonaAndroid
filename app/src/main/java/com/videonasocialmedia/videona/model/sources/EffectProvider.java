@@ -126,7 +126,7 @@ public class EffectProvider {
         List<Effect> overlayList = new ArrayList<>();
         overlayList.add(new OverlayEffect("GIFT_OVg01", " ",
                 R.drawable.common_filter_overlay_gift,
-                R.drawable.overlay_filter_cancer, AnalyticsConstants.FILTER_TYPE_OVERLAY));
+                R.drawable.overlay_filter_autumn, AnalyticsConstants.FILTER_TYPE_OVERLAY));
 
         overlayList.add(new OverlayEffect("ovw001", "Mexico",
                 R.drawable.common_filter_overlay_ovw001_mexico,
@@ -226,8 +226,8 @@ public class EffectProvider {
 
     public static Effect getOverlayEffectGift() {
         return new OverlayEffect("ovt004", "Pink Fight",
-                R.drawable.common_filter_overlay_ovt004_cancer,
-                R.drawable.overlay_filter_cancer, AnalyticsConstants.FILTER_TYPE_OVERLAY);
+                R.drawable.common_filter_overlay_ovt006_autumn,
+                R.drawable.overlay_filter_autumn, AnalyticsConstants.FILTER_TYPE_OVERLAY);
     }
 
 }
