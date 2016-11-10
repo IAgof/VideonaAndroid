@@ -41,10 +41,6 @@ public class AVRecorder {
         setWatermark(watermark);
     }
 
-    public AVRecorder (SessionConfig config) throws IOException{
-        init(config);
-    }
-
     private void init(SessionConfig config) throws IOException {
         mCamEncoder = new CameraEncoder(config);
         mMicEncoder = new MicrophoneEncoder(config);
@@ -52,6 +48,19 @@ public class AVRecorder {
         mIsRecording = false;
         released = false;
         cameraChanged = false;
+    }
+
+    /**
+     * Set a watermark hide in the preview
+     *
+     * @param watermarkImage
+     */
+    public void setWatermark(Drawable watermarkImage) {
+        mCamEncoder.addWatermark(watermarkImage, false);
+    }
+
+    public AVRecorder(SessionConfig config) throws IOException {
+        init(config);
     }
 
     public void setPreviewDisplay(GLCameraView display) {
@@ -85,15 +94,9 @@ public class AVRecorder {
         mCamEncoder.addWatermark(watermarkImage, showInPreview);
     }
 
-    /**
-     * Set a watermark hide in the preview
-     *
-     * @param watermarkImage
-     */
-    public void setWatermark(Drawable watermarkImage) {
-        mCamEncoder.addWatermark(watermarkImage, false);
+    public void removeWatermark() {
+        mCamEncoder.removeWaterMark();
     }
-
     //TODO define how to identify a single overlay;
     public void removeOverlay() {
         mCamEncoder.removeOverlayFilter(null);
@@ -214,4 +217,6 @@ public class AVRecorder {
     public void rotateCamera(int rotation) {
         mCamEncoder.updateRotationDisplay(rotation);
     }
+
+
 }

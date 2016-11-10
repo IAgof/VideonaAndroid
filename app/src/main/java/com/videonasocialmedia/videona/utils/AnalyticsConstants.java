@@ -84,6 +84,7 @@ public class AnalyticsConstants {
     public static final String FILTER_GROUP_OVERLAY = "overlay";
     public static final String FILTER_GROUP_SHADER = "shader";
     public static final String FILTERS_COMBINED = "filtersCombined";
+    public static final String FILTERS_PERMISSION_TYPE = "filtersPermissionType";
     public static final String COMBINED = "combined";
 
     public static final String INIT_STATE_FIRST_TIME = "firstTime";

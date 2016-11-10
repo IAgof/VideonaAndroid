@@ -17,6 +17,9 @@
     <string name="recordError">Algo ha fallado. Imposible grabar el vídeo, pruebe otra vez</string>
     <string name="giftOverlayDialogTitle">Tu regalo</string>
     <string name="giftOverlayDialogMessage">Disfruta de tu nuevo filtro</string>
+    <string name="dialog_record_go_to_login_message">Registrate o inicia sesión en la aplicación y consigue este filtro</string>
+    <string name="dialog_record_login_accept">Aceptar</string>
+    <string name="dialog_record_login_cancel">Cancelar</string>
 
     <!-- Share Activity -->
     <string name="shareError">Uy, no hemos podido compartir el vídeo.</string>
@@ -77,6 +80,70 @@
     <!-- Settings Activity -->
 
     <string name="action_settings">Ajustes</string>
+
+    <!-- Loggin -->
+    <string name="title_activity_login">Registro / Iniciar Sesión </string>
+    <string name="signOut">Cerrar sesión</string>
+    <string name="signIn">Registro / Iniciar Sesión</string>
+    <string name="title_activity_logout">Desconectarse</string>
+    <string name="success_login">Sesión iniciada </string>
+    <string name="success_register">¡BIENVENIDO A VIDEONA!</string>
+
+    <string name="signOut_title_dialog">Cerrar sesión</string>
+    <string name="signOut_message_dialog">¿Estás seguro? Se eliminarán todos los datos de Videona de este dispositivo</string>
+    <string name="acceptSignOut">Sí</string>
+    <string name="cancelSignOut">No</string>
+    <!-- Promo -->
+    <string name="title_activity_promo">Código promocional</string>
+    <string name="validate_code">Validar</string>
+    <string name="introduce_your_promo_code">Introduce tu código promocional</string>
+    <string name="message_promocode_valid">Código válido</string>
+    <string name="message_promocode_invalid">El código no es correcto</string>
+    <string name="message_promocode_unauthorized">Primero necesitas registrarte</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="action_sign_in">Iniciar sesión</string>
+    <string name="action_sign_in_short">Ok</string>
+    <string name="action_email_sign_in_short">Ocultar</string>
+    <string name="error_invalid_email">La dirección de email es incorrecta</string>
+    <string name="error_invalid_password">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_field_required">Este campo ha de rellenarse</string>
+    <string name="login_in_progress">Inicio de sesión en curso... </string>
+
+    <string name="first_string_link_for_create_account">¿No tienes una cuenta de Videona?</string>
+    <string name="second_string_link_for_create_account">Créate una</string>
+    <string name="first_string_link_for_goToLogin">¿Tienes una cuenta en Videona?</string>
+    <string name="second_string_link_for_goToLogin">Inicia sesión</string>
+
+    <!-- Strings related to register -->
+    <string name="prompt_email_register">Email</string>
+    <string name="prompt_password_register">Contraseña</string>
+
+    <string name="action_register_short">Hecho</string>
+    <string name="action_email_register_short">Ocultar</string>
+    <string name="error_already_exits">Ya existe un usuario con esta dirección de email</string>
+    <string name="error_invalid_email_register">La dirección de email es incorrecta</string>
+    <string name="error_invalid_password_register">La contraseña es demasiado corta</string>
+    <string name="error_incorrect_password_register">La contraseña es incorrecta</string>
+    <string name="error_field_required_register">Este campo ha de rellenarse</string>
+
+
+    <string name="error_No_Cheked_PrivacyTerm">Necesita aceptar las condiciones de servicio y la política de privacidad</string>
+    <string name="action_register">Registrarme</string>
+    <string name="title_checkbox_termService">Acepto las condiciones de servicio y la política de privacidad</string>
+    <string name="term_of_service_link">Condiciones de servicio</string>
+    <string name="privacy_policy_link">Política de privacidad</string>
+    <string name="register_progress">Registro en curso... </string>
+    <string name="and">y</string>
+
+    <string name="exit_registerActivity_title">Salir</string>
+    <string name="exit_registerActivity_message">¿Seguro que quieres salir? Se descartará la información introducida</string>
+    <string name="acceptExitRegisterActivity">Sí</string>
+    <string name="cancelExitRegisterActivity">No</string>
+
 
     <!-- Rate Videona -->
     <string name="rateUsDialogTitle">Contamos contigo</string>
@@ -531,5 +598,8 @@ Con respecto a las funcionalidades y herramientas de la Aplicación que permiten
 
     <string name="video_saved">Video guardado en tu galería</string>
     <string name="save_to_gallery">Guardar en galería</string>
+    <string name="defaultErrorMessage">Oh, algo ha salido mal. Intentalo mas tarde</string>
+    <string name="credentialsUknownError">Email o contraseña incorrecto</string>
+    <string name="networkError">¿Tienes conexión a internet?</string>
 
 </resources>

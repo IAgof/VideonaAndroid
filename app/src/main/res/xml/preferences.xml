@@ -2,47 +2,30 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="@string/title_advanced_section">
-        <Preference
-            android:key="downloadKamarada"
-            android:title="@string/downloadKamarada">
-        </Preference>
-        <Preference
-            android:key="shareVideona"
-            android:title="@string/shareVideona">
-        </Preference>
-        <Preference
-            android:key="followUs"
-            android:title="@string/followUsInTwitter">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/videonaTwitter"/>
-        </Preference>
-        <Preference
-            android:key="beta"
-            android:title="@string/betaPreferenceText">
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="@string/titleUserSection">
         <Preference
             android:key="name"
             android:title="@string/name">
             <intent android:action=".presentation.views.activity.NamePreferenceActivity"/>
         </Preference>
-        <Preference
+       <!--<Preference
             android:key="username"
             android:title="@string/username">
             <intent android:action=".presentation.views.activity.UsernamePreferenceActivity"/>
-        </Preference>
+        </Preference>-->
         <Preference
             android:key="email"
             android:title="@string/emailPreference">
             <intent android:action=".presentation.views.activity.EmailPreferenceActivity"/>
         </Preference>
-    </PreferenceCategory>
+        <Preference
+            android:key="promo"
+            android:title="@string/title_activity_promo"/>
+        <Preference
+            android:key="login"
+            android:title="@string/title_activity_login"/>
 
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/title_camera_section">
@@ -64,7 +47,29 @@
             android:title="@string/quality"/>
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/title_advanced_section">
+        <Preference
+            android:key="beta"
+            android:title="@string/betaPreferenceText">
+        </Preference>
+        <Preference
+            android:key="downloadKamarada"
+            android:title="@string/downloadKamarada">
+        </Preference>
+        <Preference
+            android:key="shareVideona"
+            android:title="@string/shareVideona">
+        </Preference>
+        <Preference
+            android:key="followUs"
+            android:title="@string/followUsInTwitter">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/videonaTwitter"/>
+        </Preference>
 
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/moreInformation">
@@ -87,14 +92,6 @@
         <Preference
             android:title="@string/legacyAdviceTitle">
             <intent android:action=".presentation.views.activity.LegalNoticeActivity"/>
-        </Preference>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/accountActions">
-        <Preference
-            android:key="exit"
-            android:title="@string/exit">
         </Preference>
     </PreferenceCategory>
 

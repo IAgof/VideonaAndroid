@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.presentation.views.adapter;
 
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,22 +21,25 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.effects.domain.model.EffectType;
+import com.videonasocialmedia.videona.effects.repository.model.Effect;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.RealmResults;
 
 /**
  * This class is used to show the camera effects gallery.
  */
-public class EffectAdapter
-        extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
+public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
+    private static final int GIFT_VIEW_TYPE = 300;
+    private static final int EFFECT_VIEW_TYPE = 254;
+
+    private RealmResults<Effect> realmEffects;
 
     private Context context;
-    private List<Effect> effects;
     private OnEffectSelectedListener onEffectSelectedListener;
     private int selectedPosition = -1;
     private int previousSelectionPosition = -1;
@@ -46,8 +50,9 @@ public class EffectAdapter
      *
      * @param effects the list of the available effects
      */
-    public EffectAdapter(List<Effect> effects, OnEffectSelectedListener listener) {
-        this.effects = effects;
+
+    public EffectAdapter(RealmResults<Effect> effects, OnEffectSelectedListener listener) {
+        this.realmEffects = effects;
         this.onEffectSelectedListener = listener;
     }
 
@@ -56,36 +61,69 @@ public class EffectAdapter
      *
      * @return
      */
-    public List<Effect> getElementList() {
-        return effects;
+
+    public RealmResults<Effect> getRealmElementList() {
+        return realmEffects.where().findAll();
     }
 
     @Override
     public cameraEffectViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View rowView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.record_effects_view_holder, viewGroup, false);
+
         this.context = viewGroup.getContext();
+        View rowView;
+        switch (viewType) {
+            case GIFT_VIEW_TYPE:
+                rowView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.record_effects_gift_view_holder, viewGroup, false);
+                break;
+            case EFFECT_VIEW_TYPE:
+            default:
+                rowView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.record_effects_view_holder, viewGroup, false);
+
+                break;
+        }
         return new cameraEffectViewHolder(rowView, onEffectSelectedListener);
     }
 
     @Override
     public void onBindViewHolder(cameraEffectViewHolder holder, int position) {
-        Effect selectedEffect = effects.get(position);
-        Glide.with(context)
-                .load(selectedEffect.getIconId())
-                .error(R.drawable.gatito_rules)
-                .into(holder.effectImage);
-        holder.effectName.setText(selectedEffect.getName());
-        if (position == selectedPosition) {
-            holder.effect.setBackgroundResource(R.color.colorAccent);
+
+        Effect selectedEffect = realmEffects.get(position);
+        if (getItemViewType(position) != GIFT_VIEW_TYPE) {
+            Glide.with(context)
+                    .load(selectedEffect.getIconId())
+                    .error(R.drawable.gatito_rules)
+                    .into(holder.effectImage);
+
+            if (holder.effectName != null) {
+                holder.effectName.setText(selectedEffect.getName());
+            }
+            if (position == selectedPosition) {
+                holder.effect.setBackgroundResource(R.color.colorAccent);
+            } else {
+                holder.effect.setBackgroundResource(0);
+            }
         } else {
-            holder.effect.setBackgroundResource(0);
+            if(selectedEffect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
+                Glide.with(context)
+                        .load(selectedEffect.getCoverIconId())
+                        .error(R.drawable.gatito_rules)
+                        .into(holder.effectImage);
+            }
         }
     }
 
     @Override
+    public int getItemViewType(int position) {
+
+        return realmEffects.get(position).getActivated()
+                ? EFFECT_VIEW_TYPE : GIFT_VIEW_TYPE;
+    }
+
+    @Override
     public int getItemCount() {
-        return effects.size();
+        return realmEffects.size();
     }
 
     /**
@@ -95,7 +133,7 @@ public class EffectAdapter
      * @return
      */
     public Effect getEffect(int position) {
-        return effects.get(position);
+        return realmEffects.get(position);
     }
 
 
@@ -109,30 +147,13 @@ public class EffectAdapter
         this.onEffectSelectedListener = onEffectSelectedListener;
     }
 
-    /**
-     * Appends new effect to the actual effect list
-     *
-     * @param effects
-     */
-    public void appendCameraEffect(List<Effect> effects) {
-        this.effects.addAll(effects);
-    }
-
-    /**
-     * Checks if the cameraEffectColor list is empty
-     *
-     * @return
-     */
-    public boolean isCameraEffectColorListEmpty() {
-        return effects.isEmpty();
-    }
 
     /**
      * Checks if some effect has been selected
      *
      * @return
      */
-    public boolean isEffectSelected(){
+    public boolean isEffectSelected() {
         return effectSelected;
     }
 
@@ -147,10 +168,16 @@ public class EffectAdapter
     }
 
     public int getSelectionPosition() {
-        if(selectedPosition == -1) {
+        if (selectedPosition == -1) {
             return 0;
         }
         return selectedPosition;
+    }
+
+
+    public void setRealmEffectList(RealmResults<Effect> effectList) {
+        this.realmEffects = effectList;
+        notifyDataSetChanged();
     }
 
     /**
@@ -165,6 +192,7 @@ public class EffectAdapter
         LinearLayout effect;
         @Bind(R.id.effectImage)
         ImageView effectImage;
+        @Nullable
         @Bind(R.id.effectName)
         TextView effectName;
 
@@ -188,20 +216,18 @@ public class EffectAdapter
                 previousSelectionPosition = selectedPosition;
                 notifyItemChanged(selectedPosition);
                 if (selectedPosition == getAdapterPosition()) {
-                    int adapterPosition= getAdapterPosition();
+                    int adapterPosition = getAdapterPosition();
                     resetSelectedEffect();
-                    onClickListener.onEffectSelectionCancel(effects.get(adapterPosition));
+                    onClickListener.onEffectSelectionCancel(realmEffects.get(adapterPosition));
                 } else {
                     effectSelected = true;
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);
-                    if (effects.get(selectedPosition).getName() == "Gift") {
-
-                    }
-                    onClickListener.onEffectSelected(effects.get(selectedPosition));
+                    onClickListener.onEffectSelected(realmEffects.get(selectedPosition));
                 }
             }
             return true;
         }
+
     }
 }

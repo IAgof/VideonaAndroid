@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Videona Socialmedia SL
+  ~ http://www.videona.com
+  ~ info@videona.com
+  ~ All rights reserved
+  --><android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:id="@+id/coordinatorLayout">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior=".presentation.views.customviews.CustomBehaviorSnackbar">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar">
+
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:id="@id/toolbar"
+                    android:theme="@style/VideonaToolbar">
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_below="@+id/appbar"
+                android:layout_marginTop="30dp">
+
+                    <EditText
+                        android:id="@+id/edit_promocode"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="@string/introduce_your_promo_code"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:backgroundTint="@color/editTextBottomLine"
+                        android:imeActionLabel="Done"
+                        android:singleLine="true"/>
+
+        <ProgressBar
+            android:id="@+id/promocode_progressbar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+            <Button
+                android:id="@+id/button_validate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorButton"
+                android:textColor="@color/textColorButton"
+                android:layout_alignParentBottom="true"
+                android:text="@string/validate_code"
+
+                />
+        </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

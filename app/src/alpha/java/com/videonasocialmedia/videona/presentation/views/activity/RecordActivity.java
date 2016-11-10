@@ -13,6 +13,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -46,7 +47,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.analytics.Tracker;
 import com.videonasocialmedia.avrecorder.view.GLCameraView;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.model.entities.editor.effects.Effect;
+import com.videonasocialmedia.videona.VideonaApplication;
+import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
+import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.auth.presentation.views.activity.LoginActivity;
+import com.videonasocialmedia.videona.effects.repository.model.Effect;
 import com.videonasocialmedia.videona.presentation.mvp.presenters.RecordPresenter;
 import com.videonasocialmedia.videona.presentation.mvp.views.RecordView;
 import com.videonasocialmedia.videona.presentation.views.adapter.EffectAdapter;
@@ -72,6 +77,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import io.realm.RealmResults;
 
 /**
  * @author Álvaro Martínez Marco
@@ -195,7 +201,7 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     }
 
     private void initEffectsRecycler() {
-        cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffectList(), this);
+        cameraShaderEffectsAdapter = new EffectAdapter(recordPresenter.getShaderEffects(), this);
         shaderEffectsRecycler.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         shaderEffectsRecycler.setAdapter(cameraShaderEffectsAdapter);
@@ -327,19 +333,22 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     }
 
     private void checkSelectedFilters() {
+
         Effect shaderEffect = recordPresenter.getSelectedShaderEffect();
         Effect overlayEffect = recordPresenter.getSelectedOverlayEffect();
         if(shaderEffect != null)
-            sendFilterSelectedTracking(shaderEffect.getType(),
+            sendFilterSelectedTracking(shaderEffect.getAnalyticsType(),
                     shaderEffect.getName().toLowerCase(),
-                    shaderEffect.getIdentifier().toLowerCase());
+                    shaderEffect.getIdentifier().toLowerCase(),
+                    shaderEffect.getPermissionType().toString().toLowerCase());
         if(overlayEffect != null)
-            sendFilterSelectedTracking(overlayEffect.getType(),
+            sendFilterSelectedTracking(overlayEffect.getAnalyticsType(),
                     overlayEffect.getName().toLowerCase(),
-                    overlayEffect.getIdentifier().toLowerCase());
+                    overlayEffect.getIdentifier().toLowerCase(),
+                    overlayEffect.getPermissionType().toString().toLowerCase());
     }
 
-    private void sendFilterSelectedTracking(String type, String name, String code) {
+    private void sendFilterSelectedTracking(String type, String name, String code, String permissionType) {
         JSONObject userInteractionsProperties = new JSONObject();
         List<String> effectsCombinedList = getEffectsCombinedList();
         boolean combined = false;
@@ -352,6 +361,7 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
             userInteractionsProperties.put(AnalyticsConstants.RECORDING, recording);
             userInteractionsProperties.put(AnalyticsConstants.COMBINED, combined);
             userInteractionsProperties.put(AnalyticsConstants.FILTERS_COMBINED, effectsCombinedList);
+            userInteractionsProperties.put(AnalyticsConstants.FILTERS_PERMISSION_TYPE, permissionType);
             mixpanel.track(AnalyticsConstants.FILTER_SELECTED, userInteractionsProperties);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -459,14 +469,14 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     }
 
     @Override
-    public void showCameraEffectShader(List<Effect> effects) {
+    public void showCameraEffectShader() {
         showEffectsRecylerView(shaderEffectsRecycler);
         shaderFilterHidden = false;
         buttonCameraEffectShader.setActivated(true);
     }
 
     @Override
-    public void showCameraEffectOverlay(List<Effect> effects) {
+    public void showCameraEffectOverlay() {
         runTranslateAnimation(overlayFilterRecycler, 0, new AccelerateInterpolator(3));
         overlayFilterHidden = false;
         buttonCameraEffectOverlay.setActivated(true);
@@ -618,6 +628,17 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         }
     }
 
+
+    @Override
+    public void updateShaderEffectList(RealmResults<Effect> shaderEffects) {
+        cameraShaderEffectsAdapter.setRealmEffectList(shaderEffects);
+    }
+
+    @Override
+    public void updateOverlayEffectList(RealmResults<Effect> overlayEffects) {
+        cameraOverlayEffectsAdapter.setRealmEffectList(overlayEffects);
+    }
+
     private void trackVideoExported() {
         JSONObject videoExportedProperties = new JSONObject();
         try {
@@ -667,7 +688,7 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         } else {
             trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_SHADER);
-            showCameraEffectShader(null);
+            showCameraEffectShader();
             if (removeFilterActivated) {
                 showRemoveFilters();
             }
@@ -750,7 +771,7 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         } else {
             trackUserInteracted(AnalyticsConstants.SET_FILTER_GROUP,
                     AnalyticsConstants.FILTER_GROUP_OVERLAY);
-            showCameraEffectOverlay(null);
+            showCameraEffectOverlay();
             if (removeFilterActivated) {
                 showRemoveFilters();
             }
@@ -868,26 +889,80 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
     @Override
     public void onEffectSelected(Effect effect) {
 
-        sendFilterSelectedTracking(effect.getType(),
-                effect.getName().toLowerCase(),
-                effect.getIdentifier().toLowerCase());
+        if (effect.getPermissionType().compareTo(PermissionType.LOGGED_IN.toString()) == 0 && !isUserLogged()) {
+            onEffectSelectionCancel(effect);
+            showDialogGoToLogin(); // TODO(javi.cabanas): 12/7/16 extract gift logic to use case
+        } else {
+            if(effect.getActivated() == false){
+                //showGiftFilterToast();
+                recordPresenter.updateEffect(effect);
 
-        if (effect.getIdentifier().compareTo(OVERLAY_EFFECT_GIFT_ID) == 0 &&
-                !sharedPreferences.getBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, false)) {
-            // Reset effect to remove selected background
-            cameraOverlayEffectsAdapter.resetSelectedEffect();
-            trackGiftOpened(recordPresenter.getOverlayEffectGift());
-            showGiftFilterToast();
+            }
             recordPresenter.applyEffect(effect);
-            return;
+            scrollEffectList(effect);
+            showRemoveFilters();
+            removeFilterActivated = true;
 
+            sendFilterSelectedTracking(effect.getAnalyticsType(),
+                    effect.getName().toLowerCase(),
+                    effect.getIdentifier().toLowerCase(),
+                    effect.getPermissionType().toString().toLowerCase());
         }
 
-        recordPresenter.applyEffect(effect);
-        scrollEffectList(effect);
-        showRemoveFilters();
-        removeFilterActivated = true;
+    }
 
+    private boolean isUserLogged() {
+        LoginUser loginUser = new LoginUser();
+        return loginUser.userIsLoggedIn();
+    }
+
+
+    private void showDialogGoToLogin(){
+
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+
+                        Intent intent = new Intent(VideonaApplication.getAppContext(), LoginActivity.class);
+                        startActivity(intent);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VideonaDialog);
+        builder.setMessage(R.string.dialog_record_go_to_login_message).setPositiveButton(R.string.dialog_record_login_accept, dialogClickListener)
+                .setNegativeButton(R.string.dialog_record_login_cancel, dialogClickListener).show();
+    }
+
+    private void scrollEffectList(Effect effect) {
+        if (!overlayFilterHidden) {
+            List effects = cameraOverlayEffectsAdapter.getRealmElementList();
+            int index = effects.indexOf(effect);
+            int scroll = index > cameraOverlayEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            overlayFilterRecycler.scrollToPosition(index + scroll);
+        } else if (!shaderFilterHidden) {
+            List effects = cameraOverlayEffectsAdapter.getRealmElementList();
+            int index = effects.indexOf(effect);
+            int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
+            shaderEffectsRecycler.scrollToPosition(index + scroll);
+        }
+    }
+
+    @Override
+    public void onEffectSelectionCancel(Effect effect) {
+        recordPresenter.removeEffect(effect);
+        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
+                !cameraShaderEffectsAdapter.isEffectSelected()) {
+            hideRemoveFilters();
+        }
     }
 
     private void trackGiftOpened(Effect overlayEffectGift) {
@@ -903,7 +978,7 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         try {
             giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED_DATE,
                     new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date()));
-            String giftResourceName = overlayEffectGift.getType() + " - " + overlayEffectGift.getName() + " " + overlayEffectGift.getIdentifier();
+            String giftResourceName = overlayEffectGift.getAnalyticsType() + " - " + overlayEffectGift.getName() + " " + overlayEffectGift.getIdentifier();
             giftDetails.put(AnalyticsConstants.LAST_GIFT_DOWNLOADED, giftResourceName);
             mixpanel.getPeople().set(giftDetails);
             giftDetails.put(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, ++giftsDownloadedCount);
@@ -912,8 +987,6 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
             Log.e("ANALYTICS", "Error sending created super property");
         }
         mixpanel.getPeople().increment(AnalyticsConstants.TOTAL_GIFTS_DOWNLOADED, 1);
-
-
     }
 
     private void showGiftFilterToast() {
@@ -922,44 +995,11 @@ RecordActivity extends VideonaActivity implements DrawerLayout.DrawerListener,
         VideonaToast toast = new VideonaToast.Builder(getApplicationContext())
                 .withTitle(R.string.giftOverlayDialogTitle)
                 .withMessage(R.string.giftOverlayDialogMessage)
-                .withDrawableImage(R.drawable.common_filter_overlay_gift_open)
+                .withDrawableImage(R.drawable.common_filter_overlay_new)
                 .withDuration(Toast.LENGTH_LONG)
                 .build();
 
-        // Save user preferences
-        editor.putBoolean(ConfigPreferences.FILTER_OVERLAY_GIFT, true);
-        editor.commit();
 
-        // Uptade overlay effect adapter
-        cameraOverlayEffectsAdapter = new EffectAdapter(recordPresenter.getOverlayEffects(), this);
-        overlayFilterRecycler.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        overlayFilterRecycler.setAdapter(cameraOverlayEffectsAdapter);
-
-
-    }
-
-    private void scrollEffectList(Effect effect) {
-        if (!overlayFilterHidden) {
-            List effects = cameraOverlayEffectsAdapter.getElementList();
-            int index = effects.indexOf(effect);
-            int scroll = index > cameraOverlayEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            overlayFilterRecycler.scrollToPosition(index + scroll);
-        } else if (!shaderFilterHidden) {
-            List effects = cameraShaderEffectsAdapter.getElementList();
-            int index = effects.indexOf(effect);
-            int scroll = index > cameraShaderEffectsAdapter.getPreviousSelectionPosition() ? 1 : -1;
-            shaderEffectsRecycler.scrollToPosition(index + scroll);
-        }
-    }
-
-    @Override
-    public void onEffectSelectionCancel(Effect effect) {
-        recordPresenter.removeEffect(effect);
-        if (!cameraOverlayEffectsAdapter.isEffectSelected() &&
-                !cameraShaderEffectsAdapter.isEffectSelected()) {
-            hideRemoveFilters();
-        }
     }
 
     private class OrientationHelper extends OrientationEventListener {

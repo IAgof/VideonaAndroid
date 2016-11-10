@@ -22,6 +22,9 @@ import com.karumi.dexter.Dexter;
 import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class VideonaApplication extends Application {
 
     private static Context context;
@@ -47,10 +50,12 @@ public class VideonaApplication extends Application {
         Fabric.with(this, new Crashlytics());
         context = getApplicationContext();
         setupGoogleAnalytics();
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+
         Dexter.initialize(this);
-      //  setupLeakCanary();
+        setupLeakCanary();
+        setupDataBase();
     }
+
 
     private void setupGoogleAnalytics() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
@@ -66,6 +71,16 @@ public class VideonaApplication extends Application {
             LeakCanary.install(this);
         }
     }
+
+    private void setupDataBase() {
+
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
+                .name("videonaDB")
+                .schemaVersion(1)
+                .build();
+        Realm.setDefaultConfiguration(realmConfiguration);
+    }
+
 
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);

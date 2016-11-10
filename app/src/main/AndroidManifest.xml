@@ -211,6 +211,21 @@
             android:label="@string/app_name"
             android:parentActivityName=".presentation.views.activity.RecordActivity"/>
 
+        <activity
+            android:name=".auth.presentation.views.activity.LoginActivity"
+            android:parentActivityName=".presentation.views.activity.SettingsActivity"
+            android:theme="@style/VideonaSettings"
+            android:screenOrientation="sensorPortrait"
+            android:label="@string/title_activity_login"/>
+
+        <activity
+            android:name=".promo.presentation.views.activity.PromoCodeActivity"
+            android:parentActivityName=".presentation.views.activity.SettingsActivity"
+            android:label="@string/title_activity_promo"
+            android:theme="@style/VideonaSettings"
+            android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustResize"/>
+
         <service
             android:name=".presentation.views.services.ExportProjectService"
             android:exported="false"

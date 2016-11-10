@@ -41,5 +41,6 @@ public class ConfigPreferences {
     public final static String TOTAL_VIDEOS_RECORDED = "total_videos_recorded";
     public final static String TOTAL_VIDEOS_SHARED = "total_videos_shared";
     public final static String FILTER_OVERLAY_GIFT = "filter_overlay_gift";
+    public final static String IS_WOLDER_USER = "is_a_wolder_user";
 
 }
