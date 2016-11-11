@@ -36,6 +36,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
+            android:id="@+id/main_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -122,7 +123,7 @@
         android:clickable="true"
         android:src="@drawable/common_icon_add_white"
         app:backgroundTint="@color/colorAccent"
-        app:layout_anchor="@id/coordinatorLayout"
+        app:layout_anchor="@id/main_linear_layout"
         app:layout_anchorGravity="bottom|right|end"
         />
 </android.support.design.widget.CoordinatorLayout>

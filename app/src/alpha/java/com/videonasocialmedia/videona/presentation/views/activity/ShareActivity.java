@@ -157,7 +157,6 @@ public class ShareActivity extends VideonaActivity implements ShareVideoView, Vi
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(Constants.NOTIFICATION_EXPORT_ID);
         }
-        initVideoPreview(videoPosition, isPlaying);
 
         initBarProgressDialog();
 
