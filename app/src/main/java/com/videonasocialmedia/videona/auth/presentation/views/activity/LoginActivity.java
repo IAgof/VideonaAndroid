@@ -60,7 +60,7 @@ public class LoginActivity extends VideonaActivity implements LoginView, Videona
 
     // UI references Login.
 
-    @Bind(R.id.image_videona)
+    @Bind(R.id.image_login_confirm)
     ImageView imageVideona;
 
     @Bind(R.id.text_input_email)

@@ -95,8 +95,8 @@
                     android:visibility="gone"
                     android:paddingTop="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_launcher"
-                    android:id="@+id/image_videona"/>
+                    android:src="@drawable/activity_options_icon_login_confirm"
+                    android:id="@+id/image_login_confirm"/>
 
 
             <LinearLayout
