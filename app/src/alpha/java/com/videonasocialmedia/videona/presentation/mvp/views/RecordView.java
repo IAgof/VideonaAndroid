@@ -84,7 +84,7 @@ public interface RecordView {
 
     void showCameraEffectOverlay();
 
-    void updateShaderEffectList(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderEffects);
+    void updateShaderEffectList(List<Effect> shaderEffects);
 
-    void updateOverlayEffectList(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayEffects);
+    void updateOverlayEffectList(List<Effect> overlayEffects);
 }

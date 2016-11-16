@@ -114,8 +114,8 @@ public class ExportService extends Service implements ExportView {
     @Override
     public void setNotificationProgress(int progress) {
         if (progress > 100) {
-            builder.setContentText(getString(R.string.notification_export));
-            builder.setContentTitle(getString(R.string.notification_export));
+            builder.setContentText(getString(R.string.notification_export_finished_message));
+            builder.setContentTitle(getString(R.string.notification_export_finished_title));
             builder.setProgress(0, 0, false);
             showNotification(false);
         } else {

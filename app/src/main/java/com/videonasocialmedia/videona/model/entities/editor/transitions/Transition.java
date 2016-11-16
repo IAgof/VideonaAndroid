@@ -18,7 +18,7 @@ import com.videonasocialmedia.videona.model.entities.social.User;
 
 /**
  * Transitions are technically effects for video purpose. However in this model transition are handle
- * very different. Regardless of its similar behaviour with the Effect class, Transitions will be the
+ * very different. Regardless of its similar behaviour with the RealmEffect class, Transitions will be the
  * first elements to be applied to the final track. This track need to be composed before any other
  * effect has take place.
  * In addition transitions cannot be layered, they will be always applied before any other effect.
@@ -51,12 +51,12 @@ public abstract class Transition extends EditorElement {
     protected long duration;
 
     /**
-     * Effect author name.
+     * RealmEffect author name.
      */
     protected String authorName;
 
     /**
-     * Effect author instance if it is a videona user, can be null if it is not.
+     * RealmEffect author instance if it is a videona user, can be null if it is not.
      */
     protected User author;
 

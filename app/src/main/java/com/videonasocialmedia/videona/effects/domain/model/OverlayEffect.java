@@ -23,29 +23,29 @@ public class OverlayEffect extends Effect {
     private final int resourceId;
 
     public OverlayEffect(String identifier, String name, String iconPath, String resourcePath,
-                         String type) {
-        super(identifier, name, iconPath, type);
+                         String type, boolean activated) {
+        super(identifier, name, iconPath, type, activated);
         this.resourcePath = resourcePath;
         this.resourceId = -1;
     }
 
     public OverlayEffect(String identifier, String name, String iconPath, int resourceId,
-                         String type) {
-        super(identifier, name, iconPath, type);
+                         String type, boolean activated) {
+        super(identifier, name, iconPath, type, activated);
         this.resourcePath = null;
         this.resourceId = resourceId;
     }
 
     public OverlayEffect(String identifier, String name,  int coverIconId, int iconId,int resourceId,
-                         String type) {
-        super(identifier, name, coverIconId, iconId,type);
+                         String type, boolean activated) {
+        super(identifier, name, coverIconId, iconId,type, activated);
         this.resourcePath = null;
         this.resourceId = resourceId;
     }
 
     public OverlayEffect(String identifier, String name, int coverIconId, int iconId, int resourceId,
-                         String type, PermissionType permissionType) {
-        super(identifier, name, coverIconId, iconId,type, permissionType);
+                         String type, String permissionType,  boolean activated ) {
+        super(identifier, name, coverIconId, iconId,type, activated, permissionType);
         this.resourcePath = null;
         this.resourceId = resourceId;
     }

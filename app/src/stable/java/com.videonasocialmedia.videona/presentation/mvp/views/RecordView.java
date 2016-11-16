@@ -23,10 +23,11 @@
 package com.videonasocialmedia.videona.presentation.mvp.views;
 
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
+import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
 
 import java.util.List;
 
-import io.realm.RealmResults;
 
 public interface RecordView {
 
@@ -90,9 +91,8 @@ public interface RecordView {
 
     void showCameraEffectOverlay();
 
-    void updateShaderEffectList(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderEffects);
+    void updateShaderEffectList(List<Effect> shaderEffects);
 
-    void updateOverlayEffectList(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayEffects);
+    void updateOverlayEffectList(List<Effect> overlayEffects);
 
 }
-

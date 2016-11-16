@@ -9,6 +9,7 @@ package com.videonasocialmedia.videona.promo.presentation.mvp.presenters;
 
 
 import com.videonasocialmedia.videona.R;
+import com.videonasocialmedia.videona.effects.domain.usecase.GetEffectListUseCase;
 import com.videonasocialmedia.videona.promo.domain.CheckPromoCode;
 import com.videonasocialmedia.videona.promo.domain.CheckPromoCodeListener;
 import com.videonasocialmedia.videona.promo.presentation.mvp.views.PromoCodeView;
@@ -20,11 +21,12 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
 
     private PromoCodeView promoCodeView;
     private CheckPromoCode checkPromoCodeUseCase;
-
+    GetEffectListUseCase getEffectListUseCase;
 
     public PromoCodePresenter(PromoCodeView promoCodeView) {
         this.promoCodeView = promoCodeView;
         checkPromoCodeUseCase = new CheckPromoCode();
+        getEffectListUseCase = new GetEffectListUseCase();
     }
 
     public void validateCode(String code) {
@@ -34,6 +36,7 @@ public class PromoCodePresenter implements CheckPromoCodeListener {
 
     @Override
     public void onSuccess(String campaing) {
+        getEffectListUseCase.addPromocodeOverlayEffect();
         showMessageValidateCode();
     }
 

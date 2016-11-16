@@ -14,15 +14,9 @@ public class ShaderEffect extends Effect {
 
     private final int resourceId;
 
-    public ShaderEffect(String identifier, String name, String iconPath, int resourceId,
-                        String type) {
-        super(identifier, name, iconPath, type);
-        this.resourceId = resourceId;
-    }
-
     public ShaderEffect(String identifier, String name, int iconId, int resourceId,
-                        String type) {
-        super(identifier, name, iconId, type);
+                        String effectType) {
+        super(identifier, name, iconId, effectType, true);
         this.resourceId = resourceId;
     }
 

@@ -23,7 +23,7 @@ public class AnalyticsConstants {
      * User Traits
      */
     public final static String CREATED = "created";
-    public final static String TYPE = "type";
+    public final static String TYPE = "effectType";
     public static final String APP_USE_COUNT = "appUseCount";
     public final static String RESOLUTION = "resolution";
     public final static String QUALITY = "quality";

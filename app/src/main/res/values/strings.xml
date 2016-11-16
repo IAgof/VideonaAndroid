@@ -27,6 +27,8 @@
     <string name="sharedWithVideona">"#videonatime"</string>
     <string name="videonaTags">"#VideonaTime"</string>
     <string name="notification_export">Exporting project</string>
+    <string name="notification_export_finished_title">Proyect exported</string>
+    <string name="notification_export_finished_message">Video created</string>
     <string name="dialog_processing_title">Exporting project</string>
     <string name="dialog_processing_progress">Making magic in your video</string>
     <string name="dialog_message_clean_project">Do you want to start a new project?</string>
@@ -795,7 +797,7 @@ being authorised by any Videona specific conditions.\n\n
 
 (ii) On the website from which the link is established, unless with Videona’s express
 
-prior written approval, no declaration of any nature may be made to the effect that
+prior written approval, no declaration of any nature may be made to the realmEffect that
 
 Videona has authorised the link. If the entity providing the link from its webpage to
 

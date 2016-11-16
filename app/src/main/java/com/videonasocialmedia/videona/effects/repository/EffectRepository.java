@@ -8,6 +8,8 @@
 package com.videonasocialmedia.videona.effects.repository;
 
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
+import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
+import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
 
 import java.util.List;
 
@@ -18,13 +20,9 @@ import io.realm.RealmResults;
  */
 public interface EffectRepository {
 
-    RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect>  getShaderEffectList();
+    List<Effect> getShaderEffectList();
 
-    void addShaderEffectList();
-
-    void discoverShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect);
-
-    RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getOverlayEffectList();
+    List<OverlayEffect> getOverlayEffectList();
 
     void addOverlayEffectList();
 
@@ -33,4 +31,6 @@ public interface EffectRepository {
     void unlockLoggedOverlayEffects();
 
     void lockLoggedOverlayEffects();
+
+    void addPromocodeOverlayEffect();
 }

@@ -50,7 +50,7 @@ public class UserEventTrackerTest {
         UserEventTracker userEventTracker = new UserEventTracker(mockedMixpanelAPI);
 
         assertThat("Mixpanel is set", userEventTracker.mixpanel, is(mockedMixpanelAPI));
-        assertThat("Mixpanel object type", userEventTracker.mixpanel, instanceOf(MixpanelAPI.class));
+        assertThat("Mixpanel object effectType", userEventTracker.mixpanel, instanceOf(MixpanelAPI.class));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class UserEventTrackerTest {
         UserEventTracker userEventTracker = UserEventTracker.getInstance(mockedMixpanelAPI);
 
         assertThat("Mixpanel is set", userEventTracker, notNullValue());
-        assertThat("Mixpanel object type", userEventTracker, instanceOf(UserEventTracker.class));
+        assertThat("Mixpanel object effectType", userEventTracker, instanceOf(UserEventTracker.class));
     }
 
     @Test

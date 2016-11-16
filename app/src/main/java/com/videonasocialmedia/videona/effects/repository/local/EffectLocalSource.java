@@ -16,11 +16,15 @@ import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
 import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
 import com.videonasocialmedia.videona.effects.repository.EffectRepository;
 import com.videonasocialmedia.videona.effects.repository.apiclient.EffectProvider;
+import com.videonasocialmedia.videona.effects.repository.model.OverlayEffectToRealmEffectMapper;
+import com.videonasocialmedia.videona.effects.repository.model.RealmEffect;
+import com.videonasocialmedia.videona.effects.repository.model.RealmEffectToOverlayEffectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -30,84 +34,59 @@ import io.realm.RealmResults;
  */
 public class EffectLocalSource implements EffectRepository {
 
+    private final RealmEffectToOverlayEffectMapper toOverlayEffectMapper;
+    private final OverlayEffectToRealmEffectMapper toRealmEffectMapper;
 
-    @Override
-    public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffectList() {
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmQuery<com.videonasocialmedia.videona.effects.repository.model.Effect> query = realm.where(com.videonasocialmedia.videona.effects.repository.model.Effect.class);
-        if (query.contains("typeEffect", EffectType.SHADER.toString()).findAll().size() == 0) {
-            addShaderEffectList();
-        }
-
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> result =
-                query.contains("typeEffect", EffectType.SHADER.toString()).findAll();
-
-        //return mapEffectListToDomainModel(result);
-        return result;
-    }
-
-    @NonNull
-    private List<Effect> mapEffectListToDomainModel(RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> result) {
-        List<Effect> finalResult = new ArrayList<>();
-        for (com.videonasocialmedia.videona.effects.repository.model.Effect currentEffect : result) {
-            Effect effect = new ShaderEffect(currentEffect.getIdentifier(), currentEffect.getName(),
-                    currentEffect.getIconId(),
-                    currentEffect.getResourceId(), currentEffect.getTypeEffect());
-            finalResult.add(effect);
-        }
-        return finalResult;
-    }
-
-    public void addShaderEffect(ShaderEffect shaderEffect) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-
-        com.videonasocialmedia.videona.effects.repository.model.Effect realmShaderEffect = realm.createObject(com.videonasocialmedia.videona.effects.repository.model.Effect.class);
-        realmShaderEffect.setTypeEffect(EffectType.SHADER.toString());
-        realmShaderEffect.setIdentifier(shaderEffect.getIdentifier());
-        realmShaderEffect.setName(shaderEffect.getName());
-        realmShaderEffect.setIconId(shaderEffect.getIconId());
-        realmShaderEffect.setPermissionType(shaderEffect.getPermissionType().toString());
-        realmShaderEffect.setResourceId(shaderEffect.getResourceId());
-        realmShaderEffect.setAnalyticsType(shaderEffect.getType());
-        realmShaderEffect.setActivated(true);
-
-        realm.commitTransaction();
-
+    public EffectLocalSource(){
+        toOverlayEffectMapper = new RealmEffectToOverlayEffectMapper();
+        toRealmEffectMapper = new OverlayEffectToRealmEffectMapper();
     }
 
     @Override
-    public void addShaderEffectList() {
+    public List<Effect> getShaderEffectList() {
 
-        for (Effect effect : EffectProvider.getShaderEffectList()) {
-            addShaderEffect((ShaderEffect) effect);
-        }
+        return EffectProvider.getShaderEffectList();
     }
 
     @Override
-    public void discoverShaderEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-
-        effect.setActivated(true);
-
-        realm.commitTransaction();
-    }
-
-    @Override
-    public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getOverlayEffectList() {
+    public List<OverlayEffect> getOverlayEffectList() {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmQuery<com.videonasocialmedia.videona.effects.repository.model.Effect> query = realm.where(com.videonasocialmedia.videona.effects.repository.model.Effect.class);
-        if (query.contains("typeEffect", EffectType.OVERLAY.toString()).findAll().size() == 0) {
+        RealmQuery<RealmEffect> query =
+            realm.where(RealmEffect.class);
+        if (query.contains("effectType", EffectType.OVERLAY.name()).findAll().size() == 0) {
             addOverlayEffectList();
         }
 
-        return query.contains("typeEffect", EffectType.OVERLAY.toString()).findAll();
+        RealmList<RealmEffect> finalList = new RealmList<RealmEffect>();
 
+
+        RealmResults<RealmEffect> result =
+            query.contains("effectType", EffectType.OVERLAY.name()).findAll();
+
+
+        finalList.addAll(result.subList(0, result.size()));
+
+        if(query.contains("name", "Wolder").findAll().size() != 0){
+            finalList.move(finalList.size()-1, 1);
+        }
+
+        return mapOverlayEffectListToDomainModel(finalList);
+
+    }
+
+    @NonNull
+    private List<OverlayEffect> mapOverlayEffectListToDomainModel(RealmList<RealmEffect> result) {
+        List<OverlayEffect> finalResult = new ArrayList<>();
+        for (RealmEffect currentRealmEffect : result) {
+            OverlayEffect effect = toOverlayEffectMapper.map(currentRealmEffect);
+          //  OverlayEffect effect = new OverlayEffect(currentRealmEffect.getIdentifier(), currentRealmEffect.getName(),
+          //      currentRealmEffect.getCoverIconId(), currentRealmEffect.getIconId(), currentRealmEffect.getResourceId(),
+          //      currentRealmEffect.getEffectType(),currentRealmEffect.getPermissionType(), currentRealmEffect.getActivated());
+            finalResult.add(effect);
+        }
+        return finalResult;
     }
 
     @Override
@@ -121,50 +100,80 @@ public class EffectLocalSource implements EffectRepository {
     @Override
     public void discoverOverlayEffect() {
 
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> result = getOverlayEffectList();
+        Realm realm = Realm.getDefaultInstance();
 
-        RealmQuery<com.videonasocialmedia.videona.effects.repository.model.Effect> effect = result.where().contains("permissionType", PermissionType.ALL.toString());
+        RealmQuery<RealmEffect> query =
+            realm.where(RealmEffect.class);
+
+        RealmResults<RealmEffect> result =
+            query.contains("effectType", EffectType.OVERLAY.name()).findAll();
+
+        RealmQuery<RealmEffect> effect =
+            result.where().contains("permissionType", PermissionType.ALL.name());
         for (int i = 0; i < effect.findAll().size(); i++) {
             discoverOverlayEffect(effect.findAll().get(i));
         }
 
     }
 
-    public void discoverOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
+    public void discoverOverlayEffect(final RealmEffect realmEffect) {
 
         Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realmEffect.setActivated(true);
+                realm.copyToRealmOrUpdate(realmEffect);
+            }
+        });
 
-        effect.setActivated(true);
-
-        realm.commitTransaction();
     }
 
-    public void addOverlayEffect(OverlayEffect overlayEffect) {
-        Realm realm = Realm.getDefaultInstance();
+    public void addOverlayEffect(final OverlayEffect overlayEffect) {
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmEffect realmEffect = toRealmEffectMapper.map(overlayEffect);
+                realm.copyToRealm(realmEffect);
+            }
+        });
+        realm.close();
+
+      /*  Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-        com.videonasocialmedia.videona.effects.repository.model.Effect realmOverlayEffect = realm.createObject(com.videonasocialmedia.videona.effects.repository.model.Effect.class);
-        realmOverlayEffect.setTypeEffect(EffectType.OVERLAY.toString());
+        RealmEffect realmOverlayEffect = realm.createObject(RealmEffect.class);
+
+        realmOverlayEffect.setUuid(overlayEffect.getUuid());
         realmOverlayEffect.setIdentifier(overlayEffect.getIdentifier());
         realmOverlayEffect.setName(overlayEffect.getName());
         realmOverlayEffect.setCoverIconId(overlayEffect.getCoverIconId());
         realmOverlayEffect.setIconId(overlayEffect.getIconId());
-        realmOverlayEffect.setPermissionType(overlayEffect.getPermissionType().toString());
         realmOverlayEffect.setResourceId(overlayEffect.getResourceId());
-        realmOverlayEffect.setAnalyticsType(overlayEffect.getType());
-        realmOverlayEffect.setActivated(false);
+        realmOverlayEffect.setEffectType(overlayEffect.getEffectType());
+        realmOverlayEffect.setActivated(overlayEffect.getActivated());
+        realmOverlayEffect.setPermissionType(overlayEffect.getPermissionType());
 
         realm.commitTransaction();
-
+        */
     }
 
     @Override
     public void unlockLoggedOverlayEffects() {
 
-        for (com.videonasocialmedia.videona.effects.repository.model.Effect effect : getOverlayEffectList().where().findAll()) {
-            if (effect.getPermissionType().toString().compareTo(PermissionType.LOGGED_IN.toString()) == 0) {
-                discoverOverlayEffect(effect);
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<RealmEffect> query =
+            realm.where(RealmEffect.class);
+
+        RealmResults<RealmEffect> result =
+            query.contains("effectType", EffectType.OVERLAY.name()).findAll();
+
+        for (RealmEffect realmEffect : result) {
+            if (realmEffect.getPermissionType().compareTo(PermissionType.LOGGED_IN.name()) == 0) {
+                discoverOverlayEffect(realmEffect);
             }
         }
 
@@ -173,19 +182,32 @@ public class EffectLocalSource implements EffectRepository {
     @Override
     public void lockLoggedOverlayEffects() {
 
-        for (com.videonasocialmedia.videona.effects.repository.model.Effect effect : getOverlayEffectList().where().findAll()) {
-            if (effect.getPermissionType().toString().compareTo(PermissionType.LOGGED_IN.toString()) == 0) {
-                hideOverlayEffect(effect);
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmQuery<RealmEffect> query =
+            realm.where(RealmEffect.class);
+
+        RealmResults<RealmEffect> result =
+            query.contains("effectType", EffectType.OVERLAY.name()).findAll();
+
+        for (RealmEffect realmEffect : result) {
+            if (realmEffect.getPermissionType().compareTo(PermissionType.LOGGED_IN.name()) == 0) {
+                hideOverlayEffect(realmEffect);
             }
         }
     }
 
-    public void hideOverlayEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
+    @Override
+    public void addPromocodeOverlayEffect(){
+       addOverlayEffect(EffectProvider.getPromocodeOverlayEffect());
+    }
+
+    public void hideOverlayEffect(RealmEffect realmEffect) {
 
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
 
-        effect.setActivated(false);
+        realmEffect.setActivated(false);
 
         realm.commitTransaction();
     }

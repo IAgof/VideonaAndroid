@@ -11,6 +11,6 @@ package com.videonasocialmedia.videona.effects.repository.apiclient;
  * Created by alvaro on 20/07/16.
  */
 public interface FeedEffect {
-    // TODO:(alvaro.martinez) 20/07/16 Future use, get Effect from Feed, not from EffectProvider
+    // TODO:(alvaro.martinez) 20/07/16 Future use, get RealmEffect from Feed, not from EffectProvider
     // API call
 }

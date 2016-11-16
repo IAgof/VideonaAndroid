@@ -27,14 +27,4 @@
         android:scaleType="centerCrop"
         android:src="@drawable/common_filter_overlay_new"/>
 
-    <TextView
-        android:id="@+id/effectName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="AD0"
-        android:textColor="@color/textColorFiltersRecord"
-        android:background="@null"
-        android:textSize="12sp"
-        android:gravity="center_horizontal|top"/>
-
 </LinearLayout>

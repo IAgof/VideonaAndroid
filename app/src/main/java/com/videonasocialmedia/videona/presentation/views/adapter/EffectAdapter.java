@@ -21,23 +21,23 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.videonasocialmedia.videona.R;
-import com.videonasocialmedia.videona.auth.domain.usecase.LoginUser;
+import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.domain.model.EffectType;
-import com.videonasocialmedia.videona.effects.repository.model.Effect;
 import com.videonasocialmedia.videona.presentation.views.listener.OnEffectSelectedListener;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.realm.RealmResults;
 
 /**
  * This class is used to show the camera effects gallery.
  */
 public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffectViewHolder> {
-    private static final int GIFT_VIEW_TYPE = 300;
+    private static final int COVERED_VIEW_TYPE = 300;
     private static final int EFFECT_VIEW_TYPE = 254;
 
-    private RealmResults<Effect> realmEffects;
+    private List<Effect> listEffects;
 
     private Context context;
     private OnEffectSelectedListener onEffectSelectedListener;
@@ -51,8 +51,8 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
      * @param effects the list of the available effects
      */
 
-    public EffectAdapter(RealmResults<Effect> effects, OnEffectSelectedListener listener) {
-        this.realmEffects = effects;
+    public EffectAdapter(List<Effect> effects, OnEffectSelectedListener listener) {
+        this.listEffects = effects;
         this.onEffectSelectedListener = listener;
     }
 
@@ -62,8 +62,9 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
      * @return
      */
 
-    public RealmResults<Effect> getRealmElementList() {
-        return realmEffects.where().findAll();
+    public List<Effect> getListEffectsElementList() {
+
+        return listEffects;
     }
 
     @Override
@@ -72,7 +73,7 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
         this.context = viewGroup.getContext();
         View rowView;
         switch (viewType) {
-            case GIFT_VIEW_TYPE:
+            case COVERED_VIEW_TYPE:
                 rowView = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.record_effects_gift_view_holder, viewGroup, false);
                 break;
@@ -89,8 +90,28 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
     @Override
     public void onBindViewHolder(cameraEffectViewHolder holder, int position) {
 
-        Effect selectedEffect = realmEffects.get(position);
-        if (getItemViewType(position) != GIFT_VIEW_TYPE) {
+        Effect selectedEffect = listEffects.get(position);
+
+        if(selectedEffect.getEffectType().compareTo(EffectType.SHADER.name()) == 0){
+            Glide.with(context)
+                .load(selectedEffect.getIconId())
+                .error(R.drawable.gatito_rules)
+                .into(holder.effectImage);
+
+            if (holder.effectName != null) {
+                holder.effectName.setText(selectedEffect.getName());
+            }
+            if (position == selectedPosition) {
+                holder.effect.setBackgroundResource(R.color.colorAccent);
+            } else {
+                holder.effect.setBackgroundResource(0);
+            }
+
+            return;
+        }
+
+
+        if ((getItemViewType(position) != COVERED_VIEW_TYPE)) {
             Glide.with(context)
                     .load(selectedEffect.getIconId())
                     .error(R.drawable.gatito_rules)
@@ -105,25 +126,24 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
                 holder.effect.setBackgroundResource(0);
             }
         } else {
-            if(selectedEffect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
-                Glide.with(context)
-                        .load(selectedEffect.getCoverIconId())
-                        .error(R.drawable.gatito_rules)
-                        .into(holder.effectImage);
-            }
+
+            Glide.with(context)
+                    .load(selectedEffect.getCoverIconId())
+                    .error(R.drawable.gatito_rules)
+                    .into(holder.effectImage);
+
         }
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        return realmEffects.get(position).getActivated()
-                ? EFFECT_VIEW_TYPE : GIFT_VIEW_TYPE;
+        return listEffects.get(position).getActivated() ? EFFECT_VIEW_TYPE : COVERED_VIEW_TYPE;
     }
 
     @Override
     public int getItemCount() {
-        return realmEffects.size();
+        return listEffects.size();
     }
 
     /**
@@ -133,7 +153,7 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
      * @return
      */
     public Effect getEffect(int position) {
-        return realmEffects.get(position);
+        return listEffects.get(position);
     }
 
 
@@ -175,8 +195,8 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
     }
 
 
-    public void setRealmEffectList(RealmResults<Effect> effectList) {
-        this.realmEffects = effectList;
+    public void setEffectList(List<Effect> effectList) {
+        this.listEffects = effectList;
         notifyDataSetChanged();
     }
 
@@ -218,12 +238,12 @@ public class EffectAdapter extends RecyclerView.Adapter<EffectAdapter.cameraEffe
                 if (selectedPosition == getAdapterPosition()) {
                     int adapterPosition = getAdapterPosition();
                     resetSelectedEffect();
-                    onClickListener.onEffectSelectionCancel(realmEffects.get(adapterPosition));
+                    onClickListener.onEffectSelectionCancel(listEffects.get(adapterPosition));
                 } else {
                     effectSelected = true;
                     selectedPosition = getAdapterPosition();
                     notifyItemChanged(selectedPosition);
-                    onClickListener.onEffectSelected(realmEffects.get(selectedPosition));
+                    onClickListener.onEffectSelected(listEffects.get(selectedPosition));
                 }
             }
             return true;

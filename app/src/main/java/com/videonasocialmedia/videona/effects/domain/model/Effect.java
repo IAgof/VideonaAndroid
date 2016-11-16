@@ -9,6 +9,8 @@ package com.videonasocialmedia.videona.effects.domain.model;
 
 import com.videonasocialmedia.videona.auth.domain.model.PermissionType;
 
+import java.util.UUID;
+
 /**
  *
  */
@@ -28,62 +30,68 @@ public abstract class Effect {
     protected final String iconPath;
     protected final int iconId;
     protected final int coverIconId;
-    protected final String type;
+    protected final String effectType;
+    protected final boolean activated;
+    protected final String permissionType;
 
-    protected final PermissionType permissionType;
+    private String uuid = UUID.randomUUID().toString();
 
     /**
      * Constructor.
-     *
-     * @param identifier          - Identifier of the effect
+     *  @param identifier          - Identifier of the effect
      * @param name                - Name of the effect
      * @param iconPath    - Path to the icon resource
+     * @param activated
      */
-    public Effect(String identifier, String name, String iconPath, String type) {
+    public Effect(String identifier, String name, String iconPath, String effectType, boolean activated) {
         this.identifier = identifier;
         this.name = name;
         this.iconPath = iconPath;
+        this.activated = activated;
         this.iconId = -1;
         this.coverIconId = -1;
-        this.type = type;
-        this.permissionType = PermissionType.ALL;
+        this.effectType = effectType;
+        this.permissionType = PermissionType.ALL.name();
     }
 
     /**
      * Constructor.
-     *
-     * @param identifier        - Identifier of the effect
+     *  @param identifier        - Identifier of the effect
      * @param name              - Name of the effect
      * @param iconId    - Path to the icon resource
+     * @param activated
      */
-    public Effect(String identifier, String name, int coverIconId, int iconId, String type) {
+    public Effect(String identifier, String name, int coverIconId, int iconId, String effectType, boolean activated) {
         this.identifier = identifier;
         this.name = name;
+        this.activated = activated;
         this.iconPath = null;
         this.coverIconId = coverIconId;
         this.iconId = iconId;
-        this.type = type;
-        this.permissionType = PermissionType.ALL;
+        this.effectType = effectType;
+        this.permissionType = PermissionType.ALL.name();
     }
 
-    public Effect(String identifier, String name, int iconId, String type) {
+    public Effect(String identifier, String name, int iconId, String effectType, boolean activated) {
         this.identifier = identifier;
         this.name = name;
+        this.activated = activated;
         this.iconPath = null;
         this.coverIconId = -1;
         this.iconId = iconId;
-        this.type = type;
-        this.permissionType = PermissionType.ALL;
+        this.effectType = effectType;
+        this.permissionType = PermissionType.ALL.name();
     }
 
-    public Effect(String identifier, String name, int coverIconId, int iconId, String type,
-                  PermissionType permissionType) {
+    public Effect(String identifier, String name, int coverIconId, int iconId, String effectType,
+                  boolean activated, String permissionType) {
         this.identifier = identifier;
         this.name = name;
+        this.activated = activated;
         this.iconPath = null;
         this.coverIconId = coverIconId;
         this.iconId = iconId;
-        this.type = type;
+        this.effectType = effectType;
         this.permissionType = permissionType;
     }
 
@@ -107,9 +115,17 @@ public abstract class Effect {
         return coverIconId;
     }
 
-    public String getType() { return type; }
+    public String getEffectType() { return effectType; }
 
-    public PermissionType getPermissionType() {
+    public boolean getActivated(){
+        return activated;
+    }
+
+    public String getPermissionType() {
         return permissionType;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 }

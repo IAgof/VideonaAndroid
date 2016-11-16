@@ -34,6 +34,8 @@ import com.videonasocialmedia.videona.domain.editor.AddVideoToProjectUseCase;
 import com.videonasocialmedia.videona.domain.editor.GetMediaListFromProjectUseCase;
 import com.videonasocialmedia.videona.effects.domain.model.Effect;
 import com.videonasocialmedia.videona.effects.domain.model.EffectType;
+import com.videonasocialmedia.videona.effects.domain.model.OverlayEffect;
+import com.videonasocialmedia.videona.effects.domain.model.ShaderEffect;
 import com.videonasocialmedia.videona.effects.domain.usecase.GetEffectListUseCase;
 import com.videonasocialmedia.videona.eventbus.events.AddMediaItemToTrackSuccessEvent;
 import com.videonasocialmedia.videona.model.entities.editor.Project;
@@ -77,8 +79,8 @@ public class RecordPresenter {
     private AVRecorder recorder;
     private int recordedVideosNumber;
     private MixpanelAPI mixpanel;
-    private com.videonasocialmedia.videona.effects.repository.model.Effect selectedShaderEffect;
-    private com.videonasocialmedia.videona.effects.repository.model.Effect selectedOverlayEffect;
+    private Effect selectedShaderEffect;
+    private Effect selectedOverlayEffect;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor preferencesEditor;
     private Context context;
@@ -171,15 +173,10 @@ public class RecordPresenter {
     }
 
     private void updateEffectLists() {
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderEffects;
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayEffects;
 
-        shaderEffects = this.getShaderEffects();
-        overlayEffects = this.getOverlayEffects();
+        recordView.updateShaderEffectList(getShaderEffects());
+        recordView.updateOverlayEffectList(getOverlayEffects());
 
-        recordView.updateShaderEffectList(shaderEffects);
-        recordView.updateOverlayEffectList(overlayEffects);
-        // TODO(javi.cabanas): 12/7/16 if currently selected effects are not on the lists they must be disabled
     }
 
     private boolean isAWolderUser() {
@@ -207,19 +204,17 @@ public class RecordPresenter {
         return result && loginUser.userIsLoggedIn();
     }
 
-    public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getShaderEffects() {
+    public List<Effect> getShaderEffects() {
 
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> shaderList = GetEffectListUseCase.getShaderEffectsList();
-
-        return shaderList;
+        return GetEffectListUseCase.getShaderEffectsList();
     }
 
-    public RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> getOverlayEffects() {
-        // TODO(javi.cabanas): 3/8/16 REMOVE REALM FROM PRESENTER. Only domain or view model can be accessed from this level. Realm objects are repository model objects.
-        RealmResults<com.videonasocialmedia.videona.effects.repository.model.Effect> overlayList = GetEffectListUseCase.getOverlayEffectsList();
+    public List<Effect> getOverlayEffects() {
 
-        return overlayList;
+        return GetEffectListUseCase.getOverlayEffectsList();
+
     }
+
 
     public void onPause() {
         EventBus.getDefault().unregister(this);
@@ -304,29 +299,31 @@ public class RecordPresenter {
     }
 
 
-    public void applyEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
-        if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
-            recorder.removeOverlay();
-            Drawable overlay = context.getResources().getDrawable(( effect ).getResourceId());
-            recorder.addOverlayFilter(overlay);
-            selectedOverlayEffect = effect;
+    public void applyEffect(Effect effect){
+
+        if(effect.getEffectType().compareTo(EffectType.OVERLAY.name()) == 0) {
+            applyOverlayEffect((OverlayEffect) effect);
         } else {
-            if (effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0) {
-                int shaderId = effect.getResourceId();
-                recorder.applyFilter(shaderId);
-                selectedShaderEffect = effect;
-            }
+            applyShaderEffect((ShaderEffect) effect);
         }
     }
 
-    public void updateEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
-        if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
-            GetEffectListUseCase.discoverOverlayEffects();
-        } else {
-            if (effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0)
-                GetEffectListUseCase.updateShaderEffect(effect);
-        }
+    private void applyOverlayEffect(OverlayEffect effect){
+        recorder.removeOverlay();
+        Drawable overlay = context.getResources().getDrawable(effect.getResourceId());
+        recorder.addOverlayFilter(overlay);
+        selectedOverlayEffect = effect;
+    }
 
+    private void applyShaderEffect(ShaderEffect effect){
+        int shaderId = effect.getResourceId();
+        recorder.applyFilter(shaderId);
+        selectedShaderEffect = effect;
+    }
+
+    public void discoverEffect() {
+        GetEffectListUseCase.discoverOverlayEffects();
+        recordView.updateOverlayEffectList(getOverlayEffects());
     }
 
     public void onEventMainThread(CameraEncoderResetEvent e) {
@@ -496,26 +493,25 @@ public class RecordPresenter {
         recordView.showFlashOn(on);
     }
 
-    public com.videonasocialmedia.videona.effects.repository.model.Effect getSelectedShaderEffect() {
+    public Effect getSelectedShaderEffect() {
         return selectedShaderEffect;
     }
 
-    public com.videonasocialmedia.videona.effects.repository.model.Effect getSelectedOverlayEffect() {
+    public Effect getSelectedOverlayEffect() {
         return selectedOverlayEffect;
     }
 
-    public void removeEffect(com.videonasocialmedia.videona.effects.repository.model.Effect effect) {
-        if (effect.getTypeEffect().compareTo(EffectType.OVERLAY.toString()) == 0) {
+    public void removeEffect(Effect effect) {
+        if (effect.getEffectType().compareTo(EffectType.OVERLAY.toString()) == 0) {
             recorder.removeOverlay();
             selectedOverlayEffect = null;
         } else {
-            if (effect.getTypeEffect().compareTo(EffectType.SHADER.toString()) == 0) {
+            if (effect.getEffectType().compareTo(EffectType.SHADER.toString()) == 0) {
                 recorder.applyFilter(Filters.FILTER_NONE);
                 selectedShaderEffect = null;
             }
         }
     }
-
 
     public void rotateCamera(int rotation) {
         recorder.rotateCamera(rotation);

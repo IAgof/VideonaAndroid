@@ -27,6 +27,8 @@
     <string name="sharedWithVideona">"#videonatime"</string>
     <string name="videonaTags">"#VideonaTime"</string>
     <string name="notification_export">Exportando proyecto</string>
+    <string name="notification_export_finished_title">Proyecto exportado</string>
+    <string name="notification_export_finished_message">Video creado</string>
     <string name="dialog_processing_title">Exportando proyecto</string>
     <string name="dialog_processing_progress">Haciendo magia en tu vídeo</string>
     <string name="dialog_message_clean_project">¿Quiere empezar un nuevo proyecto?</string>
