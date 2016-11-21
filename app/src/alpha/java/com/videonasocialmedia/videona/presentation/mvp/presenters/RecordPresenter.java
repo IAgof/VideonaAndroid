@@ -459,8 +459,10 @@ public class RecordPresenter {
             }
         }
 
-        applyEffect(selectedShaderEffect);
-        applyEffect(selectedOverlayEffect);
+        if (selectedShaderEffect != null)
+            applyEffect(selectedShaderEffect);
+        if (selectedOverlayEffect != null)
+            applyEffect(selectedOverlayEffect);
 
         checkFlashSupport();
     }

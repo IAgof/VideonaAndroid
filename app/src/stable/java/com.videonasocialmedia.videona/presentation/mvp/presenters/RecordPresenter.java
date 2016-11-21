@@ -363,7 +363,7 @@ public class RecordPresenter implements OnExportFinishedListener {
 
     public void applyEffect(Effect effect){
 
-        if(effect.getEffectType().compareTo(EffectType.OVERLAY.name()) == 0) {
+        if (effect.getEffectType().compareTo(EffectType.OVERLAY.name()) == 0) {
             applyOverlayEffect((OverlayEffect) effect);
         } else {
             applyShaderEffect((ShaderEffect) effect);
@@ -531,8 +531,10 @@ public class RecordPresenter implements OnExportFinishedListener {
                 recordView.showFrontCameraSelected();
             }
         }
-        applyEffect(selectedShaderEffect);
-        applyEffect(selectedOverlayEffect);
+        if (selectedShaderEffect != null)
+            applyEffect(selectedShaderEffect);
+        if (selectedOverlayEffect != null)
+            applyEffect(selectedOverlayEffect);
         checkFlashSupport();
     }
 
